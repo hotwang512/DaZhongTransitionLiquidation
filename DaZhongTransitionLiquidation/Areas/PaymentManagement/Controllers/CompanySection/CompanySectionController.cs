@@ -99,14 +99,27 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         /// </summary>
         /// <param name="vguids"></param>
         /// <returns></returns>
-        public JsonResult GetSectionInfo(string code, string sectionVGUID,string columnName)//Guid[] vguids
+        public JsonResult GetSectionInfo(string code, string sectionVGUID,string columnName,string keyColumnName)//Guid[] vguids
         {
             var response = new List<SubjectSetting>();
             DbBusinessDataService.Command(db =>
             {
-                response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption from Business_SevenSection bs 
- left join Business_SubjectSettingInfo bss on bs.Code=bss."+ columnName + " and bss.SubjectCode='"+ code + @"'
- where SectionVGUID='"+ sectionVGUID + "' and Status='1'").OrderBy("checked desc,Code asc").ToList();
+                var checkStr = "";
+                response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss."+ keyColumnName + "='" + code + @"'
+ where bs.SectionVGUID='"+ sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+                for (int i = 0; i < response.Count; i++)
+                {
+                    if(response[i].Checked == "True")
+                    {
+                        checkStr += i + ",";
+                    }
+                }
+                if(checkStr != "")
+                {
+                    checkStr = checkStr.Substring(0, checkStr.Length - 1);
+                }
+                response[0].Count = checkStr;
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -232,31 +245,31 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 var insertObjs = new List<Business_SubjectSettingInfo>();
                 switch (type)
                 {
-                    #region 公司段设置
+                    #region 科目段设置
                     case "0":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and CompanyCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.CompanyCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.CompanyCode = item;
+                                insertObj.SubjectCode = item;
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs).ExecuteCommand();
                             db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
                             {
-                                IsCompanyCode = true,
+                                IsSubjectCode = true,
                             }).Where(it => it.Code == code).ExecuteCommand();
                         }
                         else
                         {
                             db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
                             {
-                                IsCompanyCode = false,
+                                IsSubjectCode = false,
                             }).Where(it => it.Code == code).ExecuteCommand();
                         }
                         resultModel.IsSuccess = true;
@@ -265,13 +278,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 核算段设置
                     case "1":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and AccountingCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and AccountingCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.CompanyCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.AccountingCode = item;
@@ -296,13 +309,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 成本中心段设置
                     case "2":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and CostCenterCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and CostCenterCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.CompanyCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.CostCenterCode = item;
@@ -327,13 +340,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 备用1段设置
                     case "3":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and SpareOneCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SpareOneCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.CompanyCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareOneCode = item;
@@ -358,13 +371,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 备用2段设置
                     case "4":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and SpareTwoCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SpareTwoCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.CompanyCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareTwoCode = item;
@@ -389,13 +402,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 往来段设置
                     case "5":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and IntercourseCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and IntercourseCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.CompanyCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.IntercourseCode = item;
@@ -420,29 +433,29 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 账套段设置
                     case "6":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where SubjectCode = '" + code + "' and AccountModeCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + code + "' and CompanyCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
-                                insertObj.SubjectCode = code;
+                                insertObj.AccountModeCode = code;
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.AccountModeCode = item;
+                                insertObj.CompanyCode = item;
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
                             db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
                             {
-                                IsAccountModeCode = true,
+                                IsCompanyCode = true,
                             }).Where(it => it.Code == code).ExecuteCommand();
                         }
                         else
                         {
                             db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
                             {
-                                IsAccountModeCode = false,
+                                IsCompanyCode = false,
                             }).Where(it => it.Code == code).ExecuteCommand();
                         }
                         resultModel.IsSuccess = true;

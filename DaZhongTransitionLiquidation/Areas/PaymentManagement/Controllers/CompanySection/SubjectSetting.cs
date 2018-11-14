@@ -11,5 +11,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public string Checked { get; set; }
         public string Code { get; set; }
         public string Descrption { get; set; }
+        public string ParentCode { get; set; }
+        public string Count { get; set; }
     }
 }

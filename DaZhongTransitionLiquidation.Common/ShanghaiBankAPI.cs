@@ -19,7 +19,7 @@ namespace DaZhongTransitionLiquidation.Common
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Clear();
+                wc.Headers.Clear();    
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
                 var resultData = wc.UploadString(new Uri(url), data);

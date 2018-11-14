@@ -1,0 +1,411 @@
+
+-------------------------------header----------------------
+2018-10-16 13:17:21,983 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 13:27:56,957 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 13:30:24,983 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 13:30:57,023 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 13:42:20,919 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 13:44:14,754 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 13:46:14,395 [2017] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_PaymentManagement_Views_CompanySection_Index_cshtml.Execute() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Views\CompanySection\Index.cshtml:行号 105
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-10-16 15:32:28,479 [1909] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 未找到视图“Reconciliation”或其母版视图，或没有视图引擎支持搜索的位置。搜索了以下位置: 
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.aspx
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.ascx
+~/Areas/ReportManagement/Views/Shared/Reconciliation.aspx
+~/Areas/ReportManagement/Views/Shared/Reconciliation.ascx
+~/Views/ReconciliationReport/Reconciliation.aspx
+~/Views/ReconciliationReport/Reconciliation.ascx
+~/Views/Shared/Reconciliation.aspx
+~/Views/Shared/Reconciliation.ascx
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.cshtml
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.vbhtml
+~/Areas/ReportManagement/Views/Shared/Reconciliation.cshtml
+~/Areas/ReportManagement/Views/Shared/Reconciliation.vbhtml
+~/Views/ReconciliationReport/Reconciliation.cshtml
+~/Views/ReconciliationReport/Reconciliation.vbhtml
+~/Views/Shared/Reconciliation.cshtml
+~/Views/Shared/Reconciliation.vbhtml
+   在 System.Web.Mvc.ViewResult.FindView(ControllerContext context)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 15:32:39,742 [1909] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 未找到视图“Reconciliation”或其母版视图，或没有视图引擎支持搜索的位置。搜索了以下位置: 
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.aspx
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.ascx
+~/Areas/ReportManagement/Views/Shared/Reconciliation.aspx
+~/Areas/ReportManagement/Views/Shared/Reconciliation.ascx
+~/Views/ReconciliationReport/Reconciliation.aspx
+~/Views/ReconciliationReport/Reconciliation.ascx
+~/Views/Shared/Reconciliation.aspx
+~/Views/Shared/Reconciliation.ascx
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.cshtml
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.vbhtml
+~/Areas/ReportManagement/Views/Shared/Reconciliation.cshtml
+~/Areas/ReportManagement/Views/Shared/Reconciliation.vbhtml
+~/Views/ReconciliationReport/Reconciliation.cshtml
+~/Views/ReconciliationReport/Reconciliation.vbhtml
+~/Views/Shared/Reconciliation.cshtml
+~/Views/Shared/Reconciliation.vbhtml
+   在 System.Web.Mvc.ViewResult.FindView(ControllerContext context)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 15:33:44,709 [1909] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 未找到视图“Reconciliation”或其母版视图，或没有视图引擎支持搜索的位置。搜索了以下位置: 
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.aspx
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.ascx
+~/Areas/ReportManagement/Views/Shared/Reconciliation.aspx
+~/Areas/ReportManagement/Views/Shared/Reconciliation.ascx
+~/Views/ReconciliationReport/Reconciliation.aspx
+~/Views/ReconciliationReport/Reconciliation.ascx
+~/Views/Shared/Reconciliation.aspx
+~/Views/Shared/Reconciliation.ascx
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.cshtml
+~/Areas/ReportManagement/Views/ReconciliationReport/Reconciliation.vbhtml
+~/Areas/ReportManagement/Views/Shared/Reconciliation.cshtml
+~/Areas/ReportManagement/Views/Shared/Reconciliation.vbhtml
+~/Views/ReconciliationReport/Reconciliation.cshtml
+~/Views/ReconciliationReport/Reconciliation.vbhtml
+~/Views/Shared/Reconciliation.cshtml
+~/Views/Shared/Reconciliation.vbhtml
+   在 System.Web.Mvc.ViewResult.FindView(ControllerContext context)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-10-16 15:57:46,823 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-16 15:57:46,846 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 15:58:44,825 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-16 15:58:45,840 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 16:06:49,896 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-16 16:06:55,964 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 16:09:09,663 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-16 16:09:10,798 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 16:11:18,127 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-16 16:12:17,058 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-16 16:16:15,898 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-16 16:17:44,806 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: SqlSugarException.ArgumentNullException：Table Business_SevenSection with no primarykey
+   在 SqlSugar.Check.ArgumentNullException(Object checkObj, String message)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](PkType[] primaryKeyValues)
+   在 SqlSugar.DeleteableProvider`1.In[PkType](List`1 primaryKeyValues)
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------

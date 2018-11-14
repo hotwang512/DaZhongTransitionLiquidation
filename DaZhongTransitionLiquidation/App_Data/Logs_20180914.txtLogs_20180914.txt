@@ -1,0 +1,250 @@
+
+-------------------------------header----------------------
+2018-09-14 14:25:48,429 [15] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Areas_ReportManagement_Views_AmountReport_AmountReport_cshtml.Execute() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Views\AmountReport\AmountReport.cshtml:行号 13
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.RunPage()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-09-14 15:16:17,870 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 此请求已被阻止，因为当用在 GET 请求中时，会将敏感信息透漏给第三方网站。若要允许 GET 请求，请将 JsonRequestBehavior 设置为 AllowGet。
+   在 System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-09-14 15:17:08,858 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 此请求已被阻止，因为当用在 GET 请求中时，会将敏感信息透漏给第三方网站。若要允许 GET 请求，请将 JsonRequestBehavior 设置为 AllowGet。
+   在 System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-09-14 15:18:03,371 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 此请求已被阻止，因为当用在 GET 请求中时，会将敏感信息透漏给第三方网站。若要允许 GET 请求，请将 JsonRequestBehavior 设置为 AllowGet。
+   在 System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-09-14 15:18:16,708 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 此请求已被阻止，因为当用在 GET 请求中时，会将敏感信息透漏给第三方网站。若要允许 GET 请求，请将 JsonRequestBehavior 设置为 AllowGet。
+   在 System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-09-14 15:18:24,057 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.InvalidOperationException: 此请求已被阻止，因为当用在 GET 请求中时，会将敏感信息透漏给第三方网站。若要允许 GET 请求，请将 JsonRequestBehavior 设置为 AllowGet。
+   在 System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-09-14 16:20:45,385 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Department can't  convert string to guid
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-09-14 16:20:45,420 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Department can't  convert string to guid
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportData(String month) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-09-14 16:20:45,560 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Department can't  convert string to guid
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-09-14 16:20:45,561 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Department can't  convert string to guid
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportData(String month) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-09-14 16:20:45,592 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Department can't  convert string to guid
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-09-14 16:20:45,653 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Department can't  convert string to guid
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportData(String month) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-09-14 16:39:46,272 [30] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Entity mapping error.指定的转换无效。
+Chinese Message : 实体与表映射出错。指定的转换无效。
+   在 SqlSugar.Check.Exception(Boolean isException, String message, String[] args)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-09-14 16:39:46,291 [30] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Entity mapping error.指定的转换无效。
+Chinese Message : 实体与表映射出错。指定的转换无效。
+   在 SqlSugar.Check.Exception(Boolean isException, String message, String[] args)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_1.<GetAmountReportData>b__1() 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 39
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass3_0.<GetAmountReportData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportData(String month) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------

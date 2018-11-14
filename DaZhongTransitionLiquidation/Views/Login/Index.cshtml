@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta name="robots" content="all" />
+    <title>大众出租财务共享服务平台-登录</title>
+    <link href="@Url.Content("~/Views/_css/Login.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/_theme/jqwidgets-ver3.8.1/jqwidgets/styles/jqx.base.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/_theme/jqwidgets-ver3.8.1/jqwidgetsExtensions/jqxext.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/_theme/_js/jquery-3.2.1.min.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver3.8.1/jqwidgets/jqx-all.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver3.8.1/jqwidgetsExtensions/jqxext.js")"></script>
+    <script src="@Url.Content("~/_theme/_js/menueCookie.js")"></script>
+    <script src="@Url.Content("~/Views/_js/Login.js")"></script>
+</head>
+<body>
+    <div>
+        <div id="top">
+        </div>
+        <div id="loginDiv">
+            <div id="loginTop">
+                <span id="title">大众出租财务共享服务平台</span>
+            </div>
+            <div id="LoginNameDiv">
+                <span id="spName">登录用户名</span><input id="txtName" name="login" type="text" />
+            </div>
+            <div class="line"></div>
+            <div id="pwdDiv">
+                <span id="spPwd">密码</span><input id="txtPwd" name="login" type="password" onpaste="return false" onselectstart="return false" />
+            </div>
+            <div class="line"></div>
+        </div>
+    </div>
+    <div id="btnDiv">
+        <input type="button" id="btnLogin" value="登录" />
+    </div>
+</body>
+</html>

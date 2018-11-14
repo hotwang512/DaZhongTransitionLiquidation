@@ -1,0 +1,62 @@
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-10-22 11:07:53,386 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.SubjectSection.SubjectSectionController.<>c__DisplayClass2_0.<GetCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs:行号 39
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-22 11:07:53,402 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.SubjectSection.SubjectSectionController.<>c__DisplayClass2_0.<GetCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs:行号 39
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.SubjectSection.SubjectSectionController.GetCompanySection(GridParams para) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-22 11:08:18,986 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.SubjectSection.SubjectSectionController.<>c__DisplayClass2_0.<GetCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs:行号 39
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-22 11:08:20,251 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.SubjectSection.SubjectSectionController.<>c__DisplayClass2_0.<GetCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs:行号 39
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.SubjectSection.SubjectSectionController.GetCompanySection(GridParams para) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------

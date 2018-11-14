@@ -1,0 +1,135 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+
+@{
+    ViewBag.Title = "基础数据/渠道管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.Content("~/Areas/SystemManagement/Views/_js/Channel.js")"></script>
+}
+
+@section css{
+
+}
+@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td>
+            }
+            @if (currentModuleRolePermission.Deletes == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 550px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">渠道名称：</td>
+                <td class="td_input">
+                    <input id="txtChannelName" type="text" class="input_text form-control" />
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<!-- 底部表格 -->
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<input id="DepartmentVguid" name="Department" type="hidden" />
+<div class="container">
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddNewChannelDialog">
+        <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+            <div class="modal-content" style="width: 445px; margin-left: auto; margin-right: auto;">
+                <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">新增渠道</h4>
+                </div>
+                <div class="modal-body" style="width: 100%;">
+                    <table style="width: 100%;">
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: left"><span class="spanText">渠道编号</span></td>
+                            <td style="width: 150px;">
+                                <input id="txtChannelID_Dialog" type="text" class="input_text form-control" validatetype="required" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: left"><span class="spanText">渠道名称</span></td>
+                            <td style="width: 150px;">
+                                <input id="txtChannelName_Dialog" type="text" class="input_text form-control" validatetype="required" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;display:none">
+                            <td style="width: 75px;text-align: left"><span class="spanText">偏移量</span></td>
+                            <td style="width: 150px;">
+                                <input id="txtOffset_Dialog" type="text" class="input_text form-control" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: left"><span class="spanText">收单银行</span></td>
+                            <td style="width: 150px;">
+                                <input id="txtContactBank_Dialog" type="text" class="input_text form-control" validatetype="required" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: left"><span class="spanText">供应商名称</span></td>
+                            <td style="width: 150px;">
+                                <input id="txtSupplierName_Dialog" type="text" class="input_text form-control" validatetype="required" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;display:none">
+                            <td style="width: 75px;text-align: left"><span class="spanText">商户编号</span></td>
+                            <td style="width: 150px;">
+                                <input id="txtMerchantsCode_Dialog" type="text" class="input_text form-control" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: left"><span class="spanText">公司</span></td>
+                            <td style="width: 150px;">
+                                <div id="pushPeopleDropDownButton" class="input_text form-control">
+                                    <div style="" id="pushTree">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="AddNewChannel_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                    <button id="AddNewChannel_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

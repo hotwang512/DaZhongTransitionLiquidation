@@ -1,0 +1,76 @@
+
+-------------------------------header----------------------
+2018-11-01 15:00:26,161 [13] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'v_Channel_Desc'.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.<>c__DisplayClass2_0.<GetChannelInfos>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 37
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:30d5a752-2009-44dc-aafa-3c4b9b317c13
+Error Number:208,State:1,Class:16
+2018-11-01 15:00:26,172 [13] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'v_Channel_Desc'.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.<>c__DisplayClass2_0.<GetChannelInfos>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 37
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.GetChannelInfos(T_Channel channel, GridParams para) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:30d5a752-2009-44dc-aafa-3c4b9b317c13
+Error Number:208,State:1,Class:16
+2018-11-01 15:01:09,014 [13] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'v_Channel_Desc'.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.<>c__DisplayClass2_0.<GetChannelInfos>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 37
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:30d5a752-2009-44dc-aafa-3c4b9b317c13
+Error Number:208,State:1,Class:16
+2018-11-01 15:01:11,084 [13] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'v_Channel_Desc'.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.<>c__DisplayClass2_0.<GetChannelInfos>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 37
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.GetChannelInfos(T_Channel channel, GridParams para) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:30d5a752-2009-44dc-aafa-3c4b9b317c13
+Error Number:208,State:1,Class:16

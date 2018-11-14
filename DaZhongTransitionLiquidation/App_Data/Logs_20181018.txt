@@ -1,0 +1,333 @@
+
+-------------------------------header----------------------
+2018-10-18 10:16:46,543 [802] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2018-10-18 10:16:48,070 [802] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2018-10-18 10:16:48,070 [802] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2018-10-18 10:16:48,100 [802] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-18 10:16:48,100 [802] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-18 10:16:48,108 [802] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-10-18 15:18:55,665 [694] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.IndexOutOfRangeException: 索引超出了数组界限。
+   在 System.String.get_Chars(Int32 index)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.setCell(DataRow dataRow, Cells cells, String[] cn, Int32 j) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 180
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.ImportExcel(DataTable data, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 129
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_1.<GetAmountReportDataOut>b__1() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 74
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_0.<GetAmountReportDataOut>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 68
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-18 15:18:55,688 [694] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.IndexOutOfRangeException: 索引超出了数组界限。
+   在 System.String.get_Chars(Int32 index)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.setCell(DataRow dataRow, Cells cells, String[] cn, Int32 j) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 180
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.ImportExcel(DataTable data, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 129
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_1.<GetAmountReportDataOut>b__1() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 74
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_0.<GetAmountReportDataOut>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 68
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportDataOut(String month, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 66
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.<>c__DisplayClass1.<WrapVoidAction>b__0(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-18 15:21:57,021 [694] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.IndexOutOfRangeException: 索引超出了数组界限。
+   在 System.String.get_Chars(Int32 index)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.setCell(DataRow dataRow, Cells cells, String[] cn, Int32 j) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 180
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.ImportExcel(DataTable data, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 129
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_1.<GetAmountReportDataOut>b__1() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 74
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_0.<GetAmountReportDataOut>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 68
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-18 15:21:59,505 [694] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.IndexOutOfRangeException: 索引超出了数组界限。
+   在 System.String.get_Chars(Int32 index)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.setCell(DataRow dataRow, Cells cells, String[] cn, Int32 j) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 180
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.ImportExcel(DataTable data, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 129
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_1.<GetAmountReportDataOut>b__1() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 74
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_0.<GetAmountReportDataOut>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 68
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportDataOut(String month, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 66
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.<>c__DisplayClass1.<WrapVoidAction>b__0(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-18 15:23:24,133 [694] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.IndexOutOfRangeException: 索引超出了数组界限。
+   在 System.String.get_Chars(Int32 index)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.setCell(DataRow dataRow, Cells cells, String[] cn, Int32 j) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 180
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.ImportExcel(DataTable data, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 129
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_1.<GetAmountReportDataOut>b__1() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 74
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_0.<GetAmountReportDataOut>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 68
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-18 15:23:25,353 [694] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.IndexOutOfRangeException: 索引超出了数组界限。
+   在 System.String.get_Chars(Int32 index)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.setCell(DataRow dataRow, Cells cells, String[] cn, Int32 j) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 180
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.ImportExcel(DataTable data, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 129
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_1.<GetAmountReportDataOut>b__1() 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 74
+   在 SqlSugar.AdoProvider.UseStoredProcedure[T](Func`1 action)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.<>c__DisplayClass5_0.<GetAmountReportDataOut>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 68
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.AmountReport.AmountReportController.GetAmountReportDataOut(String month, String companyName, String channel) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs:行号 66
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.<>c__DisplayClass1.<WrapVoidAction>b__0(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-10-18 16:35:08,458 [62] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-18 16:35:08,488 [62] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-18 16:36:53,460 [62] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-18 16:36:55,286 [62] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-18 16:38:32,562 [62] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-18 16:38:35,372 [62] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<DeleteCompanySection>b__0(SqlSugarClient db) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 94
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.DeleteCompanySection(List`1 vguids) 位置 F:\大众清算项目\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 92
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.ActionInvocation.InvokeSynchronousActionMethod()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------

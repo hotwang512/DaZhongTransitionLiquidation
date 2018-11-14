@@ -1,0 +1,58 @@
+﻿
+@{
+
+    ViewBag.Title = ViewBag.IsEdit ? "系统管理/角色权限管理/角色权限编辑" : "系统管理/角色权限管理/角色权限新增";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section js{
+    <script src="@Url.Content("~/Areas/SystemManagement/Views/_js/AuthorityDetail.js")"></script>
+}
+
+<table style="margin-top: 10px;">
+    <tr style="height: 40px;">
+
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+
+        <td style="width: 95px;">
+            <button id="btnBack" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe60b;</i><span style="margin-left: 7px; float: left;">返回</span></button>
+        </td>
+    </tr>
+</table>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">角色信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 150px">
+        <form id="roleForm">
+            <table style="margin-top: 10px; margin-left: 20px;">
+                <tr style="height: 40px;">
+                    <td class="td_span">角色名称：</td>
+                    <td class="td_input">
+                        <input id="RoleName" name="Role" type="text" class="input_text form-control" validatetype="required" />
+                    </td>
+                </tr>
+                <tr style="height: 100px;">
+                    <td class="td_span">描 述：</td>
+                    <td colspan="2">
+                        <textarea id="Description" type="text" class="description form-control" style="resize: none; width: 700px; height: 74px;" name="Description"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <input id="RoleVGUID" name="Vguid" type="hidden" value="@ViewData["Vguid"]" />
+        </form>
+    </div>
+</div>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">权限信息</span></div>
+    </div>
+    <div id="modulePermissionsList" class="jqxTable">
+    </div>
+</div>
+
+<input id="isEdit" type="hidden" value="@ViewBag.IsEdit.ToString()" />

@@ -1,0 +1,155 @@
+﻿body {
+    background-image: url('/_theme/images/hbg.png');
+    padding: 0;
+    margin: 0;
+    background-repeat: no-repeat;
+}
+
+
+#top {
+    width: 500px;
+    height: 100px;
+    background-color: #006299;
+    margin: 0 auto;
+    margin-top: 200px;
+    text-align: center;
+    -webkit-border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0 0;
+}
+
+    #top img {
+        margin: 0 auto;
+        margin-top: 4px;
+    }
+
+#loginDiv {
+    height: 250px;
+    width: 500px;
+    margin: 0 auto;
+    background-color: white;
+    -webkit-border-radius: 0 0 10px 10px;
+    border-radius: 0 0 10px 10px;
+}
+
+#loginTop {
+    margin: 0 auto;
+    margin-top: 0;
+    text-align: center;
+    padding-top: 20px;
+}
+
+#title {
+    font-size: 26px;
+    width: 24px;
+    color: #666666;
+    font-weight: bold;
+    font-family: Calibri;
+}
+
+#LoginNameDiv {
+    margin: 0 auto;
+    margin-top: 35px;
+    margin-left: 45px;
+}
+
+#pwdDiv {
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-left: 70px;
+}
+
+#spName {
+    height: 14px;
+    font-size: 18px;
+    color: #666666;
+    font-family: Calibri;
+}
+
+#spPwd {
+    height: 14px;
+    font-size: 18px;
+    color: #666666;
+    font-family: Calibri;
+}
+
+#txtName, #txtPwd {
+    color: #666666;
+    margin-left: 20px;
+    height: 30px;
+    width: 200px;
+}
+
+#txtPwd {
+    margin-left: 50px;
+}
+
+#btnDiv {
+    margin: 0 auto;
+    /*margin-left: 900px;*/
+    margin-top: -38px;
+    width: 140px;
+}
+
+#btnLogin, #btnReset {
+    width: 130px;
+    height: 50px;
+    background-color: #00aadf;
+    font-size: 24px;
+    color: white;
+    font-family: Calibri;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.19);
+    -moz-border-radius: 4px; /* Gecko browsers */
+    -webkit-border-radius: 4px; /* Webkit browsers */
+    border-radius: 4px; /* W3C syntax */
+}
+
+#loginDiv input {
+    outline: none;
+    border: none;
+}
+
+#splitDiv {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 135px;
+    width: 100%;
+}
+
+    #splitDiv img {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+#iconDiv {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+    #iconDiv span {
+        font-family: Calibri;
+        color: #666666;
+        font-size: 15px;
+    }
+
+    #iconDiv table {
+        margin: 0 auto;
+    }
+
+        #iconDiv table tr td {
+            padding-left: 100px;
+        }
+
+.line {
+    width: 400px;
+    height: 1px;
+    margin: 0 auto;
+    padding: 0;
+    margin-left: 45px;
+    background-color: #D5D5D5;
+    overflow: hidden;
+}

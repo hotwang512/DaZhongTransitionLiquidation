@@ -1,0 +1,208 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+
+@{
+    ViewBag.Title = "报表/金额对账报表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    List<T_Channel> channels = ViewBag.channels;
+
+}
+@section css{
+    <link href="@Url.Content("~/Areas/ReportManagement/Views/_css/Reconciliation.css")" rel="stylesheet" />
+}
+@section js{
+
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/Areas/ReportManagement/Views/_js/Reconciliation.js")"></script>
+}
+@*@if (currentModuleRolePermission.Export == 1)
+    {
+        <table style="margin-top: 10px;">
+            <tr style="height: 50px;">
+                <td style="width: 95px;">
+                    <button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe607;</i><span style="margin-left: 7px; float: left;">导出</span></button>
+                </td>
+            </tr>
+        </table>
+    }*@
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 100px">
+        <table style="margin-top: 20px; width: 800px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">付款时间起：</td>
+                <td class="td_input">
+                    <input id="txtPaymentForm" type="text" onfocus="WdatePicker({ maxDate: '#F{$dp.$D(\'txtPaymentTo\')||\'%y-#{%M}\'}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" value="@DateTime.Now.AddDays(-35).ToString("yyyy-MM-dd")" />
+                </td>
+                <td class="td_span">付款时间止：</td>
+                <td class="td_input">
+                    <input id="txtPaymentTo" type="text" onfocus="WdatePicker({ maxDate: '%y-#{%M}', minDate: '#F{$dp.$D(\'txtPaymentForm\')}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </td>
+                <td>
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                @*<td></td>*@
+            </tr>
+            <tr style="height: 45px;">
+                <td class="td_span cover1">渠道名称：</td>
+                <td class="td_input cover1">
+                    <select id="txtChannel" class="input_text form-control">
+                        <option></option>
+                        @{
+                            foreach (var item in channels)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td class="td_span cover">状态：</td>
+                <td class="td_input cover">
+                    <select id="txtStatus" class="input_text form-control">
+                        <option value=""></option>
+                        <option selected="selected" value="1">未对账</option>
+                        <option value="2">已对账</option>
+                        <option value="3">对账异常</option>
+
+                    </select>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+                @* <td><button id="btnAutomaticReconciliation" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">自动对账</span></button></td>*@
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="datatable" class="jqxTable">
+    </div>
+</div>
+<input type="hidden" id="currentUserDepartment" value="@ViewBag.UserSubDepartment" />
+<input id="DepartmentVguid" name="Department" type="hidden" />
+
+
+<input id="hidestatus" type="hidden" />
+<input id="hideChannelid" type="hidden" />
+<div class="container">
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailDialog">
+        <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+            <div class="modal-content" style="width: 920px; margin-left: auto; margin-right: auto;">
+                <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">
+                        对账： <label id="DetailedDate"></label>&nbsp;&nbsp;
+                        <label id="ChannelData">无</label>
+                    </h4>
+                </div>
+                <div class="modal-body" style="width: 100%;max-height:560px;overflow-y:auto;overflow-x:hidden; padding: 0px 20px;">
+                    <table style="width:100%;">
+                        <tr style="height:50px; border-bottom:1px solid #f1f1f1;">
+                            <td valign="middle">
+                                <div style="width:55%;float:left">
+                                    营收系统数据
+                                </div>
+                                <div style="width:45%;float:left">
+                                    欠款金额：<label id="RevenueSystemTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height:50px;border-bottom:1px solid #f1f1f1;">
+                            <td valign="middle">
+                                <div style="width:15%;float:left">
+                                    营收数据
+                                </div>
+                                <div style="width:40%;float:left">
+                                    日期：<label id="RevenueDate" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    欠款金额：<label id="ArrearsRevenueTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    应收金额：<label id="RevenueTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:5%;float:left;text-align: right;">
+                                    <a id="RevenueDetailed" href='#'> 明细</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="RevenuejqxTable" class="jqxTable" style="height:300px;display:none">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height:50px;border-bottom:1px solid #f1f1f1;">
+                            <td valign="middle">
+                                <div style="width:15%;float:left">
+                                    T+1渠道数据
+                                </div>
+                                <div style="width:40%;float:left">
+                                    日期：<label id="ChannelDate" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    欠款金额：<label id="ArrearsChannelTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    应收金额：<label id="ChannelTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:5%;float:left;text-align: right;">
+                                    <a id="ChannelDetailed" href='#'> 明细</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="ChanneljqxTable" class="jqxTable" style="height:100px;display:none">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height:50px;border-bottom:1px solid #f1f1f1;">
+                            <td valign="middle">
+                                <div style="width:15%;float:left">
+                                    银行到账数据
+                                </div>
+                                <div style="width:60%;float:left">
+                                    日期：<label id="BankDate" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    实收金额：<label id="BankTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:5%;float:left;text-align: right;">
+                                    <a id="BankDetailed" href='#'> 明细</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height:50px;">
+                            <td>
+                                <div id="BankjqxTable" class="jqxTable" style="height:100px;display:none">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*@if (currentModuleRolePermission.Export == 1)
+                        {
+                            <button id="detail_OKButton" type="button" class="btn btn-warning" style="width: 85px; background-color: #16609c !important; margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important; margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">导出</span></button>
+                        }*@
+                    <button id="detail_BeforeDate" type="button" class="btn btn-danger" style="width: 95px; border-color: #16609c !important; background-color: #16609c !important; margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important; margin-left: 0;">&#xe609;</i><span style="margin-left: 7px; float: left;">补一天</span></button>
+                    <button id="detail_AfterDate" type="button" class="btn btn-danger" style="width: 95px; border-color: #16609c !important; background-color: #16609c !important; margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important; margin-left: 0;transform: rotate(180deg);">&#xe609;</i><span style="margin-left: 7px; float: left;">减一天</span></button>
+                    <button id="detail_ReconciliationsBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important; margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important; margin-left: 0">&#xe64c;</i><span style="margin-left: 7px; float: left;">对账</span></button>
+
+                    <button id="detail_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important; margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important; margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.IsEdit ? "系统管理/用户管理/用户编辑" : "系统管理/用户管理/用户新增";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section js
+{
+    <script src="@Url.Content("~/Areas/SystemManagement/Views/_js/UserInfoDetail.js")"></script>
+}
+<table style="margin-top: 10px;">
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">用户信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 290px;">
+        <form id="frmtable" class="form">
+            <table id="message" style="margin-top: 20px; margin-left: 20px;">
+                <tr style="height: 50px;">
+                    <td class="td_span">用户登录名：</td>
+                    <td class="td_input">
+                        <input id="loginName_Input" name="LoginName" type="text" class="input_text form-control" validatetype="required" style="text-align: left;" value="" />
+                    </td>
+                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
+                    <td class="td_span">是否启用：</td>
+                    <td class="td_input">
+                        <select id="enable_Input" name="Enable" class="input_text form-control">
+                            <option value="1" selected="selected">启用</option>
+                            <option value="0">禁用</option>
+                        </select>
+                    </td>
+                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
+                    <td class="td_span">邮箱：</td>
+                    <td class="td_input">
+                        <input id="email_Input" name="Email" type="text" maxlength="145" class="input_text form-control" style="text-align: left" value="" />
+                    </td>
+                    <td align="center" style="width: 10px;"></td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="text-align: right">手机号：</td>
+                    <td>
+                        <input id="mobilePhone_Input" name="MobileNnumber" type="text" maxlength="95" class="input_text form-control" validatetype="required,phone" style="text-align: left" value="" />
+                    </td>
+                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
+                    <td style="text-align: right">部门：</td>
+                    <td>
+                        <div id="pushPeopleDropDownButton" class="input_text form-control">
+                            <div style="" id="pushTree">
+                            </div>
+                        </div>
+                    </td>
+                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
+                    <td style="text-align: right">角色：</td>
+                    <td>
+                        @Html.DropDownList("Role", ViewData["Role"] as SelectList, "===请选择===", new { id = "role_Input", name = "Role", @class = "input_text form-control", validatetype = "required" })
+                    </td>
+
+                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
+
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="text-align: right">备注：</td>
+                    <td colspan="8" style="width: 210px;">
+                        <textarea id="remark_Input" name="Remark" style="width: 98.5%;" maxlength="300" rows="5" class="description form-control"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" id="Vguid" name="Vguid" value="@ViewData["Vguid"]" />
+
+            <input id="DepartmentVguid" name="Department" type="hidden" />
+        </form>
+        <input type="hidden" id="currentUserDepartment" value="@ViewBag.UserSubDepartment" />
+        <input type="hidden" id="isEdit" value="@ViewBag.IsEdit.ToString()" />
+
+    </div>
+</div>

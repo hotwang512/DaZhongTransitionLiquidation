@@ -1,0 +1,77 @@
+﻿using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SqlSugar;
+
+namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
+{
+    public class VoucherListController : BaseController
+    {
+        public VoucherListController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        {
+
+        }
+        // GET: VoucherManageManagement/VoucherList
+        public ActionResult Index()
+        {
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            return View();
+        }
+        public JsonResult GetVoucherListDatas(Business_VoucherList searchParams, GridParams para)
+        {
+            var jsonResult = new JsonResultModel<Business_VoucherList>();
+            DbBusinessDataService.Command(db =>
+            {
+                int pageCount = 0;
+                para.pagenum = para.pagenum + 1;
+                jsonResult.Rows = db.Queryable<Business_VoucherList>()
+                .Where(i => i.Status == searchParams.Status)
+                .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod == searchParams.AccountingPeriod)
+                .OrderBy(i => i.VoucherDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.TotalRows = pageCount;
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteVoucherListInfo(List<Guid> vguids)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                foreach (var item in vguids)
+                {
+                    int saveChanges = 1;
+                    //删除主表信息
+                    saveChanges = db.Deleteable<Business_VoucherList>(x => x.VGUID == item).ExecuteCommand();
+                    //删除副表信息
+                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                foreach (var item in vguids)
+                {
+                    int saveChanges = 1;
+                    //更新主表信息
+                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                    {
+                        Status = status,
+                    }).Where(it => it.VGUID == item).ExecuteCommand();
+                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel);
+        }
+    }
+}

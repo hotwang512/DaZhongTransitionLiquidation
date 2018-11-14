@@ -1,0 +1,57 @@
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-09-14 11:11:28,431 [25] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{ "ReceiptCategory":12, "ReconciliationsDate":"2018-09-13", "ClearingPlatformReconciliations":["d6029fa5-ddd3-45c8-859c-3d67f2db3510","7a06e739-2be9-4587-980f-dc3c57ad7107"] },result:System.Net.WebException: 远程服务器返回错误: (404) 未找到。
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(String address, String data)
+   在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.ReconciliationReport.ReconciliationReportController.GetRevenueSystemAmount(String BankDate, String revenueDate, String channel_Id) 位置 E:\Project\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\ReconciliationReport\ReconciliationReportController.cs:行号 349
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+
+-------------------------------footer----------------------

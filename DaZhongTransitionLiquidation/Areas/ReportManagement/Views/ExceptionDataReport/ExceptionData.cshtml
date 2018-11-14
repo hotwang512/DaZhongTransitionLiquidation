@@ -1,0 +1,58 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+
+@{
+    ViewBag.Title = "报表/异常数据报表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.css")"></script>
+    <script src="@Url.Content("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.js")">></script>
+    <script src="@Url.Content("~/Areas/ReportManagement/Views/_js/ExceptionData.js")"></script>
+}
+@if (currentModuleRolePermission.Export == 1)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            <td style="width: 95px;">
+                <button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe607;</i><span style="margin-left: 7px; float: left;">导出</span></button>
+            </td>
+        </tr>
+    </table>
+}
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 100px">
+        <table style="margin-top: 20px; width: 800px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">营收月份：</td>
+                <td class="td_input">
+                    <input id="txtMonth" type="text"  onfocus="WdatePicker({ maxDate: '#F{$dp.$D(\'txtMonth\')||\'%y-#{%M}\'}', realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" value="@DateTime.Now.AddDays(-35).ToString("yyyy-MM")" class="input_text form-control" />
+                </td>
+                <td>
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="datatable" class="jqxTable">
+    </div>
+</div>
+

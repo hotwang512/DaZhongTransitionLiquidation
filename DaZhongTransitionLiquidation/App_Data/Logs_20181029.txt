@@ -1,0 +1,1393 @@
+
+-------------------------------header----------------------
+2018-10-29 13:11:46,531 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2018-10-29 13:11:46,575 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2018-10-29 13:11:46,576 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-29 13:11:46,576 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-29 13:12:01,833 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2018-10-29 13:12:03,936 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------header----------------------
+2018-10-29 13:51:04,068 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:d3dee0fb-7c59-4c39-b67b-298a877368e2
+Error Number:156,State:1,Class:15
+2018-10-29 13:51:04,077 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:d3dee0fb-7c59-4c39-b67b-298a877368e2
+Error Number:156,State:1,Class:15
+2018-10-29 13:52:14,137 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:d3dee0fb-7c59-4c39-b67b-298a877368e2
+Error Number:156,State:1,Class:15
+2018-10-29 13:52:15,165 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:d3dee0fb-7c59-4c39-b67b-298a877368e2
+Error Number:156,State:1,Class:15
+2018-10-29 13:52:53,917 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:d3dee0fb-7c59-4c39-b67b-298a877368e2
+Error Number:156,State:1,Class:15
+2018-10-29 13:52:54,976 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:d3dee0fb-7c59-4c39-b67b-298a877368e2
+Error Number:156,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 14:34:30,802 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 244
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:bddf4db3-c2a5-49e3-a41c-8c7de97190b0
+Error Number:102,State:1,Class:15
+2018-10-29 14:34:30,811 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 244
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:bddf4db3-c2a5-49e3-a41c-8c7de97190b0
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 14:38:40,967 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 244
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:38:40,977 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 244
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:40:19,871 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:40:21,071 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:43:23,945 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:43:25,020 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:44:47,620 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:44:49,199 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:45:30,997 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:45:32,698 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:47:44,440 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:47:47,128 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:48:01,723 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+2018-10-29 14:48:05,600 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:1278c9eb-162a-472f-812c-881724e1e125
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 14:52:19,508 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 243
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:384d8981-f4ad-455d-8424-8f57ed3848ff
+Error Number:102,State:1,Class:15
+2018-10-29 14:52:19,530 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 243
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:384d8981-f4ad-455d-8424-8f57ed3848ff
+Error Number:102,State:1,Class:15
+2018-10-29 14:53:12,992 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 243
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:384d8981-f4ad-455d-8424-8f57ed3848ff
+Error Number:102,State:1,Class:15
+2018-10-29 14:53:14,182 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 243
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:384d8981-f4ad-455d-8424-8f57ed3848ff
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 15:00:25,847 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 243
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:3c3c3d8b-bff9-485e-8041-897bd70a3552
+Error Number:102,State:1,Class:15
+2018-10-29 15:00:25,858 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 243
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:3c3c3d8b-bff9-485e-8041-897bd70a3552
+Error Number:102,State:1,Class:15
+2018-10-29 15:03:59,172 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:3c3c3d8b-bff9-485e-8041-897bd70a3552
+Error Number:102,State:1,Class:15
+2018-10-29 15:04:02,927 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:3c3c3d8b-bff9-485e-8041-897bd70a3552
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 15:06:46,345 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:accdeb86-b9e9-4f9a-8969-d615e45f7681
+Error Number:102,State:1,Class:15
+2018-10-29 15:06:46,361 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:accdeb86-b9e9-4f9a-8969-d615e45f7681
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 15:24:15,112 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:24:15,123 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:27:53,071 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:27:54,141 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:31:20,564 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:31:24,476 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 248
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:35:05,491 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+2018-10-29 15:35:07,329 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near '1001'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.SqlQuery[T](String sql, Object parameters)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass22_0`1.<GetListOrCache>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetListOrCache[T](String cacheKey, String sql)
+   在 SqlSugar.DbMaintenanceProvider.GetColumnInfosByTableName(String tableName)
+   在 SqlSugar.DbMaintenanceProvider.<>c__DisplayClass3_0.<GetIsIdentities>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbMaintenanceProvider.GetIsIdentities(String tableName)
+   在 SqlSugar.InsertableProvider`1.GetIdentityKeys()
+   在 SqlSugar.InsertableProvider`1.PreToSql()
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:ce5f4dbf-f3fd-4e4a-8ec8-8c10af71228d
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 16:12:27,970 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:d65a5c6b-b880-4c46-a20a-16ddc5e0e390
+Error Number:156,State:1,Class:15
+2018-10-29 16:12:27,979 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:d65a5c6b-b880-4c46-a20a-16ddc5e0e390
+Error Number:156,State:1,Class:15
+2018-10-29 16:13:01,395 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:d65a5c6b-b880-4c46-a20a-16ddc5e0e390
+Error Number:156,State:1,Class:15
+2018-10-29 16:13:04,489 [11] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:d65a5c6b-b880-4c46-a20a-16ddc5e0e390
+Error Number:156,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 16:16:31,047 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:9921fe58-0061-45f5-8a0a-9c4db4a1e722
+Error Number:156,State:1,Class:15
+2018-10-29 16:16:31,054 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:9921fe58-0061-45f5-8a0a-9c4db4a1e722
+Error Number:156,State:1,Class:15
+2018-10-29 16:17:40,782 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:9921fe58-0061-45f5-8a0a-9c4db4a1e722
+Error Number:156,State:1,Class:15
+2018-10-29 16:17:42,705 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 107
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 105
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:9921fe58-0061-45f5-8a0a-9c4db4a1e722
+Error Number:156,State:1,Class:15
+
+-------------------------------header----------------------
+2018-10-29 16:20:27,035 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 240
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-29 16:20:27,052 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 240
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-10-29 16:21:12,357 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 240
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-10-29 16:21:13,274 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 240
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type) 位置 G:\大众清算\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 216
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)

@@ -1,0 +1,74 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+
+@{
+    ViewBag.Title = "报表/营收报表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section js{
+    @*<script src="@Url.Content("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.css")"></script>
+        <script src="@Url.Content("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>*@
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivot.js"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotdesigner.js"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotgrid.js"></script>
+    <script src="@Url.Content("~/Areas/ReportManagement/Views/_js/AmountReport.js")"></script>
+}
+
+<table style="margin-top: 10px;">
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>
+        </td>
+    </tr>
+</table>
+
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px">
+        <table style="margin-top: 20px; width: 845px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">营收月份：</td>
+                <td class="td_input">
+                    <input id="txtPaymentForm" type="text" style="display:none" class="input_text form-control" value="2018-09" />
+                    <input id="txtMonth" type="text" onfocus="WdatePicker({realDateFmt: 'yyyy-MM', minDate: '#F{$dp.$D(\'txtPaymentForm\')}',dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" value="@DateTime.Now.ToString("yyyy-MM")" />
+                </td>
+                <td class="td_span">渠道名称：</td>
+                <td class="td_input">
+                    <select id="txtChannel" name="Channel_Id" class="input_text form-control">
+                        <option></option>
+                        @{
+                            foreach (var item in ViewBag.Channel)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+
+    <div id="datatable" class="jqxTable" style="height:500px;width:100%;background-color: white;">
+    </div>
+    <div id="de" class="jqxTable">
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+
+@{
+    ViewBag.Title = "系统管理/用户管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js
+{
+    <script src="@Url.Content("~/Areas/SystemManagement/Views/_js/UserInfo.js")"></script>
+}
+<!-- 顶部按钮 -->
+@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1 || currentModuleRolePermission.Enable == 1 || currentModuleRolePermission.Disable == 1)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td>
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td>
+            }
+            @if (currentModuleRolePermission.Deletes == 1)
+            {
+                <td>
+                    <button id="btnDelete" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+            @if (currentModuleRolePermission.Enable == 1)
+            {
+                <td>
+                    <button id="btnEnable" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
+                </td>
+            }
+            @if (currentModuleRolePermission.Disable == 1)
+            {
+                <td>
+                    <button id="btnDisable" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
+                </td>
+            }
+            @if (ViewBag.IsAdmin)
+            {
+                <td>
+                    <button id="btnChangePwd" style="margin-left: 20px; width: 100px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置密码</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
+<!-- 顶部按钮 -->
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 100px">
+        <table style="margin-top: 20px; width: 800px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">登录名称：</td>
+                <td class="td_input">
+                    <input id="txtLoginName" name="LoginName" type="text" class="input_text form-control" />
+                </td>
+                <td class="td_span">部门：</td>
+                <td class="td_input">
+                    <div id="pushPeopleDropDownButton" class="input_text form-control">
+                        <div style="" id="pushTree">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 45px;">
+                <td class="td_span">角色：</td>
+                <td class="td_input">
+                    @Html.DropDownList("Role", ViewData["Role"] as SelectList, "===请选择===", new { id = "drdRole", @class = "input_text form-control" })
+                </td>
+                <td class="td_span">是否启用：</td>
+                <td class="td_input">
+                    <select id="drdStatus" class="input_text form-control">
+                        <option value="1" selected="selected">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </td>
+                <td>
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+
+    <div id="UserInfoList" class="jqxTable">
+    </div>
+</div>
+<!-- 底部表格 -->
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<input type="hidden" id="currentUserDepartment" value="@ViewBag.UserSubDepartment" />
+<input id="DepartmentVguid" name="Department" type="hidden" />

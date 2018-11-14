@@ -1,0 +1,157 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "基础数据/T+1数据";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/_theme/layer/layer/theme/default/layer.css")"></script>
+    <script src="@Url.Content("~/_theme/layer/layer/layer.js")"></script>
+    <script src="@Url.Content("~/Areas/PaymentManagement/Views/_js/NextDayData.js")"></script>
+}
+
+@if (currentModuleRolePermission.Import == 1)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @*@if (currentModuleRolePermission.Adds == 1)
+                    {
+                    <td style="width: 95px;">
+                        <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                    </td>
+                }*@
+            @if (currentModuleRolePermission.Import == 1)
+            {
+                <td style="width: 135px;">
+                    <button id="btnImportHuiDouQuan" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="">导入(慧兜圈)</span></button>@*style="margin-left: 7px; float: left;"*@
+                    <input id="uploadFileHuiDouQuan" type="file" accept=".txt" style="display:none;" />
+                </td>
+                <td style="width: 135px;">
+                    <button id="btnImportSelfServicePaymentMachine" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="margin-left: 7px; float: left;">导入(自助)</span></button>
+                    <input id="uploadSelfServicePaymentMachine" type="file" accept="application/vnd.ms-excel" style="display:none;" />
+                </td>
+            }
+        </tr>
+    </table>
+}
+
+
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 100px">
+        <table style="margin-top: 20px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">支付流水号：</td>
+                <td class="td_input">
+                    <input id="txtTransactionId" type="text" class="input_text form-control" />
+                </td>
+                <td class="td_span">渠道名称：</td>
+                <td class="td_input">
+                    <select id="txtChannel" class="input_text form-control"></select>
+                    @*<input id="txtChannel" type="text" class="input_text form-control" />*@
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+            </tr>
+            <tr>
+                <td class="td_span">到账时间起：</td>
+                <td class="td_input">
+                    <input id="txtPaymentForm" type="text" onfocus="WdatePicker({ maxDate: '#F{$dp.$D(\'txtPaymentTo\')||\'%y-#{%M}\'}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" />
+                </td>
+                <td class="td_span">到账时间止：</td>
+                <td class="td_input">
+                    <input id="txtPaymentTo" type="text" onfocus="WdatePicker({ maxDate: '%y-#{%M}', minDate: '#F{$dp.$D(\'txtPaymentForm\')}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" />
+                </td>
+
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span><span style="margin-left: 10px;text-decoration: underline;"><a href="/PaymentManagement/NextDayData/DownLoadNextDayData" style="color:black;">下载导入模板</a></span></div>
+    </div>
+
+    <div id="datatable" class="jqxTable">
+    </div>
+</div>
+<!-- 底部表格 -->
+<input type="hidden" id="txtTransactionId_T" value="@ViewData["transactionId"]" />
+
+<div class="container">
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddDialog">
+        <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+            <div class="modal-content" style="width: 445px; margin-left: auto; margin-right: auto;">
+                <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="AddDialog_Title" style="color: #555; font-family: Calibri;">T+1数据</h4>
+                </div>
+                <div class="modal-body" style="width: 100%;">
+                    <form id="NextDayDataFrm">
+                        <table style="width: 100%;">
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">支付流水号</span></td>
+                                <td style="width: 150px;">
+                                    <input id="txtWechatNo" name="WechatNo" type="text" class="input_text form-control" validatetype="required" />
+                                </td>
+                            </tr>
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">到账金额</span></td>
+                                <td style="width: 150px;">
+                                    <input id="txtRemitamount" name="Remitamount" type="text" class="input_text form-control" validatetype="required,decimalNumber" />
+                                </td>
+                            </tr>
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">到账时间</span></td>
+                                <td style="width: 150px;">
+                                    <input id="txtPaymentTime" name="Revenuetime" type="text" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd' })" validatetype="required" />
+                                </td>
+                            </tr>
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">渠道</span></td>
+                                <td style="width: 150px;">
+                                    @*<input id="txtChannel_Dialog" type="text" class="input_text form-control" validatetype="required" />*@
+                                    <select id="txtChannel_Dialog" name="Channel_Id" class="input_text form-control" validatetype="required">
+                                        <option></option>
+                                        @{
+                                            foreach (var item in ViewBag.Channel)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">科目</span></td>
+                                <td style="width: 150px;">
+                                    <select id="txtSubject_Dialog" name="SubjectId" class="input_text form-control" validatetype="required">
+                                        <option value=""></option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="add_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                    <button id="add_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+﻿.input_Validate
+{
+    border: 1px !important;
+    border-color: red !important;
+    border-style: solid !important;
+    /*float: left;*/
+}
+
+.messg_Validate
+{
+    font-size: 12px;
+    color: #375471;
+    height: 35px;
+    line-height: 35px;
+    width: auto;
+    border: 1px;
+    border-color: #dddddd;
+    border-style: solid;
+    border-radius: 4px;
+    margin-top: 0px;
+    margin-left: 4px;
+    padding-left: 15px;
+    /*padding-right: 15px;*/
+    background-color: #F5F5F5;
+    z-index: 900;
+     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+}
+
+.messg_icon
+{
+    width: 5px;
+    height: 6px;
+    margin-top: 14px;
+    float: left;
+}
+
+.msg
+{
+    position: absolute;
+    margin-left: 210px;
+    width:80px;
+    min-width: 80px;
+}

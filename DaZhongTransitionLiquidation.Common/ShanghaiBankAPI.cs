@@ -26,7 +26,7 @@ namespace DaZhongTransitionLiquidation.Common
                 var modelData = resultData.JsonToModel<BankFlowResult>();
                 if (modelData.success)
                 {
-                    bankFlowList = SaveBankFlow(modelData.data, bankFlowList);
+                    bankFlowList = SaveBankFlow(modelData.data);
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }
@@ -39,18 +39,19 @@ namespace DaZhongTransitionLiquidation.Common
         public static List<Business_BankFlowTemplate> GetShangHaiBankYesterdayTradingFlow()
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
-            var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
-            var url = ConfigSugar.GetAppString("HistoryTradingFlowUrl");
             var tradingStartDate = DateTime.Now.AddDays(-1);
             var tradingEndDate = DateTime.Now.AddDays(-1);
-            bankFlowList = GetShangHaiBankHistoryTradingFlow(capitalAccount, url, tradingStartDate, tradingEndDate, bankFlowList);
+            bankFlowList = GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
             return bankFlowList;
         }
-        public static List<Business_BankFlowTemplate> GetShangHaiBankHistoryTradingFlow(string capitalAccount, string url, DateTime tradingStartDate, DateTime tradingEndDate, List<Business_BankFlowTemplate> bankFlowList)
+        public static List<Business_BankFlowTemplate> GetShangHaiBankHistoryTradingFlow(DateTime tradingStartDate, DateTime tradingEndDate)
         {
+            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+            var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
+            var url = ConfigSugar.GetAppString("HistoryTradingFlowUrl");
             var data = "{" +
                             "\"CapitalAccount\":\"{CapitalAccount}\",".Replace("{CapitalAccount}", capitalAccount) +
-                            "\"TradingStartDate\":\"{TradingStartDate}\"".Replace("{TradingStartDate}", tradingStartDate.ToString("yyyyMMdd")) +
+                            "\"TradingStartDate\":\"{TradingStartDate}\",".Replace("{TradingStartDate}", tradingStartDate.ToString("yyyyMMdd")) +
                             "\"TradingEndDate\":\"{TradingEndDate}\"".Replace("{TradingEndDate}", tradingEndDate.ToString("yyyyMMdd")) +
                             "}";
             try
@@ -63,7 +64,7 @@ namespace DaZhongTransitionLiquidation.Common
                 var modelData = resultData.JsonToModel<BankFlowResult>();
                 if (modelData.success)
                 {
-                    bankFlowList = SaveBankFlow(modelData.data, bankFlowList);
+                    bankFlowList = SaveBankFlow(modelData.data);
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }
@@ -73,8 +74,9 @@ namespace DaZhongTransitionLiquidation.Common
             }
             return bankFlowList;
         }
-        public static List<Business_BankFlowTemplate> SaveBankFlow(BankFlowData modelData, List<Business_BankFlowTemplate> bankFlowList)
-        {          
+        public static List<Business_BankFlowTemplate> SaveBankFlow(BankFlowData modelData)
+        {
+            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             foreach (var details in modelData.Detail)
             {
                 Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
@@ -102,7 +104,11 @@ namespace DaZhongTransitionLiquidation.Common
                     bankFlow.ReceivableAccount = modelData.ACNO;
                 }
                 bankFlow.VGUID = Guid.NewGuid();
-                bankFlow.TransactionDate = details.FSSJ.TryToDate();
+                string dateString = (details.JYRQ + " " + details.FSSJ);
+                dateString = dateString.Replace("年", "-");
+                dateString = dateString.Replace("月", "-");
+                dateString = dateString.Replace("日", "");
+                bankFlow.TransactionDate = dateString.TryToDate();
                 bankFlow.PaymentUnitInstitution = "";
                 bankFlow.Purpose = details.YOTU;
                 bankFlow.Remark = details.BEZH;

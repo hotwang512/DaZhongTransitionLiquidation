@@ -33,17 +33,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                 var success = 0;
                 try
                 {
-                    bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow();
-                    foreach (var item in bankFlowList)
-                    {
-                        var isAny = _db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == item.Batch);
-                        if (isAny)
-                        {
-                            continue;
-                        }
-                        success = _db.Insertable(item).ExecuteCommand();
-                    }
-                    BankDataPack.SyncBackFlow();
+                    var tradingStartDate = DateTime.Parse("2018-11-01");
+                    var tradingEndDate = DateTime.Parse("2018-11-13");
+                    bankFlowList = ShanghaiBankAPI.GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
+                    //bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow();
+                    success = WirterSyncBankFlow(bankFlowList);
                 }
                 catch (Exception ex)
                 {
@@ -71,16 +65,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     try
                     {
                         bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow();
-                        foreach (var item in bankFlowList)
-                        {
-                            var isAny = _db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == item.Batch);
-                            if (isAny)
-                            {
-                                continue;
-                            }
-                            success = _db.Insertable(item).ExecuteCommand();
-                        }
-                        BankDataPack.SyncBackFlow();
+                        success = WirterSyncBankFlow(bankFlowList);
                     }
                     catch (Exception ex)
                     {
@@ -89,6 +74,23 @@ namespace DaZhongTransitionLiquidation.Controllers
                     Thread.Sleep((int)(1000 * 1));
                 }
             }
+        }
+
+
+        public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
+        {
+            int success = 0;
+            foreach (var item in bankFlowList)
+            {
+                var isAny = _db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == item.Batch);
+                if (isAny)
+                {
+                    continue;
+                }
+                success = _db.Insertable(item).ExecuteCommand();
+            }
+            new Thread(new ThreadStart(BankDataPack.SyncBackFlowAndReconciliation)).Start();
+            return success;
         }
     }
 }

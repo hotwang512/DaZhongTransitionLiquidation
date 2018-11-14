@@ -1,4 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using SqlSugar;
@@ -42,6 +43,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         }
                         success = _db.Insertable(item).ExecuteCommand();
                     }
+                    BankDataPack.SyncBackFlow();
                 }
                 catch (Exception ex)
                 {
@@ -62,8 +64,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         {
             while (true)
             {
-                string now = DateTime.Now.ToString("HH:mm:ss");
-                if (now == "00:30:00")
+                if (DateTime.Now.ToString("HH:mm:ss") == "00:30:00")
                 {
                     List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
                     var success = 0;
@@ -79,13 +80,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                             }
                             success = _db.Insertable(item).ExecuteCommand();
                         }
+                        BankDataPack.SyncBackFlow();
                     }
                     catch (Exception ex)
                     {
                         LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
                     }
-                    double timeSpan = 24;
-                    Thread.Sleep((int)(timeSpan * 1000 * 60 * 60));
+                    Thread.Sleep((int)(1000 * 1));
                 }
             }
         }

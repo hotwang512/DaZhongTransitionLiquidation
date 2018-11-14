@@ -12,7 +12,7 @@ var selector = {
     $AddNewBankData_CancelBtn: function () { return $("#AddNewBankData_CancelBtn") },
 
     $VoucherSubject: function () { return $("#VoucherSubject") },
-    $VoucherSummary: function () { return $("#VoucherSummary") },
+    $VoucherSummary: function () { return $("#VoucherSummary") }, 
 
     $txtBankAccountName_Dialog: function () { return $("#txtBankAccountName_Dialog") },
     $txtBankAccount_Dialog: function () { return $("#txtBankAccount_Dialog") },

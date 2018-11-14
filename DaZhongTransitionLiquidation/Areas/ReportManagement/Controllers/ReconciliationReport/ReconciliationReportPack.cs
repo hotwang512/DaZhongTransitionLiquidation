@@ -26,7 +26,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             List<v_Business_Reconciliation> business_Reconciliations = new List<v_Business_Reconciliation>();
             dbBusinessDataService.Command(db =>
             {
-                business_Reconciliations = db.Queryable<v_Business_Reconciliation>().Where(c => c.Status != "2").ToList();
+                business_Reconciliations = db.Queryable<v_Business_Reconciliation>().Where(c => c.Status == "1").ToList();
             });
             if (business_Reconciliations.Count > 0)
             {
@@ -52,6 +52,45 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     }
                 }
             }
+
+            for (int i = 3; i < 9; i++)
+            {
+                dbBusinessDataService.Command(db =>
+                {
+                    business_Reconciliations = db.Queryable<v_Business_Reconciliation>().Where(c => c.Status == "3").ToList();
+                });
+                if (business_Reconciliations.Count == 0)
+                {
+                    break;
+                }
+                foreach (v_Business_Reconciliation business_Reconciliation in business_Reconciliations)
+                {
+                    string bankDate = business_Reconciliation.BankBillDate.Value.ToString("yyyy-MM-dd");
+                    DateTime revenueDateData = business_Reconciliation.BankBillDate.Value.AddDays(-1);
+                    string revenueDate = revenueDateData.ToString("yyyy-MM-dd");
+                    for (int k = 1; k < i; k++)
+                    {
+                        revenueDate += "," + revenueDateData.AddDays(-i).ToString("yyyy-MM-dd");
+                    }
+                    ResultModel<usp_GetTotalAmount> resultData = GetTotalAmount(dbBusinessDataService, bankDate, revenueDate, business_Reconciliation.Channel_Id);
+                    if (resultData != null)
+                    {
+                        RevenuepaymentReconciliation(
+                            dbBusinessDataService,
+                            "sysadmin",
+                            business_Reconciliation.BankBillDate.Value,
+                            revenueDate,
+                            business_Reconciliation.Channel_Id,
+                            resultData.ResultInfo.RevenueSystemTotalAccount.Value,
+                            resultData.ResultInfo.RevenueArrearsTotalAccount.Value,
+                            resultData.ResultInfo.RevenuePaymentTotalAccount.Value,
+                            resultData.ResultInfo.T1DataArrearsTotalAccount.Value,
+                            resultData.ResultInfo.T1DataPaymentTotalAccount.Value,
+                            resultData.ResultInfo.BankTotalAccount.Value);
+                    }
+                }
+            }
+
         }
         /// <summary>
         /// 获取对账数据，包含营收系统总额，营收总额、T+1总额，银行总额

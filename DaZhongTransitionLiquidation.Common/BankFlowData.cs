@@ -85,6 +85,13 @@ namespace DaZhongTransitionLiquidation.Common
         /// </summary> 
         public string FSJE { get; set; }
         /// <summary>
+        /// Desc:交易日期
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string JYRQ { get; set; }
+
+        /// <summary>
         /// Desc:交易时间
         /// Default:
         /// Nullable:True

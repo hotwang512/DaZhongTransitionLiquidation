@@ -160,18 +160,20 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             {
                 int pageCount = 0;
                 paras.pagenum = paras.pagenum + 1;
+                DateTime dateFrom = DateTime.Parse(searchParams.PayDateFrom);
+                DateTime dateTo = DateTime.Parse(searchParams.PayDateTo).AddDays(1);
                 var outputResult = db.Queryable<v_Business_Reconciliation>();
                 if (searchParams.PayDateFrom != null && searchParams.PayDateTo != null)
                 {
-                    outputResult.Where(i => i.BankBillDate >= DateTime.Parse(searchParams.PayDateFrom) && i.BankBillDate <= DateTime.Parse(searchParams.PayDateTo));
+                    outputResult.Where(i => i.BankBillDate >= dateFrom && i.BankBillDate <= dateTo);
                 }
                 else if (searchParams.PayDateFrom != null)
                 {
-                    outputResult.Where(i => i.BankBillDate >= DateTime.Parse(searchParams.PayDateFrom));
+                    outputResult.Where(i => i.BankBillDate >= dateFrom);
                 }
                 else if (searchParams.PayDateTo != null)
                 {
-                    outputResult.Where(i => i.BankBillDate <= DateTime.Parse(searchParams.PayDateTo));
+                    outputResult.Where(i => i.BankBillDate <= dateTo);
                 }
                 if (!string.IsNullOrEmpty(searchParams.Channel))
                 {
@@ -260,28 +262,9 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         /// <returns></returns>
         public JsonResult GetTotalAmount(string BankDate, string RevenueDate, string Channel_Id)
         {
-            var resultModel = new ResultModel<usp_GetTotalAmount>() { IsSuccess = false, Status = "0" };
-            DbBusinessDataService.Command(db =>
-            {
-                var outputResult = db.Ado.UseStoredProcedure<dynamic>(() =>
-                {
-                    string spName = "usp_GetTotalAmount";
-
-                    var p1 = new SugarParameter("@BankDate", BankDate);
-                    var p2 = new SugarParameter("@PayDate", RevenueDate);
-                    var p3 = new SugarParameter("@Channel_Id", Channel_Id);
-                    resultModel.ResultInfo = db.Ado.SqlQuerySingle<usp_GetTotalAmount>(spName, new SugarParameter[] { p1, p2, p3 });
-                    resultModel.IsSuccess = true;
-                    return resultModel;
-                });
-            });
-            resultModel.ResultInfo.RevenueSystemTotalAccount = GetRevenueSystemAmount(BankDate, RevenueDate, Channel_Id);
+            var resultModel = ReconciliationReportPack.GetTotalAmount(DbBusinessDataService, BankDate, RevenueDate, Channel_Id);
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-
-
-
-
         /// <summary>
         /// 营收数据
         /// </summary>
@@ -311,60 +294,6 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-
-        /// <summary>
-        /// 获取应收系统金额
-        /// </summary>
-        /// <param name="revenuepayments">营收数据</param>
-        /// <returns></returns>
-        public decimal GetRevenueSystemAmount(string BankDate, string revenueDate, string channel_Id)
-        {
-            decimal total = 0;
-            string revenueVguid = string.Empty;
-            //DateTime sDataTime = DateTime.Parse(date + " 00:00:00");
-            //DateTime eDataTime = DateTime.Parse(date + " 23:59:59");
-            List<V_Revenuepayment_Information_Date> revenuepayments = new List<V_Revenuepayment_Information_Date>();
-            DbBusinessDataService.Command(db =>
-            {
-                revenueDate.Replace(" ", "");
-                string[] revenueDates = revenueDate.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                var query = db.Queryable<V_Revenuepayment_Information_Date>().Where(i => i.Channel_Id == channel_Id).In(i => i.PayDateStr, revenueDates);
-                revenuepayments = query.ToList();
-            });
-
-            foreach (var revenuepayment in revenuepayments)
-            {
-                revenueVguid += string.Format("\"{0}\",", revenuepayment.VGUID.ToString());
-            }
-            if (!string.IsNullOrEmpty(revenueVguid))
-            {
-                revenueVguid = revenueVguid.Remove(revenueVguid.Length - 1, 1);
-                string data = "{"
-                            + " \"ReceiptCategory\":{0},".Replace("{0}", channel_Id == "1465779302" ? "11" : "12")
-                            + " \"ReconciliationsDate\":\"{0}\",".Replace("{0}", BankDate)
-                            + " \"ClearingPlatformReconciliations\":[{0}]".Replace("{0}", revenueVguid)
-                            + " }";
-                try
-                {
-                    WebClient wc = new WebClient();
-                    string result = wc.UploadString(ConfigSugar.GetAppString("RevenueSystemTotalPath"), data);
-                    object obj = result.JsonToModel<object>();
-                    bool success = Convert.ToBoolean(((Dictionary<string, object>)obj)["success"]);
-                    if (success)
-                    {
-                        object val = ((Dictionary<string, object>)((Dictionary<string, object>)obj)["data"])["TotleAmount"];
-                        total = Convert.ToDecimal(val);
-                    }
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, result));
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
-                }
-            }
-            return total;
-        }
-
         /// <summary>
         /// T+1
         /// </summary>
@@ -434,157 +363,20 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         {
             string operatorUser = UserInfo.LoginName;
 
-            var resultModel = Validate(RevenueSystemTotal, ArrearsRevenueTotal, RevenueTotal, ArrearsChannelTotal, ChannelTotal, BankTotal);
-            bool isAccountingRevenue = true;
-            string batchBillNo = "";
-            if (resultModel.IsSuccess)
-            {
-                isAccountingRevenue = AccountingRevenueSystem(BankDate, RevenueDate, Channel_Id, ref batchBillNo);
-            }
-            if (!isAccountingRevenue)
-            {
-                resultModel.IsSuccess = false;
-                resultModel.ResultInfo = "营收系统入账错误！";
-            }
-            Business_Reconciliation reconciliation = new Business_Reconciliation();
-            DbBusinessDataService.Command(db =>
-            {
-                reconciliation = db.Queryable<Business_Reconciliation>().Where(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ToList().SingleOrDefault();
-            });
-            if (reconciliation == null)
-            {
-                reconciliation = new Business_Reconciliation();
-                reconciliation.VGUID = Guid.NewGuid();
-                reconciliation.CreatedDate = DateTime.Now;
-                reconciliation.CreatedUser = operatorUser;
-            }
-            else
-            {
-                reconciliation.ChangeDate = DateTime.Now;
-                reconciliation.ChangeUser = operatorUser;
-            }
-            reconciliation.Channel_Id = Channel_Id;
-            reconciliation.BankBillDate = BankDate;
-            reconciliation.BankBillTotalAmount = BankTotal;
-            reconciliation.ReconciliationDate = DateTime.Now;
-            reconciliation.ReconciliationUser = operatorUser;
-            reconciliation.BatchBillNo = batchBillNo;
-            reconciliation.AbnormalReason = resultModel.ResultInfo;
-            reconciliation.Status = "2";
-            if (!resultModel.IsSuccess)
-            {
-                reconciliation.Status = "3";
-            }
-            List<Business_ReconciliationDetail> reconciliationDetails = new List<Business_ReconciliationDetail>();
-            RevenueDate = RevenueDate.Replace(" ", "");
-            string[] revenueDates = RevenueDate.Split(",", StringSplitOptions.RemoveEmptyEntries);
-            foreach (string date in revenueDates)
-            {
-                Business_ReconciliationDetail reconciliationDetail = new Business_ReconciliationDetail();
-                reconciliationDetail.VGUID = Guid.NewGuid();
-                reconciliationDetail.Business_ReconciliationVGUID = reconciliation.VGUID;
-                reconciliationDetail.RevenueDate = Convert.ToDateTime(date);
-                reconciliationDetail.CreatedDate = DateTime.Now;
-                reconciliationDetail.CreatedUser = operatorUser;
-                reconciliationDetail.ChangeDate = DateTime.Now;
-                reconciliationDetail.ChangeUser = operatorUser;
-                reconciliationDetails.Add(reconciliationDetail);
-            }
-
-            DbBusinessDataService.Command(db =>
-            {
-                db.Ado.UseTran(delegate
-                {
-                    db.Deleteable<Business_Reconciliation>(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ExecuteCommand();
-                    db.Deleteable<Business_ReconciliationDetail>(c => c.Business_ReconciliationVGUID == reconciliation.VGUID).ExecuteCommand();
-                    db.Insertable(reconciliation).ExecuteCommand();
-                    db.Insertable(reconciliationDetails).ExecuteCommand();
-                });
-            });
+            var resultModel = ReconciliationReportPack.RevenuepaymentReconciliation(
+                DbBusinessDataService,
+                UserInfo.LoginName,
+                BankDate,
+                RevenueDate,
+                Channel_Id,
+                RevenueSystemTotal,
+                ArrearsRevenueTotal,
+                RevenueTotal,
+                ArrearsChannelTotal,
+                ChannelTotal,
+                BankTotal);
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-
-        public bool AccountingRevenueSystem(DateTime BankDate, string RevenueDate, string Channel_Id, ref string batchBillNo)
-        {
-            bool surccss = false;
-            List<usp_GetSubjectAmount> usp_GetSubjectAmounts = new List<usp_GetSubjectAmount>();
-            DbBusinessDataService.Command(db =>
-            {
-                var outputResult = db.Ado.UseStoredProcedure<dynamic>(() =>
-                {
-                    string spName = "usp_GetSubjectAmount";
-                    var p1 = new SugarParameter("@PayDate", RevenueDate);
-                    var p2 = new SugarParameter("@Channel_Id", Channel_Id);
-                    usp_GetSubjectAmounts = db.Ado.SqlQuery<usp_GetSubjectAmount>(spName, new SugarParameter[] { p1, p2 });
-                    return "";
-                });
-            });
-            string subjects = "";
-            foreach (var usp_GetSubjectAmount in usp_GetSubjectAmounts)
-            {
-                string subject = "{"
-                                  + "\"Subject_ID\":\"{0}\",".Replace("{0}", usp_GetSubjectAmount.SubjectId)
-                                  + "\"RecordCount\":{0},".Replace("{0}", usp_GetSubjectAmount.SubjectCounts.ToString())
-                                  + "\"TotalAmount\":{0}".Replace("{0}", usp_GetSubjectAmount.SubjectAmount.ToString())
-                                  + "},";
-                subjects += subject;
-            }
-            subjects = subjects.Remove(subjects.Length - 1, 1);
-            string data = "{"
-                           + " \"ReceiptCategory\":{0},".Replace("{0}", Channel_Id == "1465779302" ? "11" : "12")
-                           + " \"Channel\":\"{0}\",".Replace("{0}", Channel_Id)
-                           + " \"ReconciliationsDate\":\"{0}\",".Replace("{0}", BankDate.ToString("yyyy-MM-dd HH:mm:ss"))
-                           + " \"RecordCount\":{0},".Replace("{0}", usp_GetSubjectAmounts[0].Counts.ToString())
-                           + " \"TotalAmount\":{0},".Replace("{0}", usp_GetSubjectAmounts[0].RevenuepaymentTotal.ToString())
-                           + " \"Operator\":\"{0}\",".Replace("{0}", UserInfo.LoginName)
-                           + " \"Subject\":[{0}]".Replace("{0}", subjects)
-                           + " }";
-            try
-            {
-                WebClient wc = new WebClient();
-                string result = wc.UploadString(ConfigSugar.GetAppString("RevenueSystemAccountingPath"), data);
-                object obj = result.JsonToModel<object>();
-                Dictionary<string, object> dicList = (Dictionary<string, object>)obj;
-                object val = dicList["success"];
-                surccss = Convert.ToBoolean(val);
-                if (dicList.ContainsKey("batchbillno"))
-                {
-                    batchBillNo = ((Dictionary<string, object>)obj)["batchbillno"].ToString();
-                }
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, result));
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
-            }
-            return surccss;
-        }
-
-
-
-        public ResultModel<string> Validate(decimal RevenueSystemTotal, decimal ArrearsRevenueTotal, decimal RevenueTotal, decimal ArrearsChannelTotal, decimal ChannelTotal, decimal BankTotal)
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0", ResultInfo = "对账成功！" };
-
-            if (RevenueSystemTotal != ArrearsRevenueTotal)
-            {
-                resultModel.ResultInfo = "营收数据与营收系统数据不一致！";
-                return resultModel;
-            }
-            if (RevenueTotal != ChannelTotal || ArrearsRevenueTotal != ArrearsChannelTotal)
-            {
-                resultModel.ResultInfo = "营收数据与T+1数据不一致！";
-                return resultModel;
-            }
-            if (RevenueTotal != BankTotal)
-            {
-                resultModel.ResultInfo = "营收数据与银行数据不一致！";
-                return resultModel;
-            }
-            resultModel.IsSuccess = true;
-            return resultModel;
-        }
-
         /// <summary>
         /// 导出
         /// </summary>
@@ -700,25 +492,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             }
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        /// <summary>
-        /// 自动对账
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult AutomaticReconciliation()
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0", ResultInfo = "对账成功！" };
-            List<v_Business_Reconciliation> business_Reconciliations = GetAutomaticReconciliationData();
-            foreach (v_Business_Reconciliation business_Reconciliation in business_Reconciliations)
-            {
-
-
-
-
-
-
-            }
-            return Json(resultModel, JsonRequestBehavior.AllowGet);
-        }
+        
         /// <summary>
         /// 获取未对账数据
         /// </summary>
@@ -738,7 +512,6 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             });
             return business_Reconciliations;
         }
+
     }
-
-
 }

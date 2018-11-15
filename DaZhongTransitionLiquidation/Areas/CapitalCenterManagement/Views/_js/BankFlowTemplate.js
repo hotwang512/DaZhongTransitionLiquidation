@@ -77,7 +77,6 @@ var $page = function () {
 
         //加载列表数据
         initTable();
-        initOrganization();
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
@@ -246,67 +245,6 @@ var $page = function () {
         return true;
     }
 };
-
-function initOrganization() {
-    $.ajax({
-        url: "/CapitalCenterManagement/BankFlowTemplate/GetCompanySection",
-        type: "post",
-        dataType: "json",
-        success: function (msg) {
-            //推送接收人下拉框
-            selector.$pushPeopleDropDownButton().jqxDropDownButton({
-                width: 250,
-                height: 25
-            });
-            //推送接收人下拉框(树形结构)
-            selector.$pushTree().on('select', function (event) {
-                var args = event.args;
-                var item = selector.$pushTree().jqxTree('getItem', args.element);
-
-                //if (selector.$currentUserDepartment().val().indexOf(item.id) == -1) {
-                //    jqxNotification("请选择本公司及其子部门！", null, "error");
-                //    return false;
-                //}
-                $("#VoucherSubject").val(item.id);
-                $("#VoucherSubjectName").val(item.label);
-                var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
-                selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', dropDownContent);
-                selector.$pushPeopleDropDownButton().jqxDropDownList('close');
-            });
-            var source =
-                {
-                    datatype: "json",
-                    datafields: [
-                        { name: 'Descrption' },
-                        { name: 'ParentCode' },
-                        { name: 'Code' }
-                    ],
-                    id: 'Vguid',
-                    localdata: msg
-                };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            // perform Data Binding.
-            dataAdapter.dataBind();
-            var records = dataAdapter.getRecordsHierarchy('Code', 'ParentCode', 'items',
-                [
-                    {
-                        name: 'Descrption',
-                        map: 'label'
-                    },
-                    {
-                        name: 'Code',
-                        map: 'id'
-                    },
-                    {
-                        name: 'ParentCode',
-                        map: 'parentId'
-                    }
-                ]);
-            selector.$pushTree().jqxTree({ source: records, width: '250px', height: '400px', incrementalSearch: true });//, checkboxes: true
-            selector.$pushTree().jqxTree('expandAll');
-        }
-    });
-}
 
 function edit(guid, voucherSubject,voucherSummary,voucherSubjectName) {
     selector.$VoucherSubject().val("");

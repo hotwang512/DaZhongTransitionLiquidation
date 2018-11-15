@@ -2214,6 +2214,7 @@
     <Compile Include="Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs" />
     <Compile Include="Areas\ReportManagement\Controllers\ExceptionDataReport\ExceptionDataReportController.cs" />
     <Compile Include="Areas\ReportManagement\Controllers\ReconciliationReport\ReconciliationReportController.cs" />
+    <Compile Include="Areas\ReportManagement\Controllers\ReconciliationReport\ReconciliationReportPack.cs" />
     <Compile Include="Areas\ReportManagement\ReportManagementAreaRegistration.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\AuthorityManagement\AuthorityManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\AuthorityManagement\AuthorityManagementPack.cs" />

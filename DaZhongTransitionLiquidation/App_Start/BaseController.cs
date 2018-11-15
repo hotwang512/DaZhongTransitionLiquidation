@@ -25,7 +25,7 @@ namespace DaZhongTransitionLiquidation
             string uniqueKey = PubGet.GetUserKey;
             UserInfo = CacheManager<Sys_User>.GetInstance()[uniqueKey];
             ViewBag.User = UserInfo;
-            if (UserInfo != null)
+            if (UserInfo != null)   
             {
                 ViewBag.CurrentUserRoleModules = GetCurrentUserRoleModules();
                 if (UserInfo.LoginName == "sysAdmin") return;

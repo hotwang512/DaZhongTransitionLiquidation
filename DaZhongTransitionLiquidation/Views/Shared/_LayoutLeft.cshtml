@@ -476,42 +476,14 @@
     @******************************************************报表管理中心******************************************************@
     @if (isSysadmin || hasReportPermission)
     {
-        <div class="menue_header AmountReport" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">金额报表</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" style="display: none;">
-            <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="Reconciliation_AmountReport" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">对账清算</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AmountReport_AmountReport" pageurl="/ReportManagement/AmountReport/AmountReport">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">金额报表</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
+       
     }
     @******************************************************预算、分析、考核******************************************************@
 
     @******************************************************驾驶员结算中心******************************************************@
     @if (isSysadmin || hasPaymentPermission)
     {
-        <div class="menue_header BaseData" style="display: none;">
+        <div class="menue_header BaseData AmountReport" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -578,6 +550,35 @@
                             <td></td>
                         </tr>
                     }*@
+            </table>
+        </div>
+        <div class="menue_header BaseData AmountReport" style="display: none;">
+            <table style="cursor: pointer;">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">金额报表</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="menue_body" style="display: none;">
+            <table>
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="Reconciliation_AmountReport" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">对账清算</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="AmountReport_AmountReport" pageurl="/ReportManagement/AmountReport/AmountReport">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">金额报表</td>
+                        <td></td>
+                    </tr>
+                }
             </table>
         </div>
     }

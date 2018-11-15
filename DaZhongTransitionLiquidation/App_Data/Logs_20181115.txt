@@ -1,0 +1,350 @@
+
+-------------------------------header----------------------
+2018-11-15 09:56:00,995 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":1158.92,"JFJE":106064.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":1,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":1}}
+
+-------------------------------header----------------------
+2018-11-15 10:21:23,566 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":1158.92,"JFJE":106064.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":1,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":1}}
+2018-11-15 10:21:46,295 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:9f3c06e1-031d-4b91-a196-a953a6ec81a5
+Error Number:207,State:1,Class:16
+2018-11-15 10:21:51,261 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetCompanyInfo(String code) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 528
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:9f3c06e1-031d-4b91-a196-a953a6ec81a5
+Error Number:207,State:1,Class:16
+2018-11-15 10:24:45,958 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:24:50,242 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetCompanyInfo(String code) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 528
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:25:04,209 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:26:28,142 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetCompanyInfo(String code) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 528
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:26:35,074 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:26:41,227 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetCompanyInfo(String code) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 528
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:26:55,408 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+2018-11-15 10:26:58,761 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AccountType' 无效。
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass11_0.<GetCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 530
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetCompanyInfo(String code) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 528
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:eb05891c-1895-4849-b012-b00735ef37dc
+Error Number:207,State:1,Class:16
+
+-------------------------------header----------------------
+2018-11-15 10:28:16,743 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":1158.92,"JFJE":106064.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":1,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":1}}
+2018-11-15 11:48:26,646 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:240a7b36-5224-475a-9b41-ce1e0d92c6a0
+Error Number:156,State:1,Class:15
+2018-11-15 11:48:30,010 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near the keyword 'and'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass4_0.<GetSectionInfo>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetSectionInfo(String code, String sectionVGUID, String columnName, String keyColumnName)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:240a7b36-5224-475a-9b41-ce1e0d92c6a0
+Error Number:156,State:1,Class:15
+
+-------------------------------header----------------------
+2018-11-15 14:12:17,969 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.InvalidOperationException: 数组的反序列化不支持类型“DaZhongTransitionLiquidation.Common.BankFlowData”。
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   在 System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   在 SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 26
+
+-------------------------------header----------------------
+2018-11-15 14:41:50,377 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":15109.69,"JFJE":314934.80,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":3,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"},{"CDFG":2,"PATI":"跨行转账","FSJE":8839.32,"FSSJ":"11:31","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29692523.25,"YOTU":"1114-1114费19.49元","BEZH":"","T24F":"FT18319100622105"},{"CDFG":2,"PATI":"跨行转账","FSJE":5111.45,"FSSJ":"11:42","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29697634.7,"YOTU":"1114-1114费11.27元","BEZH":"","T24F":"FT18319987272857"},{"CDFG":1,"PATI":"跨行转账","FSJE":200000.00,"FSSJ":"13:06","DFZH":310066661018170329753,"DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车分公司","VCTP":"","VCNO":"","YUER":29497634.7,"YOTU":"划款","BEZH":"　","T24F":"FT18319404253074"},{"CDFG":1,"PATI":"跨行转账","FSJE":3763.80,"FSSJ":"13:07","DFZH":31050167360000002175,"DFBZ":"CNY","DFHM":"中国人民财产保险股份有限公司上海市分公司","VCTP":"","VCNO":"","YUER":29493870.9,"YOTU":"划款","BEZH":"保险费　","T24F":"FT18319640007330"},{"CDFG":1,"PATI":"跨行转账","FSJE":5107.00,"FSSJ":"13:07","DFZH":6222021001140086817,"DFBZ":"CNY","DFHM":"钱智伟","VCTP":"","VCNO":"","YUER":29488763.9,"YOTU":"划款","BEZH":"沪M12853公务车补贴费　","T24F":"FT18319014336082"}],"ACNO":31685803002369318,"SUMU":"0007","JFBS":4}}
+
+-------------------------------header----------------------
+2018-11-15 15:04:30,633 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":15109.69,"JFJE":314934.80,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":3,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"},{"CDFG":2,"PATI":"跨行转账","FSJE":8839.32,"FSSJ":"11:31","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29692523.25,"YOTU":"1114-1114费19.49元","BEZH":"","T24F":"FT18319100622105"},{"CDFG":2,"PATI":"跨行转账","FSJE":5111.45,"FSSJ":"11:42","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29697634.7,"YOTU":"1114-1114费11.27元","BEZH":"","T24F":"FT18319987272857"},{"CDFG":1,"PATI":"跨行转账","FSJE":200000.00,"FSSJ":"13:06","DFZH":310066661018170329753,"DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车分公司","VCTP":"","VCNO":"","YUER":29497634.7,"YOTU":"划款","BEZH":"　","T24F":"FT18319404253074"},{"CDFG":1,"PATI":"跨行转账","FSJE":3763.80,"FSSJ":"13:07","DFZH":31050167360000002175,"DFBZ":"CNY","DFHM":"中国人民财产保险股份有限公司上海市分公司","VCTP":"","VCNO":"","YUER":29493870.9,"YOTU":"划款","BEZH":"保险费　","T24F":"FT18319640007330"},{"CDFG":1,"PATI":"跨行转账","FSJE":5107.00,"FSSJ":"13:07","DFZH":6222021001140086817,"DFBZ":"CNY","DFHM":"钱智伟","VCTP":"","VCNO":"","YUER":29488763.9,"YOTU":"划款","BEZH":"沪M12853公务车补贴费　","T24F":"FT18319014336082"}],"ACNO":31685803002369318,"SUMU":"0007","JFBS":4}}
+
+-------------------------------header----------------------
+2018-11-15 16:00:07,347 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":1511096.53,"JFJE":314934.80,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":4,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"},{"CDFG":2,"PATI":"跨行转账","FSJE":8839.32,"FSSJ":"11:31","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29692523.25,"YOTU":"1114-1114费19.49元","BEZH":"","T24F":"FT18319100622105"},{"CDFG":2,"PATI":"跨行转账","FSJE":5111.45,"FSSJ":"11:42","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29697634.7,"YOTU":"1114-1114费11.27元","BEZH":"","T24F":"FT18319987272857"},{"CDFG":1,"PATI":"跨行转账","FSJE":200000.00,"FSSJ":"13:06","DFZH":310066661018170329753,"DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车分公司","VCTP":"","VCNO":"","YUER":29497634.7,"YOTU":"划款","BEZH":"　","T24F":"FT18319404253074"},{"CDFG":1,"PATI":"跨行转账","FSJE":3763.80,"FSSJ":"13:07","DFZH":31050167360000002175,"DFBZ":"CNY","DFHM":"中国人民财产保险股份有限公司上海市分公司","VCTP":"","VCNO":"","YUER":29493870.9,"YOTU":"划款","BEZH":"保险费　","T24F":"FT18319640007330"},{"CDFG":1,"PATI":"跨行转账","FSJE":5107.00,"FSSJ":"13:07","DFZH":6222021001140086817,"DFBZ":"CNY","DFHM":"钱智伟","VCTP":"","VCNO":"","YUER":29488763.9,"YOTU":"划款","BEZH":"沪M12853公务车补贴费　","T24F":"FT18319014336082"},{"CDFG":2,"PATI":"电子内转","FSJE":1495986.84,"FSSJ":"15:38","DFZH":"03002361905","DFBZ":"CNY","DFHM":"上海虹口大众出租汽车有限公司","VCTP":"","VCNO":"","YUER":30984750.74,"YOTU":"10月托管成本　","BEZH":"","T24F":"FT18319674315635"}],"ACNO":31685803002369318,"SUMU":"0008","JFBS":4}}
+2018-11-15 16:00:18,652 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near 't'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass12_0.<GetAccountCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 542
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:fe9f00fe-35ce-4add-85dc-dcdb1159ce6d
+Error Number:102,State:1,Class:15
+2018-11-15 16:00:23,646 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near 't'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass12_0.<GetAccountCompanyInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 542
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetAccountCompanyInfo(String code) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 540
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:fe9f00fe-35ce-4add-85dc-dcdb1159ce6d
+Error Number:102,State:1,Class:15
+2018-11-15 16:01:10,714 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near 't'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass12_0.<GetAccountCompanyInfo>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:fe9f00fe-35ce-4add-85dc-dcdb1159ce6d
+Error Number:102,State:1,Class:15
+2018-11-15 16:01:13,393 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near 't'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass12_0.<GetAccountCompanyInfo>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetAccountCompanyInfo(String code)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:fe9f00fe-35ce-4add-85dc-dcdb1159ce6d
+Error Number:102,State:1,Class:15
+2018-11-15 16:04:55,526 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near 't'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass12_0.<GetAccountCompanyInfo>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:fe9f00fe-35ce-4add-85dc-dcdb1159ce6d
+Error Number:102,State:1,Class:15
+2018-11-15 16:04:56,838 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Incorrect syntax near 't'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass12_0.<GetAccountCompanyInfo>b__0(SqlSugarClient db)
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.GetAccountCompanyInfo(String code)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:fe9f00fe-35ce-4add-85dc-dcdb1159ce6d
+Error Number:102,State:1,Class:15
+
+-------------------------------header----------------------
+2018-11-15 16:07:45,610 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":1511096.53,"JFJE":314934.80,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":4,"Detail":[{"CDFG":2,"PATI":"存入","FSJE":1158.92,"FSSJ":"05:30","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":29789747.93,"YOTU":"","BEZH":"","T24F":"BEA183190530266460901"},{"CDFG":1,"PATI":"跨行转账","FSJE":106064.00,"FSSJ":"09:35","DFZH":1742842203,"DFBZ":"CNY","DFHM":"中智上海经济技术合作有限公司","VCTP":"","VCNO":"","YUER":29683683.93,"YOTU":"划款","BEZH":"社保费　","T24F":"FT18319605801026"},{"CDFG":2,"PATI":"跨行转账","FSJE":8839.32,"FSSJ":"11:31","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29692523.25,"YOTU":"1114-1114费19.49元","BEZH":"","T24F":"FT18319100622105"},{"CDFG":2,"PATI":"跨行转账","FSJE":5111.45,"FSSJ":"11:42","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":29697634.7,"YOTU":"1114-1114费11.27元","BEZH":"","T24F":"FT18319987272857"},{"CDFG":1,"PATI":"跨行转账","FSJE":200000.00,"FSSJ":"13:06","DFZH":310066661018170329753,"DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车分公司","VCTP":"","VCNO":"","YUER":29497634.7,"YOTU":"划款","BEZH":"　","T24F":"FT18319404253074"},{"CDFG":1,"PATI":"跨行转账","FSJE":3763.80,"FSSJ":"13:07","DFZH":31050167360000002175,"DFBZ":"CNY","DFHM":"中国人民财产保险股份有限公司上海市分公司","VCTP":"","VCNO":"","YUER":29493870.9,"YOTU":"划款","BEZH":"保险费　","T24F":"FT18319640007330"},{"CDFG":1,"PATI":"跨行转账","FSJE":5107.00,"FSSJ":"13:07","DFZH":6222021001140086817,"DFBZ":"CNY","DFHM":"钱智伟","VCTP":"","VCNO":"","YUER":29488763.9,"YOTU":"划款","BEZH":"沪M12853公务车补贴费　","T24F":"FT18319014336082"},{"CDFG":2,"PATI":"电子内转","FSJE":1495986.84,"FSSJ":"15:38","DFZH":"03002361905","DFBZ":"CNY","DFHM":"上海虹口大众出租汽车有限公司","VCTP":"","VCNO":"","YUER":30984750.74,"YOTU":"10月托管成本　","BEZH":"","T24F":"FT18319674315635"}],"ACNO":31685803002369318,"SUMU":"0008","JFBS":4}}

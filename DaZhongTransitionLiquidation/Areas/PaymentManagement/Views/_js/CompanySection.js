@@ -85,9 +85,13 @@ var $page = function () {
         selector.$AddNewBankData_CancelBtn().on("click", function () {
             selector.$AddNewBankDataDialog().modal("hide");
         });
-        //设置弹出框中的取消按钮
+        //公司段设置弹出框中的取消按钮
         $("#AddSection_CancelBtn").on("click", function () {
             $("#AddSectionDialog").modal("hide");
+        });
+        //核算段设置弹出框中的取消按钮
+        $("#AddAccount_CancelBtn").on("click", function () {
+            $("#AddAccountSettingDialog").modal("hide");
         });
         //公司段设置弹出框中的保存按钮
         $("#AddSection_OKButton").on("click", function () {
@@ -123,6 +127,36 @@ var $page = function () {
                             jqxNotification("操作成功！", null, "success");
                             $("#AddSectionDialog").modal("hide");
                             $("#jqxTable"+ index).jqxDataTable('updateBoundData');
+                            break;
+                    }
+                }
+            });
+        });
+        //核算段设置弹出框中的保存按钮
+        $("#AddAccount_OKButton").on("click", function () {
+            var code = $("#hidSubjectCode").val();
+            var vguid = [];
+            var data = $('#jqxAccountSetting').jqxGrid('getdisplayrows')
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].IsChecked == "True" || data[i].IsChecked == true) {
+                    vguid.push(data[i].VGUID);
+                }
+            }
+            $.ajax({
+                url: "/PaymentManagement/CompanySection/SaveAccoutSetting",
+                //data: { vguids: selection },
+                data: { code: code, vguid: vguid },
+                traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("操作失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("操作成功！", null, "success");
+                            $("#AddAccountSettingDialog").modal("hide");
+                            $("#jqxTable" + index).jqxDataTable('updateBoundData');
                             break;
                     }
                 }
@@ -240,6 +274,7 @@ var $page = function () {
                         "BankAccount": $("#BankAccount").val(),
                         "BankAccountName": $("#BankAccountName").val(),
                         "CompanyCode": $("#CompanyCode").val(),
+                        "AccountType": $("#AccountType").val(),
                         "VGUID": vguid
                     },
                     type: "post",
@@ -257,6 +292,12 @@ var $page = function () {
                                 break;
                             case "2":
                                 jqxNotification("银行下已存在该账号！", null, "error");
+                                break;
+                            case "3":
+                                jqxNotification("公司下已存在一个基本户,保存失败！", null, "error");
+                                break;
+                            case "4":
+                                jqxNotification("公司下已存在一个社保账户,保存失败！", null, "error");
                                 break;
                         }
                     }
@@ -591,8 +632,9 @@ var $page = function () {
                     { name: 'Descrption', type: 'string' },
                     { name: 'SectionVGUID', type: 'string' },
                     { name: 'VGUID', type: 'string' },
-                     { name: 'Status', type: 'string' },
+                    { name: 'Status', type: 'string' },
                     { name: 'Remark', type: 'string' },
+                    { name: 'IsSetAccount', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -619,8 +661,9 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '描述', datafield: 'Descrption', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '描述', datafield: 'Descrption', width: 210, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
+                    { text: '设置账户', datafield: 'IsSetAccount', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingBankFunc },
                     { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
                     { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
@@ -874,6 +917,18 @@ var $page = function () {
         var container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
         if (value != "" && (value == "True" || value == true)) {
             container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
+        }
+        return container;
+    }
+
+    function settingBankFunc(row, column, value, rowData) {
+        var code = rowData.Code.substring(2, 0);
+        var container = "";
+        if (code == "11") {
+            container = "<a href='#' onclick=settingAccount('" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
+            if (value != "" && (value == "True" || value == true)) {
+                container = "<a href='#' onclick=settingAccount('" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
+            }
         }
         return container;
     }
@@ -1147,6 +1202,7 @@ function settingCompany(code, companyName) {
                { name: "BankName", type: 'string' },
                { name: 'BankAccount', type: 'string' },
                { name: 'BankAccountName', type: 'string' },
+               { name: 'AccountType', type: 'string' },
                { name: "CompanyCode", type: 'string' },
                { name: 'VGUID', type: 'string' },
                //{ name: 'SectionVGUID', type: 'string' },
@@ -1164,7 +1220,7 @@ function settingCompany(code, companyName) {
     var typeAdapter = new $.jqx.dataAdapter(source);
     $("#jqxCompanySetting").jqxGrid({
         //pageable: false,           
-        width: '700px',
+        width: '800px',
         height: 400,
         //pageSize: 10,
         //serverProcessing: true,
@@ -1182,7 +1238,8 @@ function settingCompany(code, companyName) {
         columns: [
             { text: '开户行', datafield: "BankName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center', cellsRenderer: editBankFunc },
             { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '银行户名', datafield: "BankAccountName", groupable: true, align: 'center', cellsAlign: 'center' },
+            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, align: 'center', cellsAlign: 'center' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]
@@ -1197,6 +1254,65 @@ function settingCompany(code, companyName) {
         }
     });
     //$('#jqxCompanySetting').jqxGrid('expandallgroups');
+}
+//设置核算段银行账号
+function settingAccount(code) {
+    $("#hidSubjectCode").val(code);
+    $("#AddAccountSettingDialog").modal({ backdrop: "static", keyboard: false });
+    $("#AddAccountSettingDialog").modal("show");
+    var source =
+       {
+           datafields:
+           [
+               { name: "BankName", type: 'string' },
+               { name: 'BankAccount', type: 'string' },
+               { name: 'BankAccountName', type: 'string' },
+               { name: 'AccountType', type: 'string' },
+               { name: "CompanyCode", type: 'string' },
+               { name: 'VGUID', type: 'string' },
+               { name: 'IsChecked', type: 'string' },
+               { name: "CompanyName", type: 'string' },
+               //{ name: 'SectionVGUID', type: 'string' },
+               //{ name: 'VGUID', type: 'string' },
+               //{ name: 'Status', type: 'string' },
+               //{ name: 'Remark', type: 'string' },
+           ],
+           datatype: "json",
+           id: "VGUID",
+           //root: "entry",
+           //record: "content",
+           data: { Code: code },
+           url: "/PaymentManagement/CompanySection/GetAccountCompanyInfo"   //获取数据源的路径
+       };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    $("#jqxAccountSetting").jqxGrid({
+        //pageable: false,           
+        width: '1000px',
+        height: 400,
+        //pageSize: 10,
+        //serverProcessing: true,
+        //pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        groupable: true,
+        groupsexpandedbydefault: true,
+        columnsHeight: 40,
+        showgroupsheader: false,
+        editable: true,
+        //pagermode: 'simple',
+        //selectionmode: 'checkbox',
+        groups: ['BankName'],
+        columns: [
+            { text: '选择', datafield: "IsChecked", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '开户行', datafield: "BankName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center'},
+            { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, width: '150px', align: 'center', cellsAlign: 'center' },
+            { text: '公司名称', datafield: "CompanyName", groupable: true, align: 'center', cellsAlign: 'center' },
+            { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true }
+        ]
+    });
 }
 
 function detailFunc(row, column, value, rowData) {

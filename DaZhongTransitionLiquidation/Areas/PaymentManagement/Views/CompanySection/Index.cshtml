@@ -211,7 +211,7 @@
 
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyDialog">
         <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
-            <div class="modal-content" style="width: 760px; margin-left: auto; margin-right: auto;">
+            <div class="modal-content" style="width: 850px; margin-left: auto; margin-right: auto;">
                 <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel_titles2" style="color: #555; font-family: Calibri;">配置银行信息</h4>
@@ -256,11 +256,39 @@
                                 <input id="BankAccountName" style="width: 277px;" type="text" class="input_text form-control" validatetype="required" />
                             </td>
                         </tr>
+                        <tr style="height: 45px;">
+                            <td style="text-align: left;"><span class="spanText">账号类别</span></td>
+                            <td>
+                                <select id="AccountType" style="width: 275px;" class="input_text form-control" validatetype="required">
+                                    <option value="基本户">基本户</option>
+                                    <option value="一般户">一般户</option>
+                                    <option value="社保账户">社保账户</option>
+                                </select>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
                     <button id="AddCompanyBankData_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
                     <button id="AddCompanyBankData_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddAccountSettingDialog">
+        <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+            <div class="modal-content" style="width: 1050px; margin-left: auto; margin-right: auto;">
+                <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel_titles2" style="color: #555; font-family: Calibri;">配置银行信息</h4>
+                </div>
+                <div class="modal-body" style="width: 100%;">
+                    <div id="jqxAccountSetting" class="jqxTable"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="AddAccount_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                    <button id="AddAccount_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
                 </div>
             </div>
         </div>

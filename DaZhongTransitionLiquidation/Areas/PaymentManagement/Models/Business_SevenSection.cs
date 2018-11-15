@@ -26,5 +26,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public bool IsCompanyCode { get; set; }
         public bool IsAccountModeCode { get; set; }
         public bool IsSubjectCode { get; set; }
+        public bool IsSetAccount { get; set; }
     }
 }

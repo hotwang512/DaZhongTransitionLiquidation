@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection
+namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
 {
-    public class Business_CompanyBankInfo
+    public class V_AccountSetting
     {
         public Guid VGUID { get; set; }
         public string BankName { get; set; }
@@ -14,5 +13,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public string CompanyCode { get; set; }
         public string BankAccountName { get; set; }
         public string AccountType { get; set; }
+        public bool IsChecked { get; set; }
+        public string CompanyName { get; set; }
     }
 }

@@ -108,18 +108,21 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss."+ keyColumnName + "='" + code + @"'
  where bs.SectionVGUID='"+ sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
-                for (int i = 0; i < response.Count; i++)
+                if(columnName == "SubjectCode")
                 {
-                    if(response[i].Checked == "True")
+                    for (int i = 0; i < response.Count; i++)
                     {
-                        checkStr += i + ",";
+                        if (response[i].Checked == "True")
+                        {
+                            checkStr += i + ",";
+                        }
                     }
-                }
-                if(checkStr != "")
-                {
-                    checkStr = checkStr.Substring(0, checkStr.Length - 1);
-                }
-                response[0].Count = checkStr;
+                    if (checkStr != "")
+                    {
+                        checkStr = checkStr.Substring(0, checkStr.Length - 1);
+                    }
+                    response[0].Count = checkStr;
+                } 
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -476,11 +479,24 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 var any = "";
                 var result = db.Ado.UseTran(() =>
                 {
+                    var data = db.Queryable<Business_CompanyBankInfo>();
                     var guid = cBank.VGUID;
-                    var isAny = db.Queryable<Business_CompanyBankInfo>().Any(x => x.CompanyCode == cBank.CompanyCode && x.BankName == cBank.BankName && x.BankAccount == cBank.BankAccount && x.VGUID != cBank.VGUID);
+                    var isAny = data.Any(x => x.CompanyCode == cBank.CompanyCode && x.BankName == cBank.BankName && x.BankAccount == cBank.BankAccount && x.VGUID != cBank.VGUID);
                     if (isAny)
                     {
                         any = "2";
+                        return;
+                    }
+                    var isAnyAccount = data.Any(x => x.AccountType == cBank.AccountType && x.VGUID != cBank.VGUID);
+                    if (isAnyAccount)
+                    {
+                        switch (cBank.AccountType)
+                        {
+                            case "基本户": any = "3";break;
+                            case "社保账户": any = "4"; break;
+                            default:
+                                break;
+                        }
                         return;
                     }
                     if (isEdit)
@@ -490,6 +506,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             BankAccountName = cBank.BankAccountName,
                             BankAccount = cBank.BankAccount,
                             BankName = cBank.BankName,
+                            AccountType = cBank.AccountType
                         }).Where(it => it.VGUID == guid).ExecuteCommand();
                     }
                     else
@@ -501,7 +518,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-                if(any == "2")
+                if(any != "")
                 {
                     resultModel.Status = any;
                 }
@@ -517,6 +534,18 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetAccountCompanyInfo(string code)//Guid[] vguids
+        {
+            var response = new List<V_AccountSetting>();
+            DbBusinessDataService.Command(db =>
+            {
+                response = db.SqlQueryable<V_AccountSetting>(@"select bs.VGUID,bs.BankName,bs.BankAccount,bs.CompanyCode
+  ,bs.BankAccountName,bs.AccountType,bs.CompanyName,bss.IsChecked  from V_AccountSetting bs 
+  left join Business_AccountSettingInfo bss on bs.VGUID=bss.BankVGUID 
+  and bss.AccountCode='" + code + "' where bs.CompanyCode in (select CompanyCode from Business_SubjectSettingInfo where AccountingCode= '"+ code + "')").ToList();
+            });
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult DeleteCompanyBankInfo(List<Guid> vguids)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
@@ -529,6 +558,43 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     resultModel.IsSuccess = saveChanges == vguids.Count;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult SaveAccoutSetting(string code, List<Guid> vguid)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var insertObjs = new List<Business_AccountSettingInfo>();
+                db.Ado.ExecuteCommand(@"delete Business_AccountSettingInfo where AccountCode = '" + code + "'");
+                if (vguid != null)
+                {
+                     foreach (var item in vguid)
+                        {
+                            var insertObj = new Business_AccountSettingInfo();
+                            insertObj.AccountCode = code;
+                            insertObj.IsChecked = true;
+                            insertObj.VGUID = Guid.NewGuid();
+                            insertObj.BankVGUID = item;
+                            insertObjs.Add(insertObj);
+                        }
+                        db.Insertable(insertObjs).ExecuteCommand();
+                    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                    {
+                        IsSetAccount = true,
+                    }).Where(it => it.Code == code).ExecuteCommand();
+                }
+                else
+                {
+                    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                    {
+                        IsSetAccount = false,
+                    }).Where(it => it.Code == code).ExecuteCommand();
+                }
+                resultModel.IsSuccess = true;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+
             });
             return Json(resultModel);
         }

@@ -33,10 +33,7 @@ var $page = function () {
             });
             //报表管理中心
             $("#ReportCenterManagemnet").click(function () {
-                switch (GetHrefPageId("7")) {
-                    case "701": CookieHelper.SaveCookie("Reconciliation_AmountReport"); window.location.href = "/ReportManagement/ReconciliationReport/Reconciliation"; break;
-                    default: jqxNotification("You are not authorized!", null, "error");
-                }
+               
             });
             //预算、分析、考核
             $("#BudgetAnalysisManagemnet").click(function () {

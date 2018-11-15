@@ -1304,11 +1304,11 @@ function settingAccount(code) {
         groups: ['BankName'],
         columns: [
             { text: '选择', datafield: "IsChecked", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
-            { text: '开户行', datafield: "BankName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center'},
-            { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '账户类别', datafield: "AccountType", groupable: true, width: '150px', align: 'center', cellsAlign: 'center' },
-            { text: '公司名称', datafield: "CompanyName", groupable: true, align: 'center', cellsAlign: 'center' },
+            { text: '开户行', datafield: "BankName", groupable: true, editable: false, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '银行账号', datafield: 'BankAccount', groupable: true, editable: false, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '银行户名', datafield: "BankAccountName", groupable: true, editable: false, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, editable: false, width: '150px', align: 'center', cellsAlign: 'center' },
+            { text: '公司名称', datafield: "CompanyName", groupable: true, editable: false, align: 'center', cellsAlign: 'center' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]

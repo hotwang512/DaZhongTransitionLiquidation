@@ -487,7 +487,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         any = "2";
                         return;
                     }
-                    var isAnyAccount = data.Any(x => x.AccountType == cBank.AccountType && x.VGUID != cBank.VGUID);
+                    var isAnyAccount = data.Any(x => x.AccountType == cBank.AccountType && x.BankAccount == cBank.CompanyCode && x.VGUID != cBank.VGUID);
                     if (isAnyAccount)
                     {
                         switch (cBank.AccountType)

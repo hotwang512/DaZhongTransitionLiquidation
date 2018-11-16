@@ -16,8 +16,7 @@ namespace DaZhongTransitionLiquidation.Controllers
 {
     public class AutoSyncBankFlow : Controller
     {
-        public DbService DbService;
-        public static SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
+
         public static void AutoSyncSeavice()
         {
             Thread LogThread = new Thread(new ThreadStart(DoSyncBank));
@@ -79,6 +78,7 @@ namespace DaZhongTransitionLiquidation.Controllers
 
         public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
         {
+            SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             int success = 0;
             foreach (var item in bankFlowList)
             {

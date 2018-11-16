@@ -74,7 +74,21 @@ var $page = function () {
                 }
             });
         });
-
+        $("#btnEdit").on("click", function (){
+            $("#InitialBalance").removeAttr("readonly");
+        })
+        $("#InitialBalance").on("blur", function () {
+            $("#InitialBalance").attr("readonly", "readonly");
+            $.ajax({
+                url: "/CapitalCenterManagement/BankFlowTemplate/SaveBalance",
+                data: { "Balance": $("#InitialBalance").val() },
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    
+                }
+            });
+        })
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -156,6 +170,7 @@ var $page = function () {
                     { name: 'VoucherSubject', type: 'string' },
                     { name: 'VoucherSubjectName', type: 'string' },
                     { name: 'VoucherSummary', type: 'string' },
+                    { name: 'Balance', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                 ],
                 datatype: "json",
@@ -199,6 +214,7 @@ var $page = function () {
                     { text: '凭证科目Code', hidden: true,datafield: 'VoucherSubject', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '凭证科目', datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '凭证摘要', datafield: 'VoucherSummary', width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: 'Balance', datafield: 'Balance', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]
             });
@@ -207,6 +223,7 @@ var $page = function () {
 
     function detailFunc(row, column, value, rowData) {
         var container = "";
+        $("#InitialBalance").val(rowData.Balance);
         if (selector.$EditPermission().val() == "1") {
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.VoucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
         } else {

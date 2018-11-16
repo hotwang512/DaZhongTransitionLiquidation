@@ -581,6 +581,7 @@ var $page = function () {
                     { name: 'SectionVGUID', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'Status', type: 'string' },
+                    { name: 'Remark', type: 'string' },
                 ],
                 hierarchy:
                 {
@@ -1033,7 +1034,7 @@ function edit(guid, Code, Descrption, Remark, ParentCode) {
     vguid = guid;
     selector.$txtCode().val(Code);
     selector.$txtDescrption().val(Descrption);
-    if (Remark == null || Remark == "null") {
+    if (Remark == null || Remark == "null" || Remark == "undefined") {
         Remark = "";
     }
     $("#txtRemark").val(Remark);

@@ -55,8 +55,43 @@ var menueHelp = {
         $("[id*=" + id + "]").parents(".menue_bodychild").css("display", "block");
         $(".menue_item").removeClass("munue_ItemSelcted");
         $("#" + menueId).addClass("munue_ItemSelcted");
+
+        switch (id) {
+            case "CapitalFlow": $("#gotoHome").text("大众出租财务共享服务平台--资金结算中心")
+                break;
+            case "PaymentOrder": $("#gotoHome").text("大众出租财务共享服务平台--资金结算中心") //*************
+                break;
+            case "VoucherManage": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+                break;
+            case "AssetManagement": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+                break;
+            case "OracleButt": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+                break;
+            case "FinancialStatements": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+                break;
+            case "QuerySubject": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")//*************
+                break;
+            case "Reimbursement": $("#gotoHome").text("大众出租财务共享服务平台--费用报销中心")
+                break;
+            case "ReportCenter": $("#gotoHome").text("大众出租财务共享服务平台--报表管理中心")
+                break;
+            case "Analysis": $("#gotoHome").text("大众出租财务共享服务平台--预算、分析、考核")
+                break;
+            case "BaseData": $("#gotoHome").text("大众出租财务共享服务平台--驾驶员结算中心")
+                break;
+            case "AmountReport": $("#gotoHome").text("大众出租财务共享服务平台--驾驶员结算中心")//*************
+                break;
+            case "BigCenter": $("#gotoHome").text("大众出租财务共享服务平台--大数据管理中心")
+                break;
+            case "TaxAuditManage": $("#gotoHome").text("大众出租财务共享服务平台--税务、审计、统计")
+                break;
+            case "SystemManage": $("#gotoHome").text("大众出租财务共享服务平台--系统管理")//*************
+                break;
+            default:
+        }
     }
 }
+
 
 
 $(function () {

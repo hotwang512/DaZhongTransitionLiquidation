@@ -57,7 +57,6 @@
             <div style="height: 20px; margin-top: 5px;">
                 账套段
             </div>
-            
         </li>
         <li>
             <div style="height: 20px; margin-top: 5px;">
@@ -103,6 +102,14 @@
         <div id="jqxTable1" class="jqxTable"></div>
     </div>
     <div style="overflow: hidden;">
+        <select id="CompanyCode" class="input_text form-control" style="display:none">
+            @{
+                foreach (var item in ViewBag.CompanyCode)
+                {
+                    <option value="@item.Code">@item.Descrption</option>
+                }
+            }
+        </select>
         <div id="jqxTable2" class="jqxTable"></div>
     </div>
     <div style="overflow: hidden;">

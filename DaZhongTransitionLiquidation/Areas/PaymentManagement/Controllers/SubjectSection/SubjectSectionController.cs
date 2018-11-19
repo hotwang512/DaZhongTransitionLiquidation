@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -26,7 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             //ViewBag.BankChannel = GetBankChannel();
             return View();
         }
-        public JsonResult GetCompanySection(GridParams para)
+        public JsonResult GetCompanySection(string companyCode,GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();
             var response = new List<Business_SevenSection>();
@@ -34,9 +35,64 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             {
                 //int pageCount = 0;               
                 para.pagenum = para.pagenum + 1;
-                response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code != null)
-                .OrderBy(i => i.Code, OrderByType.Asc).ToList();
+                //var subjectCode = db.SqlQueryable<Business_SubjectSettingInfo>(@"select SubjectCode from Business_SubjectSettingInfo where CompanyCode='" + companyCode + "'");
+                //response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code != null)
+                //.OrderBy(i => i.Code, OrderByType.Asc).ToList();
+                response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' 
+                              and Code is not null and Code in (select SubjectCode from Business_SubjectSettingInfo where CompanyCode = '" + companyCode + "')").OrderBy("Code asc").ToList();
                 jsonResult.TotalRows = response.Count;
+                if (response != null)
+                {
+                    var data = db.Queryable<Business_SubjectSettingInfo>();
+                    foreach (var item in response)
+                    {
+                        var isAnyAccountingCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.AccountingCode != null);
+                        if (isAnyAccountingCode)
+                        {
+                            item.IsAccountingCode = true;
+                        }
+                        else
+                        {
+                            item.IsAccountingCode = false;
+                        }
+                        var isAnyCostCenterCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.CostCenterCode != null);
+                        if (isAnyCostCenterCode)
+                        {
+                            item.IsCostCenterCode = true;
+                        }
+                        else
+                        {
+                            item.IsCostCenterCode = false;
+                        }
+                        var isAnySpareOneCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.SpareOneCode != null);
+                        if (isAnySpareOneCode)
+                        {
+                            item.IsSpareOneCode = true;
+                        }
+                        else
+                        {
+                            item.IsSpareOneCode = false;
+                        }
+                        var isAnySpareTwoCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.SpareTwoCode != null);
+                        if (isAnySpareTwoCode)
+                        {
+                            item.IsSpareTwoCode = true;
+                        }
+                        else
+                        {
+                            item.IsSpareTwoCode = false;
+                        }
+                        var isAnyIntercourseCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.IntercourseCode != null);
+                        if (isAnyIntercourseCode)
+                        {
+                            item.IsIntercourseCode = true;
+                        }
+                        else
+                        {
+                            item.IsIntercourseCode = false;
+                        }
+                    }
+                }
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }

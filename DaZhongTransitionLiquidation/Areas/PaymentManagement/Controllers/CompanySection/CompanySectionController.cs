@@ -533,7 +533,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 response = db.SqlQueryable<V_AccountSetting>(@"select bs.VGUID,bs.BankName,bs.BankAccount,bs.CompanyCode
   ,bs.BankAccountName,bs.AccountType,bs.CompanyName,bss.IsChecked  from V_AccountSetting bs 
   left join Business_AccountSettingInfo bss on bs.VGUID=bss.BankVGUID 
-  and bss.AccountCode='" + code + "' where bs.CompanyCode in (select CompanyCode from Business_SubjectSettingInfo where AccountingCode= '"+ code + "')").ToList();
+  and bss.AccountCode='" + code + "' where bs.CompanyCode in (select SubjectCode from Business_SubjectSettingInfo where AccountingCode= '" + code + "')").ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }

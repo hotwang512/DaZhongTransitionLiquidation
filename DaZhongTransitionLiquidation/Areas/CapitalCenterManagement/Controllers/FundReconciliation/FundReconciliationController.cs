@@ -58,7 +58,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult SaveFundReconciliation(Business_FundReconciliation sevenSection)
+        public JsonResult SaveFundReconciliation(Business_FundReconciliation sevenSection,bool isEdit)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -85,13 +85,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                 return;
                             }
                         }
-                        if (initialBalanceData.ReconciliantStatus == "对账失败")
+                        if (initialBalanceData.ReconciliantStatus == "对账失败" && initialBalanceData.BalanceDate != sevenSection.BalanceDate)
                         {
                             any = "3";
                             return;
                         }
                         number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where  
-                                 TransactionDate>'" + initialBalanceData.BalanceDate + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
+                                 TransactionDate>='" + initialBalanceData.BalanceDate.Value.AddDays(1) + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalanceData.BankBalance + number))
                         {
                             sevenSection.ReconciliantStatus = "对账成功";
@@ -113,9 +113,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         {
                             sevenSection.ReconciliantStatus = "对账失败";
                         }
+                    }
+                    if (isEdit)
+                    {
+                        db.Updateable(sevenSection).ExecuteCommand();
+                    }
+                    else
+                    {
+                        sevenSection.VGUID = Guid.NewGuid();
+                        db.Insertable(sevenSection).ExecuteCommand();
                     } 
-                    sevenSection.VGUID = Guid.NewGuid();
-                    db.Insertable(sevenSection).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

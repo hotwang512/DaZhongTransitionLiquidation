@@ -2,7 +2,7 @@
     $txtModuleID: function () { return $("#txtModule") },
 }
 var $page = function () {
-    $("#gotoHome").text("大众出租财务共享服务平台");
+    $("#homeModel").text("");
     this.init = function () {
         $(function () {
             //资金结算中心跳转

@@ -57,35 +57,35 @@ var menueHelp = {
         $("#" + menueId).addClass("munue_ItemSelcted");
 
         switch (id) {
-            case "CapitalFlow": $("#gotoHome").text("大众出租财务共享服务平台--资金结算中心")
+            case "CapitalFlow": $("#homeModel").text("--资金结算中心")
                 break;
-            case "PaymentOrder": $("#gotoHome").text("大众出租财务共享服务平台--资金结算中心") //*************
+            case "PaymentOrder": $("#homeModel").text("--资金结算中心") //*************
                 break;
-            case "VoucherManage": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+            case "VoucherManage": $("#homeModel").text("--会计核算中心")
                 break;
-            case "AssetManagement": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+            case "AssetManagement": $("#homeModel").text("--会计核算中心")
                 break;
-            case "OracleButt": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+            case "OracleButt": $("#homeModel").text("--会计核算中心")
                 break;
-            case "FinancialStatements": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")
+            case "FinancialStatements": $("#homeModel").text("--会计核算中心")
                 break;
-            case "QuerySubject": $("#gotoHome").text("大众出租财务共享服务平台--会计核算中心")//*************
+            case "QuerySubject": $("#homeModel").text("--会计核算中心")//*************
                 break;
-            case "Reimbursement": $("#gotoHome").text("大众出租财务共享服务平台--费用报销中心")
+            case "Reimbursement": $("#homeModel").text("--费用报销中心")
                 break;
-            case "ReportCenter": $("#gotoHome").text("大众出租财务共享服务平台--报表管理中心")
+            case "ReportCenter": $("#homeModel").text("--报表管理中心")
                 break;
-            case "Analysis": $("#gotoHome").text("大众出租财务共享服务平台--预算、分析、考核")
+            case "Analysis": $("#homeModel").text("--预算、分析、考核")
                 break;
-            case "BaseData": $("#gotoHome").text("大众出租财务共享服务平台--驾驶员结算中心")
+            case "BaseData": $("#homeModel").text("--驾驶员结算中心")
                 break;
-            case "AmountReport": $("#gotoHome").text("大众出租财务共享服务平台--驾驶员结算中心")//*************
+            case "AmountReport": $("#homeModel").text("--驾驶员结算中心")//*************
                 break;
-            case "BigCenter": $("#gotoHome").text("大众出租财务共享服务平台--大数据管理中心")
+            case "BigCenter": $("#homeModel").text("--大数据管理中心")
                 break;
-            case "TaxAuditManage": $("#gotoHome").text("大众出租财务共享服务平台--税务、审计、统计")
+            case "TaxAuditManage": $("#homeModel").text("--税务、审计、统计")
                 break;
-            case "SystemManage": $("#gotoHome").text("大众出租财务共享服务平台--系统管理")//*************
+            case "SystemManage": $("#homeModel").text("--系统管理")//*************
                 break;
             default:
         }

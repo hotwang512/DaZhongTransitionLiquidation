@@ -91,7 +91,7 @@ var $page = function () {
             }
             if (validateError <= 0) {
                 $.ajax({
-                    url: "/CapitalCenterManagement/FundReconciliation/SaveFundReconciliation",
+                    url: "/CapitalCenterManagement/FundReconciliation/SaveFundReconciliation?isEdit=" + isEdit,
                     data: {
                         "BankBalance": $("#BankBalance").val(),
                         "BalanceDate": $("#BalanceDate").val(),
@@ -154,14 +154,14 @@ var $page = function () {
                     { name: "checkbox", type: null },
                     { name: 'Reconcilianter', type: 'string' },
                     { name: 'BankBalance', type: 'number' },
-                    { name: 'BalanceDate', type: 'date' },                    
+                    { name: 'BalanceDate', type: 'date' },
                     { name: 'ReconciliantDate', type: 'date' },
                     { name: 'ReconciliantStatus', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { },
+                data: {},
                 url: "/CapitalCenterManagement/FundReconciliation/GetFundReconciliationData"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -181,25 +181,35 @@ var $page = function () {
                 source: typeAdapter,
                 theme: "office",
                 columnsHeight: 30,
+                //selectionMode: "selectionMode",
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '银行余额', datafield: 'BankBalance', width: 300, cellsFormat: "d2", pinned: false, align: 'center', cellsAlign: 'center' },
-                    { text: '余额日期', datafield: 'BalanceDate', width: 300, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '对账日期', datafield: 'ReconciliantDate', width: 300, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '对账人', datafield: 'Reconcilianter', width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: '对账状态', datafield: 'ReconciliantStatus',  align: 'center', cellsAlign: 'center' },
+                    { text: '银行余额', datafield: 'BankBalance', width: 250, cellsFormat: "d2", pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '余额日期', datafield: 'BalanceDate', width: 250, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", cellsRenderer: redcolcorFunc },
+                    { text: '对账日期', datafield: 'ReconciliantDate', width: 250, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", cellsRenderer: redcolcorFunc },
+                    { text: '对账人', datafield: 'Reconcilianter', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '对账状态', datafield: 'ReconciliantStatus', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '操作', align: 'center', cellsAlign: 'center', cellsRenderer: cellsDoneFunc },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]
             });
-
     }
 
-    function detailFunc(row, column, value, rowData) {
+    function cellsDoneFunc(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.VoucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
-        } else {
-            container = "<span>" + rowData.Batch + "</span>";
+        if (rowData.ReconciliantStatus == "对账失败") {
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BankBalance + "','" + rowData.BalanceDate.Format("yyyy-MM-dd") + "','" + rowData.ReconciliantDate.Format("yyyy-MM-dd") + "','" + rowData.Reconcilianter + "')>重新对账</a>";
+        }
+        return container;
+    }
+
+    function redcolcorFunc(row, column, value, rowData) {
+        var container = "";
+        if (rowData.ReconciliantStatus == "对账成功") {
+            container = "<font style='color:green'>" + value + "</font>";
+        }
+        else {
+            container = "<font style='color:red'>" + value + "</font>";
         }
         return container;
     }
@@ -233,7 +243,35 @@ var $page = function () {
         });
         return true;
     }
+
+    
 };
+
+function edit(guid, bankBalance, balanceDate, reconciliantDate, reconcilianter) {
+    isEdit = true;
+    vguid = guid;
+    if (bankBalance == null || bankBalance == "null") {
+        bankBalance = "";
+    }
+    if (balanceDate == null || balanceDate == "null") {
+        balanceDate = "";
+    }
+    if (reconciliantDate == null || reconciliantDate == "null") {
+        reconciliantDate = "";
+    }
+    if (reconcilianter == null || reconcilianter == "null") {
+        reconcilianter = "";
+    }
+    $("#BankBalance").val(bankBalance);
+    $("#BalanceDate").val(balanceDate);
+    $("#ReconciliantDate").val(reconciliantDate);
+    $("#Reconcilianter").val(reconcilianter);
+    $("#myModalLabel_title").text("重新对账");
+    //$("#AddNewBankDataDialog table tr").eq(1).hide();
+    $(".msg").remove();
+    selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
+    selector.$AddNewBankDataDialog().modal("show");
+}
 
 $(function () {
     var page = new $page();

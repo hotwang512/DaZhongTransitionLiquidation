@@ -1,0 +1,48 @@
+
+-------------------------------header----------------------
+2018-11-21 09:09:38,237 [16] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 无法连接到远程服务器 ---> System.Net.Sockets.SocketException: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 192.168.173.81:80
+   在 System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------header----------------------
+2018-11-21 11:14:50,535 [14] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 无法连接到远程服务器 ---> System.Net.Sockets.SocketException: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 192.168.173.81:80
+   在 System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2018-11-21 11:15:54,060 [14] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 无法连接到远程服务器 ---> System.Net.Sockets.SocketException: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 192.168.173.81:80
+   在 System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2018-11-21 13:15:11,620 [14] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 无法连接到远程服务器 ---> System.Net.Sockets.SocketException: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 192.168.173.81:80
+   在 System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2018-11-21 15:15:32,719 [14] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 无法连接到远程服务器 ---> System.Net.Sockets.SocketException: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 192.168.173.81:80
+   在 System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------header----------------------
+2018-11-21 15:28:33,692 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":17999.75,"JFJE":212507.65,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":1,"PATI":"跨行转账","FSJE":75.65,"FSSJ":"08:42","DFZH":6222620110006462833,"DFBZ":"CNY","DFHM":"王皓磊","VCTP":"","VCNO":"","YUER":30935764.15,"YOTU":"划款","BEZH":"交换机和网线　","T24F":"FT18325000600887"},{"CDFG":1,"PATI":"电子内转","FSJE":155432.00,"FSSJ":"08:42","DFZH":"03002360801","DFBZ":"CNY","DFHM":"上海大众国际会议中心有限公司","VCTP":"","VCNO":"","YUER":30780332.15,"YOTU":"划款　住宿费和会务费","BEZH":"","T24F":"FT18325738804504"},{"CDFG":1,"PATI":"跨行转账","FSJE":6000.00,"FSSJ":"08:42","DFZH":440375914037,"DFBZ":"CNY","DFHM":"上海小映网络科技有限公司","VCTP":"","VCNO":"","YUER":30774332.15,"YOTU":"划款","BEZH":"蛋糕　","T24F":"FT18325600481707"},{"CDFG":1,"PATI":"跨行转账","FSJE":25000.00,"FSSJ":"08:42","DFZH":31050161373800000336,"DFBZ":"CNY","DFHM":"上海容顺企业管理有限公司","VCTP":"","VCNO":"","YUER":30749332.15,"YOTU":"划款","BEZH":"咨询服务费　","T24F":"FT18325137730583"},{"CDFG":1,"PATI":"跨行转账","FSJE":26000.00,"FSSJ":"08:42","DFZH":31050161373800000336,"DFBZ":"CNY","DFHM":"上海容顺企业管理有限公司","VCTP":"","VCNO":"","YUER":30723332.15,"YOTU":"划款","BEZH":"咨询服务费　","T24F":"FT18325739287874"},{"CDFG":2,"PATI":"跨行转账","FSJE":17958.60,"FSSJ":"11:39","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":30741290.75,"YOTU":"1120-1120费39.59元","BEZH":"","T24F":"FT18325230624631"},{"CDFG":2,"PATI":"跨行转账","FSJE":41.15,"FSSJ":"11:48","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":30741331.9,"YOTU":"1120-1120费0.09元","BEZH":"","T24F":"FT18325189342580"}],"ACNO":31685803002369318,"SUMU":"0007","JFBS":5}}
+2018-11-21 15:28:50,013 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318","TradingStartDate":"20181120","TradingEndDate":"20181120"},result:{"success":true,"errmsg":"","data":{"DFJE":23340.02,"JFJE":179225.88,"HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"转帐","FSJE":4088.54,"JYRQ":"2018年11月20日","FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":31095814.2,"YOTU":"","BEZH":"","T24F":"BEA183240418149121101"},{"CDFG":1,"PATI":"转账","FSJE":114.00,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":6222600110055499029,"DFBZ":"CNY","DFHM":"黄峰波","VCTP":"","VCNO":"","YUER":31095700.2,"YOTU":"划款","BEZH":"哈尔滨出租汽车行业用车费　","T24F":"FT18324800011698"},{"CDFG":1,"PATI":"转账","FSJE":1037.40,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":31094662.8,"YOTU":"划款","BEZH":"办公室接待上级主管部门餐费　","T24F":"FT18324939759064"},{"CDFG":1,"PATI":"转账","FSJE":3125.00,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":32403108010059753,"DFBZ":"CNY","DFHM":"上海大众交通汽车修理有限公司","VCTP":"","VCNO":"","YUER":31091537.8,"YOTU":"划款","BEZH":"沪H01811公务车修理费　","T24F":"FT18324703240211"},{"CDFG":1,"PATI":"转账","FSJE":39888.00,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":435164256326,"DFBZ":"CNY","DFHM":"上海醇谊实业有限公司","VCTP":"","VCNO":"","YUER":31051649.8,"YOTU":"划款","BEZH":"饮料　","T24F":"FT18324059710451"},{"CDFG":1,"PATI":"转账","FSJE":1550.00,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":32476908010519648,"DFBZ":"CNY","DFHM":"上海大众运行供应链管理有限公司","VCTP":"","VCNO":"","YUER":31050099.8,"YOTU":"划款","BEZH":"搬运费　","T24F":"FT18324430113003"},{"CDFG":1,"PATI":"转账","FSJE":132500.00,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":436459221017,"DFBZ":"CNY","DFHM":"上海伊诺尔实业集团有限公司","VCTP":"","VCNO":"","YUER":30917599.8,"YOTU":"划款","BEZH":"车费发票　","T24F":"FT18324016640390"},{"CDFG":1,"PATI":"转账","FSJE":415.68,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":6214850218463849,"DFBZ":"CNY","DFHM":"龚敏","VCTP":"","VCNO":"","YUER":30917184.12,"YOTU":"划款","BEZH":"纸箱　","T24F":"FT18324565009511"},{"CDFG":1,"PATI":"转账","FSJE":595.80,"JYRQ":"2018年11月20日","FSSJ":"09:23","DFZH":6214850218463849,"DFBZ":"CNY","DFHM":"龚敏","VCTP":"","VCNO":"","YUER":30916588.32,"YOTU":"划款","BEZH":"2018年10月交通费　","T24F":"FT18324806078664"},{"CDFG":2,"PATI":"转账","FSJE":19251.48,"JYRQ":"2018年11月20日","FSSJ":"11:42","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":30935839.8,"YOTU":"1119-1119费42.45元","BEZH":"","T24F":"FT18324478080053"}],"ACNO":31685803002369318,"SUMU":10,"JFBS":8}}

@@ -269,6 +269,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SubjectCode = item;
+                                insertObj.SubjectVGUID = "A63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs).ExecuteCommand();
@@ -301,6 +302,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.AccountingCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs).ExecuteCommand();
@@ -333,6 +335,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.CostCenterCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
@@ -365,6 +368,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareOneCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
@@ -397,6 +401,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareTwoCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
@@ -428,6 +433,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.IntercourseCode = item;
+                                insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
@@ -448,6 +455,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.CompanyCode = item;
+                                insertObj.SubjectVGUID = "H63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();

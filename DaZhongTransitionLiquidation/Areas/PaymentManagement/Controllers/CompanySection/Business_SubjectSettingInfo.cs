@@ -15,7 +15,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public string SpareOneCode { get; set; }
         public string SpareTwoCode { get; set; }
         public string IntercourseCode { get; set; }
-        public Guid SubjectVGUID { get; set; }
+        public string SubjectVGUID { get; set; }
         public bool Checked { get; set; }
         public string CompanyCode { get; set; }
         public string AccountModeCode { get; set; }

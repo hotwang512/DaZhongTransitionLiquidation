@@ -1,61 +1,39 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
-    ViewBag.Title = "资金交易流水/银行交易流水";
+    ViewBag.Title = "资金交易流水/资金对账模块";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 
 @section js{
     <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.Content("~/Areas/CapitalCenterManagement/Views/_js/BankFlowTemplate.js")"></script>
+    <script src="@Url.Content("~/Areas/CapitalCenterManagement/Views/_js/FundReconciliation.js")"></script>
 }
 
 @section css{
 
 }
-<style type="text/css">
-    .jqx-grid-cell-pinned-office {
-        background-color: none !important;
-    }
-    </style>
-
 @if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
             @if (currentModuleRolePermission.Adds == 1)
             {
-                <td style="width: 190px;">
-                    <button id="btnSync" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">同步当天银行数据</span></button>
+                <td style="width: 95px;">
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
-                <td style="width: 190px;">
-                    <button id="btnYesterdaySync" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">同步前天银行数据</span></button>
+            }
+            @if (currentModuleRolePermission.Deletes == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
                 </td>
             }
         </tr>
     </table>
 }
-<div class="mk">
-    <div class="header_mk">
-        <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">编辑余额</span></div>
-    </div>
-    <div class="body_mk" style="height:70px;">
-        <table style="margin-top: 20px; margin-left: 20px;">
-            <tr style="height: 45px;">
-                <td class="td_span">初始余额：</td>
-                <td class="td_input">
-                    <input id="InitialBalance" type="text" class="input_text form-control" readonly="readonly"/>
-                </td>
-                <td style="width: 95px;">
-                    <button id="btnEdit" type="button" class="buttons" style="margin-top: 8px;"><i class="iconfont btn_icon">&#xe646;</i><span style="margin-left: 7px; float: left;">编辑</span></button>
-                </td>     
-            </tr>
-        </table>
-    </div>
-</div>
 <!-- 中部条件 -->
-<div class="mk">
+<div class="mk hide">
     <div class="header_mk">
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
@@ -70,10 +48,10 @@
                 <td class="td_span">交易开始日期：</td>
                 <td class="td_input">
                     <input id="TransactionDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
-                </td>              
+                </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
-                </td>               
+                </td>
             </tr>
             <tr style="height: 45px;">
                 <td class="td_span">付款单位：</td>
@@ -88,7 +66,7 @@
                     <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
                 </td>
             </tr>
-</table>
+        </table>
     </div>
 </div>
 <!-- 中部条件 -->
@@ -98,17 +76,16 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
     </div>
-    <div id="jqxTable" class="jqxTable">
-    </div>
+    <div id="jqxTable" class="jqxTable"></div>
 </div>
 <style>
     /*.input_text {
         width: 340px;
     }*/
     .td_span {
-    text-align: right;
-    width: 115px;
-}
+        text-align: right;
+        width: 115px;
+    }
 </style>
 <!-- 底部表格 -->
 <input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
@@ -118,27 +95,34 @@
             <div class="modal-content" style="width: 420px; margin-left: auto; margin-right: auto;">
                 <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">编辑数据</h4>
+                    <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">新增数据</h4>
                 </div>
                 <div class="modal-body" style="width: 100%;">
                     <table style="width: 100%;">
                         <tr style="height: 45px;">
-                            <td style="width: 90px;text-align: left"><span class="spanText">凭证科目</span></td>
+                            <td style="width: 90px;text-align: left"><span class="spanText">银行余额</span></td>
                             <td>
-                                <div id="pushPeopleDropDownButton" class="input_text form-control">
-                                    <div style="" id="pushTree">
-                                    </div>
-                                </div>
-                                <input id="VoucherSubject" name="VoucherSubject" type="hidden" validatetype="required" />
-                                <input id="VoucherSubjectName" name="VoucherSubjectName" type="hidden" />
+                                <input id="BankBalance" style="width: 210px;" type="text" class="input_text form-control" validatetype="decimalNumber" />
                             </td>
                         </tr>
                         <tr style="height: 45px;">
-                            <td style="text-align: left"><span class="spanText">凭证摘要</span></td>
+                            <td style="text-align: left"><span class="spanText">余额日期</span></td>
                             <td>
-                                <input id="VoucherSummary" style="width: 210px;" type="text" class="input_text form-control" validatetype="required" />
+                                <input id="BalanceDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
                             </td>
-                        </tr>                       
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="text-align: left"><span class="spanText">对账日期</span></td>
+                            <td>
+                                <input id="ReconciliantDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="text-align: left"><span class="spanText">对账人</span></td>
+                            <td>
+                                <input id="Reconcilianter" style="width: 210px;" type="text" class="input_text form-control" validatetype="required" />
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="modal-footer">

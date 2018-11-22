@@ -55,8 +55,43 @@ var menueHelp = {
         $("[id*=" + id + "]").parents(".menue_bodychild").css("display", "block");
         $(".menue_item").removeClass("munue_ItemSelcted");
         $("#" + menueId).addClass("munue_ItemSelcted");
+
+        switch (id) {
+            case "CapitalFlow": $("#homeModel").text("--资金结算中心")
+                break;
+            case "PaymentOrder": $("#homeModel").text("--资金结算中心") //*************
+                break;
+            case "VoucherManage": $("#homeModel").text("--会计核算中心")
+                break;
+            case "AssetManagement": $("#homeModel").text("--会计核算中心")
+                break;
+            case "OracleButt": $("#homeModel").text("--会计核算中心")
+                break;
+            case "FinancialStatements": $("#homeModel").text("--会计核算中心")
+                break;
+            case "QuerySubject": $("#homeModel").text("--会计核算中心")//*************
+                break;
+            case "Reimbursement": $("#homeModel").text("--费用报销中心")
+                break;
+            case "ReportCenter": $("#homeModel").text("--报表管理中心")
+                break;
+            case "Analysis": $("#homeModel").text("--预算、分析、考核")
+                break;
+            case "BaseData": $("#homeModel").text("--驾驶员结算中心")
+                break;
+            case "AmountReport": $("#homeModel").text("--驾驶员结算中心")//*************
+                break;
+            case "BigCenter": $("#homeModel").text("--大数据管理中心")
+                break;
+            case "TaxAuditManage": $("#homeModel").text("--税务、审计、统计")
+                break;
+            case "SystemManage": $("#homeModel").text("--系统管理")//*************
+                break;
+            default:
+        }
     }
 }
+
 
 
 $(function () {

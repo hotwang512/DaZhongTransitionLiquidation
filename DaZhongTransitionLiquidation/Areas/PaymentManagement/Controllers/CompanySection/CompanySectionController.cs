@@ -21,7 +21,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
-            //ViewBag.Channel = GetChannel();
+            ViewBag.CompanyCode = GetCompanyCode();
             //ViewBag.BankChannel = GetBankChannel();
             return View();
         }
@@ -99,15 +99,24 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         /// </summary>
         /// <param name="vguids"></param>
         /// <returns></returns>
-        public JsonResult GetSectionInfo(string code, string sectionVGUID,string columnName,string keyColumnName)//Guid[] vguids
+        public JsonResult GetSectionInfo(string code, string sectionVGUID,string columnName,string keyColumnName,int index,string companyCode)//Guid[] vguids
         {
             var response = new List<SubjectSetting>();
             DbBusinessDataService.Command(db =>
             {
                 var checkStr = "";
-                response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
- left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss."+ keyColumnName + "='" + code + @"'
- where bs.SectionVGUID='"+ sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+                if(index == 2)
+                {
+                    response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
+ and bss.SubjectCode='" + companyCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+                }
+                else
+                {
+                    response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
+ where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+                }
                 if(columnName == "SubjectCode")
                 {
                     for (int i = 0; i < response.Count; i++)
@@ -240,7 +249,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
         }
 
-        public JsonResult SaveSectionSetting(string code, List<string> otherCode, string type)
+        public JsonResult SaveSectionSetting(string code, List<string> otherCode, string type,string companyCode)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -260,6 +269,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SubjectCode = item;
+                                insertObj.SubjectVGUID = "A63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs).ExecuteCommand();
@@ -281,7 +291,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 核算段设置
                     case "1":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and AccountingCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '"+ companyCode + "'  and AccountingCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -291,6 +301,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.AccountingCode = item;
+                                insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs).ExecuteCommand();
@@ -312,7 +324,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 成本中心段设置
                     case "2":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and CostCenterCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and CostCenterCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -322,28 +334,30 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.CostCenterCode = item;
+                                insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsCostCenterCode = true,
-                            }).Where(it => it.Code == code).ExecuteCommand();
+                            //db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                            //{
+                            //    IsCostCenterCode = true,
+                            //}).Where(it => it.Code == code).ExecuteCommand();
                         }
-                        else
-                        {
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsCostCenterCode = false,
-                            }).Where(it => it.Code == code).ExecuteCommand();
-                        }
+                        //else
+                        //{
+                        //    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                        //    {
+                        //        IsCostCenterCode = false,
+                        //    }).Where(it => it.Code == code).ExecuteCommand();
+                        //}
                         resultModel.IsSuccess = true;
                         resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                         break;
                     #endregion
                     #region 备用1段设置
                     case "3":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SpareOneCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and SpareOneCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -353,28 +367,30 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareOneCode = item;
+                                insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsSpareOneCode = true,
-                            }).Where(it => it.Code == code).ExecuteCommand();
+                            //db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                            //{
+                            //    IsSpareOneCode = true,
+                            //}).Where(it => it.Code == code).ExecuteCommand();
                         }
-                        else
-                        {
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsSpareOneCode = false,
-                            }).Where(it => it.Code == code).ExecuteCommand();
-                        }
+                        //else
+                        //{
+                        //    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                        //    {
+                        //        IsSpareOneCode = false,
+                        //    }).Where(it => it.Code == code).ExecuteCommand();
+                        //}
                         resultModel.IsSuccess = true;
                         resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                         break;
                     #endregion
                     #region 备用2段设置
                     case "4":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SpareTwoCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and SpareTwoCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -384,28 +400,30 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareTwoCode = item;
+                                insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsSpareTwoCode = true,
-                            }).Where(it => it.Code == code).ExecuteCommand();
+                            //db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                            //{
+                            //    IsSpareTwoCode = true,
+                            //}).Where(it => it.Code == code).ExecuteCommand();
                         }
-                        else
-                        {
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsSpareTwoCode = false,
-                            }).Where(it => it.Code == code).ExecuteCommand();
-                        }                            
+                        //else
+                        //{
+                        //    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                        //    {
+                        //        IsSpareTwoCode = false,
+                        //    }).Where(it => it.Code == code).ExecuteCommand();
+                        //}                            
                         resultModel.IsSuccess = true;
                         resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                         break;
                     #endregion
                     #region 往来段设置
                     case "5":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and IntercourseCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and IntercourseCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -415,21 +433,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.IntercourseCode = item;
+                                insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsIntercourseCode = true,
-                            }).Where(it => it.Code == code).ExecuteCommand();
-                        }
-                        else
-                        {
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsIntercourseCode = false,
-                            }).Where(it => it.Code == code).ExecuteCommand();
-                        }                           
+                        }                          
                         resultModel.IsSuccess = true;
                         resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                         break;
@@ -446,20 +455,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.Checked = true;
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.CompanyCode = item;
+                                insertObj.SubjectVGUID = "H63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsCompanyCode = true,
-                            }).Where(it => it.Code == code).ExecuteCommand();
-                        }
-                        else
-                        {
-                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                            {
-                                IsCompanyCode = false,
-                            }).Where(it => it.Code == code).ExecuteCommand();
                         }
                         resultModel.IsSuccess = true;
                         resultModel.Status = resultModel.IsSuccess ? "1" : "0";
@@ -542,7 +541,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 response = db.SqlQueryable<V_AccountSetting>(@"select bs.VGUID,bs.BankName,bs.BankAccount,bs.CompanyCode
   ,bs.BankAccountName,bs.AccountType,bs.CompanyName,bss.IsChecked  from V_AccountSetting bs 
   left join Business_AccountSettingInfo bss on bs.VGUID=bss.BankVGUID 
-  and bss.AccountCode='" + code + "' where bs.CompanyCode in (select CompanyCode from Business_SubjectSettingInfo where AccountingCode= '"+ code + "')").ToList();
+  and bss.AccountCode='" + code + "' where bs.CompanyCode in (select SubjectCode from Business_SubjectSettingInfo where AccountingCode= '" + code + "')").ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -597,6 +596,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
 
             });
             return Json(resultModel);
+        }
+        public List<Business_SevenSection> GetCompanyCode()
+        {
+            var result = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                result = db.Queryable<Business_SevenSection>().Where(x=>x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+            });
+            return result;
         }
     }
 }

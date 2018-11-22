@@ -120,5 +120,20 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult SaveBalance(Business_BankFlowTemplate sevenSection)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    db.Ado.ExecuteCommand(@"update Business_BankFlowTemplate set Balance = '" + sevenSection.Balance + "'");
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
     }
 }

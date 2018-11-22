@@ -209,7 +209,8 @@ function validate_Number(selecter) {
 //验证整数数字或小数点数字
 function validate_decimalNumber(selecter) {
     var isValidateSuccess = true;
-    var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+    //var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+    var reg = /^(\-?)\d+(\.\d+)?$/;
     if (reg.test($(selecter).val())) {
         isValidateSuccess = true;
         if ($(selecter).hasClass("input_Validate")) {

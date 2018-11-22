@@ -70,7 +70,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     string revenueDate = revenueDateData.ToString("yyyy-MM-dd");
                     for (int k = 1; k < i; k++)
                     {
-                        revenueDate += "," + revenueDateData.AddDays(-i).ToString("yyyy-MM-dd");
+                        revenueDate += "," + revenueDateData.AddDays(-k).ToString("yyyy-MM-dd");
                     }
                     ResultModel<usp_GetTotalAmount> resultData = GetTotalAmount(dbBusinessDataService, bankDate, revenueDate, business_Reconciliation.Channel_Id);
                     if (resultData != null)

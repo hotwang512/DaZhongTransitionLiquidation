@@ -280,6 +280,7 @@ var $page = function () {
                         "BankAccountName": $("#BankAccountName").val(),
                         "CompanyCode": $("#CompanyCode").val(),
                         "AccountType": $("#AccountType").val(),
+                        "InitialBalance": $("#InitialBalance").val(),
                         "VGUID": vguid
                     },
                     type: "post",
@@ -493,7 +494,7 @@ var $page = function () {
             pageable: true,
             width: "100%",
             height: 550,
-            pageSize: 10,
+            pageSize: 99999999,
             serverProcessing: true,
             pagerButtonsCount: 10,
             source: typeAdapter,
@@ -552,7 +553,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 550,
-                pageSize: 10,
+                pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
@@ -668,7 +669,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 550,
-                pageSize: 10,
+                pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
@@ -717,7 +718,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 550,
-                pageSize: 10,
+                pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
@@ -765,7 +766,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 550,
-                pageSize: 10,
+                pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
@@ -813,7 +814,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 550,
-                pageSize: 10,
+                pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
@@ -861,7 +862,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 550,
-                pageSize: 10,
+                pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
@@ -1141,9 +1142,7 @@ function settingSection(column, code) {
                 { text: 'Count', datafield: 'Count', hidden: true },
             ]
         });
-        
         $('#jqxSubjectSetting').on('bindingComplete', function (event) {
-            //$("#jqxSubjectSetting").jqxTreeGrid('showColumn', 'Checked');
             $("#jqxSubjectSetting").jqxTreeGrid('checkRow')
             var firstLevelRows = $("#jqxSubjectSetting").jqxTreeGrid('getRows');
             if (firstLevelRows[0].Count != "") {
@@ -1152,7 +1151,9 @@ function settingSection(column, code) {
                     // get a row.
                     $("#jqxSubjectSetting").jqxTreeGrid('checkRow', count[i])
                 }
-            } 
+            }
+            $("#jqxTable2").jqxTreeGrid('expandRow', 0);
+            $("#jqxTable2").jqxTreeGrid('collapseRow', 0);
         });
     }
     else {
@@ -1220,6 +1221,7 @@ function settingCompany(code, companyName) {
                { name: 'BankAccountName', type: 'string' },
                { name: 'AccountType', type: 'string' },
                { name: "CompanyCode", type: 'string' },
+               { name: "InitialBalance", type: 'number' },
                { name: 'VGUID', type: 'string' },
                //{ name: 'SectionVGUID', type: 'string' },
                //{ name: 'VGUID', type: 'string' },
@@ -1236,7 +1238,7 @@ function settingCompany(code, companyName) {
     var typeAdapter = new $.jqx.dataAdapter(source);
     $("#jqxCompanySetting").jqxGrid({
         //pageable: false,           
-        width: '800px',
+        width: '1100px',
         height: 400,
         //pageSize: 10,
         //serverProcessing: true,
@@ -1254,8 +1256,9 @@ function settingCompany(code, companyName) {
         columns: [
             { text: '开户行', datafield: "BankName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center', cellsRenderer: editBankFunc },
             { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '账户类别', datafield: "AccountType", groupable: true, align: 'center', cellsAlign: 'center' },
+            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '250px', align: 'center', cellsAlign: 'center' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2",align: 'center', cellsAlign: 'center' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]
@@ -1266,7 +1269,7 @@ function settingCompany(code, companyName) {
         // row's bound index.
         var rowdata = args.row.bounddata;
         if (rowdata.level != 0) {
-            editBank(rowdata.VGUID, rowdata.CompanyCode, rowdata.BankName, rowdata.BankAccount, rowdata.BankAccountName);
+            editBank(rowdata.VGUID, rowdata.CompanyCode, rowdata.BankName, rowdata.BankAccount, rowdata.BankAccountName,rowdata.AccountType,rowdata.InitialBalance);
         }
     });
     //$('#jqxCompanySetting').jqxGrid('expandallgroups');
@@ -1381,7 +1384,7 @@ function renderedFunc(element) {
     return true;
 }
 
-function editBank(guid, companyCode, bankName, bankAccount, bankAccountName) {
+function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, accountType, initialBalance) {
     $("#BankName").val("");
     $("#BankAccount").val("");
     $("#BankAccountName").val("");
@@ -1400,6 +1403,8 @@ function editBank(guid, companyCode, bankName, bankAccount, bankAccountName) {
     $("#BankName").val(bankName);
     $("#BankAccount").val(bankAccount);
     $("#BankAccountName").val(bankAccountName);
+    $("#AccountType").val(accountType);
+    $("#InitialBalance").val(initialBalance);
     $("#myModalLabel_title3").text("编辑银行数据");
     //$("#AddNewBankDataDialog table tr").eq(1).hide();
     $(".msg").remove();

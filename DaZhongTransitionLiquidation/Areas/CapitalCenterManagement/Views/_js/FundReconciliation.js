@@ -28,6 +28,7 @@ var selector = {
 
 var isEdit = false;
 var vguid = "";
+var mydate = new Date();
 var $page = function () {
 
     this.init = function () {
@@ -37,10 +38,13 @@ var $page = function () {
     //所有事件
     function addEvent() {
         $("#btnAdd").on("click", function () {
+            $("#BankAccount").val("");
+            $("#BankName").val("");
+            $("#BankAccountName").val("");
             $("#BankBalance").val("");
             $("#BalanceDate").val("");
-            $("#ReconciliantDate").val("");
-            $("#Reconcilianter").val("");
+            $("#ReconciliantDate").val(mydate.Format("yyyy-MM-dd"));
+            $("#Reconcilianter").val($("#LoginName").val());
             selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
             selector.$AddNewBankDataDialog().modal("show");
         });
@@ -64,8 +68,11 @@ var $page = function () {
         });
         //加载列表数据
         initTable();
+        //选择银行数据
         selector.$btnSearch().unbind("click").on("click", function () {
-            initTable();
+            initBankTable();
+            $("#AddCompanyDialog").modal({ backdrop: "static", keyboard: false });
+            $("#AddCompanyDialog").modal("show");
         });
 
         //重置按钮事件
@@ -90,9 +97,17 @@ var $page = function () {
                 validateError++;
             }
             if (validateError <= 0) {
+                var obj = document.getElementById("CompanyCode");
+                var index = obj.selectedIndex;
+                var companyName = obj.options[index].getAttribute("name");
                 $.ajax({
                     url: "/CapitalCenterManagement/FundReconciliation/SaveFundReconciliation?isEdit=" + isEdit,
                     data: {
+                        "CompanyName": companyName,
+                        "CompanyCode": $("#CompanyCode").val(),
+                        "BankAccount": $("#BankAccount").val(),
+                        "BankName": $("#BankName").val(),
+                        "BankAccountName": $("#BankAccountName").val(),
                         "BankBalance": $("#BankBalance").val(),
                         "BalanceDate": $("#BalanceDate").val(),
                         "ReconciliantDate": $("#ReconciliantDate").val(),
@@ -146,6 +161,7 @@ var $page = function () {
             }
         });
     }
+
     function initTable() {
         var source =
             {
@@ -157,6 +173,11 @@ var $page = function () {
                     { name: 'BalanceDate', type: 'date' },
                     { name: 'ReconciliantDate', type: 'date' },
                     { name: 'ReconciliantStatus', type: 'string' },
+                    { name: 'CompanyCode', type: 'string' },
+                    { name: 'CompanyName', type: 'string' },
+                    { name: 'BankAccount', type: 'string' },
+                    { name: 'BankName', type: 'string' },
+                    { name: 'BankAccountName', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                 ],
                 datatype: "json",
@@ -181,18 +202,94 @@ var $page = function () {
                 source: typeAdapter,
                 theme: "office",
                 columnsHeight: 30,
+                groups: ['CompanyName'],
+                groupsRenderer: function (value, rowData, level) {
+                    return "公司名: " + value;
+                },
                 //selectionMode: "selectionMode",
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '银行余额', datafield: 'BankBalance', width: 250, cellsFormat: "d2", pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
-                    { text: '余额日期', datafield: 'BalanceDate', width: 250, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", cellsRenderer: redcolcorFunc },
-                    { text: '对账日期', datafield: 'ReconciliantDate', width: 250, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", cellsRenderer: redcolcorFunc },
-                    { text: '对账人', datafield: 'Reconcilianter', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
-                    { text: '对账状态', datafield: 'ReconciliantStatus', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
-                    { text: '操作', align: 'center', cellsAlign: 'center', cellsRenderer: cellsDoneFunc },
+                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: '公司', datafield: 'CompanyName',pinned:true, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '银行账号', datafield: 'BankAccount', pinned: true, width: 200,align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '开户行', datafield: 'BankName', width: 250, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '银行名称', datafield: 'BankAccountName', width: 200, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '银行余额', datafield: 'BankBalance', width: 150, cellsFormat: "d2", pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '余额日期', datafield: 'BalanceDate', width: 150, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", cellsRenderer: redcolcorFunc },
+                    { text: '对账日期', datafield: 'ReconciliantDate', width: 150, pinned: false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", cellsRenderer: redcolcorFunc },
+                    { text: '对账人', datafield: 'Reconcilianter', width: 100, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '对账状态', datafield: 'ReconciliantStatus', width: 100, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '操作', align: 'center', cellsAlign: 'center', width: 100, cellsRenderer: cellsDoneFunc },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]
             });
+    }
+
+    function initBankTable() {
+        var code = $("#CompanyCode").val();
+        var source =
+      {
+          datafields:
+          [
+              { name: "BankName", type: 'string' },
+              { name: 'BankAccount', type: 'string' },
+              { name: 'BankAccountName', type: 'string' },
+              { name: 'AccountType', type: 'string' },
+              { name: "CompanyCode", type: 'string' },
+              { name: "InitialBalance", type: 'number' },
+              { name: 'VGUID', type: 'string' },
+              //{ name: 'SectionVGUID', type: 'string' },
+              //{ name: 'VGUID', type: 'string' },
+              //{ name: 'Status', type: 'string' },
+              //{ name: 'Remark', type: 'string' },
+          ],
+          datatype: "json",
+          id: "VGUID",
+          //root: "entry",
+          //record: "content",
+          data: { Code: code },
+          url: "/PaymentManagement/CompanySection/GetCompanyInfo"   //获取数据源的路径
+      };
+        var typeAdapter = new $.jqx.dataAdapter(source);
+        $("#jqxCompanySetting").jqxGrid({
+            //pageable: false,           
+            width: '1100px',
+            height: 400,
+            //pageSize: 10,
+            //serverProcessing: true,
+            //pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            groupable: true,
+            groupsexpandedbydefault: true,
+            columnsHeight: 40,
+            showgroupsheader: false,
+            //editable: false,
+            //pagermode: 'simple',
+            selectionmode: 'singlerow',
+            groups: ['BankName'],
+            columns: [
+                { text: '开户行', datafield: "BankName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+                { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+                { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '250px', align: 'center', cellsAlign: 'center' },
+                { text: '账户类别', datafield: "AccountType", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
+                { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
+                { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true }
+            ]
+        });
+        $("#jqxCompanySetting").on("rowclick", function (event) {
+            // event arguments.
+            var args = event.args;
+            // row's bound index.
+            var rowdata = args.row.bounddata;
+            if (rowdata.level != 0) {
+                $("#BankAccount").val(rowdata.BankAccount);
+                $("#BankName").val(rowdata.BankName);
+                $("#BankAccountName").val(rowdata.BankAccountName);
+                $("#AddCompanyDialog").modal("hide");
+            }
+        })
+
     }
 
     function cellsDoneFunc(row, column, value, rowData) {
@@ -244,7 +341,6 @@ var $page = function () {
         return true;
     }
 
-    
 };
 
 function edit(guid, bankBalance, balanceDate, reconciliantDate, reconcilianter) {
@@ -257,10 +353,10 @@ function edit(guid, bankBalance, balanceDate, reconciliantDate, reconcilianter) 
         balanceDate = "";
     }
     if (reconciliantDate == null || reconciliantDate == "null") {
-        reconciliantDate = "";
+        reconciliantDate = mydate.Format("yyyy-MM-dd");
     }
     if (reconcilianter == null || reconcilianter == "null") {
-        reconcilianter = "";
+        reconcilianter = $("#LoginName").val();
     }
     $("#BankBalance").val(bankBalance);
     $("#BalanceDate").val(balanceDate);

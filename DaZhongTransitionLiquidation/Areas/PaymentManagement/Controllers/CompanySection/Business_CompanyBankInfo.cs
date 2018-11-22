@@ -14,5 +14,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public string CompanyCode { get; set; }
         public string BankAccountName { get; set; }
         public string AccountType { get; set; }
+        public decimal? InitialBalance { get; set; }
     }
 }

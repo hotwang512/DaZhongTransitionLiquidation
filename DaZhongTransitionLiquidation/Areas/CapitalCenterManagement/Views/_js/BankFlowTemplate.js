@@ -74,21 +74,6 @@ var $page = function () {
                 }
             });
         });
-        $("#btnEdit").on("click", function (){
-            $("#InitialBalance").removeAttr("readonly");
-        })
-        $("#InitialBalance").on("blur", function () {
-            $("#InitialBalance").attr("readonly", "readonly");
-            $.ajax({
-                url: "/CapitalCenterManagement/BankFlowTemplate/SaveBalance",
-                data: { "Balance": $("#InitialBalance").val() },
-                type: "post",
-                dataType: "json",
-                success: function (msg) {
-                    
-                }
-            });
-        })
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -223,7 +208,6 @@ var $page = function () {
 
     function detailFunc(row, column, value, rowData) {
         var container = "";
-        $("#InitialBalance").val(rowData.Balance);
         if (selector.$EditPermission().val() == "1") {
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.VoucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
         } else {

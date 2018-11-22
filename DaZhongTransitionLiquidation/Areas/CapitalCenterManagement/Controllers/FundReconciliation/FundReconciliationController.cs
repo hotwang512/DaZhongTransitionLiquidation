@@ -1,4 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
@@ -22,6 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CompanyCode = GetCompanyCode();
             return View();
         }
         public JsonResult GetFundReconciliationData(Business_FundReconciliation searchParams, GridParams para)
@@ -66,13 +68,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 var any = "";
                 var result = db.Ado.UseTran(() =>
                 {
-                    var datas = db.Queryable<Business_BankFlowTemplate>();
-                    var balanceDate = sevenSection.BalanceDate;//余额日期
-                    var initialBalanceData = db.Queryable<Business_FundReconciliation>().OrderBy("BalanceDate desc").First();//最新一条数据
+                    var companyCode = sevenSection.CompanyCode;//公司
+                    var bankAccount = sevenSection.BankAccount;//银行账号
+                    var initialBalance = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == companyCode && x.BankAccount == bankAccount).First().InitialBalance;//初始余额
+
                     var bankBalance = sevenSection.BankBalance;//银行余额 
+                    var balanceDate = sevenSection.BalanceDate;//余额日期
                     var date = balanceDate.ToString().Split(" ")[0];
-                    var initialBalance = datas.First().Balance;//初始余额
-                    var balanceDateEnd = Convert.ToDateTime(date + " 23:59:59");
+                    var balanceDateEnd = Convert.ToDateTime(date + " 23:59:59");//结束日期
+                    var initialBalanceData = db.Queryable<Business_FundReconciliation>().Where(x=>x.ReconciliantStatus == "对账成功" && x.CompanyCode == companyCode 
+                                              && x.BankAccount == bankAccount).OrderBy("BalanceDate desc").First();//当前公司银行账号下最新一条数据
                     decimal number = 0;
                     if (initialBalanceData != null)
                     {
@@ -90,8 +95,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             any = "3";
                             return;
                         }
-                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where  
-                                 TransactionDate>='" + initialBalanceData.BalanceDate.Value.AddDays(1) + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
+                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where (PayeeAccount='" + bankAccount + "' or ReceivableAccount='" + bankAccount + @"') 
+                                 and TransactionDate >='" + initialBalanceData.BalanceDate.Value.AddDays(1) + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalanceData.BankBalance + number))
                         {
                             sevenSection.ReconciliantStatus = "对账成功";
@@ -103,8 +108,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                     else
                     {
-                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where  
-                                 TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
+                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where (PayeeAccount='" + bankAccount + "' or ReceivableAccount='" + bankAccount + @"') 
+                                 and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalance + number))
                         {
                             sevenSection.ReconciliantStatus = "对账成功";
@@ -133,6 +138,15 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 }
             });
             return Json(resultModel);
+        }
+        public List<Business_SevenSection> GetCompanyCode()
+        {
+            var result = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                result = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+            });
+            return result;
         }
     }
 }

@@ -505,7 +505,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             BankAccountName = cBank.BankAccountName,
                             BankAccount = cBank.BankAccount,
                             BankName = cBank.BankName,
-                            AccountType = cBank.AccountType
+                            AccountType = cBank.AccountType,
+                            InitialBalance = cBank.InitialBalance
                         }).Where(it => it.VGUID == guid).ExecuteCommand();
                     }
                     else

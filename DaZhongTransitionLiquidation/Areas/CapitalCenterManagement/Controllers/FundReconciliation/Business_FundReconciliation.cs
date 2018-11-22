@@ -38,5 +38,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public string ReconciliantStatus { get; set; }
+        public string CompanyCode { get; set; }
+        public string CompanyName { get; set; }
+        public string BankAccount { get; set; }
+        public string BankName { get; set; }
+        public string BankAccountName { get; set; }
     }
 }

@@ -1117,14 +1117,14 @@ function settingSection(column, code) {
             };
         var typeAdapter = new $.jqx.dataAdapter(source);
         $("#jqxSubjectSetting").jqxTreeGrid({
-            pageable: false,
+            pageable: true,
             width: 460,
             height: 300,
-            pageSize: 15,
+            pageSize: 9999999,
             //serverProcessing: true,
             pagerButtonsCount: 10,
             source: typeAdapter,
-            theme: "energyblue",
+            //theme: "energyblue",
             columnsHeight: 30,
             checkboxes: true,
             hierarchicalCheckboxes: true,
@@ -1152,8 +1152,8 @@ function settingSection(column, code) {
                     $("#jqxSubjectSetting").jqxTreeGrid('checkRow', count[i])
                 }
             }
-            $("#jqxTable2").jqxTreeGrid('expandRow', 0);
-            $("#jqxTable2").jqxTreeGrid('collapseRow', 0);
+            //$("#jqxSubjectSetting").jqxTreeGrid('expandRow', 0);
+            //$("#jqxSubjectSetting").jqxTreeGrid('collapseRow', 0);
         });
     }
     else {

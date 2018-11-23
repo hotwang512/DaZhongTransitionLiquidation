@@ -106,6 +106,5 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// </summary> 
         public string VoucherSummary { get; set; }
         public string VoucherSubjectName { get; set; }
-        public decimal? Balance { get; set; }
     }
 }

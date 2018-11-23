@@ -12,3 +12,5 @@
    在 System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
    在 SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 26
+
+-------------------------------footer----------------------

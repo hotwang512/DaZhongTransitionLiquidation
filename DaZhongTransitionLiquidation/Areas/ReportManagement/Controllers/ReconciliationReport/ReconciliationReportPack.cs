@@ -53,7 +53,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 }
             }
 
-            for (int i = 3; i < 9; i++)
+            for (int i = 1; i < 9; i++)
             {
                 dbBusinessDataService.Command(db =>
                 {

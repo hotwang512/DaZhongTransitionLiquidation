@@ -513,6 +513,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     {
                         cBank.VGUID = Guid.NewGuid();
                         db.Insertable(cBank).ExecuteCommand();
+                        db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                        {
+                            IsCompanyBank = true,
+                        }).Where(it => it.Code == cBank.CompanyCode).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
@@ -551,12 +555,22 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
+                var companyCode = "";
+                companyCode = db.Queryable<Business_CompanyBankInfo>().Single(x => x.VGUID == vguids[0]).CompanyCode;
                 foreach (var item in vguids)
                 {
                     int saveChanges = 1;
                     saveChanges = db.Deleteable<Business_CompanyBankInfo>(x => x.VGUID == item).ExecuteCommand();
                     resultModel.IsSuccess = saveChanges == vguids.Count;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                var data = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == companyCode).ToList();
+                if(data.Count == 0)
+                {
+                    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                    {
+                        IsCompanyBank = false,
+                    }).Where(it => it.Code == companyCode).ExecuteCommand();
                 }
             });
             return Json(resultModel);

@@ -58,3 +58,84 @@
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
 2018-11-28 14:49:44,510 [15] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35305.00,"JFJE":0.02,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":21305.00,"FSSJ":"10:38","DFZH":23040122000000752,"DFBZ":"CNY","DFHM":"宁波大众汽车服务有限公司","VCTP":"","VCNO":"","YUER":37282597.5,"YOTU":"吴建国 11月份工资及社保","BEZH":"","T24F":"FT18332200803573"},{"CDFG":1,"PATI":"电子内转","FSJE":0.01,"FSSJ":"12:43","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.49,"YOTU":"测试　test","BEZH":"","T24F":"FT18332200919637"},{"CDFG":1,"PATI":"跨行转账","FSJE":0.01,"FSSJ":"12:49","DFZH":6217001210053783526,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.48,"YOTU":"测试","BEZH":"test　","T24F":"FT18332805742111"},{"CDFG":2,"PATI":"跨行转账","FSJE":14000.00,"FSSJ":"13:21","DFZH":40402900000302031,"DFBZ":"CNY","DFHM":"花园饭店（上海）","VCTP":"","VCNO":"","YUER":37296597.48,"YOTU":"","BEZH":252,"T24F":"BEA183321321400430401"}],"ACNO":31685803002369318,"SUMU":"0004","JFBS":2}}
 2018-11-28 14:56:49,334 [15] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35305.00,"JFJE":0.02,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":21305.00,"FSSJ":"10:38","DFZH":23040122000000752,"DFBZ":"CNY","DFHM":"宁波大众汽车服务有限公司","VCTP":"","VCNO":"","YUER":37282597.5,"YOTU":"吴建国 11月份工资及社保","BEZH":"","T24F":"FT18332200803573"},{"CDFG":1,"PATI":"电子内转","FSJE":0.01,"FSSJ":"12:43","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.49,"YOTU":"测试　test","BEZH":"","T24F":"FT18332200919637"},{"CDFG":1,"PATI":"跨行转账","FSJE":0.01,"FSSJ":"12:49","DFZH":6217001210053783526,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.48,"YOTU":"测试","BEZH":"test　","T24F":"FT18332805742111"},{"CDFG":2,"PATI":"跨行转账","FSJE":14000.00,"FSSJ":"13:21","DFZH":40402900000302031,"DFBZ":"CNY","DFHM":"花园饭店（上海）","VCTP":"","VCNO":"","YUER":37296597.48,"YOTU":"","BEZH":252,"T24F":"BEA183321321400430401"}],"ACNO":31685803002369318,"SUMU":"0004","JFBS":2}}
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-11-28 15:12:40,053 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 请求被中止: 操作超时。
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2018-11-28 16:15:07,168 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'v_Channel_Desc'.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.<>c__DisplayClass2_0.<GetChannelInfos>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 37
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:d43da73e-9e1c-4f0e-b66b-ba6907098a56
+Error Number:208,State:1,Class:16
+2018-11-28 16:15:10,577 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'v_Channel_Desc'.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.<>c__DisplayClass2_0.<GetChannelInfos>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 37
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement.ChannelManagementController.GetChannelInfos(T_Channel channel, GridParams para) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs:行号 33
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:d43da73e-9e1c-4f0e-b66b-ba6907098a56
+Error Number:208,State:1,Class:16
+
+-------------------------------header----------------------
+2018-11-28 16:23:38,912 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35305.00,"JFJE":0.02,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":21305.00,"FSSJ":"10:38","DFZH":23040122000000752,"DFBZ":"CNY","DFHM":"宁波大众汽车服务有限公司","VCTP":"","VCNO":"","YUER":37282597.5,"YOTU":"吴建国 11月份工资及社保","BEZH":"","T24F":"FT18332200803573"},{"CDFG":1,"PATI":"电子内转","FSJE":0.01,"FSSJ":"12:43","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.49,"YOTU":"测试　test","BEZH":"","T24F":"FT18332200919637"},{"CDFG":1,"PATI":"跨行转账","FSJE":0.01,"FSSJ":"12:49","DFZH":6217001210053783526,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.48,"YOTU":"测试","BEZH":"test　","T24F":"FT18332805742111"},{"CDFG":2,"PATI":"跨行转账","FSJE":14000.00,"FSSJ":"13:21","DFZH":40402900000302031,"DFBZ":"CNY","DFHM":"花园饭店（上海）","VCTP":"","VCNO":"","YUER":37296597.48,"YOTU":"","BEZH":252,"T24F":"BEA183321321400430401"}],"ACNO":31685803002369318,"SUMU":"0004","JFBS":2}}
+2018-11-28 16:23:40,407 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:System.Data.SqlClient.SqlException (0x80131904): 列名 'CreateTime' 无效。
+列名 'CreatePerson' 无效。
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.WirterSyncBankFlow(List`1 bankFlowList) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:行号 85
+   在 DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:行号 39
+ClientConnectionId:469bf1b2-0cb2-4abb-886c-b1c255781dd4
+Error Number:207,State:1,Class:16
+2018-11-28 16:24:58,467 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'CreateTime' 无效。
+列名 'CreatePerson' 无效。
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.BankFlowTemplateController.<>c__DisplayClass2_0.<GetBankFlowData>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs:行号 35
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:469bf1b2-0cb2-4abb-886c-b1c255781dd4
+Error Number:207,State:1,Class:16
+
+-------------------------------header----------------------
+2018-11-28 16:28:18,614 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35305.00,"JFJE":0.02,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":21305.00,"FSSJ":"10:38","DFZH":23040122000000752,"DFBZ":"CNY","DFHM":"宁波大众汽车服务有限公司","VCTP":"","VCNO":"","YUER":37282597.5,"YOTU":"吴建国 11月份工资及社保","BEZH":"","T24F":"FT18332200803573"},{"CDFG":1,"PATI":"电子内转","FSJE":0.01,"FSSJ":"12:43","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.49,"YOTU":"测试　test","BEZH":"","T24F":"FT18332200919637"},{"CDFG":1,"PATI":"跨行转账","FSJE":0.01,"FSSJ":"12:49","DFZH":6217001210053783526,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.48,"YOTU":"测试","BEZH":"test　","T24F":"FT18332805742111"},{"CDFG":2,"PATI":"跨行转账","FSJE":14000.00,"FSSJ":"13:21","DFZH":40402900000302031,"DFBZ":"CNY","DFHM":"花园饭店（上海）","VCTP":"","VCNO":"","YUER":37296597.48,"YOTU":"","BEZH":252,"T24F":"BEA183321321400430401"}],"ACNO":31685803002369318,"SUMU":"0004","JFBS":2}}
+
+-------------------------------header----------------------
+2018-11-28 16:57:20,204 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35305.00,"JFJE":0.02,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":21305.00,"FSSJ":"10:38","DFZH":23040122000000752,"DFBZ":"CNY","DFHM":"宁波大众汽车服务有限公司","VCTP":"","VCNO":"","YUER":37282597.5,"YOTU":"吴建国 11月份工资及社保","BEZH":"","T24F":"FT18332200803573"},{"CDFG":1,"PATI":"电子内转","FSJE":0.01,"FSSJ":"12:43","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.49,"YOTU":"测试　test","BEZH":"","T24F":"FT18332200919637"},{"CDFG":1,"PATI":"跨行转账","FSJE":0.01,"FSSJ":"12:49","DFZH":6217001210053783526,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.48,"YOTU":"测试","BEZH":"test　","T24F":"FT18332805742111"},{"CDFG":2,"PATI":"跨行转账","FSJE":14000.00,"FSSJ":"13:21","DFZH":40402900000302031,"DFBZ":"CNY","DFHM":"花园饭店（上海）","VCTP":"","VCNO":"","YUER":37296597.48,"YOTU":"","BEZH":252,"T24F":"BEA183321321400430401"}],"ACNO":31685803002369318,"SUMU":"0004","JFBS":2}}
+
+-------------------------------header----------------------
+2018-11-28 16:57:56,842 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35305.00,"JFJE":0.02,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":21305.00,"FSSJ":"10:38","DFZH":23040122000000752,"DFBZ":"CNY","DFHM":"宁波大众汽车服务有限公司","VCTP":"","VCNO":"","YUER":37282597.5,"YOTU":"吴建国 11月份工资及社保","BEZH":"","T24F":"FT18332200803573"},{"CDFG":1,"PATI":"电子内转","FSJE":0.01,"FSSJ":"12:43","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.49,"YOTU":"测试　test","BEZH":"","T24F":"FT18332200919637"},{"CDFG":1,"PATI":"跨行转账","FSJE":0.01,"FSSJ":"12:49","DFZH":6217001210053783526,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":37282597.48,"YOTU":"测试","BEZH":"test　","T24F":"FT18332805742111"},{"CDFG":2,"PATI":"跨行转账","FSJE":14000.00,"FSSJ":"13:21","DFZH":40402900000302031,"DFBZ":"CNY","DFHM":"花园饭店（上海）","VCTP":"","VCNO":"","YUER":37296597.48,"YOTU":"","BEZH":252,"T24F":"BEA183321321400430401"}],"ACNO":31685803002369318,"SUMU":"0004","JFBS":2}}

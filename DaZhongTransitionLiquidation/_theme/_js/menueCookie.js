@@ -79,6 +79,8 @@ var menueHelp = {
                 break;
             case "BaseData": $("#homeModel").text("--驾驶员结算中心")
                 break;
+            case "Reconc": $("#homeModel").text("--驾驶员结算中心")
+                break;
             case "AmountReport": $("#homeModel").text("--驾驶员结算中心")//*************
                 break;
             case "BigCenter": $("#homeModel").text("--大数据管理中心")

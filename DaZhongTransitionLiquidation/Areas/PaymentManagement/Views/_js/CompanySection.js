@@ -295,6 +295,7 @@ var $page = function () {
                                 $("#jqxCompanySetting").jqxGrid('updateBoundData');
                                 $('#jqxCompanySetting').jqxGrid('addgroup', 'BankName');
                                 $("#AddCompanyBankDataDialog").modal("hide");
+                                $("#jqxTable1").jqxDataTable('updateBoundData');
                                 break;
                             case "2":
                                 jqxNotification("银行下已存在该账号！", null, "error");
@@ -536,6 +537,7 @@ var $page = function () {
                     { name: 'IsCompanyCode', type: 'string' },       
                     { name: 'IsAccountModeCode', type: 'string' },
                     { name: 'IsSubjectCode', type: 'string' },
+                    { name: 'IsCompanyBank', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -564,7 +566,7 @@ var $page = function () {
                     { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '描述', datafield: 'Descrption', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
-                    { text: '银行账号设置', datafield: 'Setting', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: setCompanyFunc },
+                    { text: '银行账号设置', datafield: 'IsCompanyBank', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: setCompanyFunc },
                     { text: '科目段', datafield: 'IsSubjectCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
                     { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
                     { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
@@ -951,7 +953,11 @@ var $page = function () {
     }
 
     function setCompanyFunc(row, column, value, rowData) {
-        var container = "<a href='#' onclick=settingCompany('" + rowData.Code + "','" + rowData.Descrption + "') style=\"text-decoration: underline;color: #333;\">设置</a>";
+        var container = "";
+        container = "<a href='#' onclick=settingCompany('" + rowData.Code + "','" + rowData.Descrption + "') style=\"text-decoration: underline;color: #333;\">设置</a>";
+        if (value != "" && (value == "True" || value == true)) {
+            container = "<a href='#' onclick=settingCompany('" + rowData.Code + "','" + rowData.Descrption + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
+        }
         return container;
     }
     //删除
@@ -1008,6 +1014,7 @@ var $page = function () {
                         jqxNotification("删除成功！", null, "success");
                         $("#jqxCompanySetting").jqxGrid('updateBoundData');
                         $('#jqxCompanySetting').jqxGrid('addgroup', 'BankName');
+                        $("#jqxTable1").jqxDataTable('updateBoundData');
                         break;
                 }
             }

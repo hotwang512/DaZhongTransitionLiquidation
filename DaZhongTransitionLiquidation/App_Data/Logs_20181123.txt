@@ -87,3 +87,14 @@ Error Number:207,State:1,Class:16
    在 System.Net.WebClient.UploadString(Uri address, String method, String data)
    在 System.Net.WebClient.UploadString(Uri address, String data)
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-11-23 16:49:11,364 [19] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------

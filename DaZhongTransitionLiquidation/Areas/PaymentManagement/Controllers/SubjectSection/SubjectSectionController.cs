@@ -96,6 +96,21 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetCompanySectionByCode(string companyCode, GridParams para)
+        {
+            var jsonResult = new JsonResultModel<Business_SevenSection>();
+            var response = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                //int pageCount = 0;               
+                para.pagenum = para.pagenum + 1;
+                response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' 
+                              and Code is not null and Code in (select SubjectCode from Business_SubjectSettingInfo where CompanyCode = '" + companyCode + "')").OrderBy("Code asc").ToList();
+                jsonResult.TotalRows = response.Count;
+            });
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
         /// <summary>
         /// 新增或编辑银行数据
         /// </summary>

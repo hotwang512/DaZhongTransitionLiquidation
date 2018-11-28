@@ -120,5 +120,7 @@ $(".menue_item").on('click', function () {
 $("#gotoHome").on('click', function () {
     window.location.href = "/HomePage/HomePage/Index";;
 });
-
+$("#homeModel").on('click', function () {
+    window.location.href = "/HomePage/HomePage/Index";;
+});
 

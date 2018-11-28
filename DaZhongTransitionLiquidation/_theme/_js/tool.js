@@ -186,6 +186,34 @@ function CheckAll(obj, selector) {
     }
 }
 
+//Select下拉数据
+var uiEngineHelper = {
+    bindSelect: function (selector, json, key, value) {
+        var selObj = $(selector);
+        selObj.html("");//add by wing 绑定时需要清空之前的Select下拉数据（wing 2016-07-19）
+        if (json != null && json != []) {
+            $(json).each(function (i, v) {
+                selObj.append("<option value='" + v[key] + "'>" + v[value] + "</option>");
+            });
+        }
+    },
+    bindSelectByUrl: function (url, data, selectId, valueField, textField) {
+        $.ajax({
+            url: url,
+            data: data,
+            dataType: 'json',
+            success: function (msg) {
+                $("#" + selectId).html("");
+                uiEngineHelper.bindSelect("#" + selectId, msg.responseInfo, valueField, textField);
+            },
+            error: jqxError
+        })
+    },
+    UrlAction: function (actionName) {
+        return $("#HidUrlAction").val() + actionName;
+    }
+};
+
 //给Date 类型绑定一个format函数
 Date.prototype.format = function (format) {
     var o = {

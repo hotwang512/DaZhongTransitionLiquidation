@@ -38,6 +38,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         $("#btnAdd").on("click", function () {
+            isEdit = false;
             $("#BankAccount").val("");
             $("#BankName").val("");
             $("#BankAccountName").val("");

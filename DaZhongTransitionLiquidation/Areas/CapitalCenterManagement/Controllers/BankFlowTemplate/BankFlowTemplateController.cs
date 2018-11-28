@@ -95,6 +95,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         continue;
                     }
+                    item.CreateTime = DateTime.Now;
+                    item.CreatePerson = "sysAdmin";
                     db.Insertable<Business_BankFlowTemplate>(item).ExecuteCommand();
                 }
             });
@@ -115,6 +117,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         continue;
                     }
+                    item.CreateTime = DateTime.Now;
+                    item.CreatePerson = "sysAdmin";
                     db.Insertable<Business_BankFlowTemplate>(item).ExecuteCommand();
                 }
             });

@@ -43,7 +43,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 jsonResult.TotalRows = response.Count;
                 if (response != null)
                 {
-                    var data = db.Queryable<Business_SubjectSettingInfo>();
+                    var data = db.Queryable<Business_SubjectSettingInfo>().ToList();
                     foreach (var item in response)
                     {
                         var isAnyAccountingCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.AccountingCode != null);

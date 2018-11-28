@@ -106,5 +106,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// </summary> 
         public string VoucherSummary { get; set; }
         public string VoucherSubjectName { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public string CreatePerson { get; set; }
     }
 }

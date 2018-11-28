@@ -39,7 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 //response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code != null)
                 //.OrderBy(i => i.Code, OrderByType.Asc).ToList();
                 response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' 
-                              and Code is not null and Code in (select SubjectCode from Business_SubjectSettingInfo where CompanyCode = '" + companyCode + "')").OrderBy("Code asc").ToList();
+                              and Code is not null ").OrderBy("Code asc").ToList();
                 jsonResult.TotalRows = response.Count;
                 if (response != null)
                 {

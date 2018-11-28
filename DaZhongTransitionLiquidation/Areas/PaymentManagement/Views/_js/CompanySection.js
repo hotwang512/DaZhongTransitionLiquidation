@@ -912,7 +912,7 @@ var $page = function () {
                 break;
         }
     }
-    $('#jqxTabs').jqxTabs({ width: "100%", height: 600, initTabContent: initWidgets });
+    $('#jqxTabs').jqxTabs({ width: "99%", height: 589, initTabContent: initWidgets });
 
     function detailFuncs(row, column, value, rowData) {
         var container = "";

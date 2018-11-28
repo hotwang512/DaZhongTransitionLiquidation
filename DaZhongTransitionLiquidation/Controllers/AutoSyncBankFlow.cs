@@ -32,10 +32,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                 var success = 0;
                 try
                 {
-                    var tradingStartDate = DateTime.Parse("2018-11-01");
-                    var tradingEndDate = DateTime.Parse("2018-11-27");
-                    bankFlowList = ShanghaiBankAPI.GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
-                    //bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow();
+                    //var tradingStartDate = DateTime.Parse("2018-11-01");
+                    //var tradingEndDate = DateTime.Parse("2018-11-27");
+                    //bankFlowList = ShanghaiBankAPI.GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
+                    bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow();
                     success = WirterSyncBankFlow(bankFlowList);
                 }
                 catch (Exception ex)

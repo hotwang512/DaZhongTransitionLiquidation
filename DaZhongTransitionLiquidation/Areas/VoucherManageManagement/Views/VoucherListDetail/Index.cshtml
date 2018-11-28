@@ -6,7 +6,10 @@
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
     var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
 }
-
+@section js{
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/Areas/VoucherManageManagement/Views/_js/VoucherListDetail.js")"></script>
+}
 <style>
     .input_text {
         width: 150px;
@@ -22,8 +25,35 @@
         float: left;
     }
 
-    .jqx-tabs-content-element{
-        overflow:auto !important;
+    .jqx-tabs-content-element {
+        overflow: auto !important;
+    }
+
+    #btn_AttachmentBrowseButton {
+        width: auto;
+        min-width: 277px;
+        min-width: 570px;
+        height: 40px;
+        margin: 0px 10px 10px;
+        cursor: pointer;
+        padding: 0px 20px;
+        border: 0px solid rgb(72, 184, 232);
+        color: rgb(204, 204, 204);
+        outline: none;
+        font-size: 15px;
+        font-weight: bold;
+        position: initial !important;
+        background: rgb(0, 153, 204) !important;
+    }
+    #btn_AttachmentUploadButton,#btn_AttachmentCancelButton {
+        width: 150px !important;
+        height: 35px;
+    }
+    #btn_AttachmentUploadButton{
+        margin-left: 120px;
+    }
+    .close {
+        float: initial !important;
     }
 </style>
 <table style="margin-top: 10px;">
@@ -130,7 +160,7 @@
                                     }
                                 }
                             </select>
-                                         
+
                         </td>
                         <td style="text-align: right;">科目段</td>
                         <td style="vertical-align: middle;padding-left: 0.8rem">
@@ -322,23 +352,35 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
     </div>
-    <table id="VoucherListAttachment" style="width:70%;margin-left: 300px;">
-        <tr style="height:10px"></tr>
-        <tr style="height:40px">
-            <td style="text-align: right;">附件1：</td>
-            <td style="text-align: left;width: 150px;"><div id="jqxFileUpload1"></div></td>
-            <td style="text-align: right;">附件2：</td>
-            <td style="text-align: left;width: 150px;"><div id="jqxFileUpload2"></div></td>
-            <td style="text-align: right;">附件3：</td>
-            <td style="text-align: left;width: 150px;"><div id="jqxFileUpload3"></div></td>
-            <td style="text-align: right;">附件4：</td>
-            <td style="text-align: left;width: 150px;"><div id="jqxFileUpload4"></div></td>
-            <td style="text-align: right;">附件5：</td>
-            <td style="text-align: left;width: 150px;"><div id="jqxFileUpload5"></div></td>
-        </tr>
-    </table>
+    <div class="body_mk" style="height: 200px;">
+        <table id="VoucherListAttachment" style="width:100%;">
+            <tr style="height:10px"></tr>
+            <tr style="height:40px">
+                <td style="text-align: right;">类型：</td>
+                <td style="text-align: left;width: 150px;">
+                    <select id="AttachmentType" style="width: 150px;" class="input_text form-control" validatetype="required">
+                        <option value="发票">发票</option>
+                        <option value="借款单">借款单</option>
+                        <option value="付款凭证">付款凭证</option>
+                        <option value="结算凭证">结算凭证</option>
+                        <option value="报销凭证">报销凭证</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">附件：</td>
+                <td style="text-align: left;">
+                    
+                    <!------------------btn_Attachment BEGIN------------------>
+                    <div type="button" id="btn_Attachment" class=""></div>
+                    <!------------------btn_Attachment END------------------>
+                    <!------------------Attachment BEGIN------------------>
+                    <input type="hidden" id="Attachment" class="" name="Attachment" value="" style="" />
+                    <!------------------Attachment END------------------>
+                    <div id="attachments"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyDialog">
     <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
         <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
@@ -370,7 +412,3 @@
     </table>
 </div>
 
-@section js{
-    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.Content("~/Areas/VoucherManageManagement/Views/_js/VoucherListDetail.js")"></script>
-}

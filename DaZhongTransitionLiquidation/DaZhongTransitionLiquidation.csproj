@@ -2235,6 +2235,7 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs" />
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
@@ -2317,6 +2318,8 @@
     <Folder Include="Models\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\NewApi\" />
+    <Folder Include="_theme\temp\file\" />
+    <Folder Include="_theme\temp\img\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DaZhongTransitionLiquidation.Common\DaZhongTransitionLiquidation.Common.csproj">

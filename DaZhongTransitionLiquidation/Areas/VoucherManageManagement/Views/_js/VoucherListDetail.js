@@ -22,11 +22,11 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        $('#jqxFileUpload1').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        $('#jqxFileUpload2').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        $('#jqxFileUpload3').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        $('#jqxFileUpload4').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        $('#jqxFileUpload5').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
+        //$('#jqxFileUpload1').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
+        //$('#jqxFileUpload2').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
+        //$('#jqxFileUpload3').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
+        //$('#jqxFileUpload4').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
+        //$('#jqxFileUpload5').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
 
         //重置按钮事件
         selector.$btnReset().on("click", function () {
@@ -289,6 +289,93 @@ function loadCompanyCode(name, companyCode, subjectCode) {
         }
     });
     return value;
+}
+
+$(function () {
+    var buttonText = {
+        browseButton: '上传',
+        uploadButton: '提交',
+        cancelButton: '清空',
+        uploadFileTooltip: '上传',
+        cancelFileTooltip: '删除'
+    };
+    $('#btn_Attachment').jqxFileUpload({ width: '600px', height: '', fileInputName: 'AttachmentFile', browseTemplate: 'success', uploadTemplate: 'primary', cancelTemplate: 'danger', localization: buttonText, multipleFilesUpload: true });
+    $("#btn_Attachment").on("select", function (event) {
+        if (event.args.size > (1024 * 1024 * 10)) {
+            jqxAlert("单文件大小不能超过10M");
+            $("#btn_AttachmentCancelButton").trigger('click');
+        }
+    });
+    $("#btn_Attachment").on("uploadStart", function (event) {
+        //获取文件名
+        fileName = event.args.file;
+        var extStart = fileName.lastIndexOf(".");
+        //判断是文件还是图片
+        var ext = fileName.substring(extStart, fileName.length).toUpperCase();
+        if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {//上传文件
+            $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadFile?allowSize=' + 20 });
+        }
+        else {//上传图片
+            $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadImage?allowSize=' + 20 });
+        }
+
+    })
+    $("#btn_Attachment").on("uploadEnd", function (event) {
+        var args = event.args;
+        //var msg = $.convert.strToJson($(args.response).html());
+
+
+        uploadFiles(event)
+
+    })
+})
+var fileName = "";
+function uploadFiles(event) {
+    var args = event.args;
+    var msg = $.convert.strToJson($(args.response).html());
+    //if (null == msg.WebPath && "文件类型非法!" == msg.Message) {
+    //    jqxAlert($pageLanguage.ErrorFileType);
+
+    //    return;
+    //}
+    //if (((msg.Size).toFixed(2)) >= 40 ) {
+    //    jqxAlert("请上传小于40M的文件");
+    //    return ;
+    //}
+    fileName = event.args.file;
+    var attachments = $("#Attachment").val();
+
+    if (attachments == "") {
+        attachments = msg.WebPath;
+    }
+    else {
+        attachments = attachments + "," + msg.WebPath;
+    }
+    var type = $("#AttachmentType").val();
+    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='close' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+    $("#Attachment").val(attachments);
+
+
+}
+function loadAttachments(attachments) {
+
+    $("#Attachment").val(attachments);
+    if (attachments != "") {
+        var attachValues = attachments.split(",");
+        for (var i = 0; i < attachValues.length; i++) {
+            $("#attachments")[0].innerHTML += "<span><a href='" + attachValues[i] + "' target='_blank'>" + fileName + "</a><button class='close' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+        }
+    }
+}
+function removeAttachment(obj) {
+
+    var id = obj.previousSibling.attributes["href"].value;
+    var attachmentValues = $("#Attachment").val();
+    attachmentValues = $.action.replaceAll(attachmentValues, id, '');
+
+    $("#Attachment").val(attachmentValues);
+    $(obj).parent().remove();
+    return false;
 }
 
 $(function () {

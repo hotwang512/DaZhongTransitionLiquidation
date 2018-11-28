@@ -109,7 +109,81 @@
                     s2 = str1.substring(n, str1.length);
                     return s1 + str2 + s2;
                 }
+            },
+            //替换所有字符
+            replaceAll: function (str, findStr, reStr) {
+                var reg = new RegExp(findStr, "g");
+                return str.replace(reg, reStr);
+
+            },
+            setTimeoutWidthNum: function (fun, time, number) {
+                if (fun != null) {
+                    setTimeout(function () {
+                        fun();
+                        number--;
+                        if (number > 0) {
+                            $.action.setTimeoutWidthNum(fun, time, number);
+                        }
+                    }, time)
+                }
+            },
+            //循环执行检测元素值是否有值当有值执行回调函数,超时停止检测
+            elementValueReady: function (selector, fun, time) {
+                var selObj = $(selector);
+                if (time == null) time = 0;
+                time = time + 50;
+                if (time > 5000) {//间隔超过5秒则停止检测
+                    return;
+                }
+                setTimeout(function () {
+                    var val = "";
+                    try {
+                        val = selObj.val();
+                    } catch (e) {
+
+                    }
+                    var valIsNull = val == null || val == "";
+                    if (valIsNull) {
+                        $.action.elementValueReady(selector, fun, time);
+                    } else {
+                        fun();
+                    }
+                }, time);
+
+            },
+            //循环执行检测选择器的元素如果存在该元素，则执行回调函数过，超过停止检测
+            elementNullComplate: function (selector, fun, time) {
+                var selObj = $(selector)
+                if (time == null) time = 0;
+                time = time + 50;
+                if (time > 5000) {//间隔超过5秒则停止检测
+                    return;
+                }
+                setTimeout(function () {
+                    if (selObj.size() > 0) {
+                        $.action.elementNullComplate(selector, fun, time);
+                    } else {
+                        fun();
+                    }
+                }, time);
+
+            },
+            //第一次执行和非第一次执行
+            firstAndNotFirstMethod: function (firstExcuteMethod, noFirstExcuteMethod, key) {
+                var defaultKey = "firstAndNotFirstMethod_defaultKey";
+                if ($.valiData.isEmpty(key)) {
+                    key = defaultKey;
+                }
+                var initValue = $("html").data(key);
+                if (initValue == null) {
+                    firstExcuteMethod();
+                    $("html").data(key, key);
+
+                } else {
+                    noFirstExcuteMethod();
+                }
             }
+
 
         },
         /*转换*/

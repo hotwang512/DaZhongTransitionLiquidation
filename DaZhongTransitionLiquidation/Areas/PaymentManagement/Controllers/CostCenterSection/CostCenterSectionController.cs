@@ -48,7 +48,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CostC
         public JsonResult SaveCompanySection(Business_SevenSection sevenSection, bool isEdit)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            if (isEdit)
+            if (!isEdit)
             {
                 sevenSection.VCRTUSER = UserInfo.LoginName;
                 sevenSection.VCRTTIME = DateTime.Now;

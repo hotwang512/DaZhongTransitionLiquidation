@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
+namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
-    public class Business_VoucherList
+    public class VoucherListDetail
     {
         public Guid VGUID { get; set; }
         /// <summary>
@@ -57,18 +57,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         /// </summary> 
         public string VoucherType { get; set; }
         /// <summary>
-        /// Desc:借方金额合计
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public decimal? DebitAmountTotal { get; set; }
-        /// <summary>
-        /// Desc:贷方金额合计
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public decimal? CreditAmountTotal { get; set; }     
-        /// <summary>
         /// Desc:财务主管
         /// Default:
         /// Nullable:True
@@ -98,13 +86,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public string Cashier { get; set; }
-        /// <summary>
-        /// Desc:审核状态
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public string Status { get; set; }
-        public string AttachmentDetail { get; set; }
-        public DateTime? CreateTime { get; set; }
+        public string Attachment { get; set; }
+        public List<Business_VoucherDetail> Detail { get; set; }
     }
 }

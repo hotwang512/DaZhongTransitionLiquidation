@@ -2,7 +2,8 @@
 var selector = {
     $grid: function () { return $("#jqxTable") },  
     $btnSearch: function () { return $("#btnSearch") },
-    $btnReset: function () { return $("#btnReset") }, 
+    $btnReset: function () { return $("#btnReset") },
+    $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
 var isEdit = false;
 var vguid = "";
@@ -40,10 +41,88 @@ var $page = function () {
             //window.location.open = "/VoucherManageManagement/VoucherListDetail/Index";
             window.open("/VoucherManageManagement/VoucherListDetail/Index");
         });
+        //删除
+        $("#btnDelete").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要删除的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
+        //提交
+        $("#btnUp").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要提交的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
 
 
     }; //addEvent end
 
+    //删除
+    function dele(selection) {
+        $.ajax({
+            url: "/VoucherManageManagement/VoucherList/DeleteVoucherListInfo",
+            data: { vguids: selection },
+            traditional: true,
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                    case "0":
+                        jqxNotification("删除失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("删除成功！", null, "success");
+                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        break;
+                }
+            }
+        });
+    }
+    //提交
+    function submit(selection) {
+        $.ajax({
+            url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
+            data: { vguids: selection },
+            traditional: true,
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                    case "0":
+                        jqxNotification("提交失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("提交成功！", null, "success");
+                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        break;
+                }
+            }
+        });
+    }
 
     function initTable() {
         //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
@@ -101,31 +180,38 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                    { text: '营运公司', datafield: 'CompanyName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
-                    { text: '币种', datafield: 'Currency', width: 150, pinned: true, align: 'center', cellsAlign: 'center', },
-                    { text: '批名', datafield: 'BatchName', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, align: 'center', cellsAlign: 'center' },
+                     { text: '批名', datafield: 'BatchName', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
+                    { text: '营运公司', datafield: 'CompanyName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', },
+                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
+                    { text: '币种', datafield: 'Currency', width: 150, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },                   
+                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center',hidden: true  },
+                    { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]
             });
-
+        selector.$grid().on('rowDoubleClick', function (event) {
+            // event args.
+            var args = event.args;
+            // row data.
+            var row = args.row;
+            // row index.
+            window.open("/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID);
+        });
     }
 
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.VoucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
+            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?VGUID='" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
         } else {
             container = "<span>" + rowData.Batch + "</span>";
         }
@@ -147,7 +233,6 @@ var $page = function () {
         element.jqxCheckBox();
         element.on('change', function (event) {
             var checked = element.jqxCheckBox('checked');
-
             if (checked) {
                 var rows = grid.jqxDataTable('getRows');
                 for (var i = 0; i < rows.length; i++) {

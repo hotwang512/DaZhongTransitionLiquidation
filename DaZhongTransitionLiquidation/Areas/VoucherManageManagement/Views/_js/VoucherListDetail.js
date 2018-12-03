@@ -27,7 +27,11 @@ var $page = function () {
         //$('#jqxFileUpload3').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
         //$('#jqxFileUpload4').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
         //$('#jqxFileUpload5').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-
+        var guid = $.request.queryString().VGUID;
+        $("#VGUID").val(guid)
+        if (guid != "" || guid != null) {
+            getVoucherDetail();
+        }
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#AccountingPeriod").val("");
@@ -39,23 +43,25 @@ var $page = function () {
         //新增
         $("#btnAddDetail").on("click", function () {
             selectIndex++;
-            
             var id = "";//生成div的ID
+            var className = "";
             var removeId = "";
             var money = "借方金额";
-            var moneyId = "BorrowMoney" + selectIndex;
+            var moneyId = "BorrowMoney_A_" + selectIndex;
             if (index == 0) {
+                className = "nav-i";
                 id = "Borrow_" + selectIndex;
                 str = "_A_" + selectIndex;
                 removeId = "removeBorrow_" + selectIndex;
             } else {
+                className = "nav-i2";
                 id = "Loan_" + selectIndex;
                 str = "_B_" + selectIndex;
                 removeId = "removeLoan_" + selectIndex;
                 money = "贷方金额";
-                moneyId = "LoanMoney" + selectIndex;
+                moneyId = "LoanMoney_B_" + selectIndex;
             }
-            var html = '<div id="' + id + '" class="nav-i" style="border:2px solid #999;position:relative;border-radius:5px;margin: 20px 0;">' +
+            var html = '<div id="' + id + '" class="' + className + '" style="border:2px solid #999;position:relative;border-radius:5px;margin: 15px 0;">' +
                '<table id="" style="width:100%;">' +
                    '<tr style="height:30px;">' +
                        '<td colspan="8" style="text-align: right;">' +
@@ -119,11 +125,14 @@ var $page = function () {
                 $("#BorrowTable").append(html);
             } else {
                 $("#LoanTable").append(html);
-            } 
+            }
             var id0 = "#CompanySection" + str;
             uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
         });
-
+        //取消
+        $("#btnCancel").on("click", function () {
+            window.close();
+        })
         //切换标签页
         $('#jqxTabs').on('tabclick', function (event) {
             index = event.args.item;
@@ -153,7 +162,7 @@ var $page = function () {
             $("#hidSubjectSection_" + z1 + "_" + z2).val(row.Code);
             $("#AddCompanyDialog").modal("hide");
             var code = $("#CompanySection_" + z1 + "_" + z2).val();
-            AccountSection = loadCompanyCode("C",code, row.Code);
+            AccountSection = loadCompanyCode("C", code, row.Code);
             CostCenterSection = loadCompanyCode("D", code, row.Code);
             SpareOneSection = loadCompanyCode("E", code, row.Code);
             SpareTwoSection = loadCompanyCode("F", code, row.Code);
@@ -161,11 +170,106 @@ var $page = function () {
             var str = "_" + z1 + "_" + z2;
             loadSelectFun(str);
         });
-
+        //保存
+        $("#btnSave").on("click", function () {
+            var detail = [];
+            var length = $(".nav-i").length;
+            for (var i = 0; i < length; i++) {
+                var remark = $("#Remark_A_" + i).val();
+                var CompanySection = $("#CompanySection_A_" + i).val();
+                var SubjectSection = $("#hidSubjectSection_A_" + i).val();
+                var SubjectSectionName = $("#SubjectSection_A_" + i).val();
+                var AccountSection = $("#AccountSection_A_" + i).val();
+                var CostCenterSection = $("#CostCenterSection_A_" + i).val();
+                var SpareOneSection = $("#SpareOneSection_A_" + i).val();
+                var SpareTwoSection = $("#SpareTwoSection_A_" + i).val();
+                var IntercourseSection = $("#IntercourseSection_A_" + i).val();
+                var BorrowMoney = $("#BorrowMoney_A_" + i).val();
+                var borrowDetail = {
+                    "VGUID": "",
+                    "Abstract": remark,
+                    "CompanySection": CompanySection,
+                    "SubjectSection": SubjectSection,
+                    "SubjectSectionName": SubjectSectionName,
+                    "AccountSection": AccountSection,
+                    "CostCenterSection": CostCenterSection,
+                    "SpareOneSection": SpareOneSection,
+                    "SpareTwoSection": SpareTwoSection,
+                    "IntercourseSection": IntercourseSection,
+                    "BorrowMoney": parseInt(BorrowMoney),
+                    "LoanMoney": -1
+                }
+                detail.push(borrowDetail);
+            }
+            var lengths = $(".nav-i2").length;
+            for (var j = 0; j < lengths; j++) {
+                var remark = $("#Remark_B_" + i).val();
+                var CompanySection = $("#CompanySection_B_" + i).val();
+                var SubjectSection = $("#hidSubjectSection_B_" + i).val();
+                var SubjectSectionName = $("#SubjectSection_B_" + i).val();
+                var AccountSection = $("#AccountSection_B_" + i).val();
+                var CostCenterSection = $("#CostCenterSection_B_" + i).val();
+                var SpareOneSection = $("#SpareOneSection_B_" + i).val();
+                var SpareTwoSection = $("#SpareTwoSection_B_" + i).val();
+                var IntercourseSection = $("#IntercourseSection_B_" + i).val();
+                var LoanMoney = $("#LoanMoney_B_" + i).val();
+                var loanDetail = {
+                    "VGUID": "",
+                    "Abstract": remark,
+                    "CompanySection": CompanySection,
+                    "SubjectSection": SubjectSection,
+                    "SubjectSectionName": SubjectSectionName,
+                    "AccountSection": AccountSection,
+                    "CostCenterSection": CostCenterSection,
+                    "SpareOneSection": SpareOneSection,
+                    "SpareTwoSection": SpareTwoSection,
+                    "IntercourseSection": IntercourseSection,
+                    "BorrowMoney": -1,
+                    "LoanMoney": parseInt(LoanMoney)
+                }
+                detail.push(loanDetail);
+            }
+            var y = JSON.stringify(detail);
+            console.log(detail);
+            console.log(y);
+            $.ajax({
+                url: "/VoucherManageManagement/VoucherListDetail/SaveVoucherListDetail",
+                //data: { vguids: selection },
+                data: {
+                    "VGUID": $("#VGUID").val(),
+                    "CompanyCode": "",
+                    "CompanyName": "营运公司",
+                    "VoucherType": "现金类",
+                    "AccountingPeriod": $("#AccountingPeriod").val(),
+                    "BatchName": $("#BatchName").val(),
+                    "Currency": $("#Currency").val(),
+                    "VoucherNo": $("#VoucherNo").val(),
+                    "VoucherDate": $("#VoucherDate").val(),
+                    "FinanceDirector": $("#FinanceDirector").val(),
+                    "Bookkeeping": $("#Bookkeeping").val(),
+                    "Auditor": $("#Auditor").val(),
+                    "DocumentMaker": $("#DocumentMaker").val(),
+                    "Cashier": $("#Cashier").val(),
+                    "Attachment": $("#Attachment").val(),
+                    "Detail": detail
+                },
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("保存失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("保存成功！", null, "success");
+                            break;
+                    }
+                }
+            });
+        })
     }; //addEvent end
 
     function loadSelectFun(str) {
-        
+
         var id1 = "#AccountSection" + str;
         var id2 = "#CostCenterSection" + str;
         var id3 = "#SpareOneSection" + str;
@@ -177,6 +281,143 @@ var $page = function () {
         uiEngineHelper.bindSelect(id3, SpareOneSection, "Code", "Descrption");
         uiEngineHelper.bindSelect(id4, SpareTwoSection, "Code", "Descrption");
         uiEngineHelper.bindSelect(id5, IntercourseSection, "Code", "Descrption");
+    }
+
+    function getVoucherDetail() {
+        $.ajax({
+            url: "/VoucherManageManagement/VoucherListDetail/GetVoucherDetail",
+            data: {
+                "vguid": $("#VGUID").val(),
+            },
+            type: "post",
+            dataType: "json",
+            success: function (msg) {
+                var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig,""));
+                var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig,""));
+                $("#VoucherDate").val($.convert.toDate(new Date(voucherDate), "yyyy-MM-dd"));
+                $("#AccountingPeriod").val($.convert.toDate(new Date(accountingPeriod), "yyyy-MM"));
+                $("#BatchName").val(msg.BatchName);
+                $("#Currency").val(msg.Currency);
+                $("#VoucherNo").val(msg.VoucherNo);
+                $("#FinanceDirector").val(msg.FinanceDirector);
+                $("#Bookkeeping").val(msg.Bookkeeping);
+                $("#Auditor").val(msg.Auditor);
+                $("#DocumentMaker").val(msg.DocumentMaker);
+                $("#Cashier").val(msg.Cashier);
+                var datas = msg.Detail;
+                setVoucherDetail(datas);
+                loadAttachments(msg.Attachment);
+            }
+        });
+    }
+
+    function setVoucherDetail(datas) {
+        var id = "";//生成div的ID
+        var className = "";
+        var removeId = "";
+        var money = "借方金额";
+        for (var i = 0; i < datas.length; i++) {
+            var moneyId = "BorrowMoney_A_" + selectIndex;
+            var data = datas[i];
+            var moneyValue = 0;
+            if (data.LoanMoney == -1) {
+                //绑定借
+                className = "nav-i";
+                id = "Borrow_" + selectIndex;
+                str = "_A_" + selectIndex;
+                removeId = "removeBorrow_" + selectIndex;
+                moneyValue = data.BorrowMoney;
+            } else {
+                //绑定贷
+                className = "nav-i2";
+                id = "Loan_" + selectIndex;
+                str = "_B_" + selectIndex;
+                removeId = "removeLoan_" + selectIndex;
+                money = "贷方金额";
+                moneyId = "LoanMoney_B_" + selectIndex;
+                moneyValue = data.LoanMoney;
+            }
+            var html = '<div id="' + id + '" class="' + className + '" style="border:2px solid #999;position:relative;border-radius:5px;margin: 15px 0;">' +
+               '<table id="" style="width:100%;">' +
+                   '<tr style="height:30px;">' +
+                       '<td colspan="8" style="text-align: right;">' +
+                           '<div id="' + removeId + '" class="iconfont btn_icon remove" onclick="removes(' + removeId + ')" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1500px;">&#xe6f2;</div>' +
+                       '</td>' +
+                   '</tr>' +
+                   '<tr style="height:55px">' +
+                       '<td style="text-align: right;">摘要</td>' +
+                       '<td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="Remark' + str + '" type="text" style="width: 1338px;" class="input_text form-control" value="' + data.Abstract + '" /></td>' +
+                   '</tr>' +
+                   ' <tr style="height:55px">' +
+                       '<td style="text-align: right;">公司段</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            ' <select id="CompanySection' + str + '" class="input_text form-control" onchange="gradeChange(CompanySection' + str + ')" >' +
+                            ' </select>' +
+                       '</td>' +
+                       '<td style="text-align: right;">科目段</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            '<input id="SubjectSection' + str + '" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" value="' + data.SubjectSectionName + '"/>&nbsp;&nbsp;&nbsp;&nbsp;' +
+                            '<input id="hidSubjectSection' + str + '" name="hidSubjectSection' + str + '" class="hide" value="' + data.SubjectSection + '"/>' +
+                            '<button id="btnSearch' + str + '" type="button" class="buttons" onclick="searchSubject(btnSearch' + str + ')"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>' +
+                       '</td>' +
+                       '<td style="text-align: right;">核算段</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            '<select id="AccountSection' + str + '" class="input_text form-control" > ' +
+                            '</select>' +
+                       ' </td>' +
+                       ' <td style="text-align: right;">成本中心</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            '<select id="CostCenterSection' + str + '" class="input_text form-control" >' +
+                            '</select>' +
+                       ' </td>' +
+                    '</tr>' +
+                    '<tr style="height:55px">' +
+                       '<td style="text-align: right;">备用1</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            '<select id="SpareOneSection' + str + '" class="input_text form-control" >' +
+                            '</select>' +
+                       '</td>' +
+                       '<td style="text-align: right;">备用2</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            '<select id="SpareTwoSection' + str + '" class="input_text form-control" >' +
+                            '</select>' +
+                       '</td>' +
+                       '<td style="text-align: right;">往来段</td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                            '<select id="IntercourseSection' + str + '" class="input_text form-control" >' +
+                            '</select>' +
+                       '</td>' +
+                       '<td style="text-align: right;"></td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem">' +
+                       '</td>' +
+                   '</tr>' +
+                   '<tr style="height:55px">' +
+                       '<td style="text-align: right;">' + money + '</td>' +
+                       '<td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="' + moneyId + '" style="width: 1338px;" type="text" class="input_text form-control" validatetype="decimalNumber" value="' + moneyValue + '"/></td>' +
+                   '</tr>' +
+            '</table>' +
+          '</div>';
+            selectIndex++;
+            if (data.LoanMoney == -1) {
+                $("#BorrowTable").append(html);
+            } else {
+                $("#LoanTable").append(html);
+            }
+            var id0 = "#CompanySection" + str;
+            uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
+            AccountSection = loadCompanyCode("C", data.CompanySection, data.SubjectSection);
+            CostCenterSection = loadCompanyCode("D", data.CompanySection, data.SubjectSection);
+            SpareOneSection = loadCompanyCode("E", data.CompanySection, data.SubjectSection);
+            SpareTwoSection = loadCompanyCode("F", data.CompanySection, data.SubjectSection);
+            IntercourseSection = loadCompanyCode("G", data.CompanySection, data.SubjectSection);
+            loadSelectFun(str);
+            $("#CompanySection" + str).val(data.CompanySection);
+            $("#AccountSection" + str).val(data.AccountSection);
+            $("#CostCenterSection" + str).val(data.CostCenterSection);
+            $("#SpareOneSection" + str).val(data.SpareOneSection);
+            $("#SpareTwoSection" + str).val(data.SpareTwoSection);
+            $("#IntercourseSection" + str).val(data.IntercourseSection);
+        } 
     }
 };
 
@@ -240,27 +481,27 @@ function initSubjectTable(companyCode, x, y) {
                data: { companyCode: companyCode },
                url: "/PaymentManagement/SubjectSection/GetCompanySectionByCode"    //获取数据源的路径
            };
-            var typeAdapter = new $.jqx.dataAdapter(source);
-            $("#jqxSubjectSection").jqxTreeGrid({
-                pageable: false,
-                width: 460,
-                height: 300,
-                pageSize: 9999999,
-                //serverProcessing: true,
-                pagerButtonsCount: 10,
-                source: typeAdapter,
-                //theme: "energyblue",
-                columnsHeight: 30,
-                checkboxes: false,
-                hierarchicalCheckboxes: false,
-                columns: [
-                    { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left' },
-                    { text: '描述', datafield: 'Descrption', align: 'center', cellsAlign: 'center' },
-                    { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
-                    { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
-                ]
-            });
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    $("#jqxSubjectSection").jqxTreeGrid({
+        pageable: false,
+        width: 460,
+        height: 300,
+        pageSize: 9999999,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        //theme: "energyblue",
+        columnsHeight: 30,
+        checkboxes: false,
+        hierarchicalCheckboxes: false,
+        columns: [
+            { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left' },
+            { text: '描述', datafield: 'Descrption', align: 'center', cellsAlign: 'center' },
+            { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true },
+        ]
+    });
 }
 
 function gradeChange(event) {
@@ -281,8 +522,8 @@ function loadCompanyCode(name, companyCode, subjectCode) {
     var value = null;
     $.ajax({
         url: url,
-        async:false,
-        data: {name:name, companyCode: companyCode, subjectCode: subjectCode },
+        async: false,
+        data: { name: name, companyCode: companyCode, subjectCode: subjectCode },
         type: "post",
         success: function (result) {
             value = result;
@@ -318,41 +559,28 @@ $(function () {
         else {//上传图片
             $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadImage?allowSize=' + 20 });
         }
-
     })
     $("#btn_Attachment").on("uploadEnd", function (event) {
         var args = event.args;
         //var msg = $.convert.strToJson($(args.response).html());
-
-
         uploadFiles(event)
-
     })
 })
 var fileName = "";
 function uploadFiles(event) {
     var args = event.args;
     var msg = $.convert.strToJson($(args.response).html());
-    //if (null == msg.WebPath && "文件类型非法!" == msg.Message) {
-    //    jqxAlert($pageLanguage.ErrorFileType);
-
-    //    return;
-    //}
-    //if (((msg.Size).toFixed(2)) >= 40 ) {
-    //    jqxAlert("请上传小于40M的文件");
-    //    return ;
-    //}
     fileName = event.args.file;
     var attachments = $("#Attachment").val();
-
+    var type = $("#AttachmentType").val();
     if (attachments == "") {
-        attachments = msg.WebPath;
+        attachments = type + "&" + msg.WebPath + "&" + fileName;
     }
     else {
-        attachments = attachments + "," + msg.WebPath;
+        attachments = attachments + "," + type + "&" + msg.WebPath + "&" + fileName;
     }
-    var type = $("#AttachmentType").val();
-    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='close' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+
+    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
     $("#Attachment").val(attachments);
 
 
@@ -363,7 +591,8 @@ function loadAttachments(attachments) {
     if (attachments != "") {
         var attachValues = attachments.split(",");
         for (var i = 0; i < attachValues.length; i++) {
-            $("#attachments")[0].innerHTML += "<span><a href='" + attachValues[i] + "' target='_blank'>" + fileName + "</a><button class='close' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+            var attach = attachValues[i].split("&");
+            $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
         }
     }
 }
@@ -526,3 +755,80 @@ function renderedFunc(element) {
     });
     return true;
 }
+
+
+//var data = {
+//    "VGUID": "",
+//    "CompanyCode": "",
+//    "CompanyName": "",
+//    "VoucherType": "现金类",
+//    "AccountingPeriod": "2018-09",
+//    "BatchName": "",
+//    "Currency": "CNY",
+//    "VoucherNo": "",
+//    "VoucherDate": "2018-11-29",
+//    "FinanceDirector": "",
+//    "Bookkeeping": "",
+//    "Auditor": "",
+//    "DocumentMaker": "",
+//    "Cashier": "",
+//    "Attachment": "发票&/_theme/temp/img/201811291128257291545.jpg,发票&/_theme/temp/img/201811291128257291546.jpg",
+//    "Detail": detail
+//}
+//var length = $(".nav-i").length;
+//for (var i = 0; i < length; i++) {
+//    var remark = $("#Remark_A_" + i).val();
+//    var CompanySection = $("#CompanySection_A_" + i).val();
+//    var SubjectSection = $("#SubjectSection_A_" + i).val();
+//    var SubjectSectionName = $("#SubjectSectionName_A_" + i).val();
+//    var AccountSection = $("#AccountSection_A_" + i).val();
+//    var CostCenterSection = $("#CostCenterSection_A_" + i).val();
+//    var SpareOneSection = $("#SpareOneSection_A_" + i).val();
+//    var SpareTwoSection = $("#SpareTwoSection_A_" + i).val();
+//    var IntercourseSection = $("#IntercourseSection_A_" + i).val();
+//    var BorrowMoney = $("#BorrowMoney_A_" + i).val();
+//    var x = {
+//        "VGUID": "",
+//        "Remark": remark,
+//        "CompanySection": CompanySection,
+//        "SubjectSection": SubjectSection,
+//        "SubjectSectionName": SubjectSectionName,
+//        "AccountSection": AccountSection,
+//        "CostCenterSection": CostCenterSection,
+//        "SpareOneSection": SpareOneSection,
+//        "SpareTwoSection": SpareTwoSection,
+//        "IntercourseSection": IntercourseSection,
+//        "BorrowMoney": BorrowMoney,
+//        "LoanMoney": 0
+//    }
+//    detail.push(x);
+//}
+
+//var detail = [
+//              {
+//                  "Remark": 2,
+//                  "CompanySection": "",
+//                  "SubjectSection": "",
+//                  "SubjectSectionName": "",
+//                  "AccountSection": "",
+//                  "CostCenterSection": "",
+//                  "SpareOneSection": "",
+//                  "SpareTwoSection": "",
+//                  "IntercourseSection": "",
+//                  "BorrowMoney": 17354318.68,
+//                  "LoanMoney": 0
+//              },
+//             {
+//                 "Remark": 2,
+//                 "CompanySection": "",
+//                 "SubjectSection": "",
+//                 "SubjectSectionName": "",
+//                 "AccountSection": "",
+//                 "CostCenterSection": "",
+//                 "SpareOneSection": "",
+//                 "SpareTwoSection": "",
+//                 "IntercourseSection": "",
+//                 "BorrowMoney": 0,
+//                 "LoanMoney": -17354318.68
+//             }
+//]

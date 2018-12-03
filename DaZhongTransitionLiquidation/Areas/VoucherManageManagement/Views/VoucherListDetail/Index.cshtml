@@ -52,8 +52,19 @@
     #btn_AttachmentUploadButton{
         margin-left: 120px;
     }
-    .close {
+    .closes {
         float: initial !important;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        opacity: .2;
+        padding: 0px;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        -webkit-appearance: none;
     }
 </style>
 <table style="margin-top: 10px;">
@@ -84,32 +95,32 @@
             </tr>
             <tr style="height:40px">
                 <td style="text-align: right;">会计期：</td>
-                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 150px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" /></td>
+                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" /></td>
                 <td style="text-align: right;">批名：</td>
-                <td style="text-align: left;"><input id="BatchName" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
+                <td style="text-align: left;"><input id="BatchName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">币种：</td>
-                <td style="text-align: left;"><input id="Currency" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="Currency" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height:40px">
                 <td style="text-align: right;">凭证号码：</td>
-                <td style="text-align: left;"><input id="VoucherNo" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="VoucherNo" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">凭证日期：</td>
-                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 150px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
                 <td style="text-align: right;">财务主管：</td>
-                <td style="text-align: left;"><input id="FinanceDirector" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="FinanceDirector" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height:40px">
                 <td style="text-align: right;">记账：</td>
-                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align: right;">审核：</td>
-                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align: right;">制单：</td>
-                <td style="text-align: left;"><input id="DocumentMaker" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="DocumentMaker" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height:40px">
                 <td style="text-align: right;">出纳：</td>
-                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 150px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;"></td>
+                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px   ;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
                 <td style="text-align: right;"></td>
                 <td style="text-align: right;"></td>
                 <td style="text-align: right;"></td>
@@ -138,210 +149,10 @@
             </li>
         </ul>
         <div style="overflow: hidden;" id="BorrowTable">
-            <div id="Borrow_0" class="nav-i" style="border:2px solid #999;position:relative;border-radius:5px;">
-                <table id="VoucherListDetail" style="width:100%;">
-                    <tr style="height:30px;">
-                        <td colspan="8" style="text-align: right;">
-                            <div id="removeBorrow_0" class="iconfont btn_icon remove" onclick="removes(removeBorrow_0)" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1500px;">&#xe6f2;</div>
-                        </td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">摘要</td>
-                        <td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="Remark_A_0" type="text" style="width: 1338px;" class="input_text form-control" /></td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">公司段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="CompanySection_A_0" class="input_text form-control" onchange="gradeChange(CompanySection_A_0)">
-                                @{
-                                    foreach (var item in ViewBag.CompanyCode)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-
-                        </td>
-                        <td style="text-align: right;">科目段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <input id="SubjectSection_A_0" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" />&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input id="hidSubjectSection_A_0" name="hidSubjectSection_A_0" class="hide" />
-                            <button id="btnSearch_A_0" type="button" class="buttons" onclick="searchSubject(btnSearch_A_0)"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>
-                        </td>
-                        <td style="text-align: right;">核算段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="AccountSection_A_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.AccountSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="AccountSection" name="AccountSection" value="@ViewBag.AccountSection" class="hide" />*@
-                        </td>
-                        <td style="text-align: right;">成本中心</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="CostCenterSection_A_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.CostCenterSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="CostCenterSection" name="CostCenterSection" value="@ViewBag.CostCenterSection" class="hide" />*@
-                        </td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">备用1</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="SpareOneSection_A_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.SpareOneSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="SpareOneSection" name="SpareOneSection" value="@ViewBag.SpareOneSection" class="hide" />*@
-                        </td>
-                        <td style="text-align: right;">备用2</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="SpareTwoSection_A_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.SpareTwoSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="SpareTwoSection" name="SpareTwoSection" value="@ViewBag.SpareTwoSection" class="hide" />*@
-                        </td>
-                        <td style="text-align: right;">往来段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="IntercourseSection_A_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.IntercourseSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="IntercourseSection" name="IntercourseSection" value="@ViewBag.IntercourseSection" class="hide" />*@
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">借方金额</td>
-                        <td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="BorrowMoney_A_0" style="width: 1338px;" type="text" class="input_text form-control" validatetype="decimalNumber" /></td>
-                    </tr>
-                </table>
-            </div>
+            
         </div>
         <div style="overflow: hidden;" id="LoanTable">
-            <div id="Loan_0" class="nav-i2" style="border:2px solid #999;position:relative;border-radius:5px">
-                <table id="VoucherListDetails" style="width:100%;">
-                    <tr style="height:30px;">
-                        <td colspan="8" style="text-align: right;">
-                            <div id="removeLoan_0" class="iconfont btn_icon remove" onclick="removes(removeLoan0)" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1500px;">&#xe6f2;</div>
-                        </td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">摘要</td>
-                        <td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="Remark_B_0" type="text" style="width: 1335px;" class="input_text form-control" /></td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">公司段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="CompanySection_B_0" class="input_text form-control" onchange="gradeChange(CompanySection_B_0)">
-                                @{
-                                    foreach (var item in ViewBag.CompanyCode)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-
-                        </td>
-                        <td style="text-align: right;">科目段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <input id="SubjectSection_B_0" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" />&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input id="hidSubjectSection_B_0" name="hidSubjectSection_B_0" class="hide" />
-                            <button id="btnSearch_B_0" type="button" class="buttons" onclick="searchSubject(btnSearch_B_0)"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>
-                        </td>
-                        <td style="text-align: right;">核算段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="AccountSection_B_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.AccountSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="AccountSection" name="AccountSection" value="@ViewBag.AccountSection" class="hide" />*@
-                        </td>
-                        <td style="text-align: right;">成本中心</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="CostCenterSection_B_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.CostCenterSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="CostCenterSection" name="CostCenterSection" value="@ViewBag.CostCenterSection" class="hide" />*@
-                        </td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">备用1</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="SpareOneSection_B_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.SpareOneSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="SpareOneSection" name="SpareOneSection" value="@ViewBag.SpareOneSection" class="hide" />*@
-                        </td>
-                        <td style="text-align: right;">备用2</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="SpareTwoSection_B_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.SpareTwoSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="SpareTwoSection" name="SpareTwoSection" value="@ViewBag.SpareTwoSection" class="hide" />*@
-                        </td>
-                        <td style="text-align: right;">往来段</td>
-                        <td style="vertical-align: middle;padding-left: 0.8rem">
-                            <select id="IntercourseSection_B_0" class="input_text form-control">
-                                @{
-                                    foreach (var item in ViewBag.IntercourseSection)
-                                    {
-                                        <option value="@item.Code">@item.Descrption</option>
-                                    }
-                                }
-                            </select>
-                            @*<input id="IntercourseSection" name="IntercourseSection" value="@ViewBag.IntercourseSection" class="hide" />*@
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr style="height:55px">
-                        <td style="text-align: right;">贷方金额</td>
-                        <td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="LoanMoney_B_0" style="width: 1335px;" type="text" class="input_text form-control" validatetype="decimalNumber" /></td>
-                    </tr>
-                </table>
-            </div>
+            
         </div>
     </div>
 </div>

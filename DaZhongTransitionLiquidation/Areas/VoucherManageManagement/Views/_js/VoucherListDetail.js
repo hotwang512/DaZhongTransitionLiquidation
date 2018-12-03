@@ -42,7 +42,6 @@ var $page = function () {
         var str = "";//控件ID后缀
         //新增
         $("#btnAddDetail").on("click", function () {
-            selectIndex++;
             var id = "";//生成div的ID
             var className = "";
             var removeId = "";
@@ -126,6 +125,7 @@ var $page = function () {
             } else {
                 $("#LoanTable").append(html);
             }
+            selectIndex++;
             var id0 = "#CompanySection" + str;
             uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
         });

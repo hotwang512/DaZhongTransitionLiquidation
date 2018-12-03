@@ -42,3 +42,45 @@
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 26
 2018-12-03 13:07:03,364 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":97.25,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":1,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":97.25,"FSSJ":"13:06","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36777727.09,"YOTU":"1202-1202费0.21元","BEZH":"","T24F":"FT18337268905540"}],"ACNO":31685803002369318,"SUMU":"0001","JFBS":""}}
 2018-12-03 15:07:07,077 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":8223.51,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":97.25,"FSSJ":"13:06","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36777727.09,"YOTU":"1202-1202费0.21元","BEZH":"","T24F":"FT18337268905540"},{"CDFG":2,"PATI":"跨行转账","FSJE":8126.26,"FSSJ":"13:26","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36785853.35,"YOTU":"1201-1202费17.91元","BEZH":"","T24F":"FT18337547180185"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":""}}
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-12-03 17:39:34,979 [141] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":8223.51,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":97.25,"FSSJ":"13:06","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36777727.09,"YOTU":"1202-1202费0.21元","BEZH":"","T24F":"FT18337268905540"},{"CDFG":2,"PATI":"跨行转账","FSJE":8126.26,"FSSJ":"13:26","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36785853.35,"YOTU":"1201-1202费17.91元","BEZH":"","T24F":"FT18337547180185"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":""}}
+2018-12-03 17:39:43,448 [141] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.ArgumentException: 对于“DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail.VoucherListDetailController”中方法“System.Web.Mvc.JsonResult GetVoucherDetail(System.Guid)”的不可以为 null 的类型“System.Guid”的参数“vguid”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-12-03 17:40:43,356 [141] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.ArgumentException: 对于“DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail.VoucherListDetailController”中方法“System.Web.Mvc.JsonResult GetVoucherDetail(System.Guid)”的不可以为 null 的类型“System.Guid”的参数“vguid”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------header----------------------
+2018-12-03 17:47:22,403 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":8223.51,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":97.25,"FSSJ":"13:06","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36777727.09,"YOTU":"1202-1202费0.21元","BEZH":"","T24F":"FT18337268905540"},{"CDFG":2,"PATI":"跨行转账","FSJE":8126.26,"FSSJ":"13:26","DFZH":1001281229006644228,"DFBZ":"CNY","DFHM":"银联商务有限公司客户备付金","VCTP":"","VCNO":"","YUER":36785853.35,"YOTU":"1201-1202费17.91元","BEZH":"","T24F":"FT18337547180185"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":""}}

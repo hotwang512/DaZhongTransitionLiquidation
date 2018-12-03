@@ -123,9 +123,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 var IsSuccess = "0";
                 var result = db.Ado.UseTran(() =>
                 {
-                    Business_VoucherDetail BVDetails = new Business_VoucherDetail();
-                    var loanMoney = voucher.Detail.Sum(x=>x.LoanMoney);//贷方总金额
-                    var borrowMoney = voucher.Detail.Sum(x => x.BorrowMoney);//借方总金额
+                    var loanMoney = voucher.Detail.Where(i=>i.LoanMoney != -1).Sum(x=>x.LoanMoney);//贷方总金额
+                    var borrowMoney = voucher.Detail.Where(i => i.BorrowMoney != -1).Sum(x => x.BorrowMoney);//借方总金额
                     var attachment = voucher.Attachment;
                     var voucherType = voucher.VoucherType;//凭证类型
                     var date = DateTime.Now;

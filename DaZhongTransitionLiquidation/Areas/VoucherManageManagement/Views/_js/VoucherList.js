@@ -79,7 +79,25 @@ var $page = function () {
                 WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
-
+        //审核
+        $("#btnCheck").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要提交的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
 
     }; //addEvent end
 
@@ -107,7 +125,27 @@ var $page = function () {
     function submit(selection) {
         $.ajax({
             url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
-            data: { vguids: selection },
+            data: { vguids: selection, status:"2" },
+            traditional: true,
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                    case "0":
+                        jqxNotification("提交失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("提交成功！", null, "success");
+                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        break;
+                }
+            }
+        });
+    }
+    //审核
+    function check(selection) {
+        $.ajax({
+            url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
+            data: { vguids: selection, status: "3" },
             traditional: true,
             type: "post",
             success: function (msg) {
@@ -157,7 +195,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status },
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val() },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

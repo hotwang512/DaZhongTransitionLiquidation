@@ -45,13 +45,16 @@
         position: initial !important;
         background: rgb(0, 153, 204) !important;
     }
-    #btn_AttachmentUploadButton,#btn_AttachmentCancelButton {
+
+    #btn_AttachmentUploadButton, #btn_AttachmentCancelButton {
         width: 150px !important;
         height: 35px;
     }
-    #btn_AttachmentUploadButton{
+
+    #btn_AttachmentUploadButton {
         margin-left: 120px;
     }
+
     .closes {
         float: initial !important;
         font-size: 22px;
@@ -65,6 +68,11 @@
         background: transparent;
         border: 0;
         -webkit-appearance: none;
+    }
+
+    .nav-i, .nav-i2 {
+        width: 1530px;
+        margin-left: 12px !important;
     }
 </style>
 <table style="margin-top: 10px;">
@@ -119,11 +127,19 @@
             </tr>
             <tr style="height:40px">
                 <td style="text-align: right;">出纳：</td>
-                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px   ;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">凭证类型：</td>
+                <td style="text-align: right;">
+                    <select id="VoucherType" style="width: 200px;" class="input_text form-control" validatetype="required">
+                        <option value="现金类">现金类</option>
+                        <option value="银行类">银行类</option>
+                        <option value="摊销类">摊销类</option>
+                        <option value="计提类">计提类</option>
+                        <option value="结转类">结转类</option>
+                    </select>
+                </td>
+                <td style="text-align: right;"></td>
                 <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: right;"></td>
             </tr>
         </table>
     </div>
@@ -149,10 +165,10 @@
             </li>
         </ul>
         <div style="overflow: hidden;" id="BorrowTable">
-            
+
         </div>
         <div style="overflow: hidden;" id="LoanTable">
-            
+
         </div>
     </div>
 </div>
@@ -179,14 +195,14 @@
                 </td>
                 <td style="text-align: right;">附件：</td>
                 <td style="text-align: left;">
-                    
+
                     <!------------------btn_Attachment BEGIN------------------>
                     <div type="button" id="btn_Attachment" class=""></div>
                     <!------------------btn_Attachment END------------------>
                     <!------------------Attachment BEGIN------------------>
                     <input type="hidden" id="Attachment" class="" name="Attachment" value="" style="" />
                     <!------------------Attachment END------------------>
-                    
+
                 </td>
             </tr>
             <tr style="height:40px">

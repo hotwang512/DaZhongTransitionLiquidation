@@ -24,8 +24,9 @@ var $page = function () {
     function addEvent() {
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
-        if (guid != "" || guid != null) {
+        if (guid != "" && guid != null) {
             getVoucherDetail();
+            $("#VoucherType").attr("disabled", "disableds");
         }
         //控件ID后缀
         var str = "";
@@ -221,6 +222,7 @@ var $page = function () {
             var y = JSON.stringify(detail);
             console.log(detail);
             console.log(y);
+            $("#VoucherType").removeAttr("disabled");
             $.ajax({
                 url: "/VoucherManageManagement/VoucherListDetail/SaveVoucherListDetail",
                 //data: { vguids: selection },
@@ -228,7 +230,7 @@ var $page = function () {
                     "VGUID": $("#VGUID").val(),
                     "CompanyCode": "",
                     "CompanyName": "营运公司",
-                    "VoucherType": "现金类",
+                    "VoucherType": $("#VoucherType").val(),
                     "AccountingPeriod": $("#AccountingPeriod").val(),
                     "BatchName": $("#BatchName").val(),
                     "Currency": $("#Currency").val(),
@@ -247,9 +249,12 @@ var $page = function () {
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("保存失败！", null, "error");
+                            $("#VoucherType").attr("disabled", "disableds");
                             break;
                         case "1":
                             jqxNotification("保存成功！", null, "success");
+                            window.close();
+                            window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }
                 }

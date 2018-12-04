@@ -286,8 +286,8 @@ var $page = function () {
             type: "post",
             dataType: "json",
             success: function (msg) {
-                var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig,""));
-                var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig,""));
+                var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig,""));//转时间戳
+                var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
                 $("#VoucherDate").val($.convert.toDate(new Date(voucherDate), "yyyy-MM-dd"));
                 $("#AccountingPeriod").val($.convert.toDate(new Date(accountingPeriod), "yyyy-MM"));
                 $("#BatchName").val(msg.BatchName);
@@ -387,7 +387,8 @@ var $page = function () {
                    '</tr>' +
                    '<tr style="height:55px">' +
                        '<td style="text-align: right;">' + money + '</td>' +
-                       '<td colspan="7" style="vertical-align: middle;padding-left: 0.8rem"><input id="' + moneyId + '" style="width: 1338px;" type="text" class="input_text form-control" validatetype="decimalNumber" value="' + moneyValue + '"/></td>' +
+                       '<td colspan="7" style="vertical-align: middle;padding-left: 0.8rem">'+
+                       '<input id="' + moneyId + '" style="width: 1338px;" type="text" class="input_text form-control" validatetype="decimalNumber" value="' + moneyValue + '"/></td>' +
                    '</tr>' +
             '</table>' +
           '</div>';
@@ -411,7 +412,7 @@ var $page = function () {
             $("#SpareOneSection" + str).val(data.SpareOneSection);
             $("#SpareTwoSection" + str).val(data.SpareTwoSection);
             $("#IntercourseSection" + str).val(data.IntercourseSection);
-        } 
+        }
     }
 };
 //移除明细内容
@@ -448,8 +449,7 @@ let z2 = "";
 function initSubjectTable(companyCode, x, y) {
     z1 = x;
     z2 = y;
-    var source =
-           {
+    var source ={
                datafields:
                [
                     { name: 'Code', type: 'string' },
@@ -580,7 +580,6 @@ function uploadFiles(event) {
 
 }
 function loadAttachments(attachments) {
-
     $("#Attachment").val(attachments);
     if (attachments != "") {
         var attachValues = attachments.split(",");

@@ -54,7 +54,7 @@ var $page = function () {
                '<table id="" style="width:100%;">' +
                    '<tr style="height:30px;">' +
                        '<td colspan="8" style="text-align: right;">' +
-                           '<div id="' + removeId + '" class="iconfont btn_icon remove" onclick="removes(' + removeId + ')" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1500px;">&#xe6f2;</div>' +
+                           '<div id="' + removeId + '" class="iconfont btn_icon remove" onclick="removes(' + removeId + ')" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1480px;">&#xe6f2;</div>' +
                        '</td>' +
                    '</tr>' +
                    '<tr style="height:55px">' +
@@ -331,11 +331,11 @@ var $page = function () {
                 moneyId = "LoanMoney_B_" + selectIndex;
                 moneyValue = data.LoanMoney;
             }
-            var html = '<div id="' + id + '" class="' + className + '" style="border:2px solid #999;position:relative;border-radius:5px;margin: 15px 0;">' +
+            var html = '<div id="' + id + '" class="' + className + '" style="border:2px solid #999;position:relative;border-radius:5px;margin: 15px 0; width: 1510px;margin-left: 12px !important;">' +
                '<table id="" style="width:100%;">' +
                    '<tr style="height:30px;">' +
                        '<td colspan="8" style="text-align: right;">' +
-                           '<div id="' + removeId + '" class="iconfont btn_icon remove" onclick="removes(' + removeId + ')" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1500px;">&#xe6f2;</div>' +
+                           '<div id="' + removeId + '" class="iconfont btn_icon remove" onclick="removes(' + removeId + ')" style="color: red !important;font-size: 20px !important;cursor:pointer;margin-left: 1480px;">&#xe6f2;</div>' +
                        '</td>' +
                    '</tr>' +
                    '<tr style="height:55px">' +

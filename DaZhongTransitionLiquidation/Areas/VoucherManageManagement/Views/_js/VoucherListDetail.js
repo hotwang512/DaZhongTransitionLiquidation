@@ -22,24 +22,13 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        //$('#jqxFileUpload1').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        //$('#jqxFileUpload2').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        //$('#jqxFileUpload3').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        //$('#jqxFileUpload4').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
-        //$('#jqxFileUpload5').jqxFileUpload({ width: '150px', uploadUrl: 'imageUpload.php', fileInputName: 'fileToUpload' });
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
         if (guid != "" || guid != null) {
             getVoucherDetail();
         }
-        //重置按钮事件
-        selector.$btnReset().on("click", function () {
-            $("#AccountingPeriod").val("");
-            //$("#TransactionDate").val("");
-            //$("#TransactionDateEnd").val("");
-            //$("#PaymentUnit").val("");
-        });
-        var str = "";//控件ID后缀
+        //控件ID后缀
+        var str = "";
         //新增
         $("#btnAddDetail").on("click", function () {
             var id = "";//生成div的ID
@@ -420,7 +409,7 @@ var $page = function () {
         } 
     }
 };
-
+//移除明细内容
 function removes(event) {
     WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", event);
 }
@@ -433,7 +422,7 @@ function dele(event) {
         $("#Loan_" + x).remove();
     }
 }
-
+//选择科目段
 function searchSubject(event) {
     var str = event.id;
     var x = str.split("_")[1];

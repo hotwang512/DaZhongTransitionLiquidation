@@ -28,6 +28,10 @@ var $page = function () {
             getVoucherDetail();
             $("#VoucherType").attr("disabled", "disableds");
         }
+        if ($("#Status").val() == "1") {
+            $("#btnSave").show();
+            $("#btnCancel").show();
+        }
         //控件ID后缀
         var str = "";
         //新增
@@ -221,7 +225,7 @@ var $page = function () {
             }
             var y = JSON.stringify(detail);
             console.log(detail);
-            console.log(y);
+            //console.log(y);
             $("#VoucherType").removeAttr("disabled");
             $.ajax({
                 url: "/VoucherManageManagement/VoucherListDetail/SaveVoucherListDetail",
@@ -298,6 +302,7 @@ var $page = function () {
                 $("#Auditor").val(msg.Auditor);
                 $("#DocumentMaker").val(msg.DocumentMaker);
                 $("#Cashier").val(msg.Cashier);
+                $("#Status").val(msg.Status);
                 var datas = msg.Detail;
                 setVoucherDetail(datas);
                 loadAttachments(msg.Attachment);
@@ -413,6 +418,7 @@ var $page = function () {
             $("#SpareTwoSection" + str).val(data.SpareTwoSection);
             $("#IntercourseSection" + str).val(data.IntercourseSection);
         }
+        console.log(selectIndex);
     }
 };
 //移除明细内容

@@ -1,0 +1,180 @@
+
+-------------------------------header----------------------
+2018-12-05 09:54:12,354 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":0.00,"JFJE":43689.10,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":"","Detail":[{"CDFG":1,"PATI":"跨行转账","FSJE":17226.20,"FSSJ":"09:27","DFZH":6222600110059133020,"DFBZ":"CNY","DFHM":"赵银翔","VCTP":"","VCNO":"","YUER":49508686.67,"YOTU":"划款","BEZH":"食品　","T24F":"FT18339320129960"},{"CDFG":1,"PATI":"跨行转账","FSJE":1427.00,"FSSJ":"09:27","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":49507259.67,"YOTU":"划款","BEZH":"餐费　","T24F":"FT18339920504020"},{"CDFG":1,"PATI":"电子内转","FSJE":385.90,"FSSJ":"09:27","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":49506873.77,"YOTU":"其他合法款项　计财部加班餐费及车费","BEZH":"","T24F":"FT18339771527409"},{"CDFG":1,"PATI":"跨行转账","FSJE":1590.00,"FSSJ":"09:27","DFZH":6222081001011914698,"DFBZ":"CNY","DFHM":"朱连喜","VCTP":"","VCNO":"","YUER":49505283.77,"YOTU":"划款","BEZH":"识别服　","T24F":"FT18339906584272"},{"CDFG":1,"PATI":"跨行转账","FSJE":17720.00,"FSSJ":"09:27","DFZH":"03486800040017450","DFBZ":"CNY","DFHM":"上海建爱实业有限公司","VCTP":"","VCNO":"","YUER":49487563.77,"YOTU":"划款","BEZH":"检测服务费　","T24F":"FT18339091020753"},{"CDFG":1,"PATI":"跨行转账","FSJE":500.00,"FSSJ":"09:27","DFZH":6222620110006462676,"DFBZ":"CNY","DFHM":"陶炯","VCTP":"","VCNO":"","YUER":49487063.77,"YOTU":"划款","BEZH":"2018年11月车费　","T24F":"FT18339935137082"},{"CDFG":1,"PATI":"跨行转账","FSJE":588.00,"FSSJ":"09:27","DFZH":6222620110006555222,"DFBZ":"CNY","DFHM":"姚颖","VCTP":"","VCNO":"","YUER":49486475.77,"YOTU":"划款","BEZH":"丝袜　","T24F":"FT18339184743771"},{"CDFG":1,"PATI":"跨行转账","FSJE":4252.00,"FSSJ":"09:27","DFZH":6222620110006555032,"DFBZ":"CNY","DFHM":"王栋","VCTP":"","VCNO":"","YUER":49482223.77,"YOTU":"划款","BEZH":"沪APP658公务车补贴费　","T24F":"FT18339307674990"}],"ACNO":31685803002369318,"SUMU":"0008","JFBS":8}}
+
+-------------------------------header----------------------
+2018-12-05 10:24:05,680 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":0.00,"JFJE":43689.10,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":"","Detail":[{"CDFG":1,"PATI":"跨行转账","FSJE":17226.20,"FSSJ":"09:27","DFZH":6222600110059133020,"DFBZ":"CNY","DFHM":"赵银翔","VCTP":"","VCNO":"","YUER":49508686.67,"YOTU":"划款","BEZH":"食品　","T24F":"FT18339320129960"},{"CDFG":1,"PATI":"跨行转账","FSJE":1427.00,"FSSJ":"09:27","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":49507259.67,"YOTU":"划款","BEZH":"餐费　","T24F":"FT18339920504020"},{"CDFG":1,"PATI":"电子内转","FSJE":385.90,"FSSJ":"09:27","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":49506873.77,"YOTU":"其他合法款项　计财部加班餐费及车费","BEZH":"","T24F":"FT18339771527409"},{"CDFG":1,"PATI":"跨行转账","FSJE":1590.00,"FSSJ":"09:27","DFZH":6222081001011914698,"DFBZ":"CNY","DFHM":"朱连喜","VCTP":"","VCNO":"","YUER":49505283.77,"YOTU":"划款","BEZH":"识别服　","T24F":"FT18339906584272"},{"CDFG":1,"PATI":"跨行转账","FSJE":17720.00,"FSSJ":"09:27","DFZH":"03486800040017450","DFBZ":"CNY","DFHM":"上海建爱实业有限公司","VCTP":"","VCNO":"","YUER":49487563.77,"YOTU":"划款","BEZH":"检测服务费　","T24F":"FT18339091020753"},{"CDFG":1,"PATI":"跨行转账","FSJE":500.00,"FSSJ":"09:27","DFZH":6222620110006462676,"DFBZ":"CNY","DFHM":"陶炯","VCTP":"","VCNO":"","YUER":49487063.77,"YOTU":"划款","BEZH":"2018年11月车费　","T24F":"FT18339935137082"},{"CDFG":1,"PATI":"跨行转账","FSJE":588.00,"FSSJ":"09:27","DFZH":6222620110006555222,"DFBZ":"CNY","DFHM":"姚颖","VCTP":"","VCNO":"","YUER":49486475.77,"YOTU":"划款","BEZH":"丝袜　","T24F":"FT18339184743771"},{"CDFG":1,"PATI":"跨行转账","FSJE":4252.00,"FSSJ":"09:27","DFZH":6222620110006555032,"DFBZ":"CNY","DFHM":"王栋","VCTP":"","VCNO":"","YUER":49482223.77,"YOTU":"划款","BEZH":"沪APP658公务车补贴费　","T24F":"FT18339307674990"}],"ACNO":31685803002369318,"SUMU":"0008","JFBS":8}}
+2018-12-05 10:24:11,099 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AttachmentDetail' 无效。
+列名 'CreateTime' 无效。
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList.VoucherListController.<>c__DisplayClass2_0.<GetVoucherListDatas>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs:行号 33
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:207,State:1,Class:16
+2018-12-05 10:24:15,818 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AttachmentDetail' 无效。
+列名 'CreateTime' 无效。
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList.VoucherListController.<>c__DisplayClass2_0.<GetVoucherListDatas>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs:行号 33
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList.VoucherListController.GetVoucherListDatas(Business_VoucherList searchParams, GridParams para) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs:行号 29
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:207,State:1,Class:16
+2018-12-05 10:24:25,436 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 将字符串转换为 uniqueidentifier 时失败。
+   在 SqlSugar.AdoProvider.ExecuteCommand(String sql, SugarParameter[] parameters)
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 461
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:8169,State:2,Class:16
+2018-12-05 10:24:28,599 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 将字符串转换为 uniqueidentifier 时失败。
+   在 SqlSugar.AdoProvider.ExecuteCommand(String sql, SugarParameter[] parameters)
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 461
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type, String companyCode) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 255
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:8169,State:2,Class:16
+2018-12-05 10:25:25,081 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 将字符串转换为 uniqueidentifier 时失败。
+   在 SqlSugar.AdoProvider.ExecuteCommand(String sql, SugarParameter[] parameters)
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 461
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:8169,State:2,Class:16
+2018-12-05 10:25:48,830 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 将字符串转换为 uniqueidentifier 时失败。
+   在 SqlSugar.AdoProvider.ExecuteCommand(String sql, SugarParameter[] parameters)
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 461
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type, String companyCode) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 255
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:8169,State:2,Class:16
+2018-12-05 10:28:30,525 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 将字符串转换为 uniqueidentifier 时失败。
+   在 SqlSugar.AdoProvider.ExecuteCommand(String sql, SugarParameter[] parameters)
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 461
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:8169,State:2,Class:16
+2018-12-05 10:28:31,901 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 将字符串转换为 uniqueidentifier 时失败。
+   在 SqlSugar.AdoProvider.ExecuteCommand(String sql, SugarParameter[] parameters)
+   在 SqlSugar.InsertableProvider`1.ExecuteCommand()
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.<>c__DisplayClass9_0.<SaveSectionSetting>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 461
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection.CompanySectionController.SaveSectionSetting(String code, List`1 otherCode, String type, String companyCode) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\PaymentManagement\Controllers\CompanySection\CompanySectionController.cs:行号 255
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:efc03b55-06c8-454e-857e-ba6c8f278c40
+Error Number:8169,State:2,Class:16
+
+-------------------------------header----------------------
+2018-12-05 10:37:33,789 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":112100.00,"JFJE":43689.10,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":1,"Detail":[{"CDFG":1,"PATI":"跨行转账","FSJE":17226.20,"FSSJ":"09:27","DFZH":6222600110059133020,"DFBZ":"CNY","DFHM":"赵银翔","VCTP":"","VCNO":"","YUER":49508686.67,"YOTU":"划款","BEZH":"食品　","T24F":"FT18339320129960"},{"CDFG":1,"PATI":"跨行转账","FSJE":1427.00,"FSSJ":"09:27","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":49507259.67,"YOTU":"划款","BEZH":"餐费　","T24F":"FT18339920504020"},{"CDFG":1,"PATI":"电子内转","FSJE":385.90,"FSSJ":"09:27","DFZH":620522003351696800,"DFBZ":"CNY","DFHM":"冯营","VCTP":"","VCNO":"","YUER":49506873.77,"YOTU":"其他合法款项　计财部加班餐费及车费","BEZH":"","T24F":"FT18339771527409"},{"CDFG":1,"PATI":"跨行转账","FSJE":1590.00,"FSSJ":"09:27","DFZH":6222081001011914698,"DFBZ":"CNY","DFHM":"朱连喜","VCTP":"","VCNO":"","YUER":49505283.77,"YOTU":"划款","BEZH":"识别服　","T24F":"FT18339906584272"},{"CDFG":1,"PATI":"跨行转账","FSJE":17720.00,"FSSJ":"09:27","DFZH":"03486800040017450","DFBZ":"CNY","DFHM":"上海建爱实业有限公司","VCTP":"","VCNO":"","YUER":49487563.77,"YOTU":"划款","BEZH":"检测服务费　","T24F":"FT18339091020753"},{"CDFG":1,"PATI":"跨行转账","FSJE":500.00,"FSSJ":"09:27","DFZH":6222620110006462676,"DFBZ":"CNY","DFHM":"陶炯","VCTP":"","VCNO":"","YUER":49487063.77,"YOTU":"划款","BEZH":"2018年11月车费　","T24F":"FT18339935137082"},{"CDFG":1,"PATI":"跨行转账","FSJE":588.00,"FSSJ":"09:27","DFZH":6222620110006555222,"DFBZ":"CNY","DFHM":"姚颖","VCTP":"","VCNO":"","YUER":49486475.77,"YOTU":"划款","BEZH":"丝袜　","T24F":"FT18339184743771"},{"CDFG":1,"PATI":"跨行转账","FSJE":4252.00,"FSSJ":"09:27","DFZH":6222620110006555032,"DFBZ":"CNY","DFHM":"王栋","VCTP":"","VCNO":"","YUER":49482223.77,"YOTU":"划款","BEZH":"沪APP658公务车补贴费　","T24F":"FT18339307674990"},{"CDFG":2,"PATI":"转账","FSJE":112100.00,"FSSJ":"10:27","DFZH":"00200486608","DFBZ":"CNY","DFHM":"上海市城市交通运输管理处","VCTP":"","VCNO":"","YUER":49594323.77,"YOTU":"S00201812049134430719202052","BEZH":"78311234-X补贴","T24F":"FT18339551072516"}],"ACNO":31685803002369318,"SUMU":"0009","JFBS":8}}
+2018-12-05 10:37:41,199 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AttachmentDetail' 无效。
+列名 'CreateTime' 无效。
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList.VoucherListController.<>c__DisplayClass2_0.<GetVoucherListDatas>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs:行号 33
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:23333e90-82e2-4ebb-8d04-b4d0e87a4e53
+Error Number:207,State:1,Class:16
+2018-12-05 10:37:44,952 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): 列名 'AttachmentDetail' 无效。
+列名 'CreateTime' 无效。
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.ToPageList(Int32 pageIndex, Int32 pageSize, Int32& totalNumber)
+   在 DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList.VoucherListController.<>c__DisplayClass2_0.<GetVoucherListDatas>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs:行号 33
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList.VoucherListController.GetVoucherListDatas(Business_VoucherList searchParams, GridParams para) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs:行号 29
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:23333e90-82e2-4ebb-8d04-b4d0e87a4e53
+Error Number:207,State:1,Class:16

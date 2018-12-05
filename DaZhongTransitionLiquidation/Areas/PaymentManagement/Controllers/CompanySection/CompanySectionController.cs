@@ -459,6 +459,17 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs.ToArray()).ExecuteCommand();
+                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                            {
+                                IsCompanyCode = true,
+                            }).Where(it => it.Code == code).ExecuteCommand();
+                        }
+                        else
+                        {
+                            db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                            {
+                                IsCompanyCode = false,
+                            }).Where(it => it.Code == code).ExecuteCommand();
                         }
                         resultModel.IsSuccess = true;
                         resultModel.Status = resultModel.IsSuccess ? "1" : "0";

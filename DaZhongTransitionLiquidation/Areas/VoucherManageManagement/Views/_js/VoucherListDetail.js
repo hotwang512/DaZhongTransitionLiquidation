@@ -142,7 +142,7 @@ var $page = function () {
                     break;
             }
         }
-        $('#jqxTabs').jqxTabs({ width: "97rem", height: 600, initTabContent: initWidgets });
+        $('#jqxTabs').jqxTabs({ width: "100%", height: 600, initTabContent: initWidgets });
         //双击选择科目
         $("#jqxSubjectSection").on('rowDoubleClick', function (event) {
             // event args.

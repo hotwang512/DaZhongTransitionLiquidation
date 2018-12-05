@@ -44,6 +44,9 @@
 var menueHelp = {
     drawMenueStyle: function () {
         var menueId = CookieHelper.GetCookie();
+        if (menueId == "" || menueId == null) {
+            return;
+        }
         var id = menueId.split("_")[1];
         $(".menue_header").css("display", "none");
         $("." + id).show();

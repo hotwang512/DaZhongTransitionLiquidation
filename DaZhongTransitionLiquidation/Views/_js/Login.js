@@ -45,7 +45,6 @@ var $page = function () {
                                 jqxNotification(msg.ResultInfo, null, "error");
                                 break;
                             case "1":
-                                CookieHelper.SaveCookie("Reconciliation");
                                 //window.location.href = "/ReportManagement/ReconciliationReport/Reconciliation";
                                 window.location.href = "/HomePage/HomePage/Index";
                                 break;

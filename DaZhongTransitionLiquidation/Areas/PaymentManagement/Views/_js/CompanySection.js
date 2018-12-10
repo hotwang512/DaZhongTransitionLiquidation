@@ -462,7 +462,19 @@ var $page = function () {
             initTable2();
             //$("#jqxTable2").jqxTreeGrid('updateBoundData');
         })
-
+        $('#jqxSubjectSetting').on('bindingComplete', function (event) {
+            $("#jqxSubjectSetting").jqxTreeGrid('checkRow')
+            var firstLevelRows = $("#jqxSubjectSetting").jqxTreeGrid('getRows');
+            if (firstLevelRows[0].Count != "") {
+                count = firstLevelRows[0].Count.split(",");
+                for (var i = 0; i < count.length; i++) {
+                    // get a row.
+                    $("#jqxSubjectSetting").jqxTreeGrid('checkRow', count[i])
+                }
+            }
+            //$("#jqxSubjectSetting").jqxTreeGrid('expandRow', 0);
+            //$("#jqxSubjectSetting").jqxTreeGrid('collapseRow', 0);
+        });
     }; //addEvent end
 
     //账套段AccountModeSection
@@ -1149,19 +1161,7 @@ function settingSection(column, code) {
                 { text: 'Count', datafield: 'Count', hidden: true },
             ]
         });
-        $('#jqxSubjectSetting').on('bindingComplete', function (event) {
-            $("#jqxSubjectSetting").jqxTreeGrid('checkRow')
-            var firstLevelRows = $("#jqxSubjectSetting").jqxTreeGrid('getRows');
-            if (firstLevelRows[0].Count != "") {
-                count = firstLevelRows[0].Count.split(",");
-                for (var i = 0; i < count.length; i++) {
-                    // get a row.
-                    $("#jqxSubjectSetting").jqxTreeGrid('checkRow', count[i])
-                }
-            }
-            //$("#jqxSubjectSetting").jqxTreeGrid('expandRow', 0);
-            //$("#jqxSubjectSetting").jqxTreeGrid('collapseRow', 0);
-        });
+       
     }
     else {
         $("#jqxTableSetting").show();

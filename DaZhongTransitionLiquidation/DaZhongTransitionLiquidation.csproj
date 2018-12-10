@@ -183,6 +183,8 @@
   <ItemGroup>
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\FundReconciliation.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderList.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDetail.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\BankData.js" />
@@ -229,6 +231,8 @@
     <Content Include="Areas\VoucherManageManagement\Views\VoucherList\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VoucherListDetail\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\FundReconciliation\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\OrderList\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\OrderListDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2193,6 +2197,9 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\Business_FundReconciliation.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\FundReconciliationController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\Business_OrderList.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
     <Compile Include="Areas\HomePage\HomePageAreaRegistration.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\AccountingSection\AccountingSectionController.cs" />

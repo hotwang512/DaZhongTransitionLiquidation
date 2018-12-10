@@ -1,0 +1,86 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "支付订单/订单列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/Areas/CapitalCenterManagement/Views/_js/OrderList.js")"></script>
+}
+
+@section css{
+
+}
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+{
+    <table style="margin-top: 10px;display:none;" id="buttonList">
+        <tr style="height: 50px;">
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td>
+            }
+            @if (currentModuleRolePermission.Deletes == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+            <td style="width: 95px;">
+                <button id="btnUp" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+            </td>
+
+        </tr>
+    </table>
+    <table style="margin-top: 10px;display:none;" id="buttonList2">
+        <tr style="height: 50px;">
+            <td style="width: 95px;">
+                <button id="btnCheck" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
+            </td>
+        </tr>
+    </table>
+}
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 550px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">业务类型：</td>
+                <td class="td_input">
+                    <input id="BusinessType" type="text" style="width: 210px;" class="input_text form-control" />
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<style>
+    .input_text {
+        width: 340px;
+    }
+</style>
+<!-- 底部表格 -->
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />

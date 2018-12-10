@@ -223,7 +223,7 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单列表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/CashTransaction/Index">
+                <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                     <td class="menue_text">订单列表</td>
                     <td></td>
@@ -231,7 +231,7 @@
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待处理" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">
+                <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=2">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                     <td class="menue_text">待处理</td>
                     <td></td>
@@ -239,7 +239,7 @@
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已审核" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/FundReconciliation/Index">
+                <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=3">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                     <td class="menue_text">已审核</td>
                     <td></td>

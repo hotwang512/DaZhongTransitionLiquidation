@@ -27,12 +27,9 @@ var $page = function () {
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
         if (guid != "" && guid != null) {
-            getVoucherDetail();
-            $("#VoucherType").attr("disabled", "disableds");
-        }
-        if ($("#Status").val() == "1") {
-            $("#btnSave").show();
-            $("#btnCancel").show();
+            getOrderListDetail();
+        } else {
+            $("#hideButton").show();
         }
         //取消
         $("#btnCancel").on("click", function () {
@@ -109,7 +106,7 @@ var $page = function () {
         uiEngineHelper.bindSelect(id5, IntercourseSection, "Code", "Descrption");
     }
 
-    function getVoucherDetail() {
+    function getOrderListDetail() {
         $.ajax({
             url: "/CapitalCenterManagement/OrderListDetail/GetOrderListDetail",
             data: {
@@ -118,6 +115,10 @@ var $page = function () {
             type: "post",
             dataType: "json",
             success: function (msg) {
+                $("#Status").val(msg.Status);
+                if ($("#Status").val() == "1") {
+                    $("#hideButton").show();
+                }
                 AccountSection = loadCompanyCode("C", msg.CompanySection, msg.SubjectSection);
                 CostCenterSection = loadCompanyCode("D", msg.CompanySection, msg.SubjectSection);
                 SpareOneSection = loadCompanyCode("E", msg.CompanySection, msg.SubjectSection);
@@ -137,7 +138,6 @@ var $page = function () {
                 $("#SpareOneSection").val(msg.SpareOneSection);
                 $("#SpareTwoSection").val(msg.SpareTwoSection);
                 $("#IntercourseSection").val(msg.IntercourseSection);
-                $("#Status").val(msg.Status);
             }
         });
     }

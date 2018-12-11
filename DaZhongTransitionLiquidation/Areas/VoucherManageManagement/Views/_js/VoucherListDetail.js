@@ -27,11 +27,10 @@ var $page = function () {
         if (guid != "" && guid != null) {
             getVoucherDetail();
             $("#VoucherType").attr("disabled", "disableds");
+        } else {
+            $("#hideButton").show();
         }
-        if ($("#Status").val() == "1") {
-            $("#btnSave").show();
-            $("#btnCancel").show();
-        }
+        
         //控件ID后缀
         var str = "";
         //新增
@@ -290,6 +289,10 @@ var $page = function () {
             type: "post",
             dataType: "json",
             success: function (msg) {
+                $("#Status").val(msg.Status);
+                if ($("#Status").val() == "1") {
+                    $("#hideButton").show();
+                }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig,""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
                 $("#VoucherDate").val($.convert.toDate(new Date(voucherDate), "yyyy-MM-dd"));
@@ -301,8 +304,7 @@ var $page = function () {
                 $("#Bookkeeping").val(msg.Bookkeeping);
                 $("#Auditor").val(msg.Auditor);
                 $("#DocumentMaker").val(msg.DocumentMaker);
-                $("#Cashier").val(msg.Cashier);
-                $("#Status").val(msg.Status);
+                $("#Cashier").val(msg.Cashier); 
                 var datas = msg.Detail;
                 setVoucherDetail(datas);
                 loadAttachments(msg.Attachment);

@@ -29,13 +29,13 @@
         overflow: auto !important;
     }
 </style>
-<table style="margin-top: 10px;">
+<table id="hideButton" style="margin-top: 10px;display:none">
     <tr style="height: 50px;">
         <td style="width: 95px;">
-            <button id="btnSave" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
         </td>
         <td style="width: 95px;">
-            <button id="btnCancel" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
         </td>
     </tr>
 </table>
@@ -80,7 +80,7 @@
                 <td style="text-align: right;"><select id="SpareTwoSection" style="width: 200px;" class="input_text form-control"></select></td>
                 <td style="text-align: right;">往来段：</td>
                 <td style="text-align: left;"><select id="IntercourseSection" style="width: 200px;" class="input_text form-control"></select></td>
-                <td style="text-align: right;"><input id="Status" name="Status" value="1" class="hide" /><input id="VGUID" name="VGUID" class="hide" /></td>
+                <td style="text-align: right;"><input id="Status" name="Status" value="" class="hide" /><input id="VGUID" name="VGUID" class="hide" /></td>
             </tr>
         </table>
     </div>

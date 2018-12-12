@@ -165,7 +165,7 @@
     @******************************************************资金结算中心******************************************************@
     @if (isSysadmin || hasPaymentPermission)
     {
-        <div class="menue_header CapitalFlow PaymentOrder" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -210,7 +210,7 @@
                     }*@
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -255,7 +255,35 @@
                 }
             </table>
         </div>
-
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+            <table style="cursor: pointer;">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">报表</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="menue_body" id="AccountReport" style="display: none;">
+            <table>
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行余额调节表" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="BalanceAdjustment_AccountReport" pageurl="/CapitalCenterManagement/BankBalanceAdjustment/Index?Status=1">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">银行余额调节表</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "现金盘点表" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="CashInventory_AccountReport" pageurl="/CapitalCenterManagement/CashInventory/Index?Status=2">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">现金盘点表</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+        </div>
         <div class="menue_bodychild" style="display: none;">
             @*<table>
                 <tr class="menue_item" id="BankFlowTemplate_CapitalFlow" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">

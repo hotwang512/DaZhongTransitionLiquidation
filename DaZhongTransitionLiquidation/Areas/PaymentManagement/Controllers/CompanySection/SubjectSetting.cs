@@ -13,5 +13,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public string Descrption { get; set; }
         public string ParentCode { get; set; }
         public string Count { get; set; }
+        public decimal? Balance { get; set; }
     }
 }

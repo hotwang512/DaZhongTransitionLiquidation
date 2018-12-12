@@ -19,5 +19,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public bool Checked { get; set; }
         public string CompanyCode { get; set; }
         public string AccountModeCode { get; set; }
+        public decimal? Balance { get; set; }
     }
 }

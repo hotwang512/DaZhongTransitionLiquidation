@@ -62,6 +62,8 @@ var menueHelp = {
         switch (id) {
             case "CapitalFlow": $("#homeModel").text("--资金结算中心")
                 break;
+            case "AccountReport": $("#homeModel").text("--资金结算中心")
+                break;
             case "PaymentOrder": $("#homeModel").text("--资金结算中心") //*************
                 break;
             case "VoucherManage": $("#homeModel").text("--会计核算中心")

@@ -103,6 +103,22 @@
                 <td></td>
             </tr>
             <tr style="height:40px">
+                <td style="text-align: right;">凭证类型：</td>
+                <td style="text-align: left;">
+                    <select id="VoucherType" style="width: 200px;" class="input_text form-control" validatetype="required">
+                        <option value="现金类">现金类</option>
+                        <option value="银行类">银行类</option>
+                        <option value="摊销类">摊销类</option>
+                        <option value="计提类">计提类</option>
+                        <option value="结转类">结转类</option>
+                    </select>
+                </td>
+                <td style="text-align: right;width: 255px;"></td>
+                <td style="text-align: left;"></td>
+                <td style=""></td>
+                <td></td>
+            </tr>
+            <tr style="height:40px">
                 <td style="text-align: right;">会计期：</td>
                 <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" /></td>
                 <td style="text-align: right;">批名：</td>
@@ -129,17 +145,9 @@
             <tr style="height:40px">
                 <td style="text-align: right;">出纳：</td>
                 <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">凭证类型：</td>
-                <td style="text-align: right;">
-                    <select id="VoucherType" style="width: 200px;" class="input_text form-control" validatetype="required">
-                        <option value="现金类">现金类</option>
-                        <option value="银行类">银行类</option>
-                        <option value="摊销类">摊销类</option>
-                        <option value="计提类">计提类</option>
-                        <option value="结转类">结转类</option>
-                    </select>
-                </td>
-                <td style="text-align: right;"><input id="Status" name="Status" value="1" class="hide" /></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
+                <td style="text-align: right;"><input id="Status" name="Status" value="" class="hide" /></td>
                 <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
             </tr>
         </table>

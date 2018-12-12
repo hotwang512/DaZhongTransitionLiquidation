@@ -3,6 +3,7 @@ using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,7 +108,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 var checkStr = "";
                 if(index == 2)
                 {
-                    response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+                    response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode,bss.Balance from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
  and bss.SubjectCode='" + companyCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
                 }
@@ -297,10 +298,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
+                                var it = item.Split(",");
                                 insertObj.CompanyCode = code;
-                                insertObj.Checked = true;
+                                insertObj.Checked = it[1].TryToBoolean();
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.AccountingCode = item;
+                                insertObj.AccountingCode = it[0];
+                                insertObj.Balance = it[2].ObjToDecimal();
                                 insertObj.SubjectCode = companyCode;//公司键
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
@@ -330,10 +333,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
+                                var it = item.Split(",");
                                 insertObj.CompanyCode = code;
-                                insertObj.Checked = true;
+                                insertObj.Checked = it[1].TryToBoolean();
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.CostCenterCode = item;
+                                insertObj.CostCenterCode = it[0];
+                                insertObj.Balance = it[2].ObjToDecimal();
                                 insertObj.SubjectCode = companyCode;//公司键
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
@@ -363,10 +368,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
+                                var it = item.Split(",");
                                 insertObj.CompanyCode = code;
-                                insertObj.Checked = true;
+                                insertObj.Checked = it[1].TryToBoolean();
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.SpareOneCode = item;
+                                insertObj.SpareOneCode = it[0];
+                                insertObj.Balance = it[2].ObjToDecimal();
                                 insertObj.SubjectCode = companyCode;//公司键
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
@@ -396,10 +403,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
+                                var it = item.Split(",");
                                 insertObj.CompanyCode = code;
-                                insertObj.Checked = true;
+                                insertObj.Checked = it[1].TryToBoolean();
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.SpareTwoCode = item;
+                                insertObj.SpareTwoCode = it[0];
+                                insertObj.Balance = it[2].ObjToDecimal();
                                 insertObj.SubjectCode = companyCode;//公司键
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
@@ -429,10 +438,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             foreach (var item in otherCode)
                             {
                                 var insertObj = new Business_SubjectSettingInfo();
+                                var it = item.Split(",");
                                 insertObj.CompanyCode = code;
-                                insertObj.Checked = true;
+                                insertObj.Checked = it[1].TryToBoolean();
                                 insertObj.VGUID = Guid.NewGuid();
-                                insertObj.IntercourseCode = item;
+                                insertObj.IntercourseCode = it[0];
+                                insertObj.Balance = it[2].ObjToDecimal();
                                 insertObj.SubjectCode = companyCode;//公司键
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);

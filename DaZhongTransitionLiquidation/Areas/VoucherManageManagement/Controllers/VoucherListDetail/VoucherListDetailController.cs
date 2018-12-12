@@ -63,14 +63,17 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 var IsSuccess = "0";
                 var result = db.Ado.UseTran(() =>
                 {
-                    var loanMoney = voucher.Detail.Where(i=>i.LoanMoney != -1).Sum(x=>x.LoanMoney);//贷方总金额
-                    var borrowMoney = voucher.Detail.Where(i => i.BorrowMoney != -1).Sum(x => x.BorrowMoney);//借方总金额
+                    var loanMoney = voucher.Detail == null ? null : voucher.Detail.Where(i => i.LoanMoney != -1).Sum(x => x.LoanMoney);//贷方总金额
+                    var borrowMoney = voucher.Detail == null ? null : voucher.Detail.Where(i => i.BorrowMoney != -1).Sum(x => x.BorrowMoney);//借方总金额
                     var attachment = voucher.Attachment;
                     var voucherType = voucher.VoucherType;//凭证类型
                     var date = DateTime.Now;
-                    var flowNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(day,a.CreateTime,@NowDate)=0 
+                    var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
+                                  order by BatchName desc", new { @NowDate = date });
+                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
                                   order by VoucherNo desc", new { @NowDate = date });
-                    var batchName = GetBatchName(voucherType, flowNo);  
+                    var batchName = GetBatchName(voucherType, flowNo);
+                    var voucherName = GetVoucherName(voucherNo);
                     //主表信息
                     Business_VoucherList voucherList = new Business_VoucherList();
                     voucherList.AccountingPeriod = voucher.AccountingPeriod;
@@ -94,7 +97,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     {
                         guid = Guid.NewGuid();
                         voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期+4位流水)
-                        voucherList.VoucherNo = "";//凭证号自动生成
+                        voucherList.VoucherNo = voucherName;//凭证号自动生成
                         voucherList.VGUID = guid;
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
                     }
@@ -107,45 +110,51 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
                     //删除现有明细数据
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
-                    foreach (var item in voucher.Detail)
+                    if(voucher.Detail != null)
                     {
-                        Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-                        BVDetail.Abstract = item.Abstract;
-                        BVDetail.AccountSection = item.AccountSection;
-                        BVDetail.BorrowMoney = item.BorrowMoney;
-                        BVDetail.CompanySection = item.CompanySection;
-                        BVDetail.CostCenterSection = item.CostCenterSection;
-                        BVDetail.IntercourseSection = item.IntercourseSection;
-                        BVDetail.LoanMoney = item.LoanMoney;
-                        BVDetail.SpareOneSection = item.SpareOneSection;
-                        BVDetail.SpareTwoSection = item.SpareTwoSection;
-                        BVDetail.SubjectSection = item.SubjectSection;
-                        BVDetail.SubjectSectionName = item.SubjectSectionName;
-                        BVDetail.VGUID = Guid.NewGuid();
-                        BVDetail.VoucherVGUID = guid;
-                        voucherdetailList.Add(BVDetail);
-                    }
-                    db.Insertable(voucherdetailList).ExecuteCommand();
-                    //附件信息
-                    var attach = attachment.Split(",");
-                    List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
-                    //删除现有附件数据
-                    db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
-                    foreach (var it in attach)
-                    {
-                        Business_VoucherAttachmentList BVAttach = new Business_VoucherAttachmentList();
-                        var att = it.Split("&");
-                        if (att[1] != null)
+                        foreach (var item in voucher.Detail)
                         {
-                            BVAttach.Attachment = att[1];
-                            BVAttach.AttachmentType = att[0];
-                            BVAttach.CreateTime = DateTime.Now;
-                            BVAttach.VGUID = Guid.NewGuid();
-                            BVAttach.VoucherVGUID = guid;
+                            Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                            BVDetail.Abstract = item.Abstract;
+                            BVDetail.AccountSection = item.AccountSection;
+                            BVDetail.BorrowMoney = item.BorrowMoney;
+                            BVDetail.CompanySection = item.CompanySection;
+                            BVDetail.CostCenterSection = item.CostCenterSection;
+                            BVDetail.IntercourseSection = item.IntercourseSection;
+                            BVDetail.LoanMoney = item.LoanMoney;
+                            BVDetail.SpareOneSection = item.SpareOneSection;
+                            BVDetail.SpareTwoSection = item.SpareTwoSection;
+                            BVDetail.SubjectSection = item.SubjectSection;
+                            BVDetail.SubjectSectionName = item.SubjectSectionName;
+                            BVDetail.VGUID = Guid.NewGuid();
+                            BVDetail.VoucherVGUID = guid;
+                            voucherdetailList.Add(BVDetail);
                         }
-                        BVAttachList.Add(BVAttach);
+                        db.Insertable(voucherdetailList).ExecuteCommand();
                     }
-                    db.Insertable(BVAttachList).ExecuteCommand();
+                    if(attachment != null)
+                    {
+                        var attach = attachment.Split(",");
+                        List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
+                        //删除现有附件数据
+                        db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
+                        foreach (var it in attach)
+                        {
+                            Business_VoucherAttachmentList BVAttach = new Business_VoucherAttachmentList();
+                            var att = it.Split("&");
+                            if (att[1] != null)
+                            {
+                                BVAttach.Attachment = att[1];
+                                BVAttach.AttachmentType = att[0];
+                                BVAttach.CreateTime = DateTime.Now;
+                                BVAttach.VGUID = Guid.NewGuid();
+                                BVAttach.VoucherVGUID = guid;
+                            }
+                            BVAttachList.Add(BVAttach);
+                        }
+                        db.Insertable(BVAttachList).ExecuteCommand();
+                    }
+                    //附件信息 
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -166,6 +175,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 batchNo = flowNo.Substring(flowNo.Length - 4, 4).TryToInt();
             }
             return voucherType + DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+        }
+        private string GetVoucherName(string voucherNo)
+        {
+            var batchNo = 0;
+            if (voucherNo.IsValuable() && voucherNo.Length > 4)
+            {
+                batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
+            }
+            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
 
         public JsonResult GetVoucherDetail(Guid vguid)

@@ -104,7 +104,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     else
                     {
                         voucherList.VGUID = voucher.VGUID;
-                        db.Updateable<Business_VoucherList>(voucherList).ExecuteCommand();
+                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo }).ExecuteCommand();
                     }
                     //明细信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();

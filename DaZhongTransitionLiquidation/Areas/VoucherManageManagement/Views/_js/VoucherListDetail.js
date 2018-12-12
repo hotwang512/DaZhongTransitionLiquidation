@@ -168,16 +168,17 @@ var $page = function () {
             var detail = [];
             var length = $(".nav-i").length;
             for (var i = 0; i < length; i++) {
-                var remark = $("#Remark_A_" + i).val();
-                var CompanySection = $("#CompanySection_A_" + i).val();
-                var SubjectSection = $("#hidSubjectSection_A_" + i).val();
-                var SubjectSectionName = $("#SubjectSection_A_" + i).val();
-                var AccountSection = $("#AccountSection_A_" + i).val();
-                var CostCenterSection = $("#CostCenterSection_A_" + i).val();
-                var SpareOneSection = $("#SpareOneSection_A_" + i).val();
-                var SpareTwoSection = $("#SpareTwoSection_A_" + i).val();
-                var IntercourseSection = $("#IntercourseSection_A_" + i).val();
-                var BorrowMoney = $("#BorrowMoney_A_" + i).val();
+                var ii = $(".nav-i")[i].id.split("_")[1];//获取DIV的ID下标
+                var remark = $("#Remark_A_" + ii).val();
+                var CompanySection = $("#CompanySection_A_" + ii).val();
+                var SubjectSection = $("#hidSubjectSection_A_" + ii).val();
+                var SubjectSectionName = $("#SubjectSection_A_" + ii).val();
+                var AccountSection = $("#AccountSection_A_" + ii).val();
+                var CostCenterSection = $("#CostCenterSection_A_" + ii).val();
+                var SpareOneSection = $("#SpareOneSection_A_" + ii).val();
+                var SpareTwoSection = $("#SpareTwoSection_A_" + ii).val();
+                var IntercourseSection = $("#IntercourseSection_A_" + ii).val();
+                var BorrowMoney = $("#BorrowMoney_A_" + ii).val();
                 var borrowDetail = {
                     "VGUID": "",
                     "Abstract": remark,
@@ -196,16 +197,17 @@ var $page = function () {
             }
             var lengths = $(".nav-i2").length;
             for (var j = 0; j < lengths; j++) {
-                var remark = $("#Remark_B_" + i).val();
-                var CompanySection = $("#CompanySection_B_" + i).val();
-                var SubjectSection = $("#hidSubjectSection_B_" + i).val();
-                var SubjectSectionName = $("#SubjectSection_B_" + i).val();
-                var AccountSection = $("#AccountSection_B_" + i).val();
-                var CostCenterSection = $("#CostCenterSection_B_" + i).val();
-                var SpareOneSection = $("#SpareOneSection_B_" + i).val();
-                var SpareTwoSection = $("#SpareTwoSection_B_" + i).val();
-                var IntercourseSection = $("#IntercourseSection_B_" + i).val();
-                var LoanMoney = $("#LoanMoney_B_" + i).val();
+                var jj = $(".nav-i2")[j].id.split("_")[1];//获取DIV的ID下标
+                var remark = $("#Remark_B_" + jj).val();
+                var CompanySection = $("#CompanySection_B_" + jj).val();
+                var SubjectSection = $("#hidSubjectSection_B_" + jj).val();
+                var SubjectSectionName = $("#SubjectSection_B_" + jj).val();
+                var AccountSection = $("#AccountSection_B_" + jj).val();
+                var CostCenterSection = $("#CostCenterSection_B_" + jj).val();
+                var SpareOneSection = $("#SpareOneSection_B_" + jj).val();
+                var SpareTwoSection = $("#SpareTwoSection_B_" + jj).val();
+                var IntercourseSection = $("#IntercourseSection_B_" + jj).val();
+                var LoanMoney = $("#LoanMoney_B_" + jj).val();
                 var loanDetail = {
                     "VGUID": "",
                     "Abstract": remark,

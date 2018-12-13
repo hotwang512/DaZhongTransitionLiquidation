@@ -197,7 +197,7 @@ function Arabia_To_SimplifiedChinese(Num) {
         newchar = newchar.replace("零零", "零");
     }
     //替换以“一十”开头的，为“十”
-    if (newchar.indexOf("一十") == 0) {
+    if (newchar.indexOf("壹拾") == 0) {
         newchar = newchar.substr(1);
     }
     //替换以“零”结尾的，为“”

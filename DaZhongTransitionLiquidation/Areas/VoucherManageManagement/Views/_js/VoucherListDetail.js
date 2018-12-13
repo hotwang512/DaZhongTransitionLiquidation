@@ -760,24 +760,7 @@ function renderedFunc(element) {
 }
 
 
-//var data = {
-//    "VGUID": "",
-//    "CompanyCode": "",
-//    "CompanyName": "",
-//    "VoucherType": "现金类",
-//    "AccountingPeriod": "2018-09",
-//    "BatchName": "",
-//    "Currency": "CNY",
-//    "VoucherNo": "",
-//    "VoucherDate": "2018-11-29",
-//    "FinanceDirector": "",
-//    "Bookkeeping": "",
-//    "Auditor": "",
-//    "DocumentMaker": "",
-//    "Cashier": "",
-//    "Attachment": "发票&/_theme/temp/img/201811291128257291545.jpg,发票&/_theme/temp/img/201811291128257291546.jpg",
-//    "Detail": detail
-//}
+
 //var length = $(".nav-i").length;
 //for (var i = 0; i < length; i++) {
 //    var remark = $("#Remark_A_" + i).val();
@@ -807,6 +790,24 @@ function renderedFunc(element) {
 //    detail.push(x);
 //}
 
+//var data = {
+//    "VGUID": "",
+//    "CompanyCode": "",
+//    "CompanyName": "",
+//    "VoucherType": "现金类",
+//    "AccountingPeriod": "2018-09",
+//    "BatchName": "",
+//    "Currency": "CNY",
+//    "VoucherNo": "",
+//    "VoucherDate": "2018-11-29",
+//    "FinanceDirector": "",
+//    "Bookkeeping": "",
+//    "Auditor": "",
+//    "DocumentMaker": "",
+//    "Cashier": "",
+//    "Attachment": "借款单&/_theme/temp/img/2018113011943974182.jpg&花,借款单&/_theme/temp/img/20181130119433326410.jpg&水母",文件流转存本地
+//    "Detail": detail
+//}
 //var detail = [
 //              {
 //                  "Remark": 2,
@@ -834,4 +835,16 @@ function renderedFunc(element) {
 //                 "BorrowMoney": 0,
 //                 "LoanMoney": -17354318.68
 //             }
+//]
+
+
+//var data = [
+//              {
+//                  "BusinessType": "",
+//                  "BusinessProject": "",
+//                  "BusinessSubItem": "",
+//                  "BusinessUnit": "",
+//                  "Number": "",
+//                  "Money": "",
+//              }
 //]

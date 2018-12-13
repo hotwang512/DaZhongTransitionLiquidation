@@ -10,7 +10,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public Guid VGUID { get; set; }
         public string BusinessType { get; set; }
         public string BusinessProject { get; set; }
-        public string BusinessSubItem { get; set; }
+        public string BusinessSubItem1 { get; set; }
+        public string BusinessSubItem2 { get; set; }
+        public string BusinessSubItem3 { get; set; }
         public string Abstract { get; set; }
         public decimal? Money { get; set; }
         public string CompanySection { get; set; }

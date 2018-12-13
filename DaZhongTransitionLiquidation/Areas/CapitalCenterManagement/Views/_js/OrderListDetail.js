@@ -127,7 +127,9 @@ var $page = function () {
                 loadSelectFun();
                 $("#BusinessType").val(msg.BusinessType);
                 $("#BusinessProject").val(msg.BusinessProject);
-                $("#BusinessSubItem").val(msg.BusinessSubItem);
+                $("#BusinessSubItem1").val(msg.BusinessSubItem1);
+                $("#BusinessSubItem2").val(msg.BusinessSubItem2);
+                $("#BusinessSubItem3").val(msg.BusinessSubItem3);
                 $("#Abstract").val(msg.Abstract);
                 $("#Money").val(msg.Money);
                 $("#CompanyCode").val(msg.CompanySection);

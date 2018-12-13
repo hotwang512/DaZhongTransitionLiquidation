@@ -3,95 +3,94 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
+namespace DaZhongTransitionLiquidation.Models
 {
-    public class VoucherListDetail
+    public class Business_OrderListAPI
     {
         public Guid VGUID { get; set; }
         /// <summary>
-        /// Desc:营运公司Code
+        /// Desc:业务类型
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string CompanyCode { get; set; }
+        public string BusinessType { get; set; }
         /// <summary>
-        /// Desc:营运公司Name
+        /// Desc:业务项目
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string CompanyName { get; set; }
+        public string BusinessProject { get; set; }
         /// <summary>
-        /// Desc:会计期
+        /// Desc:业务子项
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public DateTime? AccountingPeriod { get; set; }
+        public string BusinessSubItem { get; set; }
         /// <summary>
-        /// Desc:币种
+        /// Desc:付款公司
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string Currency { get; set; }
+        public string PaymentCompany { get; set; }
         /// <summary>
-        /// Desc:批名
+        /// Desc:收款公司
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string BatchName { get; set; }
+        public string CollectionCompany { get; set; }
         /// <summary>
-        /// Desc:凭证号码
+        /// Desc:业务单位
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string VoucherNo { get; set; }
+        public string BusinessUnit { get; set; }
         /// <summary>
-        /// Desc:凭证日期
+        /// Desc:模式
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public DateTime? VoucherDate { get; set; }
+        public string Mode { get; set; }
         /// <summary>
-        /// Desc:凭证类型
+        /// Desc:车型
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string VoucherType { get; set; }
+        public string VehicleType { get; set; }
         /// <summary>
-        /// Desc:财务主管
+        /// Desc:数量
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string FinanceDirector { get; set; }
+        public int Number { get; set; }
         /// <summary>
-        /// Desc:记账
+        /// Desc:金额
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string Bookkeeping { get; set; }
+        public decimal? Money { get; set; }
         /// <summary>
-        /// Desc:审核
+        /// Desc:提交日期
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string Auditor { get; set; }
+        public DateTime? SubmitDate { get; set; }
         /// <summary>
-        /// Desc:制单
+        /// Desc:支付方式
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string DocumentMaker { get; set; }
+        public string PaymentMethod { get; set; }
         /// <summary>
-        /// Desc:出纳
+        /// Desc:附件张数
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string Cashier { get; set; }
+        public int AttachmentNumber { get; set; }
         /// <summary>
-        /// Desc:附件
-        /// Default:借款单&/_theme/temp/img/2018113011943974182.jpg&花,借款单&/_theme/temp/img/20181130119433326410.jpg&水母
+        /// Desc:发票张数
+        /// Default:
         /// Nullable:True
         /// </summary> 
-        public string Attachment { get; set; }
-        public List<Business_VoucherDetail> Detail { get; set; }
+        public int InvoiceNumber { get; set; }
     }
 }

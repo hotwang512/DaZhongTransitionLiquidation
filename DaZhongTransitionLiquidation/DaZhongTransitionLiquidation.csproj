@@ -2248,10 +2248,12 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
+    <Compile Include="Controllers\PaymentOrderAPI.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Business_OrderListAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2325,7 +2327,6 @@
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
     <Folder Include="Areas\SystemManagement\Models\" />
-    <Folder Include="Models\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />

@@ -464,6 +464,7 @@ var $page = function () {
             for (var i = 0; i < expandVGUID.length; i++) {
                 $("#jqxTable2").jqxTreeGrid('expandRow', expandVGUID[i]);
             }
+            $("#jqxTable2").unbind("bindingcomplete");
         });
         //切换公司值
         $('#CompanyCode').on('change', function (event) {
@@ -482,16 +483,21 @@ var $page = function () {
                     $("#jqxSubjectSetting").jqxTreeGrid('checkRow', count[i])
                 }
             }
+            $("#jqxSubjectSetting").unbind("bindingcomplete");
             //$("#jqxSubjectSetting").jqxTreeGrid('expandRow', 0);
             //$("#jqxSubjectSetting").jqxTreeGrid('collapseRow', 0);
         });
-        //$('#jqxTableSetting').on('bindingComplete', function (event) {
-        //    if (index != 2) {
-        //        $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
-        //    } else {
-        //        $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
-        //    }
-        //});
+        $('#jqxTableSetting').on('bindingcomplete', function (event) {
+            var isCompleted = $("#jqxTableSetting").jqxGrid('isBindingCompleted');
+            if (isCompleted) {
+                if (index != 2) {
+                    $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
+                } else {
+                    $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
+                }
+            }
+            $("#jqxTableSetting").unbind("bindingcomplete");
+        });
     }; //addEvent end
 
     //账套段AccountModeSection
@@ -1218,6 +1224,15 @@ function settingSection(column, code) {
             columnsHeight: 30,
             editable: true,
             pagermode: 'simple',
+            ready: function () {
+                if (index != 2) {
+                    $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
+                    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 420);
+                } else {
+                    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 200);
+                    $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
+                }
+            },
             columns: [
                 {
                     text: '选择', datafield: "Checked", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
@@ -1236,14 +1251,16 @@ function settingSection(column, code) {
                 //{ text: 'VGUID', datafield: 'VGUID', hidden: true },
             ]
         });
-        if (index != 2) {
-            $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
-            $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 420);
-        } else {
-            $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 200);
-            $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
-        }
+        
     }
+    
+    //if (index != 2) {
+    //    $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
+    //    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 420);
+    //} else {
+    //    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 200);
+    //    $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
+    //}
 }
 //设置公司下银行及银行账号
 function settingCompany(code, companyName) {

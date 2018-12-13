@@ -165,27 +165,27 @@ function Arabia_To_SimplifiedChinese(Num) {
         perchar = part[0].charAt(i);
         switch (perchar) {
             case "0": tmpnewchar = "零" + tmpnewchar; break;
-            case "1": tmpnewchar = "一" + tmpnewchar; break;
-            case "2": tmpnewchar = "二" + tmpnewchar; break;
-            case "3": tmpnewchar = "三" + tmpnewchar; break;
-            case "4": tmpnewchar = "四" + tmpnewchar; break;
-            case "5": tmpnewchar = "五" + tmpnewchar; break;
-            case "6": tmpnewchar = "六" + tmpnewchar; break;
-            case "7": tmpnewchar = "七" + tmpnewchar; break;
-            case "8": tmpnewchar = "八" + tmpnewchar; break;
-            case "9": tmpnewchar = "九" + tmpnewchar; break;
+            case "1": tmpnewchar = "壹" + tmpnewchar; break;
+            case "2": tmpnewchar = "贰" + tmpnewchar; break;
+            case "3": tmpnewchar = "叁" + tmpnewchar; break;
+            case "4": tmpnewchar = "肆" + tmpnewchar; break;
+            case "5": tmpnewchar = "伍" + tmpnewchar; break;
+            case "6": tmpnewchar = "陆" + tmpnewchar; break;
+            case "7": tmpnewchar = "柒" + tmpnewchar; break;
+            case "8": tmpnewchar = "捌" + tmpnewchar; break;
+            case "9": tmpnewchar = "玖" + tmpnewchar; break;
         }
         switch (part[0].length - i - 1) {
             case 0: tmpnewchar = tmpnewchar; break;
-            case 1: if (perchar != 0) tmpnewchar = tmpnewchar + "十"; break;
-            case 2: if (perchar != 0) tmpnewchar = tmpnewchar + "百"; break;
-            case 3: if (perchar != 0) tmpnewchar = tmpnewchar + "千"; break;
+            case 1: if (perchar != 0) tmpnewchar = tmpnewchar + "拾"; break;
+            case 2: if (perchar != 0) tmpnewchar = tmpnewchar + "佰"; break;
+            case 3: if (perchar != 0) tmpnewchar = tmpnewchar + "仟"; break;
             case 4: tmpnewchar = tmpnewchar + "万"; break;
-            case 5: if (perchar != 0) tmpnewchar = tmpnewchar + "十"; break;
-            case 6: if (perchar != 0) tmpnewchar = tmpnewchar + "百"; break;
-            case 7: if (perchar != 0) tmpnewchar = tmpnewchar + "千"; break;
+            case 5: if (perchar != 0) tmpnewchar = tmpnewchar + "拾"; break;
+            case 6: if (perchar != 0) tmpnewchar = tmpnewchar + "佰"; break;
+            case 7: if (perchar != 0) tmpnewchar = tmpnewchar + "仟"; break;
             case 8: tmpnewchar = tmpnewchar + "亿"; break;
-            case 9: tmpnewchar = tmpnewchar + "十"; break;
+            case 9: tmpnewchar = tmpnewchar + "拾"; break;
         }
         newchar = tmpnewchar + newchar;
     }

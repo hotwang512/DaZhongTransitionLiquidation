@@ -12,7 +12,7 @@ namespace DaZhongTransitionLiquidation.Controllers
 {
     public class PaymentOrderAPI: Controller
     {
-        public static void SavePaymentOrder(List<Business_OrderListAPI> OrderListAPI)
+        public static void SavePaymentOrder(List<Business_OrderListDraft> OrderListAPI)
         {
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             if (OrderListAPI != null)
@@ -28,7 +28,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     item.AttachmentNumber = 0;
                     item.InvoiceNumber = 0;
                 }
-                _db.Insertable<Business_OrderListAPI>(OrderListAPI).ExecuteCommand();
+                _db.Insertable<Business_OrderListDraft>(OrderListAPI).ExecuteCommand();
             }
         }
         public static void SaveVoucherListDetail(VoucherListDetail voucher)

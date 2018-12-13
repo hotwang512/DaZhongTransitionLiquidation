@@ -185,6 +185,8 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\FundReconciliation.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderList.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDetail.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraft.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftDetail.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\BankData.js" />
@@ -233,6 +235,8 @@
     <Content Include="Areas\CapitalCenterManagement\Views\FundReconciliation\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\OrderList\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\OrderListDetail\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\OrderListDraft\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\OrderListDraftDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2198,6 +2202,8 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\Business_FundReconciliation.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\FundReconciliationController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraftDetail\OrderListDraftDetailController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraft\OrderListDraftController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\Business_OrderList.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
@@ -2253,7 +2259,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Business_OrderListAPI.cs" />
+    <Compile Include="Models\Business_OrderListDraft.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

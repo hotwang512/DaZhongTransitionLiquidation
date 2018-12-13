@@ -1,0 +1,140 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+@{
+    ViewBag.Title = "支付订单/订单明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
+}
+@section js{
+    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/Areas/CapitalCenterManagement/Views/_js/OrderListDraftDetail.js")"></script>
+}
+<style>
+    .input_text {
+        width: 150px;
+        height: 35px;
+        border: 1px;
+        border-style: solid;
+        border-color: #dddddd;
+        -moz-box-shadow: 0px 1px 10px #dddddd;
+        -webkit-box-shadow: 0px 1px 10px #dddddd;
+        box-shadow: 0 0 10px #dddddd;
+        background-color: white !important;
+        border-radius: 4px;
+        float: left;
+    }
+
+    .jqx-tabs-content-element {
+        overflow: auto !important;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;display:none">
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">主信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 400px;">
+        <table id="VoucherList" style="width:100%;">
+            <tr style="height:50px">
+                <td style="text-align: right;">业务类型：</td>
+                <td style="text-align: left;"><input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">业务项目：</td>
+                <td style="text-align: left;"><input id="BusinessProject" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">业务子项1：</td>
+                <td style="text-align: left;"><input id="BusinessSubItem1" type="text" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">业务子项2：</td>
+                <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">业务子项3：</td>
+                <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">订单日期：</td>
+                <td style="text-align: left;"><input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">订单时间：</td>
+                <td style="text-align: left;">
+                    <select id="OrderTime" style="width: 200px;" class="input_text form-control" validatetype="required">
+                        <option value="中午">中午</option>
+                        <option value="晚上">晚上</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">付款公司：</td>
+                <td style="text-align: left;">
+                    @*<select id="CompanyCode" style="width: 200px;" class="input_text form-control" onchange="gradeChange()"></select>*@
+                <input id="PaymentCompany" type="text" style="width: 200px;" class="input_text form-control" />
+            </td>
+            <td style="text-align: right;">收款公司：</td>
+            <td style="text-align: left;">
+                <input id="CollectionCompany" type="text" style="width: 200px;" class="input_text form-control" />
+            </td>
+        </tr>
+        <tr style="height:50px">
+            <td style="text-align: right;">来客人数：</td>
+            <td style="text-align: left;"><input id="VisitorsNumber" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
+            <td style="text-align: right;">陪同人数：</td>
+            <td style="text-align: left;"><input id="EscortNumber" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
+            <td style="text-align: right;">人数合计：</td>
+            <td style="text-align: left;"><input id="NumberCount" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+        </tr>
+        <tr style="height:50px">
+            <td style="text-align: right;">支付方式：</td>
+            <td style="text-align: right;">
+                <select id="VehicleType" style="width: 200px;" class="input_text form-control" validatetype="required">
+                    <option value="现金">现金</option>
+                    <option value="银行">银行</option>
+                    <option value="其他">其他</option>
+                </select>
+            </td>
+            <td style="text-align: right;">金额：</td>
+            <td style="text-align: left;"><input id="Money" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>
+            <td style="text-align: right;">金额(大写)：</td>
+            <td style="text-align: right;"><input id="CapitalizationMoney" style="width: 200px;" class="input_text form-control" readonly="readonly" title=""/></td>
+        </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">企业负责人：</td>
+                <td style="text-align: left;"><input id="EnterpriseLeader" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">分管负责人：</td>
+                <td style="text-align: left;"><input id="ResponsibleLeader" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">计财部审核：</td>
+                <td style="text-align: left;"><input id="JiCaiBuExamine" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">部门主管：</td>
+                <td style="text-align: left;"><input id="DepartmentHead" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">出纳：</td>
+                <td style="text-align: left;"><input id="Cashier" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">受款人经办人：</td>
+                <td style="text-align: left;"><input id="Payee" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+    </table>
+</div>
+    <input id="Status" name="Status" value="" class="hide" /><input id="VGUID" name="VGUID" class="hide" />
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles2" style="color: #555; font-family: Calibri;">选择科目段</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <div id="jqxSubjectSection" class="jqxTable" style=""></div>
+            </div>
+        </div>
+    </div>
+</div>
+

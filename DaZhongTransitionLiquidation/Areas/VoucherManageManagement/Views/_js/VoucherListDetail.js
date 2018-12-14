@@ -602,8 +602,11 @@ function loadAttachments(attachments) {
 function removeAttachment(obj) {
 
     var id = obj.previousSibling.attributes["href"].value;
+    var type = obj.parentElement.textContent.substring(0, 2);
+    var name = obj.parentElement.textContent.substring(4, obj.parentElement.textContent.length - 1);
+    var replaceStr = type + "&" + id + "&" + name;
     var attachmentValues = $("#Attachment").val();
-    attachmentValues = $.action.replaceAll(attachmentValues, id, '');
+    attachmentValues = $.action.replaceAll(attachmentValues, replaceStr, '');
 
     $("#Attachment").val(attachmentValues);
     $(obj).parent().remove();

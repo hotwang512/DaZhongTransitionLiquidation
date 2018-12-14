@@ -1,7 +1,9 @@
-﻿using DaZhongTransitionLiquidation.Common.Pub;
+﻿using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Models;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +41,29 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     else
                     {
                         db.Updateable<Business_OrderListDraft>(sevenSection).ExecuteCommand();
+                    }
+                    var attachment = sevenSection.Attachment;
+                    if (attachment != null)
+                    {
+                        var attach = attachment.Split(",");
+                        List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
+                        //删除现有附件数据
+                        db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == sevenSection.VGUID).ExecuteCommand();
+                        foreach (var it in attach)
+                        {
+                            Business_VoucherAttachmentList BVAttach = new Business_VoucherAttachmentList();
+                            var att = it.Split("&");
+                            if (att[1] != null)
+                            {
+                                BVAttach.Attachment = att[1];
+                                BVAttach.AttachmentType = att[0];
+                                BVAttach.CreateTime = DateTime.Now;
+                                BVAttach.VGUID = Guid.NewGuid();
+                                BVAttach.VoucherVGUID = sevenSection.VGUID;
+                            }
+                            BVAttachList.Add(BVAttach);
+                        }
+                        db.Insertable(BVAttachList).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

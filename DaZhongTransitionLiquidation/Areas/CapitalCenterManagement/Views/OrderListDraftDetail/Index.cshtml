@@ -28,6 +28,47 @@
     .jqx-tabs-content-element {
         overflow: auto !important;
     }
+
+        #btn_AttachmentBrowseButton {
+        width: auto;
+        min-width: 277px;
+        min-width: 570px;
+        height: 40px;
+        margin: 0px 10px 10px;
+        cursor: pointer;
+        padding: 0px 20px;
+        border: 0px solid rgb(72, 184, 232);
+        color: rgb(204, 204, 204);
+        outline: none;
+        font-size: 15px;
+        font-weight: bold;
+        position: initial !important;
+        background: rgb(0, 153, 204) !important;
+    }
+
+    #btn_AttachmentUploadButton, #btn_AttachmentCancelButton {
+        width: 150px !important;
+        height: 35px;
+    }
+
+    #btn_AttachmentUploadButton {
+        margin-left: 120px;
+    }
+
+    .closes {
+        float: initial !important;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        opacity: .2;
+        padding: 0px;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        -webkit-appearance: none;
+    }
 </style>
 <table id="hideButton" style="margin-top: 10px;display:none">
     <tr style="height: 50px;">
@@ -45,7 +86,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 400px;">
+    <div class="body_mk" style="height: 420px;">
         <table id="VoucherList" style="width:100%;">
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
@@ -119,9 +160,55 @@
                 <td style="text-align: right;">受款人经办人：</td>
                 <td style="text-align: left;"><input id="Payee" style="width: 200px;" class="input_text form-control" /></td>
             </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">单据张数：</td>
+                <td style="text-align: left;"><input id="AttachmentNumber" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                <td style="text-align: right;">发票张数：</td>
+                <td style="text-align: left;"><input id="InvoiceNumber" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
+            </tr>
     </table>
 </div>
     <input id="Status" name="Status" value="" class="hide" /><input id="VGUID" name="VGUID" class="hide" />
+</div>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 200px;">
+        <table id="VoucherListAttachment" style="width:100%;">
+            <tr style="height:10px"></tr>
+            <tr style="height:40px">
+                <td style="text-align: right;">类型：</td>
+                <td style="text-align: left;width: 150px;">
+                    <select id="AttachmentType" style="width: 150px;" class="input_text form-control" validatetype="required">
+                        <option value="发票">发票</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">附件：</td>
+                <td style="text-align: left;">
+
+                    <!------------------btn_Attachment BEGIN------------------>
+                    <div type="button" id="btn_Attachment" class=""></div>
+                    <!------------------btn_Attachment END------------------>
+                    <!------------------Attachment BEGIN------------------>
+                    <input type="hidden" id="Attachment" class="" name="Attachment" value="" style="" />
+                    <!------------------Attachment END------------------>
+
+                </td>
+            </tr>
+            <tr style="height:40px">
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"><div id="attachments"></div></td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyDialog">

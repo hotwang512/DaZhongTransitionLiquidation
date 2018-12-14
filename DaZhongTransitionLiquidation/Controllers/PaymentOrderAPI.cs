@@ -12,22 +12,25 @@ namespace DaZhongTransitionLiquidation.Controllers
 {
     public class PaymentOrderAPI: Controller
     {
-        public static void SavePaymentOrder(List<Business_OrderListDraft> OrderListAPI)
+        public static void SavePaymentOrder(Business_OrderListDraft OrderListAPI)
         {
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             if (OrderListAPI != null)
             {
-                foreach (var item in OrderListAPI)
-                {
-                    item.PaymentCompany = "";
-                    item.CollectionCompany = "";
-                    item.Mode = "";
-                    item.VehicleType = "";
-                    item.SubmitDate = DateTime.Now;
-                    item.PaymentMethod = "";
-                    item.AttachmentNumber = 0;
-                    item.InvoiceNumber = 0;
-                }
+                var BusinessType = OrderListAPI.BusinessType;
+                var BusinessProject = OrderListAPI.BusinessProject;
+                var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
+                var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
+                var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
+                OrderListAPI.PaymentCompany = "";
+                OrderListAPI.CollectionCompany = "";
+                OrderListAPI.Mode = "";
+                OrderListAPI.VehicleType = "";
+                OrderListAPI.SubmitDate = DateTime.Now;
+                OrderListAPI.PaymentMethod = "";
+                OrderListAPI.AttachmentNumber = 0;
+                OrderListAPI.InvoiceNumber = 0;
+                OrderListAPI.VGUID = Guid.NewGuid();
                 _db.Insertable<Business_OrderListDraft>(OrderListAPI).ExecuteCommand();
             }
         }

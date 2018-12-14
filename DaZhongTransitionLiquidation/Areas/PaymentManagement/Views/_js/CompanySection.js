@@ -193,11 +193,11 @@ var $page = function () {
             }
             var url = "";
             switch (index) {
-                case 0: url = "/PaymentManagement/SubjectSection/SaveCompanySection?isEdit=";
+                case 0: url = "/PaymentManagement/AccountModeSection/SaveCompanySection?isEdit=";
                     break;
-                case 1: url = "/PaymentManagement/AccountModeSection/SaveCompanySection?isEdit=";
+                case 1: url = "/PaymentManagement/CompanySection/SaveCompanySection?isEdit=";
                     break;
-                case 2: url = "/PaymentManagement/CompanySection/SaveCompanySection?isEdit=";
+                case 2: url = "/PaymentManagement/SubjectSection/SaveCompanySection?isEdit=";
                     break;
                 case 3: url = "/PaymentManagement/AccountingSection/SaveCompanySection?isEdit=";
                     break;

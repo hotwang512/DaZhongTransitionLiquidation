@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Common.Pub;
+﻿using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Models;
@@ -47,6 +48,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     int saveChanges = 1;
                     //删除主表信息
                     saveChanges = db.Deleteable<Business_OrderListDraft>(x => x.VGUID == item).ExecuteCommand();
+                    //删除附件信息
+                    db.Deleteable<Business_VoucherAttachmentList>(x => x.VoucherVGUID == item).ExecuteCommand();
                     resultModel.IsSuccess = saveChanges == vguids.Count;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }

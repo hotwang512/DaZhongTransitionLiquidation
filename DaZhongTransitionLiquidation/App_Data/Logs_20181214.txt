@@ -19,3 +19,8 @@
    在 System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
    在 SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 26
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-12-14 10:36:30,183 [100] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":2888000.00,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":8000.00,"FSSJ":"09:57","DFZH":"00000450759230681","DFBZ":"CNY","DFHM":"上海珩意实业有限公司","VCTP":"","VCNO":"","YUER":29087667.24,"YOTU":"","BEZH":"2018年11月调度管理费","T24F":"BEA183480957403107600"},{"CDFG":2,"PATI":"跨行转账","FSJE":2880000.00,"FSSJ":"10:34","DFZH":31001592820055613146,"DFBZ":"CNY","DFHM":"上海大众交通虹桥汽车销售服务有限公司","VCTP":"","VCNO":"","YUER":31967667.24,"YOTU":"退购车款","BEZH":"退购车款","T24F":"BEA183481034059224001"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":""}}

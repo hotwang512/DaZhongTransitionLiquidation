@@ -88,7 +88,7 @@
     </div>
     <div class="body_mk" style="height: 420px;">
         <table id="VoucherList" style="width:100%;">
-            <tr style="height:50px">
+            <tr style="height:50px;display:none">
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;"><input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务项目：</td>
@@ -96,15 +96,26 @@
                 <td style="text-align: right;">业务子项1：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem1" type="text" style="width: 200px;" class="input_text form-control" /></td>
             </tr>
-            <tr style="height:50px">
+            <tr style="height:50px;display:none">
                 <td style="text-align: right;">业务子项2：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务子项3：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">订单日期：</td>
-                <td style="text-align: left;"><input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+                @*<td style="text-align: right;">订单日期：</td>
+                <td style="text-align: left;"><input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>*@
+            </tr>
+            <tr style="height:50px;">
+                <td style="text-align: right;width: 150px;">填单日期：</td>
+                <td style="text-align: left;width: 350px;"><input id="FillingDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+                <td style="text-align: right;width: 150px;">付款内容：</td>
+                <td style="text-align: left;" colspan="3"><input id="PaymentContents" type="text" style="width: 750px;" class="input_text form-control" /></td>
+                
             </tr>
             <tr style="height:50px">
+                <td style="text-align: right;">订单日期：</td>
+                <td style="text-align: left;">
+                    <input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td>
                 <td style="text-align: right;">订单时间：</td>
                 <td style="text-align: left;">
                     <select id="OrderTime" style="width: 200px;" class="input_text form-control" validatetype="required">
@@ -112,15 +123,15 @@
                         <option value="晚上">晚上</option>
                     </select>
                 </td>
-                <td style="text-align: right;">付款公司：</td>
+                <td style="text-align: right;">对方单位名称：</td>
                 <td style="text-align: left;">
                     @*<select id="CompanyCode" style="width: 200px;" class="input_text form-control" onchange="gradeChange()"></select>*@
                 <input id="PaymentCompany" type="text" style="width: 200px;" class="input_text form-control" />
             </td>
-            <td style="text-align: right;">收款公司：</td>
+            @*<td style="text-align: right;">收款公司：</td>
             <td style="text-align: left;">
                 <input id="CollectionCompany" type="text" style="width: 200px;" class="input_text form-control" />
-            </td>
+            </td>*@
         </tr>
         <tr style="height:50px">
             <td style="text-align: right;">来客人数：</td>
@@ -133,7 +144,7 @@
         <tr style="height:50px">
             <td style="text-align: right;">支付方式：</td>
             <td style="text-align: right;">
-                <select id="VehicleType" style="width: 200px;" class="input_text form-control" validatetype="required">
+                <select id="PaymentMethod" style="width: 200px;" class="input_text form-control" validatetype="required">
                     <option value="现金">现金</option>
                     <option value="银行">银行</option>
                     <option value="其他">其他</option>

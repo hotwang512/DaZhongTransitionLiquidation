@@ -25,7 +25,10 @@ var $page = function () {
         var id0 = "#CompanyCode";
         uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
         var guid = $.request.queryString().VGUID;
-        $("#VGUID").val(guid)
+        $("#VGUID").val(guid);
+        var myDate = new Date();
+        var date = myDate.toLocaleDateString();     //获取当前日期
+        $("#SubmitDate").val($.action.replaceAll(date, '/', '-'));
         if (guid != "" && guid != null) {
             getOrderListDetail();
         } else {
@@ -60,7 +63,9 @@ var $page = function () {
                     "VGUID": $("#VGUID").val(),
                     "BusinessType": $("#BusinessType").val(),
                     "BusinessProject": $("#BusinessProject").val(),
-                    "BusinessSubItem": $("#BusinessSubItem").val(),
+                    "BusinessSubItem1": $("#BusinessSubItem1").val(),
+                    "BusinessSubItem2": $("#BusinessSubItem2").val(),
+                    "BusinessSubItem3": $("#BusinessSubItem3").val(),
                     "Abstract": $("#Abstract").val(),
                     "Money": $("#Money").val(),
                     "CompanySection": $("#CompanyCode").val(),
@@ -72,7 +77,18 @@ var $page = function () {
                     "SpareTwoSection": $("#SpareTwoSection").val(),
                     "IntercourseSection": $("#IntercourseSection").val(),
                     "Status": $("#Status").val(),
-                    "Founder": $("#LoginName").val()
+                    "Founder": $("#LoginName").val(),
+
+                    "PaymentCompany": $("#PaymentCompany").val(),
+                    "CollectionCompany": $("#CollectionCompany").val(),
+                    "BusinessUnit": $("#BusinessUnit").val(),
+                    "Mode": $("#Mode").val(),
+                    "VehicleType": $("#VehicleType").val(),
+                    "Number": $("#Number").val(),
+                    "SubmitDate": $("#SubmitDate").val(),
+                    "PaymentMethod": $("#PaymentMethod").val(),
+                    "InvoiceNumber": $("#InvoiceNumber").val(),
+                    "AttachmentNumber": $("#AttachmentNumber").val(),
                 },
                 type: "post",
                 success: function (msg) {
@@ -131,7 +147,6 @@ var $page = function () {
                 $("#BusinessSubItem2").val(msg.BusinessSubItem2);
                 $("#BusinessSubItem3").val(msg.BusinessSubItem3);
                 $("#Abstract").val(msg.Abstract);
-                $("#Money").val(msg.Money);
                 $("#CompanyCode").val(msg.CompanySection);
                 $("#SubjectName").val(msg.SubjectName);
                 $("#SubjectSection").val(msg.SubjectSection);
@@ -140,6 +155,19 @@ var $page = function () {
                 $("#SpareOneSection").val(msg.SpareOneSection);
                 $("#SpareTwoSection").val(msg.SpareTwoSection);
                 $("#IntercourseSection").val(msg.IntercourseSection);
+
+                $("#PaymentCompany").val(msg.PaymentCompany);
+                $("#CollectionCompany").val(msg.CollectionCompany);
+                $("#BusinessUnit").val(msg.BusinessUnit);
+                $("#Mode").val(msg.Mode);
+                $("#VehicleType").val(msg.VehicleType);
+                $("#Number").val(msg.Number);
+                $("#Money").val(msg.Money);
+                var submitDate = parseInt(msg.SubmitDate.replace(/[^0-9]/ig, ""));//转时间戳
+                $("#SubmitDate").val($.convert.toDate(new Date(submitDate), "yyyy-MM-dd"));
+                $("#PaymentMethod").val(msg.PaymentMethod);
+                $("#InvoiceNumber").val(msg.InvoiceNumber);
+                $("#AttachmentNumber").val(msg.AttachmentNumber);
             }
         });
     }

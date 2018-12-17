@@ -16,7 +16,10 @@ var $page = function () {
     //所有事件
     function addEvent() {
         var guid = $.request.queryString().VGUID;
-        $("#VGUID").val(guid)
+        $("#VGUID").val(guid);
+        var myDate = new Date();
+        var date = myDate.toLocaleDateString();     //获取当前日期
+        $("#FillingDate").val($.action.replaceAll(date, '/', '-'));
         if (guid != "" && guid != null) {
             getOrderListDetail();
         } else {
@@ -80,7 +83,9 @@ var $page = function () {
                     "Founder": $("#LoginName").val(),
                     "Attachment": $("#Attachment").val(),
                     "InvoiceNumber":$("#InvoiceNumber").val(),
-                    "AttachmentNumber":$("#AttachmentNumber").val()
+                    "AttachmentNumber": $("#AttachmentNumber").val(),
+                    "PaymentContents": $("#PaymentContents").val(),
+                    "FillingDate": $("#FillingDate").val()
                 },
                 type: "post",
                 success: function (msg) {
@@ -124,7 +129,7 @@ var $page = function () {
                 $("#VisitorsNumber").val(msg.VisitorsNumber);
                 $("#EscortNumber").val(msg.EscortNumber);
                 $("#NumberCount").val(msg.NumberCount);
-                $("#VehicleType").val(msg.VehicleType);
+                $("#PaymentMethod").val(msg.PaymentMethod);
                 $("#Money").val(msg.Money);
                 $("#CapitalizationMoney").val(msg.CapitalizationMoney);
                 $("#EnterpriseLeader").val(msg.EnterpriseLeader);
@@ -135,6 +140,10 @@ var $page = function () {
                 $("#Payee").val(msg.Payee);
                 $("#InvoiceNumber").val(msg.InvoiceNumber);
                 $("#AttachmentNumber").val(msg.AttachmentNumber);
+                $("#PaymentContents").val(msg.PaymentContents);
+                //$("#FillingDate").val(msg.FillingDate);
+                var fillingDate = parseInt(msg.FillingDate.replace(/[^0-9]/ig, ""));//转时间戳
+                $("#FillingDate").val($.convert.toDate(new Date(fillingDate), "yyyy-MM-dd"));
                 $("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
                 loadAttachments(msg.Attachment);
             }

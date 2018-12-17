@@ -5,3 +5,125 @@
    在 System.Net.WebClient.UploadString(Uri address, String method, String data)
    在 System.Net.WebClient.UploadString(Uri address, String data)
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-12-17 09:30:23,115 [25] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.InvalidOperationException: 数组的反序列化不支持类型“DaZhongTransitionLiquidation.Common.BankFlowData”。
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   在 System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   在 System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   在 SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 26
+
+-------------------------------header----------------------
+2018-12-17 11:12:35,472 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2018-12-17 11:13:02,442 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Number can't  convert string to int32
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 SqlSugar.QueryableProvider`1.Single()
+   在 SqlSugar.QueryableProvider`1.Single(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDetail.OrderListDetailController.<>c__DisplayClass3_0.<GetOrderListDetail>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs:行号 59
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2018-12-17 11:13:22,287 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: Number can't  convert string to int32
+   在 SqlSugar.IDataReaderEntityBuilder`1.CheckType(List`1 invalidTypes, String bindProperyTypeName, String validPropertyType, String propertyName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindMethod(ILGenerator generator, PropertyInfo bindProperty, Int32 ordinal)
+   在 SqlSugar.IDataReaderEntityBuilder`1.BindField(ILGenerator generator, LocalBuilder result, PropertyInfo propertyInfo, String fileName)
+   在 SqlSugar.IDataReaderEntityBuilder`1.CreateBuilder(Type type)
+   在 SqlSugar.DbBindAccessory.<>c__DisplayClass0_0`1.<GetEntityList>b__0()
+   在 SqlSugar.ReflectionInoCore`1.GetOrCreate(String cacheKey, Func`1 create)
+   在 SqlSugar.ReflectionInoCacheService.GetOrCreate[V](String cacheKey, Func`1 create, Int32 cacheDurationInSeconds)
+   在 SqlSugar.DbBindAccessory.GetEntityList[T](SqlSugarClient context, IDataReader dataReader)
+   在 SqlSugar.DbBindProvider.DataReaderToList[T](Type type, IDataReader dataReader)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 SqlSugar.QueryableProvider`1.Single()
+   在 SqlSugar.QueryableProvider`1.Single(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDetail.OrderListDetailController.<>c__DisplayClass3_0.<GetOrderListDetail>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs:行号 59
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDetail.OrderListDetailController.GetOrderListDetail(Guid vguid) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs:行号 56
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-12-17 13:12:35,597 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2018-12-17 15:12:37,584 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":14441287.93,"JFJE":32019765.87,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":6,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":1108.25,"FSSJ":"11:46","DFZH":"0000300000000080","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":32982322.86,"YOTU":"1215-1216费2.45元","BEZH":"","T24F":"BEA183511146453178701"},{"CDFG":2,"PATI":"跨行转账","FSJE":94333.26,"FSSJ":"11:53","DFZH":"0000300000000080","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":33076656.12,"YOTU":"1214-1216费208.02元","BEZH":"","T24F":"BEA183511153434980501"},{"CDFG":1,"PATI":"电子内转","FSJE":12006.40,"FSSJ":"13:25","DFZH":"03002362208","DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车浦东分公司","VCTP":"","VCNO":"","YUER":33064649.72,"YOTU":"划款　职工住房基金支用费","BEZH":"","T24F":"FT18351400563497"},{"CDFG":1,"PATI":"跨行转账","FSJE":291500.00,"FSSJ":"13:25","DFZH":436459221017,"DFBZ":"CNY","DFHM":"上海伊诺尔实业集团有限公司","VCTP":"","VCNO":"","YUER":32773149.72,"YOTU":"划款","BEZH":"车费发票　","T24F":"FT18351935690628"},{"CDFG":1,"PATI":"跨行转账","FSJE":228.00,"FSSJ":"13:25","DFZH":6214850218463849,"DFBZ":"CNY","DFHM":"龚敏","VCTP":"","VCNO":"","YUER":32772921.72,"YOTU":"划款","BEZH":"快递费　","T24F":"FT18351631365802"},{"CDFG":1,"PATI":"跨行转账","FSJE":588.20,"FSSJ":"13:25","DFZH":6214850218463849,"DFBZ":"CNY","DFHM":"龚敏","VCTP":"","VCNO":"","YUER":32772333.52,"YOTU":"划款","BEZH":"2018年11月交通费　","T24F":"FT18351331950408"},{"CDFG":1,"PATI":"跨行转账","FSJE":570.00,"FSSJ":"13:25","DFZH":6217920109299854,"DFBZ":"CNY","DFHM":"颜迎春","VCTP":"","VCNO":"","YUER":32771763.52,"YOTU":"划款","BEZH":"沪ACT731公务车停车费　","T24F":"FT18351680245704"},{"CDFG":1,"PATI":"跨行转账","FSJE":300.00,"FSSJ":"13:25","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":32771463.52,"YOTU":"划款","BEZH":"职工子女托费　","T24F":"FT18351459206845"},{"CDFG":1,"PATI":"跨行转账","FSJE":1750.00,"FSSJ":"13:25","DFZH":6217920109299854,"DFBZ":"CNY","DFHM":"颜迎春","VCTP":"","VCNO":"","YUER":32769713.52,"YOTU":"划款","BEZH":"沪ACT731公务车补贴费　","T24F":"FT18351445033390"},{"CDFG":2,"PATI":"电子内转","FSJE":3081694.62,"FSSJ":"13:29","DFZH":"03002362464","DFBZ":"CNY","DFHM":"上海奉贤大众汽车客运有限公司","VCTP":"","VCNO":"","YUER":35851408.14,"YOTU":"划款　2018年11月托管成本","BEZH":"","T24F":"FT18351399986209"},{"CDFG":2,"PATI":"电子内转","FSJE":710903.64,"FSSJ":"13:29","DFZH":"03002362348","DFBZ":"CNY","DFHM":"上海奉贤大众众义汽车客运有限公司","VCTP":"","VCNO":"","YUER":36562311.78,"YOTU":"划款　2018年11月托管成本","BEZH":"","T24F":"FT18351567891210"},{"CDFG":2,"PATI":"电子内转","FSJE":1553248.16,"FSSJ":"13:29","DFZH":"03002362294","DFBZ":"CNY","DFHM":"上海奉贤大众众和出租汽车有限公司","VCTP":"","VCNO":"","YUER":38115559.94,"YOTU":"划款　2018年11月托管成本","BEZH":"","T24F":"FT18351581167450"},{"CDFG":1,"PATI":"电子内转","FSJE":678608.90,"FSSJ":"13:29","DFZH":"03003252794","DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车分公司工会委员会","VCTP":"","VCNO":"","YUER":37436951.04,"YOTU":"划款　上缴2018年10月至11月工会经费及会费","BEZH":"","T24F":"FT18351635336490"},{"CDFG":1,"PATI":"跨行转账","FSJE":916.00,"FSSJ":"13:30","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":37436035.04,"YOTU":"划款","BEZH":"餐费　","T24F":"FT18351648246492"},{"CDFG":2,"PATI":"电子内转","FSJE":9000000.00,"FSSJ":"14:13","DFZH":"03002363018","DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车市南分公司","VCTP":"","VCNO":"","YUER":46436035.04,"YOTU":"划款　上划资金划款","BEZH":"","T24F":"FT18351536360470"},{"CDFG":1,"PATI":"电子内转","FSJE":14000000.00,"FSSJ":"14:13","DFZH":"03002362189","DFBZ":"CNY","DFHM":"上海京威实业有限公司","VCTP":"","VCNO":"","YUER":32436035.04,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351505555686"},{"CDFG":1,"PATI":"跨行转账","FSJE":721591.58,"FSSJ":"14:13","DFZH":310066580018170324465,"DFBZ":"CNY","DFHM":"上海大众万祥汽车修理有限公司","VCTP":"","VCNO":"","YUER":31714443.46,"YOTU":"划款","BEZH":"2018年11月应付托管单位往来款　","T24F":"FT18351112244181"},{"CDFG":1,"PATI":"电子内转","FSJE":1109218.61,"FSSJ":"14:13","DFZH":"03002449802","DFBZ":"CNY","DFHM":"上海大众新亚出租汽车有限公司","VCTP":"","VCNO":"","YUER":30605224.85,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351721112650"},{"CDFG":1,"PATI":"电子内转","FSJE":2819949.00,"FSSJ":"14:13","DFZH":"03002362294","DFBZ":"CNY","DFHM":"上海奉贤大众众和出租汽车有限公司","VCTP":"","VCNO":"","YUER":27785275.85,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351993640202"},{"CDFG":1,"PATI":"电子内转","FSJE":7293939.22,"FSSJ":"14:13","DFZH":"03002362464","DFBZ":"CNY","DFHM":"上海奉贤大众汽车客运有限公司","VCTP":"","VCNO":"","YUER":20491336.63,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351991641549"},{"CDFG":1,"PATI":"电子内转","FSJE":1358109.00,"FSSJ":"14:13","DFZH":"03002362348","DFBZ":"CNY","DFHM":"上海奉贤大众众义汽车客运有限公司","VCTP":"","VCNO":"","YUER":19133227.63,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351820873297"},{"CDFG":1,"PATI":"电子内转","FSJE":3723791.86,"FSSJ":"14:13","DFZH":"03002361905","DFBZ":"CNY","DFHM":"上海虹口大众出租汽车有限公司","VCTP":"","VCNO":"","YUER":15409435.77,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351541585122"},{"CDFG":1,"PATI":"跨行转账","FSJE":6699.10,"FSSJ":"14:20","DFZH":31001545200050001705,"DFBZ":"CNY","DFHM":"上海大众交运出租汽车有限公司","VCTP":"","VCNO":"","YUER":15402736.67,"YOTU":"划款","BEZH":"2018年11月应付托管单位往来款　","T24F":"FT18351105510613"}],"ACNO":31685803002369318,"SUMU":"0023","JFBS":17}}
+
+-------------------------------header----------------------
+2018-12-17 15:25:51,763 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":14441287.93,"JFJE":32019765.87,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":6,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":1108.25,"FSSJ":"11:46","DFZH":"0000300000000080","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":32982322.86,"YOTU":"1215-1216费2.45元","BEZH":"","T24F":"BEA183511146453178701"},{"CDFG":2,"PATI":"跨行转账","FSJE":94333.26,"FSSJ":"11:53","DFZH":"0000300000000080","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":33076656.12,"YOTU":"1214-1216费208.02元","BEZH":"","T24F":"BEA183511153434980501"},{"CDFG":1,"PATI":"电子内转","FSJE":12006.40,"FSSJ":"13:25","DFZH":"03002362208","DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车浦东分公司","VCTP":"","VCNO":"","YUER":33064649.72,"YOTU":"划款　职工住房基金支用费","BEZH":"","T24F":"FT18351400563497"},{"CDFG":1,"PATI":"跨行转账","FSJE":291500.00,"FSSJ":"13:25","DFZH":436459221017,"DFBZ":"CNY","DFHM":"上海伊诺尔实业集团有限公司","VCTP":"","VCNO":"","YUER":32773149.72,"YOTU":"划款","BEZH":"车费发票　","T24F":"FT18351935690628"},{"CDFG":1,"PATI":"跨行转账","FSJE":228.00,"FSSJ":"13:25","DFZH":6214850218463849,"DFBZ":"CNY","DFHM":"龚敏","VCTP":"","VCNO":"","YUER":32772921.72,"YOTU":"划款","BEZH":"快递费　","T24F":"FT18351631365802"},{"CDFG":1,"PATI":"跨行转账","FSJE":588.20,"FSSJ":"13:25","DFZH":6214850218463849,"DFBZ":"CNY","DFHM":"龚敏","VCTP":"","VCNO":"","YUER":32772333.52,"YOTU":"划款","BEZH":"2018年11月交通费　","T24F":"FT18351331950408"},{"CDFG":1,"PATI":"跨行转账","FSJE":570.00,"FSSJ":"13:25","DFZH":6217920109299854,"DFBZ":"CNY","DFHM":"颜迎春","VCTP":"","VCNO":"","YUER":32771763.52,"YOTU":"划款","BEZH":"沪ACT731公务车停车费　","T24F":"FT18351680245704"},{"CDFG":1,"PATI":"跨行转账","FSJE":300.00,"FSSJ":"13:25","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":32771463.52,"YOTU":"划款","BEZH":"职工子女托费　","T24F":"FT18351459206845"},{"CDFG":1,"PATI":"跨行转账","FSJE":1750.00,"FSSJ":"13:25","DFZH":6217920109299854,"DFBZ":"CNY","DFHM":"颜迎春","VCTP":"","VCNO":"","YUER":32769713.52,"YOTU":"划款","BEZH":"沪ACT731公务车补贴费　","T24F":"FT18351445033390"},{"CDFG":2,"PATI":"电子内转","FSJE":3081694.62,"FSSJ":"13:29","DFZH":"03002362464","DFBZ":"CNY","DFHM":"上海奉贤大众汽车客运有限公司","VCTP":"","VCNO":"","YUER":35851408.14,"YOTU":"划款　2018年11月托管成本","BEZH":"","T24F":"FT18351399986209"},{"CDFG":2,"PATI":"电子内转","FSJE":710903.64,"FSSJ":"13:29","DFZH":"03002362348","DFBZ":"CNY","DFHM":"上海奉贤大众众义汽车客运有限公司","VCTP":"","VCNO":"","YUER":36562311.78,"YOTU":"划款　2018年11月托管成本","BEZH":"","T24F":"FT18351567891210"},{"CDFG":2,"PATI":"电子内转","FSJE":1553248.16,"FSSJ":"13:29","DFZH":"03002362294","DFBZ":"CNY","DFHM":"上海奉贤大众众和出租汽车有限公司","VCTP":"","VCNO":"","YUER":38115559.94,"YOTU":"划款　2018年11月托管成本","BEZH":"","T24F":"FT18351581167450"},{"CDFG":1,"PATI":"电子内转","FSJE":678608.90,"FSSJ":"13:29","DFZH":"03003252794","DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车分公司工会委员会","VCTP":"","VCNO":"","YUER":37436951.04,"YOTU":"划款　上缴2018年10月至11月工会经费及会费","BEZH":"","T24F":"FT18351635336490"},{"CDFG":1,"PATI":"跨行转账","FSJE":916.00,"FSSJ":"13:30","DFZH":6222620110006462759,"DFBZ":"CNY","DFHM":"戴建华","VCTP":"","VCNO":"","YUER":37436035.04,"YOTU":"划款","BEZH":"餐费　","T24F":"FT18351648246492"},{"CDFG":2,"PATI":"电子内转","FSJE":9000000.00,"FSSJ":"14:13","DFZH":"03002363018","DFBZ":"CNY","DFHM":"大众交通（集团）股份有限公司大众出租汽车市南分公司","VCTP":"","VCNO":"","YUER":46436035.04,"YOTU":"划款　上划资金划款","BEZH":"","T24F":"FT18351536360470"},{"CDFG":1,"PATI":"电子内转","FSJE":14000000.00,"FSSJ":"14:13","DFZH":"03002362189","DFBZ":"CNY","DFHM":"上海京威实业有限公司","VCTP":"","VCNO":"","YUER":32436035.04,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351505555686"},{"CDFG":1,"PATI":"跨行转账","FSJE":721591.58,"FSSJ":"14:13","DFZH":310066580018170324465,"DFBZ":"CNY","DFHM":"上海大众万祥汽车修理有限公司","VCTP":"","VCNO":"","YUER":31714443.46,"YOTU":"划款","BEZH":"2018年11月应付托管单位往来款　","T24F":"FT18351112244181"},{"CDFG":1,"PATI":"电子内转","FSJE":1109218.61,"FSSJ":"14:13","DFZH":"03002449802","DFBZ":"CNY","DFHM":"上海大众新亚出租汽车有限公司","VCTP":"","VCNO":"","YUER":30605224.85,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351721112650"},{"CDFG":1,"PATI":"电子内转","FSJE":2819949.00,"FSSJ":"14:13","DFZH":"03002362294","DFBZ":"CNY","DFHM":"上海奉贤大众众和出租汽车有限公司","VCTP":"","VCNO":"","YUER":27785275.85,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351993640202"},{"CDFG":1,"PATI":"电子内转","FSJE":7293939.22,"FSSJ":"14:13","DFZH":"03002362464","DFBZ":"CNY","DFHM":"上海奉贤大众汽车客运有限公司","VCTP":"","VCNO":"","YUER":20491336.63,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351991641549"},{"CDFG":1,"PATI":"电子内转","FSJE":1358109.00,"FSSJ":"14:13","DFZH":"03002362348","DFBZ":"CNY","DFHM":"上海奉贤大众众义汽车客运有限公司","VCTP":"","VCNO":"","YUER":19133227.63,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351820873297"},{"CDFG":1,"PATI":"电子内转","FSJE":3723791.86,"FSSJ":"14:13","DFZH":"03002361905","DFBZ":"CNY","DFHM":"上海虹口大众出租汽车有限公司","VCTP":"","VCNO":"","YUER":15409435.77,"YOTU":"划款　2018年11月应付托管单位往来款","BEZH":"","T24F":"FT18351541585122"},{"CDFG":1,"PATI":"跨行转账","FSJE":6699.10,"FSSJ":"14:20","DFZH":31001545200050001705,"DFBZ":"CNY","DFHM":"上海大众交运出租汽车有限公司","VCTP":"","VCNO":"","YUER":15402736.67,"YOTU":"划款","BEZH":"2018年11月应付托管单位往来款　","T24F":"FT18351105510613"}],"ACNO":31685803002369318,"SUMU":"0023","JFBS":17}}
+2018-12-17 15:26:06,889 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid column name 'FillingDate'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 SqlSugar.QueryableProvider`1.Single()
+   在 SqlSugar.QueryableProvider`1.Single(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDraftDetail.OrderListDraftDetailController.<>c__DisplayClass3_0.<GetOrderListDetail>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\OrderListDraftDetail\OrderListDraftDetailController.cs:行号 81
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+ClientConnectionId:e170eef7-6665-4c80-a279-f15d1b5c4322
+Error Number:207,State:1,Class:16
+2018-12-17 15:26:21,339 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.Data.SqlClient.SqlException (0x80131904): Invalid column name 'FillingDate'.
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 SqlSugar.QueryableProvider`1.Single()
+   在 SqlSugar.QueryableProvider`1.Single(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDraftDetail.OrderListDraftDetailController.<>c__DisplayClass3_0.<GetOrderListDetail>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\OrderListDraftDetail\OrderListDraftDetailController.cs:行号 81
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDraftDetail.OrderListDraftDetailController.GetOrderListDetail(Guid vguid) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\OrderListDraftDetail\OrderListDraftDetailController.cs:行号 78
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ClientConnectionId:e170eef7-6665-4c80-a279-f15d1b5c4322
+Error Number:207,State:1,Class:16

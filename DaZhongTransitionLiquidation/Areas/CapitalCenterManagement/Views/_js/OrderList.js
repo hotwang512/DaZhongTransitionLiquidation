@@ -174,6 +174,10 @@ var $page = function () {
                     { name: 'BusinessSubItem1', type: 'string' },
                     { name: 'BusinessSubItem2', type: 'string' },
                     { name: 'BusinessSubItem3', type: 'string' },
+                    { name: 'PaymentCompany', type: 'string' },
+                    { name: 'CollectionCompany', type: 'string' },
+                    { name: 'BusinessUnit', type: 'string' },
+
                     { name: 'Abstract', type: 'string' },
                     { name: 'Money', type: 'number' },
                     { name: 'CompanySection', type: 'string' },
@@ -211,9 +215,13 @@ var $page = function () {
                     { text: '业务子项1', datafield: 'BusinessSubItem1', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '摘要', datafield: 'Abstract', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '公司', datafield: 'CompanyName',  align: 'center', cellsAlign: 'center' },
+                    { text: '付款公司', datafield: 'PaymentCompany', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '收款公司', datafield: 'CollectionCompany', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '业务单位', datafield: 'BusinessUnit', width: 200, align: 'center', cellsAlign: 'center', },
+
+                    { text: '摘要', datafield: 'Abstract', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '公司', datafield: 'CompanyName', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '状态', datafield: 'Status', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]

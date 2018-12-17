@@ -45,7 +45,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 260px;">
+    <div class="body_mk" style="height: 400px;">
         <table id="VoucherList" style="width:100%;">
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
@@ -60,12 +60,53 @@
                 <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务子项3：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">摘要：</td>
-                <td style="text-align: left;"><input id="Abstract" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                @*<td style="text-align: right;">摘要：</td>
+                <td style="text-align: left;"><input id="Abstract" type="text" style="width: 200px;" class="input_text form-control" /></td>*@
+                <td style="text-align: right;">付款公司：</td>
+                <td style="text-align: left;"><input id="PaymentCompany" type="text" style="width: 200px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
+                <td style="text-align: right;">收款公司：</td>
+                <td style="text-align: left;"><input id="CollectionCompany" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">业务单位：</td>
+                <td style="text-align: left;"><input id="BusinessUnit" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">模式：</td>
+                <td style="text-align: left;"><input id="Mode" type="text" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">车型：</td>
+                <td style="text-align: left;"><input id="VehicleType" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">数量：</td>
+                <td style="text-align: left;"><input id="Number" type="text" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
                 <td style="text-align: right;">金额：</td>
-                <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>
+                <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">提交日期：</td>
+                <td style="text-align: left;"><input id="SubmitDate" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                <td style="text-align: right;">支付方式：</td>
+                <td style="text-align: right;">
+                    <select id="PaymentMethod" style="width: 200px;" class="input_text form-control" >
+                        <option value="现金">现金</option>
+                        <option value="银行">银行</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">附件张数：</td>
+                <td style="text-align: left;"><input id="AttachmentNumber" type="text" style="width: 200px;" class="input_text form-control" validatetype="number" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">发票张数：</td>
+                <td style="text-align: left;"><input id="InvoiceNumber" type="text" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
+            </tr>
+
+            <tr style="height:50px;display:none">
+                @*<td style="text-align: right;">金额：</td>
+                <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>*@
                 <td style="text-align: right;">公司段：</td>
                 <td style="text-align: left;"><select id="CompanyCode" style="width: 200px;" class="input_text form-control" onchange="gradeChange()"></select></td>
                 <td style="text-align: right;">科目段：</td>
@@ -74,8 +115,10 @@
                     <input id="SubjectSection" name="SubjectSection" class="hide" />
                     <button id="btnSearch" type="button" class="buttons" onclick="searchSubject(btnSearch)"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>
                 </td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
             </tr>
-            <tr style="height:50px">
+            <tr style="height:50px;display:none">
                 <td style="text-align: right;">核算段：</td>
                 <td style="text-align: left;"><select id="AccountSection" style="width: 200px;" class="input_text form-control"></select></td>
                 <td style="text-align: right;">成本中心：</td>
@@ -83,7 +126,7 @@
                 <td style="text-align: right;">备用1：</td>
                 <td style="text-align: left;"><select id="SpareOneSection" style="width: 200px;" class="input_text form-control"></select></td>
             </tr>
-            <tr style="height:50px">
+            <tr style="height:50px;display:none">
                 <td style="text-align: right;">备用2：</td>
                 <td style="text-align: right;"><select id="SpareTwoSection" style="width: 200px;" class="input_text form-control"></select></td>
                 <td style="text-align: right;">往来段：</td>

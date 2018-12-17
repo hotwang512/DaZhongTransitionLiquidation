@@ -9,6 +9,12 @@ namespace DaZhongTransitionLiquidation.Models
     {
         public Guid VGUID { get; set; }
         /// <summary>
+        /// Desc:填单日期
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public DateTime? FillingDate { get; set; }
+        /// <summary>
         /// Desc:业务类型
         /// Default:
         /// Nullable:True
@@ -186,5 +192,6 @@ namespace DaZhongTransitionLiquidation.Models
         public DateTime? CreateTime { get; set; }
         public string Founder { get; set; }
         public string Attachment { get; set; }
+        
     }
 }

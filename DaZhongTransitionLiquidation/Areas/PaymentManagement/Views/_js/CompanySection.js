@@ -496,7 +496,7 @@ var $page = function () {
                     $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
                 }
             }
-            $("#jqxTableSetting").unbind("bindingcomplete");
+            //$("#jqxTableSetting").unbind("bindingcomplete");
         });
     }; //addEvent end
 
@@ -1251,16 +1251,15 @@ function settingSection(column, code) {
                 //{ text: 'VGUID', datafield: 'VGUID', hidden: true },
             ]
         });
-        
+        //var isCompleted = $("#jqxTableSetting").jqxGrid('isBindingCompleted');
+        //if (isCompleted) {
+        //    if (index != 2) {
+        //        $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
+        //    } else {
+        //        $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
+        //    }
+        //}
     }
-    
-    //if (index != 2) {
-    //    $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
-    //    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 420);
-    //} else {
-    //    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 200);
-    //    $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
-    //}
 }
 //设置公司下银行及银行账号
 function settingCompany(code, companyName) {

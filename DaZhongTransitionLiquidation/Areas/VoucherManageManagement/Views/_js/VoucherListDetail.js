@@ -118,6 +118,7 @@ var $page = function () {
             } else {
                 $("#LoanTable").append(html);
             }
+            autoHeight(index);
             selectIndex++;
             var id0 = "#CompanySection" + str;
             uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
@@ -130,6 +131,7 @@ var $page = function () {
         $('#jqxTabs').on('tabclick', function (event) {
             index = event.args.item;
             console.log(index);
+            autoHeight(index);
         });
         var initWidgets = function (tab) {
             switch (tab) {
@@ -141,7 +143,7 @@ var $page = function () {
                     break;
             }
         }
-        $('#jqxTabs').jqxTabs({ width: "100%", height: 600, initTabContent: initWidgets });
+        $('#jqxTabs').jqxTabs({ width: '1560px', height: 200, initTabContent: initWidgets });
         //双击选择科目
         $("#jqxSubjectSection").on('rowDoubleClick', function (event) {
             // event args.
@@ -407,6 +409,7 @@ var $page = function () {
             } else {
                 $("#LoanTable").append(html);
             }
+            autoHeight(index);
             var id0 = "#CompanySection" + str;
             uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
             AccountSection = loadCompanyCode("C", data.CompanySection, data.SubjectSection);
@@ -437,6 +440,7 @@ function dele(event) {
     } else {
         $("#Loan_" + x).remove();
     }
+    autoHeight(index)
 }
 //选择科目段
 function searchSubject(event) {
@@ -534,6 +538,34 @@ function loadCompanyCode(name, companyCode, subjectCode) {
         }
     });
     return value;
+}
+
+function autoHeight(index) {
+    if (index == 0) {
+        var length = $(".nav-i").length;
+        if (length < 1) {
+            $('#jqxTabs').jqxTabs({ height: 200 });//0个
+        }
+        if (length == 1) {
+            $('#jqxTabs').jqxTabs({ height: 400 });//1个
+        }
+        if (length >= 2) {
+            $('#jqxTabs').jqxTabs({ height: 600 });//2个
+        }
+    }
+    else {
+        var length2 = $(".nav-i2").length;
+        if (length2 < 1) {
+            $('#jqxTabs').jqxTabs({ height: 200 });//0个
+        }
+        if (length2 == 1) {
+            $('#jqxTabs').jqxTabs({ height: 400 });//1个
+        }
+        if (length2 >= 2) {
+            $('#jqxTabs').jqxTabs({ height: 600 });//2个
+        }
+    }
+    
 }
 
 $(function () {

@@ -190,10 +190,12 @@ $(function () {
         //var msg = $.convert.strToJson($(args.response).html());
         uploadFiles(event)
         var attValue = $("#Attachment").val();
+        //var reg = /,$/gi;
+        //attValue = attValue.replace(reg, "");
         var count = (attValue.split('发票&')).length - 1;
-        var counts = (attValue.split(',')).length;
+        var counts = (attValue.split('其他&')).length - 1;
         $("#InvoiceNumber").val(count);
-        $("#AttachmentNumber").val(counts);
+        $("#AttachmentNumber").val(count + counts);
     })
 })
 var fileName = "";
@@ -236,6 +238,13 @@ function removeAttachment(obj) {
 
     $("#Attachment").val(attachmentValues);
     $(obj).parent().remove();
+    var attValue = attachmentValues;
+    //var reg = /,$/gi;
+    //attValue = attValue.replace(reg, "");
+    var count = (attValue.split('发票&')).length - 1;
+    var counts = (attValue.split('其他&')).length - 1;
+    $("#InvoiceNumber").val(count);
+    $("#AttachmentNumber").val(count+counts);
     return false;
 }
 

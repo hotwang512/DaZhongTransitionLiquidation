@@ -547,7 +547,7 @@ function autoHeight(index) {
             $('#jqxTabs').jqxTabs({ height: 200 });//0个
         }
         if (length == 1) {
-            $('#jqxTabs').jqxTabs({ height: 400 });//1个
+            $('#jqxTabs').jqxTabs({ height: 350 });//1个
         }
         if (length >= 2) {
             $('#jqxTabs').jqxTabs({ height: 600 });//2个
@@ -559,7 +559,7 @@ function autoHeight(index) {
             $('#jqxTabs').jqxTabs({ height: 200 });//0个
         }
         if (length2 == 1) {
-            $('#jqxTabs').jqxTabs({ height: 400 });//1个
+            $('#jqxTabs').jqxTabs({ height: 350 });//1个
         }
         if (length2 >= 2) {
             $('#jqxTabs').jqxTabs({ height: 600 });//2个

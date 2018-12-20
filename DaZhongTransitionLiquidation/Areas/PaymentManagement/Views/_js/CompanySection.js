@@ -106,22 +106,12 @@ var $page = function () {
                 }
             }
             else {
-                if (index == 2) {
-                    var data = $('#jqxTableSetting').jqxGrid('getdisplayrows')
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].Checked == "True" || data[i].Checked == true || data[i].Balance != null) {
-                            var codes = data[i].Code + "," + data[i].Checked + "," + data[i].Balance;
-                            otherCode.push(codes);
-                        }
+                var data = $('#jqxTableSetting').jqxGrid('getdisplayrows')
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].Checked == "True" || data[i].Checked == true) {
+                        otherCode.push(data[i].Code);
                     }
-                } else {
-                    var data = $('#jqxTableSetting').jqxGrid('getdisplayrows')
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].Checked == "True" || data[i].Checked == true) {
-                            otherCode.push(data[i].Code);
-                        }
-                    }
-                } 
+                }
             }
             $.ajax({
                 url: "/PaymentManagement/CompanySection/SaveSectionSetting",
@@ -486,17 +476,6 @@ var $page = function () {
             $("#jqxSubjectSetting").unbind("bindingcomplete");
             //$("#jqxSubjectSetting").jqxTreeGrid('expandRow', 0);
             //$("#jqxSubjectSetting").jqxTreeGrid('collapseRow', 0);
-        });
-        $('#jqxTableSetting').on('bindingcomplete', function (event) {
-            var isCompleted = $("#jqxTableSetting").jqxGrid('isBindingCompleted');
-            if (isCompleted) {
-                if (index != 2) {
-                    $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
-                } else {
-                    $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
-                }
-            }
-            //$("#jqxTableSetting").unbind("bindingcomplete");
         });
     }; //addEvent end
 
@@ -1196,7 +1175,6 @@ function settingSection(column, code) {
                 { name: "Checked", type: 'bool' },
                 { name: 'Code', type: 'string' },
                 { name: 'Descrption', type: 'string' },
-                { name: 'Balance', type: 'number' },
                 //{ name: 'SectionVGUID', type: 'string' },
                 //{ name: 'VGUID', type: 'string' },
                 //{ name: 'Status', type: 'string' },
@@ -1214,7 +1192,7 @@ function settingSection(column, code) {
         });
         $("#jqxTableSetting").jqxGrid({
             pageable: true,
-            width: 600,
+            width: 460,
             height: 300,
             pageSize: 10,
             //serverProcessing: true,
@@ -1224,41 +1202,17 @@ function settingSection(column, code) {
             columnsHeight: 30,
             editable: true,
             pagermode: 'simple',
-            ready: function () {
-                if (index != 2) {
-                    $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
-                    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 420);
-                } else {
-                    $('#jqxTableSetting').jqxGrid('setcolumnproperty', 'Descrption', 'width', 200);
-                    $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
-                }
-            },
             columns: [
                 {
                     text: '选择', datafield: "Checked", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
                 },
                 { text: '编码', datafield: 'Code', editable: false, width: 120, align: 'center', cellsAlign: 'center' },
                 { text: '描述', datafield: 'Descrption', editable: false,  align: 'center', cellsAlign: 'center' },
-                {
-                    text: '余额', datafield: 'Balance', align: 'center', cellsFormat: "d2", cellsAlign: 'center', hidden: true, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
-                        if (value == 0) {
-                            return "";
-                        }
-                    }
-                },
                 //{ text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center', hidden: true },
                 //{ text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
                 //{ text: 'VGUID', datafield: 'VGUID', hidden: true },
             ]
         });
-        //var isCompleted = $("#jqxTableSetting").jqxGrid('isBindingCompleted');
-        //if (isCompleted) {
-        //    if (index != 2) {
-        //        $("#jqxTableSetting").jqxGrid('hidecolumn', 'Balance');
-        //    } else {
-        //        $("#jqxTableSetting").jqxGrid('showcolumn', 'Balance');
-        //    }
-        //}
     }
 }
 //设置公司下银行及银行账号

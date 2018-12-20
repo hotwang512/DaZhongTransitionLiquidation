@@ -23,7 +23,7 @@ var $page = function () {
         if (guid != "" && guid != null) {
             getOrderListDetail();
         } else {
-            $("#hideButton").show();
+            //$("#hideButton").show();
         }
         $("#Money").blur(function () {
             var money = $("#Money").val();
@@ -102,6 +102,87 @@ var $page = function () {
                 }
             });
         })
+        
+        $("#btnUp").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要提交的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
+        //审核
+        $("#btnCheck").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要提交的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
+
+
+        //提交
+        function submit(selection) {
+            $.ajax({
+                url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
+                data: { vguids: selection, status: "2" },
+                //traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("提交失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("提交成功！", null, "success");
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                    }
+                }
+            });
+        }
+        //审核
+        function check(selection) {
+            $.ajax({
+                url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
+                data: { vguids: selection, status: "3" },
+                //traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("提交失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("提交成功！", null, "success");
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                    }
+                }
+            });
+        }
+
     }; //addEvent end
 
     function getOrderListDetail() {
@@ -115,7 +196,10 @@ var $page = function () {
             success: function (msg) {
                 $("#Status").val(msg.Status);
                 if ($("#Status").val() == "1") {
-                    $("#hideButton").show();
+                    $("#btnUp").show();
+                }
+                if ($("#Status").val() == "2") {
+                    $("#btnCheck").show();
                 }
                 $("#BusinessType").val(msg.BusinessType);
                 $("#BusinessProject").val(msg.BusinessProject);

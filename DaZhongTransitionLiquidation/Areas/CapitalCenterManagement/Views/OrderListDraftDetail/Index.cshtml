@@ -70,13 +70,21 @@
         -webkit-appearance: none;
     }
 </style>
-<table id="hideButton" style="margin-top: 10px;display:none">
-    <tr style="height: 50px;">
+<table id="hideButton" style="margin-top: 10px;">
+    <tr style="height: 50px;display:none">
         <td style="width: 95px;">
             <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
         </td>
         <td style="width: 95px;">
             <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnUp" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCheck" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">审核</span></button>
         </td>
     </tr>
 </table>
@@ -88,7 +96,7 @@
     </div>
     <div class="body_mk" style="height: 420px;">
         <table id="VoucherList" style="width:100%;">
-            <tr style="height:50px;display:none">
+            @*<tr style="height:50px;display:none">
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;"><input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务项目：</td>
@@ -101,17 +109,17 @@
                 <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务子项3：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                @*<td style="text-align: right;">订单日期：</td>
-                <td style="text-align: left;"><input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>*@
-            </tr>
+                <td style="text-align: right;">订单日期：</td>
+                <td style="text-align: left;"><input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+            </tr>*@
             <tr style="height:50px;">
                 <td style="text-align: right;width: 150px;">填单日期：</td>
                 <td style="text-align: left;width: 350px;"><input id="FillingDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
-                <td style="text-align: right;width: 150px;">付款内容：</td>
-                <td style="text-align: left;" colspan="3"><input id="PaymentContents" type="text" style="width: 750px;" class="input_text form-control" /></td>
+                <td style="text-align: right;width: 150px;">受款人/部门/单位：</td>
+                <td style="text-align: left;" colspan="3"><input id="PaymentCompany" type="text" style="width: 750px;" class="input_text form-control" /></td>
                 
             </tr>
-            <tr style="height:50px">
+            <tr style="height:50px;display:none">
                 <td style="text-align: right;">订单日期：</td>
                 <td style="text-align: left;">
                     <input id="OrderDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
@@ -126,14 +134,14 @@
                 <td style="text-align: right;">对方单位名称：</td>
                 <td style="text-align: left;">
                     @*<select id="CompanyCode" style="width: 200px;" class="input_text form-control" onchange="gradeChange()"></select>*@
-                <input id="PaymentCompany" type="text" style="width: 200px;" class="input_text form-control" />
+                @*<input id="PaymentCompany" type="text" style="width: 200px;" class="input_text form-control" />*@
             </td>
             @*<td style="text-align: right;">收款公司：</td>
             <td style="text-align: left;">
                 <input id="CollectionCompany" type="text" style="width: 200px;" class="input_text form-control" />
             </td>*@
         </tr>
-        <tr style="height:50px">
+        <tr style="height:50px;display:none">
             <td style="text-align: right;">来客人数：</td>
             <td style="text-align: left;"><input id="VisitorsNumber" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
             <td style="text-align: right;">陪同人数：</td>
@@ -150,32 +158,41 @@
                     <option value="其他">其他</option>
                 </select>
             </td>
-            <td style="text-align: right;">金额：</td>
-            <td style="text-align: left;"><input id="Money" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>
-            <td style="text-align: right;">金额(大写)：</td>
-            <td style="text-align: right;"><input id="CapitalizationMoney" style="width: 200px;" class="input_text form-control" readonly="readonly" title=""/></td>
+            <td style="text-align: right;width: 150px;">付款内容：</td>
+            <td style="text-align: left;" colspan="3"><input id="PaymentContents" type="text" style="width: 750px;" class="input_text form-control" /></td>
         </tr>
             <tr style="height:50px">
+                <td style="text-align: right;">金额：</td>
+                <td style="text-align: left;"><input id="Money" style="width: 200px;" class="input_text form-control" validatetype="money" /></td>
+                <td style="text-align: right;">金额(大写)：</td>
+                <td style="text-align: right;"><input id="CapitalizationMoney" style="width: 200px;" class="input_text form-control" readonly="readonly" title="" /></td>
                 <td style="text-align: right;">企业负责人：</td>
                 <td style="text-align: left;"><input id="EnterpriseLeader" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                
                 <td style="text-align: right;">分管负责人：</td>
                 <td style="text-align: left;"><input id="ResponsibleLeader" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">计财部审核：</td>
                 <td style="text-align: left;"><input id="JiCaiBuExamine" style="width: 200px;" class="input_text form-control" /></td>
-            </tr>
-            <tr style="height:50px">
                 <td style="text-align: right;">部门主管：</td>
                 <td style="text-align: left;"><input id="DepartmentHead" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+               
                 <td style="text-align: right;">出纳：</td>
                 <td style="text-align: left;"><input id="Cashier" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">受款人经办人：</td>
                 <td style="text-align: left;"><input id="Payee" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">单据张数：</td>
+                <td style="text-align: left;"><input id="AttachmentNumber" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align: right;">单据张数：</td>
-                <td style="text-align: left;"><input id="AttachmentNumber" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                
                 <td style="text-align: right;">发票张数：</td>
                 <td style="text-align: left;"><input id="InvoiceNumber" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
                 <td style="text-align: right;"></td>
                 <td style="text-align: left;"></td>
             </tr>

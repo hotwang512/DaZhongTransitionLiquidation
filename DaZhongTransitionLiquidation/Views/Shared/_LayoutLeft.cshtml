@@ -221,33 +221,33 @@
         </div>
         <div class="menue_body" id="PaymentOrder" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单列表" && i.Reads == 1))
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待提交订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderListDraft_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=1">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">订单列表</td>
+                    <td class="menue_text">待提交订单</td>
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待处理" && i.Reads == 1))
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待过账订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=2">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">待处理</td>
+                    <td class="menue_text">待过账订单</td>
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已审核" && i.Reads == 1))
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=3">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">已审核</td>
+                    <td class="menue_text">已过账订单</td>
                     <td></td>
                 </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/FundReconciliation/Index">
+                <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                     <td class="menue_text">客户银行信息</td>
                     <td></td>

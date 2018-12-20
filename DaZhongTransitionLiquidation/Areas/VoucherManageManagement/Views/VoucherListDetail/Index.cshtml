@@ -12,7 +12,7 @@
 }
 <style>
     .input_text {
-        width: 150px;
+        width: 200px;
         height: 35px;
         border: 1px;
         border-style: solid;
@@ -92,13 +92,13 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 260px;">
+    <div class="body_mk" style="height: 230px;">
         <table id="VoucherList" style="width:100%;">
             <tr style="height:50px">
                 <td style="text-align: right;"></td>
                 <td style=""></td>
                 <td style="text-align: right;width: 255px;">公司名称：</td>
-                <td style="text-align: left;">营运公司</td>
+                <td style="text-align: left;"><select id="CompanyCode" class="input_text form-control"></select></td>
                 <td style="width: 200px;"></td>
                 <td></td>
             </tr>
@@ -123,28 +123,31 @@
                 <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" /></td>
                 <td style="text-align: right;">批名：</td>
                 <td style="text-align: left;"><input id="BatchName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-                <td style="text-align: right;">币种：</td>
-                <td style="text-align: left;"><input id="Currency" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-            </tr>
-            <tr style="height:40px">
                 <td style="text-align: right;">凭证号码：</td>
                 <td style="text-align: left;"><input id="VoucherNo" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
+            </tr>
+            <tr style="height:40px">
+                <td style="text-align: right;">币种：</td>
+                <td style="text-align: left;"><input id="Currency" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align: right;">凭证日期：</td>
                 <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
-                <td style="text-align: right;">财务主管：</td>
-                <td style="text-align: left;"><input id="FinanceDirector" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">@*财务主管：*@制单：</td>
+                <td style="text-align: left;">
+                    @*<input id="FinanceDirector" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" />*@
+                    <input id="DocumentMaker" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" />
+                </td>
             </tr>
             <tr style="height:40px">
-                <td style="text-align: right;">记账：</td>
-                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">审核：</td>
-                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">制单：</td>
-                <td style="text-align: left;"><input id="DocumentMaker" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">@*记账：*@</td>
+                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">@*审核：*@</td>
+                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
             </tr>
             <tr style="height:40px">
-                <td style="text-align: right;">出纳：</td>
-                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">@*出纳：*@</td>
+                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align: right;"></td>
                 <td style="text-align: left;"></td>
                 <td style="text-align: right;"><input id="Status" name="Status" value="" class="hide" /></td>

@@ -71,6 +71,9 @@ function Validate(selecter) {
             case "decimalNumber"://整数或小数验证
                 isValidateSuccess = validate_decimalNumber(selecter);
                 break;
+            case "money"://金额
+                isValidateSuccess = validate_money(selecter);
+                break;
             case "idCard"://身份证号验证
                 isValidateSuccess = validate_IdCard(selecter);
                 break;
@@ -228,6 +231,33 @@ function validate_decimalNumber(selecter) {
             $(selecter).next(".msg").remove();
             var width = $(selecter).css("width");
             $(selecter).after("<div class=\"msg\" style=\"margin-left:" + width + ";width:150px;\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">请输入整数或者小数！</div></div>");
+        }
+        isValidateSuccess = false;
+    }
+    return isValidateSuccess;
+}
+//验证金额
+function validate_money(selecter) {
+    var isValidateSuccess = true;
+    //var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+    var reg =/^-?([0-9]+|[0-9]{1,3}(,[0-9]{3})*)(.[0-9]{1,2})?$/
+    if (reg.test($(selecter).val())) {
+        isValidateSuccess = true;
+        if ($(selecter).hasClass("input_Validate")) {
+            $(selecter).removeClass("input_Validate");
+            $(selecter).next(".msg").remove();
+        }
+    }
+    else {
+        if (!$(selecter).hasClass("input_Validate")) {
+            $(selecter).addClass("input_Validate");
+            var width = $(selecter).css("width");
+            $(selecter).after("<div class=\"msg\" style=\"margin-left:" + width + "; width:150px;\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">请输入正确金额！</div></div>");
+        }
+        else {
+            $(selecter).next(".msg").remove();
+            var width = $(selecter).css("width");
+            $(selecter).after("<div class=\"msg\" style=\"margin-left:" + width + ";width:150px;\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">请输入正确金额！</div></div>");
         }
         isValidateSuccess = false;
     }

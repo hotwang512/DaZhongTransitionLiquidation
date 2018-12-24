@@ -88,11 +88,7 @@ var $page = function () {
                                 selector.$grid().jqxDataTable('updateBoundData');
                                 selector.$AddBankChannelDialog().modal("hide");
                                 break;
-                            case "2":
-                                jqxNotification("渠道名称已经存在！", null, "error");
-                                break;
                         }
-
                     }
                 });
             }

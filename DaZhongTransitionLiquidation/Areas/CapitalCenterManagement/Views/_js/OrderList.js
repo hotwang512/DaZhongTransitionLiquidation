@@ -184,6 +184,9 @@ var $page = function () {
                     { name: 'CompanyName', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'Status', type: 'string' },
+
+                    { name: 'CollectionAccount', type: 'string' },
+                    { name: 'CollectionBankAccount', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -215,9 +218,8 @@ var $page = function () {
                     { text: '业务子项1', datafield: 'BusinessSubItem1', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '付款公司', datafield: 'PaymentCompany', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '收款公司', datafield: 'CollectionCompany', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '业务单位', datafield: 'BusinessUnit', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '收款账号', datafield: 'CollectionAccount', align: 'center', cellsAlign: 'center', },
 
                     { text: '摘要', datafield: 'Abstract', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center', hidden: true },

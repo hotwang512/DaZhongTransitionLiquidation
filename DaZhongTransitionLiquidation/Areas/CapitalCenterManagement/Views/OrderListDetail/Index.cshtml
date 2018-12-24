@@ -45,7 +45,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 400px;">
+    <div class="body_mk" style="height: 200px;">
         <table id="VoucherList" style="width:100%;">
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
@@ -60,50 +60,26 @@
                 <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务子项3：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                @*<td style="text-align: right;">摘要：</td>
-                <td style="text-align: left;"><input id="Abstract" type="text" style="width: 200px;" class="input_text form-control" /></td>*@
-                <td style="text-align: right;">付款公司：</td>
-                <td style="text-align: left;"><input id="PaymentCompany" type="text" style="width: 200px;" class="input_text form-control" /></td>
-            </tr>
-            <tr style="height:50px">
                 <td style="text-align: right;">收款公司：</td>
                 <td style="text-align: left;"><input id="CollectionCompany" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">业务单位：</td>
-                <td style="text-align: left;"><input id="BusinessUnit" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">模式：</td>
-                <td style="text-align: left;"><input id="Mode" type="text" style="width: 200px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align: right;">车型：</td>
-                <td style="text-align: left;"><input id="VehicleType" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">数量：</td>
-                <td style="text-align: left;"><input id="Number" type="text" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
-                <td style="text-align: right;">金额：</td>
-                <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber" /></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align: right;">提交日期：</td>
-                <td style="text-align: left;"><input id="SubmitDate" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                <td style="text-align: right;">收款账号：</td>
+                <td style="text-align: left;"><input id="CollectionAccount" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">收款银行行号：</td>
+                <td style="text-align: left;"><input id="CollectionBankAccount" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">支付方式：</td>
                 <td style="text-align: right;">
-                    <select id="PaymentMethod" style="width: 200px;" class="input_text form-control" >
+                    <select id="PaymentMethod" style="width: 200px;" class="input_text form-control">
                         <option value="现金">现金</option>
                         <option value="银行">银行</option>
                         <option value="其他">其他</option>
                     </select>
                 </td>
-                <td style="text-align: right;">附件张数：</td>
-                <td style="text-align: left;"><input id="AttachmentNumber" type="text" style="width: 200px;" class="input_text form-control" validatetype="number" /></td>
             </tr>
-            <tr style="height:50px">
-                <td style="text-align: right;">发票张数：</td>
-                <td style="text-align: left;"><input id="InvoiceNumber" type="text" style="width: 200px;" class="input_text form-control" validatetype="number"/></td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: left;"></td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: left;"></td>
-            </tr>
-
+           
+            
+            @*凭证7个段配置*@
             <tr style="height:50px;display:none">
                 @*<td style="text-align: right;">金额：</td>
                 <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>*@

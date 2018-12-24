@@ -66,29 +66,22 @@ var $page = function () {
                     "BusinessSubItem1": $("#BusinessSubItem1").val(),
                     "BusinessSubItem2": $("#BusinessSubItem2").val(),
                     "BusinessSubItem3": $("#BusinessSubItem3").val(),
-                    "Abstract": $("#Abstract").val(),
-                    "Money": $("#Money").val(),
-                    "CompanySection": $("#CompanyCode").val(),
-                    "SubjectName": $("#SubjectName").val(),
-                    "SubjectSection": $("#SubjectSection").val(),
-                    "AccountSection": $("#AccountSection").val(),
-                    "CostCenterSection": $("#CostCenterSection").val(),
-                    "SpareOneSection": $("#SpareOneSection").val(),
-                    "SpareTwoSection": $("#SpareTwoSection").val(),
-                    "IntercourseSection": $("#IntercourseSection").val(),
+                    
+                    //"CompanySection": $("#CompanyCode").val(),
+                    //"SubjectName": $("#SubjectName").val(),
+                    //"SubjectSection": $("#SubjectSection").val(),
+                    //"AccountSection": $("#AccountSection").val(),
+                    //"CostCenterSection": $("#CostCenterSection").val(),
+                    //"SpareOneSection": $("#SpareOneSection").val(),
+                    //"SpareTwoSection": $("#SpareTwoSection").val(),
+                    //"IntercourseSection": $("#IntercourseSection").val(),
                     "Status": $("#Status").val(),
                     "Founder": $("#LoginName").val(),
 
-                    "PaymentCompany": $("#PaymentCompany").val(),
                     "CollectionCompany": $("#CollectionCompany").val(),
-                    "BusinessUnit": $("#BusinessUnit").val(),
-                    "Mode": $("#Mode").val(),
-                    "VehicleType": $("#VehicleType").val(),
-                    "Number": $("#Number").val(),
-                    "SubmitDate": $("#SubmitDate").val(),
+                    "CollectionAccount": $("#CollectionAccount").val(),
+                    "CollectionBankAccount": $("#CollectionBankAccount").val(),
                     "PaymentMethod": $("#PaymentMethod").val(),
-                    "InvoiceNumber": $("#InvoiceNumber").val(),
-                    "AttachmentNumber": $("#AttachmentNumber").val(),
                 },
                 type: "post",
                 success: function (msg) {
@@ -135,39 +128,31 @@ var $page = function () {
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();
                 }
-                AccountSection = loadCompanyCode("C", msg.CompanySection, msg.SubjectSection);
-                CostCenterSection = loadCompanyCode("D", msg.CompanySection, msg.SubjectSection);
-                SpareOneSection = loadCompanyCode("E", msg.CompanySection, msg.SubjectSection);
-                SpareTwoSection = loadCompanyCode("F", msg.CompanySection, msg.SubjectSection);
-                IntercourseSection = loadCompanyCode("G", msg.CompanySection, msg.SubjectSection);
-                loadSelectFun();
+                //AccountSection = loadCompanyCode("C", msg.CompanySection, msg.SubjectSection);
+                //CostCenterSection = loadCompanyCode("D", msg.CompanySection, msg.SubjectSection);
+                //SpareOneSection = loadCompanyCode("E", msg.CompanySection, msg.SubjectSection);
+                //SpareTwoSection = loadCompanyCode("F", msg.CompanySection, msg.SubjectSection);
+                //IntercourseSection = loadCompanyCode("G", msg.CompanySection, msg.SubjectSection);
+                //loadSelectFun();
                 $("#BusinessType").val(msg.BusinessType);
                 $("#BusinessProject").val(msg.BusinessProject);
                 $("#BusinessSubItem1").val(msg.BusinessSubItem1);
                 $("#BusinessSubItem2").val(msg.BusinessSubItem2);
                 $("#BusinessSubItem3").val(msg.BusinessSubItem3);
-                $("#Abstract").val(msg.Abstract);
-                $("#CompanyCode").val(msg.CompanySection);
-                $("#SubjectName").val(msg.SubjectName);
-                $("#SubjectSection").val(msg.SubjectSection);
-                $("#AccountSection").val(msg.AccountSection);
-                $("#CostCenterSection").val(msg.CostCenterSection);
-                $("#SpareOneSection").val(msg.SpareOneSection);
-                $("#SpareTwoSection").val(msg.SpareTwoSection);
-                $("#IntercourseSection").val(msg.IntercourseSection);
+               
+                //$("#CompanyCode").val(msg.CompanySection);
+                //$("#SubjectName").val(msg.SubjectName);
+                //$("#SubjectSection").val(msg.SubjectSection);
+                //$("#AccountSection").val(msg.AccountSection);
+                //$("#CostCenterSection").val(msg.CostCenterSection);
+                //$("#SpareOneSection").val(msg.SpareOneSection);
+                //$("#SpareTwoSection").val(msg.SpareTwoSection);
+                //$("#IntercourseSection").val(msg.IntercourseSection);
 
-                $("#PaymentCompany").val(msg.PaymentCompany);
                 $("#CollectionCompany").val(msg.CollectionCompany);
-                $("#BusinessUnit").val(msg.BusinessUnit);
-                $("#Mode").val(msg.Mode);
-                $("#VehicleType").val(msg.VehicleType);
-                $("#Number").val(msg.Number);
-                $("#Money").val(msg.Money);
-                var submitDate = parseInt(msg.SubmitDate.replace(/[^0-9]/ig, ""));//转时间戳
-                $("#SubmitDate").val($.convert.toDate(new Date(submitDate), "yyyy-MM-dd"));
+                $("#CollectionAccount").val(msg.CollectionAccount);
+                $("#CollectionBankAccount").val(msg.CollectionBankAccount);
                 $("#PaymentMethod").val(msg.PaymentMethod);
-                $("#InvoiceNumber").val(msg.InvoiceNumber);
-                $("#AttachmentNumber").val(msg.AttachmentNumber);
             }
         });
     }

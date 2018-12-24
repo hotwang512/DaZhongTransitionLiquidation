@@ -31,8 +31,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var companyCode = sevenSection.CompanySection;
-                    sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.Code == companyCode && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").Descrption;
+                    //var companyCode = sevenSection.CompanySection;
+                    //sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.Code == companyCode && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").Descrption;
                     if (sevenSection.VGUID == Guid.Empty)
                     {
                         sevenSection.VGUID = Guid.NewGuid();

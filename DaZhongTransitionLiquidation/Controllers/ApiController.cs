@@ -1,7 +1,9 @@
-﻿using DaZhongTransitionLiquidation.Common;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using DaZhongTransitionLiquidation.Models;
 using SqlSugar;
 using SyntacticSugar;
 using System;
@@ -229,6 +231,76 @@ namespace DaZhongTransitionLiquidation.Controllers
                 business_Revenuepayment.CreateDate = DateTime.Now;
                 business_Revenuepayment.CreateUser = "Revenue";
                 db.Insertable(business_Revenuepayment).ExecuteCommand();
+                return Json(new
+                {
+                    errmsg = "ok"
+                });
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.ToString());
+                return Json(new
+                {
+                    errmsg = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// 订单生产接口
+        /// </summary>
+        /// <param name="OrderListAPI">
+        ///  /// 请求示例:
+        /// {
+        /// PaymentCompany:"付款公司",       
+        /// BusinessType:"保险类",
+        /// BusinessProject:"投保",
+        /// Money:"100000",
+        /// Founder: "admin",
+        /// PaymentContents:"付款内容(摘要)"
+        /// }
+        /// </param>
+        /// <returns></returns>
+        public JsonResult SavePaymentOrder(Business_OrderListDraft OrderListAPI)
+        {
+            SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
+            try
+            {
+                ExpCheck.Exception(OrderListAPI.PaymentCompany == null, "付款公司为空！");
+                ExpCheck.Exception(OrderListAPI.BusinessType == null, "类别为空！");
+                ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");
+                ExpCheck.Exception(OrderListAPI.Money == null, "金额为空！");
+                ExpCheck.Exception(OrderListAPI.Founder == null, "发起人为空！");
+                ExpCheck.Exception(OrderListAPI.PaymentContents == null, "摘要为空！");
+                if (OrderListAPI != null)
+                {
+                    var BusinessType = OrderListAPI.BusinessType;
+                    var BusinessProject = OrderListAPI.BusinessProject;
+                    //var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
+                    //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
+                    //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
+                    //从订单配置表中取出数据
+                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessType != null, i => i.BusinessType == BusinessType)
+                               .WhereIF(BusinessProject != null, i => i.BusinessProject == BusinessProject)
+                               //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
+                               //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
+                               //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
+                               .ToList().FirstOrDefault();
+                    //数据存入订单草稿表，生成订单
+                    var guid = Guid.NewGuid();
+                    if (data != null)
+                    {
+                        OrderListAPI.PaymentCompany = data.PaymentCompany;
+                        //OrderListAPI.Mode = data.Mode;
+                        //OrderListAPI.VehicleType = data.VehicleType;
+                        OrderListAPI.SubmitDate = DateTime.Now;
+                        OrderListAPI.PaymentMethod = data.PaymentMethod;
+                        //OrderListAPI.AttachmentNumber = data.AttachmentNumber;
+                        //OrderListAPI.InvoiceNumber = data.InvoiceNumber;
+                        OrderListAPI.VGUID = guid;
+                        _db.Insertable<Business_OrderListDraft>(OrderListAPI).ExecuteCommand();
+                    }
+                }
                 return Json(new
                 {
                     errmsg = "ok"

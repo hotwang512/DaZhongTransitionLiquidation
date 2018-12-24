@@ -563,7 +563,6 @@ function loadCompanyCode(name, companyCode, subjectCode) {
 function autoHeight(index) {
     if (index == 0) {
         var length = $(".nav-i").length;
-       
         if (length == 1) {
             $('#jqxTabs').jqxTabs({ height: 300 });//1个
         }
@@ -572,8 +571,7 @@ function autoHeight(index) {
         }
     }
     else {
-        var length2 = $(".nav-i2").length;
-        
+        var length2 = $(".nav-i2").length;  
         if (length2 == 1) {
             $('#jqxTabs').jqxTabs({ height: 300 });//1个
         }
@@ -581,7 +579,6 @@ function autoHeight(index) {
             $('#jqxTabs').jqxTabs({ height: 500 });//2个
         }
     }
-    
 }
 
 $(function () {

@@ -92,5 +92,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public int InvoiceNumber { get; set; }
+        public string CollectionAccount { get; set; }
+        public string CollectionBankAccount { get; set; }
     }
 }

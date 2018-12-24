@@ -188,6 +188,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraft.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftDetail.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftPrint.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\BankData.js" />
@@ -239,6 +240,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\OrderListDraft\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\OrderListDraftDetail\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\CustomerBankInfo\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\OrderListDraftPrint\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2207,6 +2209,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\FundReconciliationController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraftDetail\OrderListDraftDetailController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraftPrint\OrderListDraftPrintController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraft\OrderListDraftController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\Business_OrderList.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />

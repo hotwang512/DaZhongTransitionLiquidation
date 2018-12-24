@@ -26,3 +26,75 @@
    在 System.Net.WebClient.UploadString(Uri address, String method, String data)
    在 System.Net.WebClient.UploadString(Uri address, String data)
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------header----------------------
+2018-12-24 15:35:09,478 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------header----------------------
+2018-12-24 15:37:34,719 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":9357182.88,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":6,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":1440.76,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":7946118.47,"YOTU":"财付通转账","BEZH":"","T24F":"BEA183580418301305101"},{"CDFG":2,"PATI":"跨行转账","FSJE":35902.95,"FSSJ":"12:01","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7982021.42,"YOTU":"1221-1223费79.17元","BEZH":"","T24F":"BEA183581201277349900"},{"CDFG":2,"PATI":"跨行转账","FSJE":3084.42,"FSSJ":"12:10","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7985105.84,"YOTU":"1221-1221费6.8元","BEZH":"","T24F":"BEA183581210298760101"},{"CDFG":2,"PATI":"电子内转","FSJE":27183.17,"FSSJ":"12:33","DFZH":"03002358707","DFBZ":"CNY","DFHM":"上海大众交通二手机动车经营有限公司","VCTP":"","VCNO":"","YUER":8012289.01,"YOTU":"经营公司社保往来　","BEZH":"","T24F":"FT18358790792232"},{"CDFG":2,"PATI":"电子内转","FSJE":5279.58,"FSSJ":"12:33","DFZH":"03002358882","DFBZ":"CNY","DFHM":"上海大众交通旧机动车经纪有限公司","VCTP":"","VCNO":"","YUER":8017568.59,"YOTU":"经纪公司社保往来　","BEZH":"","T24F":"FT18358610006720"},{"CDFG":2,"PATI":"转账","FSJE":9284292.00,"FSSJ":"15:11","DFZH":"090000000002371109","DFBZ":"CNY","DFHM":"上海市国库收付中心零余额专户","VCTP":"","VCNO":"","YUER":17301860.59,"YOTU":"8207011186658848 600192550097","BEZH":"2018年11月出租汽车临时性成品油价格补助","T24F":"FT18358719019059"}],"ACNO":31685803002369318,"SUMU":"0006","JFBS":""}}
+2018-12-24 15:38:29,308 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Views_Shared__Layout_cshtml.Execute() 位置 E:\Project\DaZhongTransitionLiquidation\Views\Shared\_Layout.cshtml:行号 22
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.WebPages.WebPageBase.<>c__DisplayClass3.<RenderPageCore>b__2(TextWriter writer)
+   在 System.Web.WebPages.HelperResult.WriteTo(TextWriter writer)
+   在 System.Web.WebPages.WebPageBase.Write(HelperResult result)
+   在 System.Web.WebPages.WebPageBase.RenderSurrounding(String partialViewName, Action`1 body)
+   在 System.Web.WebPages.WebPageBase.PopContext()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2018-12-24 15:40:30,087 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ASP._Page_Views_Shared__Layout_cshtml.Execute() 位置 E:\Project\DaZhongTransitionLiquidation\Views\Shared\_Layout.cshtml:行号 22
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.WebPages.WebPageBase.<>c__DisplayClass3.<RenderPageCore>b__2(TextWriter writer)
+   在 System.Web.WebPages.HelperResult.WriteTo(TextWriter writer)
+   在 System.Web.WebPages.WebPageBase.Write(HelperResult result)
+   在 System.Web.WebPages.WebPageBase.RenderSurrounding(String partialViewName, Action`1 body)
+   在 System.Web.WebPages.WebPageBase.PopContext()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)
+   在 System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------header----------------------
+2018-12-24 15:43:54,312 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":9357182.88,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":6,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":1440.76,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":7946118.47,"YOTU":"财付通转账","BEZH":"","T24F":"BEA183580418301305101"},{"CDFG":2,"PATI":"跨行转账","FSJE":35902.95,"FSSJ":"12:01","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7982021.42,"YOTU":"1221-1223费79.17元","BEZH":"","T24F":"BEA183581201277349900"},{"CDFG":2,"PATI":"跨行转账","FSJE":3084.42,"FSSJ":"12:10","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7985105.84,"YOTU":"1221-1221费6.8元","BEZH":"","T24F":"BEA183581210298760101"},{"CDFG":2,"PATI":"电子内转","FSJE":27183.17,"FSSJ":"12:33","DFZH":"03002358707","DFBZ":"CNY","DFHM":"上海大众交通二手机动车经营有限公司","VCTP":"","VCNO":"","YUER":8012289.01,"YOTU":"经营公司社保往来　","BEZH":"","T24F":"FT18358790792232"},{"CDFG":2,"PATI":"电子内转","FSJE":5279.58,"FSSJ":"12:33","DFZH":"03002358882","DFBZ":"CNY","DFHM":"上海大众交通旧机动车经纪有限公司","VCTP":"","VCNO":"","YUER":8017568.59,"YOTU":"经纪公司社保往来　","BEZH":"","T24F":"FT18358610006720"},{"CDFG":2,"PATI":"转账","FSJE":9284292.00,"FSSJ":"15:11","DFZH":"090000000002371109","DFBZ":"CNY","DFHM":"上海市国库收付中心零余额专户","VCTP":"","VCNO":"","YUER":17301860.59,"YOTU":"8207011186658848 600192550097","BEZH":"2018年11月出租汽车临时性成品油价格补助","T24F":"FT18358719019059"}],"ACNO":31685803002369318,"SUMU":"0006","JFBS":""}}
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-12-24 16:44:51,679 [25] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-12-24 17:39:07,652 [63] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":9357182.88,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":6,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":1440.76,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":7946118.47,"YOTU":"财付通转账","BEZH":"","T24F":"BEA183580418301305101"},{"CDFG":2,"PATI":"跨行转账","FSJE":35902.95,"FSSJ":"12:01","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7982021.42,"YOTU":"1221-1223费79.17元","BEZH":"","T24F":"BEA183581201277349900"},{"CDFG":2,"PATI":"跨行转账","FSJE":3084.42,"FSSJ":"12:10","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7985105.84,"YOTU":"1221-1221费6.8元","BEZH":"","T24F":"BEA183581210298760101"},{"CDFG":2,"PATI":"电子内转","FSJE":27183.17,"FSSJ":"12:33","DFZH":"03002358707","DFBZ":"CNY","DFHM":"上海大众交通二手机动车经营有限公司","VCTP":"","VCNO":"","YUER":8012289.01,"YOTU":"经营公司社保往来　","BEZH":"","T24F":"FT18358790792232"},{"CDFG":2,"PATI":"电子内转","FSJE":5279.58,"FSSJ":"12:33","DFZH":"03002358882","DFBZ":"CNY","DFHM":"上海大众交通旧机动车经纪有限公司","VCTP":"","VCNO":"","YUER":8017568.59,"YOTU":"经纪公司社保往来　","BEZH":"","T24F":"FT18358610006720"},{"CDFG":2,"PATI":"转账","FSJE":9284292.00,"FSSJ":"15:11","DFZH":"090000000002371109","DFBZ":"CNY","DFHM":"上海市国库收付中心零余额专户","VCTP":"","VCNO":"","YUER":17301860.59,"YOTU":"8207011186658848 600192550097","BEZH":"2018年11月出租汽车临时性成品油价格补助","T24F":"FT18358719019059"}],"ACNO":31685803002369318,"SUMU":"0006","JFBS":""}}
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2018-12-24 17:40:44,124 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":9357182.88,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":6,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":1440.76,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":7946118.47,"YOTU":"财付通转账","BEZH":"","T24F":"BEA183580418301305101"},{"CDFG":2,"PATI":"跨行转账","FSJE":35902.95,"FSSJ":"12:01","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7982021.42,"YOTU":"1221-1223费79.17元","BEZH":"","T24F":"BEA183581201277349900"},{"CDFG":2,"PATI":"跨行转账","FSJE":3084.42,"FSSJ":"12:10","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":7985105.84,"YOTU":"1221-1221费6.8元","BEZH":"","T24F":"BEA183581210298760101"},{"CDFG":2,"PATI":"电子内转","FSJE":27183.17,"FSSJ":"12:33","DFZH":"03002358707","DFBZ":"CNY","DFHM":"上海大众交通二手机动车经营有限公司","VCTP":"","VCNO":"","YUER":8012289.01,"YOTU":"经营公司社保往来　","BEZH":"","T24F":"FT18358790792232"},{"CDFG":2,"PATI":"电子内转","FSJE":5279.58,"FSSJ":"12:33","DFZH":"03002358882","DFBZ":"CNY","DFHM":"上海大众交通旧机动车经纪有限公司","VCTP":"","VCNO":"","YUER":8017568.59,"YOTU":"经纪公司社保往来　","BEZH":"","T24F":"FT18358610006720"},{"CDFG":2,"PATI":"转账","FSJE":9284292.00,"FSSJ":"15:11","DFZH":"090000000002371109","DFBZ":"CNY","DFHM":"上海市国库收付中心零余额专户","VCTP":"","VCNO":"","YUER":17301860.59,"YOTU":"8207011186658848 600192550097","BEZH":"2018年11月出租汽车临时性成品油价格补助","T24F":"FT18358719019059"}],"ACNO":31685803002369318,"SUMU":"0006","JFBS":""}}

@@ -39,7 +39,7 @@ var $page = function () {
         //新增
         $("#btnAdd").on("click", function () {
             //window.location.open = "/VoucherManageManagement/VoucherListDetail/Index";
-            window.open("/CapitalCenterManagement/OrderListDraftDetail/Index");
+            window.open("/ReimbursementCenter/ROrderListDraftDetail/Index");
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -104,7 +104,7 @@ var $page = function () {
     //删除
     function dele(selection) {
         $.ajax({
-            url: "/CapitalCenterManagement/OrderListDraft/DeleteOrderListInfo",
+            url: "/ReimbursementCenter/ROrderListDraft/DeleteOrderListInfo",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -124,7 +124,7 @@ var $page = function () {
     //提交
     function submit(selection) {
         $.ajax({
-            url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
+            url: "/ReimbursementCenter/ROrderListDraft/UpdataOrderListInfo",
             data: { vguids: selection, status: "2" },
             //traditional: true,
             type: "post",
@@ -144,7 +144,7 @@ var $page = function () {
     //审核
     function check(selection) {
         $.ajax({
-            url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
+            url: "/ReimbursementCenter/ROrderListDraft/UpdataOrderListInfo",
             data: { vguids: selection, status: "3" },
             //traditional: true,
             type: "post",
@@ -187,8 +187,8 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "status": status, "FillingDate": $("#FillingDate").val() },
-                url: "/CapitalCenterManagement/OrderListDraft/GetOrderListDatas"   //获取数据源的路径
+                data: { "status": 1, "FillingDate": $("#FillingDate").val() },
+                url: "/ReimbursementCenter/ROrderListDraft/GetOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -228,7 +228,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.open("/CapitalCenterManagement/OrderListDraftDetail/Index?VGUID=" + row.VGUID);
+            window.open("/ReimbursementCenter/ROrderListDraftDetail/Index?VGUID=" + row.VGUID);
         });
     }
 

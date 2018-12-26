@@ -29,7 +29,7 @@ var $page = function () {
             //费用报销中心
             $("#ReimbursementCenterManagemnet").click(function () {
                 switch (GetHrefPageId("4")) {
-                    case "401": CookieHelper.SaveCookie("Cost_Reimbursement"); window.location.href = "";
+                    case "401": CookieHelper.SaveCookie("ROrderListDraft_ROrderListManage"); window.location.href = "/ReimbursementCenter/ROrderListDraft/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
                 }

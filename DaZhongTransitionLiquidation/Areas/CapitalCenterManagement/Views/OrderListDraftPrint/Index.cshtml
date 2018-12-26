@@ -1,13 +1,20 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 @{
     ViewBag.Title = "支付订单/订单打印";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section js{
     <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.Content("~/_theme/tool/jquery.PrintArea.min.js")"></script>
     <script src="@Url.Content("~/Areas/CapitalCenterManagement/Views/_js/OrderListDraftPrint.js")"></script>
 }
-
+@section css{
+    <link href="@Url.Content("~/Areas/CapitalCenterManagement/Views/_css/OrderListDraftPrint.css")" rel="stylesheet" />
+}
+<style>
+  
+</style>
 <table id="hideButton" style="margin-top: 10px;">
     <tr style="height: 50px;">
         <td style="width: 95px;">
@@ -21,28 +28,35 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">打印单据</span></div>
     </div>
-    <div class="body_mk" style="height: 1000px;">
-        <table style="width:97%">
+    <div class="body_mk" style="height: 800px;">
+        <style type="text/css">
+            #VoucherListTitle td {
+                font-family: SimSun;
+            }
+            #VoucherList td {
+                font-family: SimSun;
+            }
+        </style>
+        <table id="VoucherListTitle" style="width:1505px">
             <tr style="height:50px">
-                <td style="text-align: center;font-size: 40px;" colspan="2">大众交通(集团)股份有限公司大众出租汽车分公司</td>
+                <td style="text-align: center;font-size: 35px;" colspan="2">大众交通(集团)股份有限公司大众出租汽车分公司</td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align: center;font-size: 40px;" colspan="2">付 款 凭 单</td>
+                <td style="text-align: center;font-size: 35px;" colspan="2">付 款 凭 单</td>
             </tr>
             <tr style="height:30px">
-                <td style="text-align: right;" colspan="2">附单据：<label id="AttachmentNumber" for=""></label>张</td>
+                <td style="text-align: right;" colspan="2">附单据：<label id="AttachmentNumber" for=""></label> 张</td>
             </tr>
             <tr style="height:30px">
-                <td style="text-align: center;"><label id="SubmitDate" for=""></label></td>
-                <td style="text-align: right;">其中发票：<label id="InvoiceNumber" for=""></label>张</td>
+                <td style="text-align: center;width: 1000px;"><label id="FillingDate" for="" style="font-size: 25px;margin-left: 500px;font-family: SimSun;"></label></td>
+                <td style="text-align: right;">其中发票：<label id="InvoiceNumber" for=""></label> 张</td>
             </tr>
         </table>
-        <br/>
-        <table id="VoucherList" style="width:100%;" border="1" cellspacing="0">
+        <br />
+        <table id="VoucherList" style="width:1555px;" border="1" cellspacing="0">
             <tr style="height:30px">
                 <td style="text-align: center;font-size: 20px;" rowspan="3" colspan="2">受款人/部门/单位</td>
-
-                <td style="text-align: center;width: 1000px;" rowspan="3">123</td>
+                <td style="text-align: left;width: 1000px;" rowspan="3">&nbsp;&nbsp;<label id="PaymentCompany" for="" style="font-size: 18px;font-family: SimSun;"></label>@*<input id="PaymentCompany" type="text" style="width: 750px;" class="form-control" />*@</td>
                 <td style="text-align: center;font-size: 20px;" colspan="3">支付方式</td>
             </tr>
             <tr style="height:30px">
@@ -51,37 +65,36 @@
                 <td style="text-align: center;width: 100px;">其他</td>
             </tr>
             <tr style="height:30px">
-
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;"><label id="Cash" for="" style="font-family: SimSun;"></label></td>
+                <td style="text-align: center;"><label id="Bank" for="" style="font-family: SimSun;"></label></td>
+                <td style="text-align: center;"><label id="Other" for="" style="font-family: SimSun;"></label></td>
             </tr>
-            <tr style="height:400px">
-                <td style="text-align: center;width: 100px;font-size: 20px;" >付  款<br>内  容</td>
-                <td style="text-align: center;" colspan="5">12345567899</td>
+            <tr style="height:300px">
+                <td style="text-align: center;width: 100px;font-size: 20px;">付  款<br><br><br>内  容</td>
+                <td style="text-align: left;" colspan="5">&nbsp;&nbsp;<label id="PaymentContents" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
             </tr>
-            <tr style="height:90px">
+            <tr style="height:70px">
                 <td style="text-align: center;font-size: 20px;">金额</td>
-                <td style="text-align: left;font-size: 20px;" colspan="2">&nbsp;&nbsp;人民币<br>（大写）</td>
+                <td style="text-align: left;font-size: 20px;" colspan="2">&nbsp;人民币（大写）  <label id="CapitalizationMoney" for="" style="font-family: SimSun;"></label></td>
 
-                <td style="text-align: left;font-size: 25px;" colspan="3">&nbsp;&nbsp;¥ </td>
+                <td style="text-align: left;font-size: 25px;" colspan="3">&nbsp;¥ <label id="Money" for="" style="font-size: 20px;font-family: SimSun;"></label></td>
             </tr>
         </table>
         <br/>
         <table style="width: 100%;">
             <tr style="height:80px">
-                <td style="text-align: left;width: 50px;">企 负<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责<br>业 人</td>
-                <td style="text-align: left;"><label id="EnterpriseLeader" for="">1</label></td>
-                <td style="text-align: left;width: 50px;">分 负<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责<br>管 人</td>
-                <td style="text-align: left;"><label id="ResponsibleLeader" for="">2</label></td>
-                <td style="text-align: left;width: 50px;">计 审<br>财<br>部 核</td>
-                <td style="text-align: left;"><label id="JiCaiBuExamine" for="">3</label></td>
-                <td style="text-align: left;width: 50px;">部 主<br><br>门 管</td>
-                <td style="text-align: left;"><label id="DepartmentHead" for="">4</label></td>
-                <td style="text-align: left;width: 50px;">出<br><br>纳</td>
-                <td style="text-align: left;"><label id="Cashier" for="">5</label></td>
-                <td style="text-align: left;width: 50px;">受 经<br>款 办<br>人 人</td>
-                <td style="text-align: left;"><label id="Payee" for="">6</label></td>
+                <td style="text-align: center;width: 50px;font-size: 18px;font-family: SimSun;">企 负<br>&nbsp; 责<br>业 人</td>
+                <td style="text-align: center;"><label id="EnterpriseLeader" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
+                <td style="text-align: left;width: 50px;font-size: 18px;font-family: SimSun;">分 负<br>&nbsp; 责<br>管 人</td>
+                <td style="text-align: center;"><label id="ResponsibleLeader" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
+                <td style="text-align: left;width: 50px;font-size: 18px;font-family: SimSun;">计 审<br>财<br>部 核</td>
+                <td style="text-align: center;"><label id="JiCaiBuExamine" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
+                <td style="text-align: left;width: 50px;font-size: 18px;font-family: SimSun;">部 主<br><br>门 管</td>
+                <td style="text-align: center;"><label id="DepartmentHead" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
+                <td style="text-align: left;width: 50px;font-size: 18px;font-family: SimSun;">出<br><br>纳</td>
+                <td style="text-align: center;"><label id="Cashier" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
+                <td style="text-align: left;width: 50px;font-size: 18px;font-family: SimSun;">受 经<br>款 办<br>人 人</td>
+                <td style="text-align: center;"><label id="Payee" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
             </tr>
         </table>
     </div>

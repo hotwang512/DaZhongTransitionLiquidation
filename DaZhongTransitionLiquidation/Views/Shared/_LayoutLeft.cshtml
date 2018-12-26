@@ -508,7 +508,30 @@
         </div>
     }
     @******************************************************费用报销中心******************************************************@
-
+    @if (isSysadmin || hasReportPermission)
+    {
+        <div class="menue_header ROrderListManage" style="display: none;">
+            <table style="cursor: pointer;">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">订单管理</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="menue_body" id="ROrderListManage" style="display: none;">
+            <table>
+                @if (currentUserRoleModules.Any(i => i.PageName == "订单草稿" && i.Reads == 1) || isSysadmin)
+                {
+                    <tr class="menue_item" id="ReimbursementCenter_ROrderListManage" pageurl="/ReimbursementCenter/ROrderListDraft/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">订单草稿</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
     @******************************************************报表管理中心******************************************************@
     @if (isSysadmin || hasReportPermission)
     {

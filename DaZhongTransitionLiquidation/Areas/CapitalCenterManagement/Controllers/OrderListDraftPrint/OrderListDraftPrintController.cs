@@ -1,5 +1,6 @@
 ﻿using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
+        }
+        public JsonResult GetOrderListDraftPrint(Guid vguid)
+        {
+            Business_OrderListDraft orderList = new Business_OrderListDraft();
+            DbBusinessDataService.Command(db =>
+            {
+                //主信息
+                orderList = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == vguid);
+            });
+            return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
     }
 }

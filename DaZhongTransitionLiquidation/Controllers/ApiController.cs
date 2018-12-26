@@ -252,29 +252,29 @@ namespace DaZhongTransitionLiquidation.Controllers
         /// <param name="OrderListAPI">
         ///  /// 请求示例:
         /// {
-        /// PaymentCompany:"付款公司",       
-        /// BusinessType:"保险类",
-        /// BusinessProject:"投保",
-        /// Money:"100000",
-        /// Founder: "admin",
-        /// PaymentContents:"付款内容(摘要)"
+        /// PaymentCompany:"大众交通(集团)股份有限公司 付款公司",       
+        /// ServiceCategory:"保险（1001）",
+        /// BusinessProject:"投保（1001001）",
+        /// Amount:"100000",
+        /// Sponsor: "安全系统 发起人",
+        /// Summary:"安全系统 保险（1001）投保（1001001） 付款内容(摘要)"
         /// }
         /// </param>
         /// <returns></returns>
-        public JsonResult SavePaymentOrder(Business_OrderListDraft OrderListAPI)
+        public JsonResult Pay_BuildPaymentVoucher(Business_OrderListAPI OrderListAPI)
         {
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             try
             {
                 ExpCheck.Exception(OrderListAPI.PaymentCompany == null, "付款公司为空！");
-                ExpCheck.Exception(OrderListAPI.BusinessType == null, "类别为空！");
+                ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
                 ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");
-                ExpCheck.Exception(OrderListAPI.Money == null, "金额为空！");
-                ExpCheck.Exception(OrderListAPI.Founder == null, "发起人为空！");
-                ExpCheck.Exception(OrderListAPI.PaymentContents == null, "摘要为空！");
+                ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
+                ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
+                ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
                 if (OrderListAPI != null)
                 {
-                    var BusinessType = OrderListAPI.BusinessType;
+                    var BusinessType = OrderListAPI.ServiceCategory;
                     var BusinessProject = OrderListAPI.BusinessProject;
                     //var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
@@ -288,17 +288,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                                .ToList().FirstOrDefault();
                     //数据存入订单草稿表，生成订单
                     var guid = Guid.NewGuid();
+                    Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
-                        OrderListAPI.PaymentCompany = data.PaymentCompany;
+                        orderListDraft.PaymentCompany = OrderListAPI.PaymentCompany;
+                        orderListDraft.PaymentContents = OrderListAPI.Summary;
+                        orderListDraft.FillingDate = DateTime.Now;
+                        orderListDraft.Founder = OrderListAPI.Sponsor;
+                        orderListDraft.Money = OrderListAPI.Amount.TryToDecimal();
                         //OrderListAPI.Mode = data.Mode;
                         //OrderListAPI.VehicleType = data.VehicleType;
-                        OrderListAPI.SubmitDate = DateTime.Now;
-                        OrderListAPI.PaymentMethod = data.PaymentMethod;
+                        orderListDraft.SubmitDate = DateTime.Now;
+                        orderListDraft.PaymentMethod = data.PaymentMethod;
                         //OrderListAPI.AttachmentNumber = data.AttachmentNumber;
                         //OrderListAPI.InvoiceNumber = data.InvoiceNumber;
-                        OrderListAPI.VGUID = guid;
-                        _db.Insertable<Business_OrderListDraft>(OrderListAPI).ExecuteCommand();
+                        orderListDraft.VGUID = guid;
+                        _db.Insertable<Business_OrderListDraft>(orderListDraft).ExecuteCommand();
                     }
                 }
                 return Json(new

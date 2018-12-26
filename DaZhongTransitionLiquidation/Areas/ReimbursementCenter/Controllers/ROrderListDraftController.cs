@@ -10,14 +10,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDraft
+namespace DaZhongTransitionLiquidation.Areas.ReimbursementCenter.Controllers
 {
-    public class OrderListDraftController : BaseController
+    public class ROrderListDraftController : BaseController
     {
-        public OrderListDraftController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        public ROrderListDraftController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
         }
-        // GET: CapitalCenterManagement/OrderListDraft
+        // GET: ReimbursementCenter/ROrderListDraft
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);

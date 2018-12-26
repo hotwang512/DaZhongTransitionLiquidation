@@ -29,8 +29,8 @@ var $page = function () {
             var money = $("#Money").val();
             if (money != "") {
                 var value = smalltoBIG(money);
-                $("#CapitalizationMoney").val(value);
-                $("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
+                $("#CapitalizationMoney").text(value);
+                //$("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
             }
         });
         $("#VisitorsNumber").blur(function () {
@@ -47,6 +47,20 @@ var $page = function () {
                 $("#NumberCount").val((parseInt(visitorsNumber) + parseInt(escortNumber)));
             }
         });
+
+        $('.types').click(function (event) {
+            var id = event.target.id;
+            switch (id) {
+                case "Cash": $("#Cash").text("√"); $("#Bank").text("选择"); $("#Other").text("选择"); $("#PaymentMethod").val("现金");
+                    break;
+                case "Bank": $("#Bank").text("√"); $("#Cash").text("选择"); $("#Other").text("选择"); $("#PaymentMethod").val("银行");
+                    break;
+                case "Other": $("#Other").text("√"); $("#Cash").text("选择"); $("#Bank").text("选择"); $("#PaymentMethod").val("其他");
+                    break;
+                default:
+
+            }
+        })
         //取消
         $("#btnCancel").on("click", function () {
             window.close();
@@ -54,24 +68,24 @@ var $page = function () {
         //保存
         $("#btnSave").on("click", function () {
             $.ajax({
-                url: "/CapitalCenterManagement/OrderListDraftDetail/SaveOrderListDetail",
+                url: "/ReimbursementCenter/ROrderListDraftDetail/SaveOrderListDetail",
                 //data: { vguids: selection },
                 data: {
                     "VGUID": $("#VGUID").val(),
-                    "BusinessType": $("#BusinessType").val(),
-                    "BusinessProject": $("#BusinessProject").val(),
-                    "BusinessSubItem1": $("#BusinessSubItem1").val(),
-                    "BusinessSubItem2": $("#BusinessSubItem2").val(),
-                    "BusinessSubItem3": $("#BusinessSubItem3").val(),
-                    "OrderDate": $("#OrderDate").val(),
-                    "OrderTime": $("#OrderTime").val(),
+                    //"BusinessType": $("#BusinessType").val(),
+                    //"BusinessProject": $("#BusinessProject").val(),
+                    //"BusinessSubItem1": $("#BusinessSubItem1").val(),
+                    //"BusinessSubItem2": $("#BusinessSubItem2").val(),
+                    //"BusinessSubItem3": $("#BusinessSubItem3").val(),
+                    //"OrderDate": $("#OrderDate").val(),
+                    //"OrderTime": $("#OrderTime").val(),
                     "PaymentCompany": $("#PaymentCompany").val(),
-                    "CollectionCompany": $("#CollectionCompany").val(),
-                    "VisitorsNumber": $("#VisitorsNumber").val(),
-                    "EscortNumber": $("#EscortNumber").val(),
-                    "NumberCount": $("#NumberCount").val(),
-                    "VehicleType": $("#VehicleType").val(),
-                    "Money": $("#Money").val(),
+                    //"CollectionCompany": $("#CollectionCompany").val(),
+                    //"VisitorsNumber": $("#VisitorsNumber").val(),
+                    //"EscortNumber": $("#EscortNumber").val(),
+                    //"NumberCount": $("#NumberCount").val(),
+                    //"VehicleType": $("#VehicleType").val(),
+                    //"Money": $("#Money").val(),
                     "CapitalizationMoney": $("#CapitalizationMoney").val(),
                     "EnterpriseLeader": $("#EnterpriseLeader").val(),
                     "ResponsibleLeader": $("#ResponsibleLeader").val(),
@@ -82,10 +96,11 @@ var $page = function () {
                     "Status": "1",
                     "Founder": $("#LoginName").val(),
                     "Attachment": $("#Attachment").val(),
-                    "InvoiceNumber":$("#InvoiceNumber").val(),
+                    "InvoiceNumber": $("#InvoiceNumber").val(),
                     "AttachmentNumber": $("#AttachmentNumber").val(),
                     "PaymentContents": $("#PaymentContents").val(),
-                    "FillingDate": $("#FillingDate").val()
+                    "FillingDate": $("#FillingDate").val(),
+                    "PaymentMethod": $("#PaymentMethod").val()
                 },
                 type: "post",
                 success: function (msg) {
@@ -102,7 +117,7 @@ var $page = function () {
                 }
             });
         })
-        
+
         $("#btnUp").on("click", function () {
             var selection = [];
             var grid = $("#jqxTable");
@@ -145,7 +160,7 @@ var $page = function () {
         //提交
         function submit(selection) {
             $.ajax({
-                url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
+                url: "/ReimbursementCenter/OrderListDraft/UpdataOrderListInfo",
                 data: { vguids: selection, status: "2" },
                 //traditional: true,
                 type: "post",
@@ -166,7 +181,7 @@ var $page = function () {
         //审核
         function check(selection) {
             $.ajax({
-                url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
+                url: "/ReimbursementCenter/OrderListDraft/UpdataOrderListInfo",
                 data: { vguids: selection, status: "3" },
                 //traditional: true,
                 type: "post",
@@ -189,7 +204,7 @@ var $page = function () {
 
     function getOrderListDetail() {
         $.ajax({
-            url: "/CapitalCenterManagement/OrderListDraftDetail/GetOrderListDetail",
+            url: "/ReimbursementCenter/ROrderListDraftDetail/GetOrderListDetail",
             data: {
                 "vguid": $("#VGUID").val(),
             },
@@ -210,29 +225,29 @@ var $page = function () {
                 //$("#BusinessSubItem3").val(msg.BusinessSubItem3);
                 //$("#OrderDate").val(msg.OrderDate);
                 //$("#OrderTime").val(msg.OrderTime);
-                $("#PaymentCompany").text(msg.PaymentCompany);
-                //$("#CollectionCompany").text(msg.CollectionCompany);
-                //$("#VisitorsNumber").text(msg.VisitorsNumber);
-                //$("#EscortNumber").text(msg.EscortNumber);
-                //$("#NumberCount").text(msg.NumberCount);
+                $("#PaymentCompany").val(msg.PaymentCompany);
+                //$("#CollectionCompany").val(msg.CollectionCompany);
+                //$("#VisitorsNumber").val(msg.VisitorsNumber);
+                //$("#EscortNumber").val(msg.EscortNumber);
+                //$("#NumberCount").val(msg.NumberCount);
 
-                $("#Money").text(msg.Money);
+                $("#Money").val(msg.Money);
                 $("#CapitalizationMoney").text(msg.CapitalizationMoney);
-                $("#EnterpriseLeader").text(msg.EnterpriseLeader);
-                $("#ResponsibleLeader").text(msg.ResponsibleLeader);
-                $("#JiCaiBuExamine").text(msg.JiCaiBuExamine);
-                $("#DepartmentHead").text(msg.DepartmentHead);
-                $("#Cashier").text(msg.Cashier);
-                $("#Payee").text(msg.Payee);
+                $("#EnterpriseLeader").val(msg.EnterpriseLeader);
+                $("#ResponsibleLeader").val(msg.ResponsibleLeader);
+                $("#JiCaiBuExamine").val(msg.JiCaiBuExamine);
+                $("#DepartmentHead").val(msg.DepartmentHead);
+                $("#Cashier").val(msg.Cashier);
+                $("#Payee").val(msg.Payee);
                 $("#InvoiceNumber").text(msg.InvoiceNumber);
                 $("#AttachmentNumber").text(msg.AttachmentNumber);
-                $("#PaymentContents").text(msg.PaymentContents);
-                //$("#FillingDate").text(msg.FillingDate);
+                $("#PaymentContents").val(msg.PaymentContents);
+                //$("#FillingDate").val(msg.FillingDate);
                 var fillingDate = parseInt(msg.FillingDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var date = $.convert.toDate(new Date(fillingDate), "yyyy-MM-dd");
-                var d = date.split("-")[0] + " 年 " + date.split("-")[1] + " 月 " + date.split("-")[2] + " 日";
-                $("#FillingDate").text(d);
-
+                //var d = date.split("-")[0] + " 年 " + date.split("-")[1] + " 月 " + date.split("-")[2] + " 日";
+                $("#FillingDate").val(date);
+                $("#PaymentMethod").val(msg.PaymentMethod);
                 switch (msg.PaymentMethod) {
                     case "现金": $("#Cash").text("√");
                         break;
@@ -343,8 +358,8 @@ function removeAttachment(obj) {
     //attValue = attValue.replace(reg, "");
     var count = (attValue.split('发票&')).length - 1;
     var counts = (attValue.split('其他&')).length - 1;
-    $("#InvoiceNumber").val(count);
-    $("#AttachmentNumber").val(count+counts);
+    $("#InvoiceNumber").text(count);
+    $("#AttachmentNumber").text(count + counts);
     return false;
 }
 

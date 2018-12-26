@@ -68,28 +68,38 @@
         border: 0;
         -webkit-appearance: none;
     }
+    .title_content{
+        z-index: 9999;
+        position: fixed ! important;
+    }
+    #dg{
+        z-index: 9999; position: fixed ! important;margin-top: -52px;background-color: whitesmoke;width: 1557px;
+    }
 </style>
-<table id="hideButton" style="margin-top: 10px;">
-    <tr style="height: 50px;">
-        <td style="width: 95px;">
-            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-        </td>
-        <td style="width: 95px;">
-            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
-        </td>
-    </tr>
-    @*<tr style="height: 50px;">
-        <td style="width: 95px;">
-            <button id="btnUp" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">提交</span></button>
-        </td>
-        <td style="width: 95px;">
-            <button id="btnCheck" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">审核</span></button>
-        </td>
-    </tr>*@
-</table>
+
+<div id="dg" style="">
+    <table id="hideButton" style="margin-top: 0px; right: 0px; top: 0px;">
+        <tr style="height: 50px;">
+            <td style="width: 95px;">
+                <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+            <td style="width: 95px;">
+                <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </td>
+        </tr>
+        @*<tr style="height: 50px;">
+                <td style="width: 95px;">
+                    <button id="btnUp" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnCheck" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">审核</span></button>
+                </td>
+            </tr>*@
+    </table>
+</div>
 
 <div class="mk">
-    <div class="header_mk">
+    <div class="header_mk" style="margin-top: 100px;">
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>

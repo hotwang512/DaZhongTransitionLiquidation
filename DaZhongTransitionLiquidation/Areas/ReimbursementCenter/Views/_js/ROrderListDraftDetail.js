@@ -31,6 +31,8 @@ var $page = function () {
                 var value = smalltoBIG(money);
                 $("#CapitalizationMoney").text(value);
                 //$("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
+            } else {
+                $("#CapitalizationMoney").text("");
             }
         });
         $("#VisitorsNumber").blur(function () {
@@ -86,7 +88,7 @@ var $page = function () {
                     //"NumberCount": $("#NumberCount").val(),
                     //"VehicleType": $("#VehicleType").val(),
                     //"Money": $("#Money").val(),
-                    "CapitalizationMoney": $("#CapitalizationMoney").val(),
+                    "CapitalizationMoney": $("#CapitalizationMoney").text(),
                     "EnterpriseLeader": $("#EnterpriseLeader").val(),
                     "ResponsibleLeader": $("#ResponsibleLeader").val(),
                     "JiCaiBuExamine": $("#JiCaiBuExamine").val(),
@@ -97,8 +99,8 @@ var $page = function () {
                     "Founder": $("#LoginName").val(),
                     "Attachment": $("#Attachment").val(),
                     "InvoiceNumber": $("#InvoiceNumber").val(),
-                    "AttachmentNumber": $("#AttachmentNumber").val(),
-                    "PaymentContents": $("#PaymentContents").val(),
+                    "AttachmentNumber": $("#AttachmentNumber").text(),
+                    "PaymentContents": $("#PaymentContents").text(),
                     "FillingDate": $("#FillingDate").val(),
                     "PaymentMethod": $("#PaymentMethod").val()
                 },

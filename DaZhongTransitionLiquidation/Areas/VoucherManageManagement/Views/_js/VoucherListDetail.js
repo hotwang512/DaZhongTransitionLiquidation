@@ -22,7 +22,7 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        addSectionDiv();
+        
         uiEngineHelper.bindSelect('#CompanyCode', CompanyCode, "Code", "Descrption");
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
@@ -30,6 +30,7 @@ var $page = function () {
             getVoucherDetail();
             $("#VoucherType").attr("disabled", "disableds");
         } else {
+            addSectionDiv();
             $("#hideButton").show();
         }
         $("#DocumentMaker").val($("#LoginName").val());

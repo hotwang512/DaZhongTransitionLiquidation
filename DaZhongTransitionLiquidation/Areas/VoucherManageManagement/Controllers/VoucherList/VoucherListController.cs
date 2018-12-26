@@ -52,7 +52,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     db.Deleteable<Business_VoucherDetail>(x => x.VoucherVGUID == item).ExecuteCommand();
                     //删除附件信息
                     db.Deleteable<Business_VoucherAttachmentList>(x => x.VoucherVGUID == item).ExecuteCommand();
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
             });
@@ -71,7 +71,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     {
                         Status = status,
                     }).Where(it => it.VGUID == item).ExecuteCommand();
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
             });

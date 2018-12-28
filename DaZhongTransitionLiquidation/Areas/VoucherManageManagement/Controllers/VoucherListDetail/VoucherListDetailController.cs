@@ -74,8 +74,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                                   order by VoucherNo desc", new { @NowDate = date });
                     var batchName = GetBatchName(voucherType, flowNo);
                     var voucherName = GetVoucherName(voucherNo);
+                    var attach = attachment.Split(",");
                     //主表信息
                     Business_VoucherList voucherList = new Business_VoucherList();
+                    voucherList.AttachmentDetail = "";
+                    foreach (var item in attach)
+                    {
+                        voucherList.AttachmentDetail += item + ",";
+                    }
+                    voucherList.AttachmentDetail = voucherList.AttachmentDetail.Substring(0, voucherList.AttachmentDetail.Length - 1);
                     voucherList.AccountingPeriod = voucher.AccountingPeriod;
                     voucherList.Auditor = voucher.Auditor;
                     voucherList.Bookkeeping = voucher.Bookkeeping;
@@ -90,7 +97,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     voucherList.VoucherType = voucherType;
                     voucherList.CreditAmountTotal = loanMoney;
                     voucherList.DebitAmountTotal = borrowMoney;
-                    voucherList.AttachmentDetail = attachment;
                     voucherList.CreateTime = DateTime.Now;
                     var guid = voucher.VGUID;
                     if(guid == Guid.Empty)
@@ -133,8 +139,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         db.Insertable(voucherdetailList).ExecuteCommand();
                     }
                     if(attachment != null)
-                    {
-                        var attach = attachment.Split(",");
+                    {    
                         List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
                         //删除现有附件数据
                         db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();

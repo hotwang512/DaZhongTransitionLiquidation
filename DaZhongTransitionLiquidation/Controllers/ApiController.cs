@@ -272,6 +272,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
                 ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
                 ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
+                var guid = Guid.NewGuid();
                 if (OrderListAPI != null)
                 {
                     var BusinessType = OrderListAPI.ServiceCategory;
@@ -287,7 +288,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
                                .ToList().FirstOrDefault();
                     //数据存入订单草稿表，生成订单
-                    var guid = Guid.NewGuid();
+                    
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
@@ -308,7 +309,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 return Json(new
                 {
-                    errmsg = "ok"
+                    errmsg = "/CapitalCenterManagement/OrderListDraftPrint/Index?VGUID=" + guid
                 });
             }
             catch (Exception ex)

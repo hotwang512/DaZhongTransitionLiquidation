@@ -32,6 +32,14 @@ namespace DaZhongTransitionLiquidation.Areas.ReimbursementCenter.Controllers
                 {
                     //var companyCode = sevenSection.CompanySection;
                     //sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.Code == companyCode && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").Descrption;
+                    var attachment = sevenSection.Attachment;
+                    var attach = attachment.Split(",");
+                    sevenSection.Attachment = "";
+                    foreach (var item in attach)
+                    {
+                        sevenSection.Attachment += item + ",";
+                    }
+                    sevenSection.Attachment = sevenSection.Attachment.Substring(0, sevenSection.Attachment.Length - 1);
                     if (sevenSection.VGUID == Guid.Empty)
                     {
                         sevenSection.VGUID = Guid.NewGuid();
@@ -42,10 +50,10 @@ namespace DaZhongTransitionLiquidation.Areas.ReimbursementCenter.Controllers
                     {
                         db.Updateable<Business_OrderListDraft>(sevenSection).ExecuteCommand();
                     }
-                    var attachment = sevenSection.Attachment;
+                    
                     if (attachment != null)
                     {
-                        var attach = attachment.Split(",");
+                        
                         List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
                         //删除现有附件数据
                         db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == sevenSection.VGUID).ExecuteCommand();

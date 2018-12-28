@@ -98,9 +98,9 @@ var $page = function () {
                     "Status": "1",
                     "Founder": $("#LoginName").val(),
                     "Attachment": $("#Attachment").val(),
-                    "InvoiceNumber": $("#InvoiceNumber").val(),
+                    "InvoiceNumber": $("#InvoiceNumber").text(),
                     "AttachmentNumber": $("#AttachmentNumber").text(),
-                    "PaymentContents": $("#PaymentContents").text(),
+                    "PaymentContents": $("#PaymentContents").val(),
                     "FillingDate": $("#FillingDate").val(),
                     "PaymentMethod": $("#PaymentMethod").val()
                 },

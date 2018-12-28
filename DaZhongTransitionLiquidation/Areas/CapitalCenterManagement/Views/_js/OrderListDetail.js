@@ -7,7 +7,8 @@ var selector = {
 var isEdit = false;
 var vguid = "";
 var index = 0;//切换借贷
-var CompanyCode = loadCompanyCode("A");
+//var CompanyCode = loadCompanyCode("A");
+var collectionCompany = loadCollectionCompany();
 var AccountSection = null;
 var CostCenterSection = null;
 var SpareOneSection = null;
@@ -22,8 +23,10 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        var id0 = "#CompanyCode";
-        uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
+        //var id0 = "#CompanyCode";
+        //uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
+        uiEngineHelper.bindSelect('#CollectionCompany', collectionCompany, "VGUID", "CompanyOrPerson");
+        $("#CollectionCompany").prepend("<option value=\"\" selected='true'>请选择</>");
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         var myDate = new Date();
@@ -81,6 +84,8 @@ var $page = function () {
                     "CollectionCompany": $("#CollectionCompany").val(),
                     "CollectionAccount": $("#CollectionAccount").val(),
                     "CollectionBankAccount": $("#CollectionBankAccount").val(),
+                    "CollectionBank": $("#CollectionBank").val(),
+                    "CollectionBankAccountName": $("#CollectionBankAccountName").val(),
                     "PaymentMethod": $("#PaymentMethod").val(),
                 },
                 type: "post",
@@ -152,6 +157,8 @@ var $page = function () {
                 $("#CollectionCompany").val(msg.CollectionCompany);
                 $("#CollectionAccount").val(msg.CollectionAccount);
                 $("#CollectionBankAccount").val(msg.CollectionBankAccount);
+                $("#CollectionBankAccountName").val(msg.CollectionBankAccountName);
+                $("#CollectionBank").val(msg.CollectionBank);
                 $("#PaymentMethod").val(msg.PaymentMethod);
             }
         });
@@ -230,13 +237,52 @@ function gradeChange(event) {
     $("#IntercourseSection").val("");
 }
 
-function loadCompanyCode(name, companyCode, subjectCode) {
-    var url = "/VoucherManageManagement/VoucherListDetail/GetSelectSection";
+function companyChange() {
+    var companyValue = $("#CollectionCompany").val();
+    if (companyValue == "") {
+        $("#CollectionAccount").val("");
+        $("#CollectionBankAccountName").val("");
+        $("#CollectionBank").val("");
+        $("#CollectionBankAccount").val("");
+        return;
+    }
+    $.ajax({
+        url: "/CapitalCenterManagement/OrderListDetail/GetCompanyChange",
+        //async: false,
+        data: { CollectionCompany: companyValue },
+        type: "post",
+        success: function (result) {
+            value = result[0];
+            $("#CollectionAccount").val(value.BankAccount);
+            $("#CollectionBankAccountName").val(value.BankAccountName);
+            $("#CollectionBank").val(value.Bank);
+            $("#CollectionBankAccount").val(value.BankNo);
+        }
+    });
+}
+
+//function loadCompanyCode(name, companyCode, subjectCode) {
+//    var url = "/VoucherManageManagement/VoucherListDetail/GetSelectSection";
+//    var value = null;
+//    $.ajax({
+//        url: url,
+//        async: false,
+//        data: { name: name, companyCode: companyCode, subjectCode: subjectCode },
+//        type: "post",
+//        success: function (result) {
+//            value = result;
+//        }
+//    });
+//    return value;
+//}
+
+function loadCollectionCompany() {
+    var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
     var value = null;
     $.ajax({
         url: url,
         async: false,
-        data: { name: name, companyCode: companyCode, subjectCode: subjectCode },
+        data: { },
         type: "post",
         success: function (result) {
             value = result;

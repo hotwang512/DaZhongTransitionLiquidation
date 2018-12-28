@@ -35,20 +35,20 @@ var $page = function () {
                 $("#CapitalizationMoney").text("");
             }
         });
-        $("#VisitorsNumber").blur(function () {
-            var visitorsNumber = $("#VisitorsNumber").val();
-            var escortNumber = $("#EscortNumber").val();
-            if (visitorsNumber != "" && escortNumber != "") {
-                $("#NumberCount").val((parseInt(visitorsNumber) + parseInt(escortNumber)));
-            }
-        });
-        $("#EscortNumber").blur(function () {
-            var visitorsNumber = $("#VisitorsNumber").val();
-            var escortNumber = $("#EscortNumber").val();
-            if (visitorsNumber != "" && escortNumber != "") {
-                $("#NumberCount").val((parseInt(visitorsNumber) + parseInt(escortNumber)));
-            }
-        });
+        //$("#VisitorsNumber").blur(function () {
+        //    var visitorsNumber = $("#VisitorsNumber").val();
+        //    var escortNumber = $("#EscortNumber").val();
+        //    if (visitorsNumber != "" && escortNumber != "") {
+        //        $("#NumberCount").val((parseInt(visitorsNumber) + parseInt(escortNumber)));
+        //    }
+        //});
+        //$("#EscortNumber").blur(function () {
+        //    var visitorsNumber = $("#VisitorsNumber").val();
+        //    var escortNumber = $("#EscortNumber").val();
+        //    if (visitorsNumber != "" && escortNumber != "") {
+        //        $("#NumberCount").val((parseInt(visitorsNumber) + parseInt(escortNumber)));
+        //    }
+        //});
 
         $('.types').click(function (event) {
             var id = event.target.id;
@@ -87,7 +87,7 @@ var $page = function () {
                     //"EscortNumber": $("#EscortNumber").val(),
                     //"NumberCount": $("#NumberCount").val(),
                     //"VehicleType": $("#VehicleType").val(),
-                    //"Money": $("#Money").val(),
+                    "Money": $("#Money").val(),
                     "CapitalizationMoney": $("#CapitalizationMoney").text(),
                     "EnterpriseLeader": $("#EnterpriseLeader").val(),
                     "ResponsibleLeader": $("#ResponsibleLeader").val(),

@@ -187,6 +187,7 @@ var $page = function () {
 
                     { name: 'CollectionAccount', type: 'string' },
                     { name: 'CollectionBankAccount', type: 'string' },
+                    { name: 'CollectionCompanyName', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -218,7 +219,7 @@ var $page = function () {
                     { text: '业务子项1', datafield: 'BusinessSubItem1', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '收款公司', datafield: 'CollectionCompany', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '收款公司', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '收款账号', datafield: 'CollectionAccount', align: 'center', cellsAlign: 'center', },
 
                     { text: '摘要', datafield: 'Abstract', width: 200, align: 'center', cellsAlign: 'center', hidden: true },

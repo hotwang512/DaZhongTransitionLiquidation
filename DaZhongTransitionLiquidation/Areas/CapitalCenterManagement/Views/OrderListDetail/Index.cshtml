@@ -45,29 +45,40 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 200px;">
+    <div class="body_mk" style="height: 350px;">
         <table id="VoucherList" style="width:100%;">
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;"><input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务项目：</td>
                 <td style="text-align: left;"><input id="BusinessProject" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">业务子项1：</td>
-                <td style="text-align: left;"><input id="BusinessSubItem1" type="text" style="width: 200px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
+                <td style="text-align: right;">业务子项1：</td>
+                <td style="text-align: left;"><input id="BusinessSubItem1" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务子项2：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
                 <td style="text-align: right;">业务子项3：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">收款公司：</td>
-                <td style="text-align: left;"><input id="CollectionCompany" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;">公司/单位/个人：</td>
+                <td style="text-align: left;"><select id="CollectionCompany" class="input_text form-control" style="width: 200px;" onchange="companyChange()"></select></td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align: right;">收款账号：</td>
-                <td style="text-align: left;"><input id="CollectionAccount" type="text" style="width: 200px;" class="input_text form-control" /></td>
-                <td style="text-align: right;">收款银行行号：</td>
-                <td style="text-align: left;"><input id="CollectionBankAccount" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: left;"><input id="CollectionAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
+                <td style="text-align: right;">户名：</td>
+                <td style="text-align: left;"><input id="CollectionBankAccountName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>           
+                <td style="text-align: right;">银行行号：</td>
+                <td style="text-align: left;"><input id="CollectionBankAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+
+            </tr>
+            <tr>
                 <td style="text-align: right;">支付方式：</td>
                 <td style="text-align: right;">
                     <select id="PaymentMethod" style="width: 200px;" class="input_text form-control">
@@ -76,13 +87,15 @@
                         <option value="其他">其他</option>
                     </select>
                 </td>
-            </tr>
-           
-            
+                <td style="text-align: right;"></td>
+                <td style="text-align: right;"></td>
+            <tr />
+
+
             @*凭证7个段配置*@
             <tr style="height:50px;display:none">
                 @*<td style="text-align: right;">金额：</td>
-                <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>*@
+                    <td style="text-align: left;"><input id="Money" type="text" style="width: 200px;" class="input_text form-control" validatetype="decimalNumber"/></td>*@
                 <td style="text-align: right;">公司段：</td>
                 <td style="text-align: left;"><select id="CompanyCode" style="width: 200px;" class="input_text form-control" onchange="gradeChange()"></select></td>
                 <td style="text-align: right;">科目段：</td>

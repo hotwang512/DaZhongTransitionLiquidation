@@ -74,6 +74,7 @@ var $page = function () {
                         BankAccountName: selector.$txtBankAccountName_Dialog().val(),
                         Bank: selector.$txtBank_Dialog().val(),
                         BankNo: selector.$txtBankNo().val(),
+                        CompanyOrPerson:$("#CompanyOrPerson").val(),
                         VGUID: vguid
                     },
                     type: "post",
@@ -122,6 +123,7 @@ var $page = function () {
                 datafields:
                 [
                     { name: "checkbox", type: null },
+                    { name: 'CompanyOrPerson', type: 'string' },
                     { name: 'BankAccountName', type: 'string' },
                     { name: 'Bank', type: 'string' },
                     { name: 'BankAccount', type: 'string' },
@@ -152,9 +154,10 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '账号', datafield: 'BankAccount', align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
-                    { text: '户名', datafield: 'BankAccountName', align: 'center', cellsAlign: 'center' },
-                    { text: '开户行', datafield: 'Bank', align: 'center', cellsAlign: 'center' },
+                    { text: '公司/单位/个人', datafield: 'CompanyOrPerson', width:'250px',align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
+                    { text: '账号', datafield: 'BankAccount', align: 'center', width: '250px', cellsAlign: 'center', },
+                    { text: '户名', datafield: 'BankAccountName', align: 'center', width: '350px', cellsAlign: 'center' },
+                    { text: '开户行', datafield: 'Bank', align: 'center', width: '350px', cellsAlign: 'center' },
                     { text: '行号', datafield: 'BankNo', align: 'center', cellsAlign: 'center' },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
@@ -169,9 +172,10 @@ var $page = function () {
                 + rowData.BankAccount + "','"
                 + rowData.BankAccountName + "','"
                 + rowData.Bank + "','"
-                + rowData.BankNo + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BankAccount + "</a>";
+                + rowData.BankNo + "','"
+                + rowData.CompanyOrPerson + "') style=\"text-decoration: underline;color: #333;\">" + rowData.CompanyOrPerson + "</a>";
         } else {
-            container = "<span>" + rowData.BankAccount + "</span>";
+            container = "<span>" + rowData.CompanyOrPerson + "</span>";
         }
         return container;
     }
@@ -249,7 +253,7 @@ function add() {
     selector.$AddBankChannelDialog().modal("show");
 }
 
-function edit(guid, BankAccount, BankAccountName, Bank, BankNo) {
+function edit(guid, BankAccount, BankAccountName, Bank, BankNo, CompanyOrPerson) {
     selector.$txtBankAccount_Dialog().val("");
     selector.$txtBankAccountName_Dialog().val("");
     selector.$txtBank_Dialog().val("");
@@ -261,6 +265,7 @@ function edit(guid, BankAccount, BankAccountName, Bank, BankNo) {
     selector.$txtBankAccountName_Dialog().val(BankAccountName);
     selector.$txtBank_Dialog().val(Bank);
     selector.$txtBankNo().val(BankNo);
+    $("#CompanyOrPerson").val(CompanyOrPerson)
 
 
 

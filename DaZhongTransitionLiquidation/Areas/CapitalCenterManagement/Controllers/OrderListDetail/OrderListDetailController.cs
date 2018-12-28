@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
@@ -31,8 +32,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    //var companyCode = sevenSection.CompanySection;
-                    //sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.Code == companyCode && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").Descrption;
+                    var guid = new Guid(sevenSection.CollectionCompany);
+                    sevenSection.CollectionCompanyName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == guid).CompanyOrPerson;
                     if (sevenSection.VGUID == Guid.Empty)
                     {
                         sevenSection.VGUID = Guid.NewGuid();
@@ -57,6 +58,26 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 //主信息
                 orderList = db.Queryable<Business_OrderList>().Single(x => x.VGUID == vguid);
+            });
+            return Json(orderList, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult GetCollectionCompany()
+        {
+            List<Business_CustomerBankInfo> orderList = new List<Business_CustomerBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                //主信息
+                orderList = db.Queryable<Business_CustomerBankInfo>().ToList();
+            });
+            return Json(orderList, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult GetCompanyChange(Guid CollectionCompany)
+        {
+            List<Business_CustomerBankInfo> orderList = new List<Business_CustomerBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                //主信息
+                orderList = db.Queryable<Business_CustomerBankInfo>().Where(x=>x.VGUID == CollectionCompany).ToList();
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }

@@ -94,5 +94,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public int InvoiceNumber { get; set; }
         public string CollectionAccount { get; set; }
         public string CollectionBankAccount { get; set; }
+        public string CollectionCompanyName { get; set; }
+        public string CollectionBankAccountName { get; set; }
+        public string CollectionBank { get; set; }
     }
 }

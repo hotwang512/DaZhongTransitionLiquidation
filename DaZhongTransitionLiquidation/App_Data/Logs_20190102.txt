@@ -1,0 +1,35 @@
+
+-------------------------------header----------------------
+2019-01-02 09:21:04,152 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2019-01-02 11:21:05,860 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 远程服务器返回错误: (500) 内部服务器错误。
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+2019-01-02 13:21:05,902 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2019-01-02 14:56:06,222 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 远程服务器返回错误: (500) 内部服务器错误。
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2019-01-02 16:35:06,423 [96] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:System.Net.WebException: 未能解析此远程名称: 'zhangzeq.xicp.net'
+   在 System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   在 System.Net.WebClient.UploadString(Uri address, String method, String data)
+   在 System.Net.WebClient.UploadString(Uri address, String data)
+   在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25

@@ -50,10 +50,8 @@ namespace DaZhongTransitionLiquidation.Areas.ReimbursementCenter.Controllers
                     {
                         db.Updateable<Business_OrderListDraft>(sevenSection).ExecuteCommand();
                     }
-                    
                     if (attachment != null)
-                    {
-                        
+                    {                      
                         List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
                         //删除现有附件数据
                         db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == sevenSection.VGUID).ExecuteCommand();

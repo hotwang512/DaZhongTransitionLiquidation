@@ -304,6 +304,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //OrderListAPI.AttachmentNumber = data.AttachmentNumber;
                         //OrderListAPI.InvoiceNumber = data.InvoiceNumber;
                         orderListDraft.VGUID = guid;
+                        orderListDraft.Status = "1";
+                        orderListDraft.CreateTime = DateTime.Now;
                         _db.Insertable<Business_OrderListDraft>(orderListDraft).ExecuteCommand();
                     }
                 }

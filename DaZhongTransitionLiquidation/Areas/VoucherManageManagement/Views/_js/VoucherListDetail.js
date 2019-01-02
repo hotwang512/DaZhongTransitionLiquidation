@@ -420,7 +420,7 @@ var $page = function () {
                             '</select>' +
                        '</td>' +
                        '<td style="text-align: right;">' + money + '</td>' +
-                       '<td style="vertical-align: middle;padding-left: 0.8rem"><input id="' + moneyId + '" style="width: 200px;" type="text" class="input_text form-control" validatetype="required,decimalNumber" /></td>' +
+                       '<td style="vertical-align: middle;padding-left: 0.8rem"><input id="' + moneyId + '" style="width: 200px;" type="text" class="input_text form-control" value="' + moneyValue + '" validatetype="required,decimalNumber" /></td>' +
                    '</tr>' +
             '</table>' +
           '</div>';

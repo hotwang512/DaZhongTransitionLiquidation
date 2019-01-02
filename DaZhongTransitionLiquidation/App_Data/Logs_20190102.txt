@@ -33,3 +33,8 @@
    在 System.Net.WebClient.UploadString(Uri address, String method, String data)
    在 System.Net.WebClient.UploadString(Uri address, String data)
    在 DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow() 位置 E:\Project\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:行号 25
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2019-01-02 17:18:28,538 [157] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":35871.85,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":2,"Detail":[{"CDFG":2,"PATI":"跨行转账","FSJE":31581.11,"FSSJ":"16:57","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":50679570.29,"YOTU":"1230-0101费69.64元","BEZH":"","T24F":"BEA190021657200040701"},{"CDFG":2,"PATI":"跨行转账","FSJE":4290.74,"FSSJ":"17:00","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":50683861.03,"YOTU":"0101-0101费9.46元","BEZH":"","T24F":"BEA190021700502799400"}],"ACNO":31685803002369318,"SUMU":"0002","JFBS":""}}

@@ -398,6 +398,14 @@
                     <td></td>
                 </tr>
                 }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额维护" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="SubjectBalance_OracleButt" pageurl="/PaymentManagement/SubjectBalance/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">科目余额维护</td>
+                        <td></td>
+                    </tr>
+                }
             </table>
         </div>
         <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">

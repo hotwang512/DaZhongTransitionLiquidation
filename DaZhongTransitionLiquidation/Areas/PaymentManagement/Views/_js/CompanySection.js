@@ -1139,7 +1139,7 @@ function settingSection(column, code) {
         var typeAdapter = new $.jqx.dataAdapter(source);
         $("#jqxSubjectSetting").jqxTreeGrid({
             pageable: false,
-            width: 600,
+            width: 450,
             height: 300,
             pageSize: 9999999,
             //serverProcessing: true,

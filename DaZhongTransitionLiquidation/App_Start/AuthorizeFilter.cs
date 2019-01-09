@@ -22,11 +22,12 @@ namespace DaZhongTransitionLiquidation
                 cm.Add(PubConst.CostCache, Guid.NewGuid().ToString(), cm.Day * 365);
             }
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToLower();
+            var actionName = filterContext.ActionDescriptor.ActionName.ToLower();
             var noCheckControllers = new List<string>()  //无需验证的控制器
             {
                 "login","shared","api"
             };
-            if (noCheckControllers.Contains(controllerName))
+            if (noCheckControllers.Contains(controllerName) || controllerName == "orderlistdraftprint")
             {
                 return;
             }

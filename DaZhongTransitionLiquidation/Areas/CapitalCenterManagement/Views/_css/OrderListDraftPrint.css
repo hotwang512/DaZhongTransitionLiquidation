@@ -1,1 +1,18 @@
-﻿
+﻿.buttons {
+    border: 1px;
+    border-color: #dddddd;
+    border-style: solid;
+    width: 80px;
+    height: 35px;
+    line-height: 35px;
+    font-family: Calibri !important;
+    font-size: 14px;
+    font-weight: 200;
+    background-color: #F5F5F5 !important;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    color: black !important;
+    overflow-y: hidden;
+    outline: none;
+}

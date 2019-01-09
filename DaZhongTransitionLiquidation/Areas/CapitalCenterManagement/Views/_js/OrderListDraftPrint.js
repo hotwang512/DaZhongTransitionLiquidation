@@ -3,13 +3,13 @@
     this.init = function () {
         addEvent();
     }
-    var guid = $.request.queryString().VGUID;
+    
     //所有事件
     function addEvent() {
         var myDate = new Date();
         var date = myDate.toLocaleDateString();     //获取当前日期
 
-        if (guid != "" && guid != null) {
+        if (vguid != "" && vguid != null) {
             getOrderListDraftPrint();
         } 
         //打印
@@ -23,7 +23,7 @@
         $.ajax({
             url: "/CapitalCenterManagement/OrderListDraftPrint/GetOrderListDraftPrint",
             data: {
-                "vguid": guid,
+                "vguid": vguid,
             },
             type: "post",
             dataType: "json",

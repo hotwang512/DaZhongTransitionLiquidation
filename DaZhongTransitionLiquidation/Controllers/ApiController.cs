@@ -273,6 +273,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                 ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
                 ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
                 var guid = Guid.NewGuid();
+                var results = "";
+                var Ifsuccess = false;
                 if (OrderListAPI != null)
                 {
                     var BusinessType = OrderListAPI.ServiceCategory;
@@ -292,6 +294,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
+                        orderListDraft.PaymentMethod = data.PaymentMethod;
                         orderListDraft.PaymentCompany = OrderListAPI.PaymentCompany;
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
@@ -300,20 +303,26 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //OrderListAPI.Mode = data.Mode;
                         //OrderListAPI.VehicleType = data.VehicleType;
                         orderListDraft.SubmitDate = DateTime.Now;
-                        orderListDraft.PaymentMethod = data.PaymentMethod;
+                       
                         //OrderListAPI.AttachmentNumber = data.AttachmentNumber;
                         //OrderListAPI.InvoiceNumber = data.InvoiceNumber;
                         orderListDraft.VGUID = guid;
                         orderListDraft.Status = "1";
                         orderListDraft.CreateTime = DateTime.Now;
                         _db.Insertable<Business_OrderListDraft>(orderListDraft).ExecuteCommand();
+                        results = "/CapitalCenterManagement/OrderListDraftPrint/Index?VGUID=" + guid;
+                        Ifsuccess = true;
+                    }
+                    else
+                    {
+                        results = "在订单配置表中找不到信息";
                     }
                 }
                 return Json(new
                 {
-                    success = true,
+                    success = Ifsuccess,
                     errmsg = "",
-                    result = "/CapitalCenterManagement/OrderListDraftPrint/Index?VGUID=" + guid
+                    result = results
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

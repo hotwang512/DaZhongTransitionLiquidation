@@ -15,9 +15,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         {
         }
         // GET: CapitalCenterManagement/OrderListDraftPrint
-        public ActionResult Index()
+        public ActionResult Index(Guid VGUID)
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.VGUID = VGUID;
+            //ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
         public JsonResult GetOrderListDraftPrint(Guid vguid)

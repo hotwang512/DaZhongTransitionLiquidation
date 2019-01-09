@@ -74,15 +74,21 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                                   order by VoucherNo desc", new { @NowDate = date });
                     var batchName = GetBatchName(voucherType, flowNo);
                     var voucherName = GetVoucherName(voucherNo);
-                    var attach = attachment.Split(",");
-                    //主表信息
                     Business_VoucherList voucherList = new Business_VoucherList();
                     voucherList.AttachmentDetail = "";
-                    foreach (var item in attach)
+                    string[] attach = null;
+                    if (attachment != null)
                     {
-                        voucherList.AttachmentDetail += item + ",";
+                       attach = attachment.Split(",");
+                        foreach (var item in attach)
+                        {
+                            voucherList.AttachmentDetail += item + ",";
+                        }
+                        voucherList.AttachmentDetail = voucherList.AttachmentDetail.Substring(0, voucherList.AttachmentDetail.Length - 1);
                     }
-                    voucherList.AttachmentDetail = voucherList.AttachmentDetail.Substring(0, voucherList.AttachmentDetail.Length - 1);
+                    
+                    //主表信息 
+                   
                     voucherList.AccountingPeriod = voucher.AccountingPeriod;
                     voucherList.Auditor = voucher.Auditor;
                     voucherList.Bookkeeping = voucher.Bookkeeping;

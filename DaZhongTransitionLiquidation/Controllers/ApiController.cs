@@ -311,16 +311,20 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 return Json(new
                 {
-                    errmsg = "/CapitalCenterManagement/OrderListDraftPrint/Index?VGUID=" + guid
-                });
+                    success = true,
+                    errmsg = "",
+                    result = "/CapitalCenterManagement/OrderListDraftPrint/Index?VGUID=" + guid
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 LogHelper.WriteLog(ex.ToString());
                 return Json(new
                 {
-                    errmsg = ex.Message
-                });
+                    success = false,
+                    errmsg = ex.Message,
+                    result = ""
+                }, JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -65,7 +65,7 @@ var $page = function () {
         })
         //取消
         $("#btnCancel").on("click", function () {
-            window.close();
+            history.go(-1);
         })
         //保存
         $("#btnSave").on("click", function () {
@@ -112,7 +112,7 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("保存成功！", null, "success");
-                            window.close();
+                            history.go(-1);
                             window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }
@@ -173,7 +173,7 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("提交成功！", null, "success");
-                            window.close();
+                            history.go(-1);
                             window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }
@@ -194,7 +194,7 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("提交成功！", null, "success");
-                            window.close();
+                            history.go(-1);
                             window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }

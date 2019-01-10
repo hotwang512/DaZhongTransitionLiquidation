@@ -82,8 +82,6 @@
     <tr style="height: 50px;">
         <td style="width: 95px;">
             <button id="btnUp" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">提交</span></button>
-        </td>
-        <td style="width: 95px;">
             <button id="btnCheck" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">审核</span></button>
         </td>
     </tr>
@@ -94,7 +92,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 800px;">
+    <div class="body_mk" style="height: 705px;">
         <style type="text/css">
             #VoucherListTitle td {
                 font-family: SimSun;
@@ -115,7 +113,7 @@
                 <td style="text-align: center;font-size: 35px;" colspan="2">付 款 凭 单</td>
             </tr>
             <tr style="height:30px">
-                <td style="text-align: right;" colspan="2">附单据：<label id="AttachmentNumber" for=""></label> 张</td>
+                <td style="text-align: right;" colspan="2">附件张数：<label id="AttachmentNumber" for=""></label> 张</td>
             </tr>
             <tr style="height:30px">
                 <td style="text-align: center;width: 1000px;"><label id="FillingDate" for="" style="font-size: 25px;margin-left: 500px;font-family: SimSun;"></label></td>
@@ -139,11 +137,11 @@
                 <td style="text-align: center;"><label id="Bank" for="" style="font-family: SimSun;"></label></td>
                 <td style="text-align: center;"><label id="Other" for="" style="font-family: SimSun;"></label></td>
             </tr>
-            <tr style="height:300px">
+            <tr style="height:230px">
                 <td style="text-align: center;width: 100px;font-size: 20px;">付  款<br><br><br>内  容</td>
                 <td style="text-align: left;" colspan="5">&nbsp;&nbsp;<label id="PaymentContents" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
             </tr>
-            <tr style="height:70px">
+            <tr style="height:60px">
                 <td style="text-align: center;font-size: 20px;">金额</td>
                 <td style="text-align: left;font-size: 20px;" colspan="2">&nbsp;人民币（大写）  <label id="CapitalizationMoney" for="" style="font-family: SimSun;"></label></td>
 
@@ -152,7 +150,7 @@
         </table>
         <br />
         <table style="width: 1535px;margin-left: 20px;">
-            <tr style="height:80px">
+            <tr style="height:70px">
                 <td style="text-align: center;width: 50px;font-size: 18px;font-family: SimSun;">企 负<br>&nbsp; 责<br>业 人</td>
                 <td style="text-align: center;"><label id="EnterpriseLeader" for="" style="font-size: 18px;font-family: SimSun;"></label></td>
                 <td style="text-align: left;width: 50px;font-size: 18px;font-family: SimSun;">分 负<br>&nbsp; 责<br>管 人</td>
@@ -267,6 +265,7 @@
                 <td style="text-align: right;">类型：</td>
                 <td style="text-align: left;width: 150px;">
                     <select id="AttachmentType" style="width: 150px;" class="input_text form-control" validatetype="required">
+                        <option value="付款凭证">付款凭证</option>
                         <option value="发票">发票</option>
                         <option value="其他">其他</option>
                     </select>

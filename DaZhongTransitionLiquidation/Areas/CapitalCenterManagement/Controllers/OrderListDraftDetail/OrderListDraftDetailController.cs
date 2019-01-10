@@ -82,5 +82,59 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
+        public JsonResult SaveAttachment(Business_OrderListDraft sevenSection)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    //var companyCode = sevenSection.CompanySection;
+                    //sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.Code == companyCode && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").Descrption;
+                    if (sevenSection.VGUID == Guid.Empty)
+                    {
+                        //sevenSection.VGUID = Guid.NewGuid();
+                        //sevenSection.CreateTime = DateTime.Now;
+                        //db.Insertable<Business_OrderListDraft>(sevenSection).ExecuteCommand();
+                    }
+                    else
+                    {
+                        db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                        {
+                            Attachment = sevenSection.Attachment,
+                            InvoiceNumber = sevenSection.InvoiceNumber,
+                            AttachmentNumber = sevenSection.AttachmentNumber,
+                        }).Where(it => it.VGUID == sevenSection.VGUID).ExecuteCommand();
+                    }
+                    var attachment = sevenSection.Attachment;
+                    if (attachment != null)
+                    {
+                        var attach = attachment.Split(",");
+                        List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
+                        //删除现有附件数据
+                        db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == sevenSection.VGUID).ExecuteCommand();
+                        foreach (var it in attach)
+                        {
+                            Business_VoucherAttachmentList BVAttach = new Business_VoucherAttachmentList();
+                            var att = it.Split("&");
+                            if (att[1] != null)
+                            {
+                                BVAttach.Attachment = att[1];
+                                BVAttach.AttachmentType = att[0];
+                                BVAttach.CreateTime = DateTime.Now;
+                                BVAttach.VGUID = Guid.NewGuid();
+                                BVAttach.VoucherVGUID = sevenSection.VGUID;
+                            }
+                            BVAttachList.Add(BVAttach);
+                        }
+                        db.Insertable(BVAttachList).ExecuteCommand();
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
     }
 }

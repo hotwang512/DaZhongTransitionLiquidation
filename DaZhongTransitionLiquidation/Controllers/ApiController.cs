@@ -1,4 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
@@ -294,8 +295,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
+                        //var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == OrderListAPI.PaymentCompany).Descrption;
+                        //orderListDraft.OrderCompany = orderCompany;
                         orderListDraft.PaymentMethod = data.PaymentMethod;
-                        orderListDraft.PaymentCompany = OrderListAPI.PaymentCompany;
+                        orderListDraft.PaymentCompany = data.CollectionCompany;//收款人
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
                         orderListDraft.Founder = OrderListAPI.Sponsor;

@@ -49,7 +49,7 @@ var $page = function () {
         });
         //取消
         $("#btnCancel").on("click", function () {
-            window.close();
+            history.go(-1);
         })
         //保存
         $("#btnSave").on("click", function () {
@@ -95,7 +95,7 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("保存成功！", null, "success");
-                            window.close();
+                            history.go(-1);
                             window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }
@@ -104,41 +104,13 @@ var $page = function () {
         })
         
         $("#btnUp").on("click", function () {
-            var selection = [];
-            var grid = $("#jqxTable");
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-            checedBoxs.each(function () {
-                var th = $(this);
-                if (th.is(":checked")) {
-                    var index = th.attr("index");
-                    var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.VGUID);
-                }
-            });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要提交的数据！", null, "error");
-            } else {
-                WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
-            }
+            var selection = $("#VGUID").val();
+            WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
         });
         //审核
         $("#btnCheck").on("click", function () {
-            var selection = [];
-            var grid = $("#jqxTable");
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-            checedBoxs.each(function () {
-                var th = $(this);
-                if (th.is(":checked")) {
-                    var index = th.attr("index");
-                    var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.VGUID);
-                }
-            });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要提交的数据！", null, "error");
-            } else {
-                WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
-            }
+            var selection = $("#VGUID").val();
+            WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
         });
 
 
@@ -146,7 +118,10 @@ var $page = function () {
         function submit(selection) {
             $.ajax({
                 url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
-                data: { vguids: selection, status: "2" },
+                data: {
+                    vguids: selection,
+                    status: "2",
+                },
                 //traditional: true,
                 type: "post",
                 success: function (msg) {
@@ -156,7 +131,7 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("提交成功！", null, "success");
-                            window.close();
+                            history.go(-1);
                             window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }
@@ -177,7 +152,7 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("提交成功！", null, "success");
-                            window.close();
+                            history.go(-1);
                             window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                     }
@@ -296,6 +271,20 @@ $(function () {
         //$("#AttachmentNumber").val(count + counts);
         $("#InvoiceNumber").text(count);
         $("#AttachmentNumber").text(count + counts);
+        $.ajax({
+            url: "/CapitalCenterManagement/OrderListDraftDetail/SaveAttachment",
+            //data: { vguids: selection },
+            data: {
+                "VGUID": $("#VGUID").val(),
+                "Attachment": $("#Attachment").val(),
+                "InvoiceNumber": $("#InvoiceNumber").text(),
+                "AttachmentNumber": $("#AttachmentNumber").text(),
+            },
+            type: "post",
+            success: function (msg) {
+                
+            }
+        });
     })
 })
 var fileName = "";

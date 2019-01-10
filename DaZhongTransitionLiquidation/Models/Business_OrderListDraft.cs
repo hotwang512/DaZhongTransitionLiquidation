@@ -192,6 +192,7 @@ namespace DaZhongTransitionLiquidation.Models
         public DateTime? CreateTime { get; set; }
         public string Founder { get; set; }
         public string Attachment { get; set; }
-        
+        public string OrderCompany { get; set; }
+
     }
 }

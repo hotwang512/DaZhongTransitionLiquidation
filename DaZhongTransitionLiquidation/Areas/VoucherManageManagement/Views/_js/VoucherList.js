@@ -38,8 +38,8 @@ var $page = function () {
 
         //新增
         $("#btnAdd").on("click", function () {
-            //window.location.open = "/VoucherManageManagement/VoucherListDetail/Index";
-            window.open("/VoucherManageManagement/VoucherListDetail/Index");
+            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index";
+            //window.open("/VoucherManageManagement/VoucherListDetail/Index");
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -242,7 +242,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.open("/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID);
+            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
         });
     }
 

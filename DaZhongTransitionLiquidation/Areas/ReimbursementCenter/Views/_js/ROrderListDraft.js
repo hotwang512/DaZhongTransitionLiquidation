@@ -38,8 +38,8 @@ var $page = function () {
 
         //新增
         $("#btnAdd").on("click", function () {
-            //window.location.open = "/VoucherManageManagement/VoucherListDetail/Index";
-            window.open("/ReimbursementCenter/ROrderListDraftDetail/Index");
+            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index";
+            //window.open("/ReimbursementCenter/ROrderListDraftDetail/Index");
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -228,7 +228,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.open("/ReimbursementCenter/ROrderListDraftDetail/Index?VGUID=" + row.VGUID);
+            window.location.href = "/ReimbursementCenter/ROrderListDraftDetail/Index?VGUID=" + row.VGUID;
         });
     }
 

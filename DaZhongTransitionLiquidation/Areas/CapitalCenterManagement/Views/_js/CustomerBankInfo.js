@@ -104,13 +104,13 @@ var $page = function () {
                 if (th.is(":checked")) {
                     var index = th.attr("index");
                     var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.Vguid);
+                    selection.push(data.VGUID);
                 }
             });
             if (selection.length < 1) {
                 jqxNotification("请选择您要删除的数据！", null, "error");
             } else {
-                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消");
+                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消",selection);
             }
         });
 
@@ -212,22 +212,12 @@ var $page = function () {
 
 
     //删除
-    function dele() {
-        var selection = [];
-        var grid = selector.$grid();
-        var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-        checedBoxs.each(function () {
-            var th = $(this);
-            if (th.is(":checked")) {
-                var index = th.attr("index");
-                var data = grid.jqxDataTable('getRows')[index];
-                selection.push(data.VGUID);
-            }
-        });
+    function dele(selection) {
+        
         $.ajax({
             url: "/CapitalCenterManagement/CustomerBankInfo/DeleteCustomerBankInfo",
             data: { vguids: selection },
-            traditional: true,
+            //traditional: true,
             type: "post",
             success: function (msg) {
                 if (msg.IsSuccess) {

@@ -198,6 +198,7 @@
     <Content Include="Areas\PaymentManagement\Views\_js\IntercourseSection.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\SpareOne.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\SpareTwo.js" />
+    <Content Include="Areas\PaymentManagement\Views\_js\SubjectBalance.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\SubjectSection.js" />
     <Content Include="Areas\ReimbursementCenter\Views\web.config" />
     <Content Include="Areas\ReimbursementCenter\Views\_js\ROrderListDraft.js" />
@@ -247,6 +248,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\OrderListDraftPrint\Index.cshtml" />
     <Content Include="Areas\ReimbursementCenter\Views\ROrderListDraft\Index.cshtml" />
     <Content Include="Areas\ReimbursementCenter\Views\ROrderListDraftDetail\Index.cshtml" />
+    <Content Include="Areas\PaymentManagement\Views\SubjectBalance\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2237,10 +2239,13 @@
     <Compile Include="Areas\PaymentManagement\Controllers\RevenuePayment\RevenuePaymentController.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\SpareOne\SpareOneController.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\SpareTwo\SpareTwoController.cs" />
+    <Compile Include="Areas\PaymentManagement\Controllers\SubjectBalance\SubjectBalanceController.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\SubjectSection\SubjectSectionController.cs" />
     <Compile Include="Areas\PaymentManagement\Models\Business_AccountSettingInfo.cs" />
     <Compile Include="Areas\PaymentManagement\Models\Business_SevenSection.cs" />
+    <Compile Include="Areas\PaymentManagement\Models\Business_SubjectBalance.cs" />
     <Compile Include="Areas\PaymentManagement\Models\V_AccountSetting.cs" />
+    <Compile Include="Areas\PaymentManagement\Models\v_Business_SubjectSettingInfo.cs" />
     <Compile Include="Areas\PaymentManagement\PaymentManagementAreaRegistration.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftController.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftDetailController.cs" />

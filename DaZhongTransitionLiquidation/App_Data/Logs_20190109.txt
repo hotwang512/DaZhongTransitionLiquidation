@@ -166,3 +166,476 @@ Error Number:208,State:1,Class:16
 
 -------------------------------header----------------------
 2019-01-09 14:10:44,840 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":50213.08,"JFJE":0.00,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":3,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":5885.90,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":38783730.16,"YOTU":"财付通转账","BEZH":"","T24F":"BEA190090418401227701"},{"CDFG":2,"PATI":"跨行转账","FSJE":32064.79,"FSSJ":"11:41","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":38815794.95,"YOTU":"0108-0108费70.7元","BEZH":"","T24F":"BEA190091141584267301"},{"CDFG":2,"PATI":"跨行转账","FSJE":12262.39,"FSSJ":"11:48","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":38828057.34,"YOTU":"0108-0108费27.04元","BEZH":"","T24F":"BEA190091148005054601"}],"ACNO":31685803002369318,"SUMU":"0003","JFBS":""}}
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2019-01-09 15:18:09,028 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":50213.08,"JFJE":36689.34,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":3,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":5885.90,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":38783730.16,"YOTU":"财付通转账","BEZH":"","T24F":"BEA190090418401227701"},{"CDFG":2,"PATI":"跨行转账","FSJE":32064.79,"FSSJ":"11:41","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":38815794.95,"YOTU":"0108-0108费70.7元","BEZH":"","T24F":"BEA190091141584267301"},{"CDFG":2,"PATI":"跨行转账","FSJE":12262.39,"FSSJ":"11:48","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":38828057.34,"YOTU":"0108-0108费27.04元","BEZH":"","T24F":"BEA190091148005054601"},{"CDFG":1,"PATI":"跨行转账","FSJE":21500.00,"FSSJ":"14:28","DFZH":1001233319300008323,"DFBZ":"CNY","DFHM":"翰威通信有限公司","VCTP":"","VCNO":"","YUER":38806557.34,"YOTU":"划款","BEZH":"AVGQE　","T24F":"FT19009390074083"},{"CDFG":1,"PATI":"跨行转账","FSJE":14349.94,"FSSJ":"14:28","DFZH":6222620110006462684,"DFBZ":"CNY","DFHM":"林国芳","VCTP":"","VCNO":"","YUER":38792207.4,"YOTU":"划款","BEZH":"退管会费用　","T24F":"FT19009636702930"},{"CDFG":1,"PATI":"跨行转账","FSJE":144.40,"FSSJ":"14:28","DFZH":6222600110055499029,"DFBZ":"CNY","DFHM":"黄峰波","VCTP":"","VCNO":"","YUER":38792063.00,"YOTU":"划款","BEZH":"2019年度上半年特约监理员交通卡邮寄费　","T24F":"FT19009963368180"},{"CDFG":1,"PATI":"跨行转账","FSJE":200.00,"FSSJ":"14:28","DFZH":6222600110055499029,"DFBZ":"CNY","DFHM":"黄峰波","VCTP":"","VCNO":"","YUER":38791863.00,"YOTU":"划款","BEZH":"客服总队用车　","T24F":"FT19009027877159"},{"CDFG":1,"PATI":"跨行转账","FSJE":495.00,"FSSJ":"14:28","DFZH":6222620110006462676,"DFBZ":"CNY","DFHM":"陶炯","VCTP":"","VCNO":"","YUER":38791368.00,"YOTU":"划款","BEZH":"2018年12月车费　","T24F":"FT19009964854537"}],"ACNO":31685803002369318,"SUMU":"0008","JFBS":5}}
+2019-01-09 16:01:47,330 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法从用法中推断出方法“SqlSugar.IDeleteable<DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.Business_CustomerBankInfo>.In<PkType>(System.Collections.Generic.List<PkType>)”的类型参数。请尝试显式指定类型参数。
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.<>c__DisplayClass4_0.<DeleteCustomerBankInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 82
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2019-01-09 16:01:57,533 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法从用法中推断出方法“SqlSugar.IDeleteable<DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.Business_CustomerBankInfo>.In<PkType>(System.Collections.Generic.List<PkType>)”的类型参数。请尝试显式指定类型参数。
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.<>c__DisplayClass4_0.<DeleteCustomerBankInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 82
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.DeleteCustomerBankInfo(List`1 vguids) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 80
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:03:49,662 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法从用法中推断出方法“SqlSugar.IDeleteable<DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.Business_CustomerBankInfo>.In<PkType>(System.Collections.Generic.List<PkType>)”的类型参数。请尝试显式指定类型参数。
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.<>c__DisplayClass4_0.<DeleteCustomerBankInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 82
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2019-01-09 16:03:50,685 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法从用法中推断出方法“SqlSugar.IDeleteable<DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.Business_CustomerBankInfo>.In<PkType>(System.Collections.Generic.List<PkType>)”的类型参数。请尝试显式指定类型参数。
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.<>c__DisplayClass4_0.<DeleteCustomerBankInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 82
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 28
+2019-01-09 16:03:50,685 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法从用法中推断出方法“SqlSugar.IDeleteable<DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.Business_CustomerBankInfo>.In<PkType>(System.Collections.Generic.List<PkType>)”的类型参数。请尝试显式指定类型参数。
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.<>c__DisplayClass4_0.<DeleteCustomerBankInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 82
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.DeleteCustomerBankInfo(List`1 vguids) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 80
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:03:51,717 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法从用法中推断出方法“SqlSugar.IDeleteable<DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.Business_CustomerBankInfo>.In<PkType>(System.Collections.Generic.List<PkType>)”的类型参数。请尝试显式指定类型参数。
+   在 CallSite.Target(Closure , CallSite , IDeleteable`1 , Object )
+   在 SqlSugar.SqlSugarClient.Deleteable[T](Object primaryKeyValue)
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.<>c__DisplayClass4_0.<DeleteCustomerBankInfo>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 82
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:行号 33
+   在 DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo.CustomerBankInfoController.DeleteCustomerBankInfo(List`1 vguids) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs:行号 80
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+
+-------------------------------header----------------------
+2019-01-09 16:43:53,364 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":50213.08,"JFJE":36689.34,"BIZH":"CNY","HUMI":"大众交通（集团）股份有限公司大众出租汽车分公司","DFBS":3,"Detail":[{"CDFG":2,"PATI":"转账贷记","FSJE":5885.90,"FSSJ":"04:18","DFZH":243300133,"DFBZ":"CNY","DFHM":"财付通支付科技有限公司","VCTP":"","VCNO":"","YUER":38783730.16,"YOTU":"财付通转账","BEZH":"","T24F":"BEA190090418401227701"},{"CDFG":2,"PATI":"跨行转账","FSJE":32064.79,"FSSJ":"11:41","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":38815794.95,"YOTU":"0108-0108费70.7元","BEZH":"","T24F":"BEA190091141584267301"},{"CDFG":2,"PATI":"跨行转账","FSJE":12262.39,"FSSJ":"11:48","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"银联商务股份有限公司客户备付金","VCTP":"","VCNO":"","YUER":38828057.34,"YOTU":"0108-0108费27.04元","BEZH":"","T24F":"BEA190091148005054601"},{"CDFG":1,"PATI":"跨行转账","FSJE":21500.00,"FSSJ":"14:28","DFZH":1001233319300008323,"DFBZ":"CNY","DFHM":"翰威通信有限公司","VCTP":"","VCNO":"","YUER":38806557.34,"YOTU":"划款","BEZH":"AVGQE　","T24F":"FT19009390074083"},{"CDFG":1,"PATI":"跨行转账","FSJE":14349.94,"FSSJ":"14:28","DFZH":6222620110006462684,"DFBZ":"CNY","DFHM":"林国芳","VCTP":"","VCNO":"","YUER":38792207.4,"YOTU":"划款","BEZH":"退管会费用　","T24F":"FT19009636702930"},{"CDFG":1,"PATI":"跨行转账","FSJE":144.40,"FSSJ":"14:28","DFZH":6222600110055499029,"DFBZ":"CNY","DFHM":"黄峰波","VCTP":"","VCNO":"","YUER":38792063.00,"YOTU":"划款","BEZH":"2019年度上半年特约监理员交通卡邮寄费　","T24F":"FT19009963368180"},{"CDFG":1,"PATI":"跨行转账","FSJE":200.00,"FSSJ":"14:28","DFZH":6222600110055499029,"DFBZ":"CNY","DFHM":"黄峰波","VCTP":"","VCNO":"","YUER":38791863.00,"YOTU":"划款","BEZH":"客服总队用车　","T24F":"FT19009027877159"},{"CDFG":1,"PATI":"跨行转账","FSJE":495.00,"FSSJ":"14:28","DFZH":6222620110006462676,"DFBZ":"CNY","DFHM":"陶炯","VCTP":"","VCNO":"","YUER":38791368.00,"YOTU":"划款","BEZH":"2018年12月车费　","T24F":"FT19009964854537"}],"ACNO":31685803002369318,"SUMU":"0008","JFBS":5}}
+2019-01-09 16:44:34,023 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.WirterSyncBankFlow(List`1 bankFlowList) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:行号 85
+   在 DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:行号 39
+2019-01-09 16:52:15,076 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:27,321 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:27,321 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:27,321 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:27,412 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:27,412 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:27,413 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:27,413 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:27,413 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：超时时间已到。超时时间已到，但是尚未从池中获取连接。出现这种情况可能是因为所有池连接均在使用，并且达到了最大池大小。.
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:29,952 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:29,952 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:29,952 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:29,952 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:31,100 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:31,100 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:31,957 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:52:46,558 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:52:46,558 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 24
+2019-01-09 16:53:00,325 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-01-09 16:53:00,325 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: Named Pipes Provider, error: 40 - 无法打开到 SQL Server 的连接).
+   在 SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   在 SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetCount()
+   在 SqlSugar.QueryableProvider`1.Count()
+   在 SqlSugar.QueryableProvider`1.Any()
+   在 SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 34
+   在 DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) 位置 E:\Project\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:行号 29
+   在 DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) 位置 E:\Project\DaZhongTransitionLiquidation\Controllers\LoginController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)

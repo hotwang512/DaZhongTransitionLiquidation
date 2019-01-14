@@ -9,6 +9,7 @@ var vguid = "";
 var index = 0;//切换借贷
 //var CompanyCode = loadCompanyCode("A");
 var collectionCompany = loadCollectionCompany();
+var businessType = loadBusinessType();
 var AccountSection = null;
 var CostCenterSection = null;
 var SpareOneSection = null;
@@ -102,6 +103,46 @@ var $page = function () {
                     }
                 }
             });
+        })
+        //弹出框中的取消按钮
+        $("#AddBankChannel_CancelBtn").on("click", function () {
+            $("#AddBusinessType").modal("hide");
+        });
+        //弹出框中的保存按钮
+        $("#AddBankChannel_OKButton").on("click", function () {
+            var validateError = 0;//未通过验证的数量
+            if (!Validate($("#BusinessTypeName"))) {
+                validateError++;
+            }
+            if (validateError <= 0) {
+                $.ajax({
+                    url: "/CapitalCenterManagement/OrderListDetail/SaveBusinessTypeName",
+                    data: {
+                        BusinessTypeName: $("#BusinessTypeName").val(),
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("保存失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("保存成功！", null, "success");
+                                $("#AddBusinessType").modal("hide");
+                                var busin = $("#BusinessTypeName").val();
+                                var mySelect = document.getElementById("BusinessType");
+                                addOption1(mySelect, busin, busin);
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+        //新增按钮
+        $("#btnAdd").on("click", function () {
+            $("#AddBusinessType").modal("show");
+            $("#BusinessTypeName").val("");
         })
     }; //addEvent end
 
@@ -291,7 +332,25 @@ function loadCollectionCompany() {
     return value;
 }
 
+function loadBusinessType() {
+    var url = "/CapitalCenterManagement/OrderListDetail/GetBusinessType";
+    $.ajax({
+        url: url,
+        async: false,
+        data: {},
+        type: "post",
+        success: function (result) {
+            uiEngineHelper.bindSelect('#BusinessType', result, "ListKey", "BusinessTypeName");
+            $("#BusinessType").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
+
 $(function () {
     var page = new $page();
     page.init();
 });
+
+var addOption1 = function (select, txt, value, num) {
+    select.add(new Option(txt, value), num);
+}

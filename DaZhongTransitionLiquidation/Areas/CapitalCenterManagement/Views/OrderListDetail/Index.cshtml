@@ -1,7 +1,7 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 @{
-    ViewBag.Title = "支付订单/订单需求配置明细";
+    ViewBag.Title = "订单需求配置/订单需求配置明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
     var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
@@ -46,10 +46,14 @@
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
     <div class="body_mk" style="height: 350px;">
-        <table id="VoucherList" style="width:100%;">
+        <table id="VoucherList" style="width:70%;margin-left:240px">
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
-                <td style="text-align: left;"><input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: left;">
+                    <select id="BusinessType" class="input_text form-control" style="width: 200px;"></select>
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                    @*<input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" />*@
+                </td>
                 <td style="text-align: right;">业务项目：</td>
                 <td style="text-align: left;"><input id="BusinessProject" type="text" style="width: 200px;" class="input_text form-control" /></td>
             </tr>
@@ -82,8 +86,8 @@
                 <td style="text-align: right;">支付方式：</td>
                 <td style="text-align: right;">
                     <select id="PaymentMethod" style="width: 200px;" class="input_text form-control">
-                        <option value="现金">现金</option>
                         <option value="银行">银行</option>
+                        <option value="现金">现金</option>
                         <option value="其他">其他</option>
                     </select>
                 </td>
@@ -136,6 +140,31 @@
             </div>
             <div class="modal-body" style="width: 100%;">
                 <div id="jqxSubjectSection" class="jqxTable" style=""></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddBusinessType">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">新增业务类型</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <table style="width: 100%;">
+                    <tr style="height: 45px;">
+                        <td style="width: 100px;text-align: right"><span class="spanText">业务类型：</span></td>
+                        <td style="width: 150px;text-align: center">
+                            <input id="BusinessTypeName" type="text" class="input_text form-control" style="width: 200px !important;" validatetype="required" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="AddBankChannel_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                <button id="AddBankChannel_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
             </div>
         </div>
     </div>

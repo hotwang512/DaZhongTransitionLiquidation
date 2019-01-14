@@ -193,6 +193,59 @@ namespace DaZhongTransitionLiquidation.Models
         public string Founder { get; set; }
         public string Attachment { get; set; }
         public string OrderCompany { get; set; }
-
+        /// <summary>
+        /// Desc:付款账号ACON
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string OrderBankAccouont { get; set; }
+        /// <summary>
+        /// Desc:付款账号户名
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string OrderBankAccouontName { get; set; }
+        /// <summary>
+        /// Desc:付款账号开户行
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string OrderBankName { get; set; }
+        /// <summary>
+        /// Desc:收款账号OPAC
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string CollectBankAccouont { get; set; }
+        /// <summary>
+        /// Desc:收款账号户名
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string CollectBankAccountName { get; set; }
+        /// <summary>
+        /// Desc:收款账号开户行
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string CollectBankName { get; set; }
+        /// <summary>
+        /// Desc:交易序列号
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string OSNO { get; set; }
+        /// <summary>
+        /// Desc:交易状态
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string BankStatus { get; set; }
+        /// <summary>
+        /// Desc:交易最终结果描述
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string BankStatusName { get; set; }
     }
 }

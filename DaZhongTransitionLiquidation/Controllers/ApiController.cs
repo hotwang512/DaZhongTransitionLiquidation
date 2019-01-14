@@ -1,4 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
@@ -253,9 +254,11 @@ namespace DaZhongTransitionLiquidation.Controllers
         /// <param name="OrderListAPI">
         ///  /// 请求示例:
         /// {
-        /// PaymentCompany:"大众交通(集团)股份有限公司 付款公司",       
+        /// AccountSetCode:"支付单位账套代码",       
         /// ServiceCategory:"保险（1001）",
         /// BusinessProject:"投保（1001001）",
+        /// invoiceNumber:"1",
+        /// numberOfAttachments:"2",
         /// Amount:"100000",
         /// Sponsor: "安全系统 发起人",
         /// Summary:"安全系统 保险（1001）投保（1001001） 付款内容(摘要)"
@@ -267,7 +270,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             try
             {
-                ExpCheck.Exception(OrderListAPI.PaymentCompany == null, "付款公司为空！");
+                ExpCheck.Exception(OrderListAPI.AccountSetCode == null, "支付单位账套代码为空！");
                 ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
                 ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");
                 ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
@@ -295,10 +298,19 @@ namespace DaZhongTransitionLiquidation.Controllers
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
-                        //var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == OrderListAPI.PaymentCompany).Descrption;
-                        //orderListDraft.OrderCompany = orderCompany;
+                        var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == OrderListAPI.AccountSetCode).Descrption;
+                        var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == OrderListAPI.AccountSetCode && x.AccountType == "基本户").First();
+
+                        orderListDraft.OrderBankName = bankInfo.BankName;
+                        orderListDraft.OrderBankAccouont = bankInfo.BankAccount;
+                        orderListDraft.OrderBankAccouontName = bankInfo.BankAccountName;
+                        orderListDraft.CollectBankName = data.CollectionBank;
+                        orderListDraft.CollectBankAccouont = data.CollectionAccount;
+                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;
+
+                        orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod;
-                        orderListDraft.PaymentCompany = data.CollectionCompany;//收款人
+                        orderListDraft.PaymentCompany = data.CollectionCompany;//收款人/单位/公司
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
                         orderListDraft.Founder = OrderListAPI.Sponsor;
@@ -307,9 +319,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //OrderListAPI.Mode = data.Mode;
                         //OrderListAPI.VehicleType = data.VehicleType;
                         orderListDraft.SubmitDate = DateTime.Now;
-                       
-                        //OrderListAPI.AttachmentNumber = data.AttachmentNumber;
-                        //OrderListAPI.InvoiceNumber = data.InvoiceNumber;
+                        orderListDraft.InvoiceNumber = OrderListAPI.invoiceNumber;//发票
+                        orderListDraft.AttachmentNumber = OrderListAPI.numberOfAttachments;//附件
                         orderListDraft.VGUID = guid;
                         orderListDraft.Status = "1";
                         orderListDraft.CreateTime = DateTime.Now;

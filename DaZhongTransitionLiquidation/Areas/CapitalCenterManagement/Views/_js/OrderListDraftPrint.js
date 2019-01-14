@@ -40,7 +40,7 @@
                 //$("#VisitorsNumber").text(msg.VisitorsNumber);
                 //$("#EscortNumber").text(msg.EscortNumber);
                 //$("#NumberCount").text(msg.NumberCount);
-                
+                $("#OrderCompany").text(msg.OrderCompany);
                 $("#Money").text(msg.Money);
                 $("#CapitalizationMoney").text(msg.CapitalizationMoney);
                 $("#EnterpriseLeader").text(msg.EnterpriseLeader);

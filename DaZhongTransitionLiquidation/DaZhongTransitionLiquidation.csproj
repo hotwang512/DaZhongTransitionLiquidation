@@ -2216,12 +2216,15 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\Business_FundReconciliation.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\FundReconciliationController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDetail\Business_BusinessType.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDetail\OrderListDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraftDetail\OrderListDraftDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraftPrint\OrderListDraftPrintController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraft\OrderListDraftController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\Business_OrderList.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\BankPreAuthResult.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
     <Compile Include="Areas\HomePage\HomePageAreaRegistration.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\AccountingSection\AccountingSectionController.cs" />

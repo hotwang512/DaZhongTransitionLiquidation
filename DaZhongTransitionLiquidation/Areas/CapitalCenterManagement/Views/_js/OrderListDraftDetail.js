@@ -190,7 +190,7 @@ var $page = function () {
                 //$("#VisitorsNumber").text(msg.VisitorsNumber);
                 //$("#EscortNumber").text(msg.EscortNumber);
                 //$("#NumberCount").text(msg.NumberCount);
-
+                $("#OrderCompany").text(msg.OrderCompany);
                 $("#Money").text(msg.Money);
                 $("#CapitalizationMoney").text(msg.CapitalizationMoney);
                 $("#EnterpriseLeader").text(msg.EnterpriseLeader);
@@ -312,7 +312,9 @@ function loadAttachments(attachments) {
         var attachValues = attachments.split(",");
         for (var i = 0; i < attachValues.length; i++) {
             var attach = attachValues[i].split("&");
-            $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+            if (attach != "") {
+                $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+            }
         }
     }
 }

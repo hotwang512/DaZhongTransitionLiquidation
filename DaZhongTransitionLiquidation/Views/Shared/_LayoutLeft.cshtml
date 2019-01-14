@@ -229,23 +229,23 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待过账订单" && i.Reads == 1))
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已提交订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=2">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">待过账订单</td>
+                    <td class="menue_text">已提交订单</td>
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
+                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=3">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                     <td class="menue_text">已过账订单</td>
                     <td></td>
                 </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
+                }*@
+                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -260,7 +260,7 @@
                         <td class="menue_text">订单业务配置</td>
                         <td></td>
                     </tr>
-                }
+                }*@
             </table>
         </div>
         <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
@@ -290,6 +290,48 @@
                         <td></td>
                     </tr>
                 }
+            </table>
+        </div>
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+            <table style="cursor: pointer;">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">客户银行信息</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="menue_body" id="PaymentOrder" style="display: none;">
+            <table>
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息维护" && i.Reads == 1))
+                    {
+                    <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">客户银行信息维护</td>
+                        <td></td>
+                    </tr>
+                    }
+            </table>
+        </div>
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+            <table style="cursor: pointer;">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">订单业务配置</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="menue_body" id="PaymentOrder" style="display: none;">
+            <table>
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置维护" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">订单业务配置维护</td>
+                            <td></td>
+                        </tr>
+                    }
             </table>
         </div>
         <div class="menue_bodychild" style="display: none;">

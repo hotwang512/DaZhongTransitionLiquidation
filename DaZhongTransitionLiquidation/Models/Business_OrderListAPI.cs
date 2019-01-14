@@ -13,5 +13,8 @@ namespace DaZhongTransitionLiquidation.Models
         public string Amount { get; set; }
         public string Sponsor { get; set; }
         public string Summary { get; set; }
+        public int invoiceNumber { get; set; }
+        public int numberOfAttachments { get; set; }
+        public string AccountSetCode { get; set; }
     }
 }

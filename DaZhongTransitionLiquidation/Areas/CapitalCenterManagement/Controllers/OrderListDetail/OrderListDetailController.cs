@@ -71,6 +71,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
+        public JsonResult GetBusinessType()
+        {
+            List<Business_BusinessType> orderList = new List<Business_BusinessType>();
+            DbBusinessDataService.Command(db =>
+            {
+                //主信息
+                orderList = db.Queryable<Business_BusinessType>().ToList();
+            });
+            return Json(orderList, JsonRequestBehavior.AllowGet); ;
+        }
         public JsonResult GetCompanyChange(Guid CollectionCompany)
         {
             List<Business_CustomerBankInfo> orderList = new List<Business_CustomerBankInfo>();
@@ -80,6 +90,25 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 orderList = db.Queryable<Business_CustomerBankInfo>().Where(x=>x.VGUID == CollectionCompany).ToList();
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult SaveBusinessTypeName(string BusinessTypeName)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    Business_BusinessType bus = new Business_BusinessType();
+                    bus.ListKey = BusinessTypeName;
+                    bus.BusinessTypeName = BusinessTypeName;
+                    bus.VGUID = Guid.NewGuid();
+                    db.Insertable<Business_BusinessType>(bus).ExecuteCommand();
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
         }
     }
 }

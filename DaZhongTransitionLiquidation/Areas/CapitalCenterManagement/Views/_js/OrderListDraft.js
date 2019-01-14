@@ -210,8 +210,8 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
-                    { text: '订单日期', datafield: 'FillingDate', width: 350, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 350, align: 'center', cellsAlign: 'center' },
+                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 350, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '订单日期', datafield: 'FillingDate', width: 350, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
                     { text: '支付方式', datafield: 'PaymentMethod', width: 350, align: 'center', cellsAlign: 'center' },
                     { text: '金额', datafield: 'Money', align: 'center', cellsAlign: 'center' },
                     { text: '订单时间', datafield: 'OrderTime', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
@@ -232,6 +232,17 @@ var $page = function () {
         });
     }
 
+    function detailFunc(row, column, value, rowData) {
+        var container = "";
+        if (selector.$EditPermission().val() == "1") {
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.PaymentCompany + "</a>";
+        } else {
+            container = "<span>" + rowData.PaymentCompany + "</span>";
+        }
+        return container;
+    }
+
+   
 
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
@@ -267,3 +278,7 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+function link(VGUID) {
+    window.location.href = "/CapitalCenterManagement/OrderListDraftDetail/Index?VGUID=" + VGUID;
+}

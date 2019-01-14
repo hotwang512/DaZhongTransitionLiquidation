@@ -251,7 +251,7 @@ var $page = function () {
         if (selector.$EditPermission().val() == "1") {
             container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?VGUID='" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
         } else {
-            container = "<span>" + rowData.Batch + "</span>";
+            container = "<span>" + rowData.BatchName + "</span>";
         }
         return container;
     }

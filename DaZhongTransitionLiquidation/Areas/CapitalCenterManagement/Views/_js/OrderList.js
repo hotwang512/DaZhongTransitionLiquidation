@@ -214,7 +214,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
-                    { text: '业务类型', datafield: 'BusinessType', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '业务类型', datafield: 'BusinessType', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '业务项目', datafield: 'BusinessProject', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '业务子项1', datafield: 'BusinessSubItem1', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
@@ -239,6 +239,17 @@ var $page = function () {
         });
     }
 
+    function detailFunc(row, column, value, rowData) {
+        var container = "";
+        if (selector.$EditPermission().val() == "1") {
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessType + "</a>";
+        } else {
+            container = "<span>" + rowData.BusinessType + "</span>";
+        }
+        return container;
+    }
+
+   
 
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
@@ -274,3 +285,7 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+function link(VGUID) {
+    window.location.href = "/CapitalCenterManagement/OrderListDetail/Index?VGUID=" + VGUID;
+}

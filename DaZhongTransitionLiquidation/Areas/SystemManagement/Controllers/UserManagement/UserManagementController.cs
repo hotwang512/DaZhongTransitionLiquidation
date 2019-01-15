@@ -9,6 +9,7 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using SqlSugar;
 using SyntacticSugar;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserManagement
 {
@@ -74,7 +75,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<V_User_Information>().Where(o.GetConditionalModels(searchParams)).In(i => i.Department, GetUserSubDepartment())
+                jsonResult.Rows = db.Queryable<V_User_Information>().Where(o.GetConditionalModels(searchParams))
                 .OrderBy(i => i.CreatedDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -154,7 +155,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
         /// <param name="userInfo">用户信息</param>
         /// <param name="isEdit">是否编辑</param>
         /// <returns></returns>
-        public JsonResult SaveUserInfo(Sys_User userInfo, bool isEdit)
+        public JsonResult SaveUserInfo(Sys_User userInfo, bool isEdit,List<string> companyCode)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbService.Command<UserManagementPack>((db, o) =>
@@ -167,7 +168,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                 if (isEdit)
                 {
                     userInfo.ChangeDate = DateTime.Now;
-                    userInfo.ChangeUser = userInfo.LoginName;
+                    userInfo.ChangeUser = userInfo.LoginName;       
                     resultModel.IsSuccess = db.Updateable(userInfo).IgnoreColumns(i => new { i.CreatedDate, i.CreatedUser, i.Password }).ExecuteCommand() > 0;
                 }
                 else
@@ -178,9 +179,22 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                     userInfo.CreatedUser = userInfo.LoginName;
                     resultModel.IsSuccess = db.Insertable(userInfo).ExecuteCommand() > 0;
                 }
+                db.Deleteable<Sys_UserCompany>(x => x.UserName == userInfo.UserName).ExecuteCommand();
+                List<Sys_UserCompany> userComList = new List<Sys_UserCompany>();
+                foreach (var item in companyCode)
+                {
+                    var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == item).First();
+                    Sys_UserCompany userCom = new Sys_UserCompany();
+                    userCom.UserName = userInfo.LoginName;
+                    userCom.VGUID = Guid.NewGuid();
+                    userCom.CompanyCode = item;
+                    userCom.CompanyCodeName = data.Descrption;
+                    userCom.Status = data.Status;
+                    userComList.Add(userCom);
+                }
+                db.Insertable(userComList).ExecuteCommand();
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
-
             return Json(resultModel);
         }
 

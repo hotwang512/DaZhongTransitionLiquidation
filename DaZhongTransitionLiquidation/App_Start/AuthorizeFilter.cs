@@ -44,6 +44,7 @@ namespace DaZhongTransitionLiquidation
            // if (control.ToLower()!= "newapi")
            // {
                 var cache = CacheManager<Sys_User>.GetInstance();
+            
                 //验证是否登录
                 if (!cache.ContainsKey(PubGet.GetUserKey) || cache[PubGet.GetUserKey].IsNullOrEmpty())
                 {
@@ -57,12 +58,12 @@ namespace DaZhongTransitionLiquidation
                 var cmRole = CacheManager<List<U_RoleModule>>.GetInstance();
                 var roleModules = cmRole[cache[PubGet.GetUserKey].Vguid.ToString()];
                 cmRole.Remove(cache[PubGet.GetUserKey].Vguid.ToString());
-                var collerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.TryToEnum<PageEnum>();
-                bool hasRight = roleModules.Any(i => i.PageID == (int)collerName);
-                if (!hasRight)
-                {
-                    filterContext.Result = new RedirectResult("/Shared/Error503");
-                }
+                //var collerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.TryToEnum<PageEnum>();
+                //bool hasRight = roleModules.Any(i => i.PageID == (int)collerName);
+                //if (!hasRight)
+                //{
+                //    filterContext.Result = new RedirectResult("/Shared/Error503");
+                //}
           //  }
 
            

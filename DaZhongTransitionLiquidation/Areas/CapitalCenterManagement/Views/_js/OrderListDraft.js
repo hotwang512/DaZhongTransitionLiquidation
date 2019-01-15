@@ -19,9 +19,9 @@ var $page = function () {
         if (status == "1") {
             $("#buttonList").show();
         }
-        if (status == "2") {
-            $("#buttonList2").show();
-        }
+        //if (status == "2") {
+        //    $("#buttonList2").show();
+        //}
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -184,6 +184,8 @@ var $page = function () {
                     { name: 'Money', type: 'number' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'Status', type: 'string' },
+                    { name: 'BankStatus', type: 'string' },
+                    { name: 'BankStatusName', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -210,10 +212,12 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
-                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 350, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '订单日期', datafield: 'FillingDate', width: 350, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
-                    { text: '支付方式', datafield: 'PaymentMethod', width: 350, align: 'center', cellsAlign: 'center' },
-                    { text: '金额', datafield: 'Money', align: 'center', cellsAlign: 'center' },
+                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '订单日期', datafield: 'FillingDate', width: 250, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
+                    { text: '支付方式', datafield: 'PaymentMethod', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '金额', datafield: 'Money', align: 'center', width: 250, cellsAlign: 'center' },
+                    { text: '交易状态', datafield: 'BankStatus', align: 'center', width: 180, cellsAlign: 'center' },
+                    { text: '交易最终结果描述', datafield: 'BankStatusName', align: 'center', cellsAlign: 'center' },
                     { text: '订单时间', datafield: 'OrderTime', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '来客人数', datafield: 'VisitorsNumber', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '陪同人数', datafield: 'EscortNumber', width: 200, align: 'center', cellsAlign: 'center', hidden: true },

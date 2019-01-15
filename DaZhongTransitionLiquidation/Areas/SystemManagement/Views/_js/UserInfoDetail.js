@@ -35,8 +35,9 @@ var $page = function () {
     //所有事件
     function addEvent() {
         //加载部门下拉框
-        initOrganization();
-
+        //initOrganization();
+        initTable1();
+        initInput();
 
     }; //addEvent end
     //编辑界面加载页面上文本框的值
@@ -141,16 +142,28 @@ var $page = function () {
             validateError++;
         }
         if (validateError == 0) {
-            var items = selector.$pushTree().jqxTree('getSelectedItem');
-            if (!items) {
-                jqxNotification("请选择部门！", null, "error");
-                return;
-            }
-            selector.$departmentVguid().val(items.id);
+            //var items = selector.$pushTree().jqxTree('getSelectedItem');
+            //if (!items) {
+            //    jqxNotification("请选择部门！", null, "error");
+            //    return;
+            //}
+            //selector.$departmentVguid().val(items.id);
+            //选择的公司
+            var selection = [];
+            var grid = $("#jqxTable1");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.Code);
+                }
+            });
             selector.$frmtable().ajaxSubmit({
                 url: '/Systemmanagement/UserManagement/SaveUserInfo',
                 type: "post",
-                data: { isEdit: selector.$isEdit().val() },
+                data: { isEdit: selector.$isEdit().val(), companyCode: selection },
                 dataType: "json",
                 success: function (msg) {
                     switch (msg.Status) {
@@ -171,6 +184,106 @@ var $page = function () {
     });
 };
 
+//公司段
+function initTable1() {
+    var source =
+        {
+            datafields:
+            [
+                { name: "checkbox", type: null },
+                { name: 'Code', type: 'string' },
+                { name: 'Descrption', type: 'string' },
+                { name: 'SectionVGUID', type: 'string' },
+                { name: 'VGUID', type: 'string' },
+                { name: 'Status', type: 'string' },
+                { name: 'Remark', type: 'string' },
+                { name: 'Setting', type: 'string' },
+                { name: 'VCRTUSER', type: 'string' },
+                { name: 'VMDFUSER', type: 'string' },
+                { name: 'VMDFTIME', type: 'date' },
+                { name: 'VCRTTIME', type: 'date' },
+                { name: 'Status', type: 'string' },
+                { name: 'Remark', type: 'string' },
+                { name: 'IsCompanyCode', type: 'string' },
+                { name: 'IsAccountModeCode', type: 'string' },
+                { name: 'IsSubjectCode', type: 'string' },
+                { name: 'IsCompanyBank', type: 'string' },
+            ],
+            datatype: "json",
+            id: "VGUID",
+            data: {},
+            url: "/PaymentManagement/CompanySection/GetCompanySection"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    //创建卡信息列表（主表）
+    $("#jqxTable1").jqxDataTable(
+        {
+            pageable: true,
+            width: "70%",
+            height: 300,
+            pageSize: 99999999,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 30,
+            columns: [
+                { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                { text: '编码', datafield: 'Code', width: 250, align: 'center', cellsAlign: 'center' },
+                { text: '描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center' },
+                { text: '状态', datafield: 'Status', align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
+                { text: '银行账号设置', datafield: 'IsCompanyBank', width: 150, align: 'center', cellsAlign: 'center',  hidden: true },
+                { text: '科目段', datafield: 'IsSubjectCode', width: 150, align: 'center', cellsAlign: 'center',  hidden: true },
+                { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center', hidden: true },
+                { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true },
+
+            ]
+        });
+
+}
+
+function cellsRendererFunc(row, column, value, rowData) {
+    return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
+}
+
+function rendererFunc() {
+    var checkBox = "<div id='jqx_datatable_checkbox_all' class='jqx_datatable_checkbox_all' style='z-index: 999; margin-left:7px ;margin-top: 7px;'>";
+    checkBox += "</div>";
+    return checkBox;
+}
+
+function statusFunc(row, column, value, rowData) {
+    var container = '<div style="color:#30dc32">启用</div>';
+    if (value == "0") {
+        container = '<div style="color:#F00">禁用</div>';
+    }
+    return container;
+}
+
+function renderedFunc(element) {
+    var grid = $("#jqxTable1");
+    element.jqxCheckBox();
+    element.on('change', function (event) {
+        var checked = element.jqxCheckBox('checked');
+
+        if (checked) {
+            var rows = grid.jqxDataTable('getRows');
+            for (var i = 0; i < rows.length; i++) {
+                grid.jqxDataTable('selectRow', i);
+                grid.find(".jqx_datatable_checkbox").attr("checked", "checked")
+            }
+        } else {
+            grid.jqxDataTable('clearSelection');
+            grid.find(".jqx_datatable_checkbox").removeAttr("checked", "checked")
+        }
+    });
+    return true;
+}
 
 $(function () {
     var page = new $page();

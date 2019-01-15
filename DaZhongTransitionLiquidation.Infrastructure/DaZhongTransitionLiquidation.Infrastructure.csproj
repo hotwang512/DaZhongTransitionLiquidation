@@ -71,6 +71,7 @@
     <Compile Include="DbEntity\Sys_Role_Fixed.cs" />
     <Compile Include="DbEntity\Sys_Role_Module.cs" />
     <Compile Include="DbEntity\Sys_User.cs" />
+    <Compile Include="DbEntity\Sys_UserCompany.cs" />
     <Compile Include="DbEntity\T_Bank.cs" />
     <Compile Include="DbEntity\T_BankChannelMapping.cs" />
     <Compile Include="DbEntity\T_Channel.cs" />

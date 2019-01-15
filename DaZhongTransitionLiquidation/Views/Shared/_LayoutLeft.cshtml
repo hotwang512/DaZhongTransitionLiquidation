@@ -734,13 +734,20 @@
                 }
                 @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isSysadmin)
                 {
-                    <tr class="menue_item" id="AuthorityManagement_SystemManages" pageurl="/Systemmanagement/AuthorityManagement/AuthorityInfo">
+                    <tr class="menue_item" id="AuthorityManagement_SystemManage" pageurl="/Systemmanagement/AuthorityManagement/AuthorityInfo">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                         <td class="menue_text">角色权限管理</td>
                         <td></td>
                     </tr>
                 }
-
+                @if (currentUserRoleModules.Any(i => i.PageName == "模块管理" && i.Reads == 1) || isSysadmin)
+                {
+                    <tr class="menue_item" id="MenuManagement_SystemManage" pageurl="/Systemmanagement/MenuManagement/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">模块管理</td>
+                        <td></td>
+                    </tr>
+                }
             </table>
         </div>
     }

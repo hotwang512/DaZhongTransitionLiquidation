@@ -91,18 +91,30 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult SaveBusinessTypeName(string BusinessTypeName)
+        public JsonResult SaveBusinessTypeName(string BusinessTypeName,string BusinessVGUID)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var result = db.Ado.UseTran(() =>
-                {
-                    Business_BusinessType bus = new Business_BusinessType();
-                    bus.ListKey = BusinessTypeName;
-                    bus.BusinessTypeName = BusinessTypeName;
-                    bus.VGUID = Guid.NewGuid();
-                    db.Insertable<Business_BusinessType>(bus).ExecuteCommand();
+                {                   
+                    if (BusinessVGUID == "")
+                    {
+                        Business_BusinessType bus = new Business_BusinessType();
+                        bus.ListKey = BusinessTypeName;
+                        bus.BusinessTypeName = BusinessTypeName;
+                        bus.VGUID = Guid.NewGuid();
+                        db.Insertable(bus).ExecuteCommand();
+                    }
+                    else
+                    {
+                        Guid VGUID = new Guid(BusinessVGUID);
+                        db.Updateable<Business_BusinessType>().UpdateColumns(it => new Business_BusinessType()
+                        {
+                            ListKey = BusinessTypeName,
+                            BusinessTypeName = BusinessTypeName,
+                        }).Where(it => it.VGUID == VGUID).ExecuteCommand();
+                    }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

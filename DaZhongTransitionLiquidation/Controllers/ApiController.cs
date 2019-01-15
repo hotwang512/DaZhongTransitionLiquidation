@@ -300,10 +300,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == OrderListAPI.AccountSetCode).Descrption;
                         var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == OrderListAPI.AccountSetCode && x.AccountType == "基本户").First();
-
-                        orderListDraft.OrderBankName = bankInfo.BankName;
-                        orderListDraft.OrderBankAccouont = bankInfo.BankAccount;
-                        orderListDraft.OrderBankAccouontName = bankInfo.BankAccountName;
+                        if(bankInfo != null)
+                        {
+                            orderListDraft.OrderBankName = bankInfo.BankName;
+                            orderListDraft.OrderBankAccouont = bankInfo.BankAccount;
+                            orderListDraft.OrderBankAccouontName = bankInfo.BankAccountName;
+                        } 
                         orderListDraft.CollectBankName = data.CollectionBank;
                         orderListDraft.CollectBankAccouont = data.CollectionAccount;
                         orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;

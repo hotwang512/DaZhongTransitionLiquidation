@@ -51,7 +51,7 @@
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;">
                     <select id="BusinessType" class="input_text form-control" style="width: 200px;"></select>
-                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">配置</span></button>
                     @*<input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" />*@
                 </td>
                 <td style="text-align: right;">业务项目：</td>
@@ -67,7 +67,10 @@
                 <td style="text-align: right;">业务子项3：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">公司/单位/个人：</td>
-                <td style="text-align: left;"><select id="CollectionCompany" class="input_text form-control" style="width: 200px;" onchange="companyChange()"></select></td>
+                <td style="text-align: left;">
+                    <div id='CollectionCompany' class="input_text form-control"></div>
+                @*<select id="CollectionCompany" class="input_text form-control" style="width: 200px;" onchange="companyChange()"></select>*@
+                </td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align: right;">收款账号：</td>
@@ -150,7 +153,7 @@
         <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
             <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">新增业务类型</h4>
+                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">配置业务类型</h4>
             </div>
             <div class="modal-body" style="width: 100%;">
                 <table style="width: 100%;">
@@ -161,6 +164,10 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <div id="jqxBusinessTypeName" class="jqxTable" style="margin-left: 80px"></div>
+                <input id="BusinessVGUID" name="BusinessVGUID" class="hide" />
             </div>
             <div class="modal-footer">
                 <button id="AddBankChannel_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>

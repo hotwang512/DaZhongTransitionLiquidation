@@ -1,0 +1,145 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    Sys_User user = ViewBag.User;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/_theme/jqwidgets-ver3.8.1/styles/bootstrap.min.css" rel="stylesheet" />
+@*<link href="/Areas/SystemManagement/Views/_css/spanObj.css" rel="stylesheet" />*@
+<link href="/_theme/css/common.css" rel="stylesheet" />
+<link href="@Url.Content("~/_theme/systemIcon/demo.css")" rel="stylesheet" />
+<link href="@Url.Content("~/_theme/systemIcon/iconfont.css")" rel="stylesheet" />
+<link href="@Url.Content("~/_theme/css/layoutCommon.css")" rel="stylesheet" />
+<link href="@Url.Content("~/_theme/css/moduleCommon.css")" rel="stylesheet" />
+<link href="/_theme/Validate/validate.css" rel="stylesheet" />
+<link href="/Views/_css/home-index.css" rel="stylesheet" />
+<link rel="stylesheet" href="/_theme/jqwidgets-ver3.8.1/jqwidgets/styles/jqx.base.css" />
+<link rel="stylesheet" href="/_theme/jqwidgets-ver3.8.1/jqwidgetsExtensions/jqxext.css" />
+<style type="text/css">
+    #logoDiv img {
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+
+    .img-style {
+        height: 150px;
+        width: 150px;
+    }
+
+    #moduleDIV {
+        /*margin-top: 180px;*/
+    }
+
+    #btnEdit {
+        margin-top: 10px;
+        background-color: inherit;
+        background-color: transparent; /*IE中使用*/
+        color: #555;
+        font-family: calibri;
+        border: 0;
+    }
+</style>
+
+<body style="background-image: url('/_theme/images/hbg.png')">
+    <div style="width: 100%; height: 35px;">
+        <table style="width:100%; border:0; border-collapse:0; border-spacing:0;">
+            <tr style="height:60px; line-height:60px;">
+                <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
+                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
+                <td></td>
+                <td style="width:45px;">
+                    <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
+                </td>
+                <td style="width: 120px; color: white; font-size: 14px; font-family: Calibri;">
+                    <div class="dropdown">
+                        <a id="drop5" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @user.LoginName<span class="caret" style="color: white;border-top-color: white;"></span>
+                        </a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
+                            <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="moduleDIV" style="width: 100%;margin-top: 80px;">
+        <div class="home-message" style="text-align: left;">
+            <table style="margin-left: 300px;margin-top: 260px;">
+                <tr>
+                    <td>
+                        <select id="CompanyCode" class="input_text form-control" style="">
+                            @{
+                                foreach (var item in ViewBag.CompanyCode)
+                                {
+                                    <option value="@item.CompanyCode">@item.CompanyCodeName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="OKButton" type="button" class="btn btn-warning" style="width: 210px;background-color: #16609c!important; margin-top: 20px"><span style="margin-left: 72px; float: left;">确定</span></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- 模态弹出 -->
+    <div class="container">
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="changePwdDialog">
+            <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+                <div class="modal-content" style="width: 445px; margin-left: auto; margin-right: auto;">
+                    <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">修改密码</h4>
+                    </div>
+                    <div class="modal-body" style="width: 100%;">
+                        <table style="width: 100%;">
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">旧密码</span></td>
+                                <td style="width: 150px;">
+                                    <input id="txtOldPwd" type="password" class="input_text form-control" validatetype="required" />
+                                </td>
+                            </tr>
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">新密码</span></td>
+                                <td style="width: 150px;">
+                                    <input id="txtNewPwd" type="password" class="input_text form-control" validatetype="required" />
+                                </td>
+                            </tr>
+                            <tr style="height: 45px;">
+                                <td style="width: 75px;text-align: left"><span class="spanText">确认密码</span></td>
+                                <td style="width: 150px;">
+                                    <input id="txtNewPwdAgain" type="password" class="input_text form-control" validatetype="required" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="changePwd_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                        <button id="changePwd_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 20px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="@Url.Content("~/_theme/_js/jquery-3.2.1.min.js")"></script>
+    <script src="@Url.Content("~/_theme/_js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/_theme/Validate/validate.js")"></script>
+    <script src="@Url.Content("~/_theme/_js/menueCookie.js")"></script>
+    <script src="@Url.Content("~/_theme/_js/common.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqx-all.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxtabs.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver5.5.0/jqwidgetsExtensions/jqxext.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver5.5.0/jqwidgets/globalization/globalize.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver5.5.0/jqwidgets/globalization/globalize.culture.zh.js")"></script>
+    <script src="@Url.Content("~/_theme/jqwidgets-ver5.5.0/scripts/demos.js")"></script>
+    <script src="@Url.Content("~/_theme/tool/ejq.js")"></script>
+    <script src="@Url.Content("~/_theme/tool/jquery-form.min.js")"></script>
+    <script src="@Url.Content("~/_theme/_js/tool.js")"></script>
+    <script src="@Url.Content("~/Views/_js/layout.js")"></script>
+    <script src="@Url.Content("~/Areas/HomePage/Views/_js/CompanyHomePage.js")"></script>
+</body>

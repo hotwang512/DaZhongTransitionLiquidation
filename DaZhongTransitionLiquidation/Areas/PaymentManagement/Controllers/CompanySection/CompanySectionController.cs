@@ -23,18 +23,36 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.CompanyCode = GetCompanyCode();
+            ViewBag.AccountMode = GetAccountMode();
             //ViewBag.BankChannel = GetBankChannel();
             return View();
         }
-        public JsonResult GetCompanySection(GridParams para)
+        public JsonResult GetCompanySection(GridParams para,string accountModeCode)
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();
+            var response = new List<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x=>x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43")
+                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43")
                 .OrderBy(i => i.Code, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                if (jsonResult.Rows != null)
+                {
+                    var data = db.Queryable<Business_SubjectSettingInfo>().ToList();
+                    foreach (var item in jsonResult.Rows)
+                    {
+                        var isAnySubjectCode = data.Any(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.Code && x.SubjectCode != null);
+                        if (isAnySubjectCode)
+                        {
+                            item.IsSubjectCode = true;
+                        }
+                        else
+                        {
+                            item.IsSubjectCode = false;
+                        }
+                    }
+                }
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -100,12 +118,18 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         /// </summary>
         /// <param name="vguids"></param>
         /// <returns></returns>
-        public JsonResult GetSectionInfo(string code, string sectionVGUID,string columnName,string keyColumnName,int index,string companyCode)//Guid[] vguids
+        public JsonResult GetSectionInfo(string code, string sectionVGUID,string columnName,string keyColumnName,int index,string companyCode,string accountModeCode)//Guid[] vguids
         {
             var response = new List<SubjectSetting>();
             DbBusinessDataService.Command(db =>
             {
                 var checkStr = "";
+                if(index == 1)
+                {
+                    response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
+ and bss.AccountModeCode='" + accountModeCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+                }
                 if(index == 2)
                 {
                     response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
@@ -250,7 +274,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
         }
 
-        public JsonResult SaveSectionSetting(string code, List<string> otherCode, string type,string companyCode)
+        public JsonResult SaveSectionSetting(string code, List<string> otherCode, string type,string companyCode,string accountModeCode)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -271,6 +295,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SubjectCode = item;
                                 insertObj.SubjectVGUID = "A63BD715-C27D-4C47-AB66-550309794D43";
+                                insertObj.AccountModeCode = accountModeCode;
                                 insertObjs.Add(insertObj);
                             }
                             db.Insertable(insertObjs).ExecuteCommand();
@@ -630,6 +655,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             DbBusinessDataService.Command(db =>
             {
                 result = db.Queryable<Business_SevenSection>().Where(x=>x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+            });
+            return result;
+        }
+        public List<Business_SevenSection> GetAccountMode()
+        {
+            var result = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                result = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
             });
             return result;
         }

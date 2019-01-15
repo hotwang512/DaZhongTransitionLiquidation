@@ -247,5 +247,17 @@ namespace DaZhongTransitionLiquidation.Models
         /// Nullable:True
         /// </summary> 
         public string BankStatusName { get; set; }
+        /// <summary>
+        /// Desc:主机交易流水号
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string BankTS { get; set; }
+        /// <summary>
+        /// Desc:主机处理日期
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string BankTD { get; set; }
     }
 }

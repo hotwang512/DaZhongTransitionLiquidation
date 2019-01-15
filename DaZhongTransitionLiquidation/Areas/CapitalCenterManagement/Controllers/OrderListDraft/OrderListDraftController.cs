@@ -216,7 +216,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                         {
                             BankStatus = modelData.data.RECO,
-                            BankStatusName = modelData.data.REMG
+                            BankStatusName = modelData.data.REMG,
+                            BankTD = modelData.data.T24D,
+                            BankTS = modelData.data.T24S
                         }).Where(it => it.VGUID == vguid).ExecuteCommand();  
                     }
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));

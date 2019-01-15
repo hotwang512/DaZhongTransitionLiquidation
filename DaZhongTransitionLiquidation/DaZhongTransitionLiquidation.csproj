@@ -190,6 +190,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraft.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftPrint.js" />
+    <Content Include="Areas\HomePage\Views\_js\CompanyHomePage.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\BankData.js" />
@@ -249,6 +250,7 @@
     <Content Include="Areas\ReimbursementCenter\Views\ROrderListDraft\Index.cshtml" />
     <Content Include="Areas\ReimbursementCenter\Views\ROrderListDraftDetail\Index.cshtml" />
     <Content Include="Areas\PaymentManagement\Views\SubjectBalance\Index.cshtml" />
+    <Content Include="Areas\HomePage\Views\CompanyHomePage\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2225,6 +2227,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\BankPreAuthResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
+    <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
     <Compile Include="Areas\HomePage\HomePageAreaRegistration.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\AccountingSection\AccountingSectionController.cs" />

@@ -24,7 +24,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">用户信息</span></div>
     </div>
-    <div class="body_mk" style="height: 290px;">
+    <div class="body_mk" style="height: 260px;">
         <form id="frmtable" class="form">
             <table id="message" style="margin-top: 20px; margin-left: 20px;">
                 <tr style="height: 50px;">
@@ -53,17 +53,18 @@
                         <input id="mobilePhone_Input" name="MobileNnumber" type="text" maxlength="95" class="input_text form-control" validatetype="required,phone" style="text-align: left" value="" />
                     </td>
                     @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
-                    <td style="text-align: right">部门：</td>
-                    <td>
-                        <div id="pushPeopleDropDownButton" class="input_text form-control">
-                            <div style="" id="pushTree">
-                            </div>
-                        </div>
-                    </td>
-                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
                     <td style="text-align: right">角色：</td>
                     <td>
+                        @*<div id="pushPeopleDropDownButton" class="input_text form-control">
+                            <div style="" id="pushTree">
+                            </div>
+                        </div>*@
                         @Html.DropDownList("Role", ViewData["Role"] as SelectList, "===请选择===", new { id = "role_Input", name = "Role", @class = "input_text form-control", validatetype = "required" })
+                    </td>
+                    @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
+                    <td style="text-align: right"></td>
+                    <td>
+                        
                     </td>
 
                     @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
@@ -82,6 +83,12 @@
         </form>
         <input type="hidden" id="currentUserDepartment" value="@ViewBag.UserSubDepartment" />
         <input type="hidden" id="isEdit" value="@ViewBag.IsEdit.ToString()" />
-
+    </div>
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">公司信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 300px;">
+        <div id="jqxTable1" class="jqxTable"></div>
     </div>
 </div>

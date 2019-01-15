@@ -26,8 +26,9 @@ var $page = function () {
     function addEvent() {
         //var id0 = "#CompanyCode";
         //uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
-        uiEngineHelper.bindSelect('#CollectionCompany', collectionCompany, "VGUID", "CompanyOrPerson");
-        $("#CollectionCompany").prepend("<option value=\"\" selected='true'>请选择</>");
+
+        //uiEngineHelper.bindSelect('#CollectionCompany', collectionCompany, "VGUID", "CompanyOrPerson");
+        //$("#CollectionCompany").prepend("<option value=\"\" selected='true'>请选择</>");
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         var myDate = new Date();
@@ -38,6 +39,7 @@ var $page = function () {
         } else {
             $("#hideButton").show();
         }
+        
         //取消
         $("#btnCancel").on("click", function () {
             history.go(-1);
@@ -119,6 +121,7 @@ var $page = function () {
                     url: "/CapitalCenterManagement/OrderListDetail/SaveBusinessTypeName",
                     data: {
                         BusinessTypeName: $("#BusinessTypeName").val(),
+                        BusinessVGUID: $("#BusinessVGUID").val()
                     },
                     type: "post",
                     dataType: "json",
@@ -132,7 +135,9 @@ var $page = function () {
                                 $("#AddBusinessType").modal("hide");
                                 var busin = $("#BusinessTypeName").val();
                                 var mySelect = document.getElementById("BusinessType");
-                                addOption1(mySelect, busin, busin);
+                                loadBusinessType();
+                                $("#BusinessType").val(busin);
+                                //addOption1(mySelect, busin, busin);
                                 break;
                         }
                     }
@@ -143,7 +148,18 @@ var $page = function () {
         $("#btnAdd").on("click", function () {
             $("#AddBusinessType").modal("show");
             $("#BusinessTypeName").val("");
+            $("#BusinessVGUID").val("");
+            initBusinessTypeName();
         })
+        //
+        $('#CollectionCompany').on('select', function (event) {
+            var args = event.args;
+            var item = args.item;
+            if (args) {
+                var value = item.value;
+                companyChange(value);
+            }
+        });
     }; //addEvent end
 
     function loadSelectFun() {
@@ -268,6 +284,44 @@ function initSubjectTable(companyCode) {
     });
 }
 
+function initBusinessTypeName() {
+    var source = {
+        datafields:
+        [
+            { name: 'VGUID', type: 'string' },
+            { name: 'ListKey', type: 'string' },
+            { name: 'BusinessTypeName', type: 'string' },
+        ],
+        datatype: "json",
+        id: "",
+        data: {},
+        url: "/CapitalCenterManagement/OrderListDetail/GetBusinessType"    //获取数据源的路径
+    };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    $("#jqxBusinessTypeName").jqxDataTable({
+        pageable: false,
+        //width: 400,
+        height: 300,
+        pageSize: 9999999,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        columnsHeight: 30,
+        columns: [
+            { text: '业务类型', datafield: 'BusinessTypeName', align: 'center', cellsAlign: 'center' },
+            { text: '', datafield: 'ListKey', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '', datafield: 'VGUID', align: 'center', cellsAlign: 'center', hidden: true },
+        ]
+    });
+    $('#jqxBusinessTypeName').on('rowClick', function (event) {
+        // event args.
+        var args = event.args;
+        // row data.
+        var row = args.row;
+        $("#BusinessTypeName").val(row.BusinessTypeName);
+        $("#BusinessVGUID").val(row.VGUID);
+    });
+}
+
 function gradeChange(event) {
     $("#SubjectSection").val("");
     $("#SubjectName").val("");
@@ -278,9 +332,8 @@ function gradeChange(event) {
     $("#IntercourseSection").val("");
 }
 
-function companyChange() {
-    var companyValue = $("#CollectionCompany").val();
-    if (companyValue == "") {
+function companyChange(value) {
+    if (value == "") {
         $("#CollectionAccount").val("");
         $("#CollectionBankAccountName").val("");
         $("#CollectionBank").val("");
@@ -290,14 +343,14 @@ function companyChange() {
     $.ajax({
         url: "/CapitalCenterManagement/OrderListDetail/GetCompanyChange",
         //async: false,
-        data: { CollectionCompany: companyValue },
+        data: { CollectionCompany: value },
         type: "post",
         success: function (result) {
-            value = result[0];
-            $("#CollectionAccount").val(value.BankAccount);
-            $("#CollectionBankAccountName").val(value.BankAccountName);
-            $("#CollectionBank").val(value.Bank);
-            $("#CollectionBankAccount").val(value.BankNo);
+            var values = result[0];
+            $("#CollectionAccount").val(values.BankAccount);
+            $("#CollectionBankAccountName").val(values.BankAccountName);
+            $("#CollectionBank").val(values.Bank);
+            $("#CollectionBankAccount").val(values.BankNo);
         }
     });
 }
@@ -319,17 +372,21 @@ function companyChange() {
 
 function loadCollectionCompany() {
     var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
-    var value = null;
-    $.ajax({
-        url: url,
-        async: false,
-        data: { },
-        type: "post",
-        success: function (result) {
-            value = result;
-        }
+    var source =
+                {
+                    datatype: "json",
+                    datafields: [
+                        { name: 'VGUID' },
+                        { name: 'CompanyOrPerson' }
+                    ],
+                    url: url,
+                    async: true
+                };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $('#CollectionCompany').jqxDropDownList({
+        filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "VGUID",
+        itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
     });
-    return value;
 }
 
 function loadBusinessType() {

@@ -45,8 +45,8 @@ var $page = function () {
                                 jqxNotification(msg.ResultInfo, null, "error");
                                 break;
                             case "1":
-                                //window.location.href = "/ReportManagement/ReconciliationReport/Reconciliation";
-                                window.location.href = "/HomePage/HomePage/Index";
+                                window.location.href = "/HomePage/CompanyHomePage/Index";
+                                //window.location.href = "/HomePage/HomePage/Index";
                                 break;
                         }
                     }

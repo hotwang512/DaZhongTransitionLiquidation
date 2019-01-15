@@ -102,6 +102,14 @@
         <div id="jqxTable0" class="jqxTable"></div>
     </div>
     <div style="overflow: hidden;">
+        <select id="AccountModeCode" class="input_text form-control" style="display:none">
+            @{
+                foreach (var item in ViewBag.AccountMode)
+                {
+                    <option value="@item.Code">@item.Descrption</option>
+                }
+            }
+        </select>
         <div id="jqxTable1" class="jqxTable"></div>
     </div>
     <div style="overflow: hidden;">

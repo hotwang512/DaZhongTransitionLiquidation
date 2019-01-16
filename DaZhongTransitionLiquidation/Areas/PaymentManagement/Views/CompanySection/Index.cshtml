@@ -102,7 +102,7 @@
         <div id="jqxTable0" class="jqxTable"></div>
     </div>
     <div style="overflow: hidden;">
-        <select id="AccountModeCode" class="input_text form-control" style="display:none">
+        <select id="AccountModeCode" class="input_text form-control" style="display:none;position: fixed">
             @{
                 foreach (var item in ViewBag.AccountMode)
                 {
@@ -110,7 +110,8 @@
                 }
             }
         </select>
-        <div id="jqxTable1" class="jqxTable"></div>
+        <br>
+        <div id="jqxTable1" class="jqxTable" style="margin-top: 18px;position: fixed"></div>
     </div>
     <div style="overflow: hidden;">
         <select id="CompanyCode" class="input_text form-control" style="display:none">

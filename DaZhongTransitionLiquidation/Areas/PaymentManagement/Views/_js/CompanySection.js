@@ -282,6 +282,7 @@ var $page = function () {
                         "CompanyCode": $("#CompanyCode").val(),
                         "AccountType": $("#AccountType").val(),
                         "InitialBalance": $("#InitialBalance").val(),
+                        "AccountModeCode": $("#AccountModeCode").val(),
                         "VGUID": vguid
                     },
                     type: "post",
@@ -376,6 +377,9 @@ var $page = function () {
                 if (index == 1) {
                     $("#AccountModeCode").show();
                 }
+            }
+            if (index == 1) {
+                $("#AccountModeCode").show();
             }
             //if (index != 0 && index != 1) {
             //    $("#SubjectList").show();
@@ -580,14 +584,14 @@ var $page = function () {
         $("#jqxTable1").jqxDataTable(
             {
                 pageable: true,
-                width: "100%",
-                height: 550,
+                width: "1550px",
+                height: 500,
                 pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
                 theme: "office",
-                columnsHeight: 40,
+                columnsHeight: 30,
                 columns: [
                     { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
@@ -1254,7 +1258,7 @@ function settingCompany(code, companyName) {
            id: "VGUID",
            //root: "entry",
            //record: "content",
-           data: { Code: code },
+           data: { Code: code, accountModeCode: accountModeCode },
            url: "/PaymentManagement/CompanySection/GetCompanyInfo"   //获取数据源的路径
        };
     var typeAdapter = new $.jqx.dataAdapter(source);

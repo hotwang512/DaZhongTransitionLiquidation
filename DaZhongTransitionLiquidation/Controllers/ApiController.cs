@@ -294,12 +294,14 @@ namespace DaZhongTransitionLiquidation.Controllers
                                //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
                                .ToList().FirstOrDefault();
                     //数据存入订单草稿表，生成订单
-                    
+                    var accountSetCode = OrderListAPI.AccountSetCode;
+                    var accountModeCode = accountSetCode.Split("|")[0];//账套
+                    var companyCode = accountSetCode.Split("|")[1];//公司
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
-                        var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == OrderListAPI.AccountSetCode).Descrption;
-                        var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == OrderListAPI.AccountSetCode && x.AccountType == "基本户").First();
+                        var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == companyCode).Descrption;
+                        var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
                         if(bankInfo != null)
                         {
                             orderListDraft.OrderBankName = bankInfo.BankName;//付款账号开户行
@@ -312,10 +314,11 @@ namespace DaZhongTransitionLiquidation.Controllers
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod;
-                        orderListDraft.PaymentCompany = data.CollectionCompany;//收款人/单位/公司
+                        orderListDraft.PaymentCompany = data.CollectionCompanyName;//收款人/单位/公司
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
                         orderListDraft.Founder = OrderListAPI.Sponsor;//发起人
+                        orderListDraft.Payee = OrderListAPI.Sponsor;//发起人
                         orderListDraft.Money = OrderListAPI.Amount.TryToDecimal();
                         orderListDraft.CapitalizationMoney = MoneyToUpper(OrderListAPI.Amount);
                         //OrderListAPI.Mode = data.Mode;

@@ -517,13 +517,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     var data = db.Queryable<Business_CompanyBankInfo>();
                     var guid = cBank.VGUID;
-                    var isAny = data.Any(x => x.CompanyCode == cBank.CompanyCode && x.BankName == cBank.BankName && x.BankAccount == cBank.BankAccount && x.VGUID != cBank.VGUID);
+                    var isAny = data.Any(x => x.CompanyCode == cBank.CompanyCode && x.AccountModeCode == cBank.AccountModeCode && x.BankName == cBank.BankName && x.BankAccount == cBank.BankAccount && x.VGUID != cBank.VGUID);
                     if (isAny)
                     {
                         any = "2";
                         return;
                     }
-                    var isAnyAccount = data.Any(x => x.AccountType == cBank.AccountType && x.BankAccount == cBank.CompanyCode && x.VGUID != cBank.VGUID);
+                    var isAnyAccount = data.Any(x => x.AccountType == cBank.AccountType && x.CompanyCode == cBank.CompanyCode && x.AccountModeCode == cBank.AccountModeCode && x.VGUID != cBank.VGUID);
                     if (isAnyAccount)
                     {
                         switch (cBank.AccountType)
@@ -543,7 +543,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             BankAccount = cBank.BankAccount,
                             BankName = cBank.BankName,
                             AccountType = cBank.AccountType,
-                            InitialBalance = cBank.InitialBalance
+                            InitialBalance = cBank.InitialBalance,
+                            AccountModeCode = cBank.AccountModeCode
                         }).Where(it => it.VGUID == guid).ExecuteCommand();
                     }
                     else
@@ -566,12 +567,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return Json(resultModel);
         }
-        public JsonResult GetCompanyInfo(string code)//Guid[] vguids
+        public JsonResult GetCompanyInfo(string code,string accountModeCode)//Guid[] vguids
         {
             var response = new List<Business_CompanyBankInfo>();
             DbBusinessDataService.Command(db =>
             {
-                response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code).ToList();
+                response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code && x.AccountModeCode == accountModeCode).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }

@@ -302,20 +302,20 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == OrderListAPI.AccountSetCode && x.AccountType == "基本户").First();
                         if(bankInfo != null)
                         {
-                            orderListDraft.OrderBankName = bankInfo.BankName;
-                            orderListDraft.OrderBankAccouont = bankInfo.BankAccount;
-                            orderListDraft.OrderBankAccouontName = bankInfo.BankAccountName;
+                            orderListDraft.OrderBankName = bankInfo.BankName;//付款账号开户行
+                            orderListDraft.OrderBankAccouont = bankInfo.BankAccount;//付款账号ACON
+                            orderListDraft.OrderBankAccouontName = bankInfo.BankAccountName;//付款账号户名
                         } 
-                        orderListDraft.CollectBankName = data.CollectionBank;
-                        orderListDraft.CollectBankAccouont = data.CollectionAccount;
-                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;
+                        orderListDraft.CollectBankName = data.CollectionBank;//收款账号开户行
+                        orderListDraft.CollectBankAccouont = data.CollectionAccount;//收款账号OPAC
+                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;//收款账号户名
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod;
                         orderListDraft.PaymentCompany = data.CollectionCompany;//收款人/单位/公司
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
-                        orderListDraft.Founder = OrderListAPI.Sponsor;
+                        orderListDraft.Founder = OrderListAPI.Sponsor;//发起人
                         orderListDraft.Money = OrderListAPI.Amount.TryToDecimal();
                         orderListDraft.CapitalizationMoney = MoneyToUpper(OrderListAPI.Amount);
                         //OrderListAPI.Mode = data.Mode;

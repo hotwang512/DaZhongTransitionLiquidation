@@ -311,6 +311,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         orderListDraft.CollectBankName = data.CollectionBank;//收款账号开户行
                         orderListDraft.CollectBankAccouont = data.CollectionAccount;//收款账号OPAC
                         orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;//收款账号户名
+                        orderListDraft.CollectBankNo = data.CollectionBankAccount;//收款银行行号
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod;

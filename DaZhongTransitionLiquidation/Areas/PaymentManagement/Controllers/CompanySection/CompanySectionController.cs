@@ -51,6 +51,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         {
                             item.IsSubjectCode = false;
                         }
+                        var isAnyCompanyBank = db.Queryable<Business_CompanyBankInfo>().Any(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.Code);
+                        if (isAnyCompanyBank)
+                        {
+                            item.IsCompanyBank = true;
+                        }
+                        else
+                        {
+                            item.IsCompanyBank = false;
+                        }
                     }
                 }
                 jsonResult.TotalRows = pageCount;

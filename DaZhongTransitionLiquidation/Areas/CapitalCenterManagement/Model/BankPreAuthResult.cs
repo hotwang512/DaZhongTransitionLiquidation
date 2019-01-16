@@ -9,6 +9,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
     {
         public bool success { get; set; }
         public string errmsg { get; set; }
-        public string data { get; set; }
+        public BankPreAuthResultData data { get; set; }
+    }
+    public class BankPreAuthResultData
+    {
+        public string serialNo { get; set; }
     }
 }

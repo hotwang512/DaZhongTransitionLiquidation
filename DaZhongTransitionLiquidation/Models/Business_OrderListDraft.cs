@@ -230,6 +230,12 @@ namespace DaZhongTransitionLiquidation.Models
         /// </summary> 
         public string CollectBankName { get; set; }
         /// <summary>
+        /// Desc:收款银行行号
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string CollectBankNo { get; set; }
+        /// <summary>
         /// Desc:交易序列号
         /// Default:
         /// Nullable:True

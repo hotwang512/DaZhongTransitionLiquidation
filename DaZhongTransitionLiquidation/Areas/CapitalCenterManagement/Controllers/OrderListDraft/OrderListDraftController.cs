@@ -116,8 +116,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
                             "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
                             "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
-                            "\"USAG\":\"{USAG}\",".Replace("{USAG}", vguid.TryToString()) +
-                            "\"REMK\":\"{REMK}\"".Replace("{REMK}", orderInfo.PaymentContents) +
+                            "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
+                            "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
                             "}";
             try
             {
@@ -131,10 +131,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 {
                     db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                     {
-                        OSNO = modelData.data,
+                        OSNO = modelData.data.serialNo,
                     }).Where(it => it.VGUID == vguid).ExecuteCommand();
                     Thread LogThread = new Thread(new ParameterizedThreadStart(AuthTransferResult));
-                    object[] paramObjs = { db,vguid, modelData.data };
+                    object[] paramObjs = { db,vguid, modelData.data.serialNo };
                     //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
                     LogThread.IsBackground = true;
                     LogThread.Start(paramObjs);//起线程  
@@ -158,10 +158,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
                             "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
                             "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
-                            "\"OPACPBNO\":\"{OPACPBNO}\",".Replace("{OPACPBNO}", orderInfo.OrderBankAccouont) +
+                            "\"OPACPBNO\":\"{OPACPBNO}\",".Replace("{OPACPBNO}", orderInfo.CollectBankNo) +
                             "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
-                            "\"USAG\":\"{USAG}\",".Replace("{USAG}", vguid.TryToString()) +
-                            "\"REMK\":\"{REMK}\"".Replace("{REMK}", orderInfo.PaymentContents) +
+                            "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
+                            "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
                             "}";
             try
             {
@@ -175,10 +175,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 {
                     db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                     {
-                        OSNO = modelData.data,
+                        OSNO = modelData.data.serialNo,
                     }).Where(it => it.VGUID == vguid).ExecuteCommand();
                     Thread LogThread = new Thread(new ParameterizedThreadStart(AuthTransferResult));
-                    object[] paramObjs = { db, vguid, modelData.data };
+                    object[] paramObjs = { db, vguid, modelData.data.serialNo };
                     //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
                     LogThread.IsBackground = true;
                     LogThread.Start(paramObjs);//起线程  

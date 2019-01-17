@@ -267,6 +267,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         /// <returns></returns>
         public JsonResult Pay_BuildPaymentVoucher(Business_OrderListAPI OrderListAPI)
         {
+            var results = "";
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             try
             {
@@ -276,8 +277,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
                 ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
                 ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
-                var guid = Guid.NewGuid();
-                var results = "";
+                var guid = Guid.NewGuid(); 
                 var Ifsuccess = false;
                 if (OrderListAPI != null)
                 {
@@ -331,7 +331,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         orderListDraft.Status = "1";
                         orderListDraft.CreateTime = DateTime.Now;
                         _db.Insertable<Business_OrderListDraft>(orderListDraft).ExecuteCommand();
-                        results = "/CapitalCenterManagement/OrderListDraftPrint/Index?VGUID=" + guid;
+                        results = guid.TryToString();
                         Ifsuccess = true;
                     }
                     else
@@ -353,7 +353,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     success = false,
                     errmsg = ex.Message,
-                    result = ""
+                    result = results
                 }, JsonRequestBehavior.AllowGet);
             }
         }

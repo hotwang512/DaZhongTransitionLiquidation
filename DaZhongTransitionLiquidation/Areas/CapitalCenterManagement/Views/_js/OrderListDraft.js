@@ -98,7 +98,41 @@ var $page = function () {
                 WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        //获取附件
+        $("#btnGetAttenment").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要操作数据！", null, "error");
+            } else if (selection.length > 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            }else {
+                WindowConfirmDialog(submit, "您确定要获取附件？", "确认框", "确定", "取消", selection);
+            }
+        });
 
+        selector.$grid().on('bindingComplete', function (event) {
+            if (status == "1") {
+                //显示附件信息
+                selector.$grid().jqxDataTable('showColumn', 'AttachmentInfo');
+                selector.$grid().jqxDataTable('hideColumn', 'BankStatus');
+                selector.$grid().jqxDataTable('hideColumn', 'BankStatusName');
+            } else {
+                //隐藏附件信息
+                selector.$grid().jqxDataTable('showColumn', 'BankStatus');
+                selector.$grid().jqxDataTable('showColumn', 'BankStatusName');
+                selector.$grid().jqxDataTable('hideColumn', 'AttachmentInfo');
+            }
+        });
     }; //addEvent end
 
     //删除
@@ -186,6 +220,7 @@ var $page = function () {
                     { name: 'Status', type: 'string' },
                     { name: 'BankStatus', type: 'string' },
                     { name: 'BankStatusName', type: 'string' },
+                    { name: 'AttachmentInfo', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -216,8 +251,10 @@ var $page = function () {
                     { text: '订单日期', datafield: 'FillingDate', width: 250, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
                     { text: '支付方式', datafield: 'PaymentMethod', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '金额', datafield: 'Money', align: 'center', width: 250, cellsAlign: 'center' },
-                    { text: '交易状态', datafield: 'BankStatus', align: 'center', width: 180, cellsAlign: 'center' },
-                    { text: '交易最终结果描述', datafield: 'BankStatusName', align: 'center', cellsAlign: 'center' },
+                    { text: '交易状态', datafield: 'BankStatus', align: 'center', width: 180, cellsAlign: 'center', hidden: true },
+                    { text: '交易最终结果描述', datafield: 'BankStatusName', align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '附件信息', datafield: 'AttachmentInfo', align: 'center', cellsAlign: 'center', hidden: true },
+
                     { text: '订单时间', datafield: 'OrderTime', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '来客人数', datafield: 'VisitorsNumber', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '陪同人数', datafield: 'EscortNumber', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
@@ -234,6 +271,7 @@ var $page = function () {
             // row index.
             window.location.href ="/CapitalCenterManagement/OrderListDraftDetail/Index?VGUID=" + row.VGUID;
         });
+
     }
 
     function detailFunc(row, column, value, rowData) {

@@ -265,5 +265,11 @@ namespace DaZhongTransitionLiquidation.Models
         /// Nullable:True
         /// </summary> 
         public string BankTD { get; set; }
+        /// <summary>
+        /// Desc:附件信息
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string AttachmentInfo { get; set; }
     }
 }

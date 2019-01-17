@@ -15,6 +15,31 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
+
+        var initWidgets = function (tab) {
+            switch (tab) {
+                case 0:
+                    
+                    break;
+                case 1:
+                    
+                    break;
+                case 2:
+                   
+                    break;
+                case 3:
+                    
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+            }
+        }
+        $('#jqxTabs').jqxTabs({ width: "99%", height: 595, initTabContent: initWidgets });
+
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         var myDate = new Date();
@@ -22,9 +47,8 @@ var $page = function () {
         $("#FillingDate").val($.action.replaceAll(date, '/', '-'));
         if (guid != "" && guid != null) {
             getOrderListDetail();
-        } else {
-            //$("#hideButton").show();
         }
+       
         $("#Money").blur(function () {
             var money = $("#Money").val();
             if (money != "") {
@@ -112,7 +136,10 @@ var $page = function () {
             var selection = $("#VGUID").val();
             WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
         });
-
+        //返回
+        $("#Comeback").on("click", function () {
+            history.go(-1);
+        });
 
         //提交
         function submit(selection) {
@@ -176,7 +203,7 @@ var $page = function () {
                     $("#btnUp").show();
                 }
                 if ($("#Status").val() == "2") {
-                    $("#btnCheck").show();
+                    $("#Comeback").hide();
                 }
                 //$("#BusinessType").val(msg.BusinessType);
                 //$("#BusinessProject").val(msg.BusinessProject);
@@ -218,7 +245,7 @@ var $page = function () {
                     default:
                 }
                 //$("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
-                loadAttachments(msg.Attachment);
+                //loadAttachments(msg.Attachment);
             }
         });
     }
@@ -230,114 +257,114 @@ $(function () {
     page.init();
 });
 
-$(function () {
-    var buttonText = {
-        browseButton: '上传',
-        uploadButton: '提交',
-        cancelButton: '清空',
-        uploadFileTooltip: '上传',
-        cancelFileTooltip: '删除'
-    };
-    $('#btn_Attachment').jqxFileUpload({ width: '600px', height: '', fileInputName: 'AttachmentFile', browseTemplate: 'success', uploadTemplate: 'primary', cancelTemplate: 'danger', localization: buttonText, multipleFilesUpload: true });
-    $("#btn_Attachment").on("select", function (event) {
-        if (event.args.size > (1024 * 1024 * 10)) {
-            jqxAlert("单文件大小不能超过10M");
-            $("#btn_AttachmentCancelButton").trigger('click');
-        }
-    });
-    $("#btn_Attachment").on("uploadStart", function (event) {
-        //获取文件名
-        fileName = event.args.file;
-        var extStart = fileName.lastIndexOf(".");
-        //判断是文件还是图片
-        var ext = fileName.substring(extStart, fileName.length).toUpperCase();
-        if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {//上传文件
-            $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadFile?allowSize=' + 20 });
-        }
-        else {//上传图片
-            $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadImage?allowSize=' + 20 });
-        }
-    })
-    $("#btn_Attachment").on("uploadEnd", function (event) {
-        var args = event.args;
-        //var msg = $.convert.strToJson($(args.response).html());
-        uploadFiles(event)
-        var attValue = $("#Attachment").val();
-        //var reg = /,$/gi;
-        //attValue = attValue.replace(reg, "");
-        var count = (attValue.split('发票&')).length - 1;
-        var counts = (attValue.split('其他&')).length - 1;
-        //$("#InvoiceNumber").val(count);
-        //$("#AttachmentNumber").val(count + counts);
-        $("#InvoiceNumber").text(count);
-        $("#AttachmentNumber").text(count + counts);
-        $.ajax({
-            url: "/CapitalCenterManagement/OrderListDraftDetail/SaveAttachment",
-            //data: { vguids: selection },
-            data: {
-                "VGUID": $("#VGUID").val(),
-                "Attachment": $("#Attachment").val(),
-                "InvoiceNumber": $("#InvoiceNumber").text(),
-                "AttachmentNumber": $("#AttachmentNumber").text(),
-            },
-            type: "post",
-            success: function (msg) {
+//$(function () {
+//    var buttonText = {
+//        browseButton: '上传',
+//        uploadButton: '提交',
+//        cancelButton: '清空',
+//        uploadFileTooltip: '上传',
+//        cancelFileTooltip: '删除'
+//    };
+//    $('#btn_Attachment').jqxFileUpload({ width: '600px', height: '', fileInputName: 'AttachmentFile', browseTemplate: 'success', uploadTemplate: 'primary', cancelTemplate: 'danger', localization: buttonText, multipleFilesUpload: true });
+//    $("#btn_Attachment").on("select", function (event) {
+//        if (event.args.size > (1024 * 1024 * 10)) {
+//            jqxAlert("单文件大小不能超过10M");
+//            $("#btn_AttachmentCancelButton").trigger('click');
+//        }
+//    });
+//    $("#btn_Attachment").on("uploadStart", function (event) {
+//        //获取文件名
+//        fileName = event.args.file;
+//        var extStart = fileName.lastIndexOf(".");
+//        //判断是文件还是图片
+//        var ext = fileName.substring(extStart, fileName.length).toUpperCase();
+//        if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {//上传文件
+//            $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadFile?allowSize=' + 20 });
+//        }
+//        else {//上传图片
+//            $('#btn_Attachment').jqxFileUpload({ uploadUrl: '/File/UploadImage?allowSize=' + 20 });
+//        }
+//    })
+//    $("#btn_Attachment").on("uploadEnd", function (event) {
+//        var args = event.args;
+//        //var msg = $.convert.strToJson($(args.response).html());
+//        uploadFiles(event)
+//        var attValue = $("#Attachment").val();
+//        //var reg = /,$/gi;
+//        //attValue = attValue.replace(reg, "");
+//        var count = (attValue.split('发票&')).length - 1;
+//        var counts = (attValue.split('其他&')).length - 1;
+//        //$("#InvoiceNumber").val(count);
+//        //$("#AttachmentNumber").val(count + counts);
+//        $("#InvoiceNumber").text(count);
+//        $("#AttachmentNumber").text(count + counts);
+//        $.ajax({
+//            url: "/CapitalCenterManagement/OrderListDraftDetail/SaveAttachment",
+//            //data: { vguids: selection },
+//            data: {
+//                "VGUID": $("#VGUID").val(),
+//                "Attachment": $("#Attachment").val(),
+//                "InvoiceNumber": $("#InvoiceNumber").text(),
+//                "AttachmentNumber": $("#AttachmentNumber").text(),
+//            },
+//            type: "post",
+//            success: function (msg) {
                 
-            }
-        });
-    })
-})
+//            }
+//        });
+//    })
+//})
 var fileName = "";
-function uploadFiles(event) {
-    var args = event.args;
-    var msg = $.convert.strToJson($(args.response).html());
-    fileName = event.args.file;
-    var attachments = $("#Attachment").val();
-    var type = $("#AttachmentType").val();
-    if (attachments == "") {
-        attachments = type + "&" + msg.WebPath + "&" + fileName;
-    }
-    else {
-        attachments = attachments + "," + type + "&" + msg.WebPath + "&" + fileName;
-    }
+//function uploadFiles(event) {
+//    var args = event.args;
+//    var msg = $.convert.strToJson($(args.response).html());
+//    fileName = event.args.file;
+//    var attachments = $("#Attachment").val();
+//    var type = $("#AttachmentType").val();
+//    if (attachments == "") {
+//        attachments = type + "&" + msg.WebPath + "&" + fileName;
+//    }
+//    else {
+//        attachments = attachments + "," + type + "&" + msg.WebPath + "&" + fileName;
+//    }
 
-    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
-    $("#Attachment").val(attachments);
+//    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+//    $("#Attachment").val(attachments);
 
 
-}
-function loadAttachments(attachments) {
-    $("#Attachment").val(attachments);
-    if (attachments != "") {
-        var attachValues = attachments.split(",");
-        for (var i = 0; i < attachValues.length; i++) {
-            var attach = attachValues[i].split("&");
-            if (attach != "") {
-                $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
-            }
-        }
-    }
-}
-function removeAttachment(obj) {
+//}
+//function loadAttachments(attachments) {
+//    $("#Attachment").val(attachments);
+//    if (attachments != "") {
+//        var attachValues = attachments.split(",");
+//        for (var i = 0; i < attachValues.length; i++) {
+//            var attach = attachValues[i].split("&");
+//            if (attach != "") {
+//                $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+//            }
+//        }
+//    }
+//}
+//function removeAttachment(obj) {
 
-    var id = obj.previousSibling.attributes["href"].value;
-    var type = obj.parentElement.textContent.substring(0, 2);
-    var name = obj.parentElement.textContent.substring(4, obj.parentElement.textContent.length - 1);
-    var replaceStr = type + "&" + id + "&" + name;
-    var attachmentValues = $("#Attachment").val();
-    attachmentValues = $.action.replaceAll(attachmentValues, replaceStr, '');
+//    var id = obj.previousSibling.attributes["href"].value;
+//    var type = obj.parentElement.textContent.substring(0, 2);
+//    var name = obj.parentElement.textContent.substring(4, obj.parentElement.textContent.length - 1);
+//    var replaceStr = type + "&" + id + "&" + name;
+//    var attachmentValues = $("#Attachment").val();
+//    attachmentValues = $.action.replaceAll(attachmentValues, replaceStr, '');
 
-    $("#Attachment").val(attachmentValues);
-    $(obj).parent().remove();
-    var attValue = attachmentValues;
-    //var reg = /,$/gi;
-    //attValue = attValue.replace(reg, "");
-    var count = (attValue.split('发票&')).length - 1;
-    var counts = (attValue.split('其他&')).length - 1;
-    $("#InvoiceNumber").val(count);
-    $("#AttachmentNumber").val(count+counts);
-    return false;
-}
+//    $("#Attachment").val(attachmentValues);
+//    $(obj).parent().remove();
+//    var attValue = attachmentValues;
+//    //var reg = /,$/gi;
+//    //attValue = attValue.replace(reg, "");
+//    var count = (attValue.split('发票&')).length - 1;
+//    var counts = (attValue.split('其他&')).length - 1;
+//    $("#InvoiceNumber").val(count);
+//    $("#AttachmentNumber").val(count+counts);
+//    return false;
+//}
 
 
 /** 数字金额大写转换(可以处理整数,小数,负数) */
@@ -366,3 +393,16 @@ function smalltoBIG(n) {
     }
     return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
 }
+
+$(document).ready(function() {
+    $("#gallery_output img").not(":first").hide();
+
+    $("#gallery a").click(function() {
+        $("#gallery a").removeClass('on');
+        $(this).addClass("on");
+        if ( $("#" + this.rel).is(":hidden") ) {
+            $("#gallery_output img").slideUp();
+            $("#" + this.rel).slideDown();
+        }
+    });
+})

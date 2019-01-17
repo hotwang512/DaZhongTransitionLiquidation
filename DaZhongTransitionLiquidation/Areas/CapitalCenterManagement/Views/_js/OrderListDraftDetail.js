@@ -15,31 +15,6 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-
-        var initWidgets = function (tab) {
-            switch (tab) {
-                case 0:
-                    
-                    break;
-                case 1:
-                    
-                    break;
-                case 2:
-                   
-                    break;
-                case 3:
-                    
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-            }
-        }
-        $('#jqxTabs').jqxTabs({ width: "99%", height: 595, initTabContent: initWidgets });
-
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         var myDate = new Date();
@@ -152,16 +127,20 @@ var $page = function () {
                 //traditional: true,
                 type: "post",
                 success: function (msg) {
-                    switch (msg.Status) {
-                        case "0":
-                            jqxNotification("提交失败！", null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("提交成功！", null, "success");
-                            history.go(-1);
-                            window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
-                            break;
+                    if (msg.ResultInfo == "成功") {
+                        jqxNotification("提交成功！", null, "success");
+                        history.go(-1);
+                        window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                    } else {
+                        jqxNotification(msg.ResultInfo, null, "error");
                     }
+                    //switch (msg.ResultInfo) {
+                    //    case "0":
+                    //        jqxNotification("提交失败！", null, "error");
+                    //        break;
+                    //    case "1":
+                            
+                    //}
                 }
             });
         }
@@ -394,15 +373,3 @@ function smalltoBIG(n) {
     return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
 }
 
-$(document).ready(function() {
-    $("#gallery_output img").not(":first").hide();
-
-    $("#gallery a").click(function() {
-        $("#gallery a").removeClass('on');
-        $(this).addClass("on");
-        if ( $("#" + this.rel).is(":hidden") ) {
-            $("#gallery_output img").slideUp();
-            $("#" + this.rel).slideDown();
-        }
-    });
-})

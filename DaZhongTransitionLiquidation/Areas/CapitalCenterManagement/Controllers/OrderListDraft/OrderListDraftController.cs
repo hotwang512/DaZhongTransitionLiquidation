@@ -64,11 +64,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         }
         public JsonResult UpdataOrderListInfo(List<Guid> vguids, string status)//Guid[] vguids
         {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0",ResultInfo="" };
             DbBusinessDataService.Command(db =>
             {
                 foreach (var item in vguids)
                 {
+                    var resultInfo = "";
                     int saveChanges = 1;
                     //更新主表信息
                     saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
@@ -82,114 +83,129 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     if (rgsOrderBankName == rgsCollectBankName)
                     {
                         //同行
-                        Thread LogThread = new Thread(new ParameterizedThreadStart(GetBankPreAuth));
-                        object[] paramObj = { db, item, orderInfo };
-                        //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
-                        LogThread.IsBackground = true;
-                        LogThread.Start(paramObj);//起线程  
+                        //Thread LogThread = new Thread(new ParameterizedThreadStart(GetBankPreAuth));
+                        //object[] paramObj = { db, item, orderInfo };
+                        ////设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+                        //LogThread.IsBackground = true;
+                        //LogThread.Start(paramObj);//起线程  
+
+                        //object[] param = (object[])paramObj;
+                        //SqlSugarClient db = (SqlSugarClient)param[0];
+                        Guid vguid = item.TryToGuid();
+                        //Business_OrderListDraft orderInfo = (Business_OrderListDraft)param[2];
+                        var url = ConfigSugar.GetAppString("BankPreAuthURL");
+                        var data = "{" +
+                                        "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
+                                        "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
+                                        "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
+                                        "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
+                                        "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
+                                        "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
+                                        "}";
+                        try
+                        {
+                            WebClient wc = new WebClient();
+                            wc.Headers.Clear();
+                            wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                            wc.Encoding = System.Text.Encoding.UTF8;
+                            var resultData = wc.UploadString(new Uri(url), data);
+                            var modelData = resultData.JsonToModel<BankPreAuthResult>();
+                            if (modelData.success)
+                            {
+                                db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                                {
+                                    OSNO = modelData.data.serialNo,
+                                }).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                Thread LogThread = new Thread(new ParameterizedThreadStart(AuthTransferResult));
+                                object[] paramObjs = { db, vguid, modelData.data.serialNo };
+                                //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+                                LogThread.IsBackground = true;
+                                LogThread.Start(paramObjs);//起线程  
+                            }
+                            else
+                            {
+                                resultInfo = modelData.errmsg;
+                            }
+                            LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                        }
                     }
                     else
                     {
-                        //跨行
-                        Thread LogThread = new Thread(new ParameterizedThreadStart(GetCrossBankPreAuth));
-                        object[] paramObj = { db, item, orderInfo };
-                        //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
-                        LogThread.IsBackground = true;
-                        LogThread.Start(paramObj);//起线程  
+                        ////跨行
+                        //Thread LogThread = new Thread(new ParameterizedThreadStart(GetCrossBankPreAuth));
+                        //object[] paramObj = { db, item, orderInfo };
+                        ////设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+                        //LogThread.IsBackground = true;
+                        //LogThread.Start(paramObj);//起线程  
+
+                        var resultData = "";
+                        //object[] param = (object[])paramObj;
+                        //SqlSugarClient db = (SqlSugarClient)param[0];
+                        Guid vguid = item.TryToGuid();
+                        //Business_OrderListDraft orderInfo = (Business_OrderListDraft)param[2];
+                        var url = ConfigSugar.GetAppString("CrossBankPreAuthURL");
+                        var data = "{" +
+                                        "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
+                                        "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
+                                        "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
+                                        "\"OPACPBNO\":\"{OPACPBNO}\",".Replace("{OPACPBNO}", orderInfo.CollectBankNo) +
+                                        "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
+                                        "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
+                                        "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
+                                        "}";
+                        try
+                        {
+                            WebClient wc = new WebClient();
+                            wc.Headers.Clear();
+                            wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                            wc.Encoding = System.Text.Encoding.UTF8;
+                            resultData = wc.UploadString(new Uri(url), data);
+                            var modelData = resultData.JsonToModel<BankPreAuthResult>();
+                            if (modelData.success)
+                            {
+                                resultInfo = "成功";
+                                db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                                {
+                                    OSNO = modelData.data.serialNo,
+                                }).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                Thread LogThread = new Thread(new ParameterizedThreadStart(AuthTransferResult));
+                                object[] paramObjs = { db, vguid, modelData.data.serialNo };
+                                //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+                                LogThread.IsBackground = true;
+                                LogThread.Start(paramObjs);//起线程  
+                            }
+                            else
+                            {
+                                resultInfo = modelData.errmsg;
+                            }
+                            LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                        }
                     }
                     resultModel.IsSuccess = saveChanges == vguids.Count;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                    resultModel.ResultInfo = resultInfo;
                 }
             });
             return Json(resultModel);
         }
         //获取OSNO：交易序列号 同行
-        public static void GetBankPreAuth(object paramObj)
-        {
-            object[] param = (object[])paramObj;
-            SqlSugarClient db = (SqlSugarClient)param[0];
-            Guid vguid = param[1].TryToGuid();
-            Business_OrderListDraft orderInfo = (Business_OrderListDraft)param[2];
-            var url = ConfigSugar.GetAppString("BankPreAuthURL");
-            var data = "{" +
-                            "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
-                            "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
-                            "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
-                            "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
-                            "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
-                            "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
-                            "}";
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Clear();
-                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
-                wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url), data);
-                var modelData = resultData.JsonToModel<BankPreAuthResult>();
-                if (modelData.success)
-                {
-                    db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                    {
-                        OSNO = modelData.data.serialNo,
-                    }).Where(it => it.VGUID == vguid).ExecuteCommand();
-                    Thread LogThread = new Thread(new ParameterizedThreadStart(AuthTransferResult));
-                    object[] paramObjs = { db,vguid, modelData.data.serialNo };
-                    //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
-                    LogThread.IsBackground = true;
-                    LogThread.Start(paramObjs);//起线程  
-                }
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
-            }
-        }
+        //public static void GetBankPreAuth(object paramObj)
+        //{
+           
+        //}
         //获取OSNO：交易序列号 跨行
-        public static void GetCrossBankPreAuth(object paramObj)
-        {
-            object[] param = (object[])paramObj;
-            SqlSugarClient db = (SqlSugarClient)param[0];
-            Guid vguid = param[1].TryToGuid();
-            Business_OrderListDraft orderInfo = (Business_OrderListDraft)param[2];
-            var url = ConfigSugar.GetAppString("CrossBankPreAuthURL");
-            var data = "{" +
-                            "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
-                            "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
-                            "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
-                            "\"OPACPBNO\":\"{OPACPBNO}\",".Replace("{OPACPBNO}", orderInfo.CollectBankNo) +
-                            "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
-                            "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
-                            "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
-                            "}";
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Clear();
-                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
-                wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url), data);
-                var modelData = resultData.JsonToModel<BankPreAuthResult>();
-                if (modelData.success)
-                {
-                    db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                    {
-                        OSNO = modelData.data.serialNo,
-                    }).Where(it => it.VGUID == vguid).ExecuteCommand();
-                    Thread LogThread = new Thread(new ParameterizedThreadStart(AuthTransferResult));
-                    object[] paramObjs = { db, vguid, modelData.data.serialNo };
-                    //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
-                    LogThread.IsBackground = true;
-                    LogThread.Start(paramObjs);//起线程  
-                }
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
-            }
-        }
+        //public  string  GetCrossBankPreAuth(object paramObj)
+        //{
+            
+        //}
         //根据OSNO获取银行交易状态
         public static void AuthTransferResult(object paramObjs)
         {

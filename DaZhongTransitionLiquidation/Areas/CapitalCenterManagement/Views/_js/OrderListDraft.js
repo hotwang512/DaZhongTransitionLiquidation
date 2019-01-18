@@ -116,7 +116,7 @@ var $page = function () {
             } else if (selection.length > 1) {
                 jqxNotification("请选择一条数据！", null, "error");
             }else {
-                WindowConfirmDialog(submit, "您确定要获取附件？", "确认框", "确定", "取消", selection);
+                WindowConfirmDialog(getAttenment, "您确定要获取附件？", "确认框", "确定", "取消", selection);
             }
         });
 
@@ -195,7 +195,26 @@ var $page = function () {
             }
         });
     }
-
+    //获取附件
+    function getAttenment(selection) {
+        $.ajax({
+            url: "/CapitalCenterManagement/OrderListDraft/GetAttachmentInfo",
+            data: { PaymentVGUID: selection[0] },
+            //data: { PaymentVGUID: '99C8C2E2-3BA0-4533-B28F-08ABDA43A906' },
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                    case "0":
+                        jqxNotification(msg.ResultInfo, null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("获取成功！", null, "success");
+                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        break;
+                }
+            }
+        });
+    }
     function initTable() {
         //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
         var source =

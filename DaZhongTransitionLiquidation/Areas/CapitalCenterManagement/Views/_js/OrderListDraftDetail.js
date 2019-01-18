@@ -5,22 +5,23 @@ var selector = {
     $btnReset: function () { return $("#btnReset") },
 }; //selector end
 var isEdit = false;
-var vguid = "";
+var vguid = $.request.queryString().VGUID;
 
 var $page = function () {
 
     this.init = function () {
         addEvent();
+        getAttachmentDetail();
     }
 
     //所有事件
     function addEvent() {
-        var guid = $.request.queryString().VGUID;
-        $("#VGUID").val(guid);
+        
+        $("#VGUID").val(vguid);
         var myDate = new Date();
         var date = myDate.toLocaleDateString();     //获取当前日期
         $("#FillingDate").val($.action.replaceAll(date, '/', '-'));
-        if (guid != "" && guid != null) {
+        if (vguid != "" && vguid != null) {
             getOrderListDetail();
         }
        
@@ -172,7 +173,7 @@ var $page = function () {
         $.ajax({
             url: "/CapitalCenterManagement/OrderListDraftDetail/GetOrderListDetail",
             data: {
-                "vguid": $("#VGUID").val(),
+                "vguid": vguid,
             },
             type: "post",
             dataType: "json",
@@ -184,47 +185,51 @@ var $page = function () {
                 if ($("#Status").val() == "2") {
                     $("#Comeback").hide();
                 }
-                //$("#BusinessType").val(msg.BusinessType);
-                //$("#BusinessProject").val(msg.BusinessProject);
-                //$("#BusinessSubItem1").val(msg.BusinessSubItem1);
-                //$("#BusinessSubItem2").val(msg.BusinessSubItem2);
-                //$("#BusinessSubItem3").val(msg.BusinessSubItem3);
-                //$("#OrderDate").val(msg.OrderDate);
-                //$("#OrderTime").val(msg.OrderTime);
                 $("#PaymentCompany").text(msg.PaymentCompany);
-                //$("#CollectionCompany").text(msg.CollectionCompany);
-                //$("#VisitorsNumber").text(msg.VisitorsNumber);
-                //$("#EscortNumber").text(msg.EscortNumber);
-                //$("#NumberCount").text(msg.NumberCount);
                 $("#OrderCompany").text(msg.OrderCompany);
                 $("#Money").text(msg.Money);
-                $("#CapitalizationMoney").text(msg.CapitalizationMoney);
-                $("#EnterpriseLeader").text(msg.EnterpriseLeader);
-                $("#ResponsibleLeader").text(msg.ResponsibleLeader);
-                $("#JiCaiBuExamine").text(msg.JiCaiBuExamine);
-                $("#DepartmentHead").text(msg.DepartmentHead);
-                $("#Cashier").text(msg.Cashier);
                 $("#Payee").text(msg.Payee);
-                $("#InvoiceNumber").text(msg.InvoiceNumber);
-                $("#AttachmentNumber").text(msg.AttachmentNumber);
                 $("#PaymentContents").text(msg.PaymentContents);
-                //$("#FillingDate").text(msg.FillingDate);
-                var fillingDate = parseInt(msg.FillingDate.replace(/[^0-9]/ig, ""));//转时间戳
-                var date = $.convert.toDate(new Date(fillingDate), "yyyy-MM-dd");
-                var d = date.split("-")[0] + " 年 " + date.split("-")[1] + " 月 " + date.split("-")[2] + " 日";
-                $("#FillingDate").text(d);
 
-                switch (msg.PaymentMethod) {
-                    case "现金": $("#Cash").text("√");
-                        break;
-                    case "银行": $("#Bank").text("√");
-                        break;
-                    case "其他": $("#Other").text("√");
-                        break;
-                    default:
-                }
+                $("#CollectionAccount").val(msg.CollectBankAccouont);
+                $("#CollectionBankAccountName").val(msg.CollectBankAccountName);
+                $("#CollectionBank").val(msg.CollectBankName);
+
+                $("#PayAccount").val(msg.OrderBankAccouont);
+                $("#PayBankAccountName").val(msg.OrderBankAccouontName);
+                $("#PayBank").val(msg.OrderBankName);
                 //$("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
                 //loadAttachments(msg.Attachment);
+            }
+        });
+    }
+    function getAttachmentDetail() {
+        $.ajax({
+            url: "/CapitalCenterManagement/OrderListDraftDetail/GetAttachmentInfo",
+            data: {
+                "PaymentVGUID": vguid,
+            },
+            type: "post",
+            dataType: "json",
+            success: function (msg) {
+                for (var i = 0; i < msg.length; i++) {
+                    var html = '<a rel="img' + i + '" href="' + msg[i].Attachment + '"><img src="' + msg[i].Attachment + '" style="width: 150px;height: 100px;margin: 3px;" /></a>';
+                    switch (msg[i].AttachmentType) {
+                        case "付款凭证":$("#ImgPaymentReceipt").append(html);
+                            break
+                        case "发票": $("#ImgInvoiceReceipt").append(html);
+                            break
+                        case "OA审批单": $("#ImgApprovalReceipt").append(html);
+                            break
+                        case "合同": $("#ImgContract").append(html);
+                            break
+                        case "清单、清册": $("#ImgDetailList").append(html);
+                            break
+                        case "其他": $("#ImgOtherReceipt").append(html);
+                            break
+                        default:
+                    }
+                }
             }
         });
     }
@@ -235,6 +240,20 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+function payBankChange() {
+    var payBankValue = $("#PayBank").val();
+    $.ajax({
+        url: "/CapitalCenterManagement/OrderListDetail/GetBankInfo",
+        //async: false,
+        data: { PayBank: payBankValue },
+        type: "post",
+        success: function (result) {
+            $("#PayAccount").val(result.BankAccount);
+            $("#PayBankAccountName").val(result.BankAccountName);
+        }
+    });
+}
 
 //$(function () {
 //    var buttonText = {

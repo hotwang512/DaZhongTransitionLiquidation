@@ -27,6 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/OrderListDraft
         public ActionResult Index()
         {
+            ViewBag.GetAttachmentUrl = ConfigSugar.GetAppString("GetAttachmentUrl");
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
@@ -179,6 +180,145 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                     resultModel.ResultInfo = resultInfo;
                 }
+            });
+            return Json(resultModel);
+        }
+
+        public JsonResult GetAttachmentInfo(string PaymentVGUID)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var VGUID = PaymentVGUID.TryToGuid();
+                var IsSuccess = "0";
+                var resultInfo = "";
+                var url = ConfigSugar.GetAppString("GetAttachmentUrl");
+                var data = "{" +
+                                        "\"PaymentVGUID\":\"{PaymentVGUID}\"".Replace("{PaymentVGUID}", PaymentVGUID) +
+                                        "}";
+                try
+                {
+                    WebClient wc = new WebClient();
+                    wc.Headers.Clear();
+                    wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                    wc.Encoding = System.Text.Encoding.UTF8;
+                    var resultData = wc.UploadString(new Uri(url), data);
+                    var modelData = resultData.JsonToModel<AttachmentResult>();
+                    if (modelData.success)
+                    {
+                        IsSuccess = "1";
+                        var attachInfo = "";
+                        db.Deleteable<Business_VoucherAttachmentList>(x => x.VoucherVGUID == VGUID).ExecuteCommand();
+                        List<Business_VoucherAttachmentList> VAList = new List<Business_VoucherAttachmentList>();
+                        if (modelData.data.PaymentReceipt.Count != 0)
+                        {
+                            attachInfo += "付款凭证" + modelData.data.PaymentReceipt.Count + "张;";
+                            for (int i = 0; i < modelData.data.PaymentReceipt.Count; i++)
+                            {
+                                Business_VoucherAttachmentList VA = new Business_VoucherAttachmentList();
+                                VA.VGUID = Guid.NewGuid();
+                                VA.VoucherVGUID = VGUID;
+                                VA.Attachment = modelData.data.PaymentReceipt[i];
+                                VA.AttachmentType = "付款凭证";
+                                VA.CreateTime = DateTime.Now;
+                                VA.CreatePerson = UserInfo.LoginName;
+                                VAList.Add(VA);
+                            }
+                        }
+                        if (modelData.data.InvoiceReceipt.Count != 0)
+                        {
+                            attachInfo += "发票" + modelData.data.InvoiceReceipt.Count + "张;";
+                            for (int i = 0; i < modelData.data.InvoiceReceipt.Count; i++)
+                            {
+                                Business_VoucherAttachmentList VA = new Business_VoucherAttachmentList();
+                                VA.VGUID = Guid.NewGuid();
+                                VA.VoucherVGUID = VGUID;
+                                VA.Attachment = modelData.data.InvoiceReceipt[i];
+                                VA.AttachmentType = "发票";
+                                VA.CreateTime = DateTime.Now;
+                                VA.CreatePerson = UserInfo.LoginName;
+                                VAList.Add(VA);
+                            }
+                        }
+                        if (modelData.data.ApprovalReceipt.Count != 0)
+                        {
+                            attachInfo += "OA审批单" + modelData.data.ApprovalReceipt.Count + "张;";
+                            for (int i = 0; i < modelData.data.ApprovalReceipt.Count; i++)
+                            {
+                                Business_VoucherAttachmentList VA = new Business_VoucherAttachmentList();
+                                VA.VGUID = Guid.NewGuid();
+                                VA.VoucherVGUID = VGUID;
+                                VA.Attachment = modelData.data.ApprovalReceipt[i];
+                                VA.AttachmentType = "OA审批单";
+                                VA.CreateTime = DateTime.Now;
+                                VA.CreatePerson = UserInfo.LoginName;
+                                VAList.Add(VA);
+                            }
+                        }
+                        if (modelData.data.Contract.Count != 0)
+                        {
+                            attachInfo += "合同" + modelData.data.Contract.Count + "张;";
+                            for (int i = 0; i < modelData.data.Contract.Count; i++)
+                            {
+                                Business_VoucherAttachmentList VA = new Business_VoucherAttachmentList();
+                                VA.VGUID = Guid.NewGuid();
+                                VA.VoucherVGUID = VGUID;
+                                VA.Attachment = modelData.data.Contract[i];
+                                VA.AttachmentType = "合同";
+                                VA.CreateTime = DateTime.Now;
+                                VA.CreatePerson = UserInfo.LoginName;
+                                VAList.Add(VA);
+                            }
+                        }
+                        if (modelData.data.DetailList.Count != 0)
+                        {
+                            attachInfo += "清单、清册" + modelData.data.DetailList.Count + "张;";
+                            for (int i = 0; i < modelData.data.DetailList.Count; i++)
+                            {
+                                Business_VoucherAttachmentList VA = new Business_VoucherAttachmentList();
+                                VA.VGUID = Guid.NewGuid();
+                                VA.VoucherVGUID = VGUID;
+                                VA.Attachment = modelData.data.DetailList[i];
+                                VA.AttachmentType = "清单、清册";
+                                VA.CreateTime = DateTime.Now;
+                                VA.CreatePerson = UserInfo.LoginName;
+                                VAList.Add(VA);
+                            }
+                        }
+                        if (modelData.data.OtherReceipt.Count != 0)
+                        {
+                            attachInfo += "其他" + modelData.data.OtherReceipt.Count + "张;";
+                            for (int i = 0; i < modelData.data.OtherReceipt.Count; i++)
+                            {
+                                Business_VoucherAttachmentList VA = new Business_VoucherAttachmentList();
+                                VA.VGUID = Guid.NewGuid();
+                                VA.VoucherVGUID = VGUID;
+                                VA.Attachment = modelData.data.OtherReceipt[i];
+                                VA.AttachmentType = "其他";
+                                VA.CreateTime = DateTime.Now;
+                                VA.CreatePerson = UserInfo.LoginName;
+                                VAList.Add(VA);
+                            }
+                        }
+                        db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                        {
+                            AttachmentInfo = attachInfo,
+                        }).Where(it => it.VGUID == VGUID).ExecuteCommand();
+                        db.Insertable(VAList).ExecuteCommand();
+                    }
+                    else
+                    {
+                        IsSuccess = "0";
+                        resultInfo = modelData.errmsg;
+                    }
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                }
+                resultModel.Status = IsSuccess;
+                resultModel.ResultInfo = resultInfo;
             });
             return Json(resultModel);
         }

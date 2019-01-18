@@ -60,7 +60,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         {
             while (true)
             {
-                if (DateTime.Now.ToString("HH:mm:ss") == "00:30:00")
+                if (DateTime.Now.ToString("HH:mm:ss") == "10:00:00")
                 {
                     List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
                     var success = 0;
@@ -107,7 +107,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             while (isDo)
             {
                 SqlSugarClient db = DbBusinessDataConfig.GetInstance();
-                var orderList = db.Queryable<Business_OrderListDraft>().Where(x => x.Status == "2" && x.BankStatus != "0000" && x.BankStatus != "0003" && x.BankStatus != "0005").ToList();
+                var orderList = db.Queryable<Business_OrderListDraft>().Where(x => x.Status == "2" && ((x.BankStatus != "0000" && x.BankStatus != "0003" && x.BankStatus != "0005") || x.BankStatus == null)).ToList();
                 if (orderList != null)
                 {
                     List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();

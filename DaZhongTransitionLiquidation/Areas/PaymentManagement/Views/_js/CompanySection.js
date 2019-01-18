@@ -612,7 +612,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '描述', datafield: 'Descrption', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '描述', datafield: 'Descrption', width: 400, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
                     { text: '银行账号设置', datafield: 'IsCompanyBank', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: setCompanyFunc },
                     { text: '科目段', datafield: 'IsSubjectCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
@@ -1301,7 +1301,7 @@ function settingCompany(code, companyName) {
             { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '280px', align: 'center', editable: false, cellsAlign: 'center' },
             { text: '账户类别', datafield: "AccountType", groupable: true, width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
             { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '默认银行', datafield: "BankStatus", groupable: true, align: 'center', cellsAlign: 'center', columntype:'checkbox' },
+            { text: '默认支付银行', datafield: "BankStatus", groupable: true, align: 'center', cellsAlign: 'center', columntype:'checkbox' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]

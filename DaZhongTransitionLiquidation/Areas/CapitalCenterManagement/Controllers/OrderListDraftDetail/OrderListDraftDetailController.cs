@@ -1,6 +1,8 @@
-﻿using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
+﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Models;
 using SyntacticSugar;
@@ -20,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/OrderListDraftDetail
         public ActionResult Index()
         {
+            ViewBag.PayAccount = GetCompanyBankInfo();
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
@@ -135,6 +138,39 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
+        }
+
+        public JsonResult GetAttachmentInfo(string PaymentVGUID)//Guid[] vguids
+        {
+            List<Business_VoucherAttachmentList> VAList = new List<Business_VoucherAttachmentList>();
+            DbBusinessDataService.Command(db =>
+            {
+                var VGUID = PaymentVGUID.TryToGuid();
+                VAList = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == VGUID).ToList();
+            });
+            return Json(VAList, JsonRequestBehavior.AllowGet);
+        }
+        public List<Business_CompanyBankInfo> GetCompanyBankInfo()
+        {
+            var result = new List<Business_CompanyBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany).OrderBy("BankStatus desc").ToList();
+            });
+            return result;
+        }
+        public JsonResult GetBankInfo(string PayBank)
+        {
+            var result = new Business_CompanyBankInfo();
+            DbBusinessDataService.Command(db =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany && x.BankName == PayBank).First();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet); ;
         }
     }
 }

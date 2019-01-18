@@ -2228,6 +2228,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraft\OrderListDraftController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\Business_OrderList.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\AttachmentResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\BankPreAuthResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />

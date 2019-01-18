@@ -72,10 +72,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     var resultInfo = "";
                     int saveChanges = 1;
                     //更新主表信息
-                    saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                    {
-                        Status = status,
-                    }).Where(it => it.VGUID == item).ExecuteCommand();
+                    
                     var orderInfo = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == item);
                     Regex rgx = new Regex(@"[\w|\W]{2,4}银行");
                     var rgsOrderBankName = rgx.Match(orderInfo.OrderBankName).Value;
@@ -112,6 +109,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             var modelData = resultData.JsonToModel<BankPreAuthResult>();
                             if (modelData.success)
                             {
+                                saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                                {
+                                    Status = status,
+                                }).Where(it => it.VGUID == item).ExecuteCommand();
                                 db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                                 {
                                     OSNO = modelData.data.serialNo,
@@ -168,6 +169,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             if (modelData.success)
                             {
                                 resultInfo = "成功";
+                                saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                                {
+                                    Status = status,
+                                }).Where(it => it.VGUID == item).ExecuteCommand();
                                 db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                                 {
                                     OSNO = modelData.data.serialNo,

@@ -2816,3 +2816,5 @@
    在 System.Net.WebClient.UploadString(Uri address, String method, String data)
    在 System.Net.WebClient.UploadString(String address, String data)
    在 DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.ReconciliationReport.ReconciliationReportPack.GetRevenueSystemAmount(DbBusinessDataService DbBusinessDataService, String BankDate, String revenueDate, String channel_Id) 位置 E:\Project\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\ReconciliationReport\ReconciliationReportPack.cs:行号 157
+
+-------------------------------footer----------------------

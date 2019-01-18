@@ -90,6 +90,10 @@ var $page = function () {
                     "CollectionBank": $("#CollectionBank").val(),
                     "CollectionBankAccountName": $("#CollectionBankAccountName").val(),
                     "PaymentMethod": $("#PaymentMethod").val(),
+                    "PayAccount": $("#PayAccount").val(),
+                    "PayBankAccountName": $("#PayBankAccountName").val(),
+                    "PayBank": $("#PayBank").val(),
+                    "CompanyCode": $("#LoginCompanyCode").val(),
                 },
                 type: "post",
                 success: function (msg) {
@@ -217,6 +221,9 @@ var $page = function () {
                 $("#CollectionBankAccountName").val(msg.CollectionBankAccountName);
                 $("#CollectionBank").val(msg.CollectionBank);
                 $("#PaymentMethod").val(msg.PaymentMethod);
+                $("#PayAccount").val(msg.PayAccount);
+                $("#PayBankAccountName").val(msg.PayBankAccountName);
+                $("#PayBank").val(msg.PayBank);
             }
         });
     }
@@ -351,6 +358,20 @@ function companyChange(value) {
             $("#CollectionBankAccountName").val(values.BankAccountName);
             $("#CollectionBank").val(values.Bank);
             $("#CollectionBankAccount").val(values.BankNo);
+        }
+    });
+}
+
+function payBankChange() {
+    var payBankValue = $("#PayBank").val();
+    $.ajax({
+        url: "/CapitalCenterManagement/OrderListDetail/GetBankInfo",
+        //async: false,
+        data: { PayBank: payBankValue },
+        type: "post",
+        success: function (result) {
+            $("#PayAccount").val(result.BankAccount);
+            $("#PayBankAccountName").val(result.BankAccountName);
         }
     });
 }

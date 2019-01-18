@@ -1,13 +1,16 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Models;
 using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -70,12 +73,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
                     }
-                    Thread.Sleep((int)(1000 * 1));
                 }
+                Thread.Sleep((int)(1000));
             }
         }
-
-
         public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
         {
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
@@ -91,6 +92,70 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
             new Thread(new ThreadStart(BankDataPack.SyncBackFlowAndReconciliation)).Start();
             return success;
+        }
+        public static void AutoBankTransferResult()
+        {
+            Thread LogThread = new Thread(new ThreadStart(AuthTransferResult));
+            //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+            LogThread.IsBackground = true;
+            LogThread.Start();//凌晨12点半开起线程
+        }
+        //根据OSNO获取银行交易状态
+        public static void AuthTransferResult()
+        {
+            bool isDo = true;
+            while (isDo)
+            {
+                SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+                var orderList = db.Queryable<Business_OrderListDraft>().Where(x => x.Status == "2" && x.BankStatus != "0000" && x.BankStatus != "0003" && x.BankStatus != "0005").ToList();
+                if (orderList != null)
+                {
+                    List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
+                    foreach (var item in orderList)
+                    {
+                        CheckTransferResult(item, db, changeOrderList);                      
+                    }
+                    //返回changeOrderList
+                }
+                double timeSpan = ConfigSugar.GetAppString("TimeSpanMin").TryToInt();
+                Thread.Sleep((int)(timeSpan * 1000 * 60));
+            }
+        }
+        public static void CheckTransferResult(Business_OrderListDraft item, SqlSugarClient db, List<Business_OrderListDraft> changeOrderList)
+        {
+            var url = ConfigSugar.GetAppString("AuthTransferResult");
+            var data = "{" +
+                                  "\"OSNO\":\"{OSNO}\"".Replace("{OSNO}", item.OSNO) +
+                                  "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), data);
+                var modelData = resultData.JsonToModel<TransferResult>();
+                if (modelData.success)
+                {
+                    if (item.BankStatus != modelData.data.RECO)
+                    {
+                        var orderLists = new Business_OrderListDraft()
+                        {
+                            BankStatus = modelData.data.RECO,
+                            BankStatusName = modelData.data.REMG,
+                            BankTD = modelData.data.T24D,
+                            BankTS = modelData.data.T24S
+                        };
+                        db.Updateable<Business_OrderListDraft>(orderLists).Where(it => it.VGUID == item.VGUID).ExecuteCommand();
+                        changeOrderList.Add(orderLists);
+                    }
+                }
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+            }
         }
     }
 }

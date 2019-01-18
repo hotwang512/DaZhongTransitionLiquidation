@@ -1,10 +1,12 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+@using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 @{
     ViewBag.Title = "订单需求配置/订单需求配置明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
     var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
+    var payAccount = ViewBag.PayAccount as List<Business_CompanyBankInfo>;
 }
 @section js{
     <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -45,8 +47,8 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 350px;">
-        <table id="VoucherList" style="width:70%;margin-left:240px">
+    <div class="body_mk" style="height: 400px;">
+        <table id="VoucherList" style="width:70%;margin-left:240px;margin-top:20px">
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;">
@@ -83,9 +85,25 @@
                 <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>           
                 <td style="text-align: right;">银行行号：</td>
                 <td style="text-align: left;"><input id="CollectionBankAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
-
             </tr>
-            <tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">付款开户行：</td>
+                <td style="text-align: left;">
+                    <select id="PayBank" class="input_text form-control" style="width: 200px" onchange="payBankChange()">
+                        @{
+                            foreach (var item in ViewBag.PayAccount)
+                            {
+                                <option value="@item.BankName">@item.BankName</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td style="text-align: right;">付款账号：</td>
+                <td style="text-align: left;"><input id="PayAccount" type="text" value="@ViewBag.PayAccount[0].BankAccount" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">付款户名：</td>
+                <td style="text-align: left;"><input id="PayBankAccountName" type="text" value="@ViewBag.PayAccount[0].BankAccountName" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">支付方式：</td>
                 <td style="text-align: right;">
                     <select id="PaymentMethod" style="width: 200px;" class="input_text form-control">
@@ -94,10 +112,7 @@
                         <option value="其他">其他</option>
                     </select>
                 </td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: right;"></td>
-            <tr />
-
+            </tr>
 
             @*凭证7个段配置*@
             <tr style="height:50px;display:none">

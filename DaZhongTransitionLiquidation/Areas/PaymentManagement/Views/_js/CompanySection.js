@@ -494,6 +494,23 @@ var $page = function () {
             //$("#jqxSubjectSetting").jqxTreeGrid('expandRow', 0);
             //$("#jqxSubjectSetting").jqxTreeGrid('collapseRow', 0);
         });
+        //编辑默认银行
+        $("#jqxCompanySetting").on('cellendedit', function (event) {
+            var args = event.args;
+            var value = args.value;
+            var oldvalue = args.oldvalue;
+            var rowData = args.row;
+            $.ajax({
+                url: "/PaymentManagement/CompanySection/UpdataBankStatus",
+                //data: { vguids: selection },
+                data: { vguids: rowData.VGUID },
+                type: "post",
+                success: function (msg) {
+                    $("#jqxCompanySetting").jqxGrid('updateBoundData');
+                    $('#jqxCompanySetting').jqxGrid('addgroup', 'BankName');
+                }
+            });
+        });
     }; //addEvent end
 
     //账套段AccountModeSection
@@ -1249,9 +1266,8 @@ function settingCompany(code, companyName) {
                { name: "CompanyCode", type: 'string' },
                { name: "InitialBalance", type: 'number' },
                { name: 'VGUID', type: 'string' },
+               { name: 'BankStatus', type: 'bool' },
                //{ name: 'SectionVGUID', type: 'string' },
-               //{ name: 'VGUID', type: 'string' },
-               //{ name: 'Status', type: 'string' },
                //{ name: 'Remark', type: 'string' },
            ],
            datatype: "json",
@@ -1264,7 +1280,7 @@ function settingCompany(code, companyName) {
     var typeAdapter = new $.jqx.dataAdapter(source);
     $("#jqxCompanySetting").jqxGrid({
         //pageable: false,           
-        width: '1100px',
+        width: '1400px',
         height: 400,
         //pageSize: 10,
         //serverProcessing: true,
@@ -1275,16 +1291,17 @@ function settingCompany(code, companyName) {
         groupsexpandedbydefault: true,
         columnsHeight: 40,
         showgroupsheader: false,
-        //editable: false,
+        editable: true,
         //pagermode: 'simple',
         selectionmode: 'checkbox',
         groups: ['BankName'],
         columns: [
-            { text: '开户行', datafield: "BankName", groupable: true, width: '200px', align: 'center', cellsAlign: 'center', cellsRenderer: editBankFunc },
-            { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '250px', align: 'center', cellsAlign: 'center' },
-            { text: '账户类别', datafield: "AccountType", groupable: true, width: '200px', align: 'center', cellsAlign: 'center' },
-            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2",align: 'center', cellsAlign: 'center' },
+            { text: '开户行', datafield: "BankName", groupable: true, width: '280px', align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc },
+            { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '280px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '默认银行', datafield: "BankStatus", groupable: true, align: 'center', cellsAlign: 'center', columntype:'checkbox' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]

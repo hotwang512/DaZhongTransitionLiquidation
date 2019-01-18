@@ -208,6 +208,7 @@
     <Content Include="Areas\ReportManagement\Views\_js\AmountReport.js" />
     <Content Include="Areas\SystemManagement\Views\_js\BankChannelMapping.js" />
     <Content Include="Areas\SystemManagement\Views\_js\Channel.js" />
+    <Content Include="Areas\SystemManagement\Views\_js\module.js" />
     <Content Include="Areas\SystemManagement\Views\_js\Subject.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VoucherList.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VoucherListDetail.js" />
@@ -251,6 +252,7 @@
     <Content Include="Areas\ReimbursementCenter\Views\ROrderListDraftDetail\Index.cshtml" />
     <Content Include="Areas\PaymentManagement\Views\SubjectBalance\Index.cshtml" />
     <Content Include="Areas\HomePage\Views\CompanyHomePage\Index.cshtml" />
+    <Content Include="Areas\SystemManagement\Views\ModuleManagement\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2211,6 +2213,7 @@
     <Compile Include="App_Start\BaseController.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\HandleErrorFilter.cs" />
+    <Compile Include="App_Start\MyUrlHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
@@ -2266,6 +2269,7 @@
     <Compile Include="Areas\SystemManagement\Controllers\BankChannelMapping\BankChannelMappingController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementPack.cs" />
+    <Compile Include="Areas\SystemManagement\Controllers\ModuleManagement\ModuleManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementController.cs" />

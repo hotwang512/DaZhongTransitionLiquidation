@@ -5,10 +5,10 @@
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
-    <script src="@Url.Content("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.Content("~/_theme/layer/layer/theme/default/layer.css")"></script>
-    <script src="@Url.Content("~/_theme/layer/layer/layer.js")"></script>
-    <script src="@Url.Content("~/Areas/PaymentManagement/Views/_js/NextDayData.js")"></script>
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/_theme/layer/layer/theme/default/layer.css")"></script>
+    <script src="@Url.CusContent("~/_theme/layer/layer/layer.js")"></script>
+    <script src="@Url.CusContent("~/Areas/PaymentManagement/Views/_js/NextDayData.js")"></script>
 }
 
 @if (currentModuleRolePermission.Import == 1)

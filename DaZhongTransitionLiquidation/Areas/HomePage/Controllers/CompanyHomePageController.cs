@@ -27,10 +27,27 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
         public List<Sys_UserCompany> GetCompanyCode()
         {
             var result = new List<Sys_UserCompany>();
-            DbService.Command(db =>
-            {  
-                result = db.Queryable<Sys_UserCompany>().Where(x => x.UserName == UserInfo.LoginName && x.Status == "1").ToList();
-            });
+            if (UserInfo.LoginName.ToLower() == "sysadmin")
+            {
+                DbBusinessDataService.Command(db => 
+                {
+                    var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+                    foreach (var item in data)
+                    {
+                        Sys_UserCompany uc = new Sys_UserCompany();
+                        uc.CompanyCode = item.Code;
+                        uc.CompanyCodeName = item.Descrption;
+                        result.Add(uc);
+                    } 
+                });
+            }
+            else
+            {
+                DbService.Command(db =>
+                {
+                    result = db.Queryable<Sys_UserCompany>().Where(x => x.UserName == UserInfo.LoginName && x.Status == "1").ToList();
+                });
+            }
             return result;
         }
         public JsonResult SaveUserInfo(string ComapnyCode)

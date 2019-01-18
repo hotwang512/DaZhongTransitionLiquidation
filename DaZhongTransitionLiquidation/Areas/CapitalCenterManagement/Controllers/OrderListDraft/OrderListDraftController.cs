@@ -108,6 +108,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                 {
                                     OSNO = modelData.data.serialNo,
                                 }).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                orderInfo.OSNO = modelData.data.serialNo;
                                 //查询银行返回状态
                                 List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
                                 AutoSyncBankFlow.CheckTransferResult(orderInfo, db, changeOrderList);

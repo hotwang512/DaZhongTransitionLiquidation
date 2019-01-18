@@ -1,0 +1,35 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "系统管理/模块管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section js
+{
+    <script src="@Url.Content("~/Areas/SystemManagement/Views/_js/module.js")"></script>
+}
+
+@section css{
+
+}
+<table style="margin-top: 10px;">
+    <tr style="height: 50px;">
+        <td>
+            <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+        </td>
+        <td>
+            <button id="btnDelete" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+        </td>
+    </tr>
+</table>
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">模块信息</span></div>
+    </div>
+
+    <div id="moduletree" class="moduletree">
+    </div>
+</div>
+<!-- 底部表格 -->

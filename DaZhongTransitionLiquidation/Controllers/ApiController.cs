@@ -281,6 +281,9 @@ namespace DaZhongTransitionLiquidation.Controllers
                 var Ifsuccess = false;
                 if (OrderListAPI != null)
                 {
+                    var accountSetCode = OrderListAPI.AccountSetCode;
+                    var accountModeCode = accountSetCode.Split("|")[0];//账套
+                    var companyCode = accountSetCode.Split("|")[1];//公司
                     var BusinessType = OrderListAPI.ServiceCategory;
                     var BusinessProject = OrderListAPI.BusinessProject;
                     //var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
@@ -289,25 +292,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //从订单配置表中取出数据
                     var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessType != null, i => i.BusinessType == BusinessType)
                                .WhereIF(BusinessProject != null, i => i.BusinessProject == BusinessProject)
+                               .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
                                //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
                                //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
                                .ToList().FirstOrDefault();
                     //数据存入订单草稿表，生成订单
-                    var accountSetCode = OrderListAPI.AccountSetCode;
-                    var accountModeCode = accountSetCode.Split("|")[0];//账套
-                    var companyCode = accountSetCode.Split("|")[1];//公司
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
                         var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == companyCode).Descrption;
-                        var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
-                        if(bankInfo != null)
-                        {
-                            orderListDraft.OrderBankName = bankInfo.BankName;//付款账号开户行
-                            orderListDraft.OrderBankAccouont = bankInfo.BankAccount;//付款账号ACON
-                            orderListDraft.OrderBankAccouontName = bankInfo.BankAccountName;//付款账号户名
-                        } 
+                        //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
+
+                        orderListDraft.OrderBankName = data.PayBank;//付款账号开户行
+                        orderListDraft.OrderBankAccouont = data.PayAccount;//付款账号ACON
+                        orderListDraft.OrderBankAccouontName = data.PayBankAccountName;//付款账号户名
+
                         orderListDraft.CollectBankName = data.CollectionBank;//收款账号开户行
                         orderListDraft.CollectBankAccouont = data.CollectionAccount;//收款账号OPAC
                         orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;//收款账号户名

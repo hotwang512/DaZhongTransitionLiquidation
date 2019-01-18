@@ -38,11 +38,11 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "0" };
             DbService.Command<Sys_User>((db, o) =>
             {
-                //var cache = CacheManager<Sys_User>.GetInstance();
-                //cache[PubGet.GetUserKey].CompanyCode = ComapnyCode;
-                Sys_User userInfos = new Sys_User();
-                userInfos.CompanyCode = ComapnyCode;
-                CacheManager<Sys_User>.GetInstance().Add("ComapnyCode", userInfos, 8 * 60 * 60);
+                var cache = CacheManager<Sys_User>.GetInstance();
+                cache[PubGet.GetUserKey].CompanyCode = ComapnyCode;
+                //Sys_User userInfos = new Sys_User();
+                //userInfos.CompanyCode = ComapnyCode;
+                //CacheManager<Sys_User>.GetInstance().Add("ComapnyCode", userInfos, 8 * 60 * 60);
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);

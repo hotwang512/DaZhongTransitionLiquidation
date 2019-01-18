@@ -1,10 +1,12 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.PayAccount = GetCompanyBankInfo();
             return View();
         }
         public JsonResult SaveOrderListDetail(Business_OrderList sevenSection)
@@ -121,6 +124,28 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
+        }
+        public List<Business_CompanyBankInfo> GetCompanyBankInfo()
+        {
+            var result = new List<Business_CompanyBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany).OrderBy("BankStatus desc").ToList();
+            });
+            return result;
+        }
+        public JsonResult GetBankInfo(string PayBank)
+        {
+            var result = new Business_CompanyBankInfo();
+            DbBusinessDataService.Command(db =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany && x.BankName == PayBank).First();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet); ;
         }
     }
 }

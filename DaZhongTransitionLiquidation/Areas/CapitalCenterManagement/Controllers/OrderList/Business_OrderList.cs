@@ -38,6 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public string CollectionCompany { get; set; }
+        public string CollectionCompanyName { get; set; }
         /// <summary>
         /// Desc:业务单位
         /// Default:
@@ -92,10 +93,48 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public int InvoiceNumber { get; set; }
+        /// <summary>
+        /// Desc:收款账号
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
         public string CollectionAccount { get; set; }
+        /// <summary>
+        /// Desc:行号
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
         public string CollectionBankAccount { get; set; }
-        public string CollectionCompanyName { get; set; }
+        /// <summary>
+        /// Desc:户名
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
         public string CollectionBankAccountName { get; set; }
+        /// <summary>
+        /// Desc:开户行
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
         public string CollectionBank { get; set; }
+        /// <summary>
+        /// Desc:付款账号
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string PayAccount { get; set; }
+        /// <summary>
+        /// Desc:付款户名
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string PayBankAccountName { get; set; }
+        /// <summary>
+        /// Desc:付款开户行
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string PayBank { get; set; }
+        public string CompanyCode { get; set; }
     }
 }

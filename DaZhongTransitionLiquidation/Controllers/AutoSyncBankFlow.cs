@@ -113,7 +113,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
                     foreach (var item in orderList)
                     {
-                        CheckTransferResult(item, db, changeOrderList);                      
+                        CheckTransferResult(item, db, changeOrderList);
                     }
                     //返回changeOrderList
                 }
@@ -139,15 +139,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     if (item.BankStatus != modelData.data.RECO)
                     {
-                        var orderLists = new Business_OrderListDraft()
-                        {
-                            BankStatus = modelData.data.RECO,
-                            BankStatusName = modelData.data.REMG,
-                            BankTD = modelData.data.T24D,
-                            BankTS = modelData.data.T24S
-                        };
-                        db.Updateable<Business_OrderListDraft>(orderLists).Where(it => it.VGUID == item.VGUID).ExecuteCommand();
-                        changeOrderList.Add(orderLists);
+                        item.BankStatus = modelData.data.RECO;
+                        item.BankStatusName = modelData.data.REMG;
+                        item.BankTD = modelData.data.T24D;
+                        item.BankTS = modelData.data.T24S;
+                        db.Updateable<Business_OrderListDraft>(item).Where(it => it.VGUID == item.VGUID).ExecuteCommand();
+                        changeOrderList.Add(item);
                     }
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));

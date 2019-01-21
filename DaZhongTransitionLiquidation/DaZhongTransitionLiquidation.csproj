@@ -2275,6 +2275,7 @@
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementPack.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
     <Compile Include="Areas\SystemManagement\SystemManagementAreaRegistration.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\Business_VoucherAttachmentList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\Business_VoucherDetail.cs" />
@@ -2366,7 +2367,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
-    <Folder Include="Areas\SystemManagement\Models\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />

@@ -47,8 +47,23 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 400px;">
+    <div class="body_mk" style="height: 440px;">
         <table id="VoucherList" style="width:70%;margin-left:240px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">版块：</td>
+                <td style="text-align: left;">
+                    <select id="OrderBaseType" class="input_text form-control" style="width: 200px" onchange="orderBaseTypeChange()">
+                        @{
+                            foreach (var item in ViewBag.OrderBaseType)
+                            {
+                                <option value="@item.DESC0">@item.DESC0</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
+            </tr>
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;">

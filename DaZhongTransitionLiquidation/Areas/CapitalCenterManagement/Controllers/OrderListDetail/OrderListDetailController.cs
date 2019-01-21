@@ -26,6 +26,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.PayAccount = GetCompanyBankInfo();
+            ViewBag.OrderBaseType = GetOrderBaseType();
             return View();
         }
         public JsonResult SaveOrderListDetail(Business_OrderList sevenSection)
@@ -146,6 +147,18 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany && x.BankName == PayBank).First();
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
+        }
+        public List<CS_Master_2> GetOrderBaseType()
+        {
+            var result = new List<CS_Master_2>();
+            DbService.Command(db =>
+            {
+                //var cache = CacheManager<Sys_User>.GetInstance();
+                //var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
+                var vguid = "F8B45774-1B8B-47FC-9E3F-6C25E0F4D0B5".TryToGuid();
+                result = db.Queryable<CS_Master_2>().Where(x => x.VGUID == vguid).ToList();
+            });
+            return result;
         }
     }
 }

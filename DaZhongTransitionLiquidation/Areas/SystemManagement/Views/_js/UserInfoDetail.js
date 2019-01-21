@@ -150,20 +150,12 @@ var $page = function () {
             //selector.$departmentVguid().val(items.id);
             //选择的公司
             var selection = [];
-            var grid = $("#jqxTable1");
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-            checedBoxs.each(function () {
-                var th = $(this);
-                if (th.is(":checked")) {
-                    var index = th.attr("index");
-                    var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.Code);
-                }
-            });
+            var pars = JSON.stringify($('#jqxTable1').jqxGrid('getdisplayrows')); 
+
             selector.$frmtable().ajaxSubmit({
                 url: '/Systemmanagement/UserManagement/SaveUserInfo',
                 type: "post",
-                data: { isEdit: selector.$isEdit().val(), companyCode: selection },
+                data: { isEdit: selector.$isEdit().val(), gjson: pars },
                 dataType: "json",
                 success: function (msg) {
                     switch (msg.Status) {
@@ -190,58 +182,61 @@ function initTable1() {
         {
             datafields:
             [
-                { name: "checkbox", type: null },
                 { name: 'Code', type: 'string' },
                 { name: 'Descrption', type: 'string' },
-                { name: 'SectionVGUID', type: 'string' },
-                { name: 'VGUID', type: 'string' },
-                { name: 'Status', type: 'string' },
-                { name: 'Remark', type: 'string' },
-                { name: 'Setting', type: 'string' },
-                { name: 'VCRTUSER', type: 'string' },
-                { name: 'VMDFUSER', type: 'string' },
-                { name: 'VMDFTIME', type: 'date' },
-                { name: 'VCRTTIME', type: 'date' },
-                { name: 'Status', type: 'string' },
-                { name: 'Remark', type: 'string' },
-                { name: 'IsCompanyCode', type: 'string' },
-                { name: 'IsAccountModeCode', type: 'string' },
-                { name: 'IsSubjectCode', type: 'string' },
-                { name: 'IsCompanyBank', type: 'string' },
+                { name: 'CompanyCode', type: 'string' },
+                { name: 'CompanyName', type: 'string' },
+                { name: 'IsCheck', type: 'bool' },
+                { name: 'KeyData', type: 'string' },
+                { name: 'Block', type: 'string' },
+                { name: 'UserVGUID', type: 'string' },
             ],
             datatype: "json",
-            id: "VGUID",
-            data: {},
-            url: "/PaymentManagement/CompanySection/GetCompanySection"   //获取数据源的路径
+            id: "KeyData",
+            data: { UserVGUID: $.request.queryString().Vguid },
+            url: "/Systemmanagement/UserManagement/GetUserCompanyInfo"   //获取数据源的路径
         };
-    var typeAdapter = new $.jqx.dataAdapter(source, {
-        downloadComplete: function (data) {
-            source.totalrecords = data.TotalRows;
-        }
-    });
+    //var typeAdapter = new $.jqx.dataAdapter(source, {
+    //    downloadComplete: function (data) {
+    //        source.totalrecords = data.TotalRows;
+    //    }
+    //});
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    var countriesAdapter = [
+                 { value: "出租", label: "出租" },
+                 { value: "租赁", label: "租赁" },
+                 ]
     //创建卡信息列表（主表）
-    $("#jqxTable1").jqxDataTable(
+    $("#jqxTable1").jqxGrid(
         {
             pageable: true,
-            width: "70%",
-            height: 300,
-            pageSize: 99999999,
-            serverProcessing: true,
+            width: "98%",
+            height: 350,
+            pageSize: 10,
+            //serverProcessing: true,
             pagerButtonsCount: 10,
             source: typeAdapter,
             theme: "office",
             columnsHeight: 30,
+            editable: true,
+            pagermode: 'simple',
+            selectionmode:'none',
             columns: [
-                { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                { text: '编码', datafield: 'Code', width: 250, align: 'center', cellsAlign: 'center' },
-                { text: '描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center' },
-                { text: '状态', datafield: 'Status', align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
-                { text: '银行账号设置', datafield: 'IsCompanyBank', width: 150, align: 'center', cellsAlign: 'center',  hidden: true },
-                { text: '科目段', datafield: 'IsSubjectCode', width: 150, align: 'center', cellsAlign: 'center',  hidden: true },
-                { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center', hidden: true },
-                { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
-                { text: 'VGUID', datafield: 'VGUID', hidden: true },
-
+                //{ text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                {
+                    text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
+                },
+                { text: '账套编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'center',editable: false, },
+                { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司描述', datafield: 'CompanyName', width: 450, align: 'center', cellsAlign: 'center', editable: false },
+                {
+                    text: '版块', datafield: 'Block', align: 'center', cellsAlign: 'center', columntype: 'dropdownlist',
+                    createeditor: function (row, value, editor) {
+                        editor.jqxDropDownList({ source: countriesAdapter, displayMember: 'label', valueMember: 'value' });
+                    }
+                },
+                { text: 'KeyData', datafield: 'SectionVGUID', hidden: true },
             ]
         });
 

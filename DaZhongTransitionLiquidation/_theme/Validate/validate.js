@@ -20,70 +20,72 @@
 function Validate(selecter) {
     var isValidateSuccess = true;
     var validatType = $(selecter).attr("validatetype");
-
-    if (validatType.indexOf(",") > 0) {
-        var validatTypeList = validatType.split(',')
-        for (var i = 0; i < validatTypeList.length; i++) {
-            if (isValidateSuccess) {
-                switch (validatTypeList[i]) {
-                    case "required"://必填验证
-                        isValidateSuccess = validate_Required(selecter);
-                        break;
-                    case "email"://邮箱验证
-                        isValidateSuccess = validate_Email(selecter);
-                        break;
-                    case "phone"://验证手机号   
-                        isValidateSuccess = validate_Phone(selecter);
-                        break;
-                    case "number"://整数验证
-                        isValidateSuccess = validate_Number(selecter);
-                        break;
-                    case "decimalNumber"://整数或小数验证
-                        isValidateSuccess = validate_decimalNumber(selecter);
-                        break;
-                    case "idCard"://身份证号验证
-                        isValidateSuccess = validate_IdCard(selecter);
-                        break;
-                    case "length":
-                        break;
-                    case "english":
-                        isValidateSuccess = validate_EN(selecter);
-                        break;
+    if (validatType != null && validatType != "undefined") {
+        if (validatType.indexOf(",") > 0) {
+            var validatTypeList = validatType.split(',')
+            for (var i = 0; i < validatTypeList.length; i++) {
+                if (isValidateSuccess) {
+                    switch (validatTypeList[i]) {
+                        case "required"://必填验证
+                            isValidateSuccess = validate_Required(selecter);
+                            break;
+                        case "email"://邮箱验证
+                            isValidateSuccess = validate_Email(selecter);
+                            break;
+                        case "phone"://验证手机号   
+                            isValidateSuccess = validate_Phone(selecter);
+                            break;
+                        case "number"://整数验证
+                            isValidateSuccess = validate_Number(selecter);
+                            break;
+                        case "decimalNumber"://整数或小数验证
+                            isValidateSuccess = validate_decimalNumber(selecter);
+                            break;
+                        case "idCard"://身份证号验证
+                            isValidateSuccess = validate_IdCard(selecter);
+                            break;
+                        case "length":
+                            break;
+                        case "english":
+                            isValidateSuccess = validate_EN(selecter);
+                            break;
+                    }
                 }
             }
         }
-    }
-    else {
+        else {
 
-        switch (validatType) {
-            case "required":
-                isValidateSuccess = validate_Required(selecter);
-                break;
-            case "email":
-                isValidateSuccess = validate_Email(selecter);
-                break;
-            case "phone"://验证手机号    
-                isValidateSuccess = validate_Phone(selecter);
-                break;
-            case "number":
-                isValidateSuccess = validate_Number(selecter);
-                break;
-            case "decimalNumber"://整数或小数验证
-                isValidateSuccess = validate_decimalNumber(selecter);
-                break;
-            case "money"://金额
-                isValidateSuccess = validate_money(selecter);
-                break;
-            case "idCard"://身份证号验证
-                isValidateSuccess = validate_IdCard(selecter);
-                break;
-            case "length":
-                break;
-            case "english":
-                isValidateSuccess = validate_EN(selecter);
-                break;
+            switch (validatType) {
+                case "required":
+                    isValidateSuccess = validate_Required(selecter);
+                    break;
+                case "email":
+                    isValidateSuccess = validate_Email(selecter);
+                    break;
+                case "phone"://验证手机号    
+                    isValidateSuccess = validate_Phone(selecter);
+                    break;
+                case "number":
+                    isValidateSuccess = validate_Number(selecter);
+                    break;
+                case "decimalNumber"://整数或小数验证
+                    isValidateSuccess = validate_decimalNumber(selecter);
+                    break;
+                case "money"://金额
+                    isValidateSuccess = validate_money(selecter);
+                    break;
+                case "idCard"://身份证号验证
+                    isValidateSuccess = validate_IdCard(selecter);
+                    break;
+                case "length":
+                    break;
+                case "english":
+                    isValidateSuccess = validate_EN(selecter);
+                    break;
+            }
         }
     }
+    
     return isValidateSuccess;
 }
 

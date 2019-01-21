@@ -10,6 +10,7 @@ using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using SqlSugar;
 using SyntacticSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserManagement
 {
@@ -38,7 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
             ViewBag.UserSubDepartment = GetUserSubDepartment().ModelToJson();
             return View();
         }
-        
+
 
         /// <summary>
         /// 绑定权限下拉框
@@ -155,9 +156,11 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
         /// <param name="userInfo">用户信息</param>
         /// <param name="isEdit">是否编辑</param>
         /// <returns></returns>
-        public JsonResult SaveUserInfo(Sys_User userInfo, bool isEdit,List<string> companyCode)
+        public JsonResult SaveUserInfo(Sys_User userInfo, bool isEdit, string gjson)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var guid = Guid.NewGuid();
+            var uGuid = guid.TryToString();
             DbService.Command<UserManagementPack>((db, o) =>
             {
                 if (o.IsExistLoginName(db, userInfo, isEdit))
@@ -168,32 +171,34 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                 if (isEdit)
                 {
                     userInfo.ChangeDate = DateTime.Now;
-                    userInfo.ChangeUser = userInfo.LoginName;       
+                    userInfo.ChangeUser = userInfo.LoginName;
                     resultModel.IsSuccess = db.Updateable(userInfo).IgnoreColumns(i => new { i.CreatedDate, i.CreatedUser, i.Password }).ExecuteCommand() > 0;
                 }
                 else
                 {
                     userInfo.Password = "123456";
-                    userInfo.Vguid = Guid.NewGuid();
+                    userInfo.Vguid = guid;
                     userInfo.CreatedDate = DateTime.Now;
                     userInfo.CreatedUser = userInfo.LoginName;
                     resultModel.IsSuccess = db.Insertable(userInfo).ExecuteCommand() > 0;
                 }
-                db.Deleteable<Sys_UserCompany>(x => x.UserName == userInfo.UserName).ExecuteCommand();
-                List<Sys_UserCompany> userComList = new List<Sys_UserCompany>();
-                foreach (var item in companyCode)
-                {
-                    var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == item).First();
-                    Sys_UserCompany userCom = new Sys_UserCompany();
-                    userCom.UserName = userInfo.LoginName;
-                    userCom.VGUID = Guid.NewGuid();
-                    userCom.CompanyCode = item;
-                    userCom.CompanyCodeName = data.Descrption;
-                    userCom.Status = data.Status;
-                    userComList.Add(userCom);
-                }
-                db.Insertable(userComList).ExecuteCommand();
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            DbBusinessDataService.Command(db =>
+            {
+                var data = gjson.JsonToModel<List<Business_UserCompanySet>>();
+                db.Deleteable<Business_UserCompanySet>(x => x.UserVGUID == uGuid).ExecuteCommand();
+                if(userInfo.Vguid != Guid.Empty)
+                {
+                    uGuid = userInfo.Vguid.TryToString();
+                    data.ForEach(w => w.UserVGUID = uGuid);
+                }
+                else
+                {
+                    data.ForEach(w => w.UserVGUID = uGuid);
+                }
+                data.ForEach(x => x.VGUID = Guid.NewGuid());
+                db.Insertable<Business_UserCompanySet>(data).ExecuteCommand();
             });
             return Json(resultModel);
         }
@@ -253,6 +258,35 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                 resultModel.IsSuccess = changes == userInfos.Count;
             });
             return Json(resultModel);
+        }
+
+
+        public JsonResult GetUserCompanyInfo(string UserVGUID)//Guid[] vguids
+        {
+            var response = new List<Business_UserCompanySet>();
+            DbBusinessDataService.Command(db =>
+            {
+                var data = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserVGUID).Count();
+                if(data == 0)
+                {
+                    response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
+ (t1.Code+t2.Code) as KeyData,t3.IsCheck,t3.Block,t3.UserVGUID from Business_SevenSection t1 
+ JOIN Business_SevenSection t2 on cast(t1.VGUID as varchar(36)) <>t2.SectionVGUID
+ left join Business_UserCompanySet as t3 on t3.KeyData = (t1.Code+t2.Code)
+where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43'").OrderBy("Code asc,CompanyCode asc").ToList();
+                }
+                else
+                {
+                    response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
+ (t1.Code+t2.Code) as KeyData,t3.IsCheck,t3.Block,t3.UserVGUID from Business_SevenSection t1 
+ JOIN Business_SevenSection t2 on cast(t1.VGUID as varchar(36)) <>t2.SectionVGUID
+ left join Business_UserCompanySet as t3 on t3.KeyData = (t1.Code+t2.Code)
+where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43' and t3.UserVGUID='" + UserVGUID + @"'
+").OrderBy("Code asc,CompanyCode asc").ToList();
+                }
+                
+            });
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }

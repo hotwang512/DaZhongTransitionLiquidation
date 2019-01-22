@@ -268,6 +268,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         public JsonResult Pay_BuildPaymentVoucher(Business_OrderListAPI OrderListAPI)
         {
             var results = "";
+            var errmsg = string.Empty;
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             try
             {
@@ -277,7 +278,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
                 ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
                 ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
-                var guid = Guid.NewGuid(); 
+                var guid = Guid.NewGuid();
                 var Ifsuccess = false;
                 if (OrderListAPI != null)
                 {
@@ -335,13 +336,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                     }
                     else
                     {
-                        results = "在订单配置表中找不到信息";
+                        errmsg = "在订单配置表中找不到信息";
                     }
                 }
                 return Json(new
                 {
                     success = Ifsuccess,
-                    errmsg = "",
+                    errmsg = errmsg,
                     result = results
                 }, JsonRequestBehavior.AllowGet);
             }

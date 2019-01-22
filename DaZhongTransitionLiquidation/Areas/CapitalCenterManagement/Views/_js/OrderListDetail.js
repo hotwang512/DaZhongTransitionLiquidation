@@ -44,7 +44,7 @@ var $page = function () {
         } else {
             $("#hideButton").show();
         }
-        
+
         //取消
         $("#btnCancel").on("click", function () {
             history.go(-1);
@@ -438,7 +438,7 @@ $(function () {
 var addOption1 = function (select, txt, value, num) {
     select.add(new Option(txt, value), num);
 }
-
+var records = null;
 function initOrganization() {
     $.ajax({
         url: "/CapitalCenterManagement/OrderListDetail/GetBusinessTypeTree",
@@ -455,6 +455,10 @@ function initOrganization() {
                 var args = event.args;
                 var item = selector.$pushTree().jqxTree('getItem', args.element);
 
+                result = "";
+                results = "";
+                $("#BusinessProject").text("");
+                $("#BusinessSubItem1").val("");//编号
                 //if (selector.$currentUserDepartment().val().indexOf(item.id) == -1) {
                 //    jqxNotification("请选择本公司及其子部门！", null, "error");
                 //    return false;
@@ -463,46 +467,46 @@ function initOrganization() {
                 var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
                 selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', dropDownContent);
 
-                var businessText = getBusinessText(item.prevItem) + item.label;
-                var businessCodeText = getBusinessCodeText(item.prevItem) + item.value;
+                var businessText = getBusinessText(item);
+                //var businessCodeText = getBusinessCodeText(item.prevItem) + item.value;
                 $("#BusinessProject").text(businessText);
-                $("#BusinessSubItem1").val(businessCodeText);//编号
-                
+                $("#BusinessSubItem1").val(results);//编号
+
             });
             var source =
-                {
-                    datatype: "json",
-                    datafields: [
-                        { name: 'Code' },
-                        { name: 'BusinessName' },
-                        { name: 'ParentVGUID' },
-                        { name: 'VGUID' }
-                    ],
-                    id: 'Vguid',
-                    localdata: msg
-                };
+               {
+                   datatype: "json",
+                   datafields: [
+                       { name: 'Code' },
+                       { name: 'BusinessName' },
+                       { name: 'ParentVGUID' },
+                       { name: 'VGUID' }
+                   ],
+                   id: 'Vguid',
+                   localdata: msg
+               };
             var dataAdapter = new $.jqx.dataAdapter(source);
             // perform Data Binding.
             dataAdapter.dataBind();
-            var records = dataAdapter.getRecordsHierarchy('VGUID', 'ParentVGUID', 'items',
-                [
-                    {
-                        name: 'Code',
-                        map: 'value'
-                    },
-                    {
-                        name: 'BusinessName',
-                        map: 'label'
-                    },
-                    {
-                        name: 'VGUID',
-                        map: 'id'
-                    },
-                    {
-                        name: 'ParentVGUID',
-                        map: 'parentId'
-                    }
-                ]);
+            records = dataAdapter.getRecordsHierarchy('VGUID', 'ParentVGUID', 'items',
+               [
+                   {
+                       name: 'Code',
+                       map: 'value'
+                   },
+                   {
+                       name: 'BusinessName',
+                       map: 'label'
+                   },
+                   {
+                       name: 'VGUID',
+                       map: 'id'
+                   },
+                   {
+                       name: 'ParentVGUID',
+                       map: 'parentId'
+                   }
+               ]);
             selector.$pushTree().jqxTree({ source: records, width: '200px', height: '250px', incrementalSearch: true });//, checkboxes: true
             selector.$pushTree().jqxTree('expandAll');
         }
@@ -510,21 +514,36 @@ function initOrganization() {
 }
 var result = "";
 var results = "";
+//var level = "";
+//var currentLever = "";
 function getBusinessText(parentItem) {
-    if (parentItem.level != 0) {
-        result = parentItem.label+ "|"+ result;
-        getBusinessText(parentItem.prevItem);
-    } else {
-        result = parentItem.label + "|" + result;
+    result = parentItem.label;
+    results = parentItem.value;
+    var prevItem = parentItem.prevItem;
+    while (prevItem != null) {
+        if (parentItem.level != prevItem.level) {
+            result = prevItem.label + "|" + result;
+            results = prevItem.value + "|" + results;
+            parentItem = prevItem;
+            prevItem = parentItem.prevItem;
+        } else {
+            prevItem = parentItem.prevItem.prevItem;
+        }
     }
+    //if (parentItem.level != 0) {
+
+    //} else {
+    //    result = parentItem.label + "|" + result;
+    //}
     return result;
 }
-function getBusinessCodeText(parentItem) {
-    if (parentItem.level != 0) {
-        results = parentItem.value + "|" + results;
-        getBusinessCodeText(parentItem.prevItem);
-    } else {
-        results = parentItem.value + "|" + results;
-    }
-    return results;
-}
+
+//function getBusinessCodeText(parentItem) {
+//    if (parentItem.level != 0) {
+//        results = parentItem.value + "|" + results;
+//        getBusinessCodeText(parentItem.prevItem);
+//    } else {
+//        results = parentItem.value + "|" + results;
+//    }
+//    return results;
+//}

@@ -183,6 +183,7 @@
   <ItemGroup>
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CustomerBankInfo.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\FundReconciliation.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderList.js" />
@@ -253,6 +254,7 @@
     <Content Include="Areas\PaymentManagement\Views\SubjectBalance\Index.cshtml" />
     <Content Include="Areas\HomePage\Views\CompanyHomePage\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleManagement\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\BusinessTypeSet\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2217,6 +2219,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\Business_BusinessTypeSet.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\Business_CustomerBankInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\Business_FundReconciliation.cs" />

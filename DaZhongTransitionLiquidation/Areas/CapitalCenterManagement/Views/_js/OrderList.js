@@ -214,11 +214,12 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
-                    { text: '业务类型', datafield: 'BusinessType', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    //{ text: '业务类型', datafield: 'BusinessType', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '业务编码', datafield: 'BusinessSubItem1', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '业务项目', datafield: 'BusinessProject', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '业务子项1', datafield: 'BusinessSubItem1', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
+                   
+                    //{ text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
+                    //{ text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '收款公司', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '收款账号', datafield: 'CollectionAccount', align: 'center', cellsAlign: 'center', },
 
@@ -242,9 +243,9 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessType + "</a>";
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem1 + "</a>";
         } else {
-            container = "<span>" + rowData.BusinessType + "</span>";
+            container = "<span>" + rowData.BusinessSubItem1 + "</span>";
         }
         return container;
     }

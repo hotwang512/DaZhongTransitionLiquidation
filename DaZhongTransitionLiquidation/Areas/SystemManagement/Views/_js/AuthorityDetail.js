@@ -3,7 +3,8 @@
 var selector = {
 
     //表格元素
-    $grid: function () { return $("#modulePermissionsList") },
+    //$grid: function () { return $("#modulePermissionsList") },
+    $grid: function () { return $("#moduletree") },
     $userGrid: function () { return $("#userGrid") },
 
     //按钮元素
@@ -35,10 +36,16 @@ var dataTotalRows = 0;
 var $page = function () {
 
     this.init = function () {
+        pageload();
         addEvent();
+        
     }
 
-
+    function pageload() {
+        getModules(function (modules) {
+            loadGridTree(modules);
+        });
+    }
 
     //所有事件
     function addEvent() {
@@ -97,6 +104,53 @@ var $page = function () {
         });
 
     }; //addEvent end
+
+    function getModules(callback) {
+        $.ajax({
+            url: "/SystemManagement/ModuleManagement/GetModules",
+            type: "get",
+            dataType: "json",
+            success: function (msg) {
+                callback(msg);
+            }
+        });
+
+    }
+    function loadGridTree(modules) {
+        var source =
+                {
+                    dataType: "json",
+                    dataFields: [
+                        { name: 'ModuleName', type: 'string' },
+                        { name: 'Parent', type: 'string' },
+                        { name: 'Vguid', type: 'string' },
+                        { name: 'Reads', type: 'string' },
+                    ],
+                    hierarchy:
+                    {
+                        keyDataField: { name: 'Vguid' },
+                        parentDataField: { name: 'Parent' }
+                    },
+                    id: 'Vguid',
+                    localData: modules
+                };
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        selector.$grid().jqxTreeGrid({
+            width: selector.$grid().width(),
+            showHeader: true,
+            source: dataAdapter,
+            checkboxes: true,
+            //ready: function () {
+            //    $("#treegrid").jqxTreeGrid('expandRow', '1');
+            //},
+            columns: [
+              { text: '模块名称', dataField: 'ModuleName', width: 200, },
+              { text: '查看', dataField: 'Reads', width: 100, },
+              { text: '', dataField: 'Parent', width: "100%", hidden: true },
+              { text: '', dataField: 'Vguid', width: "100%", hidden: true },
+            ]
+        });
+    }
 
     //加载页面内容
     function initInput() {

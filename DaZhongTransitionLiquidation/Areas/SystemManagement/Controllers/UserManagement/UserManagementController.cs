@@ -266,13 +266,12 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
             var response = new List<Business_UserCompanySet>();
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserVGUID).Count();
+                 var data = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserVGUID).Count();
                 if(data == 0)
                 {
                     response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
- (t1.Code+t2.Code) as KeyData,t3.IsCheck,t3.Block,t3.UserVGUID from Business_SevenSection t1 
+ (t1.Code+t2.Code) as KeyData from Business_SevenSection t1 
  JOIN Business_SevenSection t2 on cast(t1.VGUID as varchar(36)) <>t2.SectionVGUID
- left join Business_UserCompanySet as t3 on t3.KeyData = (t1.Code+t2.Code)
 where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43'").OrderBy("Code asc,CompanyCode asc").ToList();
                 }
                 else

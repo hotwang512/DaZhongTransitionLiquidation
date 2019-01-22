@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
@@ -159,6 +160,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 result = db.Queryable<CS_Master_2>().Where(x => x.VGUID == vguid).ToList();
             });
             return result;
+        }
+        public JsonResult GetBusinessTypeTree()
+        {
+            var organizations = new List<Business_BusinessTypeSet>();
+            DbBusinessDataService.Command(db =>
+            {
+                //var currentDepartment = UserInfo.Department;
+                //var mainDepVguid = db.Queryable<Master_Organization>().Where(i => i.ParentVguid == null).Select(i => i.Vguid).Single();
+                organizations = db.Queryable<Business_BusinessTypeSet>().ToList();
+            });
+            return Json(organizations);
         }
     }
 }

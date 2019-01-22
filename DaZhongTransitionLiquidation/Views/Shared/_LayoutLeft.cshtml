@@ -324,14 +324,23 @@
         </div>
         <div class="menue_body" id="PaymentOrder" style="display: none;">
             <table>
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置维护" && i.Reads == 1))
-                    {
-                        <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
-                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">订单业务配置维护</td>
-                            <td></td>
-                        </tr>
-                    }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "业务配置" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/BusinessTypeSet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">业务配置</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置维护" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">订单业务配置维护</td>
+                        <td></td>
+                    </tr>
+                }    
+                
             </table>
         </div>
         <div class="menue_bodychild" style="display: none;">

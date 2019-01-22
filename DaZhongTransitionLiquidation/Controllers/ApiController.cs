@@ -272,8 +272,8 @@ namespace DaZhongTransitionLiquidation.Controllers
             try
             {
                 ExpCheck.Exception(OrderListAPI.AccountSetCode == null, "支付单位账套代码为空！");
-                ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
-                ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");
+                //ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
+                ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");//编码
                 ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
                 ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
                 ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
@@ -290,8 +290,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
                     //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
                     //从订单配置表中取出数据
-                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessType != null, i => i.BusinessType == BusinessType)
-                               .WhereIF(BusinessProject != null, i => i.BusinessProject == BusinessProject)
+                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1 == BusinessProject)
                                .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
                                //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
@@ -352,7 +351,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 return Json(new
                 {
                     success = false,
-                    errmsg = ex.Message,
+                    errmsg = ex.Message.ToString(),
                     result = results
                 }, JsonRequestBehavior.AllowGet);
             }

@@ -48,8 +48,8 @@
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
     <div class="body_mk" style="height: 440px;">
-        <table id="VoucherList" style="width:70%;margin-left:240px;margin-top:20px">
-            <tr style="height:50px">
+        <table id="VoucherList" style="width:82%;margin-left:240px;margin-top:20px">
+            @*<tr style="height:50px">
                 <td style="text-align: right;">版块：</td>
                 <td style="text-align: left;">
                     <select id="OrderBaseType" class="input_text form-control" style="width: 200px" onchange="orderBaseTypeChange()">
@@ -63,45 +63,50 @@
                 </td>
                 <td style="text-align: right;"></td>
                 <td style="text-align: left;"></td>
-            </tr>
+            </tr>*@
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
-                <td style="text-align: left;">
-                    <select id="BusinessType" class="input_text form-control" style="width: 200px;"></select>
-                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">配置</span></button>
+                <td style="text-align: left;" colspan="3">
+                    <div id="pushPeopleDropDownButton" class="input_text form-control">
+                        <div style="" id="pushTree">
+                        </div>
+                    </div>
+                    <label id="BusinessProject" for="" style="margin-left: 10px;margin-top: 5px;"></label>
+                    <input id="BusinessSubItem1" type="text" style="width: 800px;" class="hide" />
+                    @*<select id="BusinessType" class="input_text form-control" style="width: 200px;"></select>*@
+                    @*<button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">配置</span></button>*@
                     @*<input id="BusinessType" type="text" style="width: 200px;" class="input_text form-control" />*@
                 </td>
-                <td style="text-align: right;">业务项目：</td>
-                <td style="text-align: left;"><input id="BusinessProject" type="text" style="width: 200px;" class="input_text form-control" /></td>
+
             </tr>
-            <tr style="height:50px">
+            @*<tr style="height:50px">
                 <td style="text-align: right;">业务子项1：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem1" type="text" style="width: 200px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">业务子项2：</td>
                 <td style="text-align: left;"><input id="BusinessSubItem2" type="text" style="width: 200px;" class="input_text form-control" /></td>
-            </tr>
+            </tr>*@
             <tr style="height:50px">
-                <td style="text-align: right;">业务子项3：</td>
-                <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>
+                @*<td style="text-align: right;">业务子项3：</td>
+                <td style="text-align: left;"><input id="BusinessSubItem3" type="text" style="width: 200px;" class="input_text form-control" /></td>*@
                 <td style="text-align: right;">公司/单位/个人：</td>
                 <td style="text-align: left;">
                     <div id='CollectionCompany' class="input_text form-control"></div>
                 @*<select id="CollectionCompany" class="input_text form-control" style="width: 200px;" onchange="companyChange()"></select>*@
                 </td>
-            </tr>
-            <tr style="height:50px">
                 <td style="text-align: right;">收款账号：</td>
                 <td style="text-align: left;"><input id="CollectionAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
+            </tr>
+            <tr style="height:50px">
+               
                 <td style="text-align: right;">户名：</td>
                 <td style="text-align: left;"><input id="CollectionBankAccountName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>           
             </tr>
             <tr style="height:50px">
-                <td style="text-align: right;">开户行：</td>
-                <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>           
+               
                 <td style="text-align: right;">银行行号：</td>
                 <td style="text-align: left;"><input id="CollectionBankAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly"/></td>
-            </tr>
-            <tr style="height:50px">
                 <td style="text-align: right;">付款开户行：</td>
                 <td style="text-align: left;">
                     <select id="PayBank" class="input_text form-control" style="width: 200px" onchange="payBankChange()">
@@ -113,12 +118,16 @@
                         }
                     </select>
                 </td>
-                <td style="text-align: right;">付款账号：</td>
-                <td style="text-align: left;"><input id="PayAccount" type="text" value="@ViewBag.PayAccount[0].BankAccount" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
             </tr>
             <tr style="height:50px">
+               
+                <td style="text-align: right;">付款账号：</td>
+                <td style="text-align: left;"><input id="PayAccount" type="text" value="@ViewBag.PayAccount[0].BankAccount" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">付款户名：</td>
                 <td style="text-align: left;"><input id="PayBankAccountName" type="text" value="@ViewBag.PayAccount[0].BankAccountName" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
+            </tr>
+            <tr style="height:50px">
+               
                 <td style="text-align: right;">支付方式：</td>
                 <td style="text-align: right;">
                     <select id="PaymentMethod" style="width: 200px;" class="input_text form-control">
@@ -127,6 +136,8 @@
                         <option value="其他">其他</option>
                     </select>
                 </td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: left;"></td>
             </tr>
 
             @*凭证7个段配置*@

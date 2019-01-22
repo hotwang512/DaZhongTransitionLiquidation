@@ -1,0 +1,81 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "订单需求配置/业务配置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section js
+{
+    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/BusinessTypeSet.js")"></script>
+}
+
+@section css{
+
+}
+<table style="margin-top: 10px;">
+    <tr style="height: 50px;">
+        <td>
+            <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+        </td>
+        <td>
+            <button id="btnDelete" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+        </td>
+    </tr>
+</table>
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">业务信息</span></div>
+    </div>
+
+    <div id="moduletree" class="moduletree">
+    </div>
+</div>
+<!-- 底部表格 -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddNewBankDataDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">新增数据</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <table style="width: 100%;">
+                    <tr style="height: 45px;">
+                        <td style="width: 100px;text-align: left"><span class="spanText">业务编号</span></td>
+                        <td>
+                            <input id="ModuleCode" type="text" class="input_text form-control" validatetype="required" />
+                        </td>
+                    </tr>
+                    <tr style="height: 45px;">
+                        <td style="width: 100px;text-align: left"><span class="spanText">业务名称</span></td>
+                        <td>
+                            <input id="ModuleName" type="text" class="input_text form-control" validatetype="required" />
+                        </td>
+                    </tr>
+                    <tr id="SubjectShow" class="SubjectTr" style="height: 45px; ">
+                        <td style="width: 100px;text-align: left"><span class="spanText">是否一级菜单</span></td>
+                        <td>
+                            <select id="FirstMenu" class="input_text form-control">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="SubjectCode" class="" style="height: 45px; display:none">
+                        <td style="width: 100px;text-align: left"><span class="spanText">父级菜单</span></td>
+                        <td>
+                            <input id="ParentMenu" type="text" readonly="readonly" class="input_text form-control" />
+                            <input id="hideParentMenu" type="text" class="hide" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="AddNewBankData_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                <button id="AddNewBankData_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>

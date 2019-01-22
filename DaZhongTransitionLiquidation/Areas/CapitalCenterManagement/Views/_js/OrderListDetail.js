@@ -3,6 +3,8 @@ var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
+    $pushPeopleDropDownButton: function () { return $("#pushPeopleDropDownButton") },
+    $pushTree: function () { return $("#pushTree") },
 }; //selector end
 var isEdit = false;
 var vguid = "";
@@ -24,6 +26,9 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
+
+        initOrganization();
+
         //var id0 = "#CompanyCode";
         //uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
 
@@ -67,12 +72,12 @@ var $page = function () {
                 //data: { vguids: selection },
                 data: {
                     "VGUID": $("#VGUID").val(),
-                    "BusinessType": $("#BusinessType").val(),
-                    "BusinessProject": $("#BusinessProject").val(),
-                    "BusinessSubItem1": $("#BusinessSubItem1").val(),
-                    "BusinessSubItem2": $("#BusinessSubItem2").val(),
-                    "BusinessSubItem3": $("#BusinessSubItem3").val(),
-                    
+                    "BusinessType": $("#pushPeopleDropDownButton").val(),
+                    "BusinessProject": $("#BusinessProject").text(),//拼接类型
+                    "BusinessSubItem1": $("#BusinessSubItem1").val(),//拼接编号
+
+                    //"BusinessSubItem2": $("#BusinessSubItem2").val(),
+                    //"BusinessSubItem3": $("#BusinessSubItem3").val(),
                     //"CompanySection": $("#CompanyCode").val(),
                     //"SubjectName": $("#SubjectName").val(),
                     //"SubjectSection": $("#SubjectSection").val(),
@@ -81,6 +86,7 @@ var $page = function () {
                     //"SpareOneSection": $("#SpareOneSection").val(),
                     //"SpareTwoSection": $("#SpareTwoSection").val(),
                     //"IntercourseSection": $("#IntercourseSection").val(),
+
                     "Status": $("#Status").val(),
                     "Founder": $("#LoginName").val(),
 
@@ -200,12 +206,12 @@ var $page = function () {
                 //SpareTwoSection = loadCompanyCode("F", msg.CompanySection, msg.SubjectSection);
                 //IntercourseSection = loadCompanyCode("G", msg.CompanySection, msg.SubjectSection);
                 //loadSelectFun();
-                $("#BusinessType").val(msg.BusinessType);
-                $("#BusinessProject").val(msg.BusinessProject);
+                $("#pushPeopleDropDownButton").val(msg.BusinessType);
+                $("#BusinessProject").text(msg.BusinessProject);
                 $("#BusinessSubItem1").val(msg.BusinessSubItem1);
-                $("#BusinessSubItem2").val(msg.BusinessSubItem2);
-                $("#BusinessSubItem3").val(msg.BusinessSubItem3);
-               
+
+                //$("#BusinessSubItem2").val(msg.BusinessSubItem2);
+                //$("#BusinessSubItem3").val(msg.BusinessSubItem3);
                 //$("#CompanyCode").val(msg.CompanySection);
                 //$("#SubjectName").val(msg.SubjectName);
                 //$("#SubjectSection").val(msg.SubjectSection);
@@ -431,4 +437,94 @@ $(function () {
 
 var addOption1 = function (select, txt, value, num) {
     select.add(new Option(txt, value), num);
+}
+
+function initOrganization() {
+    $.ajax({
+        url: "/CapitalCenterManagement/OrderListDetail/GetBusinessTypeTree",
+        type: "post",
+        dataType: "json",
+        success: function (msg) {
+            //推送接收人下拉框
+            selector.$pushPeopleDropDownButton().jqxDropDownButton({
+                width: 175,
+                height: 25
+            });
+            //推送接收人下拉框(树形结构)
+            selector.$pushTree().on('select', function (event) {
+                var args = event.args;
+                var item = selector.$pushTree().jqxTree('getItem', args.element);
+
+                //if (selector.$currentUserDepartment().val().indexOf(item.id) == -1) {
+                //    jqxNotification("请选择本公司及其子部门！", null, "error");
+                //    return false;
+                //}
+                //selector.$DepartmentVguid().val(item.id);
+                var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
+                selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', dropDownContent);
+
+                var businessText = getBusinessText(item.prevItem) + item.label;
+                var businessCodeText = getBusinessCodeText(item.prevItem) + item.value;
+                $("#BusinessProject").text(businessText);
+                $("#BusinessSubItem1").val(businessCodeText);//编号
+                
+            });
+            var source =
+                {
+                    datatype: "json",
+                    datafields: [
+                        { name: 'Code' },
+                        { name: 'BusinessName' },
+                        { name: 'ParentVGUID' },
+                        { name: 'VGUID' }
+                    ],
+                    id: 'Vguid',
+                    localdata: msg
+                };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // perform Data Binding.
+            dataAdapter.dataBind();
+            var records = dataAdapter.getRecordsHierarchy('VGUID', 'ParentVGUID', 'items',
+                [
+                    {
+                        name: 'Code',
+                        map: 'value'
+                    },
+                    {
+                        name: 'BusinessName',
+                        map: 'label'
+                    },
+                    {
+                        name: 'VGUID',
+                        map: 'id'
+                    },
+                    {
+                        name: 'ParentVGUID',
+                        map: 'parentId'
+                    }
+                ]);
+            selector.$pushTree().jqxTree({ source: records, width: '200px', height: '250px', incrementalSearch: true });//, checkboxes: true
+            selector.$pushTree().jqxTree('expandAll');
+        }
+    });
+}
+var result = "";
+var results = "";
+function getBusinessText(parentItem) {
+    if (parentItem.level != 0) {
+        result = parentItem.label+ "|"+ result;
+        getBusinessText(parentItem.prevItem);
+    } else {
+        result = parentItem.label + "|" + result;
+    }
+    return result;
+}
+function getBusinessCodeText(parentItem) {
+    if (parentItem.level != 0) {
+        results = parentItem.value + "|" + results;
+        getBusinessCodeText(parentItem.prevItem);
+    } else {
+        results = parentItem.value + "|" + results;
+    }
+    return results;
 }

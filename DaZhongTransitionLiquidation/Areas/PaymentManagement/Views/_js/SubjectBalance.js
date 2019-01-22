@@ -143,7 +143,7 @@ var $page = function () {
             columnsHeight: 40,
             columns: [
                 //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                { text: '编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: detailFuncs },
+                { text: '编码', datafield: 'BusinessCode', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFuncs },
                 { text: '科目段', datafield: 'Company', width: 200, align: 'center', cellsAlign: 'center' }, 
                 { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
                 { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
@@ -158,7 +158,7 @@ var $page = function () {
                 { text: '备用2', datafield: 'SpareTwoCode', hidden: true },
                 { text: '往来段', datafield: 'IntercourseCode', hidden: true },
                 { text: 'SubjectCode', datafield: 'ParentCode', hidden: true },
-                { text: 'BusinessCode', datafield: 'BusinessCode', hidden: true },
+                //{ text: 'BusinessCode', datafield: 'BusinessCode', hidden: true },
                 { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
             ]
         });
@@ -168,9 +168,9 @@ var $page = function () {
     function detailFuncs(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=edit('" + rowData.Balance + "','" + rowData.BusinessCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.CompanyCode + "</a>";
+            container = "<a href='#' onclick=edit('" + rowData.Balance + "','" + rowData.BusinessCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessCode + "</a>";
         } else {
-            container = "<span>" + rowData.CompanyCode + "</span>";
+            container = "<span>" + rowData.BusinessCode + "</span>";
         }
         return container;
     }

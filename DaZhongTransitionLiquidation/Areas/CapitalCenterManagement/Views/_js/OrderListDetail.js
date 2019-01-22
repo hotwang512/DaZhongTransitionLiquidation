@@ -521,13 +521,13 @@ function getBusinessText(parentItem) {
     results = parentItem.value;
     var prevItem = parentItem.prevItem;
     while (prevItem != null) {
-        if (parentItem.level != prevItem.level) {
+        if (parentItem.level > prevItem.level) {
             result = prevItem.label + "|" + result;
             results = prevItem.value + "|" + results;
             parentItem = prevItem;
             prevItem = parentItem.prevItem;
         } else {
-            prevItem = parentItem.prevItem.prevItem;
+            prevItem = prevItem.prevItem;
         }
     }
     //if (parentItem.level != 0) {

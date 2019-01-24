@@ -113,7 +113,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                     List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
                     foreach (var item in orderList)
                     {
-                        CheckTransferResult(item, db, changeOrderList);
+                        if (item.OSNO != null && item.OSNO != "")
+                        {
+                            CheckTransferResult(item, db, changeOrderList);
+                        }
                     }
                     //返回changeOrderList
                 }

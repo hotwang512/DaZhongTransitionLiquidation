@@ -35,7 +35,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43")
+                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode)
                 .OrderBy(i => i.Code, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 if (jsonResult.Rows != null)
                 {
@@ -137,7 +137,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
- and bss.AccountModeCode='" + accountModeCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+ and bss.AccountModeCode='" + accountModeCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.CompanyCode='" + code + "' and bs.AccountModeCode='" + accountModeCode + "' and bs.Code is not null").OrderBy("Code asc").ToList();
                 }
                 if(index == 2)
                 {
@@ -145,13 +145,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
  and bss.SubjectCode='" + companyCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
                 }
-                else
+                if (index != 1 && index != 2)
                 {
                     response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
                 }
-                if(columnName == "SubjectCode")
+                if(columnName == "SubjectCode" && response.Count>0)
                 {
                     for (int i = 0; i < response.Count; i++)
                     {
@@ -293,7 +293,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     #region 科目段设置
                     case "0":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + accountModeCode + "' and  CompanyCode = '" + code + "' and SubjectCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -326,7 +326,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 核算段设置
                     case "1":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "'  and AccountingCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + accountModeCode + "' and CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "'  and AccountingCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -337,6 +337,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.AccountingCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.AccountModeCode = accountModeCode;//账套
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
@@ -359,7 +360,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 成本中心段设置
                     case "2":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and CostCenterCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + accountModeCode + "' and CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and CostCenterCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -370,6 +371,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.CostCenterCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.AccountModeCode = accountModeCode;//账套
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
@@ -392,7 +394,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 备用1段设置
                     case "3":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and SpareOneCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + accountModeCode + "' and CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and SpareOneCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -403,6 +405,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareOneCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.AccountModeCode = accountModeCode;//账套
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
@@ -425,7 +428,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 备用2段设置
                     case "4":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and SpareTwoCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + accountModeCode + "' and CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and SpareTwoCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -436,6 +439,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.SpareTwoCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.AccountModeCode = accountModeCode;//账套
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
@@ -458,7 +462,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     #region 往来段设置
                     case "5":
-                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and IntercourseCode is not null");
+                        db.Ado.ExecuteCommand(@"delete Business_SubjectSettingInfo where AccountModeCode = '" + accountModeCode + "' and CompanyCode = '" + code + "' and SubjectCode = '" + companyCode + "' and IntercourseCode is not null");
                         if (otherCode != null)
                         {
                             foreach (var item in otherCode)
@@ -469,6 +473,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 insertObj.VGUID = Guid.NewGuid();
                                 insertObj.IntercourseCode = item;
                                 insertObj.SubjectCode = companyCode;//公司键
+                                insertObj.AccountModeCode = accountModeCode;//账套
                                 insertObj.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
                                 insertObjs.Add(insertObj);
                             }
@@ -622,25 +627,27 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return Json(resultModel);
         }
-        public JsonResult SaveAccoutSetting(string code, List<Guid> vguid)
+        public JsonResult SaveAccoutSetting(string code, List<Guid> vguid, string companyCode, string accountModeCode)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var insertObjs = new List<Business_AccountSettingInfo>();
-                db.Ado.ExecuteCommand(@"delete Business_AccountSettingInfo where AccountCode = '" + code + "'");
+                db.Ado.ExecuteCommand(@"delete Business_AccountSettingInfo where CompanyCode = '" + companyCode + "' and AccountModeCode = '" + accountModeCode + "' and AccountCode = '" + code + "'");
                 if (vguid != null)
                 {
-                     foreach (var item in vguid)
-                        {
-                            var insertObj = new Business_AccountSettingInfo();
-                            insertObj.AccountCode = code;
-                            insertObj.IsChecked = true;
-                            insertObj.VGUID = Guid.NewGuid();
-                            insertObj.BankVGUID = item;
-                            insertObjs.Add(insertObj);
-                        }
-                        db.Insertable(insertObjs).ExecuteCommand();
+                    foreach (var item in vguid)
+                    {
+                        var insertObj = new Business_AccountSettingInfo();
+                        insertObj.AccountCode = code;
+                        insertObj.AccountModeCode = accountModeCode;
+                        insertObj.CompanyCode = companyCode;
+                        insertObj.IsChecked = true;
+                        insertObj.VGUID = Guid.NewGuid();
+                        insertObj.BankVGUID = item;
+                        insertObjs.Add(insertObj);
+                    }
+                    db.Insertable(insertObjs).ExecuteCommand();
                     db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
                     {
                         IsSetAccount = true,

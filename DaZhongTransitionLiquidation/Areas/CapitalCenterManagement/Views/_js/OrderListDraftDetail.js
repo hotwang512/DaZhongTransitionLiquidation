@@ -119,6 +119,8 @@ var $page = function () {
 
         //提交
         function submit(selection) {
+            //$pubLayout.loading();
+
             $.ajax({
                 url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
                 data: {

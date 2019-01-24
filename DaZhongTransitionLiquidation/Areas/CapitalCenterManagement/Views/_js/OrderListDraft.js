@@ -197,20 +197,18 @@ var $page = function () {
     }
     //获取附件
     function getAttenment(selection) {
+        var guid = selection[0];
         $.ajax({
             url: "/CapitalCenterManagement/OrderListDraft/GetAttachmentInfo",
-            data: { PaymentVGUID: selection[0] },
+            data: { PaymentVGUID: guid },
             //data: { PaymentVGUID: '99C8C2E2-3BA0-4533-B28F-08ABDA43A906' },
             type: "post",
             success: function (msg) {
-                switch (msg.Status) {
-                    case "0":
-                        jqxNotification(msg.ResultInfo, null, "error");
-                        break;
-                    case "1":
-                        jqxNotification("获取成功！", null, "success");
-                        $("#jqxTable").jqxDataTable('updateBoundData');
-                        break;
+                if (msg.IsSuccess == true) {
+                    jqxNotification("获取成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                } else {
+                    jqxNotification(msg.ResultInfo, null, "error");
                 }
             }
         });

@@ -66,7 +66,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         }
         public JsonResult UpdataOrderListInfo(List<Guid> vguids, string status)//Guid[] vguids
         {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0",ResultInfo="" };
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0", ResultInfo = "" };
             DbBusinessDataService.Command(db =>
             {
                 foreach (var item in vguids)
@@ -103,14 +103,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             {
                                 saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                                 {
-                                    Status = status,
-                                }).Where(it => it.VGUID == item).ExecuteCommand();
-                                db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                                {
+                                    Status = "2",
                                     OSNO = modelData.data.serialNo,
                                 }).Where(it => it.VGUID == vguid).ExecuteCommand();
                                 orderInfo.OSNO = modelData.data.serialNo;
+                                var json = orderInfo.ModelToJson();
                                 //查询银行返回状态
+                                LogHelper.WriteLog(string.Format("orderInfo:{0},status:{1}", json, status));
                                 List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
                                 AutoSyncBankFlow.CheckTransferResult(orderInfo, db, changeOrderList);
                                 var changeOrderListNew = changeOrderList;
@@ -154,12 +153,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                 resultInfo = "成功";
                                 saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                                 {
-                                    Status = status,
-                                }).Where(it => it.VGUID == item).ExecuteCommand();
-                                db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                                {
+                                    Status = "2",
                                     OSNO = modelData.data.serialNo,
                                 }).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                orderInfo.OSNO = modelData.data.serialNo;
+                                var json = orderInfo.ModelToJson();
+                                LogHelper.WriteLog(string.Format("orderInfo:{0},status:{1}", json, status));
                                 //查询银行返回状态
                                 List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
                                 AutoSyncBankFlow.CheckTransferResult(orderInfo, db, changeOrderList);
@@ -186,12 +185,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
 
         public JsonResult GetAttachmentInfo(string PaymentVGUID)//Guid[] vguids
         {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var VGUID = PaymentVGUID.TryToGuid();
-                var IsSuccess = "0";
-                var resultInfo = "";
                 var url = ConfigSugar.GetAppString("GetAttachmentUrl");
                 var data = "{" +
                                         "\"PaymentVGUID\":\"{PaymentVGUID}\"".Replace("{PaymentVGUID}", PaymentVGUID) +
@@ -206,7 +203,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     var modelData = resultData.JsonToModel<AttachmentResult>();
                     if (modelData.success)
                     {
-                        IsSuccess = "1";
                         var attachInfo = "";
                         db.Deleteable<Business_VoucherAttachmentList>(x => x.VoucherVGUID == VGUID).ExecuteCommand();
                         List<Business_VoucherAttachmentList> VAList = new List<Business_VoucherAttachmentList>();
@@ -300,25 +296,33 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                 VAList.Add(VA);
                             }
                         }
-                        db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                        if(VAList != null && VAList.Count > 0)
                         {
-                            AttachmentInfo = attachInfo,
-                        }).Where(it => it.VGUID == VGUID).ExecuteCommand();
-                        db.Insertable(VAList).ExecuteCommand();
+                            db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
+                            {
+                                AttachmentInfo = attachInfo,
+                            }).Where(it => it.VGUID == VGUID).ExecuteCommand();
+                            db.Insertable(VAList).ExecuteCommand();
+                        }
+                       else
+                        {
+                            resultModel.IsSuccess = false;
+                            resultModel.ResultInfo = "未找到附件!" ;
+                        }
                     }
                     else
                     {
-                        IsSuccess = "0";
-                        resultInfo = modelData.errmsg;
+                        resultModel.IsSuccess = false;
+                        resultModel.ResultInfo = modelData.errmsg; ;
                     }
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
                 }
                 catch (Exception ex)
                 {
+                    resultModel.IsSuccess = false;
+                    resultModel.ResultInfo = ex.Message;
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
                 }
-                resultModel.Status = IsSuccess;
-                resultModel.ResultInfo = resultInfo;
             });
             return Json(resultModel);
         }

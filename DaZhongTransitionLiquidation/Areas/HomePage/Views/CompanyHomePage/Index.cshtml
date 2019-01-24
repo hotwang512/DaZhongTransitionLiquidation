@@ -65,22 +65,30 @@
     </div>
     <div id="moduleDIV" style="width: 100%;margin-top: 80px;">
         <div class="home-message" style="text-align: left;">
-            <table style="margin-left: 300px;margin-top: 260px;">
-                <tr>
+            <table style="margin-left: 220px;margin-top: 160px;width: 500px;">
+                <tr style="height: 80px;">
                     <td>
-                        <select id="CompanyCode" class="input_text form-control" style="">
+                        <div id="jqxTable1" class="jqxTable"></div>
+                        @*<select id="AccountModeCode" class="input_text form-control" style="width: 410px;" onchange="GetCompanyCode()">
                             @{
-                                foreach (var item in ViewBag.CompanyCode)
+                                foreach (var item in ViewBag.AccountModeCode)
                                 {
-                                    <option value="@item.CompanyCode">@item.CompanyCodeName</option>
+                                    <option value="@item.Code">@item.Descrption</option>
                                 }
                             }
-                        </select>
+                        </select>*@
+                        <input id="AccountModeCode" class="hide"><input id="CompanyCode" class="hide">
                     </td>
                 </tr>
+                @*<tr>
+                    <td>
+                        <select id="CompanyCode" class="input_text form-control" style="width: 410px;">
+                        </select>
+                    </td>
+                </tr>*@
                 <tr>
                     <td>
-                        <button id="OKButton" type="button" class="btn btn-warning" style="width: 210px;background-color: #16609c!important; margin-top: 20px"><span style="margin-left: 72px; float: left;">确定</span></button>
+                        <button id="OKButton" type="button" class="btn btn-warning" style="width: 210px;background-color: #16609c!important; margin-top: 20px;margin-left: 148px;"><span style="margin-left: 72px; float: left;">确定</span></button>
                     </td>
                 </tr>
             </table>

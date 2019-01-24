@@ -26,14 +26,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Spare
             //ViewBag.BankChannel = GetBankChannel();
             return View();
         }
-        public JsonResult GetCompanySection(GridParams para)
+        public JsonResult GetCompanySection(string companyCode, string accountModeCode, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43")
+                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43" &&
+                                      x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode)
                 .OrderBy(i => i.Code, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -63,7 +64,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Spare
                 {
                     var guid = sevenSection.VGUID;
                     var code = sevenSection.Code;
-                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.VGUID != guid && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43");
+                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.AccountModeCode == sevenSection.AccountModeCode && x.CompanyCode == sevenSection.CompanyCode && x.VGUID != guid && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43");
                     if (isAny)
                     {
                         IsSuccess = "2";

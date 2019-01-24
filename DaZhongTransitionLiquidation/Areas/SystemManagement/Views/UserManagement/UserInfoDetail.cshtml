@@ -24,7 +24,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">用户信息</span></div>
     </div>
-    <div class="body_mk" style="height: 260px;">
+    <div class="body_mk" style="height: 250px;">
         <form id="frmtable" class="form">
             <table id="message" style="margin-top: 20px; margin-left: 20px;">
                 <tr style="height: 50px;">
@@ -84,11 +84,27 @@
         <input type="hidden" id="currentUserDepartment" value="@ViewBag.UserSubDepartment" />
         <input type="hidden" id="isEdit" value="@ViewBag.IsEdit.ToString()" />
     </div>
-    <div class="header_mk">
-        <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">公司信息</span></div>
-    </div>
-    <div class="body_mk" style="height: 350px;">
-        <div id="jqxTable1" class="jqxTable"></div>
-    </div>
+    <table style="width: 100%;">
+        <tr>
+            <td style="width:1100px">
+                <div class="header_mk" style="width:98%">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div"><span class="header_text_span">公司信息</span></div>
+                </div>
+                <div class="body_mk" style="height: 380px;">
+                    <div id="jqxTable1" class="jqxTable"></div>
+                </div>
+                </td>
+            <td>
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div"><span class="header_text_span">版块信息</span></div>
+                </div>
+                <div class="body_mk" style="height: 380px;">
+                    <div id="jqxTable2" class="jqxTable"></div>
+                </div>
+            </td>
+            </tr>
+        </table>
+        
 </div>

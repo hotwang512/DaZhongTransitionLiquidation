@@ -30,7 +30,7 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-
+        getCompanyCode();
         //加载列表数据
         //initTable();
 
@@ -49,18 +49,23 @@ var $page = function () {
             if (index == 2) {
                 $(".SubjectTr").show();
                 var checkrow = $("#jqxTable2").jqxTreeGrid('getCheckedRows');
-                if (checkrow.length != 1) {
+                var data = $("#jqxTable2").jqxTreeGrid('getView');
+                var parentCode = "";
+                if (data.length != 0) {
+                    parentCode = checkrow[0].Code;
+                    hidParentCode = parentCode;
+                    $("#txtParentCode").val(parentCode);
+                }
+                if (data.length != 0 && checkrow.length != 1) {
                     jqxNotification("请选择一个节点！", null, "error");
                     return;
                 } else {
-                    var parentCode = checkrow[0].Code;
                     if ($("#txtFirstSubjects").val() == "1") {
                         $("#SubjectCode").hide();
                         $("#txtParentCode").val("");
                     } else {
                         $("#SubjectCode").show();
-                        hidParentCode = parentCode;
-                        $("#txtParentCode").val(parentCode);
+                       
                     }
                 }
             } else {
@@ -69,7 +74,7 @@ var $page = function () {
             }
             selector.$txtCode().val("");
             selector.$txtDescrption().val("");
-            $("#txtFirstSubjects").val("0");
+            //$("#txtFirstSubjects").val("0");
             //$("#txtParentCode").val("");
             $("#txtRemark").val("");
             isEdit = false;
@@ -151,7 +156,7 @@ var $page = function () {
             $.ajax({
                 url: "/PaymentManagement/CompanySection/SaveAccoutSetting",
                 //data: { vguids: selection },
-                data: { code: code, vguid: vguid },
+                data: { code: code, vguid: vguid, companyCode: companyCode, accountModeCode: accountModeCode },
                 traditional: true,
                 type: "post",
                 success: function (msg) {
@@ -212,7 +217,9 @@ var $page = function () {
                         "Descrption": selector.$txtDescrption().val(),
                         "Remark": $("#txtRemark").val(),
                         "VGUID": vguid,
-                        "ParentCode": $("#txtParentCode").val()
+                        "ParentCode": $("#txtParentCode").val(),
+                        "AccountModeCode": $("#AccountModeCode").val(),
+                        "CompanyCode": $("#CompanyCode").val()
                     },
                     type: "post",
                     dataType: "json",
@@ -363,7 +370,7 @@ var $page = function () {
             if (index == 2) {
                 $(".SubjectTr").show();
                 $("#CompanyCode").show();
-                $("#AccountModeCode").hide();
+                $("#AccountModeCode").show();
                 if ($("#txtFirstSubjects").val() == "1") {
                     $("#SubjectCode").hide();
                 } else {
@@ -372,13 +379,15 @@ var $page = function () {
             } else {
                 $(".SubjectTr").hide();
                 $("#SubjectCode").hide()
-                $("#CompanyCode").hide();
-                $("#AccountModeCode").hide();
+                $("#CompanyCode").show();
+                $("#AccountModeCode").show();
                 if (index == 1) {
                     $("#AccountModeCode").show();
+                    $("#CompanyCode").hide();
                 }
             }
             if (index == 1) {
+                $("#CompanyCode").hide();
                 $("#AccountModeCode").show();
             }
             //if (index != 0 && index != 1) {
@@ -470,20 +479,20 @@ var $page = function () {
         $('#CompanyCode').on('change', function (event) {
             companyCode = $("#CompanyCode").val();
             console.log(companyCode);
-            initTable2();
+            loadTable();
             //$("#jqxTable2").jqxTreeGrid('updateBoundData');
         })
         //切换账套值
         $('#AccountModeCode').on('change', function (event) {
             accountModeCode = $("#AccountModeCode").val();
             console.log(accountModeCode);
-            initTable1();
+            loadTable();
             //$("#jqxTable2").jqxTreeGrid('updateBoundData');
         })
         $('#jqxSubjectSetting').on('bindingComplete', function (event) {
-            $("#jqxSubjectSetting").jqxTreeGrid('checkRow')
+            //$("#jqxSubjectSetting").jqxTreeGrid('checkRow')
             var firstLevelRows = $("#jqxSubjectSetting").jqxTreeGrid('getRows');
-            if (firstLevelRows[0].Count != "") {
+            if (firstLevelRows[0].Count != null) {
                 count = firstLevelRows[0].Count.split(",");
                 for (var i = 0; i < count.length; i++) {
                     // get a row.
@@ -512,6 +521,26 @@ var $page = function () {
             });
         });
     }; //addEvent end
+
+    function loadTable() {
+        switch (index) {
+            case 1: initTable1();
+                break;
+            case 2: $("#txtFirstSubjects").val("1");initTable2();
+                break;
+            case 3: initTable3();
+                break;
+            case 4: initTable4();
+                break;
+            case 5: initTable5();
+                break;
+            case 6: initTable6();
+                break;
+            case 7: initTable7();
+                break;
+            default:
+        }
+    }
 
     //账套段AccountModeSection
     function initTable0() {
@@ -552,7 +581,7 @@ var $page = function () {
             columns: [
                 { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                 { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                { text: '描述', datafield: 'Descrption', width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '描述', datafield: 'Descrption', width: 200, align: 'center', cellsAlign: 'center' },
                 { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
                 { text: '公司段', datafield: 'IsCompanyCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
                 { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
@@ -601,14 +630,14 @@ var $page = function () {
         $("#jqxTable1").jqxDataTable(
             {
                 pageable: true,
-                width: "1550px",
+                width: "100%",
                 height: 500,
                 pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
                 theme: "office",
-                columnsHeight: 30,
+                columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
@@ -651,7 +680,7 @@ var $page = function () {
                 datatype: "json",
                 cache:false,
                 id: "VGUID",
-                data: { companyCode: companyCode},
+                data: { companyCode: companyCode, accountModeCode: accountModeCode },
                 url: "/PaymentManagement/SubjectSection/GetCompanySection"    //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source);
@@ -705,7 +734,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: {companyCode:companyCode},
+                data: { companyCode: companyCode, accountModeCode: accountModeCode },
                 url: "/PaymentManagement/AccountingSection/GetCompanySection"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -718,7 +747,7 @@ var $page = function () {
             {
                 pageable: true,
                 width: "100%",
-                height: 550,
+                height: 500,
                 pageSize: 99999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
@@ -754,7 +783,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: {},
+                data: { companyCode: companyCode, accountModeCode: accountModeCode },
                 url: "/PaymentManagement/CostCenterSection/GetCompanySection"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -802,7 +831,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: {},
+                data: { companyCode: companyCode, accountModeCode: accountModeCode },
                 url: "/PaymentManagement/SpareOne/GetCompanySection"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -850,7 +879,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: {},
+                data: { companyCode: companyCode, accountModeCode: accountModeCode },
                 url: "/PaymentManagement/SpareTwo/GetCompanySection"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -898,7 +927,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: {},
+                data: { companyCode: companyCode, accountModeCode: accountModeCode },
                 url: "/PaymentManagement/IntercourseSection/GetCompanySection"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -1190,11 +1219,12 @@ function settingSection(column, code) {
                 //{ text: '账套段', datafield: 'IsAccountModeCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
                 //{ text: '公司段', datafield: 'IsCompanyCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },                
                 //{ text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
+                { text: 'Count', datafield: 'Count', hidden: true },
                 { text: 'Checked', datafield: "Checked", hidden: true },
                 { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
                 { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true },
-                { text: 'Count', datafield: 'Count', hidden: true },
+                
             ]
         });
 
@@ -1462,3 +1492,19 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+function getCompanyCode() {
+    var accountMode = $("#AccountModeCode").val();
+    $.ajax({
+        url: "/HomePage/CompanyHomePage/GetCompanyCode",
+        data: { accountMode: accountMode },
+        type: "POST",
+        dataType: "json",
+        async:false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "CompanyName");
+            //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+    companyCode = $("#CompanyCode").val();
+}

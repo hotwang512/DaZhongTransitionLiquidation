@@ -11,5 +11,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string AccountCode { get; set; }
         public Guid BankVGUID { get; set; }
         public bool IsChecked { get; set; }
+        public string AccountModeCode { get; set; }
+        public string CompanyCode { get; set; }
     }
 }

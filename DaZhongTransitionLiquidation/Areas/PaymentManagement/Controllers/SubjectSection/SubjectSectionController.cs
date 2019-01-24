@@ -27,7 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             //ViewBag.BankChannel = GetBankChannel();
             return View();
         }
-        public JsonResult GetCompanySection(string companyCode,GridParams para)
+        public JsonResult GetCompanySection(string companyCode,string accountModeCode, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();
             var response = new List<Business_SevenSection>();
@@ -39,7 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 //response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code != null)
                 //.OrderBy(i => i.Code, OrderByType.Asc).ToList();
                 response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' 
-                              and Code is not null ").OrderBy("Code asc").ToList();
+                             and CompanyCode='"+ companyCode + "' and AccountModeCode='"+ accountModeCode + "' and Code is not null ").OrderBy("Code asc").ToList();
                 jsonResult.TotalRows = response.Count;
                 if (response != null)
                 {
@@ -136,18 +136,18 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                     var guid = sevenSection.VGUID;
                     var code = sevenSection.Code;
                     var parentcode = sevenSection.ParentCode;
-                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.VGUID != guid && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43");
+                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.AccountModeCode == sevenSection.AccountModeCode && x.CompanyCode == sevenSection.CompanyCode && x.VGUID != guid && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43");
                     if (isAny)
                     {
                         IsSuccess = "2";
                         return;
                     }
-                    var isAnyParent = db.Queryable<Business_SevenSection>().Any(x => x.ParentCode == parentcode && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43");
-                    if (!isAnyParent && parentcode !="" && !isEdit)
-                    {
-                        IsSuccess = "3";
-                        return;
-                    }
+                    //var isAnyParent = db.Queryable<Business_SevenSection>().Any(x => x.ParentCode == parentcode && x.AccountModeCode == sevenSection.AccountModeCode && x.CompanyCode == sevenSection.CompanyCode && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43");
+                    //if (!isAnyParent && parentcode !="" && parentcode != null && !isEdit)
+                    //{
+                    //    IsSuccess = "3";
+                    //    return;
+                    //}
                     if (isEdit)
                     {
                         db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()

@@ -37,7 +37,18 @@ var $page = function () {
         //加载部门下拉框
         //initOrganization();
         initTable1();
+        initTable2();
         initInput();
+
+        $("#jqxTable2").on('cellendedit', function (event) {
+            var data = $('#jqxTable2').jqxGrid('getboundrows');
+            for (var i = 0; i < data.length; i++) {
+                $("#jqxTable2").jqxGrid('setcellvalue', i, "IsCheck", "false");
+            }
+            var args = event.args;
+            var rowBoundIndex = event.args.rowindex;
+            $("#jqxTable2").jqxGrid('setcellvalue', rowBoundIndex, "IsCheck", "true")
+        });
 
     }; //addEvent end
     //编辑界面加载页面上文本框的值
@@ -150,12 +161,12 @@ var $page = function () {
             //selector.$departmentVguid().val(items.id);
             //选择的公司
             var selection = [];
-            var pars = JSON.stringify($('#jqxTable1').jqxGrid('getdisplayrows')); 
-
+            var pars = JSON.stringify($('#jqxTable1').jqxGrid('getboundrows'));
+            var jpars = JSON.stringify($('#jqxTable2').jqxGrid('getboundrows'));
             selector.$frmtable().ajaxSubmit({
                 url: '/Systemmanagement/UserManagement/SaveUserInfo',
                 type: "post",
-                data: { isEdit: selector.$isEdit().val(), gjson: pars },
+                data: { isEdit: selector.$isEdit().val(), gjson: pars, gjsons: jpars },
                 dataType: "json",
                 success: function (msg) {
                     switch (msg.Status) {
@@ -176,7 +187,7 @@ var $page = function () {
     });
 };
 
-//公司段
+//公司配置
 function initTable1() {
     var source =
         {
@@ -188,7 +199,7 @@ function initTable1() {
                 { name: 'CompanyName', type: 'string' },
                 { name: 'IsCheck', type: 'bool' },
                 { name: 'KeyData', type: 'string' },
-                { name: 'Block', type: 'string' },
+                //{ name: 'Block', type: 'string' },
                 { name: 'UserVGUID', type: 'string' },
             ],
             datatype: "json",
@@ -196,22 +207,73 @@ function initTable1() {
             data: { UserVGUID: $.request.queryString().Vguid },
             url: "/Systemmanagement/UserManagement/GetUserCompanyInfo"   //获取数据源的路径
         };
-    //var typeAdapter = new $.jqx.dataAdapter(source, {
-    //    downloadComplete: function (data) {
-    //        source.totalrecords = data.TotalRows;
-    //    }
-    //});
     var typeAdapter = new $.jqx.dataAdapter(source);
-    var countriesAdapter = [
-                 { value: "出租", label: "出租" },
-                 { value: "租赁", label: "租赁" },
-                 ]
+
     //创建卡信息列表（主表）
     $("#jqxTable1").jqxGrid(
         {
             pageable: true,
             width: "98%",
-            height: 350,
+            height: 380,
+            pageSize: 10,
+            //serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            groupable: true,
+            groupsexpandedbydefault: true,
+            groups: ['Descrption'],
+            showgroupsheader: false,
+            columnsHeight: 30,
+            editable: true,
+            pagermode: 'simple',
+            selectionmode: 'none',
+            columns: [
+                //{ text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                {
+                    text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
+                },
+                { text: '账套编码', datafield: 'Code', width: 120, align: 'center', cellsAlign: 'center', editable: false, },
+                { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司描述', datafield: 'CompanyName', width: 450, align: 'center', cellsAlign: 'center', editable: false },
+                //{
+                //    text: '版块', datafield: 'Block', align: 'center', cellsAlign: 'center', columntype: 'dropdownlist',
+                //    createeditor: function (row, value, editor) {
+                //        editor.jqxDropDownList({ source: countriesAdapter, displayMember: 'label', valueMember: 'value' });
+                //    }
+                //},
+                { text: 'KeyData', datafield: 'SectionVGUID', hidden: true },
+            ]
+        });
+}
+
+//版块配置
+function initTable2() {
+    var source =
+        {
+            datafields:
+            [
+                { name: 'BusinessCode', type: 'string' },
+                { name: 'BusinessName', type: 'string' },               
+                { name: 'IsCheck', type: 'bool' },
+                //{ name: 'KeyData', type: 'string' },
+                { name: 'Block', type: 'string' },
+                { name: 'UserVGUID', type: 'string' },
+            ],
+            datatype: "json",
+            id: "KeyData",
+            data: { UserVGUID: $.request.queryString().Vguid },
+            url: "/Systemmanagement/UserManagement/GetUserBlockInfo"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+
+    //创建卡信息列表（主表）
+    $("#jqxTable2").jqxGrid(
+        {
+            pageable: true,
+            width: "98%",
+            height: 380,
             pageSize: 10,
             //serverProcessing: true,
             pagerButtonsCount: 10,
@@ -220,64 +282,23 @@ function initTable1() {
             columnsHeight: 30,
             editable: true,
             pagermode: 'simple',
-            selectionmode:'none',
+            selectionmode: 'none',
             columns: [
                 //{ text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                 {
                     text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
                 },
-                { text: '账套编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'center',editable: false, },
-                { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false },
-                { text: '公司编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', editable: false },
-                { text: '公司描述', datafield: 'CompanyName', width: 450, align: 'center', cellsAlign: 'center', editable: false },
-                {
-                    text: '版块', datafield: 'Block', align: 'center', cellsAlign: 'center', columntype: 'dropdownlist',
-                    createeditor: function (row, value, editor) {
-                        editor.jqxDropDownList({ source: countriesAdapter, displayMember: 'label', valueMember: 'value' });
-                    }
-                },
-                { text: 'KeyData', datafield: 'SectionVGUID', hidden: true },
+                { text: '版块编码', datafield: 'BusinessCode', width: 180, align: 'center', cellsAlign: 'center', editable: false, },
+                { text: '版块描述', datafield: 'BusinessName',  align: 'center', cellsAlign: 'center', editable: false },
+                //{
+                //    text: '版块', datafield: 'Block', align: 'center', cellsAlign: 'center', columntype: 'dropdownlist',
+                //    createeditor: function (row, value, editor) {
+                //        editor.jqxDropDownList({ source: countriesAdapter, displayMember: 'label', valueMember: 'value' });
+                //    }
+                //},
+                { text: 'UserVGUID', datafield: 'SectionVGUID', hidden: true },
             ]
         });
-
-}
-
-function cellsRendererFunc(row, column, value, rowData) {
-    return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
-}
-
-function rendererFunc() {
-    var checkBox = "<div id='jqx_datatable_checkbox_all' class='jqx_datatable_checkbox_all' style='z-index: 999; margin-left:7px ;margin-top: 7px;'>";
-    checkBox += "</div>";
-    return checkBox;
-}
-
-function statusFunc(row, column, value, rowData) {
-    var container = '<div style="color:#30dc32">启用</div>';
-    if (value == "0") {
-        container = '<div style="color:#F00">禁用</div>';
-    }
-    return container;
-}
-
-function renderedFunc(element) {
-    var grid = $("#jqxTable1");
-    element.jqxCheckBox();
-    element.on('change', function (event) {
-        var checked = element.jqxCheckBox('checked');
-
-        if (checked) {
-            var rows = grid.jqxDataTable('getRows');
-            for (var i = 0; i < rows.length; i++) {
-                grid.jqxDataTable('selectRow', i);
-                grid.find(".jqx_datatable_checkbox").attr("checked", "checked")
-            }
-        } else {
-            grid.jqxDataTable('clearSelection');
-            grid.find(".jqx_datatable_checkbox").removeAttr("checked", "checked")
-        }
-    });
-    return true;
 }
 
 $(function () {

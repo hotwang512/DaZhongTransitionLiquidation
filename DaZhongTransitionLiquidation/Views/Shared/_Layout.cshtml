@@ -19,12 +19,14 @@
     <link href="@Url.CusContent("~/_theme/systemIcon/iconfont.css")" rel="stylesheet" />
     <link href="@Url.CusContent("~/_theme/css/layoutCommon.css")" rel="stylesheet" />
     <link href="@Url.CusContent("~/_theme/css/moduleCommon.css")" rel="stylesheet" />
+    <link href="@Url.CusContent("~/_theme/layer/layer/theme/default/layer.css")" rel="stylesheet" />
     @RenderSection("css", false)
 </head>
 <body id="body" style="background-color: #f5f5f5; /*background-image: url('/_theme/images/bg.gif')*/">
     <!--Header-->
     <input id="LoginName" name="LoginName" value="@user.LoginName" type="hidden" />
     <input id="LoginCompanyCode" name="LoginCompanyCode" value="@user.CompanyCode" type="hidden" />
+    <input id="LoginAccountModeCode" name="LoginAccountModeCode" value="@user.AccountModeCode" type="hidden" />
     <div class="main_header">
         <div style="width: 100%; height: 60px;">
             <table style="width:100%; border:0; border-collapse:0; border-spacing:0;">
@@ -181,6 +183,7 @@
     <script src="@Url.CusContent("~/_theme/tool/jquery-form.min.js")"></script>
     <script src="@Url.CusContent("~/_theme/_js/tool.js")"></script>
     <script src="@Url.CusContent("~/Views/_js/layout.js")"></script>
+    <script src="@Url.CusContent("~/_theme/layer/layer/layer.js")"></script>
     @RenderSection("js", false)
 </body>
 

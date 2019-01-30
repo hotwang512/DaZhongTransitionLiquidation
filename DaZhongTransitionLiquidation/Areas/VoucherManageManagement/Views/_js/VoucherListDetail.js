@@ -14,6 +14,8 @@ var SpareOneSection = null;
 var SpareTwoSection = null;
 var IntercourseSection = null;
 var selectIndex = 0;//生成块的数量
+var loginCompanyCode = $("#LoginCompanyCode").val();
+var loginAccountModeCode = $("#LoginAccountModeCode").val();
 var $page = function () {
 
     this.init = function () {
@@ -507,7 +509,7 @@ function initSubjectTable(companyCode, x, y) {
                },
                datatype: "json",
                id: "VGUID",
-               data: { companyCode: companyCode },
+               data: { companyCode: companyCode, accountModeCode: loginAccountModeCode },
                url: "/PaymentManagement/SubjectSection/GetCompanySectionByCode"    //获取数据源的路径
            };
     var typeAdapter = new $.jqx.dataAdapter(source);

@@ -368,6 +368,8 @@ var $page = function () {
             expandVGUID = [];
             $("#jqxTable2").jqxTreeGrid('updateBoundData'); 
             if (index == 2) {
+                $("#hideCompany").show();
+                $("#ACChange").show();
                 $(".SubjectTr").show();
                 $("#CompanyCode").show();
                 $("#AccountModeCode").show();
@@ -377,23 +379,26 @@ var $page = function () {
                     $("#SubjectCode").show();
                 }
             } else {
+                $("#hideCompany").show();
                 $(".SubjectTr").hide();
                 $("#SubjectCode").hide()
                 $("#CompanyCode").show();
                 $("#AccountModeCode").show();
-                if (index == 1) {
-                    $("#AccountModeCode").show();
-                    $("#CompanyCode").hide();
-                }
+                $("#ACChange").show();
+                //if (index == 1) {
+                //    $("#AccountModeCode").show();
+                //    $("#CompanyCode").hide();
+                //}
             }
             if (index == 1) {
                 $("#CompanyCode").hide();
                 $("#AccountModeCode").show();
+                $("#ACChange").show();
+                $("#hideCompany").hide()
             }
-            //if (index != 0 && index != 1) {
-            //    $("#SubjectList").show();
-            //    initSubjectSection();
-            //}
+            if (index == 0) {
+                $("#ACChange").hide();
+            }
         });
         //改变一级节点值
         $('#txtFirstSubjects').on('change', function (event) {

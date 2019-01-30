@@ -52,7 +52,7 @@ var $page = function () {
 
         initInput();
         //加载列表数据
-        loadTable();
+        //loadTable();
 
         //返回
         selector.$btnBack().on('click', function () {
@@ -107,7 +107,7 @@ var $page = function () {
 
     function getModules(callback) {
         $.ajax({
-            url: "/SystemManagement/ModuleManagement/GetModules",
+            url: "/SystemManagement/AuthorityManagement/GetModules",
             type: "get",
             dataType: "json",
             success: function (msg) {
@@ -124,7 +124,16 @@ var $page = function () {
                         { name: 'ModuleName', type: 'string' },
                         { name: 'Parent', type: 'string' },
                         { name: 'Vguid', type: 'string' },
-                        { name: 'Reads', type: 'string' },
+                         { name: 'Reads', type: 'string' },
+                    { name: 'Adds', type: 'string' },
+                    { name: 'Edit', type: 'string' },
+                    { name: 'Deletes', type: 'string' },
+                    { name: 'Enable', type: 'string' },
+                    { name: 'Disable', type: 'string' },
+                    { name: 'Import', type: 'string' },
+                    { name: 'Export', type: 'string' },
+                    { name: 'Vguid', type: 'string' },
+                    { name: 'ModuleVGUID', type: 'string' }
                     ],
                     hierarchy:
                     {
@@ -139,15 +148,27 @@ var $page = function () {
             width: selector.$grid().width(),
             showHeader: true,
             source: dataAdapter,
-            checkboxes: true,
-            //ready: function () {
-            //    $("#treegrid").jqxTreeGrid('expandRow', '1');
-            //},
+            checkboxes: false,
+            ready: function () {
+                $("#moduletree").jqxTreeGrid('expandAll');
+            },
             columns: [
               { text: '模块名称', dataField: 'ModuleName', width: 200, },
-              { text: '查看', dataField: 'Reads', width: 100, },
-              { text: '', dataField: 'Parent', width: "100%", hidden: true },
-              { text: '', dataField: 'Vguid', width: "100%", hidden: true },
+              //{ text: '查看', dataField: 'Reads', width: 100, },
+              { text: '查看', datafield: 'Reads', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Reads },
+                  { text: '新增', datafield: 'Adds', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Adds },
+                  { text: '编辑', datafield: 'Edit', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Edit },
+                  { text: '删除', datafield: 'Deletes', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Deletes },
+                  { text: '启用', datafield: 'Enable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
+                  { text: '禁用', datafield: 'Disable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Approved },
+                  { text: '导入', datafield: 'Import', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
+                  { text: '导出', datafield: 'Export', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
+                  { text: '全选', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, rendered: renderedFunc },
+                  { text: 'PageID', datafield: 'PageID', hidden: true },
+                  { text: 'Vguid', datafield: 'Vguid', hidden: true },
+                  { text: 'ModuleVGUID', datafield: 'ModuleVGUID', hidden: true }
+              //{ text: '', dataField: 'Parent', width: "100%", hidden: true },
+              //{ text: '', dataField: 'Vguid', width: "100%", hidden: true },
             ]
         });
     }
@@ -166,77 +187,14 @@ var $page = function () {
         });
     }
     //加载权限列表
-    function loadTable() {
-        var centerSetUpSource =
-            {
-                datafields:
-                [
-                    { name: 'ParentID', type: 'string' },
-                    { name: 'PageID', type: 'string' },
-                    { name: 'PageName', type: 'string' },
-                    { name: 'Reads', type: 'string' },
-                    { name: 'Adds', type: 'string' },
-                    { name: 'Edit', type: 'string' },
-                    { name: 'Deletes', type: 'string' },
-                    { name: 'Enable', type: 'string' },
-                    { name: 'Disable', type: 'string' },
-                    { name: 'Import', type: 'string' },
-                    { name: 'Export', type: 'string' },
-                    { name: 'Vguid', type: 'string' },
-                    { name: 'ModuleVGUID', type: 'string' }
-                ],
-                datatype: "json",
-                id: "Vguid",
-                async: true,
-                data: { "roleVguid": selector.$RoleVGUID().val() },
-                url: "/Systemmanagement/AuthorityManagement/GetModulePermissions"   //获取数据源的路径
-            };
-        var typeAdapter = new $.jqx.dataAdapter(centerSetUpSource, {
-            downloadComplete: function (data) {
-                centerSetUpSource.totalrecords = data.TotalRows;
-            }
-        });
-        //创建卡信息列表（主表）
-        selector.$grid().jqxDataTable(
-            {
-                pageable: false,
-                width: "100%",
-                height: 500,
-                pageSize: 10,
-                //serverProcessing: true,
-                pagerButtonsCount: 10,
-                columnsHeight: 40,
-                source: typeAdapter,
-                theme: "office",
-                groups: ['ParentID'],
-                groupsRenderer: function (value, rowData, level) {
-                    return "  " + value + "模块";
-                },
-                columns: [
-                  { text: '模块', datafield: 'ParentID', hidden: true, align: 'center', cellsAlign: 'center' },
-                  { text: '页面', datafield: 'PageName', align: 'center', cellsAlign: 'center' },
-                  { text: '查看', datafield: 'Reads', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Reads },
-                  { text: '新增', datafield: 'Adds', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Adds },
-                  { text: '编辑', datafield: 'Edit', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Edit },
-                  { text: '删除', datafield: 'Deletes', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Deletes },
-                  { text: '启用', datafield: 'Enable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
-                  { text: '禁用', datafield: 'Disable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Approved },
-                  { text: '导入', datafield: 'Import', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
-                  { text: '导出', datafield: 'Export', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
-                  { text: '全选', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, rendered: renderedFunc },
-                  { text: 'PageID', datafield: 'PageID', hidden: true },
-                  { text: 'Vguid', datafield: 'Vguid', hidden: true },
-                  { text: 'ModuleVGUID', datafield: 'ModuleVGUID', hidden: true }
-                ]
-            });
-    }
+   
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"selectedAllCheckbox\" id=\"" + row + "\" index=\"" + row + "\" type=\"checkbox\" onclick=\"selectAll('" + row + "')\" style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
 
     function renderedFunc(element) {
         var grid = selector.$grid();
-        var rows = grid.jqxDataTable('getRows');
+        var rows = grid.jqxTreeGrid('getRows');
         for (var i = 0; i < rows.length; i++) {
 
         }
@@ -376,3 +334,65 @@ $(function () {
 });
 
 
+ function loadTable() {
+        var centerSetUpSource ={
+                datafields:
+                [
+                    { name: 'ParentID', type: 'string' },
+                    { name: 'PageID', type: 'string' },
+                    { name: 'PageName', type: 'string' },
+                    { name: 'Reads', type: 'string' },
+                    { name: 'Adds', type: 'string' },
+                    { name: 'Edit', type: 'string' },
+                    { name: 'Deletes', type: 'string' },
+                    { name: 'Enable', type: 'string' },
+                    { name: 'Disable', type: 'string' },
+                    { name: 'Import', type: 'string' },
+                    { name: 'Export', type: 'string' },
+                    { name: 'Vguid', type: 'string' },
+                    { name: 'ModuleVGUID', type: 'string' }
+                ],
+                datatype: "json",
+                id: "Vguid",
+                async: true,
+                data: { "roleVguid": selector.$RoleVGUID().val() },
+                url: "/Systemmanagement/AuthorityManagement/GetModulePermissions"   //获取数据源的路径
+            };
+        var typeAdapter = new $.jqx.dataAdapter(centerSetUpSource, {
+            downloadComplete: function (data) {
+                centerSetUpSource.totalrecords = data.TotalRows;
+            }
+        });
+        //创建卡信息列表（主表）
+        selector.$grid().jqxDataTable({
+                pageable: false,
+                width: "100%",
+                height: 500,
+                pageSize: 10,
+                //serverProcessing: true,
+                pagerButtonsCount: 10,
+                columnsHeight: 40,
+                source: typeAdapter,
+                theme: "office",
+                groups: ['ParentID'],
+                groupsRenderer: function (value, rowData, level) {
+                    return "  " + value + "模块";
+                },
+                columns: [
+                  { text: '模块', datafield: 'ParentID', hidden: true, align: 'center', cellsAlign: 'center' },
+                  { text: '页面', datafield: 'PageName', align: 'center', cellsAlign: 'center' },
+                  { text: '查看', datafield: 'Reads', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Reads },
+                  { text: '新增', datafield: 'Adds', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Adds },
+                  { text: '编辑', datafield: 'Edit', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Edit },
+                  { text: '删除', datafield: 'Deletes', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Deletes },
+                  { text: '启用', datafield: 'Enable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
+                  { text: '禁用', datafield: 'Disable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Approved },
+                  { text: '导入', datafield: 'Import', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
+                  { text: '导出', datafield: 'Export', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
+                  { text: '全选', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, rendered: renderedFunc },
+                  { text: 'PageID', datafield: 'PageID', hidden: true },
+                  { text: 'Vguid', datafield: 'Vguid', hidden: true },
+                  { text: 'ModuleVGUID', datafield: 'ModuleVGUID', hidden: true }
+                ]
+            });
+    }

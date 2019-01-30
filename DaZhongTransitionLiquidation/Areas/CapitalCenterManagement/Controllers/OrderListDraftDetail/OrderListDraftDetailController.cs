@@ -20,8 +20,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         {
         }
         // GET: CapitalCenterManagement/OrderListDraftDetail
-        public ActionResult Index()
+        public ActionResult Index(string vguid)
         {
+            ViewBag.VGUID = vguid;
             ViewBag.PayAccount = GetCompanyBankInfo();
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();

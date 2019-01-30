@@ -26,7 +26,6 @@
 
     #moduleDIV {
         /*margin-top: 180px;*/
-        
     }
 
     #btnEdit {
@@ -44,7 +43,45 @@
         <table style="width:100%; border:0; border-collapse:0; border-spacing:0;">
             <tr style="height:60px; line-height:60px;">
                 <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
-                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
+                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
+                <td>
+                    @*<select id="AccountModeCode" class="" style="border: 0;
+    display: block;
+    color: white;
+    position: relative;
+    min-height: 1.146667rem;
+    line-height: 1.146667rem;
+    white-space: nowrap;
+    width: 60%;
+    overflow: hidden;
+    padding-right: .6rem;
+    background-color: snow;
+    background: transparent;
+    -webkit-appearance: none;" onchange="getCompanyCode()">
+                        @{
+                            foreach (var item in ViewBag.AccountMode)
+                            {
+                                <option value="@item.Code">@item.Descrption</option>
+                            }
+                        }
+                    </select>*@
+
+                    <div class="dropdown">
+                        <a id="drop4" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            xxxxx<span class="caret" style="color: white;border-top-color: white;"></span>
+                        </a>
+                        <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            @{
+                                foreach (var item in ViewBag.AccountMode)
+                                {
+                                    <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
+                                }
+                            }
+                            @*<li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
+                            <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
+                        </ul>
+                    </div>
+                </td>
                 <td></td>
                 <td style="width:45px;">
                     <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
@@ -204,44 +241,44 @@
 
 <!-- 中部条件 -->
 @*<div class="table">
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 0px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="1" data-height="150" data-width="282" data-state="move" id="1-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#ff0000;cursor: pointer;" onclick="window.location.href = '/CapitalCenterManagement/BankFlowTemplate/Index';">
-            <span class="chartAdd  icon-plus"> 资金结算中心 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 0px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="1" data-height="150" data-width="282" data-state="move" id="1-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#ff0000;cursor: pointer;" onclick="window.location.href = '/CapitalCenterManagement/BankFlowTemplate/Index';">
+                <span class="chartAdd  icon-plus"> 资金结算中心 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 331px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="2" data-height="150" data-width="282" data-state="move" id="2-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#ff6a00">
-            <span class="chartAdd  icon-plus"> 会计核算中心 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 331px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="2" data-height="150" data-width="282" data-state="move" id="2-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#ff6a00">
+                <span class="chartAdd  icon-plus"> 会计核算中心 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 662px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="3" data-height="150" data-width="282" data-state="move" id="3-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#ffd800">
-            <span class="chartAdd  icon-plus"> 费用报销中心 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 662px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="3" data-height="150" data-width="282" data-state="move" id="3-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#ffd800">
+                <span class="chartAdd  icon-plus"> 费用报销中心 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 993px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="4" data-height="150" data-width="282" data-state="move" id="4-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#b6ff00">
-            <span class="chartAdd  icon-plus"> 报表管理中心 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 0px; left: 993px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="4" data-height="150" data-width="282" data-state="move" id="4-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#b6ff00">
+                <span class="chartAdd  icon-plus"> 报表管理中心 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 0px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="5" data-height="150" data-width="282" data-state="move" id="5-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#4cff00">
-            <span class="chartAdd  icon-plus"> 预算、分析、考核 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 0px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="5" data-height="150" data-width="282" data-state="move" id="5-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#4cff00">
+                <span class="chartAdd  icon-plus"> 预算、分析、考核 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 331px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="6" data-height="150" data-width="282" data-state="move" id="6-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#00ff90">
-            <span class="chartAdd  icon-plus"> 驾驶员结算中心 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 331px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="6" data-height="150" data-width="282" data-state="move" id="6-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#00ff90">
+                <span class="chartAdd  icon-plus"> 驾驶员结算中心 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 662px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="7" data-height="150" data-width="282" data-state="move" id="7-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#0094ff">
-            <span class="chartAdd  icon-plus"> 大数据管理中心 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 662px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="7" data-height="150" data-width="282" data-state="move" id="7-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#0094ff">
+                <span class="chartAdd  icon-plus"> 大数据管理中心 </span>
+            </div>
         </div>
-    </div>
-    <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 993px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="8" data-height="150" data-width="282" data-state="move" id="8-2">
-        <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#4800ff">
-            <span class="chartAdd  icon-plus"> 税务、审计、统计 </span>
+        <div class="cell" style="width: 316px; height: 161.38px; background: rgb(245, 245, 243); position: absolute; opacity: 1; top: 176.38px; left: 993px; transition: top 0.5s ease 0s, left 0.5s ease 0s, width 0.5s ease 0s, height 0.5s ease 0s, opacity 0.5s ease 0s;" data-delay="8" data-height="150" data-width="282" data-state="move" id="8-2">
+            <div style="width:calc(100% - 6px);border-top:10px solid #F5F5F3;margin-left:4px;height:95%;background:#4800ff">
+                <span class="chartAdd  icon-plus"> 税务、审计、统计 </span>
+            </div>
         </div>
-    </div>
-</div>*@
+    </div>*@

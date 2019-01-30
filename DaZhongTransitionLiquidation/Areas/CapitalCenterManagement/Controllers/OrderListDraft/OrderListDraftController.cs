@@ -80,7 +80,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     var rgsCollectBankName = rgx.Match(orderInfo.CollectBankName).Value;
                     if (rgsOrderBankName == rgsCollectBankName)
                     {
-                        //同行
+                        #region 同行
                         Guid vguid = item.TryToGuid();
                         var url = ConfigSugar.GetAppString("BankPreAuthURL");
                         var data = "{" +
@@ -101,12 +101,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             var modelData = resultData.JsonToModel<BankPreAuthResult>();
                             if (modelData.success)
                             {
-                                saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                                {
-                                    Status = "2",
-                                    OSNO = modelData.data.serialNo,
-                                }).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                orderInfo.Status = "2";
                                 orderInfo.OSNO = modelData.data.serialNo;
+                                saveChanges = db.Updateable(orderInfo).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                var orderInfoTwo = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == item);
+                                if (orderInfoTwo.Status == "1")
+                                {
+                                    db.Updateable(orderInfo).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                }
                                 var json = orderInfo.ModelToJson();
                                 //查询银行返回状态
                                 LogHelper.WriteLog(string.Format("orderInfo:{0},status:{1}", json, status));
@@ -124,10 +126,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         {
                             LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
                         }
+                        #endregion
                     }
                     else
                     {
-                        ////跨行
+                        #region 跨行
                         var resultData = "";
                         Guid vguid = item.TryToGuid();
                         var url = ConfigSugar.GetAppString("CrossBankPreAuthURL");
@@ -151,12 +154,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             if (modelData.success)
                             {
                                 resultInfo = "成功";
-                                saveChanges = db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
-                                {
-                                    Status = "2",
-                                    OSNO = modelData.data.serialNo,
-                                }).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                orderInfo.Status = "2";
                                 orderInfo.OSNO = modelData.data.serialNo;
+                                saveChanges = db.Updateable(orderInfo).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                var orderInfoTwo = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == item);
+                                if(orderInfoTwo.Status == "1")
+                                {
+                                    db.Updateable(orderInfo).Where(it => it.VGUID == vguid).ExecuteCommand();
+                                }
                                 var json = orderInfo.ModelToJson();
                                 LogHelper.WriteLog(string.Format("orderInfo:{0},status:{1}", json, status));
                                 //查询银行返回状态
@@ -174,6 +179,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         {
                             LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
                         }
+                        #endregion
                     }
                     resultModel.IsSuccess = saveChanges == vguids.Count;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
@@ -296,7 +302,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                 VAList.Add(VA);
                             }
                         }
-                        if(VAList != null && VAList.Count > 0)
+                        if (VAList != null && VAList.Count > 0)
                         {
                             db.Updateable<Business_OrderListDraft>().UpdateColumns(it => new Business_OrderListDraft()
                             {
@@ -304,10 +310,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             }).Where(it => it.VGUID == VGUID).ExecuteCommand();
                             db.Insertable(VAList).ExecuteCommand();
                         }
-                       else
+                        else
                         {
                             resultModel.IsSuccess = false;
-                            resultModel.ResultInfo = "未找到附件!" ;
+                            resultModel.ResultInfo = "未找到附件!";
                         }
                     }
                     else

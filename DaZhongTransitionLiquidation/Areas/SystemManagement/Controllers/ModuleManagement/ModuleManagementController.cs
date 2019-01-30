@@ -88,7 +88,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Module
                     var guid = module.Vguid;
                     var moduleName = module.ModuleName;
                     var parent = module.Parent;
-                    var isAny = db.Queryable<Sys_Module>().Any(x => x.ModuleName == moduleName && x.Vguid != guid);
+                    var isAny = db.Queryable<Sys_Module>().Any(x => x.ModuleName == moduleName && x.Parent == parent && x.Vguid != guid);
                     if (isAny)
                     {
                         IsSuccess = "2";

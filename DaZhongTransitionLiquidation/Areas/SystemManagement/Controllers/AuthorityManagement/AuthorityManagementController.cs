@@ -7,6 +7,7 @@ using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using SyntacticSugar;
+using System.Collections.Generic;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.AuthorityManagement
 {
@@ -155,6 +156,17 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
                 roleInfo = db.Queryable<Sys_Role>().Single(i => i.Vguid == vguid);
             });
             return Json(roleInfo);
+        }
+        public ActionResult GetModules()
+        {
+            var jsonResult = new JsonResultModel<Sys_Module>();
+            List<Sys_Module> sys_Modules = new List<Sys_Module>();
+            DbService.Command(db =>
+            {
+                sys_Modules = db.Queryable<Sys_Module>().OrderBy(c => c.Zorder).OrderBy(z => z.CreatedDate).ToList();
+            });
+            jsonResult.Rows = sys_Modules;
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
     }
 }

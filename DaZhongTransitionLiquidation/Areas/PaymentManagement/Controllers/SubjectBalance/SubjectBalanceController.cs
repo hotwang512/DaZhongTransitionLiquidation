@@ -21,6 +21,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.CompanyCode = GetCompanyCode();
+            ViewBag.AccountMode = GetAccountMode();
             return View();
         }
         public List<Business_SevenSection> GetCompanyCode()
@@ -32,7 +33,16 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             });
             return result;
         }
-        public JsonResult GetSubjectBalance(string companyCode, GridParams para)
+        public List<Business_SevenSection> GetAccountMode()
+        {
+            var result = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                result = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+            });
+            return result;
+        }
+        public JsonResult GetSubjectBalance(string companyCode,string accountModeCode, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_Business_SubjectSettingInfo>();
             DbBusinessDataService.Command(db =>
@@ -41,7 +51,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.SqlQueryable<v_Business_SubjectSettingInfo>(@"select a.*,b.Balance from v_Business_SubjectSettingInfo as a
                                left join Business_SubjectBalance as b on b.Code = a.BusinessCode
-                               where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43' and SubjectCode='"+ companyCode + "'")
+                               where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43' and AccountModeCode='" + accountModeCode + "' and SubjectCode='" + companyCode + "'")
                                .ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

@@ -197,9 +197,9 @@ function loadGridTree(modules) {
         showHeader: false,
         source: dataAdapter,
         checkboxes: true,
-        //ready: function () {
-        //    $("#treegrid").jqxTreeGrid('expandRow', '1');
-        //},
+        ready: function () {
+            $("#moduletree").jqxTreeGrid('expandAll');
+        },
         columns: [
           { text: '模块名称', dataField: 'ModuleName', width: "100%", cellsRenderer: detailFuncs },
           { text: '', dataField: 'Parent', width: "100%",hidden:true  },

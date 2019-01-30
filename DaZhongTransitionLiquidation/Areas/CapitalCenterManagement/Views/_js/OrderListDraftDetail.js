@@ -17,7 +17,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         
-        $("#VGUID").val(vguid);
+        //$("#VGUID").val(vguid);
         var myDate = new Date();
         var date = myDate.toLocaleDateString();     //获取当前日期
         $("#FillingDate").val($.action.replaceAll(date, '/', '-'));
@@ -120,7 +120,7 @@ var $page = function () {
         //提交
         function submit(selection) {
             //$pubLayout.loading();
-
+            layer.load();
             $.ajax({
                 url: "/CapitalCenterManagement/OrderListDraft/UpdataOrderListInfo",
                 data: {
@@ -131,11 +131,14 @@ var $page = function () {
                 type: "post",
                 success: function (msg) {
                     if (msg.ResultInfo == "成功") {
+                        layer.closeAll('loading');
+                        //WindowConfirmDialog(submit, "提交成功!", "确认框", "返回", "取消", selection);
                         jqxNotification("提交成功！", null, "success");
                         history.go(-1);
                         window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                     } else {
                         jqxNotification(msg.ResultInfo, null, "error");
+                        layer.closeAll('loading');
                     }
                     //switch (msg.ResultInfo) {
                     //    case "0":

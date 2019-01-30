@@ -36,12 +36,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Accou
                 jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "C63BD715-C27D-4C47-AB66-550309794D43" &&
                                       x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode)
                 .OrderBy(i => i.Code, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                var dataInfo = jsonResult.Rows.ToList();
                 if (jsonResult.Rows != null)
                 {
                     var data = db.Queryable<Business_AccountSettingInfo>().ToList();
-                    foreach (var item in jsonResult.Rows)
+                    foreach (var item in dataInfo)
                     {
-                        var isAnyAccountCode = db.Queryable<Business_AccountSettingInfo>().Any(x => x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode && x.AccountCode == item.Code);
+                        var isAnyAccountCode = data.Any(x => x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode && x.AccountCode == item.Code);
                         if (isAnyAccountCode)
                         {
                             item.IsSetAccount = true;

@@ -78,7 +78,68 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
                 }
             }
         }
-
+        public void GetModulePermissionsNew(List<Sys_Module> roleFixeds, List<Sys_Role_Module> sysRoleList)
+        {
+            foreach (var modulePermission in roleFixeds)
+            {
+                if (modulePermission.Reads == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Reads == 1))
+                    {
+                        modulePermission.Reads = 2;
+                    }
+                }
+                if (modulePermission.Adds == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Adds == 1))
+                    {
+                        modulePermission.Adds = 2;
+                    }
+                }
+                if (modulePermission.Edit == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Edit == 1))
+                    {
+                        modulePermission.Edit = 2;
+                    }
+                }
+                if (modulePermission.Deletes == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Deletes == 1))
+                    {
+                        modulePermission.Deletes = 2;
+                    }
+                }
+                if (modulePermission.Enable == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Enable == 1))
+                    {
+                        modulePermission.Enable = 2;
+                    }
+                }
+                if (modulePermission.Disable == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Disable == 1))
+                    {
+                        modulePermission.Disable = 2;
+                    }
+                }
+                if (modulePermission.Import == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Import == 1))
+                    {
+                        modulePermission.Import = 2;
+                    }
+                }
+                if (modulePermission.Export == 1)
+                {
+                    if (sysRoleList.Any(i => i.ModuleVGUID == modulePermission.ModuleVGUID && i.Export == 1))
+                    {
+                        modulePermission.Export = 2;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// 获取当前角色下每个模块拥有的权限以及按钮权限
         /// </summary>

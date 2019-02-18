@@ -29,11 +29,25 @@
     <input id="LoginAccountModeCode" name="LoginAccountModeCode" value="@user.AccountModeCode" type="hidden" />
     <div class="main_header">
         <div style="width: 100%; height: 60px;">
-            <table style="width:100%; border:0; border-collapse:0; border-spacing:0;">
+            <table style="width:100%; border:0; border-collapse:initial; border-spacing:0;">
                 <tr style="height:60px; line-height:60px;">
                     <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
                     <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span><span id="homeModel" style="cursor:pointer;color:white;font-size: 22px"></span><input id="PageType" name="PageTypes" class="hide" /></td>
-                    <td></td>
+                    <td>
+                        <div class="dropdown">
+                            <a id="drop4" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @user.AccountModeName<span class="caret" style="color: white;border-top-color: white;"></span>
+                            </a>
+                            @*<ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                                @{
+                                    foreach (var item in ViewBag.AccountMode)
+                                    {
+                                        <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
+                                    }
+                                }
+                            </ul>*@
+                        </div>
+                    </td>
                     <td style="width:45px;">
                         <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
                     </td>

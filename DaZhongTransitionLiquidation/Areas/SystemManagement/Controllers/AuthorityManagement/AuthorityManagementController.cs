@@ -157,13 +157,15 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
             });
             return Json(roleInfo);
         }
-        public ActionResult GetModules()
+        public JsonResult GetModules(string roleVguid)
         {
             var jsonResult = new JsonResultModel<Sys_Module>();
             List<Sys_Module> sys_Modules = new List<Sys_Module>();
-            DbService.Command(db =>
+            DbService.Command<AuthorityManagementPack>((db,o) =>
             {
                 sys_Modules = db.Queryable<Sys_Module>().OrderBy(c => c.Zorder).OrderBy(z => z.CreatedDate).ToList();
+                var roleInfos = db.Queryable<Sys_Role_Module>().Where(i => i.RoleVGUID == roleVguid.TryToGuid()).ToList();
+                o.GetModulePermissionsNew(sys_Modules, roleInfos);
             });
             jsonResult.Rows = sys_Modules;
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

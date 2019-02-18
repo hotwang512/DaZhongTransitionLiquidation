@@ -73,7 +73,7 @@ namespace DaZhongTransitionLiquidation
             var roleModules = new List<V_Sys_Role_Module>();
             DbService.Command(db =>
             {
-                roleModules = db.Queryable<Sys_Role_Module, Sys_Role_Fixed>((srm, srf) => new object[] { JoinType.Left, srm.ModuleVGUID == srf.ModuleVGUID })
+                roleModules = db.Queryable<Sys_Role_Module, Sys_Module>((srm, srf) => new object[] { JoinType.Left, srm.ModuleVGUID == srf.ModuleVGUID })
                .Where((srm, srf) => srm.RoleVGUID == UserInfo.Role.TryToGuid()).Select((srm, srf) => new V_Sys_Role_Module()
                {
                    Reads = srm.Reads,
@@ -87,9 +87,9 @@ namespace DaZhongTransitionLiquidation
                    Vguid = srm.Vguid,
                    ModuleVGUID = srm.ModuleVGUID,
                    RoleVGUID = srm.RoleVGUID,
-                   PageID = srf.PageID,
-                   ParentID = srf.ParentID,
-                   PageName = srf.PageName
+                   //PageID = srf.PageID,
+                   //ParentID = srf.ParentID,
+                   PageName = srf.ModuleName
                }).ToList();
             });
             return roleModules;

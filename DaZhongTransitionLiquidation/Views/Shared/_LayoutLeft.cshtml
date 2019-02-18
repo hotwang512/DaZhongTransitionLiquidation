@@ -27,7 +27,7 @@
         </div>
         <div class="menue_body" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "营收数据" && i.Reads == 1))
+                @if (currentUserRoleModules.Any(i => i.PageName == "营收数据" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="PaymentHistory" pageurl="/PaymentManagement/RevenuePayment/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -35,7 +35,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "T+1数据" && i.Reads == 1))
+                @if ( currentUserRoleModules.Any(i => i.PageName == "T+1数据" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="NextDayData" pageurl="/PaymentManagement/NextDayData/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -43,7 +43,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行数据" && i.Reads == 1))
+                @if (currentUserRoleModules.Any(i => i.PageName == "银行数据" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="BankData" pageurl="/PaymentManagement/BankData/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -75,7 +75,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "7个段" && i.Reads == 1))
+                @if ( currentUserRoleModules.Any(i => i.PageName == "7个段" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="CompanySection" pageurl="/PaymentManagement/CompanySection/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -99,7 +99,7 @@
         </div>
         <div class="menue_body" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
+                @if (currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="Reconciliation" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -115,7 +115,7 @@
                     <td></td>
                     </tr>
                     }*@
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
+                @if ( currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="AmountReport" pageurl="/ReportManagement/AmountReport/AmountReport">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>

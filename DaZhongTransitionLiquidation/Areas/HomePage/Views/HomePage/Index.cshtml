@@ -1,7 +1,9 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
-    Sys_User user = ViewBag.User;
+    Sys_User user = ViewBag.SysUser;
+    bool isSysadmin = user?.LoginName == "sysAdmin";
     //Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as List<Sys_Role_Module>;
 }
 <link href="@Url.CusContent("~/_theme/jqwidgets-ver3.8.1/styles/bootstrap.min.css")" rel="stylesheet" />
 <link href="@Url.CusContent("~/_theme/css/common.css")" rel="stylesheet" />
@@ -46,31 +48,31 @@
                 <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
                 <td>
                     @*<select id="AccountModeCode" class="" style="border: 0;
-    display: block;
-    color: white;
-    position: relative;
-    min-height: 1.146667rem;
-    line-height: 1.146667rem;
-    white-space: nowrap;
-    width: 60%;
-    overflow: hidden;
-    padding-right: .6rem;
-    background-color: snow;
-    background: transparent;
-    -webkit-appearance: none;" onchange="getCompanyCode()">
-                        @{
-                            foreach (var item in ViewBag.AccountMode)
-                            {
-                                <option value="@item.Code">@item.Descrption</option>
-                            }
-                        }
-                    </select>*@
+                        display: block;
+                        color: white;
+                        position: relative;
+                        min-height: 1.146667rem;
+                        line-height: 1.146667rem;
+                        white-space: nowrap;
+                        width: 60%;
+                        overflow: hidden;
+                        padding-right: .6rem;
+                        background-color: snow;
+                        background: transparent;
+                        -webkit-appearance: none;" onchange="getCompanyCode()">
+                                            @{
+                                                foreach (var item in ViewBag.AccountMode)
+                                                {
+                                                    <option value="@item.Code">@item.Descrption</option>
+                                                }
+                                            }
+                                        </select>*@
 
                     <div class="dropdown">
                         <a id="drop4" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            xxxxx<span class="caret" style="color: white;border-top-color: white;"></span>
+                            @user.AccountModeName<span class="caret" style="color: white;border-top-color: white;"></span>
                         </a>
-                        <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                        <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
                             @{
                                 foreach (var item in ViewBag.AccountMode)
                                 {
@@ -78,7 +80,7 @@
                                 }
                             }
                             @*<li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
-                            <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
+                                <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
                         </ul>
                     </div>
                 </td>
@@ -102,78 +104,119 @@
     </div>
     <div id="moduleDIV" style="width: 100%;margin-top: 80px;">
         <div class="home-message" style="text-align: left;">
-            <a url="" href="#" id="DriverCenterManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/System Management.png" />
-                    </div>
-                    <span class="writing">驾驶员结算中心</span>
-                </div>
-            </a>
-            <a url="" href="#" id="CapitalCenterManagement" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Accrual.png" />
-                    </div>
-                    <span class="writing">资金结算中心</span>
-                </div>
-            </a>
-            <a url="" href="#" id="AccountingCenterManagemnet" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Payment.png" />
-                    </div>
-                    <span class="writing">会计核算中心</span>
-                </div>
-            </a>
-            <a url="" href="#" id="BigDataManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Accrual.png" />
-                    </div>
-                    <span class="writing">大数据管理中心</span>
-                </div>
-            </a>
-            <a url="" href="#" id="ReimbursementCenterManagemnet" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Send Email.png" />
-                    </div>
-                    <span class="writing">费用报销中心</span>
-                </div>
-            </a>
-            <a url="" href="#" id="ReportCenterManagemnet" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Business Data.png" />
-                    </div>
-                    <span class="writing">报表管理中心</span>
-                </div>
-            </a>
-            <a url="" href="#" id="BudgetAnalysisManagemnet" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Report.png" />
-                    </div>
-                    <span class="writing">预算、分析、考核</span>
-                </div>
-            </a>
-            <a url="" href="#" id="TaxAuditManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Payment.png" />
-                    </div>
-                    <span class="writing">税务、审计、统计</span>
-                </div>
-            </a>
-            <a url="" href="#" id="SystemManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/System Management.png" />
-                    </div>
-                    <span class="writing">系统管理</span>
-                </div>
-            </a>
+            @for (int i = 0; i < 9; i++)
+            {
+                if(!isSysadmin && i >= currentModuleRolePermission.Count)
+                {
+                    return;
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "50F3C129-5C30-4B2F-A942-6B309C6278C6" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="DriverCenterManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/System Management.png" />
+                            </div>
+                            <span class="writing">驾驶员结算中心</span>
+                        </div>
+                    </a>
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "185A294A-8BC7-4F9B-943A-B4F6F8791587" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="CapitalCenterManagement" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Accrual.png" />
+                            </div>
+                            <span class="writing">资金结算中心</span>
+                        </div>
+                    </a>
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "2C708F01-9229-48B8-9CAB-63407D1945E0" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="AccountingCenterManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Payment.png" />
+                            </div>
+                            <span class="writing">会计核算中心</span>
+                        </div>
+                    </a>
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "368296C7-667C-4316-96BC-1370ED9C50BC" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="BigDataManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Accrual.png" />
+                            </div>
+                            <span class="writing">大数据管理中心</span>
+                        </div>
+                    </a>
+                }
+
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "B9B5E47C-C646-4D0B-877D-BA456968C346" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="ReimbursementCenterManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Send Email.png" />
+                            </div>
+                            <span class="writing">费用报销中心</span>
+                        </div>
+                    </a>
+                }
+
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="ReportCenterManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Business Data.png" />
+                            </div>
+                            <span class="writing">报表管理中心</span>
+                        </div>
+                    </a>
+                }
+
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "6BAA4F3E-BCEA-45C4-8D57-F2E9A96CE06C" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="BudgetAnalysisManagemnet" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Report.png" />
+                            </div>
+                            <span class="writing">预算、分析、考核</span>
+                        </div>
+                    </a>
+                }
+
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="TaxAuditManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Payment.png" />
+                            </div>
+                            <span class="writing">税务、审计、统计</span>
+                        </div>
+                    </a>
+                }
+
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "23EF85FF-E6F1-46B7-8DBD-8FD99BEBB24A" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="SystemManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/System Management.png" />
+                            </div>
+                            <span class="writing">系统管理</span>
+                        </div>
+                    </a>
+                }
+
+            }
+           
         </div>
     </div>
 

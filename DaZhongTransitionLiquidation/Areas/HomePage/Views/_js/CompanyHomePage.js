@@ -9,7 +9,12 @@ var $page = function () {
             $("#OKButton").on("click", function () {
                 $.ajax({
                     url: "/HomePage/CompanyHomePage/SaveUserInfo",
-                    data: { ComapnyCode: $("#CompanyCode").val(), AccountModeCode: $("#AccountModeCode").val() },
+                    data: {
+                        ComapnyCode: $("#CompanyCode").val(),
+                        AccountModeCode: $("#AccountModeCode").val(),
+                        CompanyName: $("#CompanyName").val(),
+                        AccountModeName: $("#AccountModeName").val(),
+                    },
                     type: "POST",
                     dataType: "json",
                     success: function (msg) {
@@ -30,6 +35,8 @@ var $page = function () {
                 var rowData = args.row;
                 $("#CompanyCode").val(rowData.CompanyCode);
                 $("#AccountModeCode").val(rowData.Code);
+                $("#CompanyName").val(rowData.CompanyName);
+                $("#AccountModeName").val(rowData.Descrption);
             });
 
             $("#jqxTable1").on("bindingcomplete", function (event) {

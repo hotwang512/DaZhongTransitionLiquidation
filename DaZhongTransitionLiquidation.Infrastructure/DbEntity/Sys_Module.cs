@@ -71,5 +71,6 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public int Disable { get; set; }
         public int Import { get; set; }
         public int Export { get; set; }
+        public Guid ModuleVGUID { get; set; }
     }
 }

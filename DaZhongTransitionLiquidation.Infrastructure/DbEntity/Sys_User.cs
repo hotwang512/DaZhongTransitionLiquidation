@@ -131,11 +131,13 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         /// Nullable:True
         /// </summary>           
         public string CompanyCode { get; set; }
+        public string CompanyName { get; set; }
         /// <summary>
         /// Desc:账套Code
         /// Default:
         /// Nullable:True
         /// </summary>           
         public string AccountModeCode { get; set; }
+        public string AccountModeName { get; set; }
     }
 }

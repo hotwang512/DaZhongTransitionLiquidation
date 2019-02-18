@@ -31,7 +31,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         initTable();
-        initOrganization();
+        //initOrganization();
     }; //addEvent end
 
     //查询按钮事件
@@ -268,7 +268,7 @@ var $page = function () {
                   { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                   { text: '登录名称', datafield: 'LoginName', width: '12%', align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                  // { text: '用户名称', datafield: 'UserName', width: '14%', align: 'center', cellsAlign: 'center' },
-                  { text: '部门', datafield: 'TranslationDepartment', width: '12%', align: 'center', cellsAlign: 'center' },
+                  { text: '部门', datafield: 'TranslationDepartment', width: '12%', align: 'center', cellsAlign: 'center',hidden:true },
                   { text: '角色', datafield: 'TranslationRole', width: '12%', align: 'center', cellsAlign: 'center' },
                   { text: '邮箱', datafield: 'Email', align: 'center', width: '12%', cellsAlign: 'center' },
                   { text: '手机号码', datafield: 'MobileNnumber', width: '12%', align: 'center', cellsAlign: 'center' },

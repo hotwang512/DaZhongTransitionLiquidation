@@ -74,9 +74,9 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
                     result = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == accountMode && x.Block == "1" && x.IsCheck == true).ToList();
                 }
             });
-            return Json(result, JsonRequestBehavior.AllowGet); ;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SaveUserInfo(string ComapnyCode,string AccountModeCode)
+        public JsonResult SaveUserInfo(string ComapnyCode,string AccountModeCode,string CompanyName,string AccountModeName)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "0" };
             DbService.Command<Sys_User>((db, o) =>
@@ -84,6 +84,8 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
                 var cache = CacheManager<Sys_User>.GetInstance();
                 cache[PubGet.GetUserKey].CompanyCode = ComapnyCode;
                 cache[PubGet.GetUserKey].AccountModeCode = AccountModeCode;
+                cache[PubGet.GetUserKey].CompanyName = CompanyName;
+                cache[PubGet.GetUserKey].AccountModeName = AccountModeName;
                 //Sys_User userInfos = new Sys_User();
                 //userInfos.CompanyCode = ComapnyCode;
                 //CacheManager<Sys_User>.GetInstance().Add("ComapnyCode", userInfos, 8 * 60 * 60);
@@ -109,7 +111,6 @@ where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID
                 {
                     response = db.Queryable<Business_UserCompanySet>().Where(x=>x.UserVGUID == UserInfo.Vguid.TryToString() && x.Block=="1" && x.IsCheck == true).OrderBy("Code asc,CompanyCode asc").ToList();
                 }
-
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }

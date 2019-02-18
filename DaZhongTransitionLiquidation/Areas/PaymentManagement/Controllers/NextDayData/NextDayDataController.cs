@@ -302,8 +302,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 {
                     db.Ado.UseTran(delegate
                     {
-                        o.ImportData(db, t1Datas);
-                        o.ImportData_Reconciliation(db, brDatas);
+                        if (t1Datas.Count > 0)
+                            o.ImportData(db, t1Datas);
+                        if (brDatas.Count > 0)
+                            o.ImportData_Reconciliation(db, brDatas);
                     });
                 });
             }
@@ -424,8 +426,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 {
                     db.Ado.UseTran(delegate
                     {
-                        o.ImportData(db, t1Datas);
-                        o.ImportData_Reconciliation(db, brDatas);
+                        if (t1Datas.Count > 0)
+                            o.ImportData(db, t1Datas);
+                        if (brDatas.Count > 0)
+                            o.ImportData_Reconciliation(db, brDatas);
                     });
                 });
             }

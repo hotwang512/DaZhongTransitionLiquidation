@@ -27,7 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
             {
                 return db.Queryable<Business_T1Data_Information>().Any(i => i.serialnumber == t1Data.serialnumber && i.Vguid != t1Data.Vguid);
             }
-            return db.Queryable<Business_T1Data_Information>().Any(i => i.WechatNo == t1Data.WechatNo);
+            return db.Queryable<Business_T1Data_Information>().Any(i => i.serialnumber == t1Data.serialnumber);
         }
 
         /// <summary>

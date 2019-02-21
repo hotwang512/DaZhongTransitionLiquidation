@@ -20,7 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/VoucherList
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.OrderListVguid);
             return View();
         }
         public JsonResult GetVoucherListDatas(Business_VoucherList searchParams, GridParams para)

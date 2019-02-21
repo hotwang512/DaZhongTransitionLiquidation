@@ -108,7 +108,11 @@
             {
                 if(!isSysadmin && i >= currentModuleRolePermission.Count)
                 {
-                    return;
+                    continue;
+                }
+                if (isSysadmin && i > 0)
+                {
+                    continue;
                 }
                 if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "50F3C129-5C30-4B2F-A942-6B309C6278C6" && currentModuleRolePermission[i].Reads == 1)
                 {
@@ -214,7 +218,7 @@
                         </div>
                     </a>
                 }
-
+                
             }
            
         </div>

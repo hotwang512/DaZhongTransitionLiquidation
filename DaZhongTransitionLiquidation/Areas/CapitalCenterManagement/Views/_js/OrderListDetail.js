@@ -4,6 +4,9 @@ var selector = {
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
     $pushPeopleDropDownButton: function () { return $("#pushPeopleDropDownButton") },
+    $AddNewBankDataDialog: function () { return $("#AddNewBankDataDialog") },
+    $AddNewBankData_OKButton: function () { return $("#AddNewBankData_OKButton") },
+    $AddNewBankData_CancelBtn: function () { return $("#AddNewBankData_CancelBtn") },
     $pushTree: function () { return $("#pushTree") },
 }; //selector end
 var isEdit = false;
@@ -26,7 +29,7 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-
+        //initTable();
         initOrganization();
 
         //var id0 = "#CompanyCode";
@@ -67,8 +70,22 @@ var $page = function () {
         });
         //保存
         $("#btnSave").on("click", function () {
+            var params = [];
+            for (var i = 0; i < $(".permissions").length; i++) {
+                params.push({
+                    "Isable": $(".permission")[i].checked,
+                    "PayBank": $(".PayBank").eq(i).text(),
+                    "PayAccount": $(".PayAccount").eq(i).text(),
+                    "PayBankAccountName": $(".PayBankAccountName").eq(i).text(),
+                    "Borrow": $(".Borrow").eq(i).text(),
+                    "Loan": $(".Loan").eq(i).text(),
+                    "KeyData": $(".KeyData")[i].value,
+                    "OrderVGUID": $("#VGUID").val()
+                });
+            }
+            var orderDetailValue = JSON.stringify(params);
             $.ajax({
-                url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail",
+                url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail?OrderDetailValue=" + orderDetailValue,
                 //data: { vguids: selection },
                 data: {
                     "VGUID": $("#VGUID").val(),
@@ -96,10 +113,10 @@ var $page = function () {
                     "CollectionBank": $("#CollectionBank").val(),
                     "CollectionBankAccountName": $("#CollectionBankAccountName").val(),
                     "PaymentMethod": $("#PaymentMethod").val(),
-                    "PayAccount": $("#PayAccount").val(),
-                    "PayBankAccountName": $("#PayBankAccountName").val(),
-                    "PayBank": $("#PayBank").val(),
-                    "CompanyCode": $("#LoginCompanyCode").val(),
+                    //"PayAccount": $("#PayAccount").val(),
+                    //"PayBankAccountName": $("#PayBankAccountName").val(),
+                    //"PayBank": $("#PayBank").val(),
+                    "CompanyCode": $("#LoginCompanyCode").val()
                 },
                 type: "post",
                 success: function (msg) {
@@ -116,44 +133,6 @@ var $page = function () {
                 }
             });
         })
-        //弹出框中的取消按钮
-        $("#AddBankChannel_CancelBtn").on("click", function () {
-            $("#AddBusinessType").modal("hide");
-        });
-        //弹出框中的保存按钮
-        $("#AddBankChannel_OKButton").on("click", function () {
-            var validateError = 0;//未通过验证的数量
-            if (!Validate($("#BusinessTypeName"))) {
-                validateError++;
-            }
-            if (validateError <= 0) {
-                $.ajax({
-                    url: "/CapitalCenterManagement/OrderListDetail/SaveBusinessTypeName",
-                    data: {
-                        BusinessTypeName: $("#BusinessTypeName").val(),
-                        BusinessVGUID: $("#BusinessVGUID").val()
-                    },
-                    type: "post",
-                    dataType: "json",
-                    success: function (msg) {
-                        switch (msg.Status) {
-                            case "0":
-                                jqxNotification("保存失败！", null, "error");
-                                break;
-                            case "1":
-                                jqxNotification("保存成功！", null, "success");
-                                $("#AddBusinessType").modal("hide");
-                                var busin = $("#BusinessTypeName").val();
-                                var mySelect = document.getElementById("BusinessType");
-                                loadBusinessType();
-                                $("#BusinessType").val(busin);
-                                //addOption1(mySelect, busin, busin);
-                                break;
-                        }
-                    }
-                });
-            }
-        });
         //新增按钮
         $("#btnAdd").on("click", function () {
             $("#AddBusinessType").modal("show");
@@ -161,7 +140,6 @@ var $page = function () {
             $("#BusinessVGUID").val("");
             initBusinessTypeName();
         })
-        //
         $('#CollectionCompany').on('select', function (event) {
             var args = event.args;
             var item = args.item;
@@ -170,7 +148,99 @@ var $page = function () {
                 companyChange(value);
             }
         });
+        //编辑账套信息
+        var vguids = [];
+        $("#btnEditInfo").on("click", function () {
+            vguids = [];
+            var per = $(".permissions");
+            var j = 0;
+            for (var i = 0; i < per.length; i++) {
+                var ischeck = per[i].checked;
+                if (ischeck) {
+                    var id = per[i].getAttribute('pageid');
+                    vguids.push(id);
+                    j = i;
+                }
+            }
+            if (vguids.length != 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            } else {
+                var companyCode = per[j].getAttribute('comvalue');
+                var accountModeCode = per[j].getAttribute('accvalue');
+                //加载借贷配置列表
+                initTable(companyCode, accountModeCode);
+                //付款银行信息
+                getPayBankInfo(companyCode, accountModeCode);
+                //绑定选中数据
+                setPayBankInfo(vguids);
+                selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
+                selector.$AddNewBankDataDialog().modal("show");
+            }
+            
+        })
+        //弹出框中的取消按钮
+        selector.$AddNewBankData_CancelBtn().on("click", function () {
+            selector.$AddNewBankDataDialog().modal("hide");
+        });
+        //确认
+        $("#AddNewBankData_OKButton").on("click", function () {
+            for (var i = 0; i < $(".Borrow").length; i++) {
+                if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
+                    var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
+                    var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
+                    $(".Borrow").eq(i).text(val)
+                    var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
+                    var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
+                    $(".Loan").eq(i).text(val2);
+                    var val3 = $("#PayBank").val();
+                    $(".PayBank").eq(i).text(val3)
+                    var val4 = $("#PayAccount").val();
+                    $(".PayAccount").eq(i).text(val4)
+                    var val5 = $("#PayBankAccountName").val();
+                    $(".PayBankAccountName").eq(i).text(val5)
+                }
+            }
+            selector.$AddNewBankDataDialog().modal("hide");
+        });
     }; //addEvent end
+
+    function getPayBankInfo(companyCode, accountModeCode) {
+        var url = "/CapitalCenterManagement/OrderListDetail/GetPayBankInfo";
+        $.ajax({
+            url: url,
+            async: false,
+            data: { companyCode: companyCode, accountModeCode: accountModeCode },
+            type: "post",
+            success: function (result) {
+                uiEngineHelper.bindSelect("#PayBank", result, "BankName", "BankName");
+                if (result.length == 0) {
+                    $("#PayAccount").val("");
+                    $("#PayBankAccountName").val("");
+                } else {
+                    $("#PayAccount").val(result[0].BankAccount);
+                    $("#PayBankAccountName").val(result[0].BankAccountName);
+                }
+            }
+        });
+    }
+
+    function setPayBankInfo(vguids) {
+        for (var i = 0; i < $(".Borrow").length; i++) {
+            if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
+                var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + $(".Borrow").eq(i).text() + '</div>';
+                $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
+                var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + $(".Loan").eq(i).text() + '</div>';
+                $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
+                var val3 = $(".PayBank").eq(i).text();
+                $("#PayBank").val(val3);
+                var val4 = $(".PayAccount").eq(i).text();
+                $("#PayAccount").val(val4);
+                var val5 = $(".PayBankAccountName").eq(i).text();
+                $("#PayBankAccountName").val(val5);
+                
+            }
+        }
+    }
 
     function loadSelectFun() {
 
@@ -227,9 +297,9 @@ var $page = function () {
                 $("#CollectionBankAccountName").val(msg.CollectionBankAccountName);
                 $("#CollectionBank").val(msg.CollectionBank);
                 $("#PaymentMethod").val(msg.PaymentMethod);
-                $("#PayAccount").val(msg.PayAccount);
-                $("#PayBankAccountName").val(msg.PayBankAccountName);
-                $("#PayBank").val(msg.PayBank);
+                //$("#PayAccount").val(msg.PayAccount);
+                //$("#PayBankAccountName").val(msg.PayBankAccountName);
+                //$("#PayBank").val(msg.PayBank);
             }
         });
     }
@@ -547,3 +617,130 @@ function getBusinessText(parentItem) {
 //    }
 //    return results;
 //}
+
+function initTable(companyCode, accountModeCode) {
+    var source =
+        {
+            datafields:
+            [
+                { name: 'BusinessCode', type: 'string' },
+                { name: 'Company', type: 'string' },
+                { name: 'CompanyCode', type: 'string' },
+                { name: 'AccountingCode', type: 'string' },
+                { name: 'CostCenterCode', type: 'string' },
+                { name: 'SpareOneCode', type: 'string' },
+                { name: 'SpareTwoCode', type: 'string' },
+                { name: 'IntercourseCode', type: 'string' },
+                { name: 'Accounting', type: 'string' },
+                { name: 'CostCenter', type: 'string' },
+                { name: 'SpareOne', type: 'string' },
+                { name: 'SpareTwo', type: 'string' },
+                { name: 'Intercourse', type: 'string' },
+                { name: 'SubjectCode', type: 'string' },
+                { name: 'SubjectVGUID', type: 'string' },
+                { name: 'Checked', type: 'string' },
+                { name: 'Balance', type: 'number' },
+            ],
+            datatype: "json",
+            cache: false,
+            id: "SectionVGUID",
+            data: { companyCode: companyCode, accountModeCode: accountModeCode },
+            url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    //创建卡信息列表（主表）
+    $("#grid1").jqxGrid({
+        pageable: false,
+        width: "100%",
+        autoheight: true,
+        columnsresize: true,
+        pageSize: 15,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        columnsHeight: 40,
+        columns: [
+            //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+            { text: '编码', datafield: 'BusinessCode', width: 250, align: 'center', cellsAlign: 'center', },
+            { text: '科目段', datafield: 'Company', width: 200, align: 'center', cellsAlign: 'center' },
+            { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用1', datafield: 'SpareOne', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用2', datafield: 'SpareTwo', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '往来段', datafield: 'Intercourse', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '余额', datafield: 'Balance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
+
+            { text: '核算段', datafield: 'AccountingCode', hidden: true },
+            { text: '成本中心段', datafield: 'CostCenterCode', hidden: true },
+            { text: '备用1', datafield: 'SpareOneCode', hidden: true },
+            { text: '备用2', datafield: 'SpareTwoCode', hidden: true },
+            { text: '往来段', datafield: 'IntercourseCode', hidden: true },
+            { text: 'SubjectCode', datafield: 'ParentCode', hidden: true },
+            //{ text: 'BusinessCode', datafield: 'BusinessCode', hidden: true },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+        ]
+    });
+    $("#jqxdropdownbutton1").jqxDropDownButton({
+        width: 300, height: 30
+    });
+    $("#grid1").on('rowclick', function (event) {
+        var args = event.args;
+        var row = $("#grid1").jqxGrid('getrowdata', args.rowindex);
+        var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + row['BusinessCode'] + '</div>';
+        $("#jqxdropdownbutton1").jqxDropDownButton('setContent', dropDownContent);
+    });
+
+    $("#grid2").jqxGrid({
+        pageable: false,
+        width: "100%",
+        autoheight: true,
+        columnsresize: true,
+        pageSize: 15,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        columnsHeight: 40,
+        columns: [
+            //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+            { text: '编码', datafield: 'BusinessCode', width: 250, align: 'center', cellsAlign: 'center', },
+            { text: '科目段', datafield: 'Company', width: 200, align: 'center', cellsAlign: 'center' },
+            { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用1', datafield: 'SpareOne', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用2', datafield: 'SpareTwo', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '往来段', datafield: 'Intercourse', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '余额', datafield: 'Balance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
+
+            { text: '核算段', datafield: 'AccountingCode', hidden: true },
+            { text: '成本中心段', datafield: 'CostCenterCode', hidden: true },
+            { text: '备用1', datafield: 'SpareOneCode', hidden: true },
+            { text: '备用2', datafield: 'SpareTwoCode', hidden: true },
+            { text: '往来段', datafield: 'IntercourseCode', hidden: true },
+            { text: 'SubjectCode', datafield: 'ParentCode', hidden: true },
+            //{ text: 'BusinessCode', datafield: 'BusinessCode', hidden: true },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+        ]
+    });
+    $("#jqxdropdownbutton2").jqxDropDownButton({
+        width: 300, height: 30
+    });
+    $("#grid2").on('rowclick', function (event) {
+        var args = event.args;
+        var row = $("#grid2").jqxGrid('getrowdata', args.rowindex);
+        var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + row['BusinessCode'] + '</div>';
+        $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
+    });
+}
+
+function checkboxOnclick(event) {
+    for (var i = 0; i < $(".permissions").length; i++) {
+        var id = $(".permissions")[i].getAttribute('pageid');
+        if (event.getAttribute('pageid') == id) {
+            $(".permissions").eq(i).prop("checked", true);
+        } else {
+            $(".permissions").eq(i).prop("checked", false);
+        } 
+    }
+}

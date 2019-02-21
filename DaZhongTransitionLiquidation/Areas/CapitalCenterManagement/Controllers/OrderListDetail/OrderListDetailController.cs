@@ -1,8 +1,9 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
-using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
@@ -10,8 +11,6 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDetail
@@ -28,9 +27,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.PayAccount = GetCompanyBankInfo();
             ViewBag.OrderBaseType = GetOrderBaseType();
+            ViewBag.UserCompanySet = GetUserCompanySet();
             return View();
         }
-        public JsonResult SaveOrderListDetail(Business_OrderList sevenSection)
+        public JsonResult SaveOrderListDetail(Business_OrderList sevenSection,string OrderDetailValue)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -49,6 +49,15 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     {
                         db.Updateable<Business_OrderList>(sevenSection).ExecuteCommand();
                     }
+                    //账套公司各项配置
+                    var gjson = OrderDetailValue.JsonToModel<List<Business_UserCompanySetDetail>>();
+                    db.Deleteable<Business_UserCompanySetDetail>(x => x.OrderVGUID == sevenSection.VGUID.TryToString()).ExecuteCommand();
+                    foreach (var item in gjson)
+                    {
+                        item.OrderVGUID = sevenSection.VGUID.TryToString();
+                        item.VGUID = Guid.NewGuid();
+                    }
+                    db.Insertable<Business_UserCompanySetDetail>(gjson).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -138,6 +147,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return result;
         }
+        public JsonResult GetPayBankInfo(string companyCode,string accountModeCode)
+        {
+            var result = new List<Business_CompanyBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                //var currentDepartment = UserInfo.Department;
+                //var mainDepVguid = db.Queryable<Master_Organization>().Where(i => i.ParentVguid == null).Select(i => i.Vguid).Single();
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountModeCode == accountModeCode).OrderBy("BankStatus desc").ToList();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetBankInfo(string PayBank)
         {
             var result = new Business_CompanyBankInfo();
@@ -171,6 +191,19 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 organizations = db.Queryable<Business_BusinessTypeSet>().ToList();
             });
             return Json(organizations);
+        }
+        public List<UserCompanySetDetail> GetUserCompanySet()
+        {
+            var result = new List<UserCompanySetDetail>();
+            DbBusinessDataService.Command(db =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                var UserVGUID = cache[PubGet.GetUserKey].Vguid;
+                result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
+left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + @"'
+                            and a.IsCheck='1' and a.Block='1'").ToList();
+            });
+            return result;
         }
     }
 }

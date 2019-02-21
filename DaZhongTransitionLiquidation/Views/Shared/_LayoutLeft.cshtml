@@ -5,9 +5,9 @@
     var currentUserRoleModules = ViewBag.CurrentUserRoleModules as List<V_Sys_Role_Module>;
     var userInfo = ViewBag.User as Sys_User;
     bool isSysadmin = userInfo?.LoginName == "sysAdmin";
-    bool hasSystemManagementPermission = currentUserRoleModules.Any(i => i.ParentID == "系统管理" && i.Reads == 1);
-    bool hasPaymentPermission = currentUserRoleModules.Any(i => i.ParentID == "基础数据" && i.Reads == 1);
-    bool hasReportPermission = currentUserRoleModules.Any(i => i.ParentID == "报表" && i.Reads == 1);
+    bool hasSystemManagementPermission = currentUserRoleModules.Any(i => i.PageName == "系统管理" && i.Reads == 1);
+    bool hasPaymentPermission = currentUserRoleModules.Any(i => i.PageName == "资金结算中心" && i.Reads == 1);
+    bool hasReportPermission = currentUserRoleModules.Any(i => i.PageName == "费用报销中心" && i.Reads == 1);
 }
 <html>
 <head>

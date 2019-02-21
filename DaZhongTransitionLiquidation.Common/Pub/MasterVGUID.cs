@@ -51,9 +51,12 @@ namespace DaZhongTransitionLiquidation.Common.Pub
         /// <summary>
         /// 银行数据
         /// </summary>
-        public const string BankData = "ED966D2E-2C71-4F10-AC97-2BE9021F42AB";
+        //public const string BankData = "ED966D2E-2C71-4F10-AC97-2BE9021F42AB";
+        public const string BankData = "55a6662b-7b12-417a-a85e-b376f303ef84";
         #endregion
 
+        //凭证列表
+        public const string OrderListVguid = "18099EAE-B140-4199-85DD-BA674B881140";
 
         #region 报表模块
         /// <summary>

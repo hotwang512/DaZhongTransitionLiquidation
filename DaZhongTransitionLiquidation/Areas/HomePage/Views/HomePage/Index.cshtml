@@ -45,46 +45,7 @@
         <table style="width:100%; border:0; border-collapse:0; border-spacing:0;">
             <tr style="height:60px; line-height:60px;">
                 <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
-                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
-                <td>
-                    @*<select id="AccountModeCode" class="" style="border: 0;
-                        display: block;
-                        color: white;
-                        position: relative;
-                        min-height: 1.146667rem;
-                        line-height: 1.146667rem;
-                        white-space: nowrap;
-                        width: 60%;
-                        overflow: hidden;
-                        padding-right: .6rem;
-                        background-color: snow;
-                        background: transparent;
-                        -webkit-appearance: none;" onchange="getCompanyCode()">
-                                            @{
-                                                foreach (var item in ViewBag.AccountMode)
-                                                {
-                                                    <option value="@item.Code">@item.Descrption</option>
-                                                }
-                                            }
-                                        </select>*@
-
-                    <div class="dropdown">
-                        <a id="drop4" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @user.AccountModeName<span class="caret" style="color: white;border-top-color: white;"></span>
-                        </a>
-                        <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
-                            @{
-                                foreach (var item in ViewBag.AccountMode)
-                                {
-                                    <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
-                                }
-                            }
-                            @*<li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
-                                <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
-                        </ul>
-                    </div>
-                </td>
-                <td></td>
+                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>              
                 <td style="width:45px;">
                     <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
                 </td>
@@ -99,6 +60,24 @@
                         </ul>
                     </div>
                 </td>
+                <td style="width:200px">
+                    <div class="dropdown">
+                        <a id="drop4" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @user.AccountModeName<span class="caret" style="color: white;border-top-color: white;"></span>
+                        </a>
+                        <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
+                            @{
+                                foreach (var item in ViewBag.AccountMode)
+                                {
+                                    <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
+                                }
+                            }
+                            @*<li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
+                    <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
+                        </ul>
+                    </div>
+                </td>
+                
             </tr>
         </table>
     </div>

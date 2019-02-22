@@ -27,10 +27,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.PayAccount = GetCompanyBankInfo();
             ViewBag.OrderBaseType = GetOrderBaseType();
-            ViewBag.UserCompanySet = GetUserCompanySet();
+            ViewBag.UserCompanySet = GetUserCompanySets();
             return View();
         }
-        public JsonResult SaveOrderListDetail(Business_OrderList sevenSection,string OrderDetailValue)
+        public JsonResult SaveOrderListDetail(Business_OrderList sevenSection, string OrderDetailValue)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -101,17 +101,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                orderList = db.Queryable<Business_CustomerBankInfo>().Where(x=>x.VGUID == CollectionCompany).ToList();
+                orderList = db.Queryable<Business_CustomerBankInfo>().Where(x => x.VGUID == CollectionCompany).ToList();
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult SaveBusinessTypeName(string BusinessTypeName,string BusinessVGUID)
+        public JsonResult SaveBusinessTypeName(string BusinessTypeName, string BusinessVGUID)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var result = db.Ado.UseTran(() =>
-                {                   
+                {
                     if (BusinessVGUID == "")
                     {
                         Business_BusinessType bus = new Business_BusinessType();
@@ -147,7 +147,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return result;
         }
-        public JsonResult GetPayBankInfo(string companyCode,string accountModeCode)
+        public JsonResult GetPayBankInfo(string companyCode, string accountModeCode)
         {
             var result = new List<Business_CompanyBankInfo>();
             DbBusinessDataService.Command(db =>
@@ -167,7 +167,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
                 result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany && x.BankName == PayBank).First();
             });
-            return Json(result, JsonRequestBehavior.AllowGet); ;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         public List<CS_Master_2> GetOrderBaseType()
         {
@@ -186,22 +186,71 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             var organizations = new List<Business_BusinessTypeSet>();
             DbBusinessDataService.Command(db =>
             {
-                //var currentDepartment = UserInfo.Department;
-                //var mainDepVguid = db.Queryable<Master_Organization>().Where(i => i.ParentVguid == null).Select(i => i.Vguid).Single();
-                organizations = db.Queryable<Business_BusinessTypeSet>().ToList();
+                var userVGUID = UserInfo.Vguid;
+                if(UserInfo.LoginName == "sysAdmin")
+                {
+                    organizations = db.Queryable<Business_BusinessTypeSet>().ToList();
+                }
+                else
+                {
+                    //账号权限下的版块（出租/租赁）
+                    var data = db.SqlQueryable<Business_BusinessTypeSet>(@"select * from dbo.Business_BusinessTypeSet where Code = (
+     select BusinessCode from Business_UserCompanySet where UserVGUID = '" + userVGUID + "' and IsCheck='1' and Block='2')").First();
+                    organizations.Add(data);
+                    GetBusinessTree(data.VGUID, organizations);
+                }
             });
-            return Json(organizations);
+            return Json(organizations, JsonRequestBehavior.AllowGet);
         }
-        public List<UserCompanySetDetail> GetUserCompanySet()
+        public void GetBusinessTree(Guid Vguid, List<Business_BusinessTypeSet> organizations)
+        {
+            DbBusinessDataService.Command(db =>
+            {
+                var datas = db.Queryable<Business_BusinessTypeSet>().Where(x => x.ParentVGUID == Vguid.TryToString()).ToList();
+                foreach (var item in datas)
+                {
+                    organizations.Add(item);
+                    GetBusinessTree(item.VGUID, organizations);
+                }
+            });
+        }
+        public JsonResult GetUserCompanySet(string orderVguid)
         {
             var result = new List<UserCompanySetDetail>();
             DbBusinessDataService.Command(db =>
             {
                 var cache = CacheManager<Sys_User>.GetInstance();
                 var UserVGUID = cache[PubGet.GetUserKey].Vguid;
-                result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
-left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + @"'
-                            and a.IsCheck='1' and a.Block='1'").ToList();
+                if (UserInfo.LoginName == "sysAdmin")
+                {
+                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
+left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where b.OrderVGUID = '" + orderVguid + @"'  and a.Block='1' ").OrderBy("Code asc,CompanyCode asc").ToList();
+                }
+                else
+                {
+                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
+left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + @"' and b.OrderVGUID = '" + orderVguid + @"' and a.IsCheck='1' and a.Block='1' ").OrderBy("Code asc,CompanyCode asc").ToList();
+                }   
+            });
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public List<UserCompanySetDetail> GetUserCompanySets()
+        {
+            var result = new List<UserCompanySetDetail>();
+            DbBusinessDataService.Command(db =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                var UserVGUID = cache[PubGet.GetUserKey].Vguid;
+                if (UserInfo.LoginName == "sysAdmin")
+                {
+                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
+left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Block='1'").OrderBy("Code asc,CompanyCode asc").ToList();
+                }
+                else
+                {
+                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
+left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + @"' and a.IsCheck='1' and a.Block='1'").OrderBy("Code asc,CompanyCode asc").ToList();
+                }         
             });
             return result;
         }

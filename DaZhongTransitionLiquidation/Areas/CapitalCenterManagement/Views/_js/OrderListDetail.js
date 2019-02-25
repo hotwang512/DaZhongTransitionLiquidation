@@ -238,11 +238,11 @@ var $page = function () {
                 var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + $(".Loan").eq(i).text() + '</div>';
                 $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
                 var val3 = $(".PayBank").eq(i).text();
-                $("#PayBank").val(val3);
+                //$("#PayBank").val(val3);
                 var val4 = $(".PayAccount").eq(i).text();
-                $("#PayAccount").val(val4);
+                //$("#PayAccount").val(val4);
                 var val5 = $(".PayBankAccountName").eq(i).text();
-                $("#PayBankAccountName").val(val5);
+                //$("#PayBankAccountName").val(val5);
                 //付款银行信息（默认）
                 getPayBankInfo(companyCode, accountModeCode, val3, val4, val5);
             }

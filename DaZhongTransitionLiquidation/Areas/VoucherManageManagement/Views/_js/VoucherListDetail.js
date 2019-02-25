@@ -51,7 +51,7 @@ var $page = function () {
             index = event.args.item;
             console.log(index);
             var length2 = $(".nav-i2").length;
-            if (length2 == 0) {
+            if (index == 1 && length2 == 0) {
                 addSectionDiv();
             } else {
                 autoHeight(index);

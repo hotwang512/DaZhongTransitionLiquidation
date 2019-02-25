@@ -7,6 +7,7 @@
     bool isSysadmin = userInfo?.LoginName == "sysAdmin";
     bool hasSystemManagementPermission = currentUserRoleModules.Any(i => i.PageName == "系统管理" && i.Reads == 1);
     bool hasPaymentPermission = currentUserRoleModules.Any(i => i.PageName == "资金结算中心" && i.Reads == 1);
+    bool hasPaymentPermission1 = currentUserRoleModules.Any(i => i.PageName == "会计核算中心" && i.Reads == 1);
     bool hasReportPermission = currentUserRoleModules.Any(i => i.PageName == "费用报销中心" && i.Reads == 1);
 }
 <html>
@@ -354,7 +355,7 @@
         </div>
     }
     @******************************************************会计核算中心******************************************************@
-    @if (isSysadmin || hasPaymentPermission)
+    @if (isSysadmin || hasPaymentPermission1)
     {
         <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">

@@ -321,7 +321,33 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 押金
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        public JsonResult GetDepositDetail(string RevenueDate, string Channel_Id, GridParams paras)
+        {
+            var jsonResult = new JsonResultModel<v_Business_T1Data_Information_Date_2>();
+            int pageCount = 0;
 
+            DbBusinessDataService.Command(db =>
+            {
+                RevenueDate.Replace(" ", "");
+                string[] revenueDates = RevenueDate.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                var query = db.Queryable<v_Business_T1Data_Information_Date_2>().Where(i => i.Channel_Id == Channel_Id).In(i => i.RevenuetimeStr, revenueDates);
+                jsonResult.Rows = query.ToPageList(paras.pagenum, paras.pagesize, ref pageCount);
+                foreach (var t1Data in jsonResult.Rows)
+                {
+                    t1Data.DriverBearFees = t1Data.PaidAmount - t1Data.Remitamount;
+                    t1Data.CompanyBearsFees = t1Data.RevenueFee - t1Data.DriverBearFees;
+                    t1Data.ChannelPayableAmount = t1Data.PaidAmount - t1Data.RevenueFee;
+                }
+                jsonResult.TotalRows = pageCount;
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
         /// 银行
@@ -359,6 +385,8 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             decimal RevenueTotal,
             decimal ArrearsChannelTotal,
             decimal ChannelTotal,
+            decimal ArrearsDepositTotal,
+            decimal DepositTotal,
             decimal BankTotal)
         {
             string operatorUser = UserInfo.LoginName;
@@ -374,6 +402,8 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 RevenueTotal,
                 ArrearsChannelTotal,
                 ChannelTotal,
+                ArrearsDepositTotal,
+                DepositTotal,
                 BankTotal);
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
@@ -492,7 +522,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             }
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        
+
         /// <summary>
         /// 获取未对账数据
         /// </summary>

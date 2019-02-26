@@ -15,6 +15,9 @@ namespace DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity
         public decimal? T1DataArrearsTotalAccount { get; set; }
         public decimal? T1DataPaymentTotalAccount { get; set; }
 
+        public decimal? DepositArrearsTotalAccount { get; set; }
+        public decimal? DepositPaymentTotalAccount { get; set; }
+
         public decimal? BankTotalAccount { get; set; }
     }
 }

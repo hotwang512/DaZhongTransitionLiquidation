@@ -61,6 +61,7 @@
     <Compile Include="DbEntity\Business_ReconciliationDetail.cs" />
     <Compile Include="DbEntity\Business_Revenuepayment_Information.cs" />
     <Compile Include="DbEntity\Business_T1Data_Information.cs" />
+    <Compile Include="DbEntity\Business_T1Data_Information_2.cs" />
     <Compile Include="DbEntity\CS_Master_1.cs" />
     <Compile Include="DbEntity\CS_Master_2.cs" />
     <Compile Include="DbEntity\Master_Configuration.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="ViewEntity\v_Business_Reconciliation.cs" />
     <Compile Include="ViewEntity\V_Business_T1Data_Information.cs" />
     <Compile Include="ViewEntity\v_Business_T1Data_Information_Date.cs" />
+    <Compile Include="ViewEntity\v_Business_T1Data_Information_Date_2.cs" />
     <Compile Include="ViewEntity\v_Business_T1Data_Information_Desc.cs" />
     <Compile Include="ViewEntity\v_Channel_Desc.cs" />
     <Compile Include="ViewEntity\v_Channel_Subject_Desc.cs" />

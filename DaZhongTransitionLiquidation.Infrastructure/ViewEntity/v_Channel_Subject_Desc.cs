@@ -43,5 +43,8 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ViewEntity
         public string OrganizationName { get; set; }
 
         public string ChannelName { get; set; }
+
+        private bool _deposit = false;
+        public bool Deposit { get { return _deposit; } set { _deposit = value; } }
     }
 }

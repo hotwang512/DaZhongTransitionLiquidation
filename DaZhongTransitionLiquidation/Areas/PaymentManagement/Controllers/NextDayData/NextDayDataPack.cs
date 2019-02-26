@@ -50,7 +50,16 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
         {
             return db.Insertable(revenuepaymentInformationDatas).ExecuteCommand();
         }
-
+        /// <summary>
+        /// 导出T+1数据 押金
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="t1Datas"></param>
+        /// <returns></returns>
+        public int ImportDepositData(SqlSugarClient db, List<Business_T1Data_Information_2> t1Datas_2)
+        {
+            return db.Insertable<Business_T1Data_Information_2>(t1Datas_2).ExecuteCommand();
+        }
 
 
     }

@@ -68,6 +68,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                     {
                         db.Deleteable<Business_SubjectBalance>(x => x.Code == Code).ExecuteCommand();
                         Business_SubjectBalance balance = new Business_SubjectBalance();
+                        balance.VGUID = Guid.NewGuid();
                         balance.Code = Code;
                         balance.Balance = Balance;
                         db.Insertable(balance).ExecuteCommand();

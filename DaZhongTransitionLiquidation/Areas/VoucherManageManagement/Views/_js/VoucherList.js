@@ -216,11 +216,11 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: "", datafield: "checkbox", width: 35, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                     { text: '批名', datafield: 'BatchName', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '营运公司', datafield: 'CompanyName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', },
+                    { text: '批名', datafield: 'BatchName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: false, align: 'center', cellsAlign: 'center' },
+                    { text: '营运公司', datafield: 'CompanyName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '币种', datafield: 'Currency', width: 150, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
@@ -249,7 +249,7 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?VGUID='" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
+            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?VGUID="+rowData.uid+"' style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
         } else {
             container = "<span>" + rowData.BatchName + "</span>";
         }

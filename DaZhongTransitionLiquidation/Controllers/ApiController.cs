@@ -1,6 +1,9 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
@@ -303,10 +306,14 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == companyCode).Descrption;
                         //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
-
-                        orderListDraft.OrderBankName = data.PayBank;//付款账号开户行
-                        orderListDraft.OrderBankAccouont = data.PayAccount;//付款账号ACON
-                        orderListDraft.OrderBankAccouontName = data.PayBankAccountName;//付款账号户名
+                        var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.KeyData == accountModeCode + companyCode).ToList();
+                        //获取配置信息（付款银行）
+                        if (orderDetail.Count() > 0)
+                        {
+                            orderListDraft.OrderBankName = orderDetail[0].PayBank;//付款账号开户行
+                            orderListDraft.OrderBankAccouont = orderDetail[0].PayAccount;//付款账号ACON
+                            orderListDraft.OrderBankAccouontName = orderDetail[0].PayBankAccountName;//付款账号户名
+                        }
 
                         orderListDraft.CollectBankName = data.CollectionBank;//收款账号开户行
                         orderListDraft.CollectBankAccouont = data.CollectionAccount;//收款账号OPAC
@@ -539,6 +546,165 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 return functionReturnValue;
             }
+        }
+
+        public JsonResult Pay_BuildPaymentVoucherDetail(Business_OrderListAPI OrderListAPI)
+        {
+            var results = "";
+            var errmsg = string.Empty;
+            SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
+            try
+            {
+                ExpCheck.Exception(OrderListAPI.AccountSetCode == null, "支付单位账套代码为空！");
+                //ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
+                ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");//编码
+                //ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
+                //ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
+                //ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
+                var guid = Guid.NewGuid();
+                var Ifsuccess = false;
+                if (OrderListAPI != null)
+                {
+                    var accountSetCode = OrderListAPI.AccountSetCode;
+                    var accountModeCode = accountSetCode.Split("|")[0];//账套
+                    var companyCode = accountSetCode.Split("|")[1];//公司
+                    var voucherType = OrderListAPI.VoucherType;//凭证类型
+                    var BusinessProject = OrderListAPI.BusinessProject;
+                    //从订单配置表中取出数据
+                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1 == BusinessProject)
+                               .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
+                               //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
+                               //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
+                               //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
+                               .ToList().FirstOrDefault();
+                    //数据存入订单草稿表，生成订单
+                    var date = DateTime.Now;
+                    var flowNo = _db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
+                                  order by BatchName desc", new { @NowDate = date });
+                    var voucherNo = _db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
+                                  order by VoucherNo desc", new { @NowDate = date });
+                    var batchName = GetBatchName(voucherType, flowNo);
+                    var voucherName = GetVoucherName(voucherNo);
+                    Business_VoucherList voucherList = new Business_VoucherList();
+                    if (data != null)
+                    {
+                        var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyCode).Descrption;
+                        //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
+
+                        voucherList.CompanyName = orderCompany;//订单抬头
+                        voucherList.CompanyCode = companyCode;//订单抬头
+                        voucherList.DocumentMaker = OrderListAPI.Sponsor;//发起人
+                        voucherList.VGUID = guid;
+                        voucherList.Status = "1";
+                        voucherList.VoucherDate = DateTime.Now;//凭证日期
+                        voucherList.AccountingPeriod = DateTime.Now;//会计期
+                        voucherList.CreateTime = DateTime.Now;
+                        voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期+4位流水)
+                        voucherList.VoucherNo = voucherName;//凭证号自动生成
+                        _db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
+
+                        //明细信息
+                        List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
+                        Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                        //获取配置信息（借/贷）
+                        var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.KeyData == accountModeCode + companyCode).ToList();
+                        string[] borrowInfo = null;
+                        if (orderDetail.Count() > 0)
+                        {
+                            borrowInfo = orderDetail[0].Borrow.Split(".");
+                        }
+                        //var borrow = _db.Queryable<Business_SubjectBalance>().Single(x => x.Code == orderDetail.Borrow).Balance;
+                        var borrowList = _db.Queryable<Business_SubjectBalance>().Where(x => x.Code == orderDetail[0].Borrow);
+                        var borrow = 0;
+                        if (borrowList.Count() > 0)
+                        {
+                            borrow = borrowList.First().Balance.TryToInt();
+                        }
+                        BVDetail.Abstract = "";
+                        BVDetail.BorrowMoney = borrow;
+                        var subjectSectionCode = borrowInfo[1];
+                        var SubjectSectionName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code == subjectSectionCode).Descrption;
+                        BVDetail.CompanySection = borrowInfo[0];
+                        BVDetail.SubjectSection = borrowInfo[1];
+                        BVDetail.SubjectSectionName = SubjectSectionName;
+                        BVDetail.AccountSection = borrowInfo[2];
+                        BVDetail.CostCenterSection = borrowInfo[3];
+                        BVDetail.IntercourseSection = borrowInfo[4];
+                        BVDetail.SpareOneSection = borrowInfo[5];
+                        BVDetail.SpareTwoSection = borrowInfo[6];
+                        BVDetail.LoanMoney = -1;
+                        BVDetail.VGUID = Guid.NewGuid();
+                        BVDetail.VoucherVGUID = guid;
+                        voucherdetailList.Add(BVDetail);
+                        Business_VoucherDetail BVDetail2 = new Business_VoucherDetail();
+                        var loanInfo = orderDetail[0].Loan.Split(".");
+                        var loanList = _db.Queryable<Business_SubjectBalance>().Where(x => x.Code == orderDetail[0].Loan);
+                        var loan = 0;
+                        if (loanList.Count() > 0)
+                        {
+                            loan = loanList.First().Balance.TryToInt();
+                        }
+                        BVDetail2.Abstract = "";
+                        BVDetail2.BorrowMoney = -1;
+                        var subjectSectionCode2 = loanInfo[1];
+                        var SubjectSectionName2 = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code == subjectSectionCode2).Descrption;
+                        BVDetail2.CompanySection = loanInfo[0];
+                        BVDetail2.SubjectSection = loanInfo[1];
+                        BVDetail2.SubjectSectionName = SubjectSectionName2;
+                        BVDetail2.AccountSection = loanInfo[2];
+                        BVDetail2.CostCenterSection = loanInfo[3];
+                        BVDetail2.IntercourseSection = loanInfo[4];
+                        BVDetail2.SpareOneSection = loanInfo[5];
+                        BVDetail2.SpareTwoSection = loanInfo[6];
+                        BVDetail2.LoanMoney = loan;
+                        BVDetail2.VGUID = Guid.NewGuid();
+                        BVDetail2.VoucherVGUID = guid;
+                        voucherdetailList.Add(BVDetail2);
+                        _db.Insertable(voucherdetailList).ExecuteCommand();
+
+                        results = "操作成功";
+                        Ifsuccess = true;
+                    }
+                    else
+                    {
+                        errmsg = "在订单配置表中找不到信息";
+                    }
+                }
+                return Json(new
+                {
+                    success = Ifsuccess,
+                    errmsg = errmsg,
+                    result = results
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.ToString());
+                return Json(new
+                {
+                    success = false,
+                    errmsg = ex.Message.ToString(),
+                    result = "操作失败"
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        private string GetBatchName(string voucherType, string flowNo)
+        {
+            var batchNo = 0;
+            if (flowNo.IsValuable() && flowNo.Length > 4)
+            {
+                batchNo = flowNo.Substring(flowNo.Length - 4, 4).TryToInt();
+            }
+            return voucherType + DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+        }
+        private string GetVoucherName(string voucherNo)
+        {
+            var batchNo = 0;
+            if (voucherNo.IsValuable() && voucherNo.Length > 4)
+            {
+                batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
+            }
+            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
     }
 }

@@ -16,5 +16,6 @@ namespace DaZhongTransitionLiquidation.Models
         public int invoiceNumber { get; set; }
         public int numberOfAttachments { get; set; }
         public string AccountSetCode { get; set; }
+        public string VoucherType { get; set; }
     }
 }

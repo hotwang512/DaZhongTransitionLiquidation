@@ -53,8 +53,8 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">业务类型</span></div>
     </div>
-    <div class="body_mk" style="height: 250px;">
-        <table id="VoucherList" style="width:82%;margin-left:190px;margin-top:20px">
+    <div class="body_mk" style="height: 175px;">
+        <table id="VoucherList" style="width:100%;margin-top: 15px;">
             @*<tr style="height:50px">
                     <td style="text-align: right;">版块：</td>
                     <td style="text-align: left;">
@@ -72,7 +72,7 @@
                 </tr>*@
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
-                <td style="text-align: left;" colspan="3">
+                <td style="text-align: left;" colspan="5">
                     <div id="pushPeopleDropDownButton" class="input_text form-control">
                         <div style="" id="pushTree">
                         </div>
@@ -101,16 +101,14 @@
                 </td>
                 <td style="text-align: right;">收款账号：</td>
                 <td style="text-align: left;"><input id="CollectionAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-            </tr>
-            <tr style="height:50px">
-
                 <td style="text-align: right;">户名：</td>
                 <td style="text-align: left;"><input id="CollectionBankAccountName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-                <td style="text-align: right;">开户行：</td>
-                <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
             </tr>
             <tr style="height:50px">
 
+               
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">银行行号：</td>
                 <td style="text-align: left;"><input id="CollectionBankAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">支付方式：@*付款开户行：*@</td>
@@ -121,16 +119,20 @@
                         <option value="其他">其他</option>
                     </select>
                     @*<select id="PayBank" class="input_text form-control" style="width: 200px" onchange="payBankChange()">
-                            @{
-                                foreach (var item in ViewBag.PayAccount)
-                                {
-                                    <option value="@item.BankName">@item.BankName</option>
-                                }
-                            }
-                        </select>*@
+                @{
+                    foreach (var item in ViewBag.PayAccount)
+                    {
+                        <option value="@item.BankName">@item.BankName</option>
+                    }
+                }
+            </select>*@
                 </td>
             </tr>
-            <tr style="height:50px">
+            <tr style="height:50px;display:none">
+
+                
+            </tr>
+            <tr style="height:50px;display:none">
                 <td style="text-align: right;">@*付款账号：*@</td>
                 <td style="text-align: left;">@*<input id="PayAccount" type="text" value="@ViewBag.PayAccount[0].BankAccount" style="width: 200px;" class="input_text form-control" readonly="readonly" />*@</td>
                 <td style="text-align: right;">@*付款户名：*@</td>

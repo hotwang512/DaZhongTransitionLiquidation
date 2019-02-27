@@ -93,7 +93,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     voucherList.Auditor = voucher.Auditor;
                     voucherList.Bookkeeping = voucher.Bookkeeping;
                     voucherList.Cashier = voucher.Cashier;
-                    voucherList.CompanyCode = "";
+                    voucherList.CompanyCode = voucher.CompanyCode;
                     voucherList.CompanyName = voucher.CompanyName;
                     voucherList.Currency = voucher.Currency;
                     voucherList.DocumentMaker = voucher.DocumentMaker;
@@ -213,7 +213,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 voucherList.BatchName = voucher.BatchName;//批名自动生成
                 voucherList.Bookkeeping = voucher.Bookkeeping;
                 voucherList.Cashier = voucher.Cashier;
-                voucherList.CompanyCode = "";
+                voucherList.CompanyCode = voucher.CompanyCode;
                 voucherList.CompanyName = voucher.CompanyName;
                 voucherList.Currency = voucher.Currency;
                 voucherList.DocumentMaker = voucher.DocumentMaker;
@@ -224,6 +224,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 voucherList.VoucherType = voucher.VoucherType;
                 voucherList.Detail = voucherDetail;
                 voucherList.Attachment = voucher.AttachmentDetail;
+                voucherList.VGUID = voucher.VGUID;
             });
             return Json(voucherList, JsonRequestBehavior.AllowGet); ;
         }

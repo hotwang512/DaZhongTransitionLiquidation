@@ -38,5 +38,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public string VMDFUSER { get; set; }
 
         public Guid ChannelVguid { get; set; }
+        private bool _deposit = false;
+        public bool Deposit { get { return _deposit; } set { _deposit = value; } }
     }
 }

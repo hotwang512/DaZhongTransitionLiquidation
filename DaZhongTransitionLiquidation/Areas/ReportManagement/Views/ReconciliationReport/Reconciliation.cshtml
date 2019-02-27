@@ -170,6 +170,31 @@
                         <tr style="height:50px;border-bottom:1px solid #f1f1f1;">
                             <td valign="middle">
                                 <div style="width:15%;float:left">
+                                    押金数据
+                                </div>
+                                <div style="width:40%;float:left">
+                                    日期：<label id="DepositDate" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    应收金额：<label id="ArrearsDepositTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:20%;float:left">
+                                    实收金额：<label id="DepositTotal" style="margin-bottom:0px;margin-left: 5px;"></label>
+                                </div>
+                                <div style="width:5%;float:left;text-align: right;">
+                                    <a id="DepositDetailed" href='#'> 明细</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="DepositjqxTable" class="jqxTable" style="height:100px;display:none">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height:50px;border-bottom:1px solid #f1f1f1;">
+                            <td valign="middle">
+                                <div style="width:15%;float:left">
                                     银行到账数据
                                 </div>
                                 <div style="width:60%;float:left">
@@ -183,7 +208,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr style="height:50px;">
+                        <tr>
                             <td>
                                 <div id="BankjqxTable" class="jqxTable" style="height:100px;display:none">
                                 </div>

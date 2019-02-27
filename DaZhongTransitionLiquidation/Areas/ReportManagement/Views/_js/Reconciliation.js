@@ -29,7 +29,7 @@
     $ChannelDate: function () { return $("#ChannelDate") },
     $BankDate: function () { return $("#BankDate") },
     $RevenueDate: function () { return $("#RevenueDate") },
-
+    $DepositDate: function () { return $("#DepositDate") },
 
     $ChannelTotal: function () { return $("#ChannelTotal") },
     $BankTotal: function () { return $("#BankTotal") },
@@ -37,8 +37,11 @@
     $RevenueTotal: function () { return $("#RevenueTotal") },
     $ArrearsRevenueTotal: function () { return $("#ArrearsRevenueTotal") },
     $ArrearsChannelTotal: function () { return $("#ArrearsChannelTotal") },
+    $ArrearsDepositTotal: function () { return $("#ArrearsDepositTotal") },
+    $DepositTotal: function () { return $("#DepositTotal") },
 
     $ChanneljqxTable: function () { return $("#ChanneljqxTable") },
+    $DepositjqxTable: function () { return $("#DepositjqxTable") },
     $BankjqxTable: function () { return $("#BankjqxTable") },
     $RevenuejqxTable: function () { return $("#RevenuejqxTable") },
     $detail_BeforeDate: function () { return $("#detail_BeforeDate") },
@@ -46,6 +49,7 @@
     $detail_ReconciliationsBtn: function () { return $("#detail_ReconciliationsBtn") },
     $RevenueDetailed: function () { return $("#RevenueDetailed") },
     $ChannelDetailed: function () { return $("#ChannelDetailed") },
+    $DepositDetailed: function () { return $("#DepositDetailed") },
     $BankDetailed: function () { return $("#BankDetailed") },
     $hidestatus: function () { return $("#hidestatus") },
     $ChannelData: function () { return $("#ChannelData") },
@@ -154,6 +158,14 @@ var $page = function () {
             selector.$ChanneljqxTable().toggle();
             //selector.$ChanneljqxTable().css('display', 'block')
         });
+        selector.$DepositDetailed().on("click", function () {
+            if (selector.$DepositDetailed().attr("load") == undefined) {
+                getDepositjqxTable();
+                selector.$DepositDetailed().attr("load", "true");
+            }
+            selector.$DepositjqxTable().toggle();
+            //selector.$ChanneljqxTable().css('display', 'block')
+        });
         selector.$BankDetailed().on("click", function () {
             if (selector.$BankDetailed().attr("load") == undefined) {
                 getBankjqxTable();
@@ -174,12 +186,16 @@ var $page = function () {
                 revenueDateString = revenueDateString + "," + newDateString;
                 selector.$RevenueDate().text(revenueDateString);
                 selector.$ChannelDate().text(revenueDateString);
+                selector.$DepositDate().text(revenueDateString);
                 GetTotalAmount();
                 if (selector.$RevenueDetailed().attr("load") == "true") {
                     getRevenuejqxTable();
                 }
                 if (selector.$ChannelDetailed().attr("load") == "true") {
                     getChanneljqxTable();
+                }
+                if (selector.$DepositDetailed().attr("load") == "true") {
+                    getDepositjqxTable();
                 }
             })
 
@@ -191,12 +207,16 @@ var $page = function () {
             var revenueDateString = revenueDateString.replace("," + date.Format("yyyy-MM-dd"), "");
             selector.$RevenueDate().text(revenueDateString);
             selector.$ChannelDate().text(revenueDateString);
+            selector.$DepositDate().text(revenueDateString);
             GetTotalAmount();
             if (selector.$RevenueDetailed().attr("load") == "true") {
                 getRevenuejqxTable();
             }
             if (selector.$ChannelDetailed().attr("load") == "true") {
                 getChanneljqxTable();
+            }
+            if (selector.$DepositDetailed().attr("load") == "true") {
+                getDepositjqxTable();
             }
         });
 
@@ -399,6 +419,7 @@ function edit(date, revenueDateString, status, Channel_Id, Channel_name) {
     }
     selector.$RevenueDate().text(revenueDateString);
     selector.$ChannelDate().text(revenueDateString);
+    selector.$DepositDate().text(revenueDateString);
 
     selector.$hidestatus().val(status);
     if (Channel_name != "null") {
@@ -422,6 +443,10 @@ function GetTotalAmount() {
             selector.$RevenueTotal().text(msg.ResultInfo.RevenuePaymentTotalAccount);
             selector.$ArrearsChannelTotal().text(msg.ResultInfo.T1DataArrearsTotalAccount);
             selector.$ChannelTotal().text(msg.ResultInfo.T1DataPaymentTotalAccount);
+
+            selector.$ArrearsDepositTotal().text(msg.ResultInfo.DepositArrearsTotalAccount);
+            selector.$DepositTotal().text(msg.ResultInfo.DepositPaymentTotalAccount);
+
             selector.$BankTotal().text(msg.ResultInfo.BankTotalAccount);
         }
     });
@@ -547,6 +572,65 @@ function getChanneljqxTable() {
         });
 }
 
+function getDepositjqxTable() {
+
+    var source =
+        {
+            datafields:
+            [
+                { name: 'Remitamount', type: 'number' },
+                { name: 'DriverBearFees', type: 'number' },
+                { name: 'PaidAmount', type: 'number' },
+                { name: 'RevenueFee', type: 'number' },
+                { name: 'CompanyBearsFees', type: 'number' },
+                { name: 'ChannelPayableAmount', type: 'number' },
+                { name: "WechatNo", type: "string" },
+                { name: "Revenuetime", type: "date" },
+                { name: "serialnumber", type: "string" },
+                { name: "ChannelName", type: "string" },
+
+            ],
+            datatype: "json",
+            //id: "RoleID",
+            async: true,
+            data: {
+                "RevenueDate": selector.$RevenueDate().text(),
+                "Channel_Id": selector.$hideChannelid().val(),
+            },
+            url: "/ReportManagement/ReconciliationReport/GetDepositDetail"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    //创建卡信息列表（主表）
+    selector.$DepositjqxTable().jqxDataTable(
+        {
+            pageable: true,
+            width: 860,
+            height: 300,
+            pageSize: 10,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 40,
+            columns: [
+                { text: '流水号', datafield: 'serialnumber', width: '30%', align: 'center', cellsAlign: 'center' },
+                { text: '驾驶员欠款金额', cellsFormat: "d2", width: 150, datafield: 'Remitamount', align: 'center', cellsAlign: 'center' },// cellsRenderer: detailFunc 
+                { text: '驾驶员承担手续费', cellsFormat: "d2", width: 150, datafield: 'DriverBearFees', align: 'center', cellsAlign: 'center' },
+                { text: '驾驶员实付金额', cellsFormat: "d2", width: 150, datafield: 'PaidAmount', align: 'center', cellsAlign: 'center' },
+                { text: '渠道实收手续费', cellsFormat: "d2", width: 150, datafield: 'RevenueFee', align: 'center', cellsAlign: 'center' },
+                { text: '公司承担手续费', cellsFormat: "d2", width: 150, datafield: 'CompanyBearsFees', align: 'center', cellsAlign: 'center' },
+                { text: '渠道应付金额', cellsFormat: "d2", width: 150, datafield: 'ChannelPayableAmount', align: 'center', cellsAlign: 'center' },
+                { text: '支付时间', datafield: 'Revenuetime', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                { text: '渠道名称', datafield: 'ChannelName', width: 150, align: 'center', cellsAlign: 'center' },
+
+            ]
+        });
+}
+
 function getBankjqxTable() {
     var source =
         {
@@ -607,6 +691,10 @@ function RevenuepaymentReconciliation() {
             "RevenueTotal": selector.$RevenueTotal().text(),
             "ArrearsChannelTotal": selector.$ArrearsChannelTotal().text(),
             "ChannelTotal": selector.$ChannelTotal().text(),
+
+            "ArrearsDepositTotal": selector.$ArrearsDepositTotal().text(),
+            "DepositTotal": selector.$DepositTotal().text(),
+
             "BankTotal": selector.$BankTotal().text(),
 
         },

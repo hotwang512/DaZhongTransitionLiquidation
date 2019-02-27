@@ -48,6 +48,8 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                             resultData.ResultInfo.RevenuePaymentTotalAccount.Value,
                             resultData.ResultInfo.T1DataArrearsTotalAccount.Value,
                             resultData.ResultInfo.T1DataPaymentTotalAccount.Value,
+                            resultData.ResultInfo.DepositArrearsTotalAccount.Value,
+                            resultData.ResultInfo.DepositPaymentTotalAccount.Value,
                             resultData.ResultInfo.BankTotalAccount.Value);
                     }
                 }
@@ -86,6 +88,8 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                             resultData.ResultInfo.RevenuePaymentTotalAccount.Value,
                             resultData.ResultInfo.T1DataArrearsTotalAccount.Value,
                             resultData.ResultInfo.T1DataPaymentTotalAccount.Value,
+                            resultData.ResultInfo.DepositArrearsTotalAccount.Value,
+                            resultData.ResultInfo.DepositPaymentTotalAccount.Value,
                             resultData.ResultInfo.BankTotalAccount.Value);
                     }
                 }
@@ -183,10 +187,12 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             decimal RevenueTotal,
             decimal ArrearsChannelTotal,
             decimal ChannelTotal,
+            decimal ArrearsDepositTotal,
+            decimal DepositTotal,
             decimal BankTotal)
         {
 
-            var resultModel = Validate(RevenueSystemTotal, ArrearsRevenueTotal, RevenueTotal, ArrearsChannelTotal, ChannelTotal, BankTotal);
+            var resultModel = Validate(RevenueSystemTotal, ArrearsRevenueTotal, RevenueTotal, ArrearsChannelTotal, ChannelTotal, ArrearsDepositTotal, DepositTotal, BankTotal);
             bool isAccountingRevenue = true;
             string batchBillNo = "";
             if (resultModel.IsSuccess)
@@ -321,7 +327,15 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
 
 
 
-        private static ResultModel<string> Validate(decimal RevenueSystemTotal, decimal ArrearsRevenueTotal, decimal RevenueTotal, decimal ArrearsChannelTotal, decimal ChannelTotal, decimal BankTotal)
+        private static ResultModel<string> Validate(
+            decimal RevenueSystemTotal,
+            decimal ArrearsRevenueTotal,
+            decimal RevenueTotal,
+            decimal ArrearsChannelTotal,
+            decimal ChannelTotal,
+            decimal ArrearsDepositTotal,
+            decimal DepositTotal,
+            decimal BankTotal)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0", ResultInfo = "对账成功！" };
 
@@ -335,7 +349,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 resultModel.ResultInfo = "营收数据与T+1数据不一致！";
                 return resultModel;
             }
-            if (RevenueTotal != BankTotal)
+            if (RevenueTotal + DepositTotal != BankTotal)
             {
                 resultModel.ResultInfo = "营收数据与银行数据不一致！";
                 return resultModel;

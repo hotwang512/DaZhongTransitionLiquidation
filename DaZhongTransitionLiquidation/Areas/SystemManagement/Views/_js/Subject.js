@@ -36,6 +36,7 @@ var selector = {
     $txtShopNo_Dialog: function () { return $("#txtShopNo_Dialog") },
     $txtStoreNo_Dialog: function () { return $("#txtStoreNo_Dialog") },
     $DepartmentVguid: function () { return $("#DepartmentVguid") },
+    $txtDeposit_Dialog: function () { return $("#txtDeposit_Dialog") },
 
     $txtContractStartTime_Dialog: function () { return $("#txtContractStartTime_Dialog") },
     $txtContractEndTime_Dialog: function () { return $("#txtContractEndTime_Dialog") },
@@ -120,6 +121,7 @@ var $page = function () {
                             SubjectNmae: selector.$txtSubjectName_Dialog().val(),
                             ChannelVguid: selector.$txtChannel_Dialog().val(),
                             Department: selector.$DepartmentVguid().val(),
+                            Deposit: selector.$txtDeposit_Dialog().is(':checked'),
                             Vguid: vguid
                         },
                         type: "post",
@@ -191,6 +193,7 @@ var $page = function () {
                     { name: 'ChannelName', type: 'string' },
                     { name: 'Department', type: 'string' },
                     { name: 'OrganizationName', type: 'string' },
+                    { name: 'Deposit', type: 'bool' },
                     { name: 'Vguid', type: 'string' }
                 ],
                 datatype: "json",
@@ -225,6 +228,7 @@ var $page = function () {
                     { text: '慧兜圈门店号', datafield: 'StoreNo', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '费率', datafield: 'Rate', width: 50, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '公司', datafield: 'OrganizationName', minwidth: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '押金', datafield: 'Deposit', columntype: 'checkbox', width: "5%", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererDeposit },
                     { text: '合同开始时间', datafield: 'ContractStartTime', align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", hidden: true },
                     { text: '合同结束时间', datafield: 'ContractEndTime', align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", hidden: true },
                     { text: 'Vguid', datafield: 'Vguid', hidden: true }
@@ -240,7 +244,7 @@ var $page = function () {
         var startTime = new Date(rowData.ContractStartTime).Format("yyyy-MM-dd");
         var endTime = new Date(rowData.ContractEndTime).Format("yyyy-MM-dd");
 
-        container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.SubjectId + "','" + rowData.SubjectNmae + "','" + rowData.TerminalNo + "','" + rowData.ShopNo + "','" + rowData.StoreNo + "','" + rowData.Rate + "','" + rowData.Department + "','" + rowData.OrganizationName + "','" + startTime + "','" + endTime + "','" + rowData.ChannelVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.SubjectId + "</a>";
+        container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.SubjectId + "','" + rowData.SubjectNmae + "','" + rowData.TerminalNo + "','" + rowData.ShopNo + "','" + rowData.StoreNo + "','" + rowData.Rate + "','" + rowData.Department + "','" + rowData.OrganizationName + "','" + startTime + "','" + endTime + "','" + rowData.ChannelVguid + "'," + rowData.Deposit + ") style=\"text-decoration: underline;color: #333;\">" + rowData.SubjectId + "</a>";
         //} else {
         //    container = "<span>" + rowData.SubjectId + "</span>";
         //}
@@ -255,6 +259,14 @@ var $page = function () {
         var checkBox = "<div id='jqx_datatable_checkbox_all' class='jqx_datatable_checkbox_all' style='z-index: 999; margin-left:7px ;margin-top: 7px;'>";
         checkBox += "</div>";
         return checkBox;
+    }
+
+    function cellsRendererDeposit(row, column, value, rowData) {
+        var html = '<input type="checkbox" />';
+        if (value == true) {
+            html = '<input type="checkbox" checked="checked" />';
+        }
+        return html;
     }
 
     function renderedFunc(element) {
@@ -369,11 +381,11 @@ function initOrganization() {
     });
 }
 
-function edit(guid, SubjectId, SubjectNmae, terminalNo, shopNo, storeNo, Rate, department, organizationname, contractStartTime, contractEndTime, ChannelVguid) {
+function edit(guid, SubjectId, SubjectNmae, terminalNo, shopNo, storeNo, Rate, department, organizationname, contractStartTime, contractEndTime, ChannelVguid, Deposit) {
     selector.$txtChannel_Dialog().val("");
     selector.$txtSubjectId_Dialog().val("");
     selector.$txtSubjectName_Dialog().val("");
-
+    selector.$txtDeposit_Dialog().prop("checked", false);
 
     selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
 
@@ -384,6 +396,8 @@ function edit(guid, SubjectId, SubjectNmae, terminalNo, shopNo, storeNo, Rate, d
     selector.$txtChannel_Dialog().val(ChannelVguid);
     selector.$txtSubjectId_Dialog().val(SubjectId == "null" ? "" : SubjectId);
     selector.$txtSubjectName_Dialog().val(SubjectNmae == "null" ? "" : SubjectNmae);
+    selector.$txtSubjectName_Dialog().val(SubjectNmae == "null" ? "" : SubjectNmae);
+    selector.$txtDeposit_Dialog().prop("checked", Deposit);
 
     selector.$DepartmentVguid().val(department = null ? "" : department);
     if (organizationname != "null") {

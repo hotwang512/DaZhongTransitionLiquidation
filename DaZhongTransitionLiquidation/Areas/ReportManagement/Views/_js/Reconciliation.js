@@ -399,6 +399,7 @@ function edit(date, revenueDateString, status, Channel_Id, Channel_name) {
     selector.$RevenueDetailed().removeAttr("load");
     selector.$ChannelDetailed().removeAttr("load");
     selector.$BankDetailed().removeAttr("load");
+    selector.$DepositDetailed().removeAttr("load");
     selector.$RevenueSystemTotal().text("");
     selector.$RevenueTotal().text("");
     selector.$BankTotal().text("");

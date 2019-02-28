@@ -226,7 +226,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
 
                 Business_T1Data_Information t1Data = new Business_T1Data_Information();
                 Business_T1Data_Information_2 t1Data_2 = new Business_T1Data_Information_2();
-                t1Data.Vguid = Guid.NewGuid();
+                t1Data_2.Vguid = t1Data.Vguid = Guid.NewGuid();
                 string serialnumber = GetLineFieldData(14, fileLine, fileLineDataRule);
                 string channelId = this.GetLineFieldData(0, fileLine, fileLineDataRule);
 
@@ -360,7 +360,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 }
                 Business_T1Data_Information t1Data = new Business_T1Data_Information();
                 Business_T1Data_Information_2 t1Data_2 = new Business_T1Data_Information_2();
-                t1Data.Vguid = Guid.NewGuid();
+                t1Data_2.Vguid = t1Data.Vguid = Guid.NewGuid();
                 string serialnumber = GetLineFieldData(17, fileLine, fileLineDataRule);
                 string channelId = this.GetLineFieldData(0, fileLine, fileLineDataRule);
 
@@ -374,7 +374,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                     return channelId;
                 }
 
-                t1Data_2.serialnumber= t1Data.serialnumber = serialnumber;
+                t1Data_2.serialnumber = t1Data.serialnumber = serialnumber;
                 t1Data_2.Channel_Id = t1Data.Channel_Id = channelId;
 
                 string subjectId = this.GetLineFieldData(1, fileLine, fileLineDataRule);

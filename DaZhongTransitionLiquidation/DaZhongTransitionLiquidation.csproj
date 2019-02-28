@@ -181,6 +181,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
@@ -255,6 +259,11 @@
     <Content Include="Areas\HomePage\Views\CompanyHomePage\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleManagement\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\BusinessTypeSet\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\web.config" />
+    <Content Include="Areas\AssetManagement\Views\AssetBasicInfoMaintenance\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetBasicInfoMaintenanceDetail\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetMaintenanceInfoDetail\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetsMaintenance\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2217,6 +2226,13 @@
     <Compile Include="App_Start\HandleErrorFilter.cs" />
     <Compile Include="App_Start\MyUrlHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceDetailController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetMaintenanceInfoDetailController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
+    <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
@@ -2290,6 +2306,7 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\Business_VoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs" />
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
+    <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2371,9 +2388,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AssetManagement\Views\Shared\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
     <Folder Include="Temp\" />
+    <Folder Include="Views\AutoSyncAssetsMaintenance\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />
     <Folder Include="_theme\temp\img\" />

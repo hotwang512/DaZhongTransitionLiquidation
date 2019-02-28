@@ -335,6 +335,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
         private string ImportJianLianData(string[] fileLines)
         {
             List<Business_T1Data_Information> t1Datas = new List<Business_T1Data_Information>();
+            List<Business_T1Data_Information_2> t1Datas_2 = new List<Business_T1Data_Information_2>();
             List<Business_Revenuepayment_Information> brDatas = new List<Business_Revenuepayment_Information>();
 
             int dataIndex = 0;
@@ -358,6 +359,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                     break;
                 }
                 Business_T1Data_Information t1Data = new Business_T1Data_Information();
+                Business_T1Data_Information_2 t1Data_2 = new Business_T1Data_Information_2();
                 t1Data.Vguid = Guid.NewGuid();
                 string serialnumber = GetLineFieldData(17, fileLine, fileLineDataRule);
                 string channelId = this.GetLineFieldData(0, fileLine, fileLineDataRule);
@@ -372,34 +374,38 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                     return channelId;
                 }
 
-                t1Data.serialnumber = serialnumber;
-                t1Data.Channel_Id = channelId;
+                t1Data_2.serialnumber= t1Data.serialnumber = serialnumber;
+                t1Data_2.Channel_Id = t1Data.Channel_Id = channelId;
 
                 string subjectId = this.GetLineFieldData(1, fileLine, fileLineDataRule);
-                t1Data.SubjectId = subjectId;
-
+                t1Data_2.SubjectId = t1Data.SubjectId = subjectId;
+                bool subjectDeposit = false;
+                DbBusinessDataService.Command(delegate (SqlSugarClient dbs)
+                {
+                    subjectDeposit = dbs.Queryable<T_Channel_Subject>().Any(c => c.SubjectId == subjectId && c.Deposit == true);
+                });
 
 
                 string remitamount = GetLineFieldData(9, fileLine, fileLineDataRule);
-                t1Data.Remitamount = Convert.ToDecimal(remitamount);
+                t1Data_2.Remitamount = t1Data.Remitamount = Convert.ToDecimal(remitamount);
 
                 string revenueFee = GetLineFieldData(12, fileLine, fileLineDataRule);
-                t1Data.RevenueFee = Convert.ToDecimal(revenueFee);
+                t1Data_2.RevenueFee = t1Data.RevenueFee = Convert.ToDecimal(revenueFee);
 
                 string paidAmount = GetLineFieldData(14, fileLine, fileLineDataRule);
-                t1Data.PaidAmount = Convert.ToDecimal(paidAmount);
+                t1Data_2.PaidAmount = t1Data.PaidAmount = Convert.ToDecimal(paidAmount);
 
                 string orderNumber = GetLineFieldData(16, fileLine, fileLineDataRule);
-                t1Data.WechatNo = orderNumber;
+                t1Data_2.WechatNo = t1Data.WechatNo = orderNumber;
 
                 string date = GetLineFieldData(6, fileLine, fileLineDataRule);
                 string time = GetLineFieldData(7, fileLine, fileLineDataRule);
 
-                t1Data.Revenuetime = Convert.ToDateTime(date + " " + time);
-                t1Data.ChangeDate = DateTime.Now;
-                t1Data.ChangeUser = UserInfo.LoginName;
-                t1Data.CreatedDate = DateTime.Now;
-                t1Data.CreatedUser = UserInfo.LoginName;
+                t1Data_2.Revenuetime = t1Data.Revenuetime = Convert.ToDateTime(date + " " + time);
+                t1Data_2.ChangeDate = t1Data.ChangeDate = DateTime.Now;
+                t1Data_2.ChangeUser = t1Data.ChangeUser = UserInfo.LoginName;
+                t1Data_2.CreatedDate = t1Data.CreatedDate = DateTime.Now;
+                t1Data_2.CreatedUser = t1Data.CreatedUser = UserInfo.LoginName;
 
                 Business_Revenuepayment_Information brData = new Business_Revenuepayment_Information
                 {
@@ -416,6 +422,11 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                     CreateDate = t1Data.CreatedDate,
                     CreateUser = t1Data.CreatedUser + "[T1_Import]"
                 };
+                if (subjectDeposit)
+                {
+                    t1Datas_2.Add(t1Data_2);
+                    continue;
+                }
                 bool isHaveT1 = false;
                 base.DbBusinessDataService.Command<NextDayDataPack>((db, o) =>
                 {
@@ -436,7 +447,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 }
 
             };
-            if ((t1Datas.Count > 0) || (brDatas.Count > 0))
+            if (t1Datas.Count > 0 || brDatas.Count > 0 || t1Datas_2.Count > 0)
             {
                 base.DbBusinessDataService.Command<NextDayDataPack>((db, o) =>
                 {
@@ -446,6 +457,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                             o.ImportData(db, t1Datas);
                         if (brDatas.Count > 0)
                             o.ImportData_Reconciliation(db, brDatas);
+                        if (t1Datas_2.Count > 0)
+                            o.ImportDepositData(db, t1Datas_2);
                     });
                 });
             }

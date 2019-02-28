@@ -185,11 +185,13 @@ var $page = function () {
         $("#AddNewBankData_OKButton").on("click", function () {
             for (var i = 0; i < $(".Borrow").length; i++) {
                 if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
-                    var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
-                    var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
-                    $(".Borrow").eq(i).text(val)
-                    var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
-                    var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
+                    //var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
+                    //var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
+                    var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
+                    $(".Borrow").eq(i).text(val);
+                    //var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
+                    //var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
+                    var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
                     $(".Loan").eq(i).text(val2);
                     var val3 = $("#PayBank").val();
                     $(".PayBank").eq(i).text(val3)

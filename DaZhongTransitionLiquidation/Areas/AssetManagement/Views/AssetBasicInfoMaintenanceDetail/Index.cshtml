@@ -1,0 +1,95 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+@{
+    ViewBag.Title = "资产管理/资产基础信息明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetBasicInfoMaintenanceDetail.js?t=2019021902")"></script>
+}
+<style>
+    .input_text {
+        width: 150px;
+        height: 35px;
+        border: 1px;
+        border-style: solid;
+        border-color: #dddddd;
+        -moz-box-shadow: 0px 1px 10px #dddddd;
+        -webkit-box-shadow: 0px 1px 10px #dddddd;
+        box-shadow: 0 0 10px #dddddd;
+        background-color: white !important;
+        border-radius: 4px;
+        float: left;
+    }
+
+    .jqx-tabs-content-element {
+        overflow: auto !important;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;display:block">
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">主信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 440px;">
+        <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">资产主类：</td>
+                <td style="text-align: left;"><div id='ASSET_CATEGORY_MAJOR'></div></td>
+                <td style="text-align: right;">资产子类：</td>
+                <td style="text-align: left;"><input id="ASSET_CATEGORY_MINOR" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">使用年限(年)：</td>
+                <td style="text-align: left;"><input id="LIFE_YEARS" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">使用年限(月)：</td>
+                <td style="text-align: left;"><input id="LIFE_MONTHS" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">残值率(%)：</td>
+                <td style="text-align: left;"><input id="SALVAGE_PERCENT" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">折旧方法：</td>
+                <td style="text-align: left;"><input id="METHOD" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+
+            <tr style="height:50px">
+                <td style="text-align: right;">帐簿：</td>
+                <td style="text-align: left;"><input id="BOOK_TYPE_CODE" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">资产成本帐户：</td>
+                <td style="text-align: left;"><input id="ASSET_COST_ACCOUNT" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">资产结算帐户：</td>
+                <td style="text-align: left;"><input id="ASSET_SETTLEMENT_ACCOUNT" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+
+            <tr style="height:50px">
+                <td style="text-align: right;">折旧费用段：</td>
+                <td style="text-align: left;"><input id="DEPRECIATION_EXPENSE_SEGMENT" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">累计折旧帐户：</td>
+                <td style="text-align: left;"><input id="ACCT_DEPRECIATION_ACCOUNT" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right; display:none">创建时间：</td>
+                <td style="text-align: left; display:none"><input id="CREATE_TIME" type="text" value="" style="width: 200px;" class="input_text form-control" /></td>
+            </tr>
+
+            <tr style="height:50px">
+                <td style="text-align: right; display:none">创建人：</td>
+                <td style="text-align: left; display:none"><input id="CREATE_USER" type="text" value="" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right; display:none">修改时间：</td>
+                <td style="text-align: left; display:none"><input id="CHANGE_TIME" type="text" value="" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right; display:none">修改人：</td>
+                <td style="text-align: left; display:none"><input id="CHANGE_USER" type="text" value="" style="width: 200px;" class="input_text form-control" /></td>
+                <td style="text-align: right;"><input id="Status" name="Status" value="1" class="hide" /><input id="VGUID" name="VGUID" class="hide" /></td>
+            </tr>
+
+        </table>
+    </div>
+</div>

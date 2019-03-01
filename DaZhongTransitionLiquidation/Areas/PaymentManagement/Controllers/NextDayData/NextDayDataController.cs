@@ -157,9 +157,14 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
         {
             string fileName = file.FileName;
             string fileDirectory = Server.MapPath(Global.Temp);
+            if (Directory.Exists(fileDirectory))
+            {
+                Directory.CreateDirectory(fileDirectory);
+            }
             string filePath = Path.Combine(fileDirectory, fileName);
             file.SaveAs(filePath);
             return Content(fileName);
+
         }
 
 

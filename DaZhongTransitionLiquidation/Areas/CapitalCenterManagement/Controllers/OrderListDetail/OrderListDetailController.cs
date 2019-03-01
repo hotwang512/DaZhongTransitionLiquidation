@@ -30,7 +30,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             ViewBag.UserCompanySet = GetUserCompanySets();
             return View();
         }
-        public JsonResult SaveOrderListDetail(Business_OrderList sevenSection, string OrderDetailValue)
+        public JsonResult SaveOrderListDetail(Business_OrderList sevenSection)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -43,14 +43,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     {
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.CreateTime = DateTime.Now;
-                        db.Insertable<Business_OrderList>(sevenSection).ExecuteCommand();
+                        db.Insertable(sevenSection).IgnoreColumns(it => new { it.OrderDetailValue }).ExecuteReturnIdentity();
                     }
                     else
                     {
-                        db.Updateable<Business_OrderList>(sevenSection).ExecuteCommand();
+                        db.Updateable(sevenSection).IgnoreColumns(it => new { it.OrderDetailValue}).ExecuteCommand();
                     }
                     //账套公司各项配置
-                    var gjson = OrderDetailValue.JsonToModel<List<Business_UserCompanySetDetail>>();
+                    var gjson = sevenSection.OrderDetailValue.JsonToModel<List<Business_UserCompanySetDetail>>();
                     db.Deleteable<Business_UserCompanySetDetail>(x => x.OrderVGUID == sevenSection.VGUID.TryToString()).ExecuteCommand();
                     foreach (var item in gjson)
                     {

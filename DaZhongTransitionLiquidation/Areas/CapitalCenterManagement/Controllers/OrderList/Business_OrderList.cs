@@ -136,5 +136,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// </summary> 
         public string PayBank { get; set; }
         public string CompanyCode { get; set; }
+        public string OrderDetailValue { get; set; }
     }
 }

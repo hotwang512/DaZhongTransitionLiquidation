@@ -86,7 +86,7 @@ var $page = function () {
             }
             var orderDetailValue = JSON.stringify(params);
             $.ajax({
-                url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail?OrderDetailValue=" + orderDetailValue,
+                url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail",
                 //data: { vguids: selection },
                 data: {
                     "VGUID": $("#VGUID").val(),
@@ -117,7 +117,8 @@ var $page = function () {
                     //"PayAccount": $("#PayAccount").val(),
                     //"PayBankAccountName": $("#PayBankAccountName").val(),
                     //"PayBank": $("#PayBank").val(),
-                    "CompanyCode": $("#LoginCompanyCode").val()
+                    "CompanyCode": $("#LoginCompanyCode").val(),
+                    "OrderDetailValue":orderDetailValue
                 },
                 type: "post",
                 success: function (msg) {

@@ -177,7 +177,8 @@ var $page = function () {
                     { name: 'PaymentCompany', type: 'string' },
                     { name: 'CollectionCompany', type: 'string' },
                     { name: 'BusinessUnit', type: 'string' },
-
+                    { name: 'CollectionBankAccountName', type: 'string' },
+                    { name: 'CollectionBank', type: 'string' },
                     { name: 'Abstract', type: 'string' },
                     { name: 'Money', type: 'number' },
                     { name: 'CompanySection', type: 'string' },
@@ -220,8 +221,10 @@ var $page = function () {
                    
                     //{ text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
                     //{ text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '收款公司', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '收款账号', datafield: 'CollectionAccount', align: 'center', cellsAlign: 'center', },
+                    { text: '公司/单位/个人', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '银行账号', datafield: 'CollectionAccount', align: 'center', cellsAlign: 'center', },
+                    { text: '银行户名', datafield: 'CollectionBankAccountName', align: 'center', cellsAlign: 'center', },
+                    { text: '开户行', datafield: 'CollectionBank', align: 'center', cellsAlign: 'center', },
 
                     { text: '摘要', datafield: 'Abstract', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center', hidden: true },

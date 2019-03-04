@@ -8,6 +8,7 @@
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetsMaintenanceDetail.js?t=2019021902")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/qwebchannel.js")"></script>
 }
 <style>
     .input_text {
@@ -28,8 +29,15 @@
         overflow: auto !important;
     }
 </style>
+
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnGenerateAcceptance" type="button" class="buttons" style="width:100px;margin-right:15px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">验收单</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnAccept" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">验收</span></button>
+        </td>
         <td style="width: 95px;">
             <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
         </td>
@@ -50,7 +58,7 @@
                 <td style="text-align:right;">GroupID：</td>
                 <td style="text-align:left;"><input id="GROUP_ID" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">组织编号：</td>
-                <td style="text-align:left;"><input id="ORGANIZATION_NUM" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align:left;"><input id="ORGANIZATION_NUM" type="text" style="width:180px;" class="input_text form-control" validatetype="required"></td>
                 <td style="text-align:right;">发动机号：</td>
                 <td style="text-align:left;"><input id="ENGINE_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
@@ -90,7 +98,6 @@
             <tr style="height:50px">
                 <td style="text-align:right;">YTD折旧：</td>
                 <td style="text-align:left;"><input id="YTD_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
-
                 <td style="text-align:right;">累计折旧：</td>
                 <td style="text-align:left;"><input id="ACCT_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
                 <td style="text-align:right;">折旧方法：</td>
@@ -125,8 +132,6 @@
             <tr style="height:50px">
                 <td style="text-align:right;">存放地点1：</td>
                 <td style="text-align:left;"><input id="FA_LOC_1" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-
-
                 <td style="text-align:right;">存放地点2：</td>
                 <td style="text-align:left;"><input id="FA_LOC_2" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">存放地点3：</td>
@@ -137,7 +142,6 @@
                 <td style="text-align:left;"><input id="RETIRE_FLAG" type="text" style="width:180px;" class="input_text form-control" /></td>
                 <td style="text-align:right;">报废数量：</td>
                 <td style="text-align:left;"><input id="RETIRE_QUANTITY" type="text" style="width:180px;" class="input_text form-control" /></td>
-
                 <td style="text-align:right;">报废成本：</td>
                 <td style="text-align:left;"><input id="RETIRE_COST" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
@@ -162,7 +166,6 @@
             <tr style="height:50px">
                 <td style="text-align:right;">防劫费：</td>
                 <td style="text-align:left;"><input id="ANTI_ROBBERY_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
-
                 <td style="text-align:right;">装车费：</td>
                 <td style="text-align:left;"><input id="LOADING_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
                 <td style="text-align:right;">内顶费：</td>
@@ -173,12 +176,17 @@
                 <td style="text-align:left;"><input id="TAXIMETER_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
                 <td style="text-align:right;">OBD：</td>
                 <td style="text-align:left;"><input id="OBD_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
-
-                <td style="text-align:right;">处理状态：</td>
-                <td style="text-align:left;"><input id="STATUS" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">购置税：</td>
+                <td style="text-align:left;"><input id="PURCHASE_TAX" type="text" style="width:180px;" class="input_text form-control" /></td>
                 <td style="text-align: right;"><input id="Status" name="Status" value="1" class="hide" /><input id="VGUID" name="VGUID" class="hide" /></td>
             </tr>
-
+            <tr style="height:50px">
+                <td style="text-align:right;">车牌号：</td>
+                <td style="text-align:left;"><input id="PLATE_NUMBER" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;" class="status">处理状态：</td>
+                <td style="text-align:left;" class="status"><input id="STATUS" type="text" style="width:180px;" disabled class="input_text form-control" /></td>
+            </tr>
+            
             <tr style="height:50px;display:none">
                 <td style="text-align:right;">创建日期：</td>
                 <td style="text-align:left;"><input id="CREATE_DATE" type="text" style="width:180px;" class="input_text form-control" /></td>
@@ -193,4 +201,231 @@
     </div>
 </div>
 
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AcceptDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 600px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">验收</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <table style="width: 100%;">
+                    <tr style="height:50px">
+                        <td style="text-align:right;">上牌费：</td>
+                        <td style="text-align:left;"><input id="LISENSING_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                        <td style="text-align:right;">出库费：</td>
+                        <td style="text-align:left;"><input id="OUT_WAREHOUSE_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                        
+                    </tr>
+                    <tr style="height:50px">
+                        <td style="text-align:right;">防劫费：</td>
+                        <td style="text-align:left;"><input id="ANTI_ROBBERY_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                        <td style="text-align:right;">装车费：</td>
+                        <td style="text-align:left;"><input id="LOADING_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                    </tr>
+                    <tr style="height:50px">
+                        <td style="text-align:right;">内顶费：</td>
+                        <td style="text-align:left;"><input id="INNER_ROOF_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                        <td style="text-align:right;">计价器：</td>
+                        <td style="text-align:left;"><input id="TAXIMETER_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                    </tr>
+                    <tr style="height:50px">
+                        <td style="text-align:right;">OBD：</td>
+                        <td style="text-align:left;"><input id="OBD_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                        <td style="text-align:right;">顶灯费：</td>
+                        <td style="text-align:left;"><input id="DOME_LIGHT_FEE_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                    </tr>
+                    <tr style="height:50px">
+                        <td style="text-align:right;">购置税：</td>
+                        <td style="text-align:left;"><input id="PURCHASE_TAX_M" type="text" style="width:180px;" class="input_text form-control" /></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="Accept_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="Accept_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="UploadPictureDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 10px;">
+        <div class="modal-content" style="width: 620px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">上传验收单</h4>
+            </div>
+            <div class="modal-body" style="width:100%;height:500px">
+                <div style="position:relative">
+                    <img style="position:absolute;top:0px;left:0px;z-index:2" id="bigPriDev" width="576" height="432" />
+                    <img hidden style="position:absolute;top:0px;left:0px;z-index:3" id="devPhoto" width="576" height="432" />
+                    <div style="position:absolute;top:432px;left:0px;z-index:2">
+                        <input id="setdeskew" type="checkbox" value="">纠偏裁边
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="photographPri" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe660;</i><span style="margin-left: 7px; float: left;">拍照</span></button>
+                <button id="Upload_OKBtn" type="button" class="btn btn-warning" style="display:none;width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">上传</span></button>
+                <button id="Upload_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="GenerateAcceptanceDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 10px;">
+        <div class="modal-content" style="width: 730px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">打印验收单</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;height:460px;overflow:auto">
+                <!--startprint--><!--注意要加上html里star和end的这两个标记--> 
+                <style>
+                    .t_title {
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+
+                    table.gridtable {
+                        width: 675px;
+                        font-family: verdana,arial,sans-serif;
+                        font-size: 11.5px;
+                        color: #333333;
+                        border-width: 1px;
+                        /*border-color: #666666;*/
+                        border-color: #dedede;
+                        border-collapse: collapse;
+                    }
+
+                        table.gridtable th {
+                            border-width: 1px;
+                            padding: 8px;
+                            border-style: solid;
+                            /*border-color: #666666;*/
+                            border-color: #dedede;
+                            background-color: #dedede;
+                        }
+
+                        table.gridtable td {
+                            border-width: 1px;
+                            padding: 8px;
+                            border-style: solid;
+                            /*border-color: #666666;*/
+                            border-color: #dedede;
+                            background-color: #ffffff;
+                        }
+
+                            table.gridtable td span {
+                                display: block;
+                                padding-top: 2px;
+                            }
+                </style>
+                <table class="gridtable">
+                    <tr>
+                        <td colspan="7" align="center" class="t_title">大众交通（集团）股份公司大众出租汽车分公司</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="center" class="t_title">固定资产验收表</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="6">日期：<lable id="SDate">2019-01-01</lable> </td>
+                        <td>NO：</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">项目名称</td>
+                        <td colspan="3" width="280px"><lable id="ProjectName">交换机</lable></td>
+                        <td width="65px">设备编号</td>
+                        <td width="140px"><lable id="DeviceID">CZ00四DN82</lable></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">型号规格</td>
+                        <td colspan="5"><lable id="ModelSpecification"></lable>（HUAWEI）S5720S-52P-LI-AC </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">制造单位</td>
+                        <td colspan="5"><lable id="CreateUnit"></lable></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">资金来源</td>
+                        <td align="middle" width="130px"><lable id="FundsSources">自筹</lable></td>
+                        <td width="110px">完工金额</td>
+                        <td align="middle" width="110px"><lable id="CompletedAmount">2500</lable></td>
+                        <td>完工日期</td>
+                        <td align="center"><lable id="CompletedDate">2018年12月</lable></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">使用年限</td>
+                        <td><lable id="UseYear">3</lable></td>
+                        <td colspan="2"></td>
+                        <td>残值</td>
+                        <td><lable id="SalvageValue"></lable></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="6">资产价值</td>
+                        <td align="middle" width="90px">交换机</td>
+                        <td colspan="3"><lable id="Switch">2500</lable></td>
+                        <td colspan="2" align="center">征收意见</td>
+                    </tr>
+                    <tr>
+                        <td height="33px"></td>
+                        <td colspan="3"></td>
+                        <td rowspan="5" align="middle" style="text-align: right;border-right-color: white">数量</td>
+                        <td rowspan="5"><lable id="Quantity">3</lable></td>
+                    </tr>
+                    <tr>
+                        <td height="33px"></td>
+                        <td colspan="3"> </td>
+                    </tr>
+                    <tr>
+                        <td height="33px"></td>
+                        <td colspan="3"> </td>
+                    </tr>
+                    <tr>
+                        <td height="33px"></td>
+                        <td colspan="3"> </td>
+                    </tr>
+                    <tr>
+                        <td align="middle">合计</td>
+                        <td colspan="3"> <lable id="Total">2500</lable></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="8" width="10">参加验收部门意见</td>
+                        <td colspan="2" height="230px"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td height="15px">使用部门</td>
+                        <td>（盖章）</td>
+                        <td>职能部门</td>
+                        <td>（盖章）</td>
+                        <td>财务部门</td>
+                        <td>（盖章）</td>
+                    </tr>
+                    <tr>
+                        <td height="15px">验收人</td>
+                        <td></td>
+                        <td>验收人</td>
+                        <td></td>
+                        <td>验收人</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <!--endprint--> 
+            </div>
+            <div class="modal-footer">
+                <button id="Print_OKBtn" onclick="doPrint()" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+                <button id="Print_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>

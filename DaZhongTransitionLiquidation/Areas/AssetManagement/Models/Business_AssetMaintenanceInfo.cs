@@ -13,6 +13,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string GROUP_ID { set; get; }
         public string ORGANIZATION_NUM { set; get; }
         public string ENGINE_NUMBER { set; get; }
+        public string PLATE_NUMBER { set; get; }
         public string CHASSIS_NUMBER { set; get; }
         public string BOOK_TYPE_CODE { set; get; }
         public string TAG_NUMBER { set; get; }
@@ -52,6 +53,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public double? INNER_ROOF_FEE { set; get; }
         public double? TAXIMETER_FEE { set; get; }
         public double? OBD_FEE { set; get; }
+        public double? PURCHASE_TAX { set; get; }
+        public string ACCEPTANCE_CERTIFICATE { set; get; }
         public DateTime? CREATE_DATE { set; get; }
         public DateTime? CHANGE_DATE { set; get; }
         public string CREATE_USER { set; get; }

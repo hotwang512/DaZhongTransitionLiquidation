@@ -185,6 +185,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
@@ -2392,7 +2393,6 @@
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
     <Folder Include="Temp\" />
-    <Folder Include="Views\AutoSyncAssetsMaintenance\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />
     <Folder Include="_theme\temp\img\" />

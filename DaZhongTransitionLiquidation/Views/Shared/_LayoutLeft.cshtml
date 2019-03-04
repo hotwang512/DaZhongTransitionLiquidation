@@ -415,13 +415,21 @@
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产盘点" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">资产盘点</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">资产盘点</td>
+                        <td></td>
+                    </tr>
                 }
-                @if (isSysadmin)
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产变动审核" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">资产变动审核</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产基础信息维护" && i.Reads == 1))
                 {
                     <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>

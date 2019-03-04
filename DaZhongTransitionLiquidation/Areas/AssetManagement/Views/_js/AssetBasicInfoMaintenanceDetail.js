@@ -14,6 +14,7 @@ var $page = function () {
         if (guid != "" && guid != null) {
             getAssetInfoListDetail();
         } else {
+            $("#ASSET_CATEGORY_MAJOR").jqxComboBox('clearSelection');
             $("#hideButton").show();
         }
         //取消
@@ -120,6 +121,9 @@ var $page = function () {
                 var arr = [];
                 for (var i = 0; i < data.length; i++) {
                     arr.push(data[i].AssetMajor);
+                }
+                if (arr.length == 0) {
+                    arr.push("Default");
                 }
                 var dataAdapter = new $.jqx.dataAdapter(arr);
                 $("#ASSET_CATEGORY_MAJOR").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 200, height: 33 });

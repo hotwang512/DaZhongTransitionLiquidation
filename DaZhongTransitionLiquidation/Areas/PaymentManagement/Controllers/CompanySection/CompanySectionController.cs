@@ -90,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     var guid = sevenSection.VGUID;
                     var code = sevenSection.Code;
-                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.VGUID != guid && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43");
+                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.AccountModeCode == sevenSection.AccountModeCode && x.VGUID != guid && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43");
                     if (isAny)
                     {
                         IsSuccess = "2";
@@ -102,6 +102,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         {
                             Code = sevenSection.Code,
                             Descrption = sevenSection.Descrption,
+                            AccountModeCode = sevenSection.AccountModeCode,
                             Remark = sevenSection.Remark,
                             VMDFTIME = DateTime.Now,
                             VMDFUSER = UserInfo.LoginName
@@ -151,7 +152,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     {
                         response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"' and bss.SubjectVGUID='H63BD715-C27D-4C47-AB66-550309794D43'
- where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+ where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.AccountModeCode='"+ code + "' and bs.Code is not null").OrderBy("Code asc").ToList();
                     }
                     else
                     {
@@ -595,6 +596,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var response = new List<Business_CompanyBankInfo>();
             DbBusinessDataService.Command(db =>
             {
+                if(accountModeCode == null)
+                {
+                    accountModeCode = UserInfo.AccountModeCode;
+                }
                 response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code && x.AccountModeCode == accountModeCode).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);

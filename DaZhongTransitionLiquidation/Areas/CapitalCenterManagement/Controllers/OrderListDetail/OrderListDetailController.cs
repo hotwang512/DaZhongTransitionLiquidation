@@ -3,6 +3,7 @@ using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.Cus
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
@@ -189,7 +190,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 var userVGUID = UserInfo.Vguid;
                 if(UserInfo.LoginName == "sysAdmin")
                 {
-                    organizations = db.Queryable<Business_BusinessTypeSet>().ToList();
+                    organizations = db.Queryable<Business_BusinessTypeSet>().OrderBy("Code asc").ToList();
                 }
                 else
                 {
@@ -206,7 +207,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         {
             DbBusinessDataService.Command(db =>
             {
-                var datas = db.Queryable<Business_BusinessTypeSet>().Where(x => x.ParentVGUID == Vguid.TryToString()).ToList();
+                var datas = db.Queryable<Business_BusinessTypeSet>().Where(x => x.ParentVGUID == Vguid.TryToString()).OrderBy("Code asc").ToList();
                 foreach (var item in datas)
                 {
                     organizations.Add(item);
@@ -224,7 +225,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 if (UserInfo.LoginName == "sysAdmin")
                 {
                     result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
-left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where b.OrderVGUID = '" + orderVguid + @"'  and a.Block='1' ").OrderBy("Code asc,CompanyCode asc").ToList();
+left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + "' and b.OrderVGUID = '" + orderVguid + @"'  and a.Block='1' ").OrderBy("Code asc,CompanyCode asc").ToList();
                 }
                 else
                 {
@@ -243,8 +244,8 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                 var UserVGUID = cache[PubGet.GetUserKey].Vguid;
                 if (UserInfo.LoginName == "sysAdmin")
                 {
-                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
-left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Block='1'").OrderBy("Code asc,CompanyCode asc").ToList();
+                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas
+from Business_UserCompanySet as a where a.Block='1' and a.UserVGUID='" + UserVGUID + "'").OrderBy("Code asc,CompanyCode asc").ToList();
                 }
                 else
                 {
@@ -253,6 +254,21 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                 }         
             });
             return result;
+        }
+        public JsonResult GetSubjectBalance(string companyCode, string accountModeCode, GridParams para)
+        {
+            var jsonResult = new List<v_Business_SubjectSettingInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                int pageCount = 0;
+                para.pagenum = para.pagenum + 1;
+                jsonResult = db.SqlQueryable<v_Business_SubjectSettingInfo>(@"select a.*,b.Balance from v_Business_SubjectSettingInfo as a
+                               left join Business_SubjectBalance as b on b.Code = a.BusinessCode
+                               where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43' and AccountModeCode='" + accountModeCode + "' and SubjectCode='" + companyCode + "'")
+                               .ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                //jsonResult.TotalRows = pageCount;
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
     }
 }

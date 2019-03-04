@@ -1207,7 +1207,7 @@ function settingSection(column, code) {
         var typeAdapter = new $.jqx.dataAdapter(source);
         $("#jqxSubjectSetting").jqxTreeGrid({
             pageable: false,
-            width: 450,
+            width: 800,
             height: 300,
             pageSize: 9999999,
             //serverProcessing: true,
@@ -1261,7 +1261,7 @@ function settingSection(column, code) {
         });
         $("#jqxTableSetting").jqxGrid({
             pageable: true,
-            width: 460,
+            width: 800,
             height: 300,
             pageSize: 10,
             //serverProcessing: true,

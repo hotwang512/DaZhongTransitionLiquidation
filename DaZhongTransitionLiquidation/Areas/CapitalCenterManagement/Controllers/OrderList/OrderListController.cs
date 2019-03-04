@@ -31,7 +31,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 jsonResult.Rows = db.Queryable<Business_OrderList>()
                 .Where(i => i.Status == searchParams.Status)
                 .WhereIF(searchParams.BusinessType != null, i => i.BusinessType == searchParams.BusinessType)
-                .OrderBy(i => i.CreateTime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("BusinessSubItem1 asc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

@@ -46,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     int saveChanges = 1;
                     //删除主表信息
                     saveChanges = db.Deleteable<Business_OrderList>(x => x.VGUID == item).ExecuteCommand();
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
             });

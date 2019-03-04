@@ -294,7 +294,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
                     //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
                     //从订单配置表中取出数据
-                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1 == BusinessProject)
+                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1.Contains(BusinessProject))
                                .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
                                //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
@@ -571,7 +571,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var voucherType = OrderListAPI.VoucherType;//凭证类型
                     var BusinessProject = OrderListAPI.BusinessProject;
                     //从订单配置表中取出数据
-                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1 == BusinessProject)
+                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1.Contains(BusinessProject))
                                .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
                                //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)

@@ -43,7 +43,28 @@ var $page = function () {
         selector.$btnReset().on("click", function () {
             selector.$txtDatedTime().val("");
         });
-
+        //同步现有数据,隐藏
+        $("#btnTongBu").on("click", function () {
+            $.ajax({
+                url: "/PaymentManagement/CompanySection/SynchronousData",
+                //data: { vguids: selection },
+                data: {
+                   companyCode: companyCode, accountModeCode: accountModeCode
+                },
+                //traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("操作失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("操作成功！", null, "success");
+                            break;
+                    }
+                }
+            });
+        });
         //新增
         selector.$btnAdd().on("click", function () {
             if (index == 2) {
@@ -101,7 +122,8 @@ var $page = function () {
             $("#AddAccountSettingDialog").modal("hide");
         });
         //公司段设置弹出框中的保存按钮
-        $("#AddSection_OKButton").on("click", function () {
+        $("#AddSection_OKButton").on("click", function ()
+        {
             var code = $("#hidSubjectCode").val();
             var type = $("#hidType").val();            
             var otherCode = [];
@@ -110,8 +132,7 @@ var $page = function () {
                 for (var i = 0; i < data.length; i++) {
                     otherCode.push(data[i].Code);
                 }
-            }
-            else {
+            }else {
                 var data = $('#jqxTableSetting').jqxGrid('getdisplayrows')
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].Checked == "True" || data[i].Checked == true) {
@@ -174,7 +195,7 @@ var $page = function () {
             });
         });
         //保存8个段数据
-        selector.$AddNewBankData_OKButton().on("click", function () {
+        selector.$AddNewBankData_OKButton().on("click", function (){
             var validateError = 0;//未通过验证的数量
             if (!Validate(selector.$txtCode())) {
                 validateError++;

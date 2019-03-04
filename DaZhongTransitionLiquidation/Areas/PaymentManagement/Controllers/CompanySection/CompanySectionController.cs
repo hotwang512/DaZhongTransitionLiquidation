@@ -714,5 +714,24 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return Json(resultModel);
         }
+        public JsonResult SynchronousData(string companyCode, string accountModeCode)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                List<Business_SevenSection> SevenSection = new List<Business_SevenSection>();
+                var data = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == "1002" && x.CompanyCode == "100201" && x.SectionVGUID== "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                foreach (var item in data)
+                {
+                    item.VGUID = Guid.NewGuid();
+                    item.VCRTTIME = DateTime.Now;
+                    item.CompanyCode = companyCode;
+                    item.AccountModeCode = accountModeCode;
+                    SevenSection.Add(item);
+                }
+                db.Insertable(SevenSection).ExecuteCommand();
+            });
+            return Json(resultModel);
+        }
     }
 }

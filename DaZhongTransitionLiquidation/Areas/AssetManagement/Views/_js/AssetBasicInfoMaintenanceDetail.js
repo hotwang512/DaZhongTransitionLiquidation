@@ -126,7 +126,9 @@ var $page = function () {
                     arr.push("Default");
                 }
                 var dataAdapter = new $.jqx.dataAdapter(arr);
-                $("#ASSET_CATEGORY_MAJOR").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 200, height: 33 });
+                $("#ASSET_CATEGORY_MAJOR").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 198, height: 33 });
+                $("#ASSET_CATEGORY_MAJOR").jqxComboBox({ itemHeight: 33 });
+                $("#dropdownlistWrapperASSET_CATEGORY_MAJOR Input")[0].style.paddingLeft = "10px"
             }
         });
 

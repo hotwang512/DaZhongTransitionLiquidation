@@ -2393,6 +2393,7 @@
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
     <Folder Include="Temp\" />
+    <Folder Include="uploads\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />
     <Folder Include="_theme\temp\img\" />

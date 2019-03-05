@@ -163,23 +163,23 @@ var $page = function () {
             if (validateError > 0) {
                 jqxNotification("还有数据未同步！", null, "error");
             } else {
+                $("#Accept_OKBtn").show();
+                $("#ResultDiv").hide();
+                $("#AcceptTable").show();
                 $("#AcceptDialog").modal({ backdrop: "static", keyboard: false });
                 $("#AcceptDialog").modal("show");
             }
         })
-        $("#Accept_OKBtn").on("click", function () {
+        $("#UploadFile").on("click", function () {
             baseUrl = "ws://127.0.0.1:12345";
             openSocket();
             $("#devPhoto").hide();
             $("#Upload_OKBtn").hide();
             $("#photographPri").show();
-            $("#AcceptDialog").modal("hide");
+            //$("#AcceptDialog").modal("hide");
             $("#UploadPictureDialog").modal({ backdrop: "static", keyboard: false });
             $("#UploadPictureDialog").modal("show");
         })
-        $("#Accept_CancelBtn").on("click", function () {
-            $("#AcceptDialog").modal("hide");
-        });
         $("#photographPri").on("click", function () {
             $("#Upload_OKBtn").show();
             $("#photographPri").hide();
@@ -199,21 +199,58 @@ var $page = function () {
                             jqxNotification("上传失败！", null, "error");
                             break;
                         case "1":
-                            jqxNotification("验收成功！", null, "success");
+                            jqxNotification("上传成功！", null, "success");
+                            $("#Attachment").show();
+                            $("#Attachment").attr("href", msg.ResultInfo);
+                            $("#Attachment").html(msg.ResultInfo2);
                             $("#UploadPictureDialog").modal("hide");
                             break;
                     }
                 }
             });
-        })
-        $("#Upload_CancelBtn").on("click", function () {
-            $("#UploadPictureDialog").modal("hide");
+        });
+        $("#Accept_OKBtn").on("click", function () {
+            $("#ResultDiv").empty();
+            $("#AcceptTable").hide();
+            $.ajax({
+                url: "/AssetManagement/AssetMaintenanceInfoDetail/InserIntoSwapTable",
+                data: {
+                    "Vguid": $("#VGUID").val()
+                },
+                type: "post",
+                success: function (msg) {
+                    $("#ResultDiv").show();
+                    $("#Accept_OKBtn").hide();
+                    debugger;
+                    switch (msg.Status) {
+                        case "0":
+                            var html = document.getElementById("ResultDiv").innerHTML;
+                            document.getElementById("ResultDiv").innerHTML = html + '<p>写入中间表失败</p>';
+                            break;
+                        case "1":
+                            var html = document.getElementById("ResultDiv").innerHTML;
+                            document.getElementById("ResultDiv").innerHTML = html + '<p>写入中间表成功</p>';
+                            SendAssetInfo();
+                            break;
+                    }
+                }
+            });
         });
         $("#btnGenerateAcceptance").on("click", function () {
             $("#GenerateAcceptanceDialog").modal({ backdrop: "static", keyboard: false });
             $("#GenerateAcceptanceDialog").modal("show");
         })
         //弹出框中的取消按钮
+        $("#Accept_CancelBtn").on("click", function () {
+            $("#AcceptDialog").modal("hide");
+        });
+        $("#Print_CancelBtn").on("click", function () {
+            $("#GenerateAcceptanceDialog").modal("hide");
+        });
+        $("#Upload_CancelBtn").on("click", function () {
+            $("#UploadPictureDialog").modal("hide");
+        });
+        
     }; //addEvent end
 
     function getAssetInfoListDetail() {
@@ -360,6 +397,27 @@ var $page = function () {
             });
         }
     }
+    function SendAssetInfo() {
+        $.ajax({
+            url: "/AssetManagement/AssetMaintenanceInfoDetail/SendAssetInfo",
+            data: {
+                "Vguid": $("#VGUID").val()
+            },
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                    case "0":
+                        var html = document.getElementById("ResultDiv").innerHTML;
+                        document.getElementById("ResultDiv").innerHTML = html + '<p>调用接口成功</p>';
+                        break;
+                    case "1":
+                        var html = document.getElementById("ResultDiv").innerHTML;
+                        document.getElementById("ResultDiv").innerHTML = html + '<p>调用接口失败</p>';
+                        break;
+                }
+            }
+        });
+    }
 };
 function formatDate(NewDtime) {
     var dt = new Date(parseInt(NewDtime.slice(6, 19)));
@@ -373,6 +431,8 @@ function formatDate(NewDtime) {
     //+ " " + hour + ":" + minute + ":" + second;
 }
 function doPrint() {
+    $("#GenerateAcceptanceDialog").hide();
+    $(".gridtable")[0].style.margin = "60px"
     bdhtml = window.document.body.innerHTML;
     sprnstr = "<!--startprint-->";
     eprnstr = "<!--endprint-->";
@@ -380,6 +440,7 @@ function doPrint() {
     prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
     window.document.body.innerHTML = prnhtml;
     window.print();
+    window.location.reload()
 }
 $(function () {
     var page = new $page();

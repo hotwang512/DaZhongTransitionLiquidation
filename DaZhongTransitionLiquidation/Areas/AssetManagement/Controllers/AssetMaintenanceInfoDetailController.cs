@@ -124,39 +124,43 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
         public JsonResult UploadImg(Guid Vguid,string ImageBase64Str)
         {
             var sevenSection = new Business_AssetMaintenanceInfo();
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            bool insertResult = false;
-            bool sendResult = false;
+            var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
-            DbBusinessDataService.Command(db =>
+            int len = ImageBase64Str.IndexOf("base64,") + 7;
+            int len1 = ImageBase64Str.IndexOf("data:") + 5;
+            string ext = ImageBase64Str.Substring(len1, len - len1 - 8);
+            var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" +
+                DateTime.Now.ToString("yyyyMMddHHmmssfff.") +
+                (ext.ToLower().Contains("png") ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+            var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
+            var savePath = FileHelper.Base64ToImg(filePath, ImageBase64Str);
+            if (!savePath.IsNullOrEmpty())
             {
-                var result = db.Ado.UseTran(() =>
+                DbBusinessDataService.Command(db =>
                 {
-                    sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                    sevenSection.ACCEPTANCE_CERTIFICATE = ImageBase64Str;
-                    sevenSection.CHANGE_DATE = DateTime.Now;
-                    sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
-                    db.Updateable(sevenSection).UpdateColumns(x => new { x.CHANGE_DATE
-                        , x.CHANGE_USER,x.ACCEPTANCE_CERTIFICATE
-                    }).ExecuteCommand();
-                    //调用接口,写入中间表
-                    sendResult = SendAssetInfo(sevenSection);
-                    if (sendResult)
+                    var result = db.Ado.UseTran(() =>
                     {
-                        insertResult = InserIntoSwapTable(sevenSection);
-                    }
-                });
-                if(insertResult && result.IsSuccess)
-                {
+                        sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
+                        sevenSection.ACCEPTANCE_CERTIFICATE = filePath;
+                        sevenSection.CHANGE_DATE = DateTime.Now;
+                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                        db.Updateable(sevenSection).UpdateColumns(x => new {
+                            x.CHANGE_DATE,
+                            x.CHANGE_USER,
+                            x.ACCEPTANCE_CERTIFICATE
+                        }).ExecuteCommand();
+                    });
                     resultModel.IsSuccess = result.IsSuccess;
-                }
-                resultModel.ResultInfo = result.ErrorMessage;
-                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-            });
+                    resultModel.ResultInfo = uploadPath;
+                    resultModel.ResultInfo2 = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);
+                    resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+                });
+            }
             return Json(resultModel);
         }
-        public bool InserIntoSwapTable(Business_AssetMaintenanceInfo assetMaintenanceInfo)
+        public JsonResult InserIntoSwapTable(Guid Vguid)
         {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var isSuccess = false;
             DbBusinessDataService.Command(db =>
             {
@@ -164,22 +168,34 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 {
                     //写入中间表
                 });
-                isSuccess = result.IsSuccess;
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
-            return isSuccess;
+            return Json(resultModel);
         }
-        public bool SendAssetInfo(Business_AssetMaintenanceInfo assetMaintenanceInfo)
+
+        //调用接口,写入中间表
+        public JsonResult SendAssetInfo(Guid Vguid)
         {
-            var assetData = new AssetInfoData();
-            assetData.VGUID = assetMaintenanceInfo.VGUID;
-            assetData.ORGANATION_NUM = assetMaintenanceInfo.ORGANIZATION_NUM;
-            assetData.ENGINE_NUMBER = assetMaintenanceInfo.ENGINE_NUMBER;
-            assetData.CHASSIS_NUMBER = assetMaintenanceInfo.CHASSIS_NUMBER;
-            assetData.BOOK_TYPE_CODE = assetMaintenanceInfo.BOOK_TYPE_CODE;
-            assetData.TAG_NUMBER = assetMaintenanceInfo.TAG_NUMBER;
-            assetData.DESCRIPTION = assetMaintenanceInfo.DESCRIPTION;
-            assetData.QUANITIY = assetMaintenanceInfo.QUANTITY;
-            return AssetMaintenanceAPI.SendAssetInfo(assetData);
+            var sevenSection = new Business_AssetMaintenanceInfo();
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var isSuccess = false;
+            DbBusinessDataService.Command(db =>
+            {
+                var assetData = new AssetInfoData();
+                assetData.VGUID = sevenSection.VGUID;
+                assetData.ORGANATION_NUM = sevenSection.ORGANIZATION_NUM;
+                assetData.ENGINE_NUMBER = sevenSection.ENGINE_NUMBER;
+                assetData.CHASSIS_NUMBER = sevenSection.CHASSIS_NUMBER;
+                assetData.BOOK_TYPE_CODE = sevenSection.BOOK_TYPE_CODE;
+                assetData.TAG_NUMBER = sevenSection.TAG_NUMBER;
+                assetData.DESCRIPTION = sevenSection.DESCRIPTION;
+                assetData.QUANITIY = sevenSection.QUANTITY;
+                resultModel.IsSuccess = AssetMaintenanceAPI.SendAssetInfo(assetData);
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
         }
     }
 }

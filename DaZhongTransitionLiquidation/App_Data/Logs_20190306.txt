@@ -3007,3 +3007,91 @@ Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ
 ²ÎÊıÃû: uriString
    ÔÚ System.Uri..ctor(String uriString)
    ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+
+-------------------------------header----------------------
+2019-03-06 16:56:39,652 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 26
+2019-03-06 16:56:54,466 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:SqlSugar.UtilExceptions: English Message : Connection open error . ÔÚÓë SQL Server ½¨Á¢Á¬½ÓÊ±³öÏÖÓëÍøÂçÏà¹ØµÄ»òÌØ¶¨ÓÚÊµÀıµÄ´íÎó¡£Î´ÕÒµ½»òÎŞ·¨·ÃÎÊ·şÎñÆ÷¡£ÇëÑéÖ¤ÊµÀıÃû³ÆÊÇ·ñÕıÈ·²¢ÇÒ SQL Server ÒÑÅäÖÃÎªÔÊĞíÔ¶³ÌÁ¬½Ó¡£ (provider: SQL Network Interfaces, error: 26 - ¶¨Î»Ö¸¶¨µÄ·şÎñÆ÷/ÊµÀıÊ±³ö´í)
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£ºÔÚÓë SQL Server ½¨Á¢Á¬½ÓÊ±³öÏÖÓëÍøÂçÏà¹ØµÄ»òÌØ¶¨ÓÚÊµÀıµÄ´íÎó¡£Î´ÕÒµ½»òÎŞ·¨·ÃÎÊ·şÎñÆ÷¡£ÇëÑéÖ¤ÊµÀıÃû³ÆÊÇ·ñÕıÈ·²¢ÇÒ SQL Server ÒÑÅäÖÃÎªÔÊĞíÔ¶³ÌÁ¬½Ó¡£ (provider: SQL Network Interfaces, error: 26 - ¶¨Î»Ö¸¶¨µÄ·şÎñÆ÷/ÊµÀıÊ±³ö´í).
+   ÔÚ SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   ÔÚ SqlSugar.QueryableProvider`1._ToList[TResult]()
+   ÔÚ SqlSugar.QueryableProvider`1.ToList()
+   ÔÚ DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:ĞĞºÅ 43
+
+-------------------------------header----------------------
+2019-03-06 16:57:54,280 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 26
+2019-03-06 16:58:37,491 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 16:58:51,957 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 16:58:59,133 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 17:00:04,614 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 17:00:09,035 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 17:00:13,135 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 17:01:12,579 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.FormatException: ¸Ã×Ö·û´®Î´±»Ê¶±ğÎªÓĞĞ§µÄ DateTime¡£ÓĞÒ»¸öÎ´Öªµ¥´Ê(´ÓË÷Òı 0 ´¦¿ªÊ¼)¡£
+   ÔÚ System.DateTimeParse.Parse(String s, DateTimeFormatInfo dtfi, DateTimeStyles styles)
+   ÔÚ System.Convert.ToDateTime(String value)
+   ÔÚ DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.BankFlowTemplateController.<>c__DisplayClass4_0.<GetBankFlowData>b__0(SqlSugarClient db) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs:ĞĞºÅ 192
+   ÔÚ DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:ĞĞºÅ 28
+2019-03-06 17:01:16,525 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - System.FormatException: ¸Ã×Ö·û´®Î´±»Ê¶±ğÎªÓĞĞ§µÄ DateTime¡£ÓĞÒ»¸öÎ´Öªµ¥´Ê(´ÓË÷Òı 0 ´¦¿ªÊ¼)¡£
+   ÔÚ System.DateTimeParse.Parse(String s, DateTimeFormatInfo dtfi, DateTimeStyles styles)
+   ÔÚ System.Convert.ToDateTime(String value)
+   ÔÚ DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.BankFlowTemplateController.<>c__DisplayClass4_0.<GetBankFlowData>b__0(SqlSugarClient db) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs:ĞĞºÅ 192
+   ÔÚ DaZhongTransitionLiquidation.Infrastructure.Dao.DbBusinessDataService.Command(Action`1 func) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Infrastructure\Dao\DbBusinessDataService.cs:ĞĞºÅ 33
+   ÔÚ DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.BankFlowTemplateController.GetBankFlowData(Business_BankFlowTemplate searchParams, GridParams para, String TransactionDateEnd) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs:ĞĞºÅ 188
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-03-06 17:02:21,175 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 17:03:53,847 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: Öµ²»ÄÜÎª null¡£
+²ÎÊıÃû: uriString
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 90
+2019-03-06 17:13:47,574 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"engine_number":"2""chassis_number":"2"},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetASSET_CATEGORY_MINOR(String ORGANIZATION_NUM, String GROUP_ID, String ENGINE_NUMBER, String CHASSIS_NUMBER) Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 55
+
+-------------------------------header----------------------
+2019-03-06 17:29:29,247 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 26

@@ -17,5 +17,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public decimal? InitialBalance { get; set; }
         public string AccountModeCode { get; set; }
         public bool BankStatus { get; set; }
+        public bool OpeningDirectBank { get; set; }
     }
 }

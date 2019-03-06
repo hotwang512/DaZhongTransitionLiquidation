@@ -31,7 +31,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 jsonResult.Rows = db.Queryable<Business_OrderList>()
                 .Where(i => i.Status == searchParams.Status)
                 .WhereIF(searchParams.BusinessType != null, i => i.BusinessType == searchParams.BusinessType)
-                .OrderBy(i => i.CreateTime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("BusinessSubItem1 asc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -46,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     int saveChanges = 1;
                     //删除主表信息
                     saveChanges = db.Deleteable<Business_OrderList>(x => x.VGUID == item).ExecuteCommand();
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
             });

@@ -71,7 +71,7 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
                 }
                 else
                 {
-                    result = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == accountMode && x.Block == "1" && x.IsCheck == true).ToList();
+                    result = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == accountMode && x.Block == "1" && x.IsCheck == true).OrderBy("CompanyCode asc").ToList();
                 }
             });
             return Json(result, JsonRequestBehavior.AllowGet);

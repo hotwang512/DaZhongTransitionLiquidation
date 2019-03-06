@@ -64,7 +64,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult UpdataOrderListInfo(List<Guid> vguids, string status)//Guid[] vguids
+        public JsonResult UpdataOrderListInfo(List<Guid> vguids, string status,string PayBank, string PayAccount, string PayBankAccountName)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0", ResultInfo = "" };
             DbBusinessDataService.Command(db =>
@@ -75,6 +75,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     int saveChanges = 1;
                     //更新主表信息 
                     var orderInfo = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == item);
+                    orderInfo.OrderBankName = PayBank;
+                    orderInfo.OrderBankAccouont = PayAccount;
+                    orderInfo.OrderBankAccouontName = PayBankAccountName;
+                    db.Updateable<Business_OrderListDraft>(orderInfo).Where(x => x.VGUID == item).ExecuteCommand();
                     Regex rgx = new Regex(@"[\w|\W]{2,4}银行");
                     var rgsOrderBankName = rgx.Match(orderInfo.OrderBankName).Value;
                     var rgsCollectBankName = rgx.Match(orderInfo.CollectBankName).Value;

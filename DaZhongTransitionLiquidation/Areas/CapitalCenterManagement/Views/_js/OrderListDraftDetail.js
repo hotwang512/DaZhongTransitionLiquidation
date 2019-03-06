@@ -126,6 +126,9 @@ var $page = function () {
                 data: {
                     vguids: selection,
                     status: "2",
+                    PayBank: $("#PayBank").val(),
+                    PayAccount: $("#PayAccount").val(),
+                    PayBankAccountName: $("#PayBankAccountName").val()
                 },
                 //traditional: true,
                 type: "post",

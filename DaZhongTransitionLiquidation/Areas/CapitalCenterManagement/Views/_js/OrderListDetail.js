@@ -86,7 +86,7 @@ var $page = function () {
             }
             var orderDetailValue = JSON.stringify(params);
             $.ajax({
-                url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail?OrderDetailValue=" + orderDetailValue,
+                url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail",
                 //data: { vguids: selection },
                 data: {
                     "VGUID": $("#VGUID").val(),
@@ -117,7 +117,8 @@ var $page = function () {
                     //"PayAccount": $("#PayAccount").val(),
                     //"PayBankAccountName": $("#PayBankAccountName").val(),
                     //"PayBank": $("#PayBank").val(),
-                    "CompanyCode": $("#LoginCompanyCode").val()
+                    "CompanyCode": $("#LoginCompanyCode").val(),
+                    "OrderDetailValue":orderDetailValue
                 },
                 type: "post",
                 success: function (msg) {
@@ -185,11 +186,13 @@ var $page = function () {
         $("#AddNewBankData_OKButton").on("click", function () {
             for (var i = 0; i < $(".Borrow").length; i++) {
                 if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
-                    var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
-                    var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
-                    $(".Borrow").eq(i).text(val)
-                    var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
-                    var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
+                    //var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
+                    //var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
+                    var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
+                    $(".Borrow").eq(i).text(val);
+                    //var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
+                    //var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
+                    var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
                     $(".Loan").eq(i).text(val2);
                     var val3 = $("#PayBank").val();
                     $(".PayBank").eq(i).text(val3)
@@ -650,7 +653,7 @@ function initTable(companyCode, accountModeCode) {
     var typeAdapter = new $.jqx.dataAdapter(source);
     //创建卡信息列表（主表）
     $("#grid1").jqxGrid({
-        pageable: false,
+        pageable: true,
         width: "100%",
         autoheight: false,
         columnsresize: true,
@@ -659,6 +662,7 @@ function initTable(companyCode, accountModeCode) {
         pagerButtonsCount: 10,
         source: typeAdapter,
         theme: "office",
+        pagermode: 'simple',
         columnsHeight: 40,
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
@@ -692,7 +696,7 @@ function initTable(companyCode, accountModeCode) {
     });
 
     $("#grid2").jqxGrid({
-        pageable: false,
+        pageable: true,
         width: "100%",
         autoheight: false,
         columnsresize: true,

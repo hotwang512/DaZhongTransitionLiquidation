@@ -95,15 +95,15 @@
                 <td style="text-align:right;">残值类型：</td>
                 <td style="text-align:left;"><input id="SALVAGE_TYPE" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">残值百分比：</td>
-                <td style="text-align:left;"><input id="SALVAGE_PERCENT" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="SALVAGE_PERCENT" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
                 <td style="text-align:right;">残值金额：</td>
-                <td style="text-align:left;"><input id="SALVAGE_VALUE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="SALVAGE_VALUE" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">YTD折旧：</td>
-                <td style="text-align:left;"><input id="YTD_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="YTD_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
                 <td style="text-align:right;">累计折旧：</td>
-                <td style="text-align:left;"><input id="ACCT_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="ACCT_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">折旧方法：</td>
                 <td style="text-align:left;"><input id="METHOD" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
@@ -111,7 +111,7 @@
                 <td style="text-align:right;">使用寿命：</td>
                 <td style="text-align:left;"><input id="LIFE_MONTHS" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">摊销标记：</td>
-                <td style="text-align:left;"><input id="AMORTIZATION_FLAG" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="AMORTIZATION_FLAG" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
 
                 <td style="text-align:right;">费用账户组合段1：</td>
                 <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT1" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
@@ -143,15 +143,15 @@
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">报废标识：</td>
-                <td style="text-align:left;"><input id="RETIRE_FLAG" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="RETIRE_FLAG" type="text" style="width:180px;" validatetype="required" class="input_text form-control" /></td>
                 <td style="text-align:right;">报废数量：</td>
-                <td style="text-align:left;"><input id="RETIRE_QUANTITY" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="RETIRE_QUANTITY" type="text" style="width:180px;" validatetype="required" class="input_text form-control" /></td>
                 <td style="text-align:right;">报废成本：</td>
-                <td style="text-align:left;"><input id="RETIRE_COST" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="RETIRE_COST" type="text" style="width:180px;" validatetype="required" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">报废日期：</td>
-                <td style="text-align:left;"><input id="RETIRE_DATE" type="text" style="width: 180px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
+                <td style="text-align:left;"><input id="RETIRE_DATE" type="text" style="width: 180px;" validatetype="required" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
                 <td style="text-align:right;">事务处理标识：</td>
                 <td style="text-align:left;"><input id="TRANSACTION_ID" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">最后更新时间：</td>
@@ -161,32 +161,32 @@
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">上牌费：</td>
-                <td style="text-align:left;"><input id="LISENSING_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="LISENSING_FEE" type="text" style="width:180px;" class="input_text form-control" validatetype="required"/></td>
                 <td style="text-align:right;">出库费：</td>
-                <td style="text-align:left;"><input id="OUT_WAREHOUSE_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="OUT_WAREHOUSE_FEE" type="text" style="width:180px;" class="input_text form-control" validatetype="required"/></td>
                 <td style="text-align:right;">顶灯费：</td>
-                <td style="text-align:left;"><input id="DOME_LIGHT_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="DOME_LIGHT_FEE" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">防劫费：</td>
-                <td style="text-align:left;"><input id="ANTI_ROBBERY_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="ANTI_ROBBERY_FEE" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
                 <td style="text-align:right;">装车费：</td>
-                <td style="text-align:left;"><input id="LOADING_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="LOADING_FEE" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
                 <td style="text-align:right;">内顶费：</td>
-                <td style="text-align:left;"><input id="INNER_ROOF_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="INNER_ROOF_FEE" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">计价器：</td>
-                <td style="text-align:left;"><input id="TAXIMETER_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="TAXIMETER_FEE" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
                 <td style="text-align:right;">OBD：</td>
-                <td style="text-align:left;"><input id="OBD_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="OBD_FEE" type="text" style="width:180px;" class="input_text form-control"  validatetype="required"/></td>
                 <td style="text-align:right;">购置税：</td>
-                <td style="text-align:left;"><input id="PURCHASE_TAX" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="PURCHASE_TAX" type="text" style="width:180px;" class="input_text form-control" validatetype="required"/></td>
                 <td style="text-align: right;"><input id="Status" name="Status" value="1" class="hide" /><input id="VGUID" name="VGUID" class="hide" /></td>
             </tr>
             <tr style="height:50px">
                 <td style="text-align:right;">车牌号：</td>
-                <td style="text-align:left;"><input id="PLATE_NUMBER" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:left;"><input id="PLATE_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required"/></td>
                 <td style="text-align:right;" class="status">处理状态：</td>
                 <td style="text-align:left;" class="status"><input id="STATUS" type="text" style="width:180px;" disabled class="input_text form-control" /></td>
             </tr>
@@ -253,6 +253,14 @@
                         </td>
                     </tr>
                 </table>
+                <div id="jqxNotification">
+                    <div id="notificationContent">
+                    </div>
+                </div>
+                <div id="jqxNotificationSendAPT">
+                    <div id="notificationContentSendAPI">
+                    </div>
+                </div>
                 <div id="ResultDiv" hidden>
                 </div>
                 <form id="formFile" hidden>

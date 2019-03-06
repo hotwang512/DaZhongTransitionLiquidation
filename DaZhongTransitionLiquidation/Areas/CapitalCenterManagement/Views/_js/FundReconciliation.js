@@ -37,6 +37,7 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
+        getCompanyCode();
         $("#btnAdd").on("click", function () {
             isEdit = false;
             $("#BankAccount").val("");
@@ -196,7 +197,7 @@ var $page = function () {
             {
                 pageable: true,
                 width: "100%",
-                height: 400,
+                height: 500,
                 pageSize: 10,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
@@ -374,3 +375,17 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+function getCompanyCode() {
+    $.ajax({
+        url: "/CapitalCenterManagement/FundReconciliation/GetCompanyCodes",
+        data: { },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "CompanyName");
+            //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}

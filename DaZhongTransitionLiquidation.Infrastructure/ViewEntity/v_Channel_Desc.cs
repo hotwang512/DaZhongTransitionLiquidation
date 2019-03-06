@@ -23,6 +23,8 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ViewEntity
         public Guid Vguid { get; set; }
         public DateTime? VMDFTIME { get; set; }
         public string VMDFUSER { get; set; }
+        public string PaymentEncoding { get; set; }
+
 
     }
 }

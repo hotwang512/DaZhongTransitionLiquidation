@@ -536,7 +536,7 @@ var $page = function () {
             $.ajax({
                 url: "/PaymentManagement/CompanySection/UpdataBankStatus",
                 //data: { vguids: selection },
-                data: { vguids: rowData.VGUID, datafield: args.datafield, ischeck: args.value },
+                data: { vguids: rowData.VGUID, datafield: args.datafield, ischeck: args.value, accountModeCode: rowData.AccountModeCode, companyCode: rowData.CompanyCode },
                 type: "post",
                 success: function (msg) {
                     $("#jqxCompanySetting").jqxGrid('updateBoundData');
@@ -1318,6 +1318,7 @@ function settingCompany(code, companyName) {
                { name: 'BankAccountName', type: 'string' },
                { name: 'AccountType', type: 'string' },
                { name: "CompanyCode", type: 'string' },
+               { name: "AccountModeCode", type: 'string' },
                { name: "InitialBalance", type: 'number' },
                { name: 'VGUID', type: 'string' },
                { name: 'BankStatus', type: 'bool' },
@@ -1359,6 +1360,7 @@ function settingCompany(code, companyName) {
             { text: '默认支付银行', datafield: "BankStatus", groupable: true, width: '110px', align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
             { text: '是否开通银企直联', datafield: "OpeningDirectBank", groupable: true, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
+            { text: '账套编码', datafield: 'AccountModeCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]
     });

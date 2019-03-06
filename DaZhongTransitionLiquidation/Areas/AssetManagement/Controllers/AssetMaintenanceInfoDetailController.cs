@@ -72,7 +72,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     {
                         sevenSection.CHANGE_DATE = DateTime.Now;
                         sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER }).ExecuteCommand();
+                        db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER,x.ACCEPTANCE_CERTIFICATE,x.STATUS }).ExecuteCommand();
                     }
                 });
                 if (resultModel.Status != "2")
@@ -120,16 +120,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
         {
             return AssetMaintenanceAPI.GetASSET_CATEGORY_MINOR(ORGANIZATION_NUM, GROUP_ID, ENGINE_NUMBER, CHASSIS_NUMBER);
         }
-        
-        public JsonResult UploadImg(Guid Vguid,string ImageBase64Str)
+
+        public JsonResult UploadImg(Guid Vguid, string ImageBase64Str)
         {
             var sevenSection = new Business_AssetMaintenanceInfo();
-            var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             int len = ImageBase64Str.IndexOf("base64,") + 7;
             int len1 = ImageBase64Str.IndexOf("data:") + 5;
             string ext = ImageBase64Str.Substring(len1, len - len1 - 8);
-            var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" +
+            var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" +
                 DateTime.Now.ToString("yyyyMMddHHmmssfff.") +
                 (ext.ToLower().Contains("png") ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
             var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
@@ -141,7 +141,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     var result = db.Ado.UseTran(() =>
                     {
                         sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                        sevenSection.ACCEPTANCE_CERTIFICATE = filePath;
+                        sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
                         sevenSection.CHANGE_DATE = DateTime.Now;
                         sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
                         db.Updateable(sevenSection).UpdateColumns(x => new {
@@ -155,6 +155,46 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     resultModel.ResultInfo2 = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);
                     resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
                 });
+            }
+            return Json(resultModel);
+        }
+        public JsonResult UploadLocalFile(Guid Vguid, HttpPostedFileBase File)
+        {
+            var sevenSection = new Business_AssetMaintenanceInfo();
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            if(File != null)
+            {
+                var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
+                var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" + newFileName;
+                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
+                try
+                {
+                    File.SaveAs(filePath);
+                    DbBusinessDataService.Command(db =>
+                    {
+                        var result = db.Ado.UseTran(() =>
+                        {
+                            sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
+                            sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
+                            sevenSection.CHANGE_DATE = DateTime.Now;
+                            sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                            db.Updateable(sevenSection).UpdateColumns(x => new {
+                                x.CHANGE_DATE,
+                                x.CHANGE_USER,
+                                x.ACCEPTANCE_CERTIFICATE
+                            }).ExecuteCommand();
+                        });
+                        resultModel.IsSuccess = result.IsSuccess;
+                        resultModel.ResultInfo = uploadPath;
+                        resultModel.ResultInfo2 = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);
+                        resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+                    });
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
+                }
             }
             return Json(resultModel);
         }

@@ -186,6 +186,7 @@ var $page = function () {
             $("#devPhoto").show();
         })
         $("#Upload_OKBtn").on("click", function () {
+            $('#jqxLoader').jqxLoader('open');
             $.ajax({
                 url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadImg",
                 data: {
@@ -194,6 +195,7 @@ var $page = function () {
                 },
                 type: "post",
                 success: function (msg) {
+                    $('#jqxLoader').jqxLoader('close');
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("上传失败！", null, "error");
@@ -210,8 +212,8 @@ var $page = function () {
             });
         });
         $("#Accept_OKBtn").on("click", function () {
-            $("#ResultDiv").empty();
             $("#AcceptTable").hide();
+            $("#ResultDiv").empty();
             $.ajax({
                 url: "/AssetManagement/AssetMaintenanceInfoDetail/InserIntoSwapTable",
                 data: {
@@ -220,19 +222,29 @@ var $page = function () {
                 type: "post",
                 success: function (msg) {
                     $("#ResultDiv").show();
-                    $("#Accept_OKBtn").hide();
+                    $("#Accept_OKBtn").hide();;
                     debugger;
                     switch (msg.Status) {
                         case "0":
                             var html = document.getElementById("ResultDiv").innerHTML;
-                            document.getElementById("ResultDiv").innerHTML = html + '<p>写入中间表失败</p>';
+                            document.getElementById("ResultDiv").innerHTML = html + '<div id="InserIntoSwapTableResult"><div>写入中间表失败</div></div>'
+                            $("#InserIntoSwapTableResult").jqxNotification({
+                                width: "100%", position: "top-left", opacity: 1,
+                                autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: "error"
+                            });
                             break;
                         case "1":
+                            debugger;
                             var html = document.getElementById("ResultDiv").innerHTML;
-                            document.getElementById("ResultDiv").innerHTML = html + '<p>写入中间表成功</p>';
+                            document.getElementById("ResultDiv").innerHTML = html + '<div id="InserIntoSwapTableResult"><div>写入中间表成功</div></div>'
+                            $("#InserIntoSwapTableResult").jqxNotification({
+                                width: "100%", position: "top-left", opacity: 1,
+                                autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: "success"
+                            });
                             SendAssetInfo();
                             break;
                     }
+                    $("#InserIntoSwapTableResult").jqxNotification("open");
                 }
             });
         });
@@ -250,6 +262,35 @@ var $page = function () {
         $("#Upload_CancelBtn").on("click", function () {
             $("#UploadPictureDialog").modal("hide");
         });
+        $("#UploadLocalFile").on("click", function () {
+            $("#FileInput").click();
+        })
+        $("#FileInput").on("change", function () {
+            $('#jqxLoader').jqxLoader('open');
+            $("#formFile").ajaxSubmit({
+                url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadLocalFile",
+                type: "post",
+                data: {
+                    'VGUID': $("#VGUID").val()
+                },
+                success: function (msg) {
+                    $('#jqxLoader').jqxLoader('close');
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("上传失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("上传成功！", null, "success");
+                            $("#Attachment").show();
+                            $("#Attachment").attr("href", msg.ResultInfo);
+                            $("#Attachment").html(msg.ResultInfo2);
+                            break;
+                    }
+                }
+            });
+        })
+
+        $("#jqxLoader").jqxLoader({ isModal: true, width: 100, height: 60, imagePosition: 'top' });
         
     }; //addEvent end
 
@@ -339,6 +380,13 @@ var $page = function () {
                 $("#CHANGE_USER").val(msg.CHANGE_USER);
                 $("#PLATE_NUMBER").val(msg.PLATE_NUMBER);
                 $("#STATUS").val(msg.STATUS);
+                debugger;
+                if (msg.ACCEPTANCE_CERTIFICATE != "" && msg.ACCEPTANCE_CERTIFICATE != null) {
+                    $("#Attachment").show();
+                    $("#Attachment").attr("href", msg.ACCEPTANCE_CERTIFICATE);
+                    var fileName = msg.ACCEPTANCE_CERTIFICATE.substring(msg.ACCEPTANCE_CERTIFICATE.lastIndexOf("\\") + 1, msg.ACCEPTANCE_CERTIFICATE.length)
+                    $("#Attachment").html(fileName);
+                }
             }
         });
     }
@@ -405,16 +453,25 @@ var $page = function () {
             },
             type: "post",
             success: function (msg) {
+                var html = document.getElementById("ResultDiv").innerHTML;
+                html = html.replace("opacity:", "").replace("opacity:", "");
                 switch (msg.Status) {
                     case "0":
-                        var html = document.getElementById("ResultDiv").innerHTML;
-                        document.getElementById("ResultDiv").innerHTML = html + '<p>调用接口成功</p>';
+                        document.getElementById("ResultDiv").innerHTML = html + '<div id="SendResult"><div>调用接口失败</div></div>'
+                        $("#SendResult").jqxNotification({
+                            width: "100%", position: "top-left", opacity: 1,
+                            autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: "error"
+                        });
                         break;
                     case "1":
-                        var html = document.getElementById("ResultDiv").innerHTML;
-                        document.getElementById("ResultDiv").innerHTML = html + '<p>调用接口失败</p>';
+                        document.getElementById("ResultDiv").innerHTML = html + '<div id="SendResult"><div>调用接口成功</div></div>'
+                        $("#SendResult").jqxNotification({
+                            width: "100%", position: "top-left", opacity: 1,
+                            autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: "success"
+                        });
                         break;
                 }
+                $("#SendResult").jqxNotification("open");
             }
         });
     }

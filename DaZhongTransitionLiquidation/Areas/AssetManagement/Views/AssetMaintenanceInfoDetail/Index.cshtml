@@ -9,6 +9,7 @@
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetsMaintenanceDetail.js?t=2019021902")"></script>
     <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/qwebchannel.js")"></script>
+    <script src="@Url.CusContent("~/_theme/_js/jquery.form.js")"></script>
 }
 <style>
     .input_text {
@@ -27,6 +28,9 @@
 
     .jqx-tabs-content-element {
         overflow: auto !important;
+    }
+    .jqx-loader-modal{
+        z-index:1040
     }
 </style>
 
@@ -250,8 +254,10 @@
                     </tr>
                 </table>
                 <div id="ResultDiv" hidden>
-
                 </div>
+                <form id="formFile" hidden>
+                    <input type="file" id="FileInput" name="file" accept=".xls,.xlsx,.doc,.pdf,.jpg,.png"/>
+                </form>
             </div>
             <div class="modal-footer">
                 <button id="Accept_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
@@ -436,4 +442,6 @@
             </div>
         </div>
     </div>
+</div>
+<div id="jqxLoader" style="z-index:1045">
 </div>

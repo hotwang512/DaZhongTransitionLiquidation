@@ -2190,6 +2190,7 @@
     <Content Include="_theme\_js\common.js" />
     <Content Include="_theme\_js\jquery-1.11.1.min.js" />
     <Content Include="_theme\_js\jquery-3.2.1.min.js" />
+    <Content Include="_theme\_js\jquery.form.js" />
     <Content Include="_theme\_js\jweixin-1.0.0.js" />
     <Content Include="_theme\_js\menueCookie.js" />
     <Content Include="_theme\_js\tool.js" />

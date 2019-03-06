@@ -119,7 +119,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     return resultModel;
                 });
             });
-            resultModel.ResultInfo.RevenueSystemTotalAccount = GetRevenueSystemAmount(DbBusinessDataService, BankDate, RevenueDate, Channel_Id);
+            resultModel.ResultInfo.RevenueSystemTotalAccount = GetRevenueSystemAmount(DbBusinessDataService, BankDate, RevenueDate, Channel_Id, resultModel.ResultInfo.RevenueArrearsTotalAccount.ToString());
             return resultModel;
         }
 
@@ -128,19 +128,21 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         /// </summary>
         /// <param name="revenuepayments">营收数据</param>
         /// <returns></returns>
-        public static decimal GetRevenueSystemAmount(DbBusinessDataService DbBusinessDataService, string BankDate, string revenueDate, string channel_Id)
+        public static decimal GetRevenueSystemAmount(DbBusinessDataService DbBusinessDataService, string BankDate, string revenueDate, string channel_Id,string revenueAmount)
         {
             decimal total = 0;
             string revenueVguid = string.Empty;
             //DateTime sDataTime = DateTime.Parse(date + " 00:00:00");
             //DateTime eDataTime = DateTime.Parse(date + " 23:59:59");
             List<V_Revenuepayment_Information_Date> revenuepayments = new List<V_Revenuepayment_Information_Date>();
+            T_Channel channel = new T_Channel();
             DbBusinessDataService.Command(db =>
             {
                 revenueDate.Replace(" ", "");
                 string[] revenueDates = revenueDate.Split(",", StringSplitOptions.RemoveEmptyEntries);
                 var query = db.Queryable<V_Revenuepayment_Information_Date>().Where(i => i.Channel_Id == channel_Id).In(i => i.PayDateStr, revenueDates);
                 revenuepayments = query.ToList();
+                channel = db.Queryable<T_Channel>().Where(c => c.Id == channel_Id).ToList()[0];
             });
 
             foreach (var revenuepayment in revenuepayments)
@@ -151,8 +153,9 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             {
                 revenueVguid = revenueVguid.Remove(revenueVguid.Length - 1, 1);
                 string data = "{"
-                            + " \"ReceiptCategory\":{0},".Replace("{0}", channel_Id == "1465779302" ? "11" : "12")
+                            + " \"ReceiptCategory\":{0},".Replace("{0}", channel.PaymentEncoding)
                             + " \"ReconciliationsDate\":\"{0}\",".Replace("{0}", BankDate)
+                            + " \"TotalAmount\":\"{0}\",".Replace("{0}", revenueAmount)
                             + " \"ClearingPlatformReconciliations\":[{0}]".Replace("{0}", revenueVguid)
                             + " }";
                 try

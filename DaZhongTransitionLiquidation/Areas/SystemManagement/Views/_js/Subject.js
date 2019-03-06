@@ -85,7 +85,7 @@ var $page = function () {
             selector.$txtTerminalNo_Dialog().val("");
             selector.$txtShopNo_Dialog().val("");
             selector.$txtStoreNo_Dialog().val("");
-
+            selector.$txtDeposit_Dialog().prop("checked", false);
             selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
             selector.$DepartmentVguid().val("");
             vguid = "";
@@ -386,7 +386,7 @@ function edit(guid, SubjectId, SubjectNmae, terminalNo, shopNo, storeNo, Rate, d
     selector.$txtSubjectId_Dialog().val("");
     selector.$txtSubjectName_Dialog().val("");
     selector.$txtDeposit_Dialog().prop("checked", false);
-
+    selector.$txtDeposit_Dialog().prop("checked", false);
     selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
 
     isEdit = true;

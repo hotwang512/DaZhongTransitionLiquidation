@@ -108,5 +108,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public string VoucherSubjectName { get; set; }
         public DateTime? CreateTime { get; set; }
         public string CreatePerson { get; set; }
+        /// <summary>
+        /// Desc:余额
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public decimal? Balance { get; set; }
     }
 }

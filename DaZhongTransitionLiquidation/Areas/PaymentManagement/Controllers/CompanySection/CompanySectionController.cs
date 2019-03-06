@@ -714,13 +714,25 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return Json(resultModel);
         }
-        public JsonResult SynchronousData(string companyCode, string accountModeCode)//Guid[] vguids
+        public JsonResult SynchronousData(string companyCode, string accountModeCode,string index)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
+                var sectionVguid = "";
+                switch (index)
+                {
+                    case "2": sectionVguid = "B63BD715-C27D-4C47-AB66-550309794D43"; break;//科目
+                    case "3": sectionVguid = "C63BD715-C27D-4C47-AB66-550309794D43"; break;//核算
+                    case "4": sectionVguid = "D63BD715-C27D-4C47-AB66-550309794D43"; break;//成本中心
+                    case "5": sectionVguid = "E63BD715-C27D-4C47-AB66-550309794D43"; break;//备用1
+                    case "6": sectionVguid = "F63BD715-C27D-4C47-AB66-550309794D43"; break;//备用2
+                    case "7": sectionVguid = "G63BD715-C27D-4C47-AB66-550309794D43"; break;//往来段
+                    default:
+                        break;
+                }
                 List<Business_SevenSection> SevenSection = new List<Business_SevenSection>();
-                var data = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == "1002" && x.CompanyCode == "100201" && x.SectionVGUID== "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                var data = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == "1002" && x.CompanyCode == "100201" && x.SectionVGUID == sectionVguid).ToList();
                 foreach (var item in data)
                 {
                     item.VGUID = Guid.NewGuid();

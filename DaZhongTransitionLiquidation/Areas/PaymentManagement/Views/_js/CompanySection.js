@@ -49,18 +49,16 @@ var $page = function () {
                 url: "/PaymentManagement/CompanySection/SynchronousData",
                 //data: { vguids: selection },
                 data: {
-                   companyCode: companyCode, accountModeCode: accountModeCode
+                    companyCode: companyCode, accountModeCode: accountModeCode, index: index
                 },
                 //traditional: true,
                 type: "post",
                 success: function (msg) {
-                    switch (msg.Status) {
-                        case "0":
-                            jqxNotification("操作失败！", null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("操作成功！", null, "success");
-                            break;
+                    jqxNotification("操作成功！", null, "success");
+                    if (index == 2) {
+                        $("#jqxTable2").jqxTreeGrid('updateBoundData');
+                    } else {
+                        $("#jqxTable" + index).jqxDataTable('updateBoundData');
                     }
                 }
             });

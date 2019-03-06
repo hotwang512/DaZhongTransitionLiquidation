@@ -13,6 +13,7 @@ var selector = {
     $txtChannelName: function () { return $("#txtChannelName") },
     $txtChannelName_Dialog: function () { return $("#txtChannelName_Dialog") },
     $txtOffset_Dialog: function () { return $("#txtOffset_Dialog") },
+    $txtDirectBankEnterprise_Dialog: function () { return $("#txtDirectBankEnterprise_Dialog") },
     $txtContactBank_Dialog: function () { return $("#txtContactBank_Dialog") },
     $txtSupplierName_Dialog: function () { return $("#txtSupplierName_Dialog") },
     $txtMerchantsCode_Dialog: function () { return $("#txtMerchantsCode_Dialog") },
@@ -58,6 +59,7 @@ var $page = function () {
             selector.$txtMerchantsCode_Dialog().val("");
             selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
             selector.$DepartmentVguid().val("");
+            selector.$txtDirectBankEnterprise_Dialog().val("");
             vguid = "";
             isEdit = false;
             $(".msg").remove();
@@ -100,6 +102,7 @@ var $page = function () {
                             SupplierName: selector.$txtSupplierName_Dialog().val(),
                             MerchantsCode: selector.$txtMerchantsCode_Dialog().val(),
                             Department: selector.$DepartmentVguid().val(),
+                            PaymentEncoding: selector.$txtDirectBankEnterprise_Dialog().val(),
                             Vguid: vguid
                         },
                         type: "post",
@@ -165,6 +168,7 @@ var $page = function () {
                     { name: 'Department', type: 'string' },
                     { name: 'OrganizationName', type: 'string' },
                     { name: 'Offset', type: 'number' },
+                    { name: 'PaymentEncoding', type: 'string' },
                     { name: 'Vguid', type: 'string' }
                 ],
                 datatype: "json",
@@ -198,6 +202,7 @@ var $page = function () {
                     { text: '商户编号', datafield: 'MerchantsCode', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '部门', datafield: 'OrganizationName', align: 'center', cellsAlign: 'center' },
                     { text: '偏移量', datafield: 'Offset', align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '支付编码', datafield: 'PaymentEncoding', align: 'center', cellsAlign: 'center' },
                     { text: 'Department', datafield: 'Department', hidden: true },
                     { text: 'Vguid', datafield: 'Vguid', hidden: true }
                 ]
@@ -209,7 +214,7 @@ var $page = function () {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
 
-            container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.Id + "','" + rowData.Name + "','" + rowData.Offset + "','" + rowData.ContactBank + "','" + rowData.SupplierName + "','" + rowData.MerchantsCode + "','" + rowData.Department + "','" + rowData.OrganizationName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Id + "</a>";
+            container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.Id + "','" + rowData.Name + "','" + rowData.Offset + "','" + rowData.ContactBank + "','" + rowData.SupplierName + "','" + rowData.MerchantsCode + "','" + rowData.Department + "','" + rowData.OrganizationName + "','" + rowData.PaymentEncoding + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Id + "</a>";
         } else {
             container = "<span>" + rowData.Id + "</span>";
         }
@@ -338,13 +343,14 @@ function initOrganization() {
 
 
 
-function edit(guid, id, name, offset, contactbank, suppliername, merchantscode, department, organizationname) {
+function edit(guid, id, name, offset, contactbank, suppliername, merchantscode, department, organizationname, directBankEnterprise) {
     selector.$txtChannelID_Dialog().val("");
     selector.$txtChannelName_Dialog().val("");
     selector.$txtOffset_Dialog().val("");
     selector.$txtContactBank_Dialog().val("");
     selector.$txtSupplierName_Dialog().val("");
     selector.$txtMerchantsCode_Dialog().val("");
+    selector.$txtDirectBankEnterprise_Dialog().val("");
     selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
     isEdit = true;
     vguid = guid;
@@ -355,10 +361,11 @@ function edit(guid, id, name, offset, contactbank, suppliername, merchantscode, 
     selector.$txtChannelID_Dialog().val(id);
     selector.$txtChannelName_Dialog().val(name);
     selector.$txtOffset_Dialog().val(offset);
-    selector.$txtContactBank_Dialog().val(contactbank = null ? "" : contactbank);
-    selector.$txtSupplierName_Dialog().val(suppliername = null ? "" : suppliername);
-    selector.$txtMerchantsCode_Dialog().val(merchantscode = null ? "" : merchantscode);
-    selector.$DepartmentVguid().val(department = null ? "" : department);
+    selector.$txtContactBank_Dialog().val(contactbank == "null" ? "" : contactbank);
+    selector.$txtSupplierName_Dialog().val(suppliername == "null" ? "" : suppliername);
+    selector.$txtMerchantsCode_Dialog().val(merchantscode == "null" ? "" : merchantscode);
+    selector.$DepartmentVguid().val(department == "null" ? "" : department);
+    selector.$txtDirectBankEnterprise_Dialog().val(directBankEnterprise == "null" ? "" : directBankEnterprise);
     $("#AddNewChannelDialog table tr").eq(0).hide();
 
     var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + organizationname + '</div>';

@@ -698,7 +698,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return result;
         }
-        public JsonResult UpdataBankStatus(Guid vguids,string datafield,bool ischeck)//Guid[] vguids
+        public JsonResult UpdataBankStatus(Guid vguids,string datafield,bool ischeck,string accountModeCode,string companyCode)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -708,7 +708,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     db.Updateable<Business_CompanyBankInfo>().UpdateColumns(it => new Business_CompanyBankInfo()
                     {
                         BankStatus = false,
-                    }).Where(x => x.BankStatus == true).ExecuteCommand();
+                    }).Where(x => x.BankStatus == true && x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode).ExecuteCommand();
                     db.Updateable<Business_CompanyBankInfo>().UpdateColumns(it => new Business_CompanyBankInfo()
                     {
                         BankStatus = true,

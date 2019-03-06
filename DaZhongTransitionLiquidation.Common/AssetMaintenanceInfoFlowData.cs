@@ -74,4 +74,16 @@ namespace DaZhongTransitionLiquidation.Common
         public string errmsg { get; set; }
         public string AssetMinor { get; set; }
     }
+    public class AssetInfoData
+    {
+        public Guid VGUID { set; get; }
+        public string ORGANATION_NUM { set; get; }
+        public string ENGINE_NUMBER { set; get; }
+        public string CHASSIS_NUMBER { set; get; }
+        public string BOOK_TYPE_CODE { set; get; }
+        public string TAG_NUMBER { set; get; }
+        public string DESCRIPTION { set; get; }
+        public int? QUANITIY { set; get; }
+
+    }
 }

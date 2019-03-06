@@ -1,5 +1,6 @@
 ﻿using Aspose.Cells;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
@@ -239,21 +240,33 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         public JsonResult SyncCurrentDayBankData()
         {
             ResultModel<string> resultModel = null;
-            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             DbBusinessDataService.Command(db =>
             {
                 resultModel = new ResultModel<string>() { IsSuccess = true, Status = "1" };
-                bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow();
-                foreach (var item in bankFlowList)
+                var companyBankData = db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                foreach (var item in companyBankData)
                 {
-                    var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == item.Batch);
-                    if (isAny)
+                    List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+                    List<Business_BankFlowTemplate> newBankFlowList = new List<Business_BankFlowTemplate>();
+                    if (item.BankName.Contains("上海银行"))
                     {
-                        continue;
+                        bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow(item.BankAccount);
                     }
-                    item.CreateTime = DateTime.Now;
-                    item.CreatePerson = "sysAdmin";
-                    db.Insertable<Business_BankFlowTemplate>(item).ExecuteCommand();
+                    foreach (var items in bankFlowList)
+                    {
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == items.Batch);
+                        if (isAny)
+                        {
+                            continue;
+                        }
+                        items.CreateTime = DateTime.Now;
+                        items.CreatePerson = "sysAdmin";
+                        newBankFlowList.Add(items);
+                    }
+                    if (newBankFlowList.Count > 0)
+                    {
+                        db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
+                    }
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
@@ -261,21 +274,33 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         public JsonResult SyncYesterdayBankData()
         {
             ResultModel<string> resultModel = null;
-            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             DbBusinessDataService.Command(db =>
             {
                 resultModel = new ResultModel<string>() { IsSuccess = true, Status = "1" };
-                bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow();
-                foreach (var item in bankFlowList)
+                var companyBankData = db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                foreach (var item in companyBankData)
                 {
-                    var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == item.Batch);
-                    if (isAny)
+                    List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+                    List<Business_BankFlowTemplate> newBankFlowList = new List<Business_BankFlowTemplate>();
+                    if (item.BankName.Contains("上海银行"))
                     {
-                        continue;
+                        bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow(item.BankAccount);
                     }
-                    item.CreateTime = DateTime.Now;
-                    item.CreatePerson = "sysAdmin";
-                    db.Insertable<Business_BankFlowTemplate>(item).ExecuteCommand();
+                    foreach (var items in bankFlowList)
+                    {
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == items.Batch);
+                        if (isAny)
+                        {
+                            continue;
+                        }
+                        items.CreateTime = DateTime.Now;
+                        items.CreatePerson = "sysAdmin";
+                        newBankFlowList.Add(items);
+                    }
+                    if (newBankFlowList.Count > 0)
+                    {
+                        db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
+                    }
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

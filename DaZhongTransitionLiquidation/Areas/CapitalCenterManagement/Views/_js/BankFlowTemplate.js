@@ -256,7 +256,8 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.VoucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
+            var voucherSubject = rowData.VoucherSubject == " " ? null : rowData.VoucherSubject;
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + voucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
         } else {
             container = "<span>" + rowData.Batch + "</span>";
         }

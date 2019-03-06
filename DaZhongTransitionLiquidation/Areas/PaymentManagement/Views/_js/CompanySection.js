@@ -516,7 +516,7 @@ var $page = function () {
         $('#jqxSubjectSetting').on('bindingComplete', function (event) {
             //$("#jqxSubjectSetting").jqxTreeGrid('checkRow')
             var firstLevelRows = $("#jqxSubjectSetting").jqxTreeGrid('getRows');
-            if (firstLevelRows[0].Count != null) {
+            if (firstLevelRows[0].Count != null && firstLevelRows[0].Count !="") {
                 count = firstLevelRows[0].Count.split(",");
                 for (var i = 0; i < count.length; i++) {
                     // get a row.
@@ -536,7 +536,7 @@ var $page = function () {
             $.ajax({
                 url: "/PaymentManagement/CompanySection/UpdataBankStatus",
                 //data: { vguids: selection },
-                data: { vguids: rowData.VGUID },
+                data: { vguids: rowData.VGUID, datafield: args.datafield, ischeck: args.value },
                 type: "post",
                 success: function (msg) {
                     $("#jqxCompanySetting").jqxGrid('updateBoundData');
@@ -1321,6 +1321,7 @@ function settingCompany(code, companyName) {
                { name: "InitialBalance", type: 'number' },
                { name: 'VGUID', type: 'string' },
                { name: 'BankStatus', type: 'bool' },
+               { name: 'OpeningDirectBank', type: 'bool' },
                //{ name: 'SectionVGUID', type: 'string' },
                //{ name: 'Remark', type: 'string' },
            ],
@@ -1351,11 +1352,12 @@ function settingCompany(code, companyName) {
         groups: ['BankName'],
         columns: [
             { text: '开户行', datafield: "BankName", groupable: true, width: '280px', align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc },
-            { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '180px', align: 'center', editable: false, cellsAlign: 'center' },
             { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '280px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '账户类别', datafield: "AccountType", groupable: true, width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", width: '200px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '默认支付银行', datafield: "BankStatus", groupable: true, align: 'center', cellsAlign: 'center', columntype:'checkbox' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, width: '180px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", width: '170px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '默认支付银行', datafield: "BankStatus", groupable: true, width: '110px', align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '是否开通银企直联', datafield: "OpeningDirectBank", groupable: true, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]

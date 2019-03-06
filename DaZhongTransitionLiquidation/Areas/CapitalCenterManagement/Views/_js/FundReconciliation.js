@@ -101,7 +101,7 @@ var $page = function () {
             if (validateError <= 0) {
                 var obj = document.getElementById("CompanyCode");
                 var index = obj.selectedIndex;
-                var companyName = obj.options[index].getAttribute("name");
+                var companyName = obj.options[0].innerText;
                 $.ajax({
                     url: "/CapitalCenterManagement/FundReconciliation/SaveFundReconciliation?isEdit=" + isEdit,
                     data: {

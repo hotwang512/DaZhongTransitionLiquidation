@@ -8,10 +8,10 @@ namespace DaZhongTransitionLiquidation.Common
 {
     public class ShanghaiBankAPI
     {
-        public static List<Business_BankFlowTemplate> GetShangHaiBankTradingFlow()
+        public static List<Business_BankFlowTemplate> GetShangHaiBankTradingFlow(string capitalAccount)
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
-            var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
+            //var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
             var url = ConfigSugar.GetAppString("TradingFlowUrl");
             var data = "{" +
                             "\"CapitalAccount\":\"{CapitalAccount}\"".Replace("{CapitalAccount}", capitalAccount) +
@@ -36,18 +36,18 @@ namespace DaZhongTransitionLiquidation.Common
             }
             return bankFlowList;
         }
-        public static List<Business_BankFlowTemplate> GetShangHaiBankYesterdayTradingFlow()
+        public static List<Business_BankFlowTemplate> GetShangHaiBankYesterdayTradingFlow(string capitalAccount)
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             var tradingStartDate = DateTime.Now.AddDays(-1);
             var tradingEndDate = DateTime.Now.AddDays(-1);
-            bankFlowList = GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
+            bankFlowList = GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate, capitalAccount);
             return bankFlowList;
         }
-        public static List<Business_BankFlowTemplate> GetShangHaiBankHistoryTradingFlow(DateTime tradingStartDate, DateTime tradingEndDate)
+        public static List<Business_BankFlowTemplate> GetShangHaiBankHistoryTradingFlow(DateTime tradingStartDate, DateTime tradingEndDate,string capitalAccount)
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
-            var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
+            //var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
             var url = ConfigSugar.GetAppString("HistoryTradingFlowUrl");
             var data = "{" +
                             "\"CapitalAccount\":\"{CapitalAccount}\",".Replace("{CapitalAccount}", capitalAccount) +

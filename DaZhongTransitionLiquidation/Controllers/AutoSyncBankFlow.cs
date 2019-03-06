@@ -1,6 +1,7 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Models;
@@ -38,8 +39,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //var tradingStartDate = DateTime.Parse("2018-11-01");
                     //var tradingEndDate = DateTime.Parse("2018-11-27");
                     //bankFlowList = ShanghaiBankAPI.GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
-                    bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow();
-                    success = WirterSyncBankFlow(bankFlowList);
+                    SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
+                    var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                    foreach (var item in companyBankData)
+                    {
+                        bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow(item.BankAccount);
+                        success = WirterSyncBankFlow(bankFlowList);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -66,8 +72,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var success = 0;
                     try
                     {
-                        bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow();
-                        success = WirterSyncBankFlow(bankFlowList);
+                        SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
+                        var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                        foreach (var item in companyBankData)
+                        {
+                            bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow(item.BankAccount);
+                            success = WirterSyncBankFlow(bankFlowList);
+                        }
                     }
                     catch (Exception ex)
                     {

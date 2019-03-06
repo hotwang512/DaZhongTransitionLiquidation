@@ -197,7 +197,7 @@ var $page = function () {
             {
                 pageable: true,
                 width: "100%",
-                height: 400,
+                height: 500,
                 pageSize: 10,
                 serverProcessing: true,
                 pagerButtonsCount: 10,

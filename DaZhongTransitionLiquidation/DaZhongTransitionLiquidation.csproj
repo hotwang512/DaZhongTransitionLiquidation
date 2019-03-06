@@ -260,11 +260,11 @@
     <Content Include="Areas\HomePage\Views\CompanyHomePage\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleManagement\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\BusinessTypeSet\Index.cshtml" />
-    <Content Include="Areas\AssetManagement\Views\web.config" />
     <Content Include="Areas\AssetManagement\Views\AssetBasicInfoMaintenance\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetBasicInfoMaintenanceDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetMaintenanceInfoDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetsMaintenance\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\web.config" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />

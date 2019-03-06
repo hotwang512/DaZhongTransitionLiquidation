@@ -84,18 +84,22 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Amount
             Cells cells = sheet.Cells;//单元格
             var columns = data.Columns.Count;
             var cn = companyName.Split(",").ToArray();//公司数
-            for (int i = 2; i <= columns - 5; i++)
+            var dataTable = data.Columns;
+            for (int k = 0; k < 2; k++)
             {
-                var c = data.Columns[i].ToString();
-                for (int j = 0; j < cn.Length; j++)
+                for (int i = 2; i <= columns - 5; i++)
                 {
-                    if (c.ToString() == cn[j].ToString())
+                    var c = dataTable[i].ToString();
+                    for (int j = 0; j < cn.Length; j++)
                     {
-                        data.Columns[i].SetOrdinal(j + 2);//同步公司列顺序
-                        break;
+                        if (c.ToString() == cn[j].ToString())
+                        {
+                            data.Columns[i].SetOrdinal(j + 2);//同步公司列顺序
+                            break;
+                        }
                     }
                 }
-            }
+            } 
            
             var amountData = data.AsEnumerable().ToList();
             

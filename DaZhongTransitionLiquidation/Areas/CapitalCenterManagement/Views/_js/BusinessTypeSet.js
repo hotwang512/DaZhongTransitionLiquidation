@@ -35,6 +35,7 @@ var $page = function () {
             } else {
                 parentVguid = checkrow[0].VGUID;
                 hideParentMenu = checkrow[0].BusinessName;
+                var code = checkrow[0].Code;
                 if ($("#FirstMenu").val() == "1") {
                     $("#SubjectCode").hide();//父级菜单
                     $("#FirstMenu").val("");
@@ -42,6 +43,7 @@ var $page = function () {
                     $("#SubjectCode").show();
                     $("#hideParentMenu").val(parentVguid);
                     $("#ParentMenu").val(hideParentMenu);
+                    $("#ModuleCode").val(code);
                 }
             }
 
@@ -113,6 +115,7 @@ var $page = function () {
                                 //selector.$grid().jqxTreeGrid('updateBoundData');
                                 pageload();
                                 selector.$AddNewBankDataDialog().modal("hide");
+                                
                                 break;
                             case "2":
                                 jqxNotification("编号已存在", null, "error");
@@ -199,9 +202,9 @@ function loadGridTree(modules) {
         showHeader: false,
         source: dataAdapter,
         checkboxes: true,
-        //ready: function () {
-        //    $("#treegrid").jqxTreeGrid('expandRow', '1');
-        //},
+        ready: function () {
+            $("#moduletree").jqxTreeGrid('expandAll');
+        },
         columns: [
           { text: '业务名称', dataField: 'BusinessName', width: "100%", cellsRenderer: detailFuncs },
           { text: '', dataField: 'ParentVGUID', width: "100%", hidden: true },

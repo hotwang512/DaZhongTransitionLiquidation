@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+﻿using Aspose.Cells;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
@@ -7,6 +8,8 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -23,6 +26,160 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
+        }
+        public ActionResult ImportDataCBC(string fileName)
+        {
+            ResultModel<string> data = new ResultModel<string>
+            {
+                IsSuccess = true,
+                Status = "0"
+            };
+            //string[] fileLines = System.IO.File.ReadAllLines(Path.Combine(Server.MapPath(Global.Temp), fileName), Encoding.Default);
+            Workbook workbook = new Workbook(Path.Combine(Server.MapPath(Global.Temp), fileName));
+            Worksheet worksheet = workbook.Worksheets[0];
+            Cells cells = worksheet.Cells;
+            DataTable datatable = cells.ExportDataTableAsString(0, 0, cells.MaxDataRow + 1, cells.MaxDataColumn + 1, true);//这里用到Aspose.Cells的ExportDataTableAsString方法来读取excel数据
+            string str = string.Empty;
+            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (worksheet.Cells.MaxDataRow > 0)
+                {
+                    for (int i = 0; i < worksheet.Cells.MaxDataRow; i++)
+                    {
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["账户明细编号-交易流水号"].ToString() && x.TradingBank == "建设银行");
+                        if (isAny)
+                        {
+                            continue;
+                        }
+                        Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
+                        bankFlow.TradingBank = "建设银行";
+                        bankFlow.TurnOut = datatable.Rows[i]["借方发生额（支取）"].ObjToDecimal();
+                        bankFlow.TurnIn = datatable.Rows[i]["贷方发生额（收入）"].ObjToDecimal();
+                        if (bankFlow.TurnOut == 0 && bankFlow.TurnIn > 0)
+                        {
+                            //本公司收款
+                            bankFlow.ReceivableAccount = datatable.Rows[i]["账号"].ToString();
+                            bankFlow.ReceivingUnit = datatable.Rows[i]["账户名称"].ToString();
+                            bankFlow.PaymentUnit = datatable.Rows[i]["对方户名"].ToString();
+                            bankFlow.PayeeAccount = datatable.Rows[i]["对方账号"].ToString();
+                            bankFlow.PaymentUnitInstitution = datatable.Rows[i]["对方开户机构"].ToString();
+                        }
+                        else
+                        {
+                            //本公司付款
+                            bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
+                            bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
+                            bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方开户机构"].ToString();
+                            bankFlow.PaymentUnit = datatable.Rows[i]["账户名称"].ToString();
+                            bankFlow.PayeeAccount = datatable.Rows[i]["账号"].ToString();
+                        }
+                        bankFlow.TransactionDate = datatable.Rows[i]["交易时间"].ToString().Insert(4, "/").Insert(7, "/").ObjToDate();
+                        bankFlow.Balance = datatable.Rows[i]["余额"].ObjToDecimal();
+                        bankFlow.Currency = datatable.Rows[i]["币种"].ToString();
+                        bankFlow.Purpose = datatable.Rows[i]["摘要"].ToString();
+                        bankFlow.Remark = datatable.Rows[i]["备注"].ToString();
+                        bankFlow.Batch = datatable.Rows[i]["账户明细编号-交易流水号"].ToString();
+                        bankFlow.VoucherSubject = datatable.Rows[i]["凭证号"].ToString();
+                        bankFlow.VoucherSubjectName = datatable.Rows[i]["凭证种类"].ToString();
+                        bankFlow.CreateTime = DateTime.Now;
+                        bankFlow.CreatePerson = UserInfo.LoginName;
+                        bankFlow.VGUID = Guid.NewGuid();
+                        bankFlowList.Add(bankFlow);
+                    }
+                    if (bankFlowList.Count > 0)
+                    {
+                        db.Insertable(bankFlowList).ExecuteCommand();
+                    }
+                    data.IsSuccess = true;
+                }
+                else
+                {
+                    data.IsSuccess = false;
+                    data.ResultInfo = "导入文件数据不正确！";
+                }
+            });
+            return base.Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ImportDataBCM(string fileName)
+        {
+            ResultModel<string> data = new ResultModel<string>
+            {
+                IsSuccess = true,
+                Status = "0"
+            };
+            //string[] fileLines = System.IO.File.ReadAllLines(Path.Combine(Server.MapPath(Global.Temp), fileName), Encoding.Default);
+            Workbook workbook = new Workbook(Path.Combine(Server.MapPath(Global.Temp), fileName));
+            Worksheet worksheet = workbook.Worksheets[0];
+            Cells cells = worksheet.Cells;
+            var bankAccount = cells.GetCell(0, 1).Value;//账号
+            var bankAccountName = cells.GetCell(0, 3).Value;//户名
+            DataTable datatable = cells.ExportDataTableAsString(1, 0, cells.MaxDataRow, cells.MaxDataColumn + 1, true);//这里用到Aspose.Cells的ExportDataTableAsString方法来读取excel数据
+            string str = string.Empty;
+            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (worksheet.Cells.MaxDataRow > 0)
+                {
+                    for (int i = 0; i < worksheet.Cells.MaxDataRow-1; i++)
+                    {
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["核心流水号"].ToString() && x.TradingBank == "交通银行");
+                        if (isAny)
+                        {
+                            continue;
+                        }
+                        Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
+                        bankFlow.TradingBank = "交通银行";
+                        
+                        var type = datatable.Rows[i]["借贷标志"].ToString();
+                        if (type == "借")
+                        {
+                            //本公司收款
+                            bankFlow.ReceivableAccount = bankAccount.ToString();
+                            bankFlow.ReceivingUnit = bankAccountName.ToString();
+                            bankFlow.PaymentUnit = datatable.Rows[i]["对方户名"].ToString();
+                            bankFlow.PayeeAccount = datatable.Rows[i]["对方账号"].ToString();
+                            bankFlow.PaymentUnitInstitution = datatable.Rows[i]["对方行名"].ToString();
+                            bankFlow.TurnOut = datatable.Rows[i]["发生额"].ObjToDecimal();
+                            bankFlow.TurnIn = 0;
+                        }
+                        else
+                        {
+                            //本公司付款
+                            bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
+                            bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
+                            bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方行名"].ToString();
+                            bankFlow.PaymentUnit = bankAccountName.ToString();
+                            bankFlow.PayeeAccount = bankAccount.ToString();
+                            bankFlow.TurnOut = 0;
+                            bankFlow.TurnIn = datatable.Rows[i]["发生额"].ObjToDecimal();
+                        }
+                        bankFlow.TransactionDate = datatable.Rows[i]["交易时间"].ObjToDate();
+                        bankFlow.Balance = datatable.Rows[i]["余额"].ObjToDecimal();
+                        bankFlow.Currency = datatable.Rows[i]["币种"].ToString();
+                        bankFlow.Purpose = datatable.Rows[i]["摘要"].ToString();
+                        //bankFlow.Remark = datatable.Rows[i]["备注"].ToString();
+                        bankFlow.Batch = datatable.Rows[i]["核心流水号"].ToString();
+                        bankFlow.VoucherSubject = datatable.Rows[i]["凭证号码"].ToString();
+                        bankFlow.VoucherSubjectName = datatable.Rows[i]["凭证种类"].ToString();
+                        bankFlow.CreateTime = DateTime.Now;
+                        bankFlow.CreatePerson = UserInfo.LoginName;
+                        bankFlow.VGUID = Guid.NewGuid();
+                        bankFlowList.Add(bankFlow);
+                    }
+                    if (bankFlowList.Count > 0)
+                    {
+                        db.Insertable(bankFlowList).ExecuteCommand();
+                    }
+                    data.IsSuccess = true;
+                }
+                else
+                {
+                    data.IsSuccess = false;
+                    data.ResultInfo = "导入文件数据不正确！";
+                }
+            });
+            return base.Json(data, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetBankFlowData(Business_BankFlowTemplate searchParams, GridParams para,string TransactionDateEnd)
         {
@@ -79,7 +236,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult SyncCurrentDayBankData()
         {
             ResultModel<string> resultModel = null;
@@ -124,5 +280,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
+       
     }
 }

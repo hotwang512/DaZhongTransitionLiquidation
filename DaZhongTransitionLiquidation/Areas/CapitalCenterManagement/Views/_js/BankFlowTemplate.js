@@ -23,7 +23,8 @@ var selector = {
 
     $txtChannel_Dialog: function () { return $("#txtChannel_Dialog") },
     $txtRemark_Dialog: function () { return $("#txtRemark_Dialog") },
-    $EditPermission: function () { return $("#EditPermission") }
+    $EditPermission: function () { return $("#EditPermission") },
+    $uploadFileHuiDouQuan: function () { return $("#uploadFileHuiDouQuan") },
 }; //selector end
 
 var isEdit = false;
@@ -87,7 +88,48 @@ var $page = function () {
             $("#TransactionDateEnd").val("");
             $("#PaymentUnit").val("");
         });
-
+        //导入建设银行
+        $("#btnImportingCBC").on("click", function () {
+            $("#uploadFileCBC").val("");
+            $("#uploadFileCBC").click();
+        });
+        //上传文件变更时间
+        $("#uploadFileCBC").on('change', function () {
+            layer.load();
+            uploadFile(this.files[0], function (fileName) {
+                runImportDataCBC(fileName, function (result) {
+                    if (result.IsSuccess == true) {
+                        jqxNotification("导入完成！", null, "success");
+                        initTable();
+                    }
+                    else {
+                        jqxNotification("导入失败！" + result.ResultInfo, null, "success");
+                    }
+                    layer.closeAll('loading');
+                });
+            })
+        });
+        //导入交通银行
+        $("#btnImportingBCM").on("click", function () {
+            $("#uploadFileBCM").val("");
+            $("#uploadFileBCM").click();
+        });
+        //上传文件变更时间
+        $("#uploadFileBCM").on('change', function () {
+            layer.load();
+            uploadFile(this.files[0], function (fileName) {
+                runImportDataBCM(fileName, function (result) {
+                    if (result.IsSuccess == true) {
+                        jqxNotification("导入完成！", null, "success");
+                        initTable();
+                    }
+                    else {
+                        jqxNotification("导入失败！" + result.ResultInfo, null, "success");
+                    }
+                    layer.closeAll('loading');
+                });
+            })
+        });
         //弹出框中的取消按钮
         selector.$AddNewBankData_CancelBtn().on("click", function () {
             selector.$AddNewBankDataDialog().modal("hide");
@@ -196,6 +238,7 @@ var $page = function () {
                     { text: '收款单位名称', datafield: 'ReceivingUnit', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '收款账号', datafield: 'ReceivableAccount', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '收款单位开户机构', datafield: 'ReceivingUnitInstitution', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '余额', datafield: 'Balance', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '用途', datafield: 'Purpose', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '备注', datafield: 'Remark', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '写入日期', datafield: 'CreateTime', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -203,7 +246,7 @@ var $page = function () {
                     { text: '凭证科目Code', hidden: true,datafield: 'VoucherSubject', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '凭证科目', datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '凭证摘要', datafield: 'VoucherSummary', width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: 'Balance', datafield: 'Balance', hidden: true },
+                    
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]
             });
@@ -284,3 +327,63 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+//上传文件
+function uploadFile(fileData, callback) {
+    var formData = new FormData();
+    formData.append("file", fileData);
+    formData.append("filename", fileData.name);
+    $.ajax({
+        url: '/PaymentManagement/NextDayData/UploadImportFile',
+        type: 'post',
+        data: formData,//这里上传的数据使用了formData 对象
+        processData: false, 	//必须false才会自动加上正确的Content-Type
+        contentType: false,
+        success: function (result) {
+            if (callback) {
+                callback(result);
+            }
+        },
+        error: function (xmlhttprequest, textstatus, errorthrow) {
+            jqxNotification("上传错误！", null, "error");
+            layer.closeAll('loading');
+        }
+
+    });
+}
+//执行导入建设银行
+function runImportDataCBC(fileName, callback) {
+    $.ajax({
+        url: '/CapitalCenterManagement/BankFlowTemplate/ImportDataCBC',
+        type: 'post',
+        data: { fileName: fileName },//这里上传的数据使用了formData 对象
+        success: function (result) {
+            if (callback) {
+                callback(result);
+            }
+        },
+        error: function (xmlhttprequest, textstatus, errorthrow) {
+            jqxNotification("导入错误！", null, "error");
+            layer.closeAll('loading');
+        }
+
+    });
+}
+//执行导入交通银行
+function runImportDataBCM(fileName, callback) {
+    $.ajax({
+        url: '/CapitalCenterManagement/BankFlowTemplate/ImportDataBCM',
+        type: 'post',
+        data: { fileName: fileName },//这里上传的数据使用了formData 对象
+        success: function (result) {
+            if (callback) {
+                callback(result);
+            }
+        },
+        error: function (xmlhttprequest, textstatus, errorthrow) {
+            jqxNotification("导入错误！", null, "error");
+            layer.closeAll('loading');
+        }
+
+    });
+}

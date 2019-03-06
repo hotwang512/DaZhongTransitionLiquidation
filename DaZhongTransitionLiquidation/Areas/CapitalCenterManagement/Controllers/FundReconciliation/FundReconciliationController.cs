@@ -1,6 +1,7 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -148,5 +149,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return result;
         }
+        public JsonResult GetCompanyCodes()
+        {
+            var jsonResult = new List<Business_UserCompanySet>();
+            DbBusinessDataService.Command(db =>
+            {
+                jsonResult = db.Queryable<Business_UserCompanySet>().Where(x => x.Block == "1" && x.IsCheck == true 
+                                         && x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == UserInfo.AccountModeCode).OrderBy("CompanyCode asc").ToList();
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        
     }
 }

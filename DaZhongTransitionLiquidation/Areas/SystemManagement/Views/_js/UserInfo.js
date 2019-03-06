@@ -110,7 +110,7 @@ var $page = function () {
         if (selection.length < 1) {
             jqxNotification("请选择您要删除的数据！", null, "error");
         } else {
-            WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消");
+            WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
         }
     });
 
@@ -258,7 +258,7 @@ var $page = function () {
             {
                 pageable: true,
                 width: "100%",
-                height: 450,
+                height: 440,
                 pageSize: 10,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
@@ -319,19 +319,19 @@ var $page = function () {
 };
 
 //删除
-function dele() {
+function dele(selection) {
     showLoading();//显示加载等待框
-    var selection = [];
-    var grid = selector.$grid();
-    var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-    checedBoxs.each(function () {
-        var th = $(this);
-        if (th.is(":checked")) {
-            var index = th.attr("index");
-            var data = grid.jqxDataTable('getRows')[index];
-            selection.push(data.Vguid);
-        }
-    });
+    //var selection = [];
+    //var grid = selector.$grid();
+    //var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+    //checedBoxs.each(function () {
+    //    var th = $(this);
+    //    if (th.is(":checked")) {
+    //        var index = th.attr("index");
+    //        var data = grid.jqxDataTable('getRows')[index];
+    //        selection.push(data.Vguid);
+    //    }
+    //});
     $.ajax({
         url: "/Systemmanagement/UserManagement/DeleteUserInfos",
         data: { vguids: selection },

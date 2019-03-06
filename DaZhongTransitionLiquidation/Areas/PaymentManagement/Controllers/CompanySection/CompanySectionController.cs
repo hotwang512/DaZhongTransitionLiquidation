@@ -90,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     var guid = sevenSection.VGUID;
                     var code = sevenSection.Code;
-                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.VGUID != guid && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43");
+                    var isAny = db.Queryable<Business_SevenSection>().Any(x => x.Code == code && x.AccountModeCode == sevenSection.AccountModeCode && x.VGUID != guid && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43");
                     if (isAny)
                     {
                         IsSuccess = "2";
@@ -102,6 +102,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         {
                             Code = sevenSection.Code,
                             Descrption = sevenSection.Descrption,
+                            AccountModeCode = sevenSection.AccountModeCode,
                             Remark = sevenSection.Remark,
                             VMDFTIME = DateTime.Now,
                             VMDFUSER = UserInfo.LoginName
@@ -147,9 +148,18 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 }
                 if (index != 1 && index != 2)
                 {
-                    response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
- left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
+                    if(columnName == "CompanyCode")
+                    {
+                        response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"' and bss.SubjectVGUID='H63BD715-C27D-4C47-AB66-550309794D43'
+ where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.AccountModeCode='"+ code + "' and bs.Code is not null").OrderBy("Code asc").ToList();
+                    }
+                    else
+                    {
+                        response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"' 
  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+                    }
                 }
                 if(columnName == "SubjectCode" && response.Count>0)
                 {
@@ -586,6 +596,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var response = new List<Business_CompanyBankInfo>();
             DbBusinessDataService.Command(db =>
             {
+                if(accountModeCode == null)
+                {
+                    accountModeCode = UserInfo.AccountModeCode;
+                }
                 response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code && x.AccountModeCode == accountModeCode).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -697,6 +711,37 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     BankStatus = true,
                 }).Where(it => it.VGUID == vguids).ExecuteCommand();
+            });
+            return Json(resultModel);
+        }
+        public JsonResult SynchronousData(string companyCode, string accountModeCode,string index)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var sectionVguid = "";
+                switch (index)
+                {
+                    case "2": sectionVguid = "B63BD715-C27D-4C47-AB66-550309794D43"; break;//科目
+                    case "3": sectionVguid = "C63BD715-C27D-4C47-AB66-550309794D43"; break;//核算
+                    case "4": sectionVguid = "D63BD715-C27D-4C47-AB66-550309794D43"; break;//成本中心
+                    case "5": sectionVguid = "E63BD715-C27D-4C47-AB66-550309794D43"; break;//备用1
+                    case "6": sectionVguid = "F63BD715-C27D-4C47-AB66-550309794D43"; break;//备用2
+                    case "7": sectionVguid = "G63BD715-C27D-4C47-AB66-550309794D43"; break;//往来段
+                    default:
+                        break;
+                }
+                List<Business_SevenSection> SevenSection = new List<Business_SevenSection>();
+                var data = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == "1002" && x.CompanyCode == "100201" && x.SectionVGUID == sectionVguid).ToList();
+                foreach (var item in data)
+                {
+                    item.VGUID = Guid.NewGuid();
+                    item.VCRTTIME = DateTime.Now;
+                    item.CompanyCode = companyCode;
+                    item.AccountModeCode = accountModeCode;
+                    SevenSection.Add(item);
+                }
+                db.Insertable(SevenSection).ExecuteCommand();
             });
             return Json(resultModel);
         }

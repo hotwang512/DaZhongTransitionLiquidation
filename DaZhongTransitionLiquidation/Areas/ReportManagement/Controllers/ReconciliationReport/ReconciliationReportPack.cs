@@ -117,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     resultModel.ResultInfo = db.Ado.SqlQuerySingle<usp_GetTotalAmount>(spName, new SugarParameter[] { p1, p2, p3 });
                     resultModel.IsSuccess = true;
                     return resultModel;
-                });
+                }); 
             });
             resultModel.ResultInfo.RevenueSystemTotalAccount = GetRevenueSystemAmount(DbBusinessDataService, BankDate, RevenueDate, Channel_Id, resultModel.ResultInfo.RevenueArrearsTotalAccount.ToString());
             return resultModel;

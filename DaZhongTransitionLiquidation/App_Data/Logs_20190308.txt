@@ -1658,3 +1658,5 @@ Error Number:207,State:1,Class:16
 2019-03-08 17:25:31,274 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - GDI+ 中发生一般性错误。
 2019-03-08 17:25:37,913 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - GDI+ 中发生一般性错误。
 2019-03-08 17:39:02,795 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - GDI+ 中发生一般性错误。
+
+-------------------------------footer----------------------

@@ -166,7 +166,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     bool success = Convert.ToBoolean(((Dictionary<string, object>)obj)["success"]);
                     if (success)
                     {
-                        object val = ((Dictionary<string, object>)((Dictionary<string, object>)obj)["data"])["TotleAmount"];
+                        object val = ((Dictionary<string, object>)((Dictionary<string, object>)obj)["data"])["TotalAmount"];
                         total = Convert.ToDecimal(val);
                     }
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, result));

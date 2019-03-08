@@ -261,7 +261,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 string revenueFee = GetLineFieldData(11, fileLine, fileLineDataRule);
                 t1Data_2.RevenueFee = t1Data.RevenueFee = Convert.ToDecimal(revenueFee);
 
-                string paidAmount = GetLineFieldData(12, fileLine, fileLineDataRule);
+                string paidAmount = GetLineFieldData(10, fileLine, fileLineDataRule);
                 t1Data_2.PaidAmount = t1Data.PaidAmount = Convert.ToDecimal(paidAmount);
 
                 string orderNumber = GetLineFieldData(13, fileLine, fileLineDataRule);
@@ -397,7 +397,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 string revenueFee = GetLineFieldData(12, fileLine, fileLineDataRule);
                 t1Data_2.RevenueFee = t1Data.RevenueFee = Convert.ToDecimal(revenueFee);
 
-                string paidAmount = GetLineFieldData(14, fileLine, fileLineDataRule);
+                string paidAmount = GetLineFieldData(9, fileLine, fileLineDataRule);
                 t1Data_2.PaidAmount = t1Data.PaidAmount = Convert.ToDecimal(paidAmount);
 
                 string orderNumber = GetLineFieldData(16, fileLine, fileLineDataRule);

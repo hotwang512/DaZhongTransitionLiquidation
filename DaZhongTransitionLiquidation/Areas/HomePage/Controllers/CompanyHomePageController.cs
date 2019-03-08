@@ -93,7 +93,34 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             });
             return Json(resultModel);
         }
-
+        public JsonResult SaveUserInfoChange(string AccountModeCode)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "0" };
+            var ComapnyCode = "";
+            var CompanyName = "";
+            var AccountModeName = "";
+            DbBusinessDataService.Command(db =>
+            {
+                var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == AccountModeCode).ToList().FirstOrDefault();
+                AccountModeName = data.Descrption;
+                var companyData = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == AccountModeCode).OrderBy("Code asc").ToList().FirstOrDefault();
+                ComapnyCode = companyData.Code;
+                CompanyName = companyData.Descrption;
+            });
+            DbService.Command<Sys_User>((db, o) =>
+            {
+                var cache = CacheManager<Sys_User>.GetInstance();
+                cache[PubGet.GetUserKey].CompanyCode = ComapnyCode;
+                cache[PubGet.GetUserKey].AccountModeCode = AccountModeCode;
+                cache[PubGet.GetUserKey].CompanyName = CompanyName;
+                cache[PubGet.GetUserKey].AccountModeName = AccountModeName;
+                //Sys_User userInfos = new Sys_User();
+                //userInfos.CompanyCode = ComapnyCode;
+                //CacheManager<Sys_User>.GetInstance().Add("ComapnyCode", userInfos, 8 * 60 * 60);
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
         public JsonResult GetUserCompanyInfo()//Guid[] vguids
         {
             var response = new List<Business_UserCompanySet>();

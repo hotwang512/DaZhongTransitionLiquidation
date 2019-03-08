@@ -94,9 +94,11 @@ namespace DaZhongTransitionLiquidation.Controllers
             int success = 0;
             foreach (var item in bankFlowList)
             {
-                var isAny = _db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == item.Batch);
-                if (isAny)
+                var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch).ToList();
+                if (isAny.Count > 0)
                 {
+                    isAny[0].BankAccount = item.BankAccount;
+                    _db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                     continue;
                 }
                 success = _db.Insertable(item).ExecuteCommand();

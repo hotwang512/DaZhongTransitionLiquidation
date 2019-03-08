@@ -10,6 +10,34 @@ $("#aChangePwd").on("click", function () {
     $("#changePwdDialog").modal("show");
 });
 
+for (var i = 0; i < $(".accountMode").length; i++) {
+    $(".accountMode").eq(i).on("click", { key: i }, function (event) {
+        var code = $(".accountMode")[event.data.key].getAttribute("vguid");
+        WindowConfirmDialog(changeAccountMode, "是否切换账套？", "确认框", "确定", "取消", code);
+    });
+};
+
+function changeAccountMode(accountModeCode) {
+    $.ajax({
+        url: "/HomePage/CompanyHomePage/SaveUserInfoChange",
+        data: {
+            AccountModeCode: accountModeCode,
+        },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            switch (msg.Status) {
+                case "0":
+                    jqxNotification("切换失败", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("切换成功", null, "success");
+                    window.location.reload();
+                    break;
+            }
+        }
+    });
+}
 
 //点击弹出框中的取消按钮
 $("#changePwd_CancelBtn").on("click", function () {

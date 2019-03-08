@@ -96,7 +96,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             any = "3";
                             return;
                         }
-                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where (PayeeAccount='" + bankAccount + "' or ReceivableAccount='" + bankAccount + @"') 
+                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where BankAccount = '" + bankAccount + @"'  
                                  and TransactionDate >='" + initialBalanceData.BalanceDate.Value.AddDays(1) + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalanceData.BankBalance + number))
                         {
@@ -109,7 +109,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                     else
                     {
-                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where (PayeeAccount='" + bankAccount + "' or ReceivableAccount='" + bankAccount + @"') 
+                        number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnIn)-SUM(TurnOut)) as number from Business_BankFlowTemplate where BankAccount ='" + bankAccount + @"'  
                                  and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalance + number))
                         {

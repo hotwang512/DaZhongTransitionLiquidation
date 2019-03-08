@@ -1,0 +1,6 @@
+
+-------------------------------header----------------------
+2019-03-08 15:52:32,787 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26

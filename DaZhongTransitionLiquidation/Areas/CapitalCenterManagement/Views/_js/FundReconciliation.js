@@ -101,7 +101,7 @@ var $page = function () {
             if (validateError <= 0) {
                 var obj = document.getElementById("CompanyCode");
                 var index = obj.selectedIndex;
-                var companyName = obj.options[0].innerText;
+                var companyName = obj.options[index].innerText;
                 $.ajax({
                     url: "/CapitalCenterManagement/FundReconciliation/SaveFundReconciliation?isEdit=" + isEdit,
                     data: {
@@ -211,8 +211,8 @@ var $page = function () {
                 //selectionMode: "selectionMode",
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '公司', datafield: 'CompanyName',pinned:true, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
-                    { text: '银行账号', datafield: 'BankAccount', pinned: true, width: 200,align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '公司', datafield: 'CompanyName', pinned: true, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
+                    { text: '银行账号', datafield: 'BankAccount', pinned: true, width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
                     { text: '开户行', datafield: 'BankName', width: 250, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
                     { text: '银行名称', datafield: 'BankAccountName', width: 200, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
                     { text: '银行余额', datafield: 'BankBalance', width: 150, cellsFormat: "d2", pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: redcolcorFunc },
@@ -379,7 +379,7 @@ $(function () {
 function getCompanyCode() {
     $.ajax({
         url: "/CapitalCenterManagement/FundReconciliation/GetCompanyCodes",
-        data: { },
+        data: {},
         type: "POST",
         dataType: "json",
         async: false,
@@ -388,4 +388,10 @@ function getCompanyCode() {
             //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
         }
     });
+}
+
+function changeBankInfo() {
+    $("#BankAccount").val("");
+    $("#BankName").val("");
+    $("#BankAccountName").val("");
 }

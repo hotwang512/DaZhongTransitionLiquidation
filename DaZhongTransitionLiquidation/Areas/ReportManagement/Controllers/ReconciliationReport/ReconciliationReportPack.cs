@@ -276,6 +276,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         {
             bool surccss = false;
             List<usp_GetSubjectAmount> usp_GetSubjectAmounts = new List<usp_GetSubjectAmount>();
+            T_Channel channel = new T_Channel();
             DbBusinessDataService.Command(db =>
             {
                 var outputResult = db.Ado.UseStoredProcedure<dynamic>(() =>
@@ -284,6 +285,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     var p1 = new SugarParameter("@PayDate", RevenueDate);
                     var p2 = new SugarParameter("@Channel_Id", Channel_Id);
                     usp_GetSubjectAmounts = db.Ado.SqlQuery<usp_GetSubjectAmount>(spName, new SugarParameter[] { p1, p2 });
+                    channel = db.Queryable<T_Channel>().Where(c => c.Id == Channel_Id).ToList()[0];
                     return "";
                 });
             });
@@ -299,7 +301,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             }
             subjects = subjects.Remove(subjects.Length - 1, 1);
             string data = "{"
-                           + " \"ReceiptCategory\":{0},".Replace("{0}", Channel_Id == "1465779302" ? "11" : "12")
+                           + " \"ReceiptCategory\":{0},".Replace("{0}", channel.PaymentEncoding)
                            + " \"Channel\":\"{0}\",".Replace("{0}", Channel_Id)
                            + " \"ReconciliationsDate\":\"{0}\",".Replace("{0}", BankDate.ToString("yyyy-MM-dd HH:mm:ss"))
                            + " \"RecordCount\":{0},".Replace("{0}", usp_GetSubjectAmounts[0].Counts.ToString())

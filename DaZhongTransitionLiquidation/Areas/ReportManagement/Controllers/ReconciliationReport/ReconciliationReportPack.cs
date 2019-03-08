@@ -283,13 +283,17 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             T_Channel channel = new T_Channel();
             DbBusinessDataService.Command(db =>
             {
+                channel = db.Queryable<T_Channel>().Where(c => c.Id == Channel_Id).ToList()[0];
+            });
+            DbBusinessDataService.Command(db =>
+            {
                 var outputResult = db.Ado.UseStoredProcedure<dynamic>(() =>
                 {
                     string spName = "usp_GetSubjectAmount";
                     var p1 = new SugarParameter("@PayDate", RevenueDate);
                     var p2 = new SugarParameter("@Channel_Id", Channel_Id);
                     usp_GetSubjectAmounts = db.Ado.SqlQuery<usp_GetSubjectAmount>(spName, new SugarParameter[] { p1, p2 });
-                    channel = db.Queryable<T_Channel>().Where(c => c.Id == Channel_Id).ToList()[0];
+                  
                     return "";
                 });
             });

@@ -285,6 +285,62 @@ var $page = function () {
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("hide");
         })
+        //拍照上传
+        $("#UploadFile").on("click", function () {
+            baseUrl = "ws://127.0.0.1:12345";
+            openSocket();
+            $("#devPhoto").hide();
+            $("#Upload_OKBtn").hide();
+            $("#photographPri").show();
+            //$("#AcceptDialog").modal("hide");
+            $("#UploadPictureDialog").modal({ backdrop: "static", keyboard: false });
+            $("#UploadPictureDialog").modal("show");
+        })
+        //拍照
+        $("#photographPri").on("click", function () {
+            $("#Upload_OKBtn").show();
+            $("#photographPri").hide();
+            $("#devPhoto").show();
+        })
+        $("#Upload_CancelBtn").on("click", function () {
+            $("#UploadPictureDialog").modal("hide");
+        });
+        $("#Upload_OKBtn").on("click", function () {
+            $('#jqxLoader').jqxLoader('open');
+            $.ajax({
+                url: "/VoucherManageManagement/VoucherListDetail/UploadImg",
+                data: {
+                    "ImageBase64Str": $("#devPhoto").attr("src"),
+                },
+                type: "post",
+                success: function (msg) {
+                    $('#jqxLoader').jqxLoader('close');
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("上传失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("上传成功！", null, "success");
+                            //$("#Attachment").show();
+                            //$("#Attachment").attr("href", msg.ResultInfo);
+                            //$("#Attachment").html(msg.ResultInfo2);
+                            $("#UploadPictureDialog").modal("hide");
+                            var attachments = $("#Attachment").val();
+                            var type = $("#AttachmentType").val();
+                            if (attachments == "") {
+                                attachments = type + "&" + msg.ResultInfo + "&" + msg.ResultInfo2;
+                            }
+                            else {
+                                attachments = attachments + "," + type + "&" + msg.ResultInfo + "&" + msg.ResultInfo2;
+                            }
+
+                            $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.ResultInfo + "' target='_blank'>" + msg.ResultInfo2 + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+                            $("#Attachment").val(attachments);
+                            break;
+                    }
+                }
+            });
+        });
     }; //addEvent end
 
     function addSectionDiv() {
@@ -320,7 +376,7 @@ var $page = function () {
                ' <tr style="height:55px">' +
                    '<td style="text-align: right;">公司段</td>' +
                    '<td style="vertical-align: middle;padding-left: 0.8rem">' +
-                        ' <select id="CompanySection' + str + '" class="input_text form-control" disabled="disabled" onchange="gradeChange(CompanySection' + str + ')">' +
+                        ' <select id="CompanySection' + str + '" class="input_text form-control"  onchange="gradeChange(CompanySection' + str + ')">' +
                         ' </select>' +
                    '</td>' +
                    '<td style="text-align: right;">科目段</td>' +
@@ -473,7 +529,7 @@ var $page = function () {
                    ' <tr style="height:55px">' +
                        '<td style="text-align: right;">公司段</td>' +
                        '<td style="vertical-align: middle;padding-left: 0.8rem">' +
-                            ' <select id="CompanySection' + str + '" class="input_text form-control" disabled="disabled"  onchange="gradeChange(CompanySection' + str + ')" >' +
+                            ' <select id="CompanySection' + str + '" class="input_text form-control"  onchange="gradeChange(CompanySection' + str + ')" >' +
                             ' </select>' +
                        '</td>' +
                        '<td style="text-align: right;">科目段</td>' +
@@ -755,7 +811,61 @@ $(function () {
 });
 
 
+//拍照
+function openSocket() {
+    socket = new WebSocket(baseUrl);
+    socket.onclose = function () {
+        console.error("web channel closed");
+    };
+    socket.onerror = function (error) {
+        console.error("web channel error: " + error);
+    };
+    socket.onopen = function () {
+        new QWebChannel(socket, function (channel) {
+            // make dialog object accessible globally
+            window.dialog = channel.objects.dialog;
+            //dialog.set_configValue("set_savePath:D:\\img");
+            //网页关闭函数
+            window.onbeforeunload = function () {
+                dialog.get_actionType("closeSignal");
+            }
+            window.onunload = function () {
+                dialog.get_actionType("closeSignal");
+            }
+            //拍照按钮点击
+            document.getElementById("photographPri").onclick = function () {
+                dialog.photoBtnClicked("primaryDev_");
+                dialog.get_actionType("savePhotoPriDev");
+            };
+            //纠偏裁边
+            document.getElementById("setdeskew").onclick = function () {
+                dialog.get_actionType("setdeskew");
+            };
 
+            //服务器返回消息
+            dialog.sendPrintInfo.connect(function (message) {
+                //设备分辨率
+                message = message.substr(14);
+                //图片保存后返回路径关键字savePhoto_success:
+                if (message.indexOf("savePhoto_success:") >= 0) {
+                    imgPath = message.substr(18);
+                }
+            });
+            //接收图片流用来展示，多个，较小的base64数据
+            dialog.send_priImgData.connect(function (message) {
+                var element = document.getElementById("bigPriDev");
+                element.src = "data:image/jpg;base64," + message;
+            });
+            //接收拍照base64
+            dialog.send_priPhotoData.connect(function (message) {
+                var element = document.getElementById("devPhoto");
+                element.src = "data:image/jpg;base64," + message;
+            });
+            //网页加载完成信号
+            dialog.html_loaded("one");
+        });
+    }
+}
 
 
 

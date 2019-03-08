@@ -210,7 +210,11 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             Business_Reconciliation reconciliation = new Business_Reconciliation();
             DbBusinessDataService.Command(db =>
             {
-                reconciliation = db.Queryable<Business_Reconciliation>().Where(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ToList().SingleOrDefault();
+                var data = db.Queryable<Business_Reconciliation>().Where(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ToList();
+                if (data.Count == 1)
+                {
+                    reconciliation = data.SingleOrDefault();
+                }
             });
             if (reconciliation == null)
             {

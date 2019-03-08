@@ -10,6 +10,7 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
 using SyntacticSugar;
+using DaZhongTransitionLiquidation.Common;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -25,14 +26,16 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetSelectSection(string name,string companyCode,string subjectCode)
+        public JsonResult GetSelectSection(string name, string companyCode, string subjectCode)
         {
             var response = new List<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
             {
-                if(name == "A")
+                if (name == "A")
                 {
-                    response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+                    response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == UserInfo.AccountModeCode && x.Status == "1").OrderBy("Code asc").ToList();
+                    //response = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.ToString() && x.Code == UserInfo.AccountModeCode
+                    //            && x.Block == "1" && x.IsCheck == true).OrderBy("Code asc").ToList();
                 }
                 else
                 {
@@ -40,18 +43,18 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var colname = "";
                     switch (name)
                     {
-                        case "C":sVGUID = "C63BD715-C27D-4C47-AB66-550309794D43"; colname = "AccountingCode"; break;
-                        case "D":sVGUID = "D63BD715-C27D-4C47-AB66-550309794D43"; colname = "CostCenterCode"; break;
-                        case "E":sVGUID = "E63BD715-C27D-4C47-AB66-550309794D43"; colname = "SpareOneCode"; break;
-                        case "F":sVGUID = "F63BD715-C27D-4C47-AB66-550309794D43"; colname = "SpareTwoCode"; break;
-                        case "G":sVGUID = "G63BD715-C27D-4C47-AB66-550309794D43"; colname = "IntercourseCode"; break;
-                        default:break;
+                        case "C": sVGUID = "C63BD715-C27D-4C47-AB66-550309794D43"; colname = "AccountingCode"; break;
+                        case "D": sVGUID = "D63BD715-C27D-4C47-AB66-550309794D43"; colname = "CostCenterCode"; break;
+                        case "E": sVGUID = "E63BD715-C27D-4C47-AB66-550309794D43"; colname = "SpareOneCode"; break;
+                        case "F": sVGUID = "F63BD715-C27D-4C47-AB66-550309794D43"; colname = "SpareTwoCode"; break;
+                        case "G": sVGUID = "G63BD715-C27D-4C47-AB66-550309794D43"; colname = "IntercourseCode"; break;
+                        default: break;
                     }
-                    response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID='"+ sVGUID + @"'
-                            and Code in (select "+ colname + @" from Business_SubjectSettingInfo where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43'
-                            and SubjectCode='"+ companyCode + "' and CompanyCode='"+ subjectCode + "')").OrderBy("Code asc").ToList();
+                    response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID='" + sVGUID + @"'
+                            and Code in (select " + colname + @" from Business_SubjectSettingInfo where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43'
+                            and SubjectCode='" + companyCode + "' and CompanyCode='" + subjectCode + "')").OrderBy("Code asc").ToList();
                 }
-                
+
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -79,16 +82,16 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     string[] attach = null;
                     if (attachment != null)
                     {
-                       attach = attachment.Split(",");
+                        attach = attachment.Split(",");
                         foreach (var item in attach)
                         {
                             voucherList.AttachmentDetail += item + ",";
                         }
                         voucherList.AttachmentDetail = voucherList.AttachmentDetail.Substring(0, voucherList.AttachmentDetail.Length - 1);
                     }
-                    
+
                     //主表信息 
-                   
+
                     voucherList.AccountingPeriod = voucher.AccountingPeriod;
                     voucherList.Auditor = voucher.Auditor;
                     voucherList.Bookkeeping = voucher.Bookkeeping;
@@ -105,7 +108,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     voucherList.DebitAmountTotal = borrowMoney;
                     voucherList.CreateTime = DateTime.Now;
                     var guid = voucher.VGUID;
-                    if(guid == Guid.Empty)
+                    if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
                         voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期+4位流水)
@@ -122,7 +125,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
                     //删除现有明细数据
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
-                    if(voucher.Detail != null)
+                    if (voucher.Detail != null)
                     {
                         foreach (var item in voucher.Detail)
                         {
@@ -144,8 +147,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         }
                         db.Insertable(voucherdetailList).ExecuteCommand();
                     }
-                    if(attachment != null)
-                    {    
+                    if (attachment != null)
+                    {
                         List<Business_VoucherAttachmentList> BVAttachList = new List<Business_VoucherAttachmentList>();
                         //删除现有附件数据
                         db.Deleteable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
@@ -178,7 +181,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             return Json(resultModel);
         }
 
-        private string GetBatchName(string voucherType,string flowNo)
+        private string GetBatchName(string voucherType, string flowNo)
         {
             var batchNo = 0;
             if (flowNo.IsValuable() && flowNo.Length > 4)
@@ -196,7 +199,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             }
             return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
-
         public JsonResult GetVoucherDetail(Guid vguid)
         {
             var voucherList = new VoucherListDetail();
@@ -227,6 +229,30 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 voucherList.VGUID = voucher.VGUID;
             });
             return Json(voucherList, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult UploadImg(string ImageBase64Str)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            int len = ImageBase64Str.IndexOf("base64,") + 7;
+            int len1 = ImageBase64Str.IndexOf("data:") + 5;
+            string ext = ImageBase64Str.Substring(len1, len - len1 - 8);
+            var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" +
+                DateTime.Now.ToString("yyyyMMddHHmmssfff.") +
+                (ext.ToLower().Contains("png") ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+            var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
+            var savePath = FileHelper.Base64ToImg(filePath, ImageBase64Str);
+            try
+            {
+                resultModel.IsSuccess = true;
+                resultModel.ResultInfo = "\\"+ uploadPath;//路径
+                resultModel.ResultInfo2 = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);//名称
+                resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
+            }
+            return Json(resultModel);
         }
     }
 }

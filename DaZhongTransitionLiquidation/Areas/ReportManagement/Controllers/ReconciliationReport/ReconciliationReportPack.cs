@@ -262,7 +262,10 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 {
                     db.Deleteable<Business_Reconciliation>(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ExecuteCommand();
                     db.Deleteable<Business_ReconciliationDetail>(c => c.Business_ReconciliationVGUID == reconciliation.VGUID).ExecuteCommand();
-                    db.Insertable(reconciliation).ExecuteCommand();
+                    if(reconciliation.VGUID != null)
+                    {
+                        db.Insertable(reconciliation).ExecuteCommand();
+                    }
                     db.Insertable(reconciliationDetails).ExecuteCommand();
                 });
             });

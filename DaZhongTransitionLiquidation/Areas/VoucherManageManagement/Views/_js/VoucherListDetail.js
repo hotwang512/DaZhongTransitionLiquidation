@@ -212,7 +212,14 @@ var $page = function () {
             $("#lblVoucherNo").text($("#VoucherNo").val());
             $("#lblVoucherDate").text($("#VoucherDate").val());
             if ($("#Attachment").val() != "") {
-                $("#lblAttachmentNumber").text($("#Attachment").val().split(",").length);
+                var att = $("#Attachment").val().split(",");
+                var attlength = 0;
+                for (var i in att) {
+                    if (att[i] != "") {
+                        attlength += 1;
+                    }
+                }
+                $("#lblAttachmentNumber").text(attlength);
             } else {
                 $("#lblAttachmentNumber").text("");
             }
@@ -798,9 +805,10 @@ function removeAttachment(obj) {
     var name = obj.parentElement.textContent.trim().split(/\s+/)[1].substring(0, obj.parentElement.textContent.trim().split(/\s+/)[1].length - 1);
     var replaceStr = type + "&" + id + "&" + name;
     var attachmentValues = $("#Attachment").val();
-    attachmentValues = $.action.replaceAll(attachmentValues, replaceStr, '');
-
-    $("#Attachment").val(attachmentValues);
+    var vall = attachmentValues.replace(replaceStr, "");
+    //console.log(vall);
+    //attachmen
+    $("#Attachment").val(vall);
     $(obj).parent().remove();
     return false;
 }

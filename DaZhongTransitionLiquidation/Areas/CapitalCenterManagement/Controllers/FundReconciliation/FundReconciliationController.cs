@@ -47,17 +47,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 var data = db.Queryable<Business_FundReconciliation>();
+                int saveChanges = 0;
                 foreach (var item in vguids)
-                {
-                    int saveChanges = 1;
+                { 
                     var isAny = data.Any(x => x.VGUID == item);
                     if (isAny)
                     {
                         saveChanges = db.Deleteable<Business_FundReconciliation>(x => x.VGUID == item).ExecuteCommand();
                     }
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
-                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
+                resultModel.IsSuccess = saveChanges == 1;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
         }

@@ -88,15 +88,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         bankFlow.CreateTime = DateTime.Now;
                         bankFlow.CreatePerson = UserInfo.LoginName;
                         bankFlow.VGUID = Guid.NewGuid();
-                        bankFlowList.Add(bankFlow);
-                       
+                        bankFlowList.Add(bankFlow); 
                     }
+                    //按交易日期排序取最小值
+                    bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
                     if (bankFlowList.Count > 0)
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                     }
                     //同步银行流水到银行数据表
-                    BankDataPack.SyncBackFlow();
+                    BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate);
                     data.IsSuccess = true;
                 }
                 else
@@ -173,12 +174,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         bankFlow.VGUID = Guid.NewGuid();
                         bankFlowList.Add(bankFlow);
                     }
+                    //按交易日期排序取最小值
+                    bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
                     if (bankFlowList.Count > 0)
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                     }
                     //同步银行流水到银行数据表
-                    BankDataPack.SyncBackFlow();
+                    BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate);
                     data.IsSuccess = true;
                 }
                 else
@@ -303,6 +306,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         if (isAny.Count > 0)
                         {
                             isAny[0].BankAccount = item.BankAccount;
+                            isAny[0].TurnIn = items.TurnIn;
+                            isAny[0].TurnOut = items.TurnOut;
                             db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                             continue;
                         }

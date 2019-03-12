@@ -9,6 +9,7 @@
     bool hasPaymentPermission = currentUserRoleModules.Any(i => i.PageName == "资金结算中心" && i.Reads == 1);
     bool hasPaymentPermission1 = currentUserRoleModules.Any(i => i.PageName == "会计核算中心" && i.Reads == 1);
     bool hasReportPermission = currentUserRoleModules.Any(i => i.PageName == "费用报销中心" && i.Reads == 1);
+    bool hasReportPermission2 = currentUserRoleModules.Any(i => i.PageName == "资产管理" && i.Reads == 1);
 }
 <html>
 <head>
@@ -357,7 +358,7 @@
     @******************************************************会计核算中心******************************************************@
     @if (isSysadmin || hasPaymentPermission1)
     {
-        <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -394,7 +395,7 @@
                 }
             </table>
         </div>
-        <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
+        @*<div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -438,8 +439,8 @@
                     </tr>
                 }
             </table>
-        </div>
-        <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
+        </div>*@
+        <div class="menue_header VoucherManage  OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -476,7 +477,7 @@
                 }
             </table>
         </div>
-        <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage  OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -545,7 +546,7 @@
                 }
             </table>
         </div>
-        <div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage  OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -732,8 +733,55 @@
             </table>
         </div>
     }
-    @******************************************************大数据管理中心******************************************************@
-
+    @******************************************************资产管理******************************************************@
+@if (isSysadmin || hasReportPermission2)
+{
+        <div class="menue_header  AssetManagement" style="display: none;">
+            <table style="cursor: pointer;">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">资产维护</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="menue_body" id="AssetManagement" style="display: none;">
+            <table>
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产维护" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">资产维护</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产盘点" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">资产盘点</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产变动审核" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">资产变动审核</td>
+                        <td></td>
+                    </tr>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产基础信息维护" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">资产基础信息维护</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+        </div>
+}
     @******************************************************税务、审计、统计******************************************************@
 
     @******************************************************系统管理******************************************************@

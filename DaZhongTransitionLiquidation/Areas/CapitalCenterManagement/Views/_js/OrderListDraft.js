@@ -264,10 +264,12 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
-                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '订单日期', datafield: 'FillingDate', width: 250, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
-                    { text: '支付方式', datafield: 'PaymentMethod', width: 250, align: 'center', cellsAlign: 'center' },
-                    { text: '金额', datafield: 'Money', align: 'center', width: 250, cellsAlign: 'center' },
+                    { text: '业务编码', datafield: 'BusinessSubItem1', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '业务项目', datafield: 'BusinessProject', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '订单日期', datafield: 'FillingDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
+                    { text: '支付方式', datafield: 'PaymentMethod', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '金额', datafield: 'Money', align: 'center', width: 150, cellsAlign: 'center' },
                     { text: '交易状态', datafield: 'BankStatus', align: 'center', width: 180, cellsAlign: 'center', hidden: true },
                     { text: '交易最终结果描述', datafield: 'BankStatusName', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '附件信息', datafield: 'AttachmentInfo', align: 'center', cellsAlign: 'center', hidden: true },
@@ -294,9 +296,9 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.PaymentCompany + "</a>";
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem1 + "</a>";
         } else {
-            container = "<span>" + rowData.PaymentCompany + "</span>";
+            container = "<span>" + rowData.BusinessSubItem1 + "</span>";
         }
         return container;
     }

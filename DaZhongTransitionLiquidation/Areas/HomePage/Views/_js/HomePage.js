@@ -63,7 +63,7 @@ var $page = function () {
             //大数据管理中心
             $("#BigDataManagement").click(function () {
                 switch (GetHrefPageId("7")) {
-                    case "701": CookieHelper.SaveCookie("BigData_BigCenter"); window.location.href = "";
+                    case "701": CookieHelper.SaveCookie("BigData_AssetManagement"); window.location.href = "/AssetManagement/AssetsMaintenance/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
                 }

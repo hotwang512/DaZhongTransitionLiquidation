@@ -68,8 +68,6 @@ var menueHelp = {
                 break;
             case "VoucherManage": $("#homeModel").text("--会计核算中心")
                 break;
-            case "AssetManagement": $("#homeModel").text("--会计核算中心")
-                break;
             case "OracleButt": $("#homeModel").text("--会计核算中心")
                 break;
             case "FinancialStatements": $("#homeModel").text("--会计核算中心")
@@ -88,7 +86,7 @@ var menueHelp = {
                 break;
             case "AmountReport": $("#homeModel").text("--驾驶员结算中心")//*************
                 break;
-            case "BigCenter": $("#homeModel").text("--大数据管理中心")
+            case "AssetManagement": $("#homeModel").text("--资产管理中心")
                 break;
             case "TaxAuditManage": $("#homeModel").text("--税务、审计、统计")
                 break;

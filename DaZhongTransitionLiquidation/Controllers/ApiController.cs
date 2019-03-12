@@ -316,6 +316,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                             orderListDraft.OrderBankAccouont = orderDetail[0].PayAccount;//付款账号ACON
                             orderListDraft.OrderBankAccouontName = orderDetail[0].PayBankAccountName;//付款账号户名
                         }
+                        orderListDraft.BusinessProject = data.BusinessProject;//业务项目
+                        orderListDraft.BusinessSubItem1 = data.BusinessSubItem1;//业务编码
 
                         orderListDraft.CollectBankName = data.CollectionBank;//收款账号开户行
                         orderListDraft.CollectBankAccouont = data.CollectionAccount;//收款账号OPAC

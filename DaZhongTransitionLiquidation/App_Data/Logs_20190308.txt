@@ -1,0 +1,41 @@
+
+-------------------------------header----------------------
+2019-03-08 10:02:18,488 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-08 10:02:33,492 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:SqlSugar.UtilExceptions: English Message : Connection open error . 在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：在与 SQL Server 建立连接时出现与网络相关的或特定于实例的错误。未找到或无法访问服务器。请验证实例名称是否正确并且 SQL Server 已配置为允许远程连接。 (provider: SQL Network Interfaces, error: 26 - 定位指定的服务器/实例时出错).
+   在 SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   在 SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   在 SqlSugar.QueryableProvider`1._ToList[TResult]()
+   在 SqlSugar.QueryableProvider`1.ToList()
+   在 DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:行号 43
+
+-------------------------------header----------------------
+2019-03-08 10:04:05,358 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-08 11:38:13,267 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: 值不能为 null。
+参数名: uriString
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 90
+2019-03-08 11:38:25,805 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: 值不能为 null。
+参数名: uriString
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 90
+2019-03-08 11:40:34,413 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"VGUID":"00000000-0000-0000-0000-000000000000""ORGANATION_NUM":"""ENGINE_NUMBER":"""CHASSIS_NUMBER":"""BOOK_TYPE_CODE":"""TAG_NUMBER":"""DESCRIPTION":"""QUANITIY":""},result:System.ArgumentNullException: 值不能为 null。
+参数名: uriString
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.SendAssetInfo(AssetInfoData assetData) 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 90
+
+-------------------------------header----------------------
+2019-03-08 11:54:45,514 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-08 13:54:45,537 [5] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26

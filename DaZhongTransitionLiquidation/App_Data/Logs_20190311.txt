@@ -1,0 +1,38 @@
+
+-------------------------------header----------------------
+2019-03-11 10:01:20,120 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+
+-------------------------------header----------------------
+2019-03-11 11:12:16,726 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-11 13:12:16,771 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-11 14:48:05,609 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"engine_number":"2""chassis_number":"2"},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetASSET_CATEGORY_MINOR(String ORGANIZATION_NUM, String GROUP_ID, String ENGINE_NUMBER, String CHASSIS_NUMBER) 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 55
+2019-03-11 14:48:17,083 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"engine_number":"2""chassis_number":"2"},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetASSET_CATEGORY_MINOR(String ORGANIZATION_NUM, String GROUP_ID, String ENGINE_NUMBER, String CHASSIS_NUMBER) 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 55
+2019-03-11 14:50:21,329 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"engine_number":"2""chassis_number":"2"},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetASSET_CATEGORY_MINOR(String ORGANIZATION_NUM, String GROUP_ID, String ENGINE_NUMBER, String CHASSIS_NUMBER) 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 55
+2019-03-11 15:12:16,844 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-11 17:12:16,914 [6] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\kai\Code\DaZhong\DaZhongTransitionLiquidation\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+
+-------------------------------footer----------------------

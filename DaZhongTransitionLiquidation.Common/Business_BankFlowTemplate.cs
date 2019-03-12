@@ -114,5 +114,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public decimal? Balance { get; set; }
+        public string BankAccount { get; set; } 
     }
 }

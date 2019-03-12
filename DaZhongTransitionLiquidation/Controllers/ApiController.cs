@@ -277,7 +277,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 ExpCheck.Exception(OrderListAPI.AccountSetCode == null, "支付单位账套代码为空！");
                 //ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
-                ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");//编码
+                ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");//编码cz|01010101
                 ExpCheck.Exception(OrderListAPI.Amount == null, "金额为空！");
                 ExpCheck.Exception(OrderListAPI.Sponsor == null, "发起人为空！");
                 ExpCheck.Exception(OrderListAPI.Summary == null, "摘要为空！");
@@ -290,11 +290,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var companyCode = accountSetCode.Split("|")[1];//公司
                     var BusinessType = OrderListAPI.ServiceCategory;
                     var BusinessProject = OrderListAPI.BusinessProject;
+                    var BusinessProject1 = BusinessProject.Split("|")[0];
+                    var BusinessProject2 = BusinessProject.Split("|")[1];
                     //var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
                     //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
                     //从订单配置表中取出数据
-                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1.Contains(BusinessProject))
+                    var data = _db.Queryable<Business_OrderList>().WhereIF(BusinessProject != null, i => i.BusinessSubItem1.Contains(BusinessProject1) && i.BusinessSubItem1.Contains(BusinessProject2))
                                .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
                                //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
@@ -304,7 +306,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
-                        var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1" && x.Code == companyCode).Descrption;
+                        var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1"  && x.AccountModeCode == accountModeCode && x.Code == companyCode).Descrption;
                         //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
                         var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.KeyData == accountModeCode + companyCode).ToList();
                         //获取配置信息（付款银行）

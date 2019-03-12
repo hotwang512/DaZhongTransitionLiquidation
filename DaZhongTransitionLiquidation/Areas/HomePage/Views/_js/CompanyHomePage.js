@@ -7,6 +7,10 @@ var $page = function () {
             //GetCompanyCode();
             initTable1();
             $("#OKButton").on("click", function () {
+                if ($("#AccountModeCode").val() == "") {
+                    jqxNotification("请选择账套公司!", null, "error");
+                    return;
+                }
                 $.ajax({
                     url: "/HomePage/CompanyHomePage/SaveUserInfo",
                     data: {

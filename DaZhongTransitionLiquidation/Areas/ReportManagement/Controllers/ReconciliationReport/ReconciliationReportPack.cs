@@ -166,7 +166,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     bool success = Convert.ToBoolean(((Dictionary<string, object>)obj)["success"]);
                     if (success)
                     {
-                        object val = ((Dictionary<string, object>)((Dictionary<string, object>)obj)["data"])["TotleAmount"];
+                        object val = ((Dictionary<string, object>)((Dictionary<string, object>)obj)["data"])["TotalAmount"];
                         total = Convert.ToDecimal(val);
                     }
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, result));
@@ -210,7 +210,11 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             Business_Reconciliation reconciliation = new Business_Reconciliation();
             DbBusinessDataService.Command(db =>
             {
-                reconciliation = db.Queryable<Business_Reconciliation>().Where(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ToList().SingleOrDefault();
+                var data = db.Queryable<Business_Reconciliation>().Where(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ToList();
+                if (data.Count == 1)
+                {
+                    reconciliation = data.SingleOrDefault();
+                }
             });
             if (reconciliation == null)
             {
@@ -258,7 +262,10 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 {
                     db.Deleteable<Business_Reconciliation>(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ExecuteCommand();
                     db.Deleteable<Business_ReconciliationDetail>(c => c.Business_ReconciliationVGUID == reconciliation.VGUID).ExecuteCommand();
-                    db.Insertable(reconciliation).ExecuteCommand();
+                    if(reconciliation.VGUID != null)
+                    {
+                        db.Insertable(reconciliation).ExecuteCommand();
+                    }
                     db.Insertable(reconciliationDetails).ExecuteCommand();
                 });
             });
@@ -276,6 +283,11 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         {
             bool surccss = false;
             List<usp_GetSubjectAmount> usp_GetSubjectAmounts = new List<usp_GetSubjectAmount>();
+            T_Channel channel = new T_Channel();
+            DbBusinessDataService.Command(db =>
+            {
+                channel = db.Queryable<T_Channel>().Where(c => c.Id == Channel_Id).ToList()[0];
+            });
             DbBusinessDataService.Command(db =>
             {
                 var outputResult = db.Ado.UseStoredProcedure<dynamic>(() =>
@@ -284,6 +296,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     var p1 = new SugarParameter("@PayDate", RevenueDate);
                     var p2 = new SugarParameter("@Channel_Id", Channel_Id);
                     usp_GetSubjectAmounts = db.Ado.SqlQuery<usp_GetSubjectAmount>(spName, new SugarParameter[] { p1, p2 });
+                  
                     return "";
                 });
             });
@@ -299,7 +312,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             }
             subjects = subjects.Remove(subjects.Length - 1, 1);
             string data = "{"
-                           + " \"ReceiptCategory\":{0},".Replace("{0}", Channel_Id == "1465779302" ? "11" : "12")
+                           + " \"ReceiptCategory\":{0},".Replace("{0}", channel.PaymentEncoding)
                            + " \"Channel\":\"{0}\",".Replace("{0}", Channel_Id)
                            + " \"ReconciliationsDate\":\"{0}\",".Replace("{0}", BankDate.ToString("yyyy-MM-dd HH:mm:ss"))
                            + " \"RecordCount\":{0},".Replace("{0}", usp_GetSubjectAmounts[0].Counts.ToString())

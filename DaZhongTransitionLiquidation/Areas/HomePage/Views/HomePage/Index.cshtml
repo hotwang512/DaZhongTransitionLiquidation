@@ -5,12 +5,17 @@
     //Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as List<Sys_Role_Module>;
 }
-<link href="@Url.CusContent("~/_theme/jqwidgets-ver3.8.1/styles/bootstrap.min.css")" rel="stylesheet" />
+<link href="@Url.CusContent("~/_theme/css/bootstrap.min.css")" rel="stylesheet" />
+<link href="@Url.CusContent("~/_theme/jqwidgets-ver5.5.0/jqwidgets/styles/jqx.base.css")" rel="stylesheet" />
+<link href="@Url.CusContent("~/_theme/jqwidgets-ver5.5.0/jqwidgetsExtensions/jqxext.css")" rel="stylesheet" />
+<link href="@Url.CusContent("~/_theme/jqwidgets-ver5.5.0/jqwidgets/styles/jqx.office.css")" rel="stylesheet" />
+<link href="@Url.CusContent("~/_theme/Validate/validate.css")" rel="stylesheet" />
 <link href="@Url.CusContent("~/_theme/css/common.css")" rel="stylesheet" />
 <link href="@Url.CusContent("~/_theme/systemIcon/demo.css")" rel="stylesheet" />
 <link href="@Url.CusContent("~/_theme/systemIcon/iconfont.css")" rel="stylesheet" />
 <link href="@Url.CusContent("~/_theme/css/layoutCommon.css")" rel="stylesheet" />
 <link href="@Url.CusContent("~/_theme/css/moduleCommon.css")" rel="stylesheet" />
+<link href="@Url.CusContent("~/_theme/layer/layer/theme/default/layer.css")" rel="stylesheet" />
 <link href="/_theme/Validate/validate.css" rel="stylesheet" />
 <link href="/Views/_css/home-index.css" rel="stylesheet" />
 <link rel="stylesheet" href="/_theme/jqwidgets-ver3.8.1/jqwidgets/styles/jqx.base.css" />
@@ -45,7 +50,7 @@
         <table style="width:100%; border:0; border-collapse:0; border-spacing:0;">
             <tr style="height:60px; line-height:60px;">
                 <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
-                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>              
+                <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
                 <td style="width:45px;">
                     <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
                 </td>
@@ -69,15 +74,15 @@
                             @{
                                 foreach (var item in ViewBag.AccountMode)
                                 {
-                                    <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
+                                    <li role="presentation"><a role="menuitem" class="accountMode" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
                                 }
                             }
                             @*<li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
-                    <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
+                                <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>*@
                         </ul>
                     </div>
                 </td>
-                
+
             </tr>
         </table>
     </div>
@@ -85,7 +90,7 @@
         <div class="home-message" style="text-align: left;">
             @for (int i = 0; i < 9; i++)
             {
-                if(!isSysadmin && i >= currentModuleRolePermission.Count)
+                if (!isSysadmin && i >= currentModuleRolePermission.Count)
                 {
                     continue;
                 }
@@ -197,12 +202,43 @@
                         </div>
                     </a>
                 }
-                
+
             }
-           
+
         </div>
     </div>
 
+    <!--确认弹出框-->
+    <div class="container">
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="confirmWindowDialog">
+            <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+                <div class="modal-content" style="width: 300px; margin-left: auto; margin-right: auto;">
+                    <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto; font-size: 15px; background-color: #375471; color: white; padding: 8px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" style="color: white" id="confirmWindow_title">确认框</h4>
+                    </div>
+                    <div class="modal-body" style="width: 100%; padding: 7px;">
+                        <table style="width: 100%;">
+                            <tr style="height: 45px;">
+                                <td align="right" style="width: 50px;">
+                                    <img src="@Url.CusContent("~/_theme/images/question.png")" />
+                                </td>
+                                <td id="confirmWindow_msg" style="font-size: 17px; text-align: left; padding-left: 10px;">确认框</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="padding: 10px 20px 10px;">
+                        <button id="confirmWindow_OKBtn" class="btn btn-warning" type="button" style="width: 50px; font-size: 12px;">
+                            确定
+                        </button>
+                        <button id="confirmWindow_CancelBtn" class="btn btn-danger" style="margin-left: 5px; width: 50px; font-size: 12px;" type="button">
+                            取消
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- 模态弹出 -->
     <div class="container">
         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="changePwdDialog">
@@ -257,6 +293,7 @@
     <script src="@Url.CusContent("~/_theme/tool/jquery-form.min.js")"></script>
     <script src="@Url.CusContent("~/_theme/_js/tool.js")"></script>
     <script src="@Url.CusContent("~/Views/_js/layout.js")"></script>
+    <script src="@Url.CusContent("~/_theme/layer/layer/layer.js")"></script>
     <script src="@Url.CusContent("~/Areas/HomePage/Views/_js/HomePage.js")"></script>
 
     <input type="hidden" id="txtVguid" value="6df093a6-08be-4128-9cdd-8e0d111f371f" />

@@ -53,14 +53,14 @@
                             <a id="drop4" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @user.AccountModeName<span class="caret" style="color: white;border-top-color: white;"></span>
                             </a>
-                            @*<ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop5">
-                    @{
-                        foreach (var item in ViewBag.AccountMode)
-                        {
-                            <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
-                        }
-                    }
-                </ul>*@
+                            <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                                @{
+                                    foreach (var item in ViewBag.AccountMode)
+                                    {
+                                        <li role="presentation"><a role="menuitem" class="accountMode" href="#" vguid="@item.Code" tabindex="1">@item.Descrption</a></li>
+                                    }
+                                }
+                            </ul>
                         </div>
                     </td>
                 </tr>

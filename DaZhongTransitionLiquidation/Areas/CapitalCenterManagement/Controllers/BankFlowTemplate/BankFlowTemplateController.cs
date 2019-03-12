@@ -1,5 +1,6 @@
 ﻿using Aspose.Cells;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
@@ -57,6 +58,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         bankFlow.TradingBank = "建设银行";
                         bankFlow.TurnOut = datatable.Rows[i]["借方发生额（支取）"].ObjToDecimal();
                         bankFlow.TurnIn = datatable.Rows[i]["贷方发生额（收入）"].ObjToDecimal();
+                        bankFlow.BankAccount = datatable.Rows[i]["账号"].ToString();
                         if (bankFlow.TurnOut == 0 && bankFlow.TurnIn > 0)
                         {
                             //本公司收款
@@ -87,11 +89,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         bankFlow.CreatePerson = UserInfo.LoginName;
                         bankFlow.VGUID = Guid.NewGuid();
                         bankFlowList.Add(bankFlow);
+                       
                     }
                     if (bankFlowList.Count > 0)
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                     }
+                    //同步银行流水到银行数据表
+                    BankDataPack.SyncBackFlow();
                     data.IsSuccess = true;
                 }
                 else
@@ -131,7 +136,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         }
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "交通银行";
-                        
+                        bankFlow.BankAccount = bankAccount.ToString();
                         var type = datatable.Rows[i]["借贷标志"].ToString();
                         if (type == "借")
                         {
@@ -172,6 +177,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                     }
+                    //同步银行流水到银行数据表
+                    BankDataPack.SyncBackFlow();
                     data.IsSuccess = true;
                 }
                 else
@@ -254,9 +261,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     foreach (var items in bankFlowList)
                     {
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == items.Batch);
-                        if (isAny)
+                        items.BankAccount = item.BankAccount;
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch).ToList();
+                        if (isAny.Count > 0)
                         {
+                            isAny[0].BankAccount = item.BankAccount;
+                            db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                             continue;
                         }
                         items.CreateTime = DateTime.Now;
@@ -288,13 +298,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     foreach (var items in bankFlowList)
                     {
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == items.Batch);
-                        if (isAny)
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch).ToList();
+                        if (isAny.Count > 0)
                         {
+                            isAny[0].BankAccount = item.BankAccount;
+                            db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                             continue;
                         }
                         items.CreateTime = DateTime.Now;
                         items.CreatePerson = "sysAdmin";
+                        
                         newBankFlowList.Add(items);
                     }
                     if (newBankFlowList.Count > 0)

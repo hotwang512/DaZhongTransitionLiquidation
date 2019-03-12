@@ -368,11 +368,11 @@
         </div>
         <div class="menue_body" id="VoucherManage" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "凭证列表" && i.Reads == 1))
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "凭证录入" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">凭证列表</td>
+                    <td class="menue_text">凭证录入</td>
                     <td></td>
                 </tr>
                 }

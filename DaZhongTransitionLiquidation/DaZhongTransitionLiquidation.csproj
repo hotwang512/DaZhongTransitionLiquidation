@@ -2235,6 +2235,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />

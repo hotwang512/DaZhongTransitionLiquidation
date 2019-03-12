@@ -481,6 +481,7 @@ var $page = function () {
                     case "1":
                         templateResult = "success";
                         $("#notificationContentSendAPI").html("调用接口成功");
+                        $("#STATUS").val("已验收");
                         break;
                 }
                 $("#jqxNotificationSendAPT").jqxNotification({

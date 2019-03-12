@@ -1270,7 +1270,7 @@ function settingSection(column, code) {
             ],
             datatype: "json",
             id: "VGUID",
-            data: { Code: code, sectionVGUID: sVGUID, columnName: columnName, keyColumnName: keyColumnName, index: index, companyCode: companyCode },
+            data: { Code: code, sectionVGUID: sVGUID, columnName: columnName, keyColumnName: keyColumnName, index: index, companyCode: companyCode, accountModeCode: accountModeCode },
             url: "/PaymentManagement/CompanySection/GetSectionInfo"   //获取数据源的路径
         };
         var typeAdapter = new $.jqx.dataAdapter(source, {

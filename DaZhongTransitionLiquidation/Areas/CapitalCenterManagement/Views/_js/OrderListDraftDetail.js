@@ -221,7 +221,17 @@ var $page = function () {
             dataType: "json",
             success: function (msg) {
                 for (var i = 0; i < msg.length; i++) {
-                    var html = '<a rel="img' + i + '" href="' + msg[i].Attachment + '"><img src="' + msg[i].Attachment + '" style="width: 150px;height: 100px;margin: 3px;" /></a>';
+                    var fileVal = msg[i].Attachment.split("/")[4];//1548321598957.png
+                    var fileName = fileVal.split(".")[0];
+                    var fileType = fileVal.split(".")[1];
+                    var ext = "." + fileType.toUpperCase();
+                    var html = "";
+                    if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                        html = '<img src="/_theme/images/' + fileType + '.png" style="width: 30px;height: 30px;margin: 3px;" /><a href="' + msg[i].Attachment + '" target="_blank">' + fileVal + '</a>';
+                    } else {
+                        html = '<a rel="img' + i + '" href="' + msg[i].Attachment + '"><img src="' + msg[i].Attachment + '" style="width: 150px;height: 100px;margin: 3px;" /></a>';
+                    }
+                   
                     switch (msg[i].AttachmentType) {
                         case "付款凭证":$("#ImgPaymentReceipt").append(html);
                             break

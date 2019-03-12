@@ -269,6 +269,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                             continue;
                         }
+                        items.BankAccount = item.BankAccount;
                         items.CreateTime = DateTime.Now;
                         items.CreatePerson = "sysAdmin";
                         newBankFlowList.Add(items);
@@ -305,6 +306,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                             continue;
                         }
+                        items.BankAccount = item.BankAccount;
                         items.CreateTime = DateTime.Now;
                         items.CreatePerson = "sysAdmin";
                         

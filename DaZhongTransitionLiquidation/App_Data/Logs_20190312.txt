@@ -350,3 +350,99 @@ Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ
 2019-03-12 10:20:53,642 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{ "ReceiptCategory":11, "ReconciliationsDate":"2019-03-10", "TotalAmount":"2087.1600", "ClearingPlatformReconciliations":["28eb13bc-632a-413d-95c4-0f21b2db8011","9fa67491-f75a-4942-9bd8-3ab31b4f4830"] },result:System.Collections.Generic.KeyNotFoundException: ¸ø¶¨¹Ø¼ü×Ö²»ÔÚ×ÖµäÖĞ¡£
    ÔÚ System.Collections.Generic.Dictionary`2.get_Item(TKey key)
    ÔÚ DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.ReconciliationReport.ReconciliationReportPack.GetRevenueSystemAmount(DbBusinessDataService DbBusinessDataService, String BankDate, String revenueDate, String channel_Id, String revenueAmount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Areas\ReportManagement\Controllers\ReconciliationReport\ReconciliationReportPack.cs:ĞĞºÅ 169
+
+-------------------------------header----------------------
+2019-03-12 10:58:49,094 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 26
+2019-03-12 10:58:49,358 [7] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:SqlSugar.UtilExceptions: English Message : Connection open error . ÓÃ»§ 'ZhangZeQun' µÇÂ¼Ê§°Ü¡£
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£ºÓÃ»§ 'ZhangZeQun' µÇÂ¼Ê§°Ü¡£.
+   ÔÚ SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   ÔÚ SqlSugar.QueryableProvider`1._ToList[TResult]()
+   ÔÚ SqlSugar.QueryableProvider`1.ToList()
+   ÔÚ DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:ĞĞºÅ 43
+
+-------------------------------header----------------------
+2019-03-12 11:00:58,318 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 26
+2019-03-12 11:01:13,544 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:SqlSugar.UtilExceptions: English Message : Connection open error . ³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£º³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£.
+   ÔÚ SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   ÔÚ SqlSugar.QueryableProvider`1._ToList[TResult]()
+   ÔÚ SqlSugar.QueryableProvider`1.ToList()
+   ÔÚ DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:ĞĞºÅ 43
+2019-03-12 11:01:35,792 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . ³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£º³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£.
+   ÔÚ SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetCount()
+   ÔÚ SqlSugar.QueryableProvider`1.Count()
+   ÔÚ SqlSugar.QueryableProvider`1.Any()
+   ÔÚ SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   ÔÚ DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\LoginController.cs:ĞĞºÅ 34
+   ÔÚ DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:ĞĞºÅ 24
+2019-03-12 11:01:37,866 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . ³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£º³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£.
+   ÔÚ SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetCount()
+   ÔÚ SqlSugar.QueryableProvider`1.Count()
+   ÔÚ SqlSugar.QueryableProvider`1.Any()
+   ÔÚ SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   ÔÚ DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\LoginController.cs:ĞĞºÅ 34
+   ÔÚ DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:ĞĞºÅ 24
+2019-03-12 11:01:37,871 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . ³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£º³¬Ê±Ê±¼äÒÑµ½¡£³¬Ê±Ê±¼äÒÑµ½£¬µ«ÊÇÉĞÎ´´Ó³ØÖĞ»ñÈ¡Á¬½Ó¡£³öÏÖÕâÖÖÇé¿ö¿ÉÄÜÊÇÒòÎªËùÓĞ³ØÁ¬½Ó¾ùÔÚÊ¹ÓÃ£¬²¢ÇÒ´ïµ½ÁË×î´ó³Ø´óĞ¡¡£.
+   ÔÚ SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetCount()
+   ÔÚ SqlSugar.QueryableProvider`1.Count()
+   ÔÚ SqlSugar.QueryableProvider`1.Any()
+   ÔÚ SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   ÔÚ DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\LoginController.cs:ĞĞºÅ 34
+   ÔÚ DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:ĞĞºÅ 29
+   ÔÚ DaZhongTransitionLiquidation.Controllers.LoginController.ProcessLogin(Sys_User userLoginInfo) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\LoginController.cs:ĞĞºÅ 32
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-03-12 11:01:37,875 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - SqlSugar.UtilExceptions: English Message : Connection open error . Á¬½Ó³¬Ê±Ê±¼äÒÑµ½¡£ÔÚ³¢ÊÔÊ¹ÓÃÔ¤µÇÂ¼ÎÕÊÖÈ·ÈÏÊ±³¬¹ıÁË´Ë³¬Ê±Ê±¼ä¡£Õâ¿ÉÄÜÊÇÒòÎªÔ¤µÇÂ¼ÎÕÊÖÊ§°Ü»ò·şÎñÆ÷Î´ÄÜ¼°Ê±ÏìÓ¦¡£  ³¢ÊÔÁ¬½Óµ½´Ë·şÎñÆ÷Ê±»¨·ÑµÄ³ÖĞøÊ±¼äÊÇ - [Pre-Login] initialization=29£»handshake=33237£»
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£ºÁ¬½Ó³¬Ê±Ê±¼äÒÑµ½¡£ÔÚ³¢ÊÔÊ¹ÓÃÔ¤µÇÂ¼ÎÕÊÖÈ·ÈÏÊ±³¬¹ıÁË´Ë³¬Ê±Ê±¼ä¡£Õâ¿ÉÄÜÊÇÒòÎªÔ¤µÇÂ¼ÎÕÊÖÊ§°Ü»ò·şÎñÆ÷Î´ÄÜ¼°Ê±ÏìÓ¦¡£  ³¢ÊÔÁ¬½Óµ½´Ë·şÎñÆ÷Ê±»¨·ÑµÄ³ÖĞøÊ±¼äÊÇ - [Pre-Login] initialization=29£»handshake=33237£».
+   ÔÚ SqlSugar.AdoProvider.GetScalar(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.AdoProvider.GetInt(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetCount()
+   ÔÚ SqlSugar.QueryableProvider`1.Count()
+   ÔÚ SqlSugar.QueryableProvider`1.Any()
+   ÔÚ SqlSugar.QueryableProvider`1.Any(Expression`1 expression)
+   ÔÚ DaZhongTransitionLiquidation.Controllers.LoginController.<>c__DisplayClass3_0.<ProcessLogin>b__0(SqlSugarClient db) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\LoginController.cs:ĞĞºÅ 34
+   ÔÚ DaZhongTransitionLiquidation.Infrastructure.Dao.DbService.Command(Action`1 func) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Infrastructure\Dao\DbService.cs:ĞĞºÅ 24
+
+-------------------------------header----------------------
+2019-03-12 11:02:46,062 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎŞĞ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ĞĞºÅ 26
+2019-03-12 11:03:01,259 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:0,result:SqlSugar.UtilExceptions: English Message : Connection open error . Á¬½Ó³¬Ê±Ê±¼äÒÑµ½¡£ÔÚ³¢ÊÔÊ¹ÓÃÔ¤µÇÂ¼ÎÕÊÖÈ·ÈÏÊ±³¬¹ıÁË´Ë³¬Ê±Ê±¼ä¡£Õâ¿ÉÄÜÊÇÒòÎªÔ¤µÇÂ¼ÎÕÊÖÊ§°Ü»ò·şÎñÆ÷Î´ÄÜ¼°Ê±ÏìÓ¦¡£  ³¢ÊÔÁ¬½Óµ½´Ë·şÎñÆ÷Ê±»¨·ÑµÄ³ÖĞøÊ±¼äÊÇ - [Pre-Login] initialization=44£»handshake=14999£»
+Chinese Message :  Á¬½ÓÊı¾İ¿â¹ı³ÌÖĞ·¢Éú´íÎó£¬¼ì²é·şÎñÆ÷ÊÇ·ñÕı³£Á¬½Ó×Ö·û´®ÊÇ·ñÕıÈ·£¬ÊµÔÚÕÒ²»µ½Ô­ÒòÇëÏÈGoogle´íÎóĞÅÏ¢£ºÁ¬½Ó³¬Ê±Ê±¼äÒÑµ½¡£ÔÚ³¢ÊÔÊ¹ÓÃÔ¤µÇÂ¼ÎÕÊÖÈ·ÈÏÊ±³¬¹ıÁË´Ë³¬Ê±Ê±¼ä¡£Õâ¿ÉÄÜÊÇÒòÎªÔ¤µÇÂ¼ÎÕÊÖÊ§°Ü»ò·şÎñÆ÷Î´ÄÜ¼°Ê±ÏìÓ¦¡£  ³¢ÊÔÁ¬½Óµ½´Ë·şÎñÆ÷Ê±»¨·ÑµÄ³ÖĞøÊ±¼äÊÇ - [Pre-Login] initialization=44£»handshake=14999£».
+   ÔÚ SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   ÔÚ SqlSugar.QueryableProvider`1.GetData[TResult](KeyValuePair`2 sqlObj)
+   ÔÚ SqlSugar.QueryableProvider`1._ToList[TResult]()
+   ÔÚ SqlSugar.QueryableProvider`1.ToList()
+   ÔÚ DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.DoSyncBank() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:ĞĞºÅ 43

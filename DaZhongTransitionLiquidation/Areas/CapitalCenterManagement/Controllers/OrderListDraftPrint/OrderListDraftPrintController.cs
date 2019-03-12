@@ -9,10 +9,13 @@ using System.Web.Mvc;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDraftPrint
 {
-    public class OrderListDraftPrintController : BaseController
+    public class OrderListDraftPrintController : Controller
     {
-        public OrderListDraftPrintController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        public DbService DbService;
+        public DbBusinessDataService DbBusinessDataService;
+        public OrderListDraftPrintController(DbService dbService, DbBusinessDataService dbBusinessDataService)
         {
+            DbService = dbService; DbBusinessDataService = dbBusinessDataService;
         }
         // GET: CapitalCenterManagement/OrderListDraftPrint
         public ActionResult Index(Guid VGUID)

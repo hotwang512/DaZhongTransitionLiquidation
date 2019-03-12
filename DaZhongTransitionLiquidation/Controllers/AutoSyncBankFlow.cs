@@ -98,12 +98,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                 if (isAny.Count > 0)
                 {
                     isAny[0].BankAccount = item.BankAccount;
-                    _db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
+                    _db.Updateable(isAny[0]).ExecuteCommand();
                     continue;
                 }
                 success = _db.Insertable(item).ExecuteCommand();
             }
-            new Thread(new ThreadStart(BankDataPack.SyncBackFlowAndReconciliation)).Start();
+            BankDataPack.SyncBackFlowAndReconciliation();
             return success;
         }
         public static void AutoBankTransferResult()

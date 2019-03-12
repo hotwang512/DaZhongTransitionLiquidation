@@ -229,7 +229,7 @@ var $page = function () {
                     if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
                         html = '<img src="/_theme/images/' + fileType + '.png" style="width: 30px;height: 30px;margin: 3px;" /><a href="' + msg[i].Attachment + '" target="_blank">' + fileVal + '</a>';
                     } else {
-                        html = '<a rel="img' + i + '" href="' + msg[i].Attachment + '"><img src="' + msg[i].Attachment + '" style="width: 150px;height: 100px;margin: 3px;" /></a>';
+                        html = '<a rel="img' + i + '" href="' + msg[i].Attachment + '"><img src="' + msg[i].Attachment + '" target="_blank" style="width: 150px;height: 100px;margin: 3px;" /></a>';
                     }
                    
                     switch (msg[i].AttachmentType) {

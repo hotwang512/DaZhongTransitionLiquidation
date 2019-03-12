@@ -19,14 +19,14 @@ namespace DaZhongTransitionLiquidation.Common
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Clear();    
+                wc.Headers.Clear();
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
                 var resultData = wc.UploadString(new Uri(url), data);
                 var modelData = resultData.JsonToModel<BankFlowResult>();
                 if (modelData.success)
                 {
-                    bankFlowList = SaveBankFlow(modelData.data);
+                    bankFlowList = SaveBankFlow(modelData.data, capitalAccount);
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }
@@ -41,10 +41,13 @@ namespace DaZhongTransitionLiquidation.Common
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             var tradingStartDate = DateTime.Now.AddDays(-1);
             var tradingEndDate = DateTime.Now.AddDays(-1);
+
+            //var tradingStartDate = DateTime.Parse("2019-03-05");
+            //var tradingEndDate = DateTime.Parse("2019-03-11");
             bankFlowList = GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate, capitalAccount);
             return bankFlowList;
         }
-        public static List<Business_BankFlowTemplate> GetShangHaiBankHistoryTradingFlow(DateTime tradingStartDate, DateTime tradingEndDate,string capitalAccount)
+        public static List<Business_BankFlowTemplate> GetShangHaiBankHistoryTradingFlow(DateTime tradingStartDate, DateTime tradingEndDate, string capitalAccount)
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             //var capitalAccount = ConfigSugar.GetAppString("CapitalAccount");
@@ -64,7 +67,7 @@ namespace DaZhongTransitionLiquidation.Common
                 var modelData = resultData.JsonToModel<BankFlowResult>();
                 if (modelData.success)
                 {
-                    bankFlowList = SaveBankFlow(modelData.data);
+                    bankFlowList = SaveBankFlow(modelData.data, capitalAccount);
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }
@@ -74,12 +77,13 @@ namespace DaZhongTransitionLiquidation.Common
             }
             return bankFlowList;
         }
-        public static List<Business_BankFlowTemplate> SaveBankFlow(BankFlowData modelData)
+        public static List<Business_BankFlowTemplate> SaveBankFlow(BankFlowData modelData, string backAccount)
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             foreach (var details in modelData.Detail)
             {
                 Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
+                bankFlow.BankAccount = backAccount;
                 bankFlow.Currency = modelData.BIZH;
                 bankFlow.ReceivingUnitInstitution = "";
                 bankFlow.TradingBank = "上海银行";

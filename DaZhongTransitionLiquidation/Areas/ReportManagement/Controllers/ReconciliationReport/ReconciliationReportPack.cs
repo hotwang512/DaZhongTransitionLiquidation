@@ -117,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     resultModel.ResultInfo = db.Ado.SqlQuerySingle<usp_GetTotalAmount>(spName, new SugarParameter[] { p1, p2, p3 });
                     resultModel.IsSuccess = true;
                     return resultModel;
-                }); 
+                });
             });
             resultModel.ResultInfo.RevenueSystemTotalAccount = GetRevenueSystemAmount(DbBusinessDataService, BankDate, RevenueDate, Channel_Id, resultModel.ResultInfo.RevenueArrearsTotalAccount.ToString());
             return resultModel;
@@ -128,7 +128,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         /// </summary>
         /// <param name="revenuepayments">营收数据</param>
         /// <returns></returns>
-        public static decimal GetRevenueSystemAmount(DbBusinessDataService DbBusinessDataService, string BankDate, string revenueDate, string channel_Id,string revenueAmount)
+        public static decimal GetRevenueSystemAmount(DbBusinessDataService DbBusinessDataService, string BankDate, string revenueDate, string channel_Id, string revenueAmount)
         {
             decimal total = 0;
             string revenueVguid = string.Empty;
@@ -207,13 +207,13 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 resultModel.IsSuccess = false;
                 resultModel.ResultInfo = "营收系统入账错误！";
             }
-            Business_Reconciliation reconciliation = new Business_Reconciliation();
+            Business_Reconciliation reconciliation = null;
             DbBusinessDataService.Command(db =>
             {
                 var data = db.Queryable<Business_Reconciliation>().Where(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ToList();
                 if (data.Count == 1)
                 {
-                    reconciliation = data.SingleOrDefault();
+                    reconciliation = data[0];
                 }
             });
             if (reconciliation == null)
@@ -262,7 +262,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 {
                     db.Deleteable<Business_Reconciliation>(c => c.BankBillDate == BankDate && c.Channel_Id == Channel_Id).ExecuteCommand();
                     db.Deleteable<Business_ReconciliationDetail>(c => c.Business_ReconciliationVGUID == reconciliation.VGUID).ExecuteCommand();
-                    if(reconciliation.VGUID != null)
+                    if (reconciliation.VGUID != null)
                     {
                         db.Insertable(reconciliation).ExecuteCommand();
                     }
@@ -296,7 +296,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     var p1 = new SugarParameter("@PayDate", RevenueDate);
                     var p2 = new SugarParameter("@Channel_Id", Channel_Id);
                     usp_GetSubjectAmounts = db.Ado.SqlQuery<usp_GetSubjectAmount>(spName, new SugarParameter[] { p1, p2 });
-                  
+
                     return "";
                 });
             });

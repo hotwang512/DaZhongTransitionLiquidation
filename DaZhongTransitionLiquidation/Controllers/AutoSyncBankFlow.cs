@@ -103,7 +103,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 success = _db.Insertable(item).ExecuteCommand();
             }
-            new Thread(new ThreadStart(BankDataPack.SyncBackFlowAndReconciliation)).Start();
+            BankDataPack.SyncBackFlowAndReconciliation();
             return success;
         }
         public static void AutoBankTransferResult()

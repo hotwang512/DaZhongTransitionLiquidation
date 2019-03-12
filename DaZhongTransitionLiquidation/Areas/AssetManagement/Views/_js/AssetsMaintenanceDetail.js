@@ -30,30 +30,30 @@ var $page = function () {
             if (!Validate($("#ORGANIZATION_NUM"))) { validateError++; }
             if (!Validate($("#ENGINE_NUMBER"))) { validateError++; }
             if (!Validate($("#CHASSIS_NUMBER"))) { validateError++; }
-            if (!Validate($("#BOOK_TYPE_CODE"))) { validateError++; }
+            //if (!Validate($("#BOOK_TYPE_CODE"))) { validateError++; }
             if (!Validate($("#TAG_NUMBER"))) { validateError++; }
             if (!Validate($("#DESCRIPTION"))) { validateError++; }
             if (!Validate($("#QUANTITY"))) { validateError++; }
-            if (!Validate($("#ASSET_CATEGORY_MAJOR"))) { validateError++; }
-            if (!Validate($("#ASSET_CATEGORY_MINOR"))) { validateError++; }
+            //if (!Validate($("#ASSET_CATEGORY_MAJOR"))) { validateError++; }
+            //if (!Validate($("#ASSET_CATEGORY_MINOR"))) { validateError++; }
             if (!Validate($("#ASSET_CREATION_DATE"))) { validateError++; }
             if (!Validate($("#ASSET_COST"))) { validateError++; }
             if (!Validate($("#SALVAGE_TYPE"))) { validateError++; }
-            if (!Validate($("#METHOD"))) { validateError++; }
-            if (!Validate($("#LIFE_MONTHS"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT1"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT2"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT3"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT4"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT5"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT6"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT7"))) { validateError++; }
+            //if (!Validate($("#METHOD"))) { validateError++; }
+            //if (!Validate($("#LIFE_MONTHS"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT1"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT2"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT3"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT4"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT5"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT6"))) { validateError++; }
+            //if (!Validate($("#EXP_ACCOUNT_SEGMENT7"))) { validateError++; }
             if (!Validate($("#FA_LOC_1"))) { validateError++; }
             if (!Validate($("#FA_LOC_2"))) { validateError++; }
             if (!Validate($("#FA_LOC_3"))) { validateError++; }
-            if (!Validate($("#TRANSACTION_ID"))) { validateError++; }
-            if (!Validate($("#LAST_UPDATE_DATE"))) { validateError++; }
-            if (!Validate($("#PURCHASE_TAX"))) { validateError++; }
+            //if (!Validate($("#TRANSACTION_ID"))) { validateError++; }
+            //if (!Validate($("#LAST_UPDATE_DATE"))) { validateError++; }
+            //if (!Validate($("#PURCHASE_TAX"))) { validateError++; }
             if (!Validate($("#PLATE_NUMBER"))) { validateError++; }
             if (validateError <= 0) {
                 $.ajax({
@@ -131,36 +131,43 @@ var $page = function () {
         $("#btnAccept").on("click", function () {
             //验证当前表所有非空
             var validateError = 0;//未通过验证的数量
-            if (!Validate($("#GROUP_ID"))) { validateError++; }
-            if (!Validate($("#ORGANIZATION_NUM"))) { validateError++; }
-            if (!Validate($("#ENGINE_NUMBER"))) { validateError++; }
-            if (!Validate($("#CHASSIS_NUMBER"))) { validateError++; }
-            if (!Validate($("#BOOK_TYPE_CODE"))) { validateError++; }
-            if (!Validate($("#TAG_NUMBER"))) { validateError++; }
-            if (!Validate($("#DESCRIPTION"))) { validateError++; }
-            if (!Validate($("#QUANTITY"))) { validateError++; }
-            if (!Validate($("#ASSET_CATEGORY_MAJOR"))) { validateError++; }
-            if (!Validate($("#ASSET_CATEGORY_MINOR"))) { validateError++; }
-            if (!Validate($("#ASSET_CREATION_DATE"))) { validateError++; }
-            if (!Validate($("#ASSET_COST"))) { validateError++; }
-            if (!Validate($("#SALVAGE_TYPE"))) { validateError++; }
-            if (!Validate($("#METHOD"))) { validateError++; }
-            if (!Validate($("#LIFE_MONTHS"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT1"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT2"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT3"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT4"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT5"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT6"))) { validateError++; }
-            if (!Validate($("#EXP_ACCOUNT_SEGMENT7"))) { validateError++; }
-            if (!Validate($("#FA_LOC_1"))) { validateError++; }
-            if (!Validate($("#FA_LOC_2"))) { validateError++; }
-            if (!Validate($("#FA_LOC_3"))) { validateError++; }
-            if (!Validate($("#TRANSACTION_ID"))) { validateError++; }
-            if (!Validate($("#LAST_UPDATE_DATE"))) { validateError++; }
-            if (!Validate($("#PURCHASE_TAX"))) { validateError++; }
-            if (!Validate($("#PLATE_NUMBER"))) { validateError++; }
-            if (!Validate($("#LISENSING_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#GROUP_ID"))) { validateError++; }
+            if (!ValidateEmpty($("#ORGANIZATION_NUM"))) { validateError++; }
+            if (!ValidateEmpty($("#ENGINE_NUMBER"))) { validateError++; }
+            if (!ValidateEmpty($("#CHASSIS_NUMBER"))) { validateError++; }
+            if (!ValidateEmpty($("#BOOK_TYPE_CODE"))) { validateError++; }
+            if (!ValidateEmpty($("#TAG_NUMBER"))) { validateError++; }
+            if (!ValidateEmpty($("#DESCRIPTION"))) { validateError++; }
+            if (!ValidateEmpty($("#QUANTITY"))) { validateError++; }
+            if (!ValidateEmpty($("#ASSET_CATEGORY_MAJOR"))) { validateError++; }
+            if (!ValidateEmpty($("#ASSET_CATEGORY_MINOR"))) { validateError++; }
+            if (!ValidateEmpty($("#ASSET_CREATION_DATE"))) { validateError++; }
+            if (!ValidateEmpty($("#ASSET_COST"))) { validateError++; }
+            if (!ValidateEmpty($("#SALVAGE_TYPE"))) { validateError++; }
+            if (!ValidateEmpty($("#METHOD"))) { validateError++; }
+            if (!ValidateEmpty($("#LIFE_MONTHS"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT1"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT2"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT3"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT4"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT5"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT6"))) { validateError++; }
+            if (!ValidateEmpty($("#EXP_ACCOUNT_SEGMENT7"))) { validateError++; }
+            if (!ValidateEmpty($("#FA_LOC_1"))) { validateError++; }
+            if (!ValidateEmpty($("#FA_LOC_2"))) { validateError++; }
+            if (!ValidateEmpty($("#FA_LOC_3"))) { validateError++; }
+            if (!ValidateEmpty($("#TRANSACTION_ID"))) { validateError++; }
+            if (!ValidateEmpty($("#LAST_UPDATE_DATE"))) { validateError++; }
+            if (!ValidateEmpty($("#PURCHASE_TAX"))) { validateError++; }
+            if (!ValidateEmpty($("#PLATE_NUMBER"))) { validateError++; }
+            if (!ValidateEmpty($("#LISENSING_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#OUT_WAREHOUSE_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#DOME_LIGHT_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#ANTI_ROBBERY_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#LOADING_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#INNER_ROOF_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#TAXIMETER_FEE"))) { validateError++; }
+            if (!ValidateEmpty($("#OBD_FEE"))) { validateError++; }
             if (validateError > 0) {
                 jqxNotification("还有数据未同步！", null, "error");
             } else {
@@ -238,7 +245,7 @@ var $page = function () {
                     }
                     $("#jqxNotification").jqxNotification({
                         width: "100%", position: "top-left", opacity: 1,
-                        autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: templateResult
+                        autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: templateResult, closeOnClick: false
                     });
                     $("#jqxNotification").jqxNotification("open");
                 }
@@ -262,30 +269,44 @@ var $page = function () {
             $("#FileInput").click();
         })
         $("#FileInput").on("change", function () {
-            $('#jqxLoader').jqxLoader('open');
-            $("#formFile").ajaxSubmit({
-                url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadLocalFile",
-                type: "post",
-                data: {
-                    'VGUID': $("#VGUID").val()
-                },
-                success: function (msg) {
-                    $('#jqxLoader').jqxLoader('close');
-                    switch (msg.Status) {
-                        case "0":
-                            jqxNotification("上传失败！", null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("上传成功！", null, "success");
-                            $("#Attachment").show();
-                            $("#Attachment").attr("href", msg.ResultInfo);
-                            $("#Attachment").html(msg.ResultInfo2);
-                            break;
+            var filePath = this.value;
+            var fileExt = filePath.substring(filePath.lastIndexOf("."))
+                .toLowerCase();
+            if (!checkFileExt(fileExt)) {
+                jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+                this.value = "";
+                return;
+            } else {
+                $('#jqxLoader').jqxLoader('open');
+                $("#formFile").ajaxSubmit({
+                    url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadLocalFile",
+                    type: "post",
+                    data: {
+                        'VGUID': $("#VGUID").val()
+                    },
+                    success: function (msg) {
+                        $('#jqxLoader').jqxLoader('close');
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("上传失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("上传成功！", null, "success");
+                                $("#Attachment").show();
+                                $("#Attachment").attr("href", msg.ResultInfo);
+                                $("#Attachment").html(msg.ResultInfo2);
+                                break;
+                        }
                     }
-                }
-            });
+                });
+            }
         })
-
+        function checkFileExt(ext) {
+            if (!ext.match(/.jpg|.png|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {
+                return false;
+            }
+            return true;
+        }
         $("#jqxLoader").jqxLoader({ isModal: true, width: 100, height: 60, imagePosition: 'top' });
         
     }; //addEvent end
@@ -384,6 +405,7 @@ var $page = function () {
                     var fileName = msg.ACCEPTANCE_CERTIFICATE.substring(msg.ACCEPTANCE_CERTIFICATE.lastIndexOf("\\") + 1, msg.ACCEPTANCE_CERTIFICATE.length)
                     $("#Attachment").html(fileName);
                 }
+                $("#btnAccept").show();
             }
         });
     }
@@ -463,7 +485,7 @@ var $page = function () {
                 }
                 $("#jqxNotificationSendAPT").jqxNotification({
                     width: "100%", position: "top-left", opacity: 1,
-                    autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: templateResult
+                    autoOpen: false, animationOpenDelay: 800, appendContainer: "#ResultDiv", autoClose: false, template: templateResult, closeOnClick: false
                 });
                 $("#jqxNotificationSendAPT").jqxNotification("open");
             }
@@ -492,6 +514,13 @@ function doPrint() {
     window.document.body.innerHTML = prnhtml;
     window.print();
     window.location.reload()
+}
+function ValidateEmpty(obj) {
+    if ($(obj).val() == "") {
+        return false;
+    } else {
+        return true;
+    }
 }
 $(function () {
     var page = new $page();

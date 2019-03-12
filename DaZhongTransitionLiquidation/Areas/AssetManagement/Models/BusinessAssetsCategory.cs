@@ -13,7 +13,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string ASSET_CATEGORY_MINOR { set; get; }
         public int? LIFE_YEARS { set; get; }
         public int? LIFE_MONTHS { set; get; }
-        public double? SALVAGE_PERCENT { set; get; }
+        public double SALVAGE_PERCENT { set; get; }
         public string METHOD { set; get; }
         public string BOOK_TYPE_CODE { set; get; }
         public string ASSET_COST_ACCOUNT { set; get; }

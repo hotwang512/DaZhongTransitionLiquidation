@@ -98,6 +98,8 @@ var $page = function () {
                 $("#LIFE_MONTHS").val(msg.LIFE_MONTHS);
                 if (msg.SALVAGE_PERCENT != "" && msg.SALVAGE_PERCENT != null) {
                     $("#SALVAGE_PERCENT").val(msg.SALVAGE_PERCENT + "%");
+                } else {
+                    $("#SALVAGE_PERCENT").val("0%");
                 }
                 $("#METHOD").val(msg.METHOD);
                 $("#BOOK_TYPE_CODE").val(msg.BOOK_TYPE_CODE);
@@ -128,6 +130,9 @@ var $page = function () {
                 var dataAdapter = new $.jqx.dataAdapter(arr);
                 $("#ASSET_CATEGORY_MAJOR").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 198, height: 33 });
                 $("#ASSET_CATEGORY_MAJOR").jqxComboBox({ itemHeight: 33 });
+                $("#ASSET_CATEGORY_MAJOR input").click(function () {
+                    $("#ASSET_CATEGORY_MAJOR").jqxComboBox('clearSelection');
+                })
                 $("#dropdownlistWrapperASSET_CATEGORY_MAJOR Input")[0].style.paddingLeft = "10px"
             }
         });

@@ -49,6 +49,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                                 sevenSection.LIFE_MONTHS = assetCategory.LIFE_YEARS * 12 + assetCategory.LIFE_MONTHS;
                                 sevenSection.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
                                 sevenSection.METHOD = assetCategory.METHOD;
+                                sevenSection.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                                sevenSection.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
                                 var account = assetCategory.ASSET_COST_ACCOUNT;
                                 var arr = account.Split(".");
                                 sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
@@ -58,8 +60,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                                 sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
                                 sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
                                 sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
-                                sevenSection.STATUS = AcceptStatus.UnAccept;
                             }
+                            sevenSection.STATUS = AcceptStatus.UnAccept;
                             db.Insertable<Business_AssetMaintenanceInfo>(sevenSection).ExecuteCommand();
                         }else
                         {
@@ -72,6 +74,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     {
                         sevenSection.CHANGE_DATE = DateTime.Now;
                         sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                        var assetMintor = GetASSET_CATEGORY_MINOR(sevenSection.ORGANIZATION_NUM, sevenSection.GROUP_ID, sevenSection.ENGINE_NUMBER, sevenSection.CHASSIS_NUMBER);
+                        if (!assetMintor.IsNullOrEmpty() && assetMintor != sevenSection.ASSET_CATEGORY_MAJOR)
+                        {
+                            var assetCategory = GetBusiness_AssetsCategory(assetMintor);
+                            sevenSection.LIFE_MONTHS = assetCategory.LIFE_YEARS * 12 + assetCategory.LIFE_MONTHS;
+                            sevenSection.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
+                            sevenSection.METHOD = assetCategory.METHOD;
+                            sevenSection.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                            sevenSection.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
+                            var account = assetCategory.ASSET_COST_ACCOUNT;
+                            var arr = account.Split(".");
+                            sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT2 = Convert.ToDouble(arr[1]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT3 = Convert.ToDouble(arr[2]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT4 = Convert.ToDouble(arr[3]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
+                        }
                         db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER,x.ACCEPTANCE_CERTIFICATE,x.STATUS }).ExecuteCommand();
                     }
                 });
@@ -129,7 +150,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             int len = ImageBase64Str.IndexOf("base64,") + 7;
             int len1 = ImageBase64Str.IndexOf("data:") + 5;
             string ext = ImageBase64Str.Substring(len1, len - len1 - 8);
-            var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" +
+            var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" +
                 DateTime.Now.ToString("yyyyMMddHHmmssfff.") +
                 (ext.ToLower().Contains("png") ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
             var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
@@ -166,7 +187,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             if(File != null)
             {
                 var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
-                var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" + newFileName;
+                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" + newFileName;
                 var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
                 try
                 {

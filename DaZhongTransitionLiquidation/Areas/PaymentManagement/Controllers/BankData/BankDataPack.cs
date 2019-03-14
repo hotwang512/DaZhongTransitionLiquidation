@@ -26,13 +26,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
         }
         public static void SyncBackFlowAndReconciliation()
         {
-            SyncBackFlow();
+            SyncBackFlow(DateTime.Now.AddDays(-1));
             ReconciliationReportPack.AutomaticReconciliation();
         }
         /// <summary>
         /// 同步银行流水到银行数据表
         /// </summary>
-        public static void SyncBackFlow()
+        public static void SyncBackFlow(DateTime? date)
         {
             string sql = string.Format(@" select 
                                           NEWID() as VGUID,
@@ -49,7 +49,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
                                           from[dbo].[T_BankChannelMapping] m
                                           left join [Business_BankFlowTemplate] f on m.BankAccount = f.PayeeAccount
                                           left join [dbo].[T_ReceiveBank] rb on f.ReceivableAccount=rb.BankAccount
-                                          where f.VGUID is not null and f.TransactionDate>'{0}'", DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"));
+                                          where f.VGUID is not null and f.TransactionDate>'{0}'", date.ObjToString("yyyy-MM-dd"));
             List<T_Bank> bankFlows = new List<T_Bank>();
             DbBusinessDataService dbBusinessDataService = new DbBusinessDataService();
             dbBusinessDataService.Command(db =>

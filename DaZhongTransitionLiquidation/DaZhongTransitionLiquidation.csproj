@@ -64,8 +64,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -2309,6 +2309,8 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\Business_VoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs" />
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
+    <Compile Include="AutoMapper\Configuration.cs" />
+    <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\FileController.cs" />

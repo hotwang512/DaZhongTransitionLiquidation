@@ -25,7 +25,7 @@ namespace DaZhongTransitionLiquidation
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             #endregion
-
+            AutoMapper.Configuration.Configure();
             log4net.Config.XmlConfigurator.Configure();
 
             AutoSyncBankFlow.AutoSyncSeavice();

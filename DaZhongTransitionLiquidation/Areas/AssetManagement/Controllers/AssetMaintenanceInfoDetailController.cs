@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Common;
+using AutoMapper;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsMaintenance
 {
@@ -113,50 +114,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
         public bool SaveAssetMaintenanceInfo_Swap(Business_AssetMaintenanceInfo sevenSection)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            var sevenSwapSection = new Business_AssetMaintenanceInfo_Swap();
+            //var sevenSwapSection = new Business_AssetMaintenanceInfo_Swap();
+
+            var sevenSwapSection = Mapper.Map<Business_AssetMaintenanceInfo_Swap>(sevenSection);
             DbBusinessDataService.Command(db =>
             {
-                sevenSwapSection.TAG_NUMBER = sevenSection.TAG_NUMBER;
-                sevenSwapSection.DESCRIPTION = sevenSection.TAG_NUMBER;
-                sevenSwapSection.QUANTITY = sevenSection.QUANTITY;
-                sevenSwapSection.ASSET_CREATION_DATE = sevenSection.ASSET_CREATION_DATE;
-                sevenSwapSection.ASSET_COST = sevenSection.ASSET_COST;
-                sevenSwapSection.SALVAGE_TYPE = sevenSection.SALVAGE_TYPE;
-                sevenSwapSection.FA_LOC_1 = sevenSection.FA_LOC_1;
-                sevenSwapSection.FA_LOC_2 = sevenSection.FA_LOC_2;
-                sevenSwapSection.FA_LOC_3 = sevenSection.FA_LOC_3;
-                sevenSwapSection.VGUID = sevenSection.VGUID;
-                sevenSwapSection.BOOK_TYPE_CODE = sevenSection.BOOK_TYPE_CODE;
-                sevenSwapSection.ASSET_CATEGORY_MAJOR = sevenSection.ASSET_CATEGORY_MAJOR;
-                sevenSwapSection.ASSET_CATEGORY_MINOR = sevenSection.ASSET_CATEGORY_MINOR;
-                sevenSwapSection.SALVAGE_PERCENT = sevenSection.SALVAGE_PERCENT;
-                sevenSwapSection.SALVAGE_VALUE = sevenSection.SALVAGE_VALUE;
-                sevenSwapSection.YTD_DEPRECIATION = sevenSection.YTD_DEPRECIATION;
-                sevenSwapSection.ACCT_DEPRECIATION = sevenSection.ACCT_DEPRECIATION;
-                sevenSwapSection.METHOD = sevenSection.METHOD;
-                sevenSwapSection.LIFE_MONTHS = sevenSection.LIFE_MONTHS;
-                sevenSwapSection.AMORTIZATION_FLAG = sevenSection.AMORTIZATION_FLAG;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT1 = sevenSection.EXP_ACCOUNT_SEGMENT1;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT2 = sevenSection.EXP_ACCOUNT_SEGMENT2;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT3 = sevenSection.EXP_ACCOUNT_SEGMENT3;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT4 = sevenSection.EXP_ACCOUNT_SEGMENT4;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT5 = sevenSection.EXP_ACCOUNT_SEGMENT5;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT6 = sevenSection.EXP_ACCOUNT_SEGMENT6;
-                sevenSwapSection.EXP_ACCOUNT_SEGMENT7 = sevenSection.EXP_ACCOUNT_SEGMENT7;
-                sevenSwapSection.FA_LOC_1 = sevenSection.FA_LOC_1;
-                sevenSwapSection.FA_LOC_2 = sevenSection.FA_LOC_2;
-                sevenSwapSection.FA_LOC_3 = sevenSection.FA_LOC_3;
-                sevenSwapSection.RETIRE_FLAG = sevenSection.RETIRE_FLAG;
-                sevenSwapSection.RETIRE_QUANTITY = sevenSection.RETIRE_QUANTITY;
-                sevenSwapSection.RETIRE_COST = sevenSection.RETIRE_COST;
-                sevenSwapSection.RETIRE_DATE = sevenSection.RETIRE_DATE;
-                sevenSwapSection.TRANSACTION_ID = sevenSection.TRANSACTION_ID;
-                sevenSwapSection.LAST_UPDATE_DATE = sevenSection.LAST_UPDATE_DATE;
-                sevenSwapSection.CREATE_DATE = sevenSection.CREATE_DATE;
-                sevenSwapSection.CHANGE_DATE = sevenSection.CHANGE_DATE;
-                sevenSwapSection.CREATE_USER = sevenSection.CREATE_USER;
-                sevenSwapSection.CHANGE_USER = sevenSection.CHANGE_USER;
-                sevenSwapSection.STATUS = sevenSection.STATUS;
+                
                 if (!db.Queryable<Business_AssetMaintenanceInfo_Swap>().Any(c => c.VGUID == sevenSection.VGUID))
                 {
                     db.Insertable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
@@ -164,7 +127,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 else
                 {
                     sevenSection.CHANGE_DATE = DateTime.Now;
-                    db.Updateable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER, x.STATUS }).ExecuteCommand();
+                    db.Updateable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
                 }
             });
             return true;
@@ -290,52 +253,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             var isSuccess = false;
             DbBusinessDataService.Command(db =>
             {
-                var assetMaintenanceSwapInfo = new Business_AssetMaintenanceInfo_Swap();
+                //var assetMaintenanceSwapInfo = new Business_AssetMaintenanceInfo_Swap();
                 var result = db.Ado.UseTran(() =>
                 {
                     //写入中间表
                     var assetMaintenanceInfo = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                    assetMaintenanceSwapInfo.TAG_NUMBER = assetMaintenanceInfo.TAG_NUMBER;
-                    assetMaintenanceSwapInfo.DESCRIPTION = assetMaintenanceInfo.TAG_NUMBER;
-                    assetMaintenanceSwapInfo.QUANTITY = assetMaintenanceInfo.QUANTITY;
-                    assetMaintenanceSwapInfo.ASSET_CREATION_DATE = assetMaintenanceInfo.ASSET_CREATION_DATE;
-                    assetMaintenanceSwapInfo.ASSET_COST = assetMaintenanceInfo.ASSET_COST;
-                    assetMaintenanceSwapInfo.SALVAGE_TYPE = assetMaintenanceInfo.SALVAGE_TYPE;
-                    assetMaintenanceSwapInfo.FA_LOC_1 = assetMaintenanceInfo.FA_LOC_1;
-                    assetMaintenanceSwapInfo.FA_LOC_2 = assetMaintenanceInfo.FA_LOC_2;
-                    assetMaintenanceSwapInfo.FA_LOC_3 = assetMaintenanceInfo.FA_LOC_3;
-                    assetMaintenanceSwapInfo.VGUID = assetMaintenanceInfo.VGUID;
-                    assetMaintenanceSwapInfo.BOOK_TYPE_CODE = assetMaintenanceInfo.BOOK_TYPE_CODE;
-                    assetMaintenanceSwapInfo.ASSET_CATEGORY_MAJOR = assetMaintenanceInfo.ASSET_CATEGORY_MAJOR;
-                    assetMaintenanceSwapInfo.ASSET_CATEGORY_MINOR = assetMaintenanceInfo.ASSET_CATEGORY_MINOR;
-                    assetMaintenanceSwapInfo.SALVAGE_PERCENT = assetMaintenanceInfo.SALVAGE_PERCENT;
-                    assetMaintenanceSwapInfo.SALVAGE_VALUE = assetMaintenanceInfo.SALVAGE_VALUE;
-                    assetMaintenanceSwapInfo.YTD_DEPRECIATION = assetMaintenanceInfo.YTD_DEPRECIATION;
-                    assetMaintenanceSwapInfo.ACCT_DEPRECIATION = assetMaintenanceInfo.ACCT_DEPRECIATION;
-                    assetMaintenanceSwapInfo.METHOD = assetMaintenanceInfo.METHOD;
-                    assetMaintenanceSwapInfo.LIFE_MONTHS = assetMaintenanceInfo.LIFE_MONTHS;
-                    assetMaintenanceSwapInfo.AMORTIZATION_FLAG = assetMaintenanceInfo.AMORTIZATION_FLAG;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT1 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT1;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT2 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT2;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT3 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT3;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT4 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT4;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT5 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT5;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT6 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT6;
-                    assetMaintenanceSwapInfo.EXP_ACCOUNT_SEGMENT7 = assetMaintenanceInfo.EXP_ACCOUNT_SEGMENT7;
-                    assetMaintenanceSwapInfo.FA_LOC_1 = assetMaintenanceInfo.FA_LOC_1;
-                    assetMaintenanceSwapInfo.FA_LOC_2 = assetMaintenanceInfo.FA_LOC_2;
-                    assetMaintenanceSwapInfo.FA_LOC_3 = assetMaintenanceInfo.FA_LOC_3;
-                    assetMaintenanceSwapInfo.RETIRE_FLAG = assetMaintenanceInfo.RETIRE_FLAG;
-                    assetMaintenanceSwapInfo.RETIRE_QUANTITY = assetMaintenanceInfo.RETIRE_QUANTITY;
-                    assetMaintenanceSwapInfo.RETIRE_COST = assetMaintenanceInfo.RETIRE_COST;
-                    assetMaintenanceSwapInfo.RETIRE_DATE = assetMaintenanceInfo.RETIRE_DATE;
-                    assetMaintenanceSwapInfo.TRANSACTION_ID = assetMaintenanceInfo.TRANSACTION_ID;
-                    assetMaintenanceSwapInfo.LAST_UPDATE_DATE = assetMaintenanceInfo.LAST_UPDATE_DATE;
-                    assetMaintenanceSwapInfo.CREATE_DATE = assetMaintenanceInfo.CREATE_DATE;
-                    assetMaintenanceSwapInfo.CHANGE_DATE = assetMaintenanceInfo.CHANGE_DATE;
-                    assetMaintenanceSwapInfo.CREATE_USER = assetMaintenanceInfo.CREATE_USER;
-                    assetMaintenanceSwapInfo.CHANGE_USER = assetMaintenanceInfo.CHANGE_USER;
-                    assetMaintenanceSwapInfo.STATUS = assetMaintenanceInfo.STATUS;
+                    var assetMaintenanceSwapInfo = Mapper.Map<Business_AssetMaintenanceInfo_Swap>(assetMaintenanceInfo);
+                    
                     assetMaintenanceSwapInfo.CHANGE_DATE = DateTime.Now;
                     assetMaintenanceSwapInfo.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
                     assetMaintenanceSwapInfo.STATUS = AcceptStatus.Accepted;

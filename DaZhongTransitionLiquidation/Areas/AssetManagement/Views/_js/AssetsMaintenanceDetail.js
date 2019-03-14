@@ -185,6 +185,7 @@ var $page = function () {
             $("#Upload_OKBtn").hide();
             $("#photographPri").show();
             //$("#AcceptDialog").modal("hide");
+            //showLoading();
             $("#UploadPictureDialog").modal({ backdrop: "static", keyboard: false });
             $("#UploadPictureDialog").modal("show");
         })

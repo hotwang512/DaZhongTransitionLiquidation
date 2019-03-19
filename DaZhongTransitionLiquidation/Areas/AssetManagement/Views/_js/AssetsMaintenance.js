@@ -252,7 +252,11 @@ var $page = function () {
         });
     }
     function cellsrenderer(row, column, value, rowData) {
-        return '<span style="margin: 4px; margin-top:8px;">' + value + '%</span>';
+        if (value != "") {
+            return '<span style="margin: 4px; margin-top:8px;">' + value + '%</span>';
+        } else {
+            return '';
+        }
     }
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";

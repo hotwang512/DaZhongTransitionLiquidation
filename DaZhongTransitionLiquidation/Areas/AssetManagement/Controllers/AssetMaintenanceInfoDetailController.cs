@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Common;
+using AutoMapper;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsMaintenance
 {
@@ -49,6 +50,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                                 sevenSection.LIFE_MONTHS = assetCategory.LIFE_YEARS * 12 + assetCategory.LIFE_MONTHS;
                                 sevenSection.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
                                 sevenSection.METHOD = assetCategory.METHOD;
+                                sevenSection.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                                sevenSection.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
                                 var account = assetCategory.ASSET_COST_ACCOUNT;
                                 var arr = account.Split(".");
                                 sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
@@ -58,10 +61,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                                 sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
                                 sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
                                 sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
-                                sevenSection.STATUS = AcceptStatus.UnAccept;
                             }
-                            db.Insertable<Business_AssetMaintenanceInfo>(sevenSection).ExecuteCommand();
-                        }else
+                            sevenSection.STATUS = AcceptStatus.UnAccept;
+                            db.Insertable<Business_AssetMaintenanceInfo>(sevenSection).ExecuteCommand();                       
+                            //中间表数据
+                            var resultSwap = SaveAssetMaintenanceInfo_Swap(sevenSection);
+                        }
+                        else
                         {
                             resultModel.IsSuccess = false;
                             resultModel.ResultInfo = "车牌号已存在";
@@ -72,7 +78,28 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     {
                         sevenSection.CHANGE_DATE = DateTime.Now;
                         sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER,x.ACCEPTANCE_CERTIFICATE,x.STATUS }).ExecuteCommand();
+                        var assetMintor = GetASSET_CATEGORY_MINOR(sevenSection.ORGANIZATION_NUM, sevenSection.GROUP_ID, sevenSection.ENGINE_NUMBER, sevenSection.CHASSIS_NUMBER);
+                        if (!assetMintor.IsNullOrEmpty() && assetMintor != sevenSection.ASSET_CATEGORY_MAJOR)
+                        {
+                            var assetCategory = GetBusiness_AssetsCategory(assetMintor);
+                            sevenSection.LIFE_MONTHS = assetCategory.LIFE_YEARS * 12 + assetCategory.LIFE_MONTHS;
+                            sevenSection.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
+                            sevenSection.METHOD = assetCategory.METHOD;
+                            sevenSection.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                            sevenSection.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
+                            var account = assetCategory.ASSET_COST_ACCOUNT;
+                            var arr = account.Split(".");
+                            sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT2 = Convert.ToDouble(arr[1]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT3 = Convert.ToDouble(arr[2]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT4 = Convert.ToDouble(arr[3]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
+                            sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
+                        }
+                        db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER, x.ACCEPTANCE_CERTIFICATE, x.STATUS }).ExecuteCommand();
+                        //中间表数据
+                        var resultSwap = SaveAssetMaintenanceInfo_Swap(sevenSection);
                     }
                 });
                 if (resultModel.Status != "2")
@@ -83,6 +110,27 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 }
             });
             return Json(resultModel);
+        }
+        public bool SaveAssetMaintenanceInfo_Swap(Business_AssetMaintenanceInfo sevenSection)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            //var sevenSwapSection = new Business_AssetMaintenanceInfo_Swap();
+
+            var sevenSwapSection = Mapper.Map<Business_AssetMaintenanceInfo_Swap>(sevenSection);
+            DbBusinessDataService.Command(db =>
+            {
+                
+                if (!db.Queryable<Business_AssetMaintenanceInfo_Swap>().Any(c => c.VGUID == sevenSection.VGUID))
+                {
+                    db.Insertable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
+                }
+                else
+                {
+                    sevenSection.CHANGE_DATE = DateTime.Now;
+                    db.Updateable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
+                }
+            });
+            return true;
         }
         public JsonResult GetAssetInfoDetail(Guid vguid)
         {
@@ -129,7 +177,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             int len = ImageBase64Str.IndexOf("base64,") + 7;
             int len1 = ImageBase64Str.IndexOf("data:") + 5;
             string ext = ImageBase64Str.Substring(len1, len - len1 - 8);
-            var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" +
+            var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" +
                 DateTime.Now.ToString("yyyyMMddHHmmssfff.") +
                 (ext.ToLower().Contains("png") ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
             var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
@@ -166,7 +214,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             if(File != null)
             {
                 var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
-                var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" + newFileName;
+                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "AcceptFile\\" + newFileName;
                 var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
                 try
                 {
@@ -200,13 +248,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
         }
         public JsonResult InserIntoSwapTable(Guid Vguid)
         {
+            var cache = CacheManager<Sys_User>.GetInstance();
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var isSuccess = false;
             DbBusinessDataService.Command(db =>
             {
+                //var assetMaintenanceSwapInfo = new Business_AssetMaintenanceInfo_Swap();
                 var result = db.Ado.UseTran(() =>
                 {
                     //写入中间表
+                    var assetMaintenanceInfo = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
+                    var assetMaintenanceSwapInfo = Mapper.Map<Business_AssetMaintenanceInfo_Swap>(assetMaintenanceInfo);
+                    
+                    assetMaintenanceSwapInfo.CHANGE_DATE = DateTime.Now;
+                    assetMaintenanceSwapInfo.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                    assetMaintenanceSwapInfo.STATUS = AcceptStatus.Accepted;
+                    db.Updateable<Business_AssetMaintenanceInfo_Swap>(assetMaintenanceSwapInfo).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER }).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -214,15 +271,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             });
             return Json(resultModel);
         }
-
-        //调用接口,写入中间表
+        /// <summary>
+        /// 调用接口
+        /// </summary>
+        /// <param name="Vguid"></param>
+        /// <returns></returns>
         public JsonResult SendAssetInfo(Guid Vguid)
         {
+            var cache = CacheManager<Sys_User>.GetInstance();
             var sevenSection = new Business_AssetMaintenanceInfo();
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var isSuccess = false;
             DbBusinessDataService.Command(db =>
             {
+                var assetMaintenanceInfo = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
                 var assetData = new AssetInfoData();
                 assetData.VGUID = sevenSection.VGUID;
                 assetData.ORGANATION_NUM = sevenSection.ORGANIZATION_NUM;
@@ -232,6 +294,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 assetData.TAG_NUMBER = sevenSection.TAG_NUMBER;
                 assetData.DESCRIPTION = sevenSection.DESCRIPTION;
                 assetData.QUANITIY = sevenSection.QUANTITY;
+                assetMaintenanceInfo.STATUS = AcceptStatus.Accepted;
+                assetMaintenanceInfo.CHANGE_DATE = DateTime.Now;
+                assetMaintenanceInfo.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                db.Updateable<Business_AssetMaintenanceInfo>(assetMaintenanceInfo).UpdateColumns(x => new { x.STATUS, x.CHANGE_DATE}).ExecuteCommand();
                 resultModel.IsSuccess = AssetMaintenanceAPI.SendAssetInfo(assetData);
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });

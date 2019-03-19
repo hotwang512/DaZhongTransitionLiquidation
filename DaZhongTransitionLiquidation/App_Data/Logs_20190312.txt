@@ -2701,3 +2701,82 @@ Chinese Message :  Á¬½ÓÊý¾Ý¿â¹ý³ÌÖÐ·¢Éú´íÎó£¬¼ì²é·þÎñÆ÷ÊÇ·ñÕý³£Á¬½Ó×Ö·û´®ÊÇ·ñÕýÈ
    ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
    ÔÚ SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
    ÔÚ DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow(String capitalAccount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:ÐÐºÅ 26
+
+-------------------------------footer----------------------
+
+-------------------------------header----------------------
+2019-03-12 19:24:30,656 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: ÎÞÐ§µÄ URI: Î´ÄÜ·ÖÎöÖ÷»úÃû¡£
+   ÔÚ System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   ÔÚ System.Uri..ctor(String uriString)
+   ÔÚ DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:ÐÐºÅ 26
+2019-03-12 19:24:31,290 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002361905"},result:System.InvalidOperationException: Êý×éµÄ·´ÐòÁÐ»¯²»Ö§³ÖÀàÐÍ¡°DaZhongTransitionLiquidation.Common.BankFlowData¡±¡£
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   ÔÚ SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   ÔÚ DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow(String capitalAccount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:ÐÐºÅ 26
+2019-03-12 19:25:22,431 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002362348"},result:System.InvalidOperationException: Êý×éµÄ·´ÐòÁÐ»¯²»Ö§³ÖÀàÐÍ¡°DaZhongTransitionLiquidation.Common.BankFlowData¡±¡£
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   ÔÚ SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   ÔÚ DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow(String capitalAccount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:ÐÐºÅ 26
+2019-03-12 19:26:10,219 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002362189"},result:System.InvalidOperationException: Êý×éµÄ·´ÐòÁÐ»¯²»Ö§³ÖÀàÐÍ¡°DaZhongTransitionLiquidation.Common.BankFlowData¡±¡£
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   ÔÚ SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   ÔÚ DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow(String capitalAccount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:ÐÐºÅ 26
+2019-03-12 19:26:53,841 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002369318"},result:{"success":true,"errmsg":"","data":{"DFJE":7066609.95,"JFJE":141.20,"BIZH":"CNY","HUMI":"´óÖÚ½»Í¨£¨¼¯ÍÅ£©¹É·ÝÓÐÏÞ¹«Ë¾´óÖÚ³ö×âÆû³µ·Ö¹«Ë¾","DFBS":7,"Detail":[{"CDFG":2,"PATI":"×ªÕË´û¼Ç","FSJE":10008.63,"FSSJ":"04:14","DFZH":243300133,"DFBZ":"CNY","DFHM":"²Æ¸¶Í¨Ö§¸¶¿Æ¼¼ÓÐÏÞ¹«Ë¾","VCTP":"","VCNO":"","YUER":24653901.79,"YOTU":"²Æ¸¶Í¨×ªÕË","BEZH":"","T24F":"BEA190710414525758900"},{"CDFG":2,"PATI":"¿çÐÐ×ªÕË","FSJE":43453.68,"FSSJ":"11:23","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"ÒøÁªÉÌÎñ¹É·ÝÓÐÏÞ¹«Ë¾¿Í»§±¸¸¶½ð","VCTP":"","VCNO":"","YUER":24697355.47,"YOTU":"0311-0311·Ñ95.81Ôª","BEZH":"","T24F":"BEA190711123413617501"},{"CDFG":2,"PATI":"¿çÐÐ×ªÕË","FSJE":5347.64,"FSSJ":"11:28","DFZH":"0000300000000181","DFBZ":"CNY","DFHM":"ÒøÁªÉÌÎñ¹É·ÝÓÐÏÞ¹«Ë¾¿Í»§±¸¸¶½ð","VCTP":"","VCNO":"","YUER":24702703.11,"YOTU":"0311-0311·Ñ11.79Ôª","BEZH":"","T24F":"BEA190711128329858101"},{"CDFG":2,"PATI":"µç×ÓÄÚ×ª","FSJE":6500.00,"FSSJ":"15:30","DFZH":"03002363061","DFBZ":"CNY","DFHM":"´óÖÚ½»Í¨£¨¼¯ÍÅ£©¹É·ÝÓÐÏÞ¹«Ë¾´óÖÚ³ö×âÆû³µÊÐ±±·Ö¹«Ë¾","VCTP":"","VCNO":"","YUER":24709203.11,"YOTU":"»®¿î¡¡¾É³µ¿î","BEZH":"","T24F":"FT19071276045156"},{"CDFG":2,"PATI":"µç×ÓÄÚ×ª","FSJE":1300.00,"FSSJ":"15:30","DFZH":"03002363061","DFBZ":"CNY","DFHM":"´óÖÚ½»Í¨£¨¼¯ÍÅ£©¹É·ÝÓÐÏÞ¹«Ë¾´óÖÚ³ö×âÆû³µÊÐ±±·Ö¹«Ë¾","VCTP":"","VCNO":"","YUER":24710503.11,"YOTU":"»®¿î¡¡¾É³µ¿î","BEZH":"","T24F":"FT19071489146259"},{"CDFG":2,"PATI":"µç×ÓÄÚ×ª","FSJE":4000000.00,"FSSJ":"16:02","DFZH":"03002362208","DFBZ":"CNY","DFHM":"´óÖÚ½»Í¨£¨¼¯ÍÅ£©¹É·ÝÓÐÏÞ¹«Ë¾´óÖÚ³ö×âÆû³µÆÖ¶«·Ö¹«Ë¾","VCTP":"","VCNO":"","YUER":28710503.11,"YOTU":"»®¿î¡¡ÉÏ»®×Ê½ð»®¿î","BEZH":"","T24F":"FT19071509740586"},{"CDFG":2,"PATI":"µç×ÓÄÚ×ª","FSJE":3000000.00,"FSSJ":"16:02","DFZH":"03002363018","DFBZ":"CNY","DFHM":"´óÖÚ½»Í¨£¨¼¯ÍÅ£©¹É·ÝÓÐÏÞ¹«Ë¾´óÖÚ³ö×âÆû³µÊÐÄÏ·Ö¹«Ë¾","VCTP":"","VCNO":"","YUER":31710503.11,"YOTU":"»®¿î¡¡ÉÏ»®×Ê½ð»®¿î","BEZH":"","T24F":"FT19071457821623"},{"CDFG":1,"PATI":"¿çÐÐ×ªÕË","FSJE":140.00,"FSSJ":"16:09","DFZH":6217920109299854,"DFBZ":"CNY","DFHM":"ÑÕÓ­´º","VCTP":"","VCNO":"","YUER":31710363.11,"YOTU":"»®¿î","BEZH":"ÓªÔË²¿Íâ³ö°ìÊÂ³µ·Ñ¡¡","T24F":"FT19071610052121"},{"CDFG":1,"PATI":"¿çÐÐ×ªÕË","FSJE":1.20,"FSSJ":"17:44","DFZH":6217930187043959,"DFBZ":"CNY","DFHM":"ÕÅÔóÈº","VCTP":"","VCNO":"","YUER":31710361.91,"YOTU":"","BEZH":"¡¡","T24F":"FT19071258803476"}],"ACNO":31685803002369318,"SUMU":"0009","JFBS":2}}
+2019-03-12 19:27:40,150 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002362294"},result:System.InvalidOperationException: Êý×éµÄ·´ÐòÁÐ»¯²»Ö§³ÖÀàÐÍ¡°DaZhongTransitionLiquidation.Common.BankFlowData¡±¡£
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   ÔÚ SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   ÔÚ DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow(String capitalAccount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:ÐÐºÅ 26
+2019-03-12 19:28:23,200 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"CapitalAccount":"31685803002362464"},result:System.InvalidOperationException: Êý×éµÄ·´ÐòÁÐ»¯²»Ö§³ÖÀàÐÍ¡°DaZhongTransitionLiquidation.Common.BankFlowData¡±¡£
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertListToObject(IList list, Type type, JavaScriptSerializer serializer, Boolean throwOnError, IList& convertedList)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.AssignToPropertyOrField(Object propertyValue, Object o, String memberName, JavaScriptSerializer serializer, Boolean throwOnError)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertDictionaryToObject(IDictionary`2 dictionary, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeInternal(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.ObjectConverter.ConvertObjectToTypeMain(Object o, Type type, JavaScriptSerializer serializer, Boolean throwOnError, Object& convertedObject)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize(JavaScriptSerializer serializer, String input, Type type, Int32 depthLimit)
+   ÔÚ System.Web.Script.Serialization.JavaScriptSerializer.Deserialize[T](String input)
+   ÔÚ SyntacticSugar.TypeParseExtenions.JsonToModel[TEntity](String json)
+   ÔÚ DaZhongTransitionLiquidation.Common.ShanghaiBankAPI.GetShangHaiBankTradingFlow(String capitalAccount) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation.Common\ShanghaiBankAPI.cs:ÐÐºÅ 26
+2019-03-12 19:29:32,880 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"OSNO":"4563420190312192646"},result:System.Net.WebException: Ô¶³Ì·þÎñÆ÷·µ»Ø´íÎó: (500) ÄÚ²¿·þÎñÆ÷´íÎó¡£
+   ÔÚ System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   ÔÚ System.Net.WebClient.UploadString(Uri address, String method, String data)
+   ÔÚ System.Net.WebClient.UploadString(Uri address, String data)
+   ÔÚ DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.CheckTransferResult(Business_OrderListDraft item, SqlSugarClient db, List`1 changeOrderList) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:ÐÐºÅ 152
+2019-03-12 19:34:33,308 [10] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"OSNO":"4563420190312192646"},result:System.Net.WebException: Ô¶³Ì·þÎñÆ÷·µ»Ø´íÎó: (500) ÄÚ²¿·þÎñÆ÷´íÎó¡£
+   ÔÚ System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   ÔÚ System.Net.WebClient.UploadString(Uri address, String method, String data)
+   ÔÚ System.Net.WebClient.UploadString(Uri address, String data)
+   ÔÚ DaZhongTransitionLiquidation.Controllers.AutoSyncBankFlow.CheckTransferResult(Business_OrderListDraft item, SqlSugarClient db, List`1 changeOrderList) Î»ÖÃ E:\NewDZTL\DaZhongTransitionLiquidation\Controllers\AutoSyncBankFlow.cs:ÐÐºÅ 152

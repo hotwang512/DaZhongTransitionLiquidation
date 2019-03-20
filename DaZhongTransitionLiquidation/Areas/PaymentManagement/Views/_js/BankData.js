@@ -34,7 +34,7 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-
+        getChannelInfos();
         //加载列表数据
         initTable();
 
@@ -178,7 +178,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "ArrivedTime": selector.$txtDatedTime().val() },
+                data: { "Channel_Id": $("#txtChannel").val(), "ArrivedTime": selector.$txtDatedTime().val() },
                 url: "/PaymentManagement/BankData/GetBankDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -258,7 +258,18 @@ var $page = function () {
         return true;
     }
 
+    function getChannelInfos() {
+        $.ajax({
+            url: "/PaymentManagement/NextDayData/GetChannelInfor",
+            type: "post",
+            dataType: "json",
+            success: function (msg) {
+                uiEngineHelper.bindSelect('#txtChannel', msg, "Id", "Name");
+                $("#txtChannel").prepend("<option value=\"\" selected='true'>请选择</>");
+            }
 
+        });
+    }
     //删除
     function dele() {
         var selection = [];

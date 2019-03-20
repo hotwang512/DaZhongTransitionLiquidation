@@ -3,6 +3,8 @@
 }
 var $page = function () {
     $("#homeModel").text("");
+    $("#jqxExpander").jqxExpander({ width: '350px' });
+    $("#jqxExpander2").jqxExpander({ width: '350px' });
     this.init = function () {
         $(function () {
             //资金结算中心跳转

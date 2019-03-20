@@ -53,9 +53,10 @@ var menueHelp = {
         $(".menue_body").css("display", "none");
         $("#" + menueId).parents(".menue_body").css("display", "block");
         $("#" + id).show();
-        $(".menue_bodychild").css("display", "none");
+        //$(".menue_bodychild").css("display", "none");
         //$("#" + menueId).parents(".menue_bodychild").css("display", "block");
         $("[id*=" + id + "]").parents(".menue_bodychild").css("display", "block");
+        $("[id*=" + id + "]").parents(".menue_bodychildchild").css("display", "block");
         $(".menue_item").removeClass("munue_ItemSelcted");
         $("#" + menueId).addClass("munue_ItemSelcted");
 

@@ -46,13 +46,14 @@
     <div class="body_mk" style="height: 100px">
         <table style="margin-top: 20px; margin-left: 20px;">
             <tr style="height: 45px;">
-                <td class="td_span">支付流水号：</td>
+                <td class="td_span" style="width:120px">一级渠道名称：</td>
                 <td class="td_input">
-                    <input id="txtTransactionId" type="text" class="input_text form-control" />
+                    @*<input id="txtTransactionId" type="text" class="input_text form-control" />*@
+                    <select id="txtChannel" class="input_text form-control" onchange="changeChannel()"></select>
                 </td>
-                <td class="td_span">渠道名称：</td>
+                <td class="td_span" style="width:120px">二级渠道名称：</td>
                 <td class="td_input">
-                    <select id="txtChannel" class="input_text form-control"></select>
+                    <select id="txtChannel2" class="input_text form-control"></select>
                     @*<input id="txtChannel" type="text" class="input_text form-control" />*@
                 </td>
                 <td style="width: 95px;">

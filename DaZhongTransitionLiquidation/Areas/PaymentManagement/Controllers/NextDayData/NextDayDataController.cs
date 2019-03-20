@@ -49,7 +49,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 para.pagenum = para.pagenum + 1;
                 List<v_Business_T1Data_Information_Desc> t1Datas = new List<v_Business_T1Data_Information_Desc>();
                 t1Datas = db.Queryable<v_Business_T1Data_Information_Desc>()
-                .WhereIF(!string.IsNullOrEmpty(searchParas.TransactionID), i => i.WechatNo.Contains(searchParas.TransactionID))
+                .WhereIF(!string.IsNullOrEmpty(searchParas.Channel_Id2), i => i.SubjectId.Contains(searchParas.Channel_Id2))
                 .WhereIF(!string.IsNullOrEmpty(searchParas.Channel_Id), i => i.Channel_Id == searchParas.Channel_Id)
                 .Where(i => SqlFunc.Between(i.Revenuetime, start, end))
                 .OrderBy(i => i.Revenuetime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);

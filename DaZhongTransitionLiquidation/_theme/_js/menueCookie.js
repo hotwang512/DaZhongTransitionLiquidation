@@ -71,8 +71,6 @@ var menueHelp = {
                 break;
             case "VoucherCheck": $("#homeModel").text("--会计核算中心")
                 break;
-            case "FinancialStatements": $("#homeModel").text("--会计核算中心")
-                break;
             case "QuerySubject": $("#homeModel").text("--会计核算中心")//*************
                 break;
             case "ROrderListManage": $("#homeModel").text("--费用报销中心")
@@ -94,6 +92,8 @@ var menueHelp = {
             case "LiXinAudit": $("#homeModel").text("--审计管理中心")
                 break;
             case "IndustryStatistics": $("#homeModel").text("--统计管理中心")
+                break; 
+            case "FinancialStatements": $("#homeModel").text("--财务管理中心")
                 break;
             case "SystemManage": $("#homeModel").text("--系统管理")//*************
                 break;

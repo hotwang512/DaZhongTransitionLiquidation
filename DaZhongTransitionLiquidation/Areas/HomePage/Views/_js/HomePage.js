@@ -36,10 +36,10 @@ var $page = function () {
                     default: jqxNotification("You are not authorized!", null, "error");
                 }
             });
-            //报表管理中心
-            $("#ReportCenterManagemnet").click(function () {
+            //财务管理中心
+            $("#FinancialManagemnet").click(function () {
                 switch (GetHrefPageId("5")) {
-                    case "501": CookieHelper.SaveCookie("ReportManage_ReportCenter"); window.location.href = "/FinancialStatementsManagement/IndependentBalanceSheet/Index";
+                    case "501": CookieHelper.SaveCookie("ReportManage_FinancialStatements"); window.location.href = "/PaymentManagement/RevenuePayment/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
                 }

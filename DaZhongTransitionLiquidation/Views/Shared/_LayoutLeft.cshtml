@@ -225,44 +225,44 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待提交订单" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="OrderListDraft_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=1">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">待提交订单</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="OrderListDraft_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=1">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">待提交订单</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已提交订单" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=2">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">已提交订单</td>
-                    <td></td>
-                </tr>
-                }
-                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
-                {
-                <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=3">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">已过账订单</td>
-                    <td></td>
-                </tr>
-                }*@
-                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
-                {
-                <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">客户银行信息</td>
-                    <td></td>
-                </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
+                    <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=2">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">订单业务配置</td>
+                        <td class="menue_text">已提交订单</td>
                         <td></td>
                     </tr>
-                }*@
+                }
+                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
+                    {
+                    <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=3">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">已过账订单</td>
+                        <td></td>
+                    </tr>
+                    }*@
+                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
+                    {
+                    <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">客户银行信息</td>
+                        <td></td>
+                    </tr>
+                    }
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">订单业务配置</td>
+                            <td></td>
+                        </tr>
+                    }*@
             </table>
         </div>
         <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
@@ -306,13 +306,13 @@
         <div class="menue_body" id="PaymentOrder" style="display: none;">
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息维护" && i.Reads == 1))
-                    {
+                {
                     <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                         <td class="menue_text">客户银行信息维护</td>
                         <td></td>
                     </tr>
-                    }
+                }
             </table>
         </div>
         <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
@@ -341,8 +341,8 @@
                         <td class="menue_text">订单业务配置维护</td>
                         <td></td>
                     </tr>
-                }    
-                
+                }
+
             </table>
         </div>
         <div class="menue_bodychild" style="display: none;">
@@ -371,75 +371,75 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "凭证录入" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">凭证录入</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">凭证录入</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待处理凭证" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="VoucherWaiting_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=2">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">待处理凭证</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="VoucherWaiting_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=2">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">待处理凭证</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已审核凭证" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="VoucherChecked_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=3">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">已审核凭证</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="VoucherChecked_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=3">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">已审核凭证</td>
+                        <td></td>
+                    </tr>
                 }
             </table>
         </div>
         @*<div class="menue_header VoucherManage AssetManagement OracleButt FinancialStatements QuerySubject" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产管理</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetManagement" style="display: none;">
-            <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产维护" && i.Reads == 1))
-                {
-                <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">资产维护</td>
-                    <td></td>
-                </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产盘点" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                <table style="cursor: pointer;">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">资产管理</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="menue_body" id="AssetManagement" style="display: none;">
+                <table>
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产维护" && i.Reads == 1))
+                    {
+                    <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资产盘点</td>
+                        <td class="menue_text">资产维护</td>
                         <td></td>
                     </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产变动审核" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资产变动审核</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产基础信息维护" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资产基础信息维护</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>*@
+                    }
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产盘点" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">资产盘点</td>
+                            <td></td>
+                        </tr>
+                    }
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产变动审核" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">资产变动审核</td>
+                            <td></td>
+                        </tr>
+                    }
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产基础信息维护" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">资产基础信息维护</td>
+                            <td></td>
+                        </tr>
+                    }
+                </table>
+            </div>*@
         <div class="menue_header VoucherManage  OracleButt FinancialStatements QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
@@ -453,19 +453,19 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目维护(8个段)" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="SubjectMaintenance_OracleButt" pageurl="/PaymentManagement/CompanySection/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">科目维护(8个段)</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="SubjectMaintenance_OracleButt" pageurl="/PaymentManagement/CompanySection/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">科目维护(8个段)</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "对接状态" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="ButtStatus_OracleButt" pageurl="/OracleButtManagement/ButtStatus/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">对接状态</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="ButtStatus_OracleButt" pageurl="/OracleButtManagement/ButtStatus/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">对接状态</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额维护" && i.Reads == 1))
                 {
@@ -490,59 +490,59 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "独立资产负债表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="IndependentBalanceSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentBalanceSheet/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">独立资产负债表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="IndependentBalanceSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentBalanceSheet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">独立资产负债表</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "独立资产利润表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="IndependentProfitSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentProfitSheet/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">独立资产利润表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="IndependentProfitSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentProfitSheet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">独立资产利润表</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "独立资现金流量表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="IndependentCashSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentCashSheet/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">独立资产现金流表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="IndependentCashSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentCashSheet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">独立资产现金流表</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产负债表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="ConsolidatedBalanceSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedBalanceSheet/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">合并资产负债表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="ConsolidatedBalanceSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedBalanceSheet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">合并资产负债表</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产利润表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="ConsolidatedProfitSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedProfitSheet/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">合并资产利润表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="ConsolidatedProfitSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedProfitSheet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">合并资产利润表</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产现金流量表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="ConsolidatedCashSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedCashSheet/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">合并资产现金流表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="ConsolidatedCashSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedCashSheet/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">合并资产现金流表</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额明细表" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="SubjectBalanceStatement_FinancialStatements" pageurl="/FinancialStatementsManagement/SubjectBalanceStatement/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">科目余额明细表</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="SubjectBalanceStatement_FinancialStatements" pageurl="/FinancialStatementsManagement/SubjectBalanceStatement/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">科目余额明细表</td>
+                        <td></td>
+                    </tr>
                 }
             </table>
         </div>
@@ -559,27 +559,27 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "凭证查询" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="VoucherQuery_QuerySubject" pageurl="/QuerySubjectManagement/VoucherQuery/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">凭证查询</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="VoucherQuery_QuerySubject" pageurl="/QuerySubjectManagement/VoucherQuery/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">凭证查询</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目发生明细查询" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="SubjectsDetailQuery_QuerySubject" pageurl="/QuerySubjectManagement/SubjectsDetailQuery/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">科目发生明细查询</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="SubjectsDetailQuery_QuerySubject" pageurl="/QuerySubjectManagement/SubjectsDetailQuery/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">科目发生明细查询</td>
+                        <td></td>
+                    </tr>
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额查询" && i.Reads == 1))
                 {
-                <tr class="menue_item" id="SubjectsBalanceQuery_QuerySubject" pageurl="/QuerySubjectManagement/SubjectsBalanceQuery/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">科目余额查询</td>
-                    <td></td>
-                </tr>
+                    <tr class="menue_item" id="SubjectsBalanceQuery_QuerySubject" pageurl="/QuerySubjectManagement/SubjectsBalanceQuery/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">科目余额查询</td>
+                        <td></td>
+                    </tr>
                 }
             </table>
         </div>
@@ -612,7 +612,7 @@
     @******************************************************报表管理中心******************************************************@
     @if (isSysadmin || hasReportPermission)
     {
-       
+
     }
     @******************************************************预算、分析、考核******************************************************@
 
@@ -623,387 +623,497 @@
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">结算数据</td>
+                    <td class="menue_text_header">驾驶员缴费管理</td>
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
         </div>
-        <div class="menue_body" style="display: none;">
-            <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "营收数据" && i.Reads == 1))
-                {
-                <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="/PaymentManagement/RevenuePayment/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">营收数据</td>
-                    <td></td>
+        <div class="menue_body" style="font-weight: 400;line-height: 40px;margin-left: 20px;">
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">人工缴费</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "T+1数据" && i.Reads == 1))
-                {
-                <tr class="menue_item" id="NextDayData_BaseData" pageurl="/PaymentManagement/NextDayData/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">T+1数据</td>
-                    <td></td>
+            </table>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">自助缴费</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行数据" && i.Reads == 1))
-                {
-                <tr class="menue_item" id="BankData_BaseData" pageurl="/PaymentManagement/BankData/Index">
-                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                    <td class="menue_text">银行数据</td>
-                    <td></td>
-                </tr>
-                }
-                
-                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "7个段" && i.Reads == 1))
-                    {
-                        <tr class="menue_item" id="CompanySection" pageurl="/PaymentManagement/CompanySection/Index">
+            </table>
+                 <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                    <div class="BaseData Reconc AmountReport" style="display: none;">
+                        <table style="cursor: pointer;">
+                            <tr>
+                                <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                                <td class="menue_text_header">结算数据</td>
+                                <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                         <div class="menue_bodychildchild" style="display: none;">
+                    <table>
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "营收数据" && i.Reads == 1))
+                        {
+                        <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="/PaymentManagement/RevenuePayment/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">7个段</td>
+                            <td class="menue_text">营收数据</td>
                             <td></td>
                         </tr>
-                    }*@
+
+                        }
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "T+1数据" && i.Reads == 1))
+                        {
+                        <tr class="menue_item" id="NextDayData_BaseData" pageurl="/PaymentManagement/NextDayData/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">T+1数据</td>
+                            <td></td>
+                        </tr>
+                        }
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行数据" && i.Reads == 1))
+                        {
+                        <tr class="menue_item" id="BankData_BaseData" pageurl="/PaymentManagement/BankData/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">银行数据</td>
+                            <td></td>
+                        </tr>
+                        }
+
+                        @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "7个段" && i.Reads == 1))
+                            {
+                                <tr class="menue_item" id="CompanySection" pageurl="/PaymentManagement/CompanySection/Index">
+                                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                    <td class="menue_text">7个段</td>
+                                    <td></td>
+                                </tr>
+                            }*@
+                    </table>
+                </div>
+                    <div class="BaseData Reconc AmountReport" style="display: none;">
+                        <table style="cursor: pointer;">
+                            <tr>
+                                <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                                <td class="menue_text_header">对账管理</td>
+                                <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                         <div class="menue_bodychildchild" style="display: none;">
+                    <table>
+                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道管理" && i.Reads == 1) || isSysadmin)
+                        {
+                        <tr class="menue_item" id="ChannelManagement_Reconc" pageurl="/Systemmanagement/ChannelManagement/Channel">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">渠道管理</td>
+                            <td></td>
+                        </tr>
+                        }
+                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
+                        {
+                        <tr class="menue_item" id="SubjectManagement_Reconc" pageurl="/Systemmanagement/SubjectManagement/SubjectManagement">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">二级渠道管理</td>
+                            <td></td>
+                        </tr>
+                        }
+                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
+                        {
+                        <tr class="menue_item" id="BankChannelMapping_Reconc" pageurl="/Systemmanagement/BankChannelMapping/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">银行渠道映射</td>
+                            <td></td>
+                        </tr>
+                        }
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
+                        {
+                        <tr class="menue_item" id="Reconciliation_Reconc" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">对账清算</td>
+                            <td></td>
+                        </tr>
+                        }
+                    </table>
+                </div>
+                    <div class="BaseData Reconc AmountReport" style="display: none;">
+                        <table style="cursor: pointer;">
+                            <tr>
+                                <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                                <td class="menue_text_header">金额管理</td>
+                                <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                            </tr>
+                        </table>
+                     </div>
+                         <div class="menue_bodychildchild" style="display: none;">
+                                <table>
+
+                             @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
+                            {
+                             <tr class="menue_item" id="AmountReport_AmountReport" pageurl="/ReportManagement/AmountReport/AmountReport">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">金额报表</td>
+                                <td></td>
+                            </tr>
+                             }
+                                </table>
+                            </div>
+            </div>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">网银代扣</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
             </table>
         </div>
+
         <div class="menue_header BaseData Reconc AmountReport" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">对账管理</td>
+                    <td class="menue_text_header">驾驶员代收代付管理</td>
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
         </div>
-        <div class="menue_body" style="display: none;">
-            <table>
-                @if (currentUserRoleModules.Any(i => i.PageName == "渠道管理" && i.Reads == 1) || isSysadmin)
-                {
-                    <tr class="menue_item" id="ChannelManagement_Reconc" pageurl="/Systemmanagement/ChannelManagement/Channel">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">渠道管理</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
-                {
-                    <tr class="menue_item" id="SubjectManagement_Reconc" pageurl="/Systemmanagement/SubjectManagement/SubjectManagement">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">二级渠道管理</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
-                {
-                    <tr class="menue_item" id="BankChannelMapping_Reconc" pageurl="/Systemmanagement/BankChannelMapping/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">银行渠道映射</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="Reconciliation_Reconc" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">对账清算</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-        <div class="menue_header BaseData Reconc AmountReport" style="display: none;">
-            <table style="cursor: pointer;">
+        <div class="menue_body" style="font-weight: 400;line-height: 40px;margin-left: 20px;">
+            <table style="cursor: pointer;" class="bodyTable">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">金额管理</td>
+                    <td class="menue_text_header">交通卡</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">MPOS</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header">网银代扣</td>
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
         </div>
-        <div class="menue_body" style="display: none;">
-            <table>
-               
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AmountReport_AmountReport" pageurl="/ReportManagement/AmountReport/AmountReport">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">金额报表</td>
-                        <td></td>
+           
+
+            <div class="menue_header BaseData Reconc AmountReport" style="display: none;">
+                <table style="cursor: pointer;">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">公司付账管理</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                     </tr>
-                }
-            </table>
-        </div>
+                </table>
+            </div>
+            <div class="menue_body" style="font-weight: 400;line-height: 40px;margin-left: 20px;">
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">油价补贴</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">**工资</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">**补贴</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="menue_header BaseData Reconc AmountReport" style="display: none;">
+                <table style="cursor: pointer;">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">驾驶员提现管理</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="menue_body" style="font-weight: 400;line-height: 40px;margin-left: 20px;">
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">在职提现</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">离职提现</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">*****</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+            </div>
     }
-    @******************************************************资产管理******************************************************@
-@if (isSysadmin || hasReportPermission2)
-{
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产采购</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetPurchase" style="display: none;">
-            <table>
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "订单管理" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">订单管理</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购分配" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">采购分配</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资金清算" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资金清算</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
+            @******************************************************资产管理******************************************************@
+            @if (isSysadmin || hasReportPermission2)
+            {
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产采购</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="AssetPurchase" style="display: none;">
+                    <table>
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购计划T-3" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购计划T-3</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购计划T-2" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购计划T-2</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购计划T-1" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购计划T-1</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购计划T" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购计划T</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购计划T+1" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购计划T+1</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购车辆列表" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购车辆列表</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "采购资金清算" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetPurchase_AssetPurchase" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购资金清算</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
 
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产新增</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="NewAssets" style="display: none;">
-            <table>
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="NewAssets_NewAssets" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">流程管理</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产新增</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="NewAssets" style="display: none;">
+                    <table>
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "固定资产验收" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="NewAssets_NewAssets" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">固定资产验收</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
 
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产变更</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetChange" style="display: none;">
-            <table>
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "车牌号变更" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">车牌号变更</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "经营模式变更" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">经营模式变更</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "存放地点变更" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">存放地点变更</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "OBD绑定车牌号变更" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">OBD绑定车牌号变更</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产原值变更" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资产原值变更</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产调拨</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetAllocation" style="display: none;">
-            <table>
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "内部调拨" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">内部调拨</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "外部调拨" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">外部调拨</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-        
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产处置</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetPurchase" style="display: none;">
-            <table>
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "退车清册" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">退车清册导入</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">处置清册导入</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">审计报表导出</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产维护</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetManagement" style="display: none;">
-            <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "Oracle资产清册" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">Oracle资产清册</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "车管系统清册" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">车管系统清册</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "折旧方法维护" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">折旧方法维护</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产管理报表" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资产管理报表</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-}
-    @******************************************************税务、审计、统计******************************************************@
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产变更</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="AssetChange" style="display: none;">
+                    <table>
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产新增" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产变更</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产处置</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="AssetPurchase" style="display: none;">
+                    <table>
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产新增" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产处置</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产调拨</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="AssetAllocation" style="display: none;">
+                    <table>
+                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产新增" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产调拨单</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产维护</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="AssetManagement" style="display: none;">
+                    <table>
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产维护" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产维护</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产盘点" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产盘点</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产变动审核" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产变动审核</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产基础信息维护" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产基础信息维护</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
+            @******************************************************税务、审计、统计******************************************************@
 
-    @******************************************************系统管理******************************************************@
-    @if (hasSystemManagementPermission || isSysadmin)
-    {
-        <div class="menue_header SystemManage" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">系统管理</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" style="display: none;">
-            <table>
-                @if (currentUserRoleModules.Any(i => i.PageName == "用户管理" && i.Reads == 1) || isSysadmin)
-                {
-                    <tr class="menue_item" id="UserManagement_SystemManage" pageurl="/Systemmanagement/UserManagement/UserInfos">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">用户管理</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isSysadmin)
-                {
-                    <tr class="menue_item" id="AuthorityManagement_SystemManage" pageurl="/Systemmanagement/AuthorityManagement/AuthorityInfo">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">角色权限管理</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (currentUserRoleModules.Any(i => i.PageName == "模块管理" && i.Reads == 1) || isSysadmin)
-                {
-                    <tr class="menue_item" id="MenuManagement_SystemManage" pageurl="/Systemmanagement/ModuleManagement/index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">模块管理</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-    }
+            @******************************************************系统管理******************************************************@
+            @if (hasSystemManagementPermission || isSysadmin)
+            {
+                <div class="menue_header SystemManage" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">系统管理</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" style="display: none;">
+                    <table>
+                        @if (currentUserRoleModules.Any(i => i.PageName == "用户管理" && i.Reads == 1) || isSysadmin)
+                        {
+                            <tr class="menue_item" id="UserManagement_SystemManage" pageurl="/Systemmanagement/UserManagement/UserInfos">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">用户管理</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isSysadmin)
+                        {
+                            <tr class="menue_item" id="AuthorityManagement_SystemManage" pageurl="/Systemmanagement/AuthorityManagement/AuthorityInfo">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">角色权限管理</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (currentUserRoleModules.Any(i => i.PageName == "模块管理" && i.Reads == 1) || isSysadmin)
+                        {
+                            <tr class="menue_item" id="MenuManagement_SystemManage" pageurl="/Systemmanagement/ModuleManagement/index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">模块管理</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
 </body>
 </html>

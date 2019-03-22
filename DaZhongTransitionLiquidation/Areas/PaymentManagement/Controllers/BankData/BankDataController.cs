@@ -41,6 +41,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<v_Bank_desc>().WhereIF(searchParams.ArrivedTime != null, i => i.ArrivedTime == searchParams.ArrivedTime)
+                .WhereIF(searchParams.Channel_Id != null, i => i.Channel_Id == searchParams.Channel_Id)
                 .OrderBy(i => i.ArrivedTime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

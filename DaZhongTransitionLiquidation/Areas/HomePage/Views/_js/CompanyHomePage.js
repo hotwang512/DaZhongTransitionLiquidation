@@ -100,8 +100,8 @@ function initTable1() {
         {
             pageable: false,
             width: "100%",
-            //autoheight: true,
-            height:500,
+            autoheight: true,
+            //height:500,
             pageSize: 10,
             //serverProcessing: true,
             pagerButtonsCount: 10,

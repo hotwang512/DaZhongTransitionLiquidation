@@ -785,8 +785,6 @@ function uploadFiles(event) {
 
     $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
     $("#Attachment").val(attachments);
-
-
 }
 function loadAttachments(attachments) {
     $("#Attachment").val(attachments);
@@ -799,7 +797,6 @@ function loadAttachments(attachments) {
     }
 }
 function removeAttachment(obj) {
-
     var id = obj.previousSibling.attributes["href"].value;
     var type = obj.parentElement.textContent.trim().split(/\s+/)[0];//按空格拆分字符串
     var name = obj.parentElement.textContent.trim().split(/\s+/)[1].substring(0, obj.parentElement.textContent.trim().split(/\s+/)[1].length - 1);

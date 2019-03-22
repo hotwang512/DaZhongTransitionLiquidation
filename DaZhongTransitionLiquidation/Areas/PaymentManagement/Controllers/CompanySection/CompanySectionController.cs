@@ -243,7 +243,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             {
                 int saveChanges = 1;
                 var disable = "";
-                var data = db.Queryable<Business_SevenSection>();
+                var data = db.Queryable<Business_SevenSection>().ToList();
                 foreach (var item in vguids)
                 {
                     saveChanges = db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
@@ -254,9 +254,11 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         //如果是科目表改变状态时要判断上级节点，并递归查询修改
                         var code = data.Single(x => x.VGUID == item && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").Code;
                         var parentCode = data.Single(x => x.VGUID == item && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ParentCode;
+                        var companyCode = data.Single(x => x.VGUID == item).CompanyCode;
+                        var accountModeCode = data.Single(x => x.VGUID == item).AccountModeCode;
                         if (parentCode != null)
                         {
-                            var st = data.Single(x => x.Code == parentCode && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").Status;
+                            var st = data.Single(x => x.Code == parentCode && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.CompanyCode == companyCode && x.AccountModeCode == accountModeCode).Status;
                             if(st == "0")
                             {
                                 disable = "2";

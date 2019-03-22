@@ -212,7 +212,7 @@ var $page = function () {
                     datatype: "json",
                     id: "Vguid",//主键
                     data: {
-                        "TransactionID": transactionId,
+                        "Channel_Id2": $("#txtChannel2").val(),
                         "PayDateFrom": selector.$txtPaymentForm().val(),
                         "PayDateTo": selector.$txtPaymentTo().val(),
                         "Channel_Id": selector.$txtChannel().val()
@@ -432,3 +432,17 @@ $(function () {
     page.init();
 
 });
+
+function changeChannel() {
+    var channel = $("#txtChannel").val();
+    $.ajax({
+        url: "/PaymentManagement/NextDayData/GetSubject",
+        type: "post",
+        dataType: "json",
+        data: { "Channel": channel },
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#txtChannel2', msg, "SubjectId", "SubjectNmae");
+        }
+
+    });
+}

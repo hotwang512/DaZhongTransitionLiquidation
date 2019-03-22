@@ -39,8 +39,12 @@
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
     </div>
     <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 550px; margin-left: 20px;">
+        <table style="margin-top: 20px; width: 100%; margin-left: 20px;">
             <tr style="height: 45px;">
+                <td class="td_span" style="width:120px">渠道名称：</td>
+                <td class="td_input">
+                    <select id="txtChannel" class="input_text form-control" style="width: 220px;" onchange="changeChannel()"></select>
+                </td>
                 <td class="td_span">到账时间：</td>
                 <td class="td_input">
                     <input id="txtDatedTime" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />

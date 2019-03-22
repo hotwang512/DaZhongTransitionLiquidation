@@ -1,0 +1,30 @@
+
+-------------------------------header----------------------
+2019-03-18 09:53:23,043 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-18 11:53:23,094 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+
+-------------------------------header----------------------
+2019-03-18 13:15:27,990 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-18 15:15:28,025 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+2019-03-18 17:15:28,104 [9] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26
+
+-------------------------------header----------------------
+2019-03-18 17:22:10,624 [8] [ERROR] DaZhongTransitionLiquidation.Common.Log4NetWriter - Data:{"Data":""},result:System.UriFormatException: 无效的 URI: 未能分析主机名。
+   在 System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   在 System.Uri..ctor(String uriString)
+   在 DaZhongTransitionLiquidation.Common.AssetMaintenanceAPI.GetAssetMaintenanceInfoData() 位置 E:\NewDZTL\DaZhongTransitionLiquidation.Common\AssetMaintenanceAPI.cs:行号 26

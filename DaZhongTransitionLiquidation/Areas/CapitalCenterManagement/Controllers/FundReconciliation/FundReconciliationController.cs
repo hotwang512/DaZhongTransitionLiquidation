@@ -117,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         }
                         else
                         {
-                            sevenSection.ReconciliantStatus = "对账失败";
+                            sevenSection.ReconciliantStatus = "对账失败"; 
                         }
                     }
                     if (isEdit)

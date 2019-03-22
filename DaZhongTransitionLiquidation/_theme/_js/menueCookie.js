@@ -69,7 +69,7 @@ var menueHelp = {
                 break;
             case "VoucherManage": $("#homeModel").text("--会计核算中心")
                 break;
-            case "OracleButt": $("#homeModel").text("--会计核算中心")
+            case "VoucherCheck": $("#homeModel").text("--会计核算中心")
                 break;
             case "FinancialStatements": $("#homeModel").text("--会计核算中心")
                 break;
@@ -79,7 +79,7 @@ var menueHelp = {
                 break;
             case "ReportCenter": $("#homeModel").text("--报表管理中心")
                 break;
-            case "Analysis": $("#homeModel").text("--预算、分析、考核")
+            case "RevenueBudget": $("#homeModel").text("--预算管理中心")
                 break;
             case "BaseData": $("#homeModel").text("--驾驶员结算中心")
                 break;
@@ -89,10 +89,19 @@ var menueHelp = {
                 break;
             case "AssetManagement": $("#homeModel").text("--资产管理中心")
                 break;
-            case "TaxAuditManage": $("#homeModel").text("--税务、审计、统计")
+            case "TaxCalculation": $("#homeModel").text("--税务管理中心")
+                break;
+            case "LiXinAudit": $("#homeModel").text("--审计管理中心")
+                break;
+            case "IndustryStatistics": $("#homeModel").text("--统计管理中心")
                 break;
             case "SystemManage": $("#homeModel").text("--系统管理")//*************
                 break;
+            case "OracleButt": $("#homeModel").text("--系统管理")
+                break;
+            case "OrderSetting": $("#homeModel").text("--系统管理")
+                break;
+                
             default:
         }
     }

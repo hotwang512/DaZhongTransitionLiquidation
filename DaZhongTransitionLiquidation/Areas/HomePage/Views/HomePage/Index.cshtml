@@ -88,7 +88,7 @@
     </div>
     <div id="moduleDIV" style="width: 100%;margin-top: 80px;">
         <div style="height:200px">
-            <div id="jqxExpander" style="margin-left: 70px">
+            <div id="jqxExpander" style="margin-left: 40px">
                 <div>
                     重要事项通知
                 </div>
@@ -135,7 +135,7 @@
                     <div class="img_Parent_div">
                         <img class="img-style" src="/_theme/images/Accrual.png" />
                     </div>
-                    <span class="writing">资金结算中心</span>
+                    <span class="writing">资金管理中心</span>
                 </div>
             </a>
                 }
@@ -170,7 +170,7 @@
                     <div class="img_Parent_div">
                         <img class="img-style" src="/_theme/images/Send Email.png" />
                     </div>
-                    <span class="writing">费用报销中心</span>
+                    <span class="writing">报销管理中心</span>
                 </div>
             </a>
                 }
@@ -182,33 +182,66 @@
                     <div class="img_Parent_div">
                         <img class="img-style" src="/_theme/images/Business Data.png" />
                     </div>
-                    <span class="writing">报表管理中心</span>
+                    <span class="writing">@*报表管理中心*@财务管理中心</span>
                 </div>
             </a>
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="ReportCenterManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Business Data.png" />
+                            </div>
+                            <span class="writing">@*报表管理中心*@分析管理中心</span>
+                        </div>
+                    </a>
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="TaxAuditManagement" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Business Data.png" />
+                            </div>
+                            <span class="writing">@*报表管理中心*@税务管理中心</span>
+                        </div>
+                    </a>
                 }
 
                 if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "6BAA4F3E-BCEA-45C4-8D57-F2E9A96CE06C" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="BudgetAnalysisManagemnet" class="moudle" data-coordinate="1">
+            <a url="" href="#" id="BudgetManagemnet" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">
                     <div class="img_Parent_div">
                         <img class="img-style" src="/_theme/images/Report.png" />
                     </div>
-                    <span class="writing">预算、分析、考核</span>
+                    <span class="writing">预算管理中心</span>
                 </div>
             </a>
                 }
 
                 if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="TaxAuditManagement" class="moudle" data-coordinate="1">
+            <a url="" href="#" id="CountManagement" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">
                     <div class="img_Parent_div">
                         <img class="img-style" src="/_theme/images/Payment.png" />
                     </div>
-                    <span class="writing">税务、审计、统计</span>
+                    <span class="writing">统计管理中心</span>
                 </div>
             </a>
+                }
+                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
+                {
+                    <a url="" href="#" id="AuditManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Payment.png" />
+                            </div>
+                            <span class="writing">审计管理中心</span>
+                        </div>
+                    </a>
                 }
 
                 if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "23EF85FF-E6F1-46B7-8DBD-8FD99BEBB24A" && currentModuleRolePermission[i].Reads == 1)
@@ -227,7 +260,7 @@
 
         </div>
         <div style="height:200px">
-            <div id="jqxExpander2" style="margin-left: 1360px;margin-top: -710px;">
+            <div id="jqxExpander2" style="margin-left: 1420px;margin-top: -710px;">
                 <div>
                    相关法律政策学习
                 </div>

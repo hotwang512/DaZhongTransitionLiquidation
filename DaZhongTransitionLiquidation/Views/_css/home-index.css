@@ -9,8 +9,8 @@ body {
 }
 
 .home-message {
-    /*width: 1020px;*/
-    width: 800px;
+    width: 1020px;
+    /*width: 800px;*/
     margin: -200px auto 0 auto;
     top: 18%;
     /*position: absolute;*/

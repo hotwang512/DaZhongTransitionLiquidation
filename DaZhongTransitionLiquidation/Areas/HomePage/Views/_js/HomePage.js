@@ -39,19 +39,12 @@ var $page = function () {
             //报表管理中心
             $("#ReportCenterManagemnet").click(function () {
                 switch (GetHrefPageId("5")) {
-                    case "501": CookieHelper.SaveCookie("ReportManage_ReportCenter"); window.location.href = "";
+                    case "501": CookieHelper.SaveCookie("ReportManage_ReportCenter"); window.location.href = "/FinancialStatementsManagement/IndependentBalanceSheet/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
                 }
             });
-            //预算、分析、考核
-            $("#BudgetAnalysisManagemnet").click(function () {
-                switch (GetHrefPageId("5")) {
-                    case "501": CookieHelper.SaveCookie("Budget_Analysis"); window.location.href = "";
-                        break;
-                    default: jqxNotification("You are not authorized!", null, "error");
-                }
-            });
+            
 
             //驾驶员结算中心
             $("#DriverCenterManagement").click(function () {
@@ -71,13 +64,37 @@ var $page = function () {
                 }
             });
 
-            //税务、审计、统计
+            //税务管理中心
             $("#TaxAuditManagement").click(function () {
                 switch (GetHrefPageId("7")) {
-                    case "701": CookieHelper.SaveCookie("TaxAudit_TaxAuditManage"); window.location.href = "";
+                    case "701": CookieHelper.SaveCookie("TaxAudit_TaxCalculation"); window.location.href = "/PaymentManagement/RevenuePayment/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
 
+                }
+            });
+            //预算管理中心
+            $("#BudgetManagemnet").click(function () {
+                switch (GetHrefPageId("5")) {
+                    case "501": CookieHelper.SaveCookie("Budget_RevenueBudget"); window.location.href = "/PaymentManagement/RevenuePayment/Index";
+                        break;
+                    default: jqxNotification("You are not authorized!", null, "error");
+                }
+            });
+            //审计管理中心
+            $("#AuditManagement").click(function () {
+                switch (GetHrefPageId("5")) {
+                    case "501": CookieHelper.SaveCookie("AuditSelect_LiXinAudit"); window.location.href = "/PaymentManagement/RevenuePayment/Index";
+                        break;
+                    default: jqxNotification("You are not authorized!", null, "error");
+                }
+            });
+            //统计管理中心
+            $("#CountManagement").click(function () {
+                switch (GetHrefPageId("5")) {
+                    case "501": CookieHelper.SaveCookie("OperationalData_IndustryStatistics"); window.location.href = "/PaymentManagement/RevenuePayment/Index";
+                        break;
+                    default: jqxNotification("You are not authorized!", null, "error");
                 }
             });
 

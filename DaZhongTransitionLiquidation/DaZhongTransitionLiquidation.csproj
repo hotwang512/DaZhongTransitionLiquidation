@@ -2396,6 +2396,9 @@
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
+    <Folder Include="Areas\TaxAdministrationCenter\Controllers\" />
+    <Folder Include="Areas\TaxAdministrationCenter\Models\" />
+    <Folder Include="Areas\TaxAdministrationCenter\Views\" />
     <Folder Include="Temp\" />
     <Folder Include="uploads\" />
     <Folder Include="Views\NewApi\" />

@@ -1,6 +1,7 @@
 ﻿//所有元素选择器
 var selector = {
-    $grid: function () { return $("#jqxTable") },  
+    $grid: function () { return $("#jqxTable") },
+    $grid1: function () { return $("#jqxTable1") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
     $EditPermission: function () { return $("#EditPermission") }
@@ -214,7 +215,7 @@ var $page = function () {
                 pagerButtonsCount: 10,
                 source: typeAdapter,
                 theme: "office",
-                columnsHeight: 40,
+                columnsHeight: 30,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
@@ -245,7 +246,100 @@ var $page = function () {
             window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
         });
     }
-
+    function initTable1() {
+        //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
+        var status = $.request.queryString().Status;
+        var source =
+            {
+                datafields:
+                [
+                    { name: "checkbox", type: null },
+                    { name: 'CompanyCode', type: 'string' },
+                    { name: 'CompanyName', type: 'string' },
+                    { name: 'AccountingPeriod', type: 'date' },
+                    { name: 'Currency', type: 'string' },
+                    { name: 'BatchName', type: 'string' },
+                    { name: 'VoucherNo', type: 'string' },
+                    { name: 'VoucherDate', type: 'date' },
+                    { name: 'VoucherType', type: 'string' },
+                    { name: 'DebitAmountTotal', type: 'number' },
+                    { name: 'CreditAmountTotal', type: 'number' },
+                    { name: 'FinanceDirector', type: 'string' },
+                    { name: 'Bookkeeping', type: 'string' },
+                    { name: 'Auditor', type: 'string' },
+                    { name: 'DocumentMaker', type: 'string' },
+                    { name: 'Cashier', type: 'string' },
+                    { name: 'Attachment1', type: 'string' },
+                    { name: 'Attachment2', type: 'string' },
+                    { name: 'Attachment3', type: 'string' },
+                    { name: 'Attachment4', type: 'string' },
+                    { name: 'Attachment5', type: 'string' },
+                    { name: 'VGUID', type: 'string' },
+                    { name: 'Status', type: 'string' },
+                ],
+                datatype: "json",
+                id: "VGUID",
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val() },
+                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
+            };
+        var typeAdapter = new $.jqx.dataAdapter(source, {
+            downloadComplete: function (data) {
+                source.totalrecords = data.TotalRows;
+            }
+        });
+        //创建卡信息列表（主表）
+        selector.$grid1().jqxDataTable(
+            {
+                pageable: true,
+                width: "100%",
+                height: 400,
+                pageSize: 10,
+                serverProcessing: true,
+                pagerButtonsCount: 10,
+                source: typeAdapter,
+                theme: "office",
+                columnsHeight: 30,
+                columns: [
+                    { text: "", datafield: "checkbox", width: 35, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
+                    { text: '批名', datafield: 'BatchName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: false, align: 'center', cellsAlign: 'center' },
+                    { text: '营运公司', datafield: 'CompanyName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', },
+                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
+                    { text: '币种', datafield: 'Currency', width: 150, align: 'center', cellsAlign: 'center', },
+                    { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
+                    //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
+                    //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '制单', datafield: 'DocumentMaker', align: 'center', cellsAlign: 'center' },
+                    //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
+                ]
+            });
+        selector.$grid1().on('rowDoubleClick', function (event) {
+            // event args.
+            var args = event.args;
+            // row data.
+            var row = args.row;
+            // row index.
+            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
+        });
+    }
+    var initWidgets = function (tab) {
+        switch (tab) {
+            case 0:
+                initTable();
+                break;
+            case 1:
+                initTable1();
+                break;
+        }
+    }
+    $('#jqxTabs').jqxTabs({ width: "100%", height: 450, initTabContent: initWidgets });
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {

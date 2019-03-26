@@ -902,7 +902,7 @@
                         <table>
                             @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
                             {
-                                <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="#">
+                                <tr class="menue_item" id="FixedAssetsOrder_AssetPurchase" pageurl="/AssetManagement/FixedAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                     <td class="menue_text">固定资产</td>
                                     <td></td>
@@ -910,7 +910,7 @@
                             }
                             @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
                             {
-                                <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="#">
+                                <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetManagement/IntangibleAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                     <td class="menue_text">无形资产</td>
                                     <td></td>

@@ -185,6 +185,8 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\FixedAssetsOrder.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\FixedAssetsOrderDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
@@ -265,6 +267,8 @@
     <Content Include="Areas\AssetManagement\Views\AssetMaintenanceInfoDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetsMaintenance\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\web.config" />
+    <Content Include="Areas\AssetManagement\Views\FixedAssetsOrder\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\FixedAssetsOrderDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2233,9 +2237,13 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceDetailController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetMaintenanceInfoDetailController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\FixedAssetsOrderController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\FixedAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetOrderDetails.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_FixedAssetsOrder.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
@@ -2400,7 +2408,9 @@
     <Folder Include="Areas\TaxAdministrationCenter\Models\" />
     <Folder Include="Areas\TaxAdministrationCenter\Views\" />
     <Folder Include="Temp\" />
-    <Folder Include="uploads\" />
+    <Folder Include="uploads\AcceptFile\" />
+    <Folder Include="uploads\ApprovalFormFile\" />
+    <Folder Include="uploads\PurchaseContract\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />
     <Folder Include="_theme\temp\img\" />

@@ -270,6 +270,7 @@ var $page = function () {
             $("#FileInput").click();
         })
         $("#FileInput").on("change", function () {
+            debugger;
             var filePath = this.value;
             var fileExt = filePath.substring(filePath.lastIndexOf("."))
                 .toLowerCase();
@@ -290,9 +291,11 @@ var $page = function () {
                         switch (msg.Status) {
                             case "0":
                                 jqxNotification("上传失败！", null, "error");
+                                $('#FileInput').val('');
                                 break;
                             case "1":
                                 jqxNotification("上传成功！", null, "success");
+                                $('#FileInput').val('');
                                 $("#Attachment").show();
                                 $("#Attachment").attr("href", msg.ResultInfo);
                                 $("#Attachment").html(msg.ResultInfo2);

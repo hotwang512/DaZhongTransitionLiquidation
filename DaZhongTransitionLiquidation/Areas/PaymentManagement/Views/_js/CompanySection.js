@@ -793,6 +793,7 @@ var $page = function () {
     }
     //成本中心段
     function initTable4() {
+        debugger
         var source =
             {
                 datafields:

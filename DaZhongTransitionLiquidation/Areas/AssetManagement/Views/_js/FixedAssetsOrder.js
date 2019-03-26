@@ -113,6 +113,7 @@ var $page = function () {
                     { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
                     { name: 'ContractFilePath', type: 'string' },
+                    { name: 'SubmitStatus', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },

@@ -262,17 +262,24 @@ function initTable() {
             { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
             { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', editable: false },
             {
-                text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center', columntype: 'numberinput',
-                createeditor: function (row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: 0, digits: 13 });
+                text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center', columntype: 'textbox',
+                validation: function (cell, value) {
+                    if (value == "")
+                        return true;
+                    if (!isNumber(value)) {
+                        return { result: false, message: "请输入数字" };
+                    }
+                    return true;
                 },
                 aggregates: [
                     {
                         '合计':
                             function (aggregatedValue, currentValue) {
-                                aggregatedValue += currentValue;
-                                $("#OrderQuantity").val(aggregatedValue);
-                                computeValue();
+                                if (currentValue != "") {
+                                    aggregatedValue += currentValue;
+                                    $("#OrderQuantity").val(aggregatedValue);
+                                    computeValue();
+                                }
                                 return aggregatedValue;
                             }
                     }
@@ -355,4 +362,13 @@ function newguid() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+function isNumber(val) {
+    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+    var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+    if (regPos.test(val) || regNeg.test(val)) {
+        return true;
+    } else {
+        return false;
+    }
 }

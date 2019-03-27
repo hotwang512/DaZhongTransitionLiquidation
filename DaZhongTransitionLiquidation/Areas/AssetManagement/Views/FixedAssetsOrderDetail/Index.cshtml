@@ -70,8 +70,18 @@
                         <option value="出租车">公务车辆</option>
                     </select>
                 </td>
-                <td style="text-align: right;">付款信息：</td>
-                <td style="text-align: left;"><input id="PaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" validatetype="required" /></td>
+                <td style="text-align: right;">付款单位及账户信息：</td>
+                <td style="text-align: left;">
+                    @*<input id="PaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" validatetype="required"/>*@
+                    <div id="PaymentInformation">
+                        <div style="border-color: transparent;" id="PaymentInformationGrid">
+                        </div>
+                    </div>
+                    <div style="display: none">
+                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                    </div>
+                </td>
                 <td style="text-align: right;">订单数量：</td>
                 <td style="text-align: left;">
                     <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
@@ -104,9 +114,8 @@
                 </td>
                 <td style="text-align: right;">采购合同：</td>
                 <td style="text-align: left;">
-                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>
-                    <br />
-                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden />
+                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
+                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
                 </td>
 
                 <td style="text-align: right;">提交状态：</td>
@@ -117,7 +126,7 @@
             <tr style="display: none">
                 <td></td>
                 <td style="text-align: left;">
-                    <input id="PaymentInformationVguid" />
+                    @*<input id="PaymentInformationVguid" />*@
                 </td>
                 <td></td>
                 <td>

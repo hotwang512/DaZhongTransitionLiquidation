@@ -35,8 +35,8 @@ var $page = function () {
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "OrderType": $("#OrderType").val(),
-                            "PaymentInformationVguid": $("#PaymentInformationVguid").val(),
-                            "PaymentInformation": $("#PaymentInformation").val(),
+                            "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
+                            "PaymentInformation": $("#hiddenPaymentInformation").val(),
                             "OrderQuantity": $("#OrderQuantity").val(),
                             "PurchasePrices": $("#PurchasePrices").val(),
                             "ContractAmount": $("#ContractAmount").val(),
@@ -46,7 +46,7 @@ var $page = function () {
                             "SupplierInformation": $("#SupplierInformation").val(),
                             "AcceptanceDate": $("#AcceptanceDate").val(),
                             "PaymentDate": $("#PaymentDate").val(),
-                            "ContractName": $("#Attachment").html(),
+                            "ContractName": $("#Attachment").attr("title"),
                             "SubmitStatus": $("#SubmitStatus").val(),
                             "ContractFilePath": $("#Attachment").attr("href")
                 },
@@ -94,8 +94,8 @@ var $page = function () {
     function getFixedAssetsOrderDetail() {
         $.post("/AssetManagement/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             $("#OrderType").val(msg.OrderType);
-            $("#PaymentInformationVguid").val(msg.PaymentInformationVguid);
-            $("#PaymentInformation").val(msg.PaymentInformation);
+            $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
+            $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#OrderQuantity").val(msg.OrderQuantity);
             $("#PurchasePrices").val(msg.PurchasePrices);
             $("#ContractAmount").val(msg.ContractAmount);
@@ -109,11 +109,13 @@ var $page = function () {
             if (msg.ContractName != "" && msg.ContractFilePath != "") {
                 $("#Attachment").show();
                 $("#Attachment").attr("href", msg.ContractFilePath);
-                $("#Attachment").html(msg.ContractName);
-
+                debugger;
+                $("#Attachment").attr("title", msg.ContractName);
             }
             $("#ContractFilePath").val(msg.ContractFilePath);
             $("#SubmitStatus").show();
+            var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
+            $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
         });
     }
     //上传文件
@@ -145,7 +147,7 @@ var $page = function () {
                         jqxNotification("上传成功！", null, "success");
                         $("#Attachment").show();
                         $("#Attachment").attr("href", msg.ResultInfo);
-                        $("#Attachment").html(msg.ResultInfo2);
+                        $("#Attachment").attr("title", msg.ResultInfo2);
                         $('#ContractFileInput').val('');
                         break;
                     }
@@ -204,6 +206,7 @@ function computeValue() {
 }
 function initSelect()
 {
+    //使用部门
     $("#OrderType").prepend("<option value=\"\" selected='true'>请选择</>");
     $.ajax({
         url: "/AssetManagement/FixedAssetsOrderDetail/GetUseDepartment",
@@ -216,7 +219,61 @@ function initSelect()
             $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
         }
     });
+    //付款单位及相关账户信息
+    debugger;
+    var source =
+    {
+        datafields:
+        [
+            { name: 'CompanyOrPerson', type: 'string' },
+            { name: 'BankAccountName', type: 'string' },
+            { name: 'Bank', type: 'string' },
+            { name: 'BankAccount', type: 'string' },
+            { name: 'BankNo', type: 'string' },
+            { name: 'VGUID', type: 'string' }
+        ],
+        datatype: "json",
+        id: "Vguid",
+        data: { "BankAccount": "" },
+        url: "/CapitalCenterManagement/CustomerBankInfo/GetCustomerBankInfo",   //获取数据源的路径
+        updaterow: function (rowid, rowdata) {
+            // synchronize with the server - send update command   
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#PaymentInformationGrid").jqxGrid(
+     {
+         width: 550,
+         source: dataAdapter,
+         pageable: true,
+         autoheight: true,
+         columnsresize: true,
+         columns: [
+             { text: '公司/单位/个人', datafield: 'CompanyOrPerson', width: '150px', align: 'center', cellsAlign: 'center'},
+             { text: '账号', datafield: 'BankAccount', align: 'center', width: '150px', cellsAlign: 'center', },
+             { text: '户名', datafield: 'BankAccountName', align: 'center', width: '250px', cellsAlign: 'center' },
+             { text: '开户行', datafield: 'Bank', align: 'center', width: '250px', cellsAlign: 'center' },
+             { text: '行号', datafield: 'BankNo', align: 'center', cellsAlign: 'center', width: '150px'},
+             { text: 'VGUID', datafield: 'VGUID', hidden: true }
+         ]
+     });
+    // initialize jqxGrid
+    $("#PaymentInformation").jqxDropDownButton({
+        width: 198, height: 33
+    });
+    $("#PaymentInformationGrid").on('rowselect', function (event) {
+        var args = event.args;
+        var row = $("#PaymentInformationGrid").jqxGrid('getrowdata', args.rowindex);
+        debugger;
+        if (row != undefined) {
+            var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + row['CompanyOrPerson'] + '</div>';
+            $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
+            $("#hiddenPaymentInformationVguid").val(row['VGUID']);
+            $("#hiddenPaymentInformation").val(row['CompanyOrPerson']);
+        }
+    });
 }
+
 function initTable() {
     getDetailData();
     var source =
@@ -338,7 +395,6 @@ function deleteApprovalFile(vguid) {
             case "0":
                 break;
                 case "1":
-                    debugger;
                 initTable();
                 break;
             }

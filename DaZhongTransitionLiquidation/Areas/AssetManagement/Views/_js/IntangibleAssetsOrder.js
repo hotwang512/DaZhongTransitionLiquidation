@@ -28,7 +28,7 @@ var $page = function () {
         });
         //新增
         $("#btnAdd").on("click", function () {
-            window.location.href = "/AssetManagement/FixedAssetsOrderDetail/Index";
+            window.location.href = "/AssetManagement/IntangibleAssetsOrderDetail/Index";
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -54,7 +54,7 @@ var $page = function () {
     //删除
     function dele(selection) {
         $.ajax({
-            url: "/AssetManagement/FixedAssetsOrder/DeleteFixedAssetsOrder",
+            url: "/AssetManagement/IntangibleAssetsOrder/DeleteIntangibleAssetsOrder",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -74,7 +74,7 @@ var $page = function () {
     //提交
     function submit(selection) {
         $.ajax({
-            url: "/AssetManagement/FixedAssetsOrder/UpdataFixedAssetsOrder",
+            url: "/AssetManagement/IntangibleAssetsOrder/UpdataIntangibleAssetsOrder",
             data: { vguids: selection, status: "2" },
             //traditional: true,
             type: "post",
@@ -103,17 +103,13 @@ var $page = function () {
                     { name: 'OrderType', type: 'string' },
                     { name: 'PaymentInformationVguid', type: 'string' },
                     { name: 'PaymentInformation', type: 'string' },
-                    { name: 'OrderQuantity', type: 'number' },
-                    { name: 'PurchasePrices', type: 'float' },
-                    { name: 'ContractAmount', type: 'float' },
-                    { name: 'AssetDescription', type: 'string' },
-                    { name: 'UseDepartment', type: 'string' },
+                    { name: 'SumPayment', type: 'float' },
+                    { name: 'FirstPayment', type: 'float' },
+                    { name: 'TailPayment', type: 'float' },
                     { name: 'SupplierInformation', type: 'string' },
-                    { name: 'AcceptanceDate', type: 'date' },
-                    { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
                     { name: 'ContractFilePath', type: 'string' },
-                    { name: 'SubmitStatus', type: 'number' },
+                    { name: 'SubmitStatus', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },
@@ -122,7 +118,7 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 data: { "OrderType": $("#OrderType").val(), "SubmitStatus": $("#SubmitStatus").val() },
-                url: "/AssetManagement/FixedAssetsOrder/GetFixedAssetsOrderListDatas"   //获取数据源的路径
+                url: "/AssetManagement/IntangibleAssetsOrder/GetIntangibleAssetsOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -135,6 +131,7 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 400,
+
                 pageSize: 10,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
@@ -144,18 +141,13 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '订单类型', datafield: 'OrderType', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '付款信息关联ID', datafield: 'PaymentInformationVguid', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款信息', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '订单数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '资产说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '使用部门', datafield: 'UseDepartment', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '合同尾款', datafield: 'TailPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商信息维护', datafield: 'SupplierInformation', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '预计验收日期', datafield: 'AcceptanceDate', width: 150, align: 'center', cellsAlign: 'center' ,cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '预计付款日期', datafield: 'PaymentDate', width: 150, align: 'center', cellsAlign: 'center', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden:true },
-                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center' ,cellsRenderer: cellsRendererSubmit},
+                    { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer:cellsRendererSubmit},
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -169,7 +161,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/AssetManagement/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID;
+            window.location.href = "/AssetManagement/IntangibleAssetsOrderDetail/Index?VGUID=" + row.VGUID;
         });
     }
 
@@ -177,10 +169,12 @@ var $page = function () {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
     function cellsRendererSubmit(row, column, value, rowData) {
-        if (value == 1) {
+        if (value == 2) {
             return '<span style="margin: 4px; margin-top:8px;">已提交</span>';
+        } else if (value == 1) {
+            return '<span style="margin: 4px; margin-top:8px;">待提交尾款</span>';
         } else if (value == 0) {
-            return '<span style="margin: 4px; margin-top:8px;">未提交</span>';
+            return '<span style="margin: 4px; margin-top:8px;">待提交首付款</span>';
         }
     }
     function rendererFunc() {

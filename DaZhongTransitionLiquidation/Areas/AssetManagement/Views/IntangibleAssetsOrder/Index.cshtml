@@ -1,12 +1,12 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
-    ViewBag.Title = "订单管理/固定资产";
+    ViewBag.Title = "订单管理/无形资产";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/FixedAssetsOrder.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/IntangibleAssetsOrder.js")"></script>
 }
 
 @section css{
@@ -45,19 +45,17 @@
                 <td class="td_input">
                     <select id="OrderType" class="input_text form-control" style="width: 200px">
                         <option value="" selected="true">全部</option>
-                        <option value="出租车">出租车</option>
-                        <option value="办公类资产">办公类资产</option>
-                        <option value="OBD">OBD</option>
-                        <option value="其他设备">其他设备</option>
-                        <option value="公务车辆">公务车辆</option>
+                        <option value="车辆牌照">车辆牌照</option>
+                        <option value="软件类资产">软件类资产</option>
                     </select>
                 </td>
                 <td class="td_span">处理状态：</td>
                 <td class="td_input">
                     <select id="SubmitStatus" class="input_text form-control" style="width: 200px">
                         <option value="" selected="true">全部</option>
-                        <option value="0">未提交</option>
-                        <option value="1">已提交</option>
+                        <option value="0">待提交首付款</option>
+                        <option value="1">待提交尾款</option>
+                        <option value="2">已提交</option>
                     </select>
                 </td>
                 <td style="width: 95px;">

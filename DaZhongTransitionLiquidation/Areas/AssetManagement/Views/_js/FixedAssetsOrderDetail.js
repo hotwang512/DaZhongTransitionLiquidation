@@ -47,7 +47,6 @@ var $page = function () {
                             "AcceptanceDate": $("#AcceptanceDate").val(),
                             "PaymentDate": $("#PaymentDate").val(),
                             "ContractName": $("#Attachment").attr("title"),
-                            "SubmitStatus": $("#SubmitStatus").val(),
                             "ContractFilePath": $("#Attachment").attr("href")
                 },
                         type: "post",
@@ -89,6 +88,21 @@ var $page = function () {
             function () {
                 computeValue();
             });
+        //提交
+        $("#btnSubmit").on("click",
+            function () {
+                $.post("/AssetManagement/FixedAssetsOrderDetail/SubmitFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("提交失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("提交成功！", null, "success");
+                        $("#btnSubmit").hide();
+                        break;
+                    }
+                });
+            });
     }; //addEvent end
 
     function getFixedAssetsOrderDetail() {
@@ -105,15 +119,14 @@ var $page = function () {
             $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
             $("#PaymentDate").val(formatDate(msg.PaymentDate));
             $("#ContractName").val(msg.ContractName);
-            $("#SubmitStatus").val(msg.SubmitStatus);
-            if (msg.ContractName != "" && msg.ContractFilePath != "") {
+            if (msg.ContractName != null && msg.ContractFilePath != null) {
                 $("#Attachment").show();
                 $("#Attachment").attr("href", msg.ContractFilePath);
                 debugger;
                 $("#Attachment").attr("title", msg.ContractName);
             }
             $("#ContractFilePath").val(msg.ContractFilePath);
-            $("#SubmitStatus").show();
+
             var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
             $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
         });

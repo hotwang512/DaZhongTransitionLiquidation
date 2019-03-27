@@ -48,4 +48,36 @@
         /// </summary>
         BankChannelMapping = 11
     }
+    /// <summary>
+    /// 固定资产订单提交状态
+    /// </summary>
+    public enum FixedAssetsSubmitStatusEnum
+    {
+        /// <summary>
+        /// 待提交
+        /// </summary>
+        UnSubmit = 0,
+        /// <summary>
+        /// 已提交
+        /// </summary>
+        Submited = 1
+    }
+    /// <summary>
+    /// 无形资产订单提交状态
+    /// </summary>
+    public enum IntangibleAssetsSubmitStatusEnum
+    {
+        /// <summary>
+        /// 首付款待提交
+        /// </summary>
+        FirstPaymentUnSubmit = 0,
+        /// <summary>
+        /// 尾款待提交
+        /// </summary>
+        TailPaymentUnSubmit = 1,
+        /// <summary>
+        /// 已提交
+        /// </summary>
+        Submited = 2
+    }
 }

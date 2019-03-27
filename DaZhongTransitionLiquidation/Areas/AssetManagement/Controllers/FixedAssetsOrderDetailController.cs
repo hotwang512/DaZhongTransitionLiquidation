@@ -41,7 +41,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                     {
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        sevenSection.SubmitStatus = "待提交";
+                        sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.ObjToInt();
                         db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
                     }
                     else
@@ -250,6 +250,27 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                         x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
                 });
             return Json(departmentData,JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SubmitFixedAssetsOrder(Guid vguid)
+        {
+            var resultModel = new ResultModel<string, string>() {IsSuccess = false, Status = "0"};
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
+                    model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.ObjToInt();
+                    model.SubmitDate = DateTime.Now;
+                    model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                    db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
+            });
+            return Json(resultModel);
         }
     }
 }

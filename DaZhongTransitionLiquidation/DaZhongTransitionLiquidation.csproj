@@ -187,6 +187,8 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\FixedAssetsOrder.js" />
     <Content Include="Areas\AssetManagement\Views\_js\FixedAssetsOrderDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\IntangibleAssetsOrder.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\IntangibleAssetsOrderDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
@@ -269,6 +271,8 @@
     <Content Include="Areas\AssetManagement\Views\web.config" />
     <Content Include="Areas\AssetManagement\Views\FixedAssetsOrder\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\FixedAssetsOrderDetail\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\IntangibleAssetsOrder\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\IntangibleAssetsOrderDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2239,11 +2243,14 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\FixedAssetsOrderDetailController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\IntangibleAssetsOrderController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\IntangibleAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetOrderDetails.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_FixedAssetsOrder.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_IntangibleAssetsOrder.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />

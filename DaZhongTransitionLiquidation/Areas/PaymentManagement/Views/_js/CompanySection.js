@@ -85,7 +85,7 @@ var $page = function () {
                         $("#txtParentCode").val("");
                     } else {
                         $("#SubjectCode").show();
-                       
+
                     }
                 }
             } else {
@@ -121,17 +121,16 @@ var $page = function () {
             $("#AddAccountSettingDialog").modal("hide");
         });
         //公司段设置弹出框中的保存按钮
-        $("#AddSection_OKButton").on("click", function ()
-        {
+        $("#AddSection_OKButton").on("click", function () {
             var code = $("#hidSubjectCode").val();
-            var type = $("#hidType").val();            
+            var type = $("#hidType").val();
             var otherCode = [];
             if (type == "0") {
                 var data = $("#jqxSubjectSetting").jqxTreeGrid('getCheckedRows');
                 for (var i = 0; i < data.length; i++) {
                     otherCode.push(data[i].Code);
                 }
-            }else {
+            } else {
                 var data = $('#jqxTableSetting').jqxGrid('getdisplayrows')
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].Checked == "True" || data[i].Checked == true) {
@@ -157,7 +156,7 @@ var $page = function () {
                                 $("#jqxTable2").jqxTreeGrid('updateBoundData');
                             } else {
                                 $("#jqxTable" + index).jqxDataTable('updateBoundData');
-                            }          
+                            }
                             break;
                     }
                 }
@@ -194,7 +193,7 @@ var $page = function () {
             });
         });
         //保存8个段数据
-        selector.$AddNewBankData_OKButton().on("click", function (){
+        selector.$AddNewBankData_OKButton().on("click", function () {
             var validateError = 0;//未通过验证的数量
             if (!Validate(selector.$txtCode())) {
                 validateError++;
@@ -518,7 +517,7 @@ var $page = function () {
         $('#jqxSubjectSetting').on('bindingComplete', function (event) {
             //$("#jqxSubjectSetting").jqxTreeGrid('checkRow')
             var firstLevelRows = $("#jqxSubjectSetting").jqxTreeGrid('getRows');
-            if (firstLevelRows[0].Count != null && firstLevelRows[0].Count !="") {
+            if (firstLevelRows[0].Count != null && firstLevelRows[0].Count != "") {
                 count = firstLevelRows[0].Count.split(",");
                 for (var i = 0; i < count.length; i++) {
                     // get a row.
@@ -553,37 +552,10 @@ var $page = function () {
             case 1: initTable1();
                 break;
             case 2: $("#txtFirstSubjects").val("1"); //$("#jqxTable2").jqxTreeGrid('updateBoundData');
-                var source =
-                     {
-               datafields:
-               [
-                   { name: 'Code', type: 'string' },
-                   { name: 'ParentCode', type: 'string' },
-                   { name: 'Descrption', type: 'string' },
-                   { name: 'SectionVGUID', type: 'string' },
-                   { name: 'VGUID', type: 'string' },
-                   { name: 'Status', type: 'string' },
-                   { name: 'Remark', type: 'string' },
-                   { name: 'IsAccountingCode', type: 'string' },
-                   { name: 'IsCostCenterCode', type: 'string' },
-                   { name: 'IsSpareOneCode', type: 'string' },
-                   { name: 'IsSpareTwoCode', type: 'string' },
-                   { name: 'IsIntercourseCode', type: 'string' },
-               ],
-               hierarchy:
-               {
-                   keyDataField: { name: 'Code' },
-                   parentDataField: { name: 'ParentCode' }
-               },
-               datatype: "json",
-               cache: false,
-               //async: false,
-               id: "VGUID",
-               data: { "companyCode": companyCode, "accountModeCodes": $("#AccountModeCode").val() },
-               url: "/PaymentManagement/SubjectSection/GetCompanySection"    //获取数据源的路径
-           };
-                typeAdapterJqxTree = new $.jqx.dataAdapter(source);
-                $("#jqxTable2").jqxTreeGrid('updateBoundData')
+                //$("#jqxTable2").jqxTreeGrid('destroy');
+                //$("#jqxTable2").remove();
+                //$("#jqxTreeTable2").append('<div id="jqxTable2" class="jqxTable"></div>');
+                initTable2();
                 break;
             case 3: initTable3();
                 break;
@@ -668,7 +640,7 @@ var $page = function () {
                     { name: 'VCRTTIME', type: 'date' },
                     { name: 'Status', type: 'string' },
                     { name: 'Remark', type: 'string' },
-                    { name: 'IsCompanyCode', type: 'string' },       
+                    { name: 'IsCompanyCode', type: 'string' },
                     { name: 'IsAccountModeCode', type: 'string' },
                     { name: 'IsSubjectCode', type: 'string' },
                     { name: 'IsCompanyBank', type: 'string' },
@@ -712,38 +684,67 @@ var $page = function () {
     }
     //科目段
     function initTable2() {
-       
+        var source =
+                     {
+                         datafields:
+                         [
+                             { name: 'Code', type: 'string' },
+                             { name: 'ParentCode', type: 'string' },
+                             { name: 'Descrption', type: 'string' },
+                             { name: 'SectionVGUID', type: 'string' },
+                             { name: 'VGUID', type: 'string' },
+                             { name: 'Status', type: 'string' },
+                             { name: 'Remark', type: 'string' },
+                             { name: 'IsAccountingCode', type: 'string' },
+                             { name: 'IsCostCenterCode', type: 'string' },
+                             { name: 'IsSpareOneCode', type: 'string' },
+                             { name: 'IsSpareTwoCode', type: 'string' },
+                             { name: 'IsIntercourseCode', type: 'string' },
+                         ],
+                         hierarchy:
+                         {
+                             keyDataField: { name: 'Code' },
+                             parentDataField: { name: 'ParentCode' }
+                         },
+                         datatype: "json",
+                         cache: false,
+                         //async: false,
+                         id: "VGUID",
+                         data: { "companyCode": companyCode, "accountModeCodes": $("#AccountModeCode").val() },
+                         url: "/PaymentManagement/SubjectSection/GetCompanySection"    //获取数据源的路径
+                     };
+        typeAdapterJqxTree = new $.jqx.dataAdapter(source);
         //创建卡信息列表（主表）
         $("#jqxTable2").jqxTreeGrid({
-                pageable: false,
-                width: "100%",
-                height: 450,
-                pageSize: 15,
-                //serverProcessing: true,
-                pagerButtonsCount: 10,
-                source: typeAdapterJqxTree,
-                theme: "energyblue",
-                columnsHeight: 40,
-                checkboxes: true,
-                //hierarchicalCheckboxes: true,
-                columns: [
-                    //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left', pinned: true, cellsRenderer: detailFuncs },
-                    { text: '描述', datafield: 'Descrption', width: 200, align: 'center', pinned: true, cellsAlign: 'center' },
-                    { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', pinned: true, cellsRenderer: statusFunc },
-                    //{ text: '账套段', datafield: 'IsAccountModeCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    //{ text: '公司段', datafield: 'IsCompanyCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },  
-                    { text: '核算段', datafield: 'IsAccountingCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    { text: '成本中心段', datafield: 'IsCostCenterCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    { text: '备用1', datafield: 'IsSpareOneCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    { text: '备用2', datafield: 'IsSpareTwoCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    { text: '往来段', datafield: 'IsIntercourseCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
-                    { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
-                    { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
-                ]
-            });
+            pageable: false,
+            width: "100%",
+            height: 450,
+            pageSize: 15,
+            //serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapterJqxTree,
+            theme: "energyblue",
+            columnsHeight: 40,
+            checkboxes: true,
+            //hierarchicalCheckboxes: true,
+            columns: [
+                //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left', pinned: true, cellsRenderer: detailFuncs },
+                { text: '描述', datafield: 'Descrption', width: 200, align: 'center', pinned: true, cellsAlign: 'center' },
+                { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', pinned: true, cellsRenderer: statusFunc },
+                //{ text: '账套段', datafield: 'IsAccountModeCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                //{ text: '公司段', datafield: 'IsCompanyCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },  
+                { text: '核算段', datafield: 'IsAccountingCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '成本中心段', datafield: 'IsCostCenterCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '备用1', datafield: 'IsSpareOneCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '备用2', datafield: 'IsSpareTwoCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '往来段', datafield: 'IsIntercourseCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
+                { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
+                { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true },
+            ]
+        });
 
     }
     //核算段
@@ -1000,7 +1001,7 @@ var $page = function () {
                 initTable1();
                 break;
             case 2:
-                initTable2();
+                //initTable2();
                 break;
             case 3:
                 initTable3();
@@ -1041,7 +1042,7 @@ var $page = function () {
 
     function settingFunc(row, column, value, rowData) {
         var container = "";
-        if (rowData.ParentCode != null) {
+        if (rowData.ParentCode != null && rowData.ParentCode != "" && rowData.Remark != "1") {
             container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
             if (value != "" && (value == "True" || value == true)) {
                 container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
@@ -1257,7 +1258,7 @@ function settingSection(column, code) {
                 { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
                 { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true },
-                
+
             ]
         });
 
@@ -1304,7 +1305,7 @@ function settingSection(column, code) {
                     text: '选择', datafield: "Checked", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
                 },
                 { text: '编码', datafield: 'Code', editable: false, width: 120, align: 'center', cellsAlign: 'center' },
-                { text: '描述', datafield: 'Descrption', editable: false,  align: 'center', cellsAlign: 'center' },
+                { text: '描述', datafield: 'Descrption', editable: false, align: 'center', cellsAlign: 'center' },
                 //{ text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center', hidden: true },
                 //{ text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
                 //{ text: 'VGUID', datafield: 'VGUID', hidden: true },
@@ -1379,7 +1380,7 @@ function settingCompany(code, companyName) {
         // row's bound index.
         var rowdata = args.row.bounddata;
         if (rowdata.level != 0) {
-            editBank(rowdata.VGUID, rowdata.CompanyCode, rowdata.BankName, rowdata.BankAccount, rowdata.BankAccountName,rowdata.AccountType,rowdata.InitialBalance);
+            editBank(rowdata.VGUID, rowdata.CompanyCode, rowdata.BankName, rowdata.BankAccount, rowdata.BankAccountName, rowdata.AccountType, rowdata.InitialBalance);
         }
     });
     //$('#jqxCompanySetting').jqxGrid('expandallgroups');
@@ -1537,7 +1538,7 @@ function getCompanyCode() {
         data: { accountMode: accountMode },
         type: "POST",
         dataType: "json",
-        async:false,
+        async: false,
         success: function (msg) {
             uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "CompanyName");
             //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");

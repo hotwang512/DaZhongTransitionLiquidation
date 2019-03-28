@@ -144,7 +144,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"'
- and bss.SubjectCode='" + companyCode + "'  where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + accountModeCode + "' and bs.Code is not null").OrderBy("Code asc").ToList();
+ and bss.SubjectCode='" + companyCode + "' and bss.AccountModeCode='" + accountModeCode + "'   where bs.SectionVGUID='" + sectionVGUID + "' and bs.Status='1' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + accountModeCode + "'  and bs.Code is not null").OrderBy("Code asc").ToList();
                 }
                 if (index != 1 && index != 2)
                 {
@@ -158,7 +158,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     {
                         response = db.SqlQueryable<SubjectSetting>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + columnName + " and bss." + keyColumnName + "='" + code + @"' 
- where bs.SectionVGUID='" + sectionVGUID + "' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + accountModeCode + "' bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
+ where bs.SectionVGUID='" + sectionVGUID + "' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + accountModeCode + "' and  bs.Status='1' and bs.Code is not null").OrderBy("Code asc").ToList();
                     }
                 }
                 if(columnName == "SubjectCode" && response.Count>0)
@@ -258,7 +258,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         var accountModeCode = data.Single(x => x.VGUID == item).AccountModeCode;
                         if (parentCode != null)
                         {
-                            var st = data.Single(x => x.Code == parentCode && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.CompanyCode == companyCode && x.AccountModeCode == accountModeCode).Status;
+                            var st = data.Single(x => x.Code == parentCode).Status;
                             if(st == "0")
                             {
                                 disable = "2";
@@ -744,7 +744,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         break;
                 }
                 List<Business_SevenSection> SevenSection = new List<Business_SevenSection>();
-                var data = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == "1002" && x.CompanyCode == "100201" && x.SectionVGUID == sectionVguid).ToList();
+                var data = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == "1002" && x.CompanyCode == "01" && x.SectionVGUID == sectionVguid).ToList();
                 foreach (var item in data)
                 {
                     item.VGUID = Guid.NewGuid();

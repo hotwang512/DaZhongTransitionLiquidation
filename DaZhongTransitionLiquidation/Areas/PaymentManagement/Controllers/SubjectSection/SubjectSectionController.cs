@@ -44,9 +44,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 if (response != null)
                 {
                     var data = db.Queryable<Business_SubjectSettingInfo>().ToList();
+                    //var datas = db.Queryable<Business_SevenSection>().Where(x=>x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCodes && x.CompanyCode == companyCode).ToList();
+                    List<Business_SevenSection> sevenList = new List<Business_SevenSection>();
+                    List<Business_SevenSection> sevenLists = new List<Business_SevenSection>();
                     foreach (var item in response)
                     {
-                        //EditStatus(item.Code,item.VGUID);
+                        //EditStatus(item.Code,item.VGUID, sevenList, sevenLists, response);
                         var isAnyAccountingCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.AccountingCode != null);
                         if (isAnyAccountingCode)
                         {
@@ -93,31 +96,92 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                             item.IsIntercourseCode = false;
                         }
                     }
+                    //db.Updateable(sevenList).ExecuteCommand();
+                    //db.Updateable(sevenLists).ExecuteCommand();
+
+                    //List<Business_SubjectSettingInfo> subjectList = new List<Business_SubjectSettingInfo>();
+                    //var resp = response.Where(x => x.ParentCode != "" && x.Remark != "1").ToList();
+                    //var subjectLists = db.Queryable<Business_SubjectSettingInfo>().Where(x => x.SubjectVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCodes
+                    //                    && x.SubjectCode == companyCode).ToList();
+                    //foreach (var items in resp)
+                    //{
+                    //    var isAny = subjectLists.Any(x => x.CompanyCode == items.Code);
+                    //    if (!isAny)
+                    //    {
+                    //        Business_SubjectSettingInfo subject1 = new Business_SubjectSettingInfo();
+                    //        subject1.VGUID = Guid.NewGuid();
+                    //        subject1.SubjectCode = companyCode;
+                    //        subject1.AccountModeCode = accountModeCodes;
+                    //        subject1.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                    //        subject1.Checked = true;
+                    //        subject1.AccountingCode = "0";
+                    //        subject1.CompanyCode = items.Code;
+                    //        subjectList.Add(subject1);
+                    //        Business_SubjectSettingInfo subject2 = new Business_SubjectSettingInfo();
+                    //        subject2.VGUID = Guid.NewGuid();
+                    //        subject2.SubjectCode = companyCode;
+                    //        subject2.AccountModeCode = accountModeCodes;
+                    //        subject2.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                    //        subject2.Checked = true;
+                    //        subject2.CostCenterCode = "0";
+                    //        subject2.CompanyCode = items.Code;
+                    //        subjectList.Add(subject2);
+                    //        Business_SubjectSettingInfo subject3 = new Business_SubjectSettingInfo();
+                    //        subject3.VGUID = Guid.NewGuid();
+                    //        subject3.SubjectCode = companyCode;
+                    //        subject3.AccountModeCode = accountModeCodes;
+                    //        subject3.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                    //        subject3.Checked = true;
+                    //        subject3.SpareOneCode = "0";
+                    //        subject3.CompanyCode = items.Code;
+                    //        subjectList.Add(subject3);
+                    //        Business_SubjectSettingInfo subject4 = new Business_SubjectSettingInfo();
+                    //        subject4.VGUID = Guid.NewGuid();
+                    //        subject4.SubjectCode = companyCode;
+                    //        subject4.AccountModeCode = accountModeCodes;
+                    //        subject4.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                    //        subject4.Checked = true;
+                    //        subject4.SpareTwoCode = "0";
+                    //        subject4.CompanyCode = items.Code;
+                    //        subjectList.Add(subject4);
+                    //        Business_SubjectSettingInfo subject5 = new Business_SubjectSettingInfo();
+                    //        subject5.VGUID = Guid.NewGuid();
+                    //        subject5.SubjectCode = companyCode;
+                    //        subject5.AccountModeCode = accountModeCodes;
+                    //        subject5.SubjectVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                    //        subject5.Checked = true;
+                    //        subject5.IntercourseCode = "0";
+                    //        subject5.CompanyCode = items.Code;
+                    //        subjectList.Add(subject5);
+                    //    }
+                    //}
+                    //if (subjectList.Count > 0)
+                    //{
+                    //    db.Insertable(subjectList).ExecuteCommand();
+                    //}
                 }
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-        private void EditStatus(string code, Guid guid)
+        private void EditStatus(string code, Guid guid, List<Business_SevenSection> sevenList, List<Business_SevenSection> sevenLists, List<Business_SevenSection> datas)
         {
             DbBusinessDataService.Command(db =>
-            {
-                List<Business_SevenSection> sevenList = new List<Business_SevenSection>();
-                var datas = db.Queryable<Business_SevenSection>();
-                var isAnyParent = datas.Where(x => x.ParentCode == code && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+            {        
+                var isAnyParent = datas.Where(x => x.ParentCode == code).ToList();
                 if (isAnyParent.Count > 0)
                 {
                     foreach (var item in isAnyParent)
                     {
                         item.Remark = "1";
                         sevenList.Add(item);
-                        EditStatus(item.Code, item.VGUID);
-                    }
-                    db.Updateable(sevenList).ExecuteCommand();
+                        EditStatus(item.Code, item.VGUID, sevenList, sevenLists, datas);
+                    }  
                 }
                 else
                 {
-                    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
-                    { Remark = "", VMDFTIME = DateTime.Now, VMDFUSER = UserInfo.LoginName }).Where(it => it.VGUID == guid).ExecuteCommand();
+                    var seven = datas.Single(x => x.VGUID == guid);
+                    seven.Remark = "";
+                    sevenLists.Add(seven);
                 }
             });
         }

@@ -1,0 +1,56 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "资产维护/Oracle资产清册";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetsRetirement.js")"></script>
+}
+
+@section css{
+
+}
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span" style="width: 130px">报废日期：</td>
+                <td class="td_input">
+                    <input id="StartDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td>
+                <td><span style="margin-left: -10px">-</span></td>
+                <td class="td_input">
+                    <input id="EndDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<style>
+    .input_text {
+        width: 340px;
+    }
+</style>

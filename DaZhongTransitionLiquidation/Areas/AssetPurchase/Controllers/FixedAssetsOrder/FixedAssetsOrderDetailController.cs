@@ -1,5 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Common.Pub;
-using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;

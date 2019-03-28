@@ -1,4 +1,4 @@
-﻿using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+﻿using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;

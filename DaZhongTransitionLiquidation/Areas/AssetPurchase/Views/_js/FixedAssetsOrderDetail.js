@@ -117,8 +117,13 @@ var $page = function () {
             $("#AssetDescription").val(msg.AssetDescription);
             $("#UseDepartment").val(msg.UseDepartmentVguid);
             $("#SupplierInformation").val(msg.SupplierInformation);
-            $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
-            $("#PaymentDate").val(formatDate(msg.PaymentDate));
+            debugger;
+            if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
+                $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
+            }
+            if (msg.PaymentDate != null && msg.PaymentDate != "") {
+                $("#PaymentDate").val(formatDate(msg.PaymentDate));
+            }
             $("#ContractName").val(msg.ContractName);
             if (msg.ContractName != null && msg.ContractFilePath != null) {
                 $("#Attachment").show();

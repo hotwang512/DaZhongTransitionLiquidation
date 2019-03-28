@@ -1096,7 +1096,7 @@
                 <table>
                     @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "Oracle资产清册" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                        <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetsLedger/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">Oracle资产清册</td>
                             <td></td>
@@ -1107,6 +1107,14 @@
                         <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">车管系统清册</td>
+                            <td></td>
+                        </tr>
+                    }
+                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产报废清册" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="AssetsRetirement_AssetManagement" pageurl="/AssetManagement/AssetsRetirement/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">资产报废清册</td>
                             <td></td>
                         </tr>
                     }

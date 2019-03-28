@@ -43,22 +43,29 @@ namespace DaZhongTransitionLiquidation
             {
                 var UserInfo = new Sys_User();
                 UserInfo = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
-                if (UserInfo.LoginName.ToLower() == "sysadmin")
+                if (!UserInfo.IsNullOrEmpty())
                 {
-                    //                    response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
-                    // (t1.Code+t2.Code) as KeyData from Business_SevenSection t1 
-                    // JOIN Business_SevenSection t2 on t1.Code = t2.AccountModeCode
-                    //where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43'").OrderBy("Code asc,CompanyCode asc").ToList();
-                    result = db.SqlQueryable<Business_UserCompanySet>(@"select Code,Descrption from Business_UserCompanySet where Block = '1' and  Code is not null group by Code,Descrption")
-                                       .OrderBy("Code asc").ToList();
+                    if (UserInfo.LoginName.ToLower() == "sysadmin")
+                    {
+                        //                    response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
+                        // (t1.Code+t2.Code) as KeyData from Business_SevenSection t1 
+                        // JOIN Business_SevenSection t2 on t1.Code = t2.AccountModeCode
+                        //where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43'").OrderBy("Code asc,CompanyCode asc").ToList();
+                        result = db.SqlQueryable<Business_UserCompanySet>(@"select Code,Descrption from Business_UserCompanySet where Block = '1' and  Code is not null group by Code,Descrption")
+                            .OrderBy("Code asc").ToList();
+                    }
+                    else
+                    {
+                        //response = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Block == "1" && x.IsCheck == true)
+                        //           .OrderBy("Code asc,CompanyCode asc").ToList();
+                        result = db.SqlQueryable<Business_UserCompanySet>(@"select Code,Descrption from Business_UserCompanySet
+                    where UserVGUID = '" + UserInfo.Vguid.TryToString() + "' and Block = '1' and IsCheck = 1 and Code is not null group by Code,Descrption")
+                            .OrderBy("Code asc").ToList();
+                    }
                 }
                 else
                 {
-                    //response = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Block == "1" && x.IsCheck == true)
-                    //           .OrderBy("Code asc,CompanyCode asc").ToList();
-                    result = db.SqlQueryable<Business_UserCompanySet>(@"select Code,Descrption from Business_UserCompanySet
-                    where UserVGUID = '" + UserInfo.Vguid.TryToString() + "' and Block = '1' and IsCheck = 1 and Code is not null group by Code,Descrption")
-                    .OrderBy("Code asc").ToList();
+                    Redirect("/Login/Index");
                 }
             });
             return result;

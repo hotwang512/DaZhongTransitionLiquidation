@@ -1,0 +1,144 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
+@{
+    ViewBag.Title = "订单管理/无形资产订单明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetPurchase/Views/_js/IntangibleAssetsOrderDetail.js")"></script>
+    <script src="@Url.CusContent("~/_theme/_js/jquery.form.js")"></script>
+}
+<style>
+    .input_text {
+        width: 150px;
+        height: 35px;
+        border: 1px;
+        border-style: solid;
+        border-color: #dddddd;
+        -moz-box-shadow: 0px 1px 10px #dddddd;
+        -webkit-box-shadow: 0px 1px 10px #dddddd;
+        box-shadow: 0 0 10px #dddddd;
+        background-color: white !important;
+        border-radius: 4px;
+        float: left;
+    }
+
+    .jqx-combobox-input {
+        padding-left: 8px;
+        color: #555;
+    }
+
+    .jqx-tabs-content-element {
+        overflow: auto !important;
+    }
+
+    .SearchInput {
+        background-image: url(/_theme/jqwidgets-ver5.5.0/images/search_lg.png);
+        background-size: 20px 20px;
+        background-position: right;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;display:block">
+    <tr style="height: 50px;">
+        @if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 2)
+        {
+            <td style="width: 95px;">
+                <button id="btnSubmit" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+            </td>
+        }
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">主信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 440px;">
+        <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">订单类型：</td>
+                <td style="text-align: left;">
+                    <select id="OrderType" class="input_text form-control" style="width: 200px">
+                        <option value="车辆牌照">车辆牌照</option>
+                        <option value="软件类资产">软件类资产</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">付款单位及账户信息：</td>
+                <td style="text-align: left;">
+                    <div id="PaymentInformation">
+                        <div style="border-color: transparent;" id="PaymentInformationGrid">
+                        </div>
+                    </div>
+                    <div style="display: none">
+                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                    </div>
+                </td>
+                <td style="text-align: right;">合同总价格：</td>
+                <td style="text-align: left;">
+                    <input id="SumPayment" type="text" value="" style="width: 200px;" class="input_text form-control" />
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">合同首付款：</td>
+                <td style="text-align: left;"><input id="FirstPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">合同尾款：</td>
+                <td style="text-align: left;"><input id="TailPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">供应商信息：</td>
+                <td style="text-align: left;"><input id="SupplierInformation" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">采购合同：</td>
+                <td style="text-align: left;">
+                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
+                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
+                </td>
+            </tr>
+            <tr style="display: none">
+                <td></td>
+                <td>
+                    <input id="VGUID" name="VGUID" />
+                </td>
+            </tr>
+            <tr></tr>
+        </table>
+        <form id="contractFormFile" hidden>
+            <input type="file" id="ContractFileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.png" />
+        </form>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="OrderDetailsDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 520px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">订单明细</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 300px; overflow: auto">
+                <div id="grid"></div>
+                <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+                    <div id="cellbegineditevent"></div>
+                    <div style="margin-top: 10px;" id="cellendeditevent"></div>
+                </div>
+                <form id="formFile" hidden>
+                    <input type="file" id="FileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.png" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="OrderDetailsDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="OrderDetailsDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>

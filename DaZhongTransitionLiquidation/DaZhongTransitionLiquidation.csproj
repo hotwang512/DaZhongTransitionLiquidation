@@ -186,6 +186,10 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrder.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrderDetail.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrder.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrderDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
@@ -265,6 +269,11 @@
     <Content Include="Areas\AssetManagement\Views\AssetMaintenanceInfoDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetsMaintenance\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\web.config" />
+    <Content Include="Areas\AssetPurchase\Views\FixedAssetsOrder\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\FixedAssetsOrderDetail\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\IntangibleAssetsOrderDetail\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\IntangibleAssetsOrder\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\web.config" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2236,6 +2245,15 @@
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetOrderDetails.cs" />
+    <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderDetails.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_FixedAssetsOrder.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_IntangibleAssetsOrder.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
@@ -2395,13 +2413,16 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
+    <Folder Include="Areas\AssetPurchase\Views\Shared\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
     <Folder Include="Areas\TaxAdministrationCenter\Controllers\" />
     <Folder Include="Areas\TaxAdministrationCenter\Models\" />
     <Folder Include="Areas\TaxAdministrationCenter\Views\" />
     <Folder Include="Temp\" />
-    <Folder Include="uploads\" />
+    <Folder Include="uploads\AcceptFile\" />
+    <Folder Include="uploads\ApprovalFormFile\" />
+    <Folder Include="uploads\PurchaseContract\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="_theme\temp\file\" />
     <Folder Include="_theme\temp\img\" />

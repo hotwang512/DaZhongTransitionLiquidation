@@ -902,7 +902,7 @@
                         <table>
                             @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
                             {
-                                <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="#">
+                                <tr class="menue_item" id="FixedAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                     <td class="menue_text">固定资产</td>
                                     <td></td>
@@ -910,7 +910,7 @@
                             }
                             @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
                             {
-                                <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="#">
+                                <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/IntangibleAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                     <td class="menue_text">无形资产</td>
                                     <td></td>
@@ -954,7 +954,7 @@
                     <table>
                         @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="NewAssets_NewAssets" pageurl="">
+                            <tr class="menue_item" id="AssetsMaintenance_NewAssets" pageurl="/AssetManagement/AssetsMaintenance/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">流程管理</td>
                                 <td></td>
@@ -1104,7 +1104,7 @@
                     }
                     @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "车管系统清册" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
+                        <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">车管系统清册</td>
                             <td></td>

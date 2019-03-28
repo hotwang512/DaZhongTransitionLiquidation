@@ -46,6 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                     var data = db.Queryable<Business_SubjectSettingInfo>().ToList();
                     foreach (var item in response)
                     {
+                        //EditStatus(item.Code,item.VGUID);
                         var isAnyAccountingCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.AccountingCode != null);
                         if (isAnyAccountingCode)
                         {
@@ -96,7 +97,30 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-
+        private void EditStatus(string code, Guid guid)
+        {
+            DbBusinessDataService.Command(db =>
+            {
+                List<Business_SevenSection> sevenList = new List<Business_SevenSection>();
+                var datas = db.Queryable<Business_SevenSection>();
+                var isAnyParent = datas.Where(x => x.ParentCode == code && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                if (isAnyParent.Count > 0)
+                {
+                    foreach (var item in isAnyParent)
+                    {
+                        item.Remark = "1";
+                        sevenList.Add(item);
+                        EditStatus(item.Code, item.VGUID);
+                    }
+                    db.Updateable(sevenList).ExecuteCommand();
+                }
+                else
+                {
+                    db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                    { Remark = "", VMDFTIME = DateTime.Now, VMDFUSER = UserInfo.LoginName }).Where(it => it.VGUID == guid).ExecuteCommand();
+                }
+            });
+        }
         public JsonResult GetCompanySectionByCode(string companyCode,string accountModeCode, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();

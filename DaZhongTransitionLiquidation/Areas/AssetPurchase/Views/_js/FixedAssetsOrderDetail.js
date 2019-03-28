@@ -31,7 +31,7 @@ var $page = function () {
                 }
                 if (validateError <= 0) {
                     $.ajax({
-                        url: "/AssetManagement/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
+                        url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "OrderType": $("#OrderType").val(),
@@ -91,7 +91,7 @@ var $page = function () {
         //提交
         $("#btnSubmit").on("click",
             function () {
-                $.post("/AssetManagement/FixedAssetsOrderDetail/SubmitFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/SubmitFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
                     switch (msg.Status) {
                     case "0":
                         jqxNotification("提交失败！", null, "error");
@@ -107,7 +107,7 @@ var $page = function () {
     }; //addEvent end
 
     function getFixedAssetsOrderDetail() {
-        $.post("/AssetManagement/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+        $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             $("#OrderType").val(msg.OrderType);
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
@@ -145,7 +145,7 @@ var $page = function () {
         } else {
             layer.load();
             $("#contractFormFile").ajaxSubmit({
-                url: "/AssetManagement/FixedAssetsOrderDetail/UploadContractFile",
+                url: "/AssetPurchase/FixedAssetsOrderDetail/UploadContractFile",
                 type: "post",
                 data: {
                     'Vguid': $("#VGUID").val()
@@ -183,7 +183,7 @@ var $page = function () {
             } else {
                 layer.load();
                 $("#formFile").ajaxSubmit({
-                    url: "/AssetManagement/FixedAssetsOrderDetail/UploadLocalFile",
+                    url: "/AssetPurchase/FixedAssetsOrderDetail/UploadLocalFile",
                     type: "post",
                     data: {
                         'VGUID': $("#FileInput").attr("cdata")
@@ -223,7 +223,7 @@ function initSelect()
     //使用部门
     $("#OrderType").prepend("<option value=\"\" selected='true'>请选择</>");
     $.ajax({
-        url: "/AssetManagement/FixedAssetsOrderDetail/GetUseDepartment",
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
         data: {},
         type: "POST",
         dataType: "json",
@@ -297,7 +297,7 @@ function initTable() {
         updaterow: function (rowid, rowdata, commit) {
             debugger;
             $.ajax({
-                url: "/AssetManagement/FixedAssetsOrderDetail/UpdateAssetNum",
+                url: "/AssetPurchase/FixedAssetsOrderDetail/UpdateAssetNum",
                 data: { vguid: rowdata.VGUID, AssetNum: rowdata.AssetNum },
                 async: false,
                 type: "post",
@@ -375,7 +375,7 @@ function cellsrenderer(row, column, value, rowData) {
 function getDetailData() {
     debugger;
     $.ajax({
-        url: "/AssetManagement/FixedAssetsOrderDetail/GetAssetOrderDetails",
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
         data: { AssetType: "vehicle", AssetsOrderVguid: $("#VGUID").val() },
         async :false,
         type: "get",
@@ -400,7 +400,7 @@ function deleteApprovalFile(vguid) {
     debugger;
     //删除文件
     $.ajax({
-        url: "/AssetManagement/FixedAssetsOrderDetail/DeleteApprovalFile",
+        url: "/AssetPurchase/FixedAssetsOrderDetail/DeleteApprovalFile",
         data: { vguid: vguid },
         async: false,
         type: "post",

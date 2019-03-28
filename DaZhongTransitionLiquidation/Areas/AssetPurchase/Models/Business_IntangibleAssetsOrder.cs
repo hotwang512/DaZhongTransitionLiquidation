@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
+namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
 {
     public class Business_IntangibleAssetsOrder
     {

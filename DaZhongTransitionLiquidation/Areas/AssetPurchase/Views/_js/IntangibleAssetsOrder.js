@@ -28,7 +28,7 @@ var $page = function () {
         });
         //新增
         $("#btnAdd").on("click", function () {
-            window.location.href = "/AssetManagement/IntangibleAssetsOrderDetail/Index";
+            window.location.href = "/AssetPurchase/IntangibleAssetsOrderDetail/Index";
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -54,7 +54,7 @@ var $page = function () {
     //删除
     function dele(selection) {
         $.ajax({
-            url: "/AssetManagement/IntangibleAssetsOrder/DeleteIntangibleAssetsOrder",
+            url: "/AssetPurchase/IntangibleAssetsOrder/DeleteIntangibleAssetsOrder",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -74,7 +74,7 @@ var $page = function () {
     //提交
     function submit(selection) {
         $.ajax({
-            url: "/AssetManagement/IntangibleAssetsOrder/UpdataIntangibleAssetsOrder",
+            url: "/AssetPurchase/IntangibleAssetsOrder/UpdataIntangibleAssetsOrder",
             data: { vguids: selection, status: "2" },
             //traditional: true,
             type: "post",
@@ -118,7 +118,7 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 data: { "OrderType": $("#OrderType").val(), "SubmitStatus": $("#SubmitStatus").val() },
-                url: "/AssetManagement/IntangibleAssetsOrder/GetIntangibleAssetsOrderListDatas"   //获取数据源的路径
+                url: "/AssetPurchase/IntangibleAssetsOrder/GetIntangibleAssetsOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -161,7 +161,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/AssetManagement/IntangibleAssetsOrderDetail/Index?VGUID=" + row.VGUID;
+            window.location.href = "/AssetPurchase/IntangibleAssetsOrderDetail/Index?VGUID=" + row.VGUID;
         });
     }
 

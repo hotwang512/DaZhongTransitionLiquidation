@@ -29,7 +29,7 @@ var $page = function () {
                 }
                 if (validateError <= 0) {
                     $.ajax({
-                        url: "/AssetManagement/IntangibleAssetsOrderDetail/SaveIntangibleAssetsOrder",
+                        url: "/AssetPurchase/IntangibleAssetsOrderDetail/SaveIntangibleAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "OrderType": $("#OrderType").val(),
@@ -80,7 +80,7 @@ var $page = function () {
         //提交
         $("#btnSubmit").on("click",
             function () {
-                $.post("/AssetManagement/IntangibleAssetsOrderDetail/SubmitIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+                $.post("/AssetPurchase/IntangibleAssetsOrderDetail/SubmitIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
                     switch (msg.Status) {
                     case "0":
                         jqxNotification("提交失败！", null, "error");
@@ -96,7 +96,7 @@ var $page = function () {
     }; //addEvent end
 
     function getIntangibleAssetsOrderDetail() {
-        $.post("/AssetManagement/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+        $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             $("#OrderType").val(msg.OrderType);
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
@@ -129,7 +129,7 @@ var $page = function () {
         } else {
             layer.load();
             $("#contractFormFile").ajaxSubmit({
-                url: "/AssetManagement/IntangibleAssetsOrderDetail/UploadContractFile",
+                url: "/AssetPurchase/IntangibleAssetsOrderDetail/UploadContractFile",
                 type: "post",
                 data: {
                     'Vguid': $("#VGUID").val()
@@ -167,7 +167,7 @@ var $page = function () {
             } else {
                 layer.load();
                 $("#formFile").ajaxSubmit({
-                    url: "/AssetManagement/IntangibleAssetsOrderDetail/UploadLocalFile",
+                    url: "/AssetPurchase/IntangibleAssetsOrderDetail/UploadLocalFile",
                     type: "post",
                     data: {
                         'VGUID': $("#FileInput").attr("cdata")

@@ -1,13 +1,13 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
-@using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+@using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 @{
-    ViewBag.Title = "订单管理/无形资产订单明细";
+    ViewBag.Title = "订单管理/固定资产订单明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/IntangibleAssetsOrderDetail.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetPurchase/Views/_js/FixedAssetsOrderDetail.js")"></script>
     <script src="@Url.CusContent("~/_theme/_js/jquery.form.js")"></script>
 }
 <style>
@@ -41,10 +41,14 @@
         background-repeat: no-repeat;
         cursor: pointer;
     }
+
+    .SubmitStatus {
+        display: none;
+    }
 </style>
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
-        @if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 2)
+        @if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 1)
         {
             <td style="width: 95px;">
                 <button id="btnSubmit" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
@@ -70,12 +74,16 @@
                 <td style="text-align: right;">订单类型：</td>
                 <td style="text-align: left;">
                     <select id="OrderType" class="input_text form-control" style="width: 200px">
-                        <option value="车辆牌照">车辆牌照</option>
-                        <option value="软件类资产">软件类资产</option>
+                        <option value="出租车">出租车</option>
+                        <option value="办公类资产">办公类资产</option>
+                        <option value="OBD">OBD</option>
+                        <option value="其他设备">其他设备</option>
+                        <option value="公务车辆">公务车辆</option>
                     </select>
                 </td>
                 <td style="text-align: right;">付款单位及账户信息：</td>
                 <td style="text-align: left;">
+                    @*<input id="PaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" validatetype="required"/>*@
                     <div id="PaymentInformation">
                         <div style="border-color: transparent;" id="PaymentInformationGrid">
                         </div>
@@ -85,20 +93,36 @@
                         <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
                     </div>
                 </td>
-                <td style="text-align: right;">合同总价格：</td>
+                <td style="text-align: right;">订单数量：</td>
                 <td style="text-align: left;">
-                    <input id="SumPayment" type="text" value="" style="width: 200px;" class="input_text form-control" />
+                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
                 </td>
             </tr>
             <tr style="height: 50px">
-                <td style="text-align: right;">合同首付款：</td>
-                <td style="text-align: left;"><input id="FirstPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">合同尾款：</td>
-                <td style="text-align: left;"><input id="TailPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">供应商信息：</td>
-                <td style="text-align: left;"><input id="SupplierInformation" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">采购单价：</td>
+                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">合同金额：</td>
+                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">资产说明：</td>
+                <td style="text-align: left;"><input id="AssetDescription" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height: 50px">
+                <td style="text-align: right;">使用部门：</td>
+                <td style="text-align: left;">
+                    <select id="UseDepartment" class="input_text form-control" style="width: 200px;"></select>
+                </td>
+                <td style="text-align: right;">供应商信息：</td>
+                <td style="text-align: left;"><input id="SupplierInformation" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">预计验收日期：</td>
+                <td style="text-align: left;">
+                    <input id="AcceptanceDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">预计付款日期：</td>
+                <td style="text-align: left;">
+                    <input id="PaymentDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                </td>
                 <td style="text-align: right;">采购合同：</td>
                 <td style="text-align: left;">
                     <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
@@ -107,8 +131,16 @@
             </tr>
             <tr style="display: none">
                 <td></td>
+                <td style="text-align: left;">
+                    @*<input id="PaymentInformationVguid" />*@
+                </td>
+                <td></td>
                 <td>
                     <input id="VGUID" name="VGUID" />
+                </td>
+                <td></td>
+                <td>
+                    @*<input id="AssetsOrderVguid" />*@
                 </td>
             </tr>
             <tr></tr>

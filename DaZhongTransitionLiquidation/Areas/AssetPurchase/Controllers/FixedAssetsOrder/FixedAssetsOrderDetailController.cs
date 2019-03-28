@@ -13,9 +13,9 @@ using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 
-namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
+namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
 {
-    
+
     public class FixedAssetsOrderDetailController : BaseController
     {
         // GET: AssetManagement/FixedAssetsOrderDetail
@@ -53,14 +53,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                     {
                         sevenSection.ChangeDate = DateTime.Now;
                         sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_FixedAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser ,x.SubmitStatus}).ExecuteCommand();
+                        db.Updateable<Business_FixedAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus }).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
-            
+
             return Json(resultModel);
         }
         public JsonResult GetFixedAssetsOrder(Guid vguid)
@@ -74,7 +74,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             return Json(model, JsonRequestBehavior.AllowGet); ;
         }
 
-        public JsonResult GetAssetOrderDetails(string AssetType,Guid AssetsOrderVguid)
+        public JsonResult GetAssetOrderDetails(string AssetType, Guid AssetsOrderVguid)
         {
             var listFixedAssetsOrder = new List<Business_AssetOrderDetails>();
             DbBusinessDataService.Command(db =>
@@ -87,12 +87,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             });
             if (listFixedAssetsOrder.Count == 0)
             {
-                listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetType,AssetsOrderVguid);
+                listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetType, AssetsOrderVguid);
             }
             return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet); ;
         }
 
-        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(string AssetType,Guid AssetsOrderVguid)
+        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(string AssetType, Guid AssetsOrderVguid)
         {
             var cache = CacheManager<Sys_User>.GetInstance();
             var list = new List<Business_AssetOrderDetails>();
@@ -147,7 +147,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult UpdateAssetNum(Guid vguid ,int AssetNum)
+        public JsonResult UpdateAssetNum(Guid vguid, int AssetNum)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -155,7 +155,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 var result = db.Ado.UseTran(() =>
                 {
                     var updateObj = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == vguid).First();
-                    db.Updateable(updateObj).UpdateColumns(it => new { it.AssetNum}).ReSetValue(it => it.AssetNum == AssetNum).ExecuteCommand();
+                    db.Updateable(updateObj).UpdateColumns(it => new { it.AssetNum }).ReSetValue(it => it.AssetNum == AssetNum).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
@@ -249,16 +249,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
         {
             var departmentData = new List<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
-                {
-                    departmentData = db.Queryable<Business_SevenSection>().Where(x =>
-                        x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == "1002" &&
-                        x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
-                });
-            return Json(departmentData,JsonRequestBehavior.AllowGet);
+            {
+                departmentData = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == "1002" &&
+                    x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
+            });
+            return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
         public JsonResult SubmitFixedAssetsOrder(Guid vguid)
         {
-            var resultModel = new ResultModel<string, string>() {IsSuccess = false, Status = "0"};
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {

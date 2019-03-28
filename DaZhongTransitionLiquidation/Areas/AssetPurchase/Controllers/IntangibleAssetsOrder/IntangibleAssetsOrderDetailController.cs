@@ -12,9 +12,9 @@ using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
-
-namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
+namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.IntangibleAssetsOrder
 {
+
     public class IntangibleAssetsOrderDetailController : BaseController
     {
         // GET: AssetManagement/IntangibleAssetsOrderDetail

@@ -10,29 +10,30 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
+namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.IntangibleAssetsOrder
 {
-    public class FixedAssetsOrderController : BaseController
+
+    public class IntangibleAssetsOrderController : BaseController
     {
-        // GET: AssetManagement/FixedAssetsOrder
-        public FixedAssetsOrderController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        public IntangibleAssetsOrderController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
 
         }
+        // GET: AssetManagement/IntangibleAssetsOrder
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetFixedAssetsOrderListDatas(Business_FixedAssetsOrder searchParams, GridParams para)
+        public JsonResult GetIntangibleAssetsOrderListDatas(Business_IntangibleAssetsOrder searchParams, GridParams para)
         {
-            var jsonResult = new JsonResultModel<Business_FixedAssetsOrder>();
+            var jsonResult = new JsonResultModel<Business_IntangibleAssetsOrder>();
 
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_FixedAssetsOrder>()
+                jsonResult.Rows = db.Queryable<Business_IntangibleAssetsOrder>()
                     .WhereIF(searchParams.OrderType != null, i => i.OrderType == searchParams.OrderType)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -41,14 +42,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult DeleteFixedAssetsOrder(List<Guid> vguids)
+        public JsonResult DeleteIntangibleAssetsOrder(List<Guid> vguids)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 int saveChanges = 1;
                 //删除主表信息
-                saveChanges = db.Deleteable<Business_FixedAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
+                saveChanges = db.Deleteable<Business_IntangibleAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
                 resultModel.IsSuccess = saveChanges == vguids.Count;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });

@@ -34,12 +34,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_IntangibleAssetsOrder>()
                     .WhereIF(searchParams.OrderType != null, i => i.OrderType == searchParams.OrderType)
-                    .WhereIF(searchParams.SubmitStatus != null, i => i.SubmitStatus == searchParams.SubmitStatus)
+                    .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteIntangibleAssetsOrder(List<Guid> vguids)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                int saveChanges = 1;
+                //删除主表信息
+                saveChanges = db.Deleteable<Business_IntangibleAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
+                resultModel.IsSuccess = saveChanges == vguids.Count;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
         }
     }
 }

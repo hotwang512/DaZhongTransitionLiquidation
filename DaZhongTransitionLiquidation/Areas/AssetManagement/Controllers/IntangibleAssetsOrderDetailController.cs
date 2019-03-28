@@ -25,6 +25,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            var vguid = Request["VGUID"].TryToGuid();
+            if (vguid != Guid.Empty)
+            {
+                ViewBag.SubmitStatus = GetSubmitStatus(Request["VGUID"].TryToGuid());
+            }
             return View();
         }
         public JsonResult SaveIntangibleAssetsOrder(Business_IntangibleAssetsOrder sevenSection)
@@ -41,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.ObjToInt();
+                        sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
                         db.Insertable<Business_IntangibleAssetsOrder>(sevenSection).ExecuteCommand();
                     }
                     else
@@ -123,7 +128,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SubmitFixedAssetsOrder(Guid vguid)
+        public JsonResult SubmitIntangibleAssetsOrder(Guid vguid)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -131,24 +136,33 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
-                    if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.ObjToInt())
+                    var model = db.Queryable<Business_IntangibleAssetsOrder>().Where(c => c.VGUID == vguid).First();
+                    if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt())
                     {
-                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.ObjToInt();
+                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt();
                     }
                     else
                     {
-                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.Submited.ObjToInt();
+                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.Submited.TryToInt();
                     }
                     model.SubmitDate = DateTime.Now;
                     model.SubmitUser = cache[PubGet.GetUserKey].UserName;
-                    db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                    db.Updateable<Business_IntangibleAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
+        }
+        public int GetSubmitStatus(Guid vguid)
+        {
+            Business_IntangibleAssetsOrder model = new Business_IntangibleAssetsOrder();
+            DbBusinessDataService.Command(db =>
+            {
+                model = db.Queryable<Business_IntangibleAssetsOrder>().Single(x => x.VGUID == vguid);
+            });
+            return model.SubmitStatus.TryToInt();
         }
     }
 }

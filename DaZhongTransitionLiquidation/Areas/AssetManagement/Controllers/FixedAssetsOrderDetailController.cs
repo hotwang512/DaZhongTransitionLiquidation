@@ -26,6 +26,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            var vguid = Request["VGUID"].TryToGuid();
+            if (vguid != Guid.Empty)
+            {
+                ViewBag.SubmitStatus = GetSubmitStatus(Request["VGUID"].TryToGuid());
+            }
             return View();
         }
         public JsonResult SaveFixedAssetsOrder(Business_FixedAssetsOrder sevenSection)
@@ -41,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                     {
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.ObjToInt();
+                        sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
                         db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
                     }
                     else
@@ -251,7 +256,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 });
             return Json(departmentData,JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult SubmitFixedAssetsOrder(Guid vguid)
         {
             var resultModel = new ResultModel<string, string>() {IsSuccess = false, Status = "0"};
@@ -261,7 +265,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 var result = db.Ado.UseTran(() =>
                 {
                     var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
-                    model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.ObjToInt();
+                    model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
                     model.SubmitDate = DateTime.Now;
                     model.SubmitUser = cache[PubGet.GetUserKey].UserName;
                     db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
@@ -271,6 +275,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
+        }
+        public int GetSubmitStatus(Guid vguid)
+        {
+            var model = new Business_FixedAssetsOrder();
+            DbBusinessDataService.Command(db =>
+            {
+                model = db.Queryable<Business_FixedAssetsOrder>().Single(x => x.VGUID == vguid);
+            });
+            return model.SubmitStatus.TryToInt();
         }
     }
 }

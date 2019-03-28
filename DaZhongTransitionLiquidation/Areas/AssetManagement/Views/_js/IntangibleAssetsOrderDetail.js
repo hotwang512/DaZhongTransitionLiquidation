@@ -87,7 +87,8 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("提交成功！", null, "success");
-                        $("#btnSubmit").hide();
+                        history.go(-1);
+                        window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                         break;
                     }
                 });

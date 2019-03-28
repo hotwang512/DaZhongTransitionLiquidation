@@ -94,6 +94,12 @@ var $page = function () {
             initTable();
             //$("#jqxTable2").jqxTreeGrid('updateBoundData');
         })
+        $('#AccountModeCode').on('change', function (event) {
+            accountModeCode = $("#AccountModeCode").val();
+            console.log(accountModeCode);
+            initTable();
+            //$("#jqxTable2").jqxTreeGrid('updateBoundData');
+        })
     }; //addEvent end
 };
 
@@ -122,7 +128,8 @@ function initTable() {
                 { name: 'Balance', type: 'number' },
             ],
             datatype: "json",
-            cache: false,
+            //cache: false,
+            async: false,
             id: "VGUID",
             data: { companyCode: companyCode, accountModeCode: accountModeCode },
             url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径

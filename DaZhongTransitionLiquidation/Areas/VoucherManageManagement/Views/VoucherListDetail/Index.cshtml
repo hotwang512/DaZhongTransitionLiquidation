@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
     var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
+    var accountModeName = ViewBag.GetAccountMode;
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -94,64 +95,33 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 230px;">
+    <div class="body_mk" style="height: 100px;">
         <table id="VoucherList" style="width:100%;">
             <tr style="height:50px">
-                <td style="text-align: right;"></td>
-                <td style=""></td>
-                <td style="text-align: right;width: 255px;">公司名称：</td>
-                <td style="text-align: left;"><select id="CompanyCode" class="input_text form-control"></select></td>
-                <td style="width: 200px;"></td>
-                <td></td>
+                <td style="text-align: right;width: 100px;">账簿名称：</td>
+                <td style="text-align: left;"><input id="AccountModeName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" value="@accountModeName" validatetype="required" /></td>
+                <td style="text-align: right;width: 90px;">会计期：@*公司名称：*@</td>
+                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 120px;" class="input_text form-control"  onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" />@*<select id="CompanyCode" class="input_text form-control"></select>*@</td>
+                <td style="text-align: right;width: 90px;">凭证类型：</td>
+                <td style="text-align: left;"><input id="VoucherType" type="text" style="width: 120px;" class="input_text form-control" readonly="readonly" value="现金类" validatetype="required" /></td>
+                <td style="text-align: right;width: 90px;">凭证日期：</td>
+                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 150px;" class="input_text form-control"  onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+                <td style="text-align: right;width: 90px;">批名：</td>
+                <td style="text-align: left;"><input id="BatchName" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
+                <td style="text-align: right;width: 90px;">凭证号码：</td>
+                <td style="text-align: left;"><input id="VoucherNo" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
             </tr>
             <tr style="height:40px">
-                <td style="text-align: right;">凭证类型：</td>
-                <td style="text-align: left;">
-                    <select id="VoucherType" style="width: 200px;" class="input_text form-control" validatetype="required">
-                        <option value="现金类">现金类</option>
-                        <option value="银行类">银行类</option>
-                        <option value="摊销类">摊销类</option>
-                        <option value="计提类">计提类</option>
-                        <option value="结转类">结转类</option>
-                    </select>
-                </td>
-                <td style="text-align: right;width: 255px;"></td>
-                <td style="text-align: left;"></td>
-                <td style=""></td>
-                <td></td>
-            </tr>
-            <tr style="height:40px">
-                <td style="text-align: right;">会计期：</td>
-                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" /></td>
-                <td style="text-align: right;">批名：</td>
-                <td style="text-align: left;"><input id="BatchName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-                <td style="text-align: right;">凭证号码：</td>
-                <td style="text-align: left;"><input id="VoucherNo" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-            </tr>
-            <tr style="height:40px">
-                <td style="text-align: right;">币种：</td>
-                <td style="text-align: left;"><input id="Currency" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">凭证日期：</td>
-                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 200px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
-                <td style="text-align: right;">@*财务主管：*@制单：</td>
-                <td style="text-align: left;">
-                    @*<input id="FinanceDirector" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" />*@
-                    <input id="DocumentMaker" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" />
-                </td>
-            </tr>
-            <tr style="height:40px">
-                <td style="text-align: right;">@*记账：*@</td>
-                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">@*审核：*@</td>
-                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: left;"></td>
-            </tr>
-            <tr style="height:40px">
-                <td style="text-align: right;">@*出纳：*@</td>
-                <td style="text-align: left;"><input id="Cashier" type="text" style="width: 200px;display:none" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;"></td>
-                <td style="text-align: left;"></td>
+                <td style="text-align: right;">财务主管：</td>
+                <td style="text-align: left;"><input id="FinanceDirector" type="text" style="width: 200px;" class="input_text form-control"  /></td>
+                <td style="text-align: right;">记账：</td>
+                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 120px;" class="input_text form-control"  /></td>
+                <td style="text-align: right;">审核：</td>
+                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 120px;" class="input_text form-control"  /></td>
+                <td style="text-align: right;">制单：</td>
+                <td style="text-align: left;"><input id="DocumentMaker" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
+                <td style="text-align: right;">出纳：</td>
+                <td style="text-align: right;"><input id="Cashier" type="text" style="width: 150px;" class="input_text form-control"  /></td>
                 <td style="text-align: right;"><input id="Status" name="Status" value="" class="hide" /></td>
                 <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
             </tr>
@@ -162,7 +132,7 @@
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">明细信息</span></div>
+        <div class="header_text_div"><span class="header_text_span">科目信息</span></div>
     </div>
     <button id="btnAddDetail" type="button" class="buttons" style="margin-top: 2px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
     <div id='jqxTabs'>
@@ -192,7 +162,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
     </div>
-    <div class="body_mk" style="height: 200px;">
+    <div class="body_mk" style="height: 115px;">
         <table id="VoucherListAttachment" style="width:100%;">
             <tr style="height:10px"></tr>
             <tr style="height:40px">
@@ -337,15 +307,15 @@
                 <table style="width: 100%;margin-left: 50px">
                     <tr style="height:35px">
                         <td style="text-align: right;font-size: 14px;">财务主管 </td>
-                        <td style="text-align: left;font-size: 14px;width:200px"><label id="lbl1" for="" style=""></label></td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblFinanceDirector" for="" style=""></label></td>
                         <td style="text-align: right;font-size: 14px;">记账 </td>
-                        <td style="text-align: left;font-size: 14px;width:200px"><label id="lbl2" for="" style=""></label></td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblBookkeeping" for="" style=""></label></td>
                         <td style="text-align: right;font-size: 14px;">审核 </td>
-                        <td style="text-align: left;font-size: 14px;width:200px"><label id="lbl3" for="" style=""></label></td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblAuditor" for="" style=""></label></td>
                         <td style="text-align: right;font-size: 14px;">制单</td>
                         <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblDocumentMaker" for="" style=""></label></td>
                         <td style="text-align: right;font-size: 14px;">出纳 </td>
-                        <td style="text-align: left;font-size: 14px;width:200px"><label id="lbl4" for="" style=""></label></td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblCashier" for="" style=""></label></td>
                     </tr>
                 </table>
             </div>

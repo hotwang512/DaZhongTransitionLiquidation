@@ -75,8 +75,7 @@ function GetCompanyCode() {
 
 //公司配置
 function initTable1() {
-    var source =
-        {
+    var source = {
             datafields:
             [
                 { name: 'Code', type: 'string' },
@@ -96,8 +95,7 @@ function initTable1() {
     var typeAdapter = new $.jqx.dataAdapter(source);
 
     //创建卡信息列表（主表）
-    $("#jqxTable1").jqxGrid(
-        {
+    $("#jqxTable1").jqxGrid({
             pageable: false,
             width: "100%",
             autoheight: true,

@@ -27,7 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             //ViewBag.BankChannel = GetBankChannel();
             return View();
         }
-        public JsonResult GetCompanySection(string companyCode,string accountModeCode, GridParams para)
+        public JsonResult GetCompanySection(string companyCode,string accountModeCodes, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();
             var response = new List<Business_SevenSection>();
@@ -39,7 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 //response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.Code != null)
                 //.OrderBy(i => i.Code, OrderByType.Asc).ToList();
                 response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' 
-                             and CompanyCode='"+ companyCode + "' and AccountModeCode='"+ accountModeCode + "' and Code is not null ").OrderBy("Code asc").ToList();
+                             and CompanyCode='"+ companyCode + "' and AccountModeCode='"+ accountModeCodes + "' and Code is not null ").OrderBy("Code asc").ToList();
                 jsonResult.TotalRows = response.Count;
                 if (response != null)
                 {
@@ -105,9 +105,9 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             {
                 //int pageCount = 0;               
                 para.pagenum = para.pagenum + 1;
-                response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' 
-                              and Code is not null and Code in (select CompanyCode from Business_SubjectSettingInfo 
-                              where SubjectCode = '"+ companyCode + "' and AccountModeCode='"+ accountModeCode + "')").OrderBy("Code asc").ToList();
+                response = db.SqlQueryable<Business_SevenSection>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss.SubjectCode and bss.CompanyCode='" + companyCode + @"'
+ and bss.AccountModeCode='" + accountModeCode + "'  where bs.SectionVGUID='B63BD715-C27D-4C47-AB66-550309794D43' and bs.Status='1' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + accountModeCode + "' and bs.Code is not null").OrderBy("Code asc").ToList();
                 jsonResult.TotalRows = response.Count;
             });
             return Json(response, JsonRequestBehavior.AllowGet);

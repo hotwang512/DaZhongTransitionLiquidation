@@ -2302,8 +2302,9 @@
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
     <Compile Include="Areas\SystemManagement\SystemManagementAreaRegistration.cs" />
-    <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\Business_VoucherAttachmentList.cs" />
-    <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\Business_VoucherDetail.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\Business_AssetsGeneralLedger_Swap.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\Business_VoucherAttachmentList.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\Business_VoucherDetail.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\VoucherListDetail.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\VoucherListDetailController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\Business_VoucherList.cs" />

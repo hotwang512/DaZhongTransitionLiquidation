@@ -22,6 +22,7 @@ var index = 0;
 var expandVGUID = [];
 var companyCode = $("#CompanyCode").val();
 var accountModeCode = $("#AccountModeCode").val();
+var typeAdapterJqxTree = null;
 var $page = function () {
 
     this.init = function () {
@@ -385,7 +386,8 @@ var $page = function () {
             index = event.args.item;
             console.log(index);
             expandVGUID = [];
-            $("#jqxTable2").jqxTreeGrid('updateBoundData'); 
+            loadTable();
+            //$("#jqxTable2").jqxTreeGrid('updateBoundData'); 
             if (index == 2) {
                 $("#hideCompany").show();
                 $("#ACChange").show();
@@ -550,7 +552,38 @@ var $page = function () {
         switch (index) {
             case 1: initTable1();
                 break;
-            case 2: $("#txtFirstSubjects").val("1");initTable2();
+            case 2: $("#txtFirstSubjects").val("1"); //$("#jqxTable2").jqxTreeGrid('updateBoundData');
+                var source =
+                     {
+               datafields:
+               [
+                   { name: 'Code', type: 'string' },
+                   { name: 'ParentCode', type: 'string' },
+                   { name: 'Descrption', type: 'string' },
+                   { name: 'SectionVGUID', type: 'string' },
+                   { name: 'VGUID', type: 'string' },
+                   { name: 'Status', type: 'string' },
+                   { name: 'Remark', type: 'string' },
+                   { name: 'IsAccountingCode', type: 'string' },
+                   { name: 'IsCostCenterCode', type: 'string' },
+                   { name: 'IsSpareOneCode', type: 'string' },
+                   { name: 'IsSpareTwoCode', type: 'string' },
+                   { name: 'IsIntercourseCode', type: 'string' },
+               ],
+               hierarchy:
+               {
+                   keyDataField: { name: 'Code' },
+                   parentDataField: { name: 'ParentCode' }
+               },
+               datatype: "json",
+               cache: false,
+               //async: false,
+               id: "VGUID",
+               data: { "companyCode": companyCode, "accountModeCodes": $("#AccountModeCode").val() },
+               url: "/PaymentManagement/SubjectSection/GetCompanySection"    //获取数据源的路径
+           };
+                typeAdapterJqxTree = new $.jqx.dataAdapter(source);
+                $("#jqxTable2").jqxTreeGrid('updateBoundData')
                 break;
             case 3: initTable3();
                 break;
@@ -679,35 +712,7 @@ var $page = function () {
     }
     //科目段
     function initTable2() {
-        var source =
-            {
-                datafields:
-                [
-                    { name: 'Code', type: 'string' },
-                    { name: 'ParentCode', type: 'string' },
-                    { name: 'Descrption', type: 'string' },
-                    { name: 'SectionVGUID', type: 'string' },
-                    { name: 'VGUID', type: 'string' },
-                    { name: 'Status', type: 'string' },
-                    { name: 'Remark', type: 'string' },
-                    { name: 'IsAccountingCode', type: 'string' },
-                    { name: 'IsCostCenterCode', type: 'string' },
-                    { name: 'IsSpareOneCode', type: 'string' },
-                    { name: 'IsSpareTwoCode', type: 'string' },
-                    { name: 'IsIntercourseCode', type: 'string' },
-                ],
-                hierarchy:
-                {
-                    keyDataField: { name: 'Code' },
-                    parentDataField: { name: 'ParentCode' }
-                },
-                datatype: "json",
-                cache:false,
-                id: "VGUID",
-                data: { companyCode: companyCode, accountModeCode: accountModeCode },
-                url: "/PaymentManagement/SubjectSection/GetCompanySection"    //获取数据源的路径
-            };
-        var typeAdapter = new $.jqx.dataAdapter(source);
+       
         //创建卡信息列表（主表）
         $("#jqxTable2").jqxTreeGrid({
                 pageable: false,
@@ -716,7 +721,7 @@ var $page = function () {
                 pageSize: 15,
                 //serverProcessing: true,
                 pagerButtonsCount: 10,
-                source: typeAdapter,
+                source: typeAdapterJqxTree,
                 theme: "energyblue",
                 columnsHeight: 40,
                 checkboxes: true,
@@ -1034,9 +1039,12 @@ var $page = function () {
     }
 
     function settingFunc(row, column, value, rowData) {
-        var container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
-        if (value != "" && (value == "True" || value == true)) {
-            container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
+        var container = "";
+        if (rowData.ParentCode != null) {
+            container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
+            if (value != "" && (value == "True" || value == true)) {
+                container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
+            }
         }
         return container;
     }

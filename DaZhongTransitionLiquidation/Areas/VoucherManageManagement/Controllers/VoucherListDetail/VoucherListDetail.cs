@@ -9,6 +9,18 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
     {
         public Guid VGUID { get; set; }
         /// <summary>
+        /// Desc:账套Code
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string AccountModeCode { get; set; }
+        /// <summary>
+        /// Desc:账套名称
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string AccountModeName { get; set; }
+        /// <summary>
         /// Desc:营运公司Code
         /// Default:
         /// Nullable:True

@@ -11,6 +11,7 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
 using SyntacticSugar;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -24,6 +25,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.GetAccountMode = GetAccountModes();
             return View();
         }
         public JsonResult GetSelectSection(string name, string companyCode, string subjectCode)
@@ -50,9 +52,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         case "G": sVGUID = "G63BD715-C27D-4C47-AB66-550309794D43"; colname = "IntercourseCode"; break;
                         default: break;
                     }
-                    response = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID='" + sVGUID + @"'
-                            and Code in (select " + colname + @" from Business_SubjectSettingInfo where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43'
-                            and SubjectCode='" + companyCode + "' and CompanyCode='" + subjectCode + "')").OrderBy("Code asc").ToList();
+                    response = db.SqlQueryable<Business_SevenSection>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+ left join Business_SubjectSettingInfo bss on bs.Code=bss." + colname + " and bss.CompanyCode='" + subjectCode + @"' 
+ where bs.SectionVGUID='" + sVGUID + "' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + UserInfo.AccountModeCode + "' and bs.Status='1' and bs.Code is not null and bss.Checked='1'").OrderBy("Code asc").ToList();
                 }
 
             });
@@ -71,12 +73,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var attachment = voucher.Attachment;
                     var voucherType = voucher.VoucherType;//凭证类型
                     var date = DateTime.Now;
-                    var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
-                                  order by BatchName desc", new { @NowDate = date });
+                    //var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
+                    //              order by BatchName desc", new { @NowDate = date });
                     var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
                                   order by VoucherNo desc", new { @NowDate = date });
-                    var batchName = GetBatchName(voucherType, flowNo);
+                    var batchName = voucher.BatchName; //GetBatchName(voucherType, flowNo);
                     var voucherName = GetVoucherName(voucherNo);
+                    //凭证主表
                     Business_VoucherList voucherList = new Business_VoucherList();
                     voucherList.AttachmentDetail = "";
                     string[] attach = null;
@@ -91,7 +94,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     }
 
                     //主表信息 
-
                     voucherList.AccountingPeriod = voucher.AccountingPeriod;
                     voucherList.Auditor = voucher.Auditor;
                     voucherList.Bookkeeping = voucher.Bookkeeping;
@@ -111,7 +113,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
-                        voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期+4位流水)
+                        voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期)
                         voucherList.VoucherNo = voucherName;//凭证号自动生成
                         voucherList.VGUID = guid;
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
@@ -121,12 +123,19 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         voucherList.VGUID = voucher.VGUID;
                         db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo }).ExecuteCommand();
                     }
-                    //明细信息
+                   
+                    //科目信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
+                    //凭证中间表List
+                    List<Business_AssetsGeneralLedger_Swap> assetList = new List<Business_AssetsGeneralLedger_Swap>();
+                    
                     //删除现有明细数据
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
+                    //删除现有中间表数据
+                    db.Deleteable<Business_AssetsGeneralLedger_Swap>().Where(x => x.SubjectVGUID == voucher.VGUID).ExecuteCommand();
                     if (voucher.Detail != null)
                     {
+                        var i = 0;
                         foreach (var item in voucher.Detail)
                         {
                             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
@@ -144,8 +153,47 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.VGUID = Guid.NewGuid();
                             BVDetail.VoucherVGUID = guid;
                             voucherdetailList.Add(BVDetail);
+                            //凭证中间表
+                            Business_AssetsGeneralLedger_Swap asset = new Business_AssetsGeneralLedger_Swap();
+                            asset.CREATE_DATE = DateTime.Now;
+                            asset.SubjectVGUID = guid;
+                            asset.LEDGER_NAME = voucher.AccountModeName;
+                            asset.JE_BATCH_NAME = batchName;
+                            asset.JE_BATCH_DESCRIPTION = "";
+                            asset.JE_HEADER_NAME = voucherName;
+                            asset.JE_HEADER_DESCRIPTION = "";
+                            asset.JE_SOURCE_NAME = "财务共享平台";
+                            asset.JE_CATEGORY_NAME = voucherType;
+                            asset.ACCOUNTING_DATE = voucher.VoucherDate;
+                            asset.CURRENCY_CODE = "人民币";
+                            asset.CURRENCY_CONVERSION_TYPE = "用户";
+                            asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
+                            asset.CURRENCY_CONVERSION_RATE = 1;
+                            asset.STATUS = "1";
+                            asset.VGUID = Guid.NewGuid();
+                            asset.JE_LINE_NUMBER = i++;
+                            asset.SEGMENT1 = item.CompanySection;
+                            asset.SEGMENT2 = item.SubjectSection;
+                            asset.SEGMENT3 = item.AccountSection;
+                            asset.SEGMENT4 = item.CostCenterSection;
+                            asset.SEGMENT5 = item.SpareOneSection;
+                            asset.SEGMENT6 = item.SpareTwoSection;
+                            asset.SEGMENT7 = item.IntercourseSection;
+                            if(item.BorrowMoney == -1)
+                            {
+                                asset.ENTERED_DR = "";
+                                asset.ENTERED_CR = item.LoanMoney.TryToString();
+                            }
+                            else
+                            {
+                                asset.ENTERED_DR = item.BorrowMoney.TryToString();
+                                asset.ENTERED_CR = "";
+                            }
+                            assetList.Add(asset);
                         }
                         db.Insertable(voucherdetailList).ExecuteCommand();
+                        //同步至中间表
+                        db.Insertable(assetList).ExecuteCommand();
                     }
                     if (attachment != null)
                     {
@@ -168,7 +216,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         }
                         db.Insertable(BVAttachList).ExecuteCommand();
                     }
-                    //附件信息 
+                    
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -253,6 +301,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
             }
             return Json(resultModel);
+        }
+        public string GetAccountModes()
+        {
+            var result = UserInfo.AccountModeName;
+            return result;
         }
     }
 }

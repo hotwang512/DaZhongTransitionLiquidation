@@ -24,7 +24,13 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-
+        var myDate = new Date();//获取系统当前时间
+        var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+        var date = myDate.getFullYear() + month + myDate.getDate();
+        var voucherType = $("#VoucherType").val();
+        $("#BatchName").val(voucherType + date);
+        $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + myDate.getDate());
+        $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
         uiEngineHelper.bindSelect('#CompanyCode', CompanyCode, "Code", "Descrption");
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
@@ -166,7 +172,8 @@ var $page = function () {
                     //data: { vguids: selection },
                     data: {
                         "VGUID": $("#VGUID").val(),
-                        "CompanyCode": $("#CompanyCode").val(),
+                        "AccountModeName": $("#AccountModeName").val(),
+                        "CompanyCode": CompanySection,
                         "CompanyName": "",
                         "VoucherType": $("#VoucherType").val(),
                         "AccountingPeriod": $("#AccountingPeriod").val(),
@@ -205,10 +212,12 @@ var $page = function () {
             $("#SubjectTable").remove();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("show");
-            $("#lblCompany").text($("#CompanyCode  option:selected").text());
+            var x = $(".nav-i")[0].id.split("_")[1];
+            var companyCode = $("#CompanySection_A_" + x + "  option:selected").text();
+            $("#lblCompany").text(companyCode);
             $("#lblAccountingPeriods").text($("#AccountingPeriod").val());
             $("#lblBatchName").text($("#BatchName").val());
-            $("#lblCurrency").text($("#Currency").val());
+            $("#lblCurrency").text("人民币");
             $("#lblVoucherNo").text($("#VoucherNo").val());
             $("#lblVoucherDate").text($("#VoucherDate").val());
             if ($("#Attachment").val() != "") {
@@ -224,6 +233,10 @@ var $page = function () {
                 $("#lblAttachmentNumber").text("");
             }
             $("#lblDocumentMaker").text($("#DocumentMaker").val());
+            $("#lblFinanceDirector").text($("#FinanceDirector").val());
+            $("#lblBookkeeping").text($("#Bookkeeping").val());
+            $("#lblAuditor").text($("#Auditor").val());
+            $("#lblCashier").text($("#Cashier").val());
             //var lengths = $(".nav-i").length + $(".nav-i2").length;
             var htmls = "";
             var list1 = "";
@@ -491,6 +504,7 @@ var $page = function () {
                 $("#CompanyCode").val(msg.CompanyCode);
                 var datas = msg.Detail;
                 setVoucherDetail(datas);
+                createTable(datas);
                 loadAttachments(msg.Attachment);
             }
         });
@@ -601,6 +615,9 @@ var $page = function () {
         }
         console.log(selectIndex);
     }
+    function createTable(datas) {
+
+    }
 };
 //移除明细内容
 function removes(event) {
@@ -659,7 +676,7 @@ function initSubjectTable(companyCode, x, y) {
             parentDataField: { name: 'ParentCode' }
         },
         datatype: "json",
-        id: "VGUID",
+        id: "",
         data: { companyCode: companyCode, accountModeCode: loginAccountModeCode },
         url: "/PaymentManagement/SubjectSection/GetCompanySectionByCode"    //获取数据源的路径
     };
@@ -783,7 +800,7 @@ function uploadFiles(event) {
         attachments = attachments + "," + type + "&" + msg.WebPath + "&" + fileName;
     }
 
-    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+    $("#attachments")[0].innerHTML += "<span>" + type + "&nbsp;&nbsp;<a href='" + msg.WebPath + "' target='_blank'>" + fileName + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button>&nbsp;&nbsp;</span>"
     $("#Attachment").val(attachments);
 }
 function loadAttachments(attachments) {
@@ -792,7 +809,7 @@ function loadAttachments(attachments) {
         var attachValues = attachments.split(",");
         for (var i = 0; i < attachValues.length; i++) {
             var attach = attachValues[i].split("&");
-            $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button></br></span>"
+            $("#attachments")[0].innerHTML += "<span>" + attach[0] + "&nbsp;&nbsp;<a href='" + attach[1] + "' target='_blank'>" + attach[2] + "</a><button class='closes' type='button' onclick='removeAttachment(this)'>×</button>&nbsp;&nbsp;</span>"
         }
     }
 }

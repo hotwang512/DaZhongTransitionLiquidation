@@ -221,7 +221,7 @@ var $page = function () {
                    
                     //{ text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
                     //{ text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '公司/单位/个人', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '供应商类别', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '银行账号', datafield: 'CollectionAccount', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '银行户名', datafield: 'CollectionBankAccountName', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '开户行', datafield: 'CollectionBank', align: 'center', cellsAlign: 'center', },

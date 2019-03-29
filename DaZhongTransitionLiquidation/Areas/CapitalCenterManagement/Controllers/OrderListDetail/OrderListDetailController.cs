@@ -82,7 +82,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                orderList = db.Queryable<Business_CustomerBankInfo>().ToList();
+                orderList = db.Queryable<Business_CustomerBankInfo>().PartitionBy(it => new { it.CompanyOrPerson }).Take(1).ToList();
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
@@ -103,6 +103,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 //主信息
                 orderList = db.Queryable<Business_CustomerBankInfo>().Where(x => x.VGUID == CollectionCompany).ToList();
+            });
+            return Json(orderList, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult GetCollectionBankChange(string CollectionCompany)
+        {
+            List<Business_CustomerBankInfo> orderList = new List<Business_CustomerBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                //主信息
+                orderList = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == CollectionCompany).ToList();
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }

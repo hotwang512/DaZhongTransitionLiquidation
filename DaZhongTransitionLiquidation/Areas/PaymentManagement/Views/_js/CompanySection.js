@@ -1179,7 +1179,7 @@ function edit(guid, Code, Descrption, Remark, ParentCode) {
     selector.$txtDescrption().removeClass("input_Validate");
     selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddNewBankDataDialog().modal("show");
-    if (ParentCode == "null" || ParentCode == null) {
+    if (ParentCode == "null" || ParentCode == null || ParentCode == "") {
         $("#txtFirstSubjects").val("1");
         $("#txtParentCode").val("");
         $("#SubjectCode").hide()

@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Common.Pub;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
@@ -32,6 +33,23 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 .Where(i => i.Status == searchParams.Status)
                 .WhereIF(searchParams.BusinessType != null, i => i.BusinessType == searchParams.BusinessType)
                 .OrderBy("BusinessSubItem1 asc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                var data = db.Queryable<Business_CustomerBankInfo>().ToList();
+                foreach (var item in jsonResult.Rows)
+                {
+                    try
+                    {
+                        var vguid = new Guid(item.CollectionBankAccountName);
+                        if (vguid != Guid.Empty)
+                        {
+                            var bankAccountName = data.Single(x => x.VGUID == vguid).BankAccountName;
+                            item.CollectionBankAccountName = bankAccountName;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

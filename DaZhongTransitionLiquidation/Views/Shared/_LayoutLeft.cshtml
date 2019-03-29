@@ -424,7 +424,7 @@
                         </tr>
                         <tr class="menue_item" id="AmortizationMoney_VoucherM" pageurl="/VoucherManageManagement/AmortizationMoney/Index?Status=1">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">摊销计划</td>
+                            <td class="menue_text">摊销计算</td>
                             <td></td>
                         </tr>
                     </table>
@@ -448,10 +448,34 @@
                         </tr>
                         <tr class="menue_item" id="ProvisionMoney_VoucherM" pageurl="/VoucherManageManagement/ProvisionMoney/Index?Status=1">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">计提金额</td>
+                            <td class="menue_text">计提计算</td>
                             <td></td>
                         </tr>
                     </table>
+                </div>
+            }
+            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "转账类凭证" && i.Reads == 1))
+            {
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text_header">转账类凭证</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                    @*<table style="cursor: pointer;">
+                        <tr class="menue_item" id="CarryForward_VoucherM" pageurl="/VoucherManageManagement/CarryForwardList/Index?Status=1">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">应付职工薪酬类</td>
+                            <td></td>
+                        </tr>
+                        <tr class="menue_item" id="CarryForwardMoney_VoucherM" pageurl="/VoucherManageManagementCarryForwardMoney/Index?Status=1">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">损益类</td>
+                            <td></td>
+                        </tr>
+                    </table>*@
                 </div>
             }
             @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "结转类凭证" && i.Reads == 1))
@@ -478,7 +502,6 @@
                     </table>
                 </div>
             }
-
         </div>
         <div class="menue_header VoucherManage VoucherM VoucherCheck QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
@@ -657,12 +680,12 @@
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
-            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 35px;display: none;">
                 <div class="BaseData Reconc AmountReport" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header">结算数据</td>
+                            <td class="menue_text_header">结算数据管理</td>
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
                     </table>
@@ -709,7 +732,7 @@
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header">对账管理</td>
+                            <td class="menue_text_header">自动对账管理</td>
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
                     </table>
@@ -754,7 +777,7 @@
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header">金额管理</td>
+                            <td class="menue_text_header">金额报表管理</td>
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
                     </table>
@@ -780,7 +803,23 @@
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
-        </div>
+            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">建行代扣</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header">银联代扣</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
+                </table>
+            </div>
+            </div>
 
         <div class="menue_header BaseData Reconc AmountReport" style="display: none;">
             <table style="cursor: pointer;">
@@ -799,17 +838,17 @@
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
                     </table>
-                    <table style="cursor: pointer;" class="bodyTable">
+                    @*<table style="cursor: pointer;" class="bodyTable">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
                             <td class="menue_text_header">MPOS</td>
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
-                    </table>
+                    </table>*@
                     <table style="cursor: pointer;" class="bodyTable">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header">网银代扣</td>
+                            <td class="menue_text_header">聚合支付</td>
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
                     </table>
@@ -869,7 +908,7 @@
                     <table style="cursor: pointer;" class="bodyTable">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header">电子警察押金</td>
+                            <td class="menue_text_header">退电子警察押金</td>
                             <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                         </tr>
                     </table>

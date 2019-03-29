@@ -145,9 +145,14 @@ var $page = function () {
         $('#CollectionCompany').on('select', function (event) {
             var args = event.args;
             var item = args.item;
+            var guid = $("#VGUID").val();
             if (args) {
-                var value = item.value;
-                companyChange(value);
+                var label = item.label;
+                collectionBankChange(label);
+                $("#CollectionAccount").val("");
+                $("#CollectionBank").val("");
+                $("#CollectionBankAccount").val("");
+                //companyChange(value);
             }
         });
         //编辑账套信息
@@ -407,10 +412,23 @@ function gradeChange(event) {
     $("#SpareTwoSection").val("");
     $("#IntercourseSection").val("");
 }
-function companyChange(value) {
+function collectionBankChange(label) {
+    $.ajax({
+        url: "/CapitalCenterManagement/OrderListDetail/GetCollectionBankChange",
+        async: false,
+        data: { "CollectionCompany": label },
+        type: "post",
+        success: function (result) {
+            uiEngineHelper.bindSelect('#CollectionBankAccountName', result, "VGUID", "BankAccountName");
+            $("#CollectionBankAccountName").prepend("<option value=\"\" selected='true'>请选择</>");
+           
+        }
+    });
+}
+function companyChange() {
+    var value = $("#CollectionBankAccountName").val();
     if (value == "") {
         $("#CollectionAccount").val("");
-        $("#CollectionBankAccountName").val("");
         $("#CollectionBank").val("");
         $("#CollectionBankAccount").val("");
         return;
@@ -423,7 +441,6 @@ function companyChange(value) {
         success: function (result) {
             var values = result[0];
             $("#CollectionAccount").val(values.BankAccount);
-            $("#CollectionBankAccountName").val(values.BankAccountName);
             $("#CollectionBank").val(values.Bank);
             $("#CollectionBankAccount").val(values.BankNo);
         }

@@ -49,10 +49,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.SqlQueryable<v_Business_SubjectSettingInfo>(@"select a.*,b.Balance from v_Business_SubjectSettingInfo as a
-                               left join Business_SubjectBalance as b on b.Code = a.BusinessCode
-                               where SubjectVGUID='B63BD715-C27D-4C47-AB66-550309794D43' and AccountModeCode='" + accountModeCode + "' and SubjectCode='" + companyCode + "'")
-                               .ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.Rows = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode",new { AccountModeCode = accountModeCode, CompanyCode = companyCode })
+                               .ToList();
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

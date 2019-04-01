@@ -37,6 +37,7 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
+        getBankInfo();
         $("#btnSync").on("click", function () {
             $.ajax({
                 url: "/CapitalCenterManagement/BankFlowTemplate/SyncCurrentDayBankData",
@@ -328,7 +329,19 @@ $(function () {
     var page = new $page();
     page.init();
 });
+function getBankInfo() {
+    $.ajax({
+        url: "/CapitalCenterManagement/BankFlowTemplate/GetBankInfo",
+        async: false,
+        data: {},
+        type: "post",
+        success: function (result) {
+            uiEngineHelper.bindSelect('#TradingBank', result, "BankAccount", "BankName");
+            $("#TradingBank").prepend("<option value=\"\" selected='true'></>");
 
+        }
+    });
+}
 //上传文件
 function uploadFile(fileData, callback) {
     var formData = new FormData();

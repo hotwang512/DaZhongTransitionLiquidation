@@ -201,7 +201,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 para.pagenum = para.pagenum + 1;
                 DateTime transactionDateEnd = Convert.ToDateTime(TransactionDateEnd + " 23:59:59");
                 jsonResult.Rows = db.Queryable<Business_BankFlowTemplate>()
-                .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == searchParams.TradingBank)
+                .WhereIF(searchParams.TradingBank != null, i => i.BankAccount == searchParams.TradingBank)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
                 .WhereIF(searchParams.PaymentUnit != null, i => i.PaymentUnit == searchParams.PaymentUnit)
                 .OrderBy(i => i.TransactionDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -325,6 +325,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-       
+        public JsonResult GetBankInfo()
+        {
+            var result = new List<Business_CompanyBankInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.AccountModeCode == UserInfo.AccountModeCode).OrderBy("BankAccount asc").ToList();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet); ;
+        }
     }
 }

@@ -442,6 +442,7 @@ function changeChannel() {
         data: { "Channel": channel },
         success: function (msg) {
             uiEngineHelper.bindSelect('#txtChannel2', msg, "SubjectId", "SubjectNmae");
+            $("#txtChannel2").prepend("<option value=\"\" selected='true'></>");
         }
 
     });

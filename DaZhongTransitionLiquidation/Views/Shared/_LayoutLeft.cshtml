@@ -1420,7 +1420,7 @@
     @******************************************************系统管理******************************************************@
     @if (hasSystemManagementPermission || isSysadmin)
             {
-        <div class="menue_header SystemManage OracleButt OrderSetting" style="display: none;">
+        <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1494,7 +1494,7 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header SystemManage OracleButt OrderSetting" style="display: none;">
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1506,7 +1506,7 @@
                 <div class="menue_body" id="OrderSetting" style="display: none;">
                     <table>
                         @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "业务配置" && i.Reads == 1))
-                {
+                        {
                             <tr class="menue_item" id="BusinessTypeSet_OrderSetting" pageurl="/CapitalCenterManagement/BusinessTypeSet/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">业务配置</td>
@@ -1514,10 +1514,31 @@
                             </tr>
                         }
                         @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置维护" && i.Reads == 1))
-                {
+                        {
                             <tr class="menue_item" id="OrderList_OrderSetting" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">订单业务配置维护</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">采购订单配置</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="PurchaseOrderSetting" style="display: none;">
+                    <table>
+                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "采购基础信息配置" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="PurchaseOrderConfiguration_PurchaseOrderSetting" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购基础信息配置</td>
                                 <td></td>
                             </tr>
                         }

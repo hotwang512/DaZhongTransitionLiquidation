@@ -221,6 +221,8 @@
     <Content Include="Areas\SystemManagement\Views\_js\BankChannelMapping.js" />
     <Content Include="Areas\SystemManagement\Views\_js\Channel.js" />
     <Content Include="Areas\SystemManagement\Views\_js\module.js" />
+    <Content Include="Areas\SystemManagement\Views\_js\PurchaseOrderSetting.js" />
+    <Content Include="Areas\SystemManagement\Views\_js\PurchaseOrderSettingDetail.js" />
     <Content Include="Areas\SystemManagement\Views\_js\Subject.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VoucherList.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VoucherListDetail.js" />
@@ -278,6 +280,8 @@
     <Content Include="Areas\AssetPurchase\Views\web.config" />
     <Content Include="Areas\AssetManagement\Views\AssetsLedger\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetsRetirement\Index.cshtml" />
+    <Content Include="Areas\SystemManagement\Views\PurchaseOrderSetting\Index.cshtml" />
+    <Content Include="Areas\SystemManagement\Views\PurchaseOrderSettingDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2266,6 +2270,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\Business_BusinessTypeSet.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\BankCategoryListData.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\Business_CustomerBankInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\FundReconciliation\Business_FundReconciliation.cs" />
@@ -2322,11 +2327,16 @@
     <Compile Include="Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\ChannelManagement\ChannelManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\ModuleManagement\ModuleManagementController.cs" />
+    <Compile Include="Areas\SystemManagement\Controllers\PurchaseOrderSetting\PurchaseOrderSettingController.cs" />
+    <Compile Include="Areas\SystemManagement\Controllers\PurchaseOrderSetting\PurchaseOrderSettingDetailController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementPack.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_PurchaseOrderSetting.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_PurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
+    <Compile Include="Areas\SystemManagement\Models\v_BankPurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\SystemManagementAreaRegistration.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_AssetsGeneralLedger_Swap.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_VoucherAttachmentList.cs" />

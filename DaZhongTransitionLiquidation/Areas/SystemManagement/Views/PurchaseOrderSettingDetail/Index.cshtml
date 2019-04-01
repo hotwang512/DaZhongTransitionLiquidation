@@ -1,0 +1,73 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+@{
+    ViewBag.Title = "采购订单配置/采购基础信息配置明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/Areas/Systemmanagement/Views/_js/PurchaseOrderSettingDetail.js")"></script>
+}
+<style>
+    .input_text {
+        width: 150px;
+        height: 35px;
+        border: 1px;
+        border-style: solid;
+        border-color: #dddddd;
+        -moz-box-shadow: 0px 1px 10px #dddddd;
+        -webkit-box-shadow: 0px 1px 10px #dddddd;
+        box-shadow: 0 0 10px #dddddd;
+        background-color: white !important;
+        border-radius: 4px;
+        float: left;
+    }
+
+    .jqx-combobox-input {
+        padding-left: 8px;
+        color: #555;
+    }
+    .jqx-dropdownlist-content {
+        margin-left: 5px;
+    }
+    .jqx-tabs-content-element {
+        overflow: auto !important;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;display:block">
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">主信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 440px;">
+        <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">采购物品：</td>
+                <td style="text-align: left;"><input id="PurchaseGoods" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">资产主类：</td>
+                <td style="text-align: left;"><div id='ASSET_CATEGORY_MAJOR'></div></td>
+                <td style="text-align: right;">资产子类：</td>
+                <td style="text-align: left;">
+                    <div id='ASSET_CATEGORY_MINOR'></div>
+                </td>
+            </tr>
+        </table>
+        <div style="display: none">
+            <input id="VGUID" />
+            <input id="AssetCategoryMajor" />
+            <input id="AssetCategoryMinor" />
+            <input id="AssetCategoryMinorVguid" />
+        </div>
+    </div>
+</div>

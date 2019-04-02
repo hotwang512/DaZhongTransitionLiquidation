@@ -90,6 +90,7 @@ var $page = function () {
                             jqxNotification("配置失败！", null, "error");
                             break;
                         case "1":
+                            $("#BankInfoModalDialog").modal("hide");
                             jqxNotification("配置成功！", null, "success");
                             $("#jqxSettingTable").jqxDataTable('updateBoundData');
                             break;

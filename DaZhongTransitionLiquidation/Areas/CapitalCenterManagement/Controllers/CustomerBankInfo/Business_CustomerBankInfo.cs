@@ -16,4 +16,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public DateTime? CreateTime { get; set; }
         public string Founder { get; set; }
     }
+
+    public class v_BankInfoSetting
+    {
+        public Guid VGUID { get; set; }
+        public string CompanyOrPerson { get; set; }
+        public string BankAccount { get; set; }
+        public string BankAccountName { get; set; }
+        public string Bank { get; set; }
+        public string BankNo { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public string Founder { get; set; }
+        public string IsCheck { get; set; }
+    }
 }

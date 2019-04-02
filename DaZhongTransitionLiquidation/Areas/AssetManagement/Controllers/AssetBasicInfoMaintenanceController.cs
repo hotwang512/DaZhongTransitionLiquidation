@@ -59,7 +59,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             var list = new List<MajorListData>();
             DbBusinessDataService.Command(db =>
             {
-                list = db.Queryable<Business_AssetsCategory>().Select(c => new MajorListData { AssetMajor = c.ASSET_CATEGORY_MAJOR }).ToList();
+                list = db.Queryable<Business_AssetsCategory>().Where(c => c.ASSET_CATEGORY_MAJOR != null).Select(c => new MajorListData { AssetMajor = c.ASSET_CATEGORY_MAJOR }).ToList();
             });
             var result = list.GroupBy(c => new { c.AssetMajor }).Select(c => c.Key).ToList();
             return Json(result);

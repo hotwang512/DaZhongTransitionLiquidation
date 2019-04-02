@@ -29,4 +29,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
     {
         public string AssetMajor { get; set; }
     }
+    public class MinorListData
+    {
+        public Guid AssetMinorVguid { get; set; }
+        public string AssetMinor { get; set; }
+    }
 }

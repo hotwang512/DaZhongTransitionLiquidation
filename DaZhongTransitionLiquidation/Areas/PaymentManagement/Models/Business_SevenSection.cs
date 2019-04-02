@@ -31,4 +31,9 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string AccountModeCode { get; set; }
         public string CompanyCode { get; set; }
     }
+    public class SevenSectionDropdown
+    {
+        public Guid VGUID { get; set; }
+        public string Descrption { get; set; }
+    }
 }

@@ -10,7 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
@@ -256,6 +259,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetPurchaseGoods()
+        {
+            var orderTypeData = new List<Business_PurchaseOrderSetting>();
+            DbBusinessDataService.Command(db =>
+            {
+                orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().ToList();
+            });
+            return Json(orderTypeData, JsonRequestBehavior.AllowGet);
+        }
+        
         public JsonResult SubmitFixedAssetsOrder(Guid vguid)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
@@ -284,6 +297,67 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 model = db.Queryable<Business_FixedAssetsOrder>().Single(x => x.VGUID == vguid);
             });
             return model.SubmitStatus.TryToInt();
+        }
+        public JsonResult GetCustomerBankInfoList(string PurchaseOrderSetting)
+        {
+            var PurchaseOrderSettingGuid = PurchaseOrderSetting.TryToGuid();
+            if (PurchaseOrderSettingGuid != Guid.Empty)
+            {
+                var jsonResult = new JsonResultModel<v_BankInfoSetting>();
+                DbBusinessDataService.Command(db =>
+                {
+                    jsonResult.Rows = db.Queryable<v_BankInfoSetting>().Where(i => i.IsCheck == "Checked")
+                        .WhereIF(PurchaseOrderSettingGuid != Guid.Empty,
+                            i => i.PurchaseOrderSettingVguid == PurchaseOrderSettingGuid)
+                        .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                });
+                return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var jsonResult = new JsonResultModel<Business_CustomerBankInfo>();
+                DbBusinessDataService.Command(db =>
+                {
+                    jsonResult.Rows = db.Queryable<Business_CustomerBankInfo>()
+                        .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                });
+                return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public JsonResult GetCustomerBankInfo(Guid vguid)
+        {
+            var model = new Business_CustomerBankInfo();
+            DbBusinessDataService.Command(db =>
+            {
+                model = db.Queryable<Business_CustomerBankInfo>().Where(c => c.VGUID == vguid).First();
+            });
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetCompanyBankInfoDropdown()
+        {
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
+            var list = new List<SevenSectionDropdown>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (db.Queryable<Business_SevenSection>().Where(c => c.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && c.Status == "1" && c.AccountModeCode == AccountModeCode).Count() > 0)
+                {
+                    list = db.Queryable<Business_SevenSection>().Where(c => c.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && c.Status == "1" && c.AccountModeCode == AccountModeCode).Select(c => new SevenSectionDropdown { VGUID = c.VGUID, Descrption = c.Descrption }).ToList();
+                }
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetCompanyBankInfo(Guid Vguid)
+        {
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
+            var model = new Business_CompanyBankInfo();
+            DbBusinessDataService.Command(db =>
+            {
+                var sevenSection = db.Queryable<Business_SevenSection>().Where(c => c.VGUID == Vguid).First();
+                model = db.Queryable<Business_CompanyBankInfo>().Where(c => c.CompanyCode == sevenSection.Code && c.AccountModeCode == AccountModeCode).First();
+            });
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
     }
 }

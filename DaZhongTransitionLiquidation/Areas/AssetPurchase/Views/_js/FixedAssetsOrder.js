@@ -23,7 +23,7 @@ var $page = function () {
 
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#OrderType").val("");
+            $("#OrdePurchaseGoodsrType").val("");
             $("#SubmitStatus").val("");
         });
         //新增
@@ -100,7 +100,7 @@ var $page = function () {
                 [
                     { name: "checkbox", type: null },
                     { name: 'VGUID', type: 'string' },
-                    { name: 'OrderType', type: 'string' },
+                    { name: 'PurchaseGoods', type: 'string' },
                     { name: 'PaymentInformationVguid', type: 'string' },
                     { name: 'PaymentInformation', type: 'string' },
                     { name: 'OrderQuantity', type: 'number' },
@@ -108,7 +108,6 @@ var $page = function () {
                     { name: 'ContractAmount', type: 'float' },
                     { name: 'AssetDescription', type: 'string' },
                     { name: 'UseDepartment', type: 'string' },
-                    { name: 'SupplierInformation', type: 'string' },
                     { name: 'AcceptanceDate', type: 'date' },
                     { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
@@ -121,7 +120,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "OrderType": $("#OrderType").val(), "SubmitStatus": $("#SubmitStatus").val() },
+                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val() },
                 url: "/AssetPurchase/FixedAssetsOrder/GetFixedAssetsOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -143,7 +142,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '订单类型', datafield: 'OrderType', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '订单类型', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '付款信息关联ID', datafield: 'PaymentInformationVguid', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款信息', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '订单数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },
@@ -151,7 +150,6 @@ var $page = function () {
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '资产说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '使用部门', datafield: 'UseDepartment', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '供应商信息维护', datafield: 'SupplierInformation', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '预计验收日期', datafield: 'AcceptanceDate', width: 150, align: 'center', cellsAlign: 'center' ,cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '预计付款日期', datafield: 'PaymentDate', width: 150, align: 'center', cellsAlign: 'center', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden:true },

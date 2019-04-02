@@ -20,6 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
     public class v_BankInfoSetting
     {
         public Guid VGUID { get; set; }
+        public Guid? PurchaseOrderSettingVguid { get; set; }
         public string CompanyOrPerson { get; set; }
         public string BankAccount { get; set; }
         public string BankAccountName { get; set; }

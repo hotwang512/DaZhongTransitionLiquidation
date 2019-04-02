@@ -29,11 +29,16 @@
         padding-left: 8px;
         color: #555;
     }
-
+    .jqx-combobox-input {
+        padding-left: 5px;
+     }
     .jqx-tabs-content-element {
         overflow: auto !important;
     }
-
+    .jqx-dropdownlist-content {
+        padding-left: 5px;
+        padding-top: 3px;
+    }
     .SearchInput {
         background-image: url(/_theme/jqwidgets-ver5.5.0/images/search_lg.png);
         background-size: 20px 20px;
@@ -62,73 +67,46 @@
         </td>
     </tr>
 </table>
-
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">主信息</span></div>
+        <div class="header_text_div"><span class="header_text_span">采购信息</span></div>
     </div>
-    <div class="body_mk" style="height: 440px;">
+    <div class="body_mk" style="height: 200px;">
         <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
             <tr style="height:50px">
-                <td style="text-align: right;">订单类型：</td>
+                <td style="text-align: right;">采购物品：</td>
                 <td style="text-align: left;">
-                    <select id="OrderType" class="input_text form-control" style="width: 200px">
-                        <option value="出租车">出租车</option>
-                        <option value="办公类资产">办公类资产</option>
-                        <option value="OBD">OBD</option>
-                        <option value="其他设备">其他设备</option>
-                        <option value="公务车辆">公务车辆</option>
-                    </select>
+                    <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;"></select>
                 </td>
-                <td style="text-align: right;">付款单位及账户信息：</td>
-                <td style="text-align: left;">
-                    @*<input id="PaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" validatetype="required"/>*@
-                    <div id="PaymentInformation">
-                        <div style="border-color: transparent;" id="PaymentInformationGrid">
-                        </div>
-                    </div>
-                    <div style="display: none">
-                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
-                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
-                    </div>
-                </td>
-                <td style="text-align: right;">订单数量：</td>
-                <td style="text-align: left;">
-                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
-                </td>
-            </tr>
-            <tr style="height: 50px">
-                <td style="text-align: right;">采购单价：</td>
-                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">合同金额：</td>
-                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">资产说明：</td>
-                <td style="text-align: left;"><input id="AssetDescription" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-            </tr>
-            <tr style="height: 50px">
                 <td style="text-align: right;">使用部门：</td>
                 <td style="text-align: left;">
                     <select id="UseDepartment" class="input_text form-control" style="width: 200px;"></select>
                 </td>
-                <td style="text-align: right;">供应商信息：</td>
-                <td style="text-align: left;"><input id="SupplierInformation" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">预计验收日期：</td>
-                <td style="text-align: left;">
-                    <input id="AcceptanceDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
-                </td>
             </tr>
             <tr style="height: 50px">
-                <td style="text-align: right;">预计付款日期：</td>
+                <td style="text-align: right;">采购数量：</td>
+                <td style="text-align: left;">
+                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                </td>
+                <td style="text-align: right;">采购单价：</td>
+                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">采购金额：</td>
+                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">采购说明：</td>
+                <td style="text-align: left;"><input id="AssetDescription" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">验收日期：</td>
+                <td style="text-align: left;">
+                    <input id="AcceptanceDate" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                </td>
+                <td style="text-align: right;">付款日期：</td>
                 <td style="text-align: left;">
                     <input id="PaymentDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
                 </td>
-                <td style="text-align: right;">采购合同：</td>
-                <td style="text-align: left;">
-                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
-                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
-                </td>
             </tr>
+           
             <tr style="display: none">
                 <td></td>
                 <td style="text-align: left;">
@@ -144,6 +122,94 @@
                 </td>
             </tr>
             <tr></tr>
+        </table>
+    </div>
+</div>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">供应商信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 120px;">
+        <table id="Supplier" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">供应商名称：</td>
+                <td style="text-align: left;">
+                    <div id="PaymentInformation">
+                    </div>
+                    <div style="display: none">
+                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                    </div>
+                </td>
+                <td style="text-align: right;">户名：</td>
+                <td style="text-align: left;"><input id="BankAccountName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">账号：</td>
+                <td style="text-align: left;"><input id="BankAccount" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="Bank" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">行号：</td>
+                <td style="text-align: left;"><input id="BankNo" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">付款信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 120px;">
+        <table id="PayInfo" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height: 50px">
+                <td style="text-align: right;">付款方式：</td>
+                <td style="text-align: left;">
+                    <select id="PayMode" class="input_text form-control" style="width: 200px;">
+                        <option value="现金" selected="selected">现金</option>
+                        <option value="转账">转账</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">付款公司：</td>
+                <td style="text-align: left;">
+                    <div id="PayCompanyDropdown">
+                    </div>
+                    <input id="hidPayCompany" disabled="disabled" type="text" value="" style="width: 200px;display: none" class="input_text form-control"/>
+                </td>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="CompanyBankName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr>
+               <td style="text-align: right;">银行账号：</td>
+                <td style="text-align: left;"><input id="CompanyBankAccount" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">银行户名：</td>
+                <td style="text-align: left;"><input id="CompanyBankAccountName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">银行类别：</td>
+                <td style="text-align: left;"><input id="AccountType" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 240px;">
+        <table id="AttachInfo" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height: 50px">
+                <td style="text-align: right;" width="100">采购合同：</td>
+                <td style="text-align: left;">
+                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
+                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
         </table>
         <form id="contractFormFile" hidden>
             <input type="file" id="ContractFileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.png" />

@@ -63,7 +63,6 @@ var $page = function () {
         $("#BankInfoDialog_OKBtn").on("click", function () {
             var selection = [];
             var grid = selector.$bankinfogrid();
-            debugger;
             var checedBoxs = $("#pinnedtablejqxBankInfoTable").find(".jqx_datatable_checkbox:checked");
             
             debugger;
@@ -79,6 +78,7 @@ var $page = function () {
             if (selection.length < 1) {
                 jqxNotification("请选择数据！", null, "error");
             } else {
+                debugger;
                 $.ajax({
                     url: "/Systemmanagement/PurchaseOrderSetting/SetPurchaseSupplier",
                     data: { selvguids: selection, allvguids: allvguids, CustomerBankInfoCategory: $("#BankCategory").val(), PurchaseOrderSettingVguid: $("#PurchaseOrderSettingVguid").val() },
@@ -122,6 +122,7 @@ var $page = function () {
                 datafields:
                 [
                     { name: "checkbox", type: null },
+                    { name: 'PurchaseOrderSettingVguid', type: 'string' },
                     { name: 'CompanyOrPerson', type: 'string' },
                     { name: 'BankAccount', type: 'string' },
                     { name: 'BankAccountName', type: 'string' },
@@ -132,7 +133,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "BankAccount": $("#BankAccount").val(), "BankCategory": $("#BankCategory").val() },
+                data: { "BankAccount": $("#BankAccount").val(), "BankCategory": $("#BankCategory").val(), "OrderSettingVguid": $("#PurchaseOrderSettingVguid").val() },
                 url: "/Systemmanagement/PurchaseOrderSetting/GetCustomerBankInfo"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -174,14 +175,13 @@ var $page = function () {
         return checkBox;
     }
     function cellsBankInfoRendererFunc(row, column, value, rowData) {
-        debugger;
         if (allvguids.indexOf(rowData.uid) == -1) {
             allvguids.push(rowData.uid);
         }
-        //return "<input class=\"jqx_datatable_checkbox\" id=\"" + rowData.uid + "\" attr=\"" + rowData.IsCheck + "\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
-        if (rowData.IsCheck == "Checked") {
+        debugger;
+        if (rowData.IsCheck == "Checked" && (rowData.PurchaseOrderSettingVguid != null && rowData.PurchaseOrderSettingVguid == $("#PurchaseOrderSettingVguid").val())) {
             return "<input class=\"jqx_datatable_checkbox\" id=\"" + rowData.uid + "\" checked=checked index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
-        } else if (rowData.IsCheck == "NoCheck") {
+        } else {
             return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
         }
     }

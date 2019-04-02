@@ -4,11 +4,14 @@ var mydate = new Date();
 var vehicleDefaultData;
 var $page = function () {
     this.init = function () {
+        initSelect();
+        initSelectPurchaseGoods();
+        initPayCompanyDropdown();
+        initComboBox();
         addEvent();
     }
     //所有事件
     function addEvent() {
-        initSelect();
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
@@ -26,16 +29,20 @@ var $page = function () {
         $("#btnSave").on("click",
             function() {
                 var validateError = 0; //未通过验证的数量
-                if (!Validate($("#OrderType"))) {
+                if (!Validate($("#PurchaseGoods"))) {
                     validateError++;
                 }
+                debugger;
                 if (validateError <= 0) {
+                    debugger;
                     $.ajax({
                         url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
-                            "OrderType": $("#OrderType").val(),
+                            "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
+                            "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
+                            "PayCompanyVguid": $("#PayCompanyDropdown").val(),
                             "PaymentInformation": $("#hiddenPaymentInformation").val(),
                             "OrderQuantity": $("#OrderQuantity").val(),
                             "PurchasePrices": $("#PurchasePrices").val(),
@@ -43,11 +50,20 @@ var $page = function () {
                             "AssetDescription": $("#AssetDescription").val(),
                             "UseDepartmentVguid": $("#UseDepartment").val(),
                             "UseDepartment": $("#UseDepartment").find("option:selected").text() == "请选择" ? "" : $("#UseDepartment").find("option:selected").text(),
-                            "SupplierInformation": $("#SupplierInformation").val(),
                             "AcceptanceDate": $("#AcceptanceDate").val(),
                             "PaymentDate": $("#PaymentDate").val(),
                             "ContractName": $("#Attachment").attr("title"),
-                            "ContractFilePath": $("#Attachment").attr("href")
+                            "ContractFilePath": $("#Attachment").attr("href"),
+                            "PayCompany": $("#hidPayCompany").val(),
+                            "SupplierBankAccountName": $("#BankAccountName").val(),
+                            "SupplierBankAccount": $("#BankAccount").val(),
+                            "SupplierBank": $("#Bank").val(),
+                            "SupplierBankNo": $("#BankNo").val(),
+                            "PayType": $("#PayMode").val(),
+                            "CompanyBankName": $("#CompanyBankName").val(),
+                            "CompanyBankAccount": $("#CompanyBankAccount").val(),
+                            "CompanyBankAccountName": $("#CompanyBankAccountName").val(),
+                            "AccountType": $("#AccountType").val()
                 },
                         type: "post",
                         success: function(msg) {
@@ -104,11 +120,45 @@ var $page = function () {
                     }
                 });
             });
+        $('#PaymentInformation').on('select', function (event) {
+            var args = event.args;
+            if (args) {
+                debugger;
+                var item = args.item;
+                $("#hiddenPaymentInformationVguid").val(item.value);
+                $("#hiddenPaymentInformation").val(item.label);
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: item.value }, function (msg) {
+                    $("#BankAccountName").val(msg.BankAccountName);
+                    $("#BankAccount").val(msg.BankAccount);
+                    $("#Bank").val(msg.Bank);
+                    $("#BankNo").val(msg.BankNo);
+                });
+            }
+        });
+        $('#PayCompanyDropdown').on('select', function (event) {
+            var args = event.args;
+            if (args) {
+                debugger;
+                var item = args.item;
+                $("#PayCompany").val(item.lable);
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo", { Vguid: $("#PayCompanyDropdown").val() }, function (msg) {
+                    $("#CompanyBankName").val(msg.BankName);
+                    $("#CompanyBankAccount").val(msg.BankAccount);
+                    $("#CompanyBankAccountName").val(msg.BankAccountName);
+                    $("#AccountType").val(msg.AccountType);
+                });
+            }
+        });
+        $("#PurchaseGoods").on("change",
+            function () {
+                initComboBox();
+            });
     }; //addEvent end
 
     function getFixedAssetsOrderDetail() {
         $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-            $("#OrderType").val(msg.OrderType);
+            $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
+            initComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#OrderQuantity").val(msg.OrderQuantity);
@@ -116,7 +166,6 @@ var $page = function () {
             $("#ContractAmount").val(msg.ContractAmount);
             $("#AssetDescription").val(msg.AssetDescription);
             $("#UseDepartment").val(msg.UseDepartmentVguid);
-            $("#SupplierInformation").val(msg.SupplierInformation);
             debugger;
             if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
                 $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
@@ -132,9 +181,20 @@ var $page = function () {
                 $("#Attachment").attr("title", msg.ContractName);
             }
             $("#ContractFilePath").val(msg.ContractFilePath);
-
-            var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
-            $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
+            $("#SupplierBankAccountName").val(msg.SupplierBankAccountName);
+            $("#SupplierBankAccount").val(msg.SupplierBankAccount);
+            $("#SupplierBank").val(msg.SupplierBank);
+            $("#SupplierBankNo").val(msg.SupplierBankNo);
+            $("#PayMode").val(msg.PayType);
+            $("#PayCompanyDropdown").val(msg.PayCompanyVguid);
+            $("#CompanyBankName").val(msg.CompanyBankName);
+            $("#CompanyBankAccount").val(msg.CompanyBankAccount);
+            $("#CompanyBankAccountName").val(msg.CompanyBankAccountName);
+            $("#hidPayCompany").val(msg.PayCompany);
+            $("#AccountType").val(msg.AccountType); 
+            
+            //var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
+            //$("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
         });
     }
     //上传文件
@@ -225,8 +285,6 @@ function computeValue() {
 }
 function initSelect()
 {
-    //使用部门
-    $("#OrderType").prepend("<option value=\"\" selected='true'>请选择</>");
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
         data: {},
@@ -238,61 +296,74 @@ function initSelect()
             $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
         }
     });
+}
+function initComboBox() {
     //付款单位及相关账户信息
-    debugger;
-    var source =
-    {
-        datafields:
-        [
-            { name: 'CompanyOrPerson', type: 'string' },
-            { name: 'BankAccountName', type: 'string' },
-            { name: 'Bank', type: 'string' },
-            { name: 'BankAccount', type: 'string' },
-            { name: 'BankNo', type: 'string' },
-            { name: 'VGUID', type: 'string' }
-        ],
-        datatype: "json",
-        id: "Vguid",
-        data: { "BankAccount": "" },
-        url: "/CapitalCenterManagement/CustomerBankInfo/GetCustomerBankInfo",   //获取数据源的路径
-        updaterow: function (rowid, rowdata) {
-            // synchronize with the server - send update command   
-        }
-    };
-    var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PaymentInformationGrid").jqxGrid(
-     {
-         width: 550,
-         source: dataAdapter,
-         pageable: true,
-         autoheight: true,
-         columnsresize: true,
-         columns: [
-             { text: '公司/单位/个人', datafield: 'CompanyOrPerson', width: '150px', align: 'center', cellsAlign: 'center'},
-             { text: '账号', datafield: 'BankAccount', align: 'center', width: '150px', cellsAlign: 'center', },
-             { text: '户名', datafield: 'BankAccountName', align: 'center', width: '250px', cellsAlign: 'center' },
-             { text: '开户行', datafield: 'Bank', align: 'center', width: '250px', cellsAlign: 'center' },
-             { text: '行号', datafield: 'BankNo', align: 'center', cellsAlign: 'center', width: '150px'},
-             { text: 'VGUID', datafield: 'VGUID', hidden: true }
-         ]
-     });
-    // initialize jqxGrid
-    $("#PaymentInformation").jqxDropDownButton({
-        width: 198, height: 33
-    });
-    $("#PaymentInformationGrid").on('rowselect', function (event) {
-        var args = event.args;
-        var row = $("#PaymentInformationGrid").jqxGrid('getrowdata', args.rowindex);
-        debugger;
-        if (row != undefined) {
-            var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + row['CompanyOrPerson'] + '</div>';
-            $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
-            $("#hiddenPaymentInformationVguid").val(row['VGUID']);
-            $("#hiddenPaymentInformation").val(row['CompanyOrPerson']);
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
+        data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            debugger;
+            var source = new Array();
+            for (var i = 0; i < data.Rows.length; i++) {
+                var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
+                    + "<b>户名</b><div>" + data.Rows[i].BankAccountName + "</div><div style='margin-top: 5px;'><b>账号</b><div>" + data.Rows[i].BankAccount + "</div></div></div>";
+                source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
+            }
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            $("#PaymentInformation").jqxComboBox({
+                source: dataAdapter, selectedIndex: 0,
+                displayMember: "title", valueMember: "value",
+                width: 198, height: 33
+            });
+
         }
     });
 }
-
+function initSelectPurchaseGoods() {
+    //使用部门
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
+        data: {},
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
+            $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+            debugger;
+        }
+    });
+}
+function initPayCompanyDropdown() {
+    var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdown";
+    var source =
+    {
+        datatype: "json",
+        datafields: [
+            { name: 'VGUID' },
+            { name: 'Descrption' }
+        ],
+        url: url,
+        async: false
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $('#PayCompanyDropdown').jqxDropDownList({
+        filterable: true, selectedIndex: 2, source: dataAdapter, displayMember: "Descrption", dropDownWidth:
+            310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200,
+        renderer: function (index, label, value) {
+            var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
+        return table;
+    },
+    selectionRenderer: function (element, index, label, value) {
+        var text = label.replace(/\n/g, " ");
+        return "<span style='left: 4px; top: 6px; position: relative;'>" + text + "</span>";
+    }
+});
+}
 function initTable() {
     getDetailData();
     var source =

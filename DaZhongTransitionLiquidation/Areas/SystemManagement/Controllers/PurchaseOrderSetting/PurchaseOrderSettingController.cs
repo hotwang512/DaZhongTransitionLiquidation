@@ -59,18 +59,28 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCustomerBankInfo(string BankAccount, string BankCategory, GridParams para)
+        public JsonResult GetCustomerBankInfo(Guid OrderSettingVguid, string BankAccount, string BankCategory, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_BankInfoSetting>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<v_BankInfoSetting>()
-                    .WhereIF(!string.IsNullOrEmpty(BankCategory) && BankCategory != "请选择", i => i.CompanyOrPerson.Contains(BankCategory))
+                jsonResult.Rows = db.SqlQueryable<v_BankInfoSetting>(@"SELECT DISTINCT bcbi.*,
+                    bps.PurchaseOrderSettingVguid,
+                    CASE
+                        WHEN bps.VGUID IS NULL THEN
+                    'NoCheck'
+                    ELSE
+                    'Checked'
+                    END AS IsCheck
+                        FROM Business_CustomerBankInfo bcbi
+                    LEFT JOIN(SELECT * FROM Business_PurchaseSupplier WHERE PurchaseOrderSettingVguid = '"+ OrderSettingVguid + @"') bps
+                        ON bps.CustomerBankInfoVguid = bcbi.VGUID " ).WhereIF(!string.IsNullOrEmpty(BankCategory) && BankCategory != "请选择", i => i.CompanyOrPerson.Contains(BankCategory))
                     .WhereIF(!string.IsNullOrEmpty(BankAccount), i => i.BankAccount.Contains(BankAccount))
-                    .OrderBy(i => i.CreateTime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    .Where(i => i.PurchaseOrderSettingVguid == null || i.PurchaseOrderSettingVguid == OrderSettingVguid).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
+
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

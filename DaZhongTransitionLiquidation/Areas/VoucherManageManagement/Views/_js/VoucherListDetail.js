@@ -57,10 +57,10 @@ var $page = function () {
                 trIndex = parseInt(trId.substr(trId.length - 1, 1))+1;
             }
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
-                             "<td style='text-align: center;'><input id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'/></td>" +
+                             "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly'  style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                             "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 120px;' class='input_text form-control money Borrow'/></td>" +
-                             "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 120px;' class='input_text form-control money Loan'/></td>" +
+                             "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 150px;' class='input_text form-control money Borrow'/></td>" +
+                             "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;' class='input_text form-control money Loan'/></td>" +
                              "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
                 $("#countTr").before(trMore);
@@ -143,10 +143,11 @@ var $page = function () {
                     var SpareOneSection = subjectName[4];
                     var SpareTwoSection = subjectName[5];
                     var IntercourseSection = subjectName[6].split(/[\s\n]/)[0];
+                    var companyName = subjectName[6].split(/[\s\n]/)[1];
                     var borrowMoney = 0;
                     var loanMoney = 0;
-                    borrowMoney = $(".money")[i * 2].value;
-                    loanMoney = $(".money")[i * 2 + 1].value;
+                    borrowMoney = $(".money")[i * 2].value.replace(/,/g, '');
+                    loanMoney = $(".money")[i * 2 + 1].value.replace(/,/g, '');
                     var detail = {
                         "VGUID": "",
                         "Abstract": remark,
@@ -158,8 +159,8 @@ var $page = function () {
                         "SpareOneSection": SpareOneSection,
                         "SpareTwoSection": SpareTwoSection,
                         "IntercourseSection": IntercourseSection,
-                        "BorrowMoney": parseInt(borrowMoney),
-                        "LoanMoney": parseInt(loanMoney),
+                        "BorrowMoney": borrowMoney,
+                        "LoanMoney": loanMoney,
                         "SevenSubjectName": subjectNames
                     }
                     detailList.push(detail);
@@ -175,7 +176,7 @@ var $page = function () {
                         "VGUID": $("#VGUID").val(),
                         "AccountModeName": $("#AccountModeName").val(),
                         "CompanyCode": CompanySection,
-                        "CompanyName": "",
+                        "CompanyName": companyName,
                         "VoucherType": $("#VoucherType").val(),
                         "AccountingPeriod": $("#AccountingPeriod").val(),
                         "BatchName": $("#BatchName").val(),
@@ -210,13 +211,19 @@ var $page = function () {
         })
         //预览
         $("#Preview").on("click", function () {
+            var borrowCount = $("#BorrowCount").val();
+            var loanCount = $("#LoanCount").val();
+            if (borrowCount != loanCount) {
+                jqxNotification("借贷不相等！", null, "error");
+                return;
+            }
             $("#SubjectTable").remove();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("show");
             //var x = $(".nav-i")[0].id.split("_")[1];
             if ($("#SubjectName0").val() != null || $("#SubjectName0").val() != "") {
                 var subjectName = $("#SubjectName0").val().split(".");
-                var companyName = subjectName[6].split(/[\s\n]/)[1];;
+                var companyName = subjectName[6].split(/[\s\n]/)[1];
                 $("#lblCompany").text(companyName);
             }          
             $("#lblAccountingPeriods").text($("#AccountingPeriod").val());
@@ -244,8 +251,7 @@ var $page = function () {
             //var lengths = $(".nav-i").length + $(".nav-i2").length;
             var htmls = "";
             var list1 = "";
-            var borrowCount = $("#BorrowCount").val();
-            var loanCount = $("#LoanCount").val();;
+            
             for (var i = 0; i < $("#VoucherTable tr").length - 2; i++) {
                 var borrowMoney = 0;
                 var loanMoney = 0;
@@ -466,33 +472,33 @@ var $page = function () {
     }
 
     function addVoucherListTable() {
-        voucherHtmls = "<table id='VoucherTable' style='width:98%;white-space:pre;margin-left: 16px;' border='1' cellspacing='0'>" +
+        voucherHtmls = "<table id='VoucherTable' style='width:100%;white-space:pre;' border='1' cellspacing='0'>" +
                         "<tr style='height:40px'>" +
                              "<td style='width: 250px;text-align: center;font-size: 18px;'>摘要</td>" +
                              "<td style='text-align: center;font-size: 18px;'>科目及描述</td>" +
-                             "<td style='width: 120px;text-align: center;font-size: 18px;'>借方金额</td>" +
-                             "<td style='width: 120px;text-align: center;font-size: 18px;'>贷方金额</td>" +
+                             "<td style='width: 150px;text-align: center;font-size: 18px;'>借方金额</td>" +
+                             "<td style='width: 150px;text-align: center;font-size: 18px;'>贷方金额</td>" +
                              "<td style='width: 50px;text-align: center;'></td>" +
                        "</tr>" +
                        "<tr style='height:60px'>" +
-                             "<td style='text-align: center;'><input id='Remark0' type='text' style='width: 248px;' class='input_text form-control'/></td>" +
+                             "<td style='text-align: center;'><textarea id='Remark0' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName0' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit0' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                             "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 120px;' class='input_text form-control money Borrow' /></td>" +
-                             "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 120px;' class='input_text form-control money Loan' /></td>" +
+                             "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 150px;' class='input_text form-control money Borrow' /></td>" +
+                             "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 150px;' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
                       "</tr>" +
                        "<tr style='height:60px'>" +
-                             "<td style='text-align: center;'><input id='Remark1' type='text' style='width: 248px;' class='input_text form-control'/></td>" +
+                             "<td style='text-align: center;'><textarea id='Remark1' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName1' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit1' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                             "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 120px;' class='input_text form-control money Borrow' /></td>" +
-                             "<td style='text-align: right;'><input id='Loan1' type='text' style='width: 120px;' class='input_text form-control money Loan' /></td>" +
+                             "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 150px;' class='input_text form-control money Borrow' /></td>" +
+                             "<td style='text-align: right;'><input id='Loan1' type='text' style='width: 150px;' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
                       "</tr>" +
                       "<tr id='countTr' style='height:40px'>" +
                               "<td style='text-align: center;'>合计</td>" +
                               "<td style='text-align: center;'></td>" +
-                              "<td style='text-align: right;'><input id='BorrowCount' type='text' style='width: 120px;' class='input_text form-control' readonly /></td></td>" +
-                              "<td style='text-align: right;'><input id='LoanCount' type='text' style='width: 120px;' class='input_text form-control' readonly/></td>" +
+                              "<td style='text-align: right;'><input id='BorrowCount' type='text' style='width: 150px;' class='input_text form-control' readonly /></td></td>" +
+                              "<td style='text-align: right;'><input id='LoanCount' type='text' style='width: 150px;' class='input_text form-control' readonly/></td>" +
                              "<td style='text-align: center;'></td>" +
                        "</tr>"
         "</table>";
@@ -662,27 +668,32 @@ var $page = function () {
             var loanMoney = "";
             if (datas[i].BorrowMoney == "" || datas[i].BorrowMoney == null) {
                 loanMoney = datas[i].LoanMoney;
+                loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
                 $("#Loan" + i).val(loanMoney);
                 $("#Borrow" + i).val("");
                 $("#Borrow" + i).attr("readonly", "readonly");
             } else {
                 borrowMoney = datas[i].BorrowMoney;
+                borrowMoney = parseFloat(borrowMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
                 $("#Borrow" + i).val(borrowMoney);
                 $("#Loan" + i).val("");
                 $("#Loan" + i).attr("readonly", "readonly");
             }
-            //
-            $("#BorrowCount").val(datas[i].BorrowMoneyCount);
-            $("#LoanCount").val(datas[i].LoanMoneyCount);
+            var bCount = datas[i].BorrowMoneyCount;
+            //bCount = bCount.toString().replace(/,/g, '');
+            $("#BorrowCount").val(parseFloat(bCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            var lCount = datas[i].LoanMoneyCount;
+            //lCount = lCount.toString().replace(/,/g, '');
+            $("#LoanCount").val(parseFloat(lCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
             //多余2条,绑定额外的tr
             if (i > 1) {
                 var trMore = "";
                 trIndex = i;
                 trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
-                                 "<td style='text-align: center;'><input id='Remark" + trIndex + "' type='text' value='" + datas[i].Abstract + "'  style='width: 248px;' class='input_text form-control'/></td>" +
-                                 "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                                 "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 120px;' class='input_text form-control money Borrow'/></td>" +
-                                 "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 120px;' class='input_text form-control money Loan'/></td>" +
+                                 "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'>" + datas[i].Abstract+ "</textarea></td>" +
+                                 "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px; '>编辑</button></td>" +
+                                 "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;' class='input_text form-control money Borrow'/></td>" +
+                                 "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;' class='input_text form-control money Loan'/></td>" +
                                  "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                           "</tr>"
                 $("#countTr").before(trMore);
@@ -975,9 +986,13 @@ function tdClick() {
         if (value != "") {
             if (id.substr(0, id.length - 1) == "Borrow") {
                 $("#Loan" + trIndexs).attr("readonly", "readonly");
+                value = value.replace(/,/g, '');
+                $("#Borrow" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
             } else {
                 $("#Borrow" + trIndexs).attr("readonly", "readonly");
-            }
+                value = value.replace(/,/g, '');
+                $("#Loan" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            } 
         } else {
             if (id.substr(0, id.length - 1) == "Borrow") {
                 if ($("#Loan" + trIndexs).val() != "") {
@@ -1016,16 +1031,18 @@ function countMoney() {
     var loanCount = 0;
     for (var i = 0; i < $(".Borrow").length; i++) {
         if ($(".Borrow")[i].value != "") {
-            borrowCount += parseFloat($(".Borrow")[i].value);
+            var valB = $(".Borrow")[i].value.replace(/,/g, '');
+            borrowCount += parseFloat(valB);
         } 
     }
     for (var i = 0; i < $(".Loan").length; i++) {
         if ($(".Loan")[i].value != "") {
-            loanCount += parseFloat($(".Loan")[i].value);
+            var valL = $(".Loan")[i].value.replace(/,/g, '');
+            loanCount += parseFloat(valL);
         }
     }
-    $("#BorrowCount").val(borrowCount);
-    $("#LoanCount").val(loanCount);
+    $("#BorrowCount").val(parseFloat(borrowCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+    $("#LoanCount").val(parseFloat(loanCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
 }
 
 

@@ -253,10 +253,10 @@ var $page = function () {
       };
         var typeAdapter = new $.jqx.dataAdapter(source);
         $("#jqxCompanySetting").jqxGrid({
-            //pageable: false,           
+            pageable: true,           
             width: '1100px',
             height: 400,
-            //pageSize: 10,
+            pageSize: 10,
             //serverProcessing: true,
             //pagerButtonsCount: 10,
             source: typeAdapter,

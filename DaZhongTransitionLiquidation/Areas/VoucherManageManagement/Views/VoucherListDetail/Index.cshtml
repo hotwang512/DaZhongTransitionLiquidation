@@ -77,6 +77,12 @@
         margin-left: 12px !important;
         border: 1px solid #ccc !important;
     }
+    #VoucherListTable input{
+                border-left:none !important;border-top:none !important;border-right:none !important;border-bottom-color:black;
+            }
+    #ShowSevenSubject .input_text{
+        width: 435px !important;
+    }
 </style>
 <table id="hideButton" style="margin-top: 10px;">
     <tr style="height: 50px;">
@@ -134,35 +140,20 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">科目信息</span></div>
     </div>
-    <button id="btnAddDetail" type="button" class="buttons" style="margin-top: 2px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-    <div id='jqxTabs'>
-        <ul>
-            <li style="margin-left: 30px;">
-                <div style="height: 20px; margin-top: 5px;width: 500px;text-align: center;">
-                    借方
-                </div>
-            </li>
-            <li>
-                <div style="height: 20px; margin-top: 5px;width: 500px;text-align: center;">
-                    贷方
-                </div>
-            </li>
-        </ul>
-        <div style="overflow: hidden;" id="BorrowTable">
+    @*<div class="body_mk" style="height: 500px;">
+        </div>*@
+        <button id="btnAddDetail" type="button" class="buttons" style="margin-top: 2px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+        <div id="VoucherListTable" style="height:210px;overflow-y:auto ">
 
-        </div>
-        <div style="overflow: hidden;" id="LoanTable">
-
-        </div>
+        </div>      
     </div>
-</div>
 
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
     </div>
-    <div class="body_mk" style="height: 115px;">
+    <div class="body_mk" style="height: 125px;">
         <table id="VoucherListAttachment" style="width:100%;">
             <tr style="height:10px"></tr>
             <tr style="height:40px">
@@ -226,19 +217,6 @@
     </div>
 </div>
 
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyDialog">
-    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
-        <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
-            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel_titles2" style="color: #555; font-family: Calibri;">选择科目段</h4>
-            </div>
-            <div class="modal-body" style="width: 100%;">
-                <div id="jqxSubjectSection" class="jqxTable" style=""></div>
-            </div>
-        </div>
-    </div>
-</div>
 <style type="text/css">
     #VoucherListTitle td {
         font-family: SimSun;
@@ -327,6 +305,84 @@
     </div>
 </div>
 <div id="jqxLoader" style="z-index:1045">
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="ShowSevenSubject">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 650px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles4" style="color: #555; font-family: Calibri;">选择7个段</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <table style="width: 100%;">
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">公司段：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <select id="CompanySection" class="input_text form-control" onchange="gradeChange()"></select>
+                            <input id="hideCompanyName" name="hideCompanyName" class="hide" />
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">科目段：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <input id="SubjectSection" type="text" style="width: 200px;" class="input_text form-control" validatetype="required" readonly="readonly" />
+                            <input id="hidSubjectSection" name="hidSubjectSection" class="hide" />
+                            <button id="btnSearch" type="button" class="buttons" style="margin-left: 10px;" onclick="searchSubject()"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">核算段：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <select id="AccountSection" class="input_text form-control"></select>
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">成本中心：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <select id="CostCenterSection" class="input_text form-control"></select>
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">备用1：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <select id="SpareOneSection" class="input_text form-control"></select>
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">备用2：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <select id="SpareTwoSection" class="input_text form-control"></select>
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="text-align: right;font-size: 14px;">往来段：</td>
+                        <td style="text-align: left;font-size: 14px;">
+                            <select id="IntercourseSection" class="input_text form-control"></select>
+                            <input id="hidbtnIndex" name="hidbtnIndex" class="hide" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSaveSeven" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确认</span></button>
+                <button id="SevenSubject_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-left: 1000px; margin-top: 100px;">
+        <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles2" style="color: #555; font-family: Calibri;">选择科目段</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <div id="jqxSubjectSection" class="jqxTable" style=""></div>
+            </div>
+        </div>
+    </div>
 </div>
 @*<div>
         <table id="VoucherListDetailss" style="width:70%;margin-left: 300px;display:none">

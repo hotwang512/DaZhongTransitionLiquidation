@@ -258,7 +258,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         var accountModeCode = data.Single(x => x.VGUID == item).AccountModeCode;
                         if (parentCode != null)
                         {
-                            var st = data.Single(x => x.Code == parentCode).Status;
+                            var st = data.Single(x => x.Code == parentCode && x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode).Status;
                             if(st == "0")
                             {
                                 disable = "2";
@@ -559,7 +559,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             default:
                                 break;
                         }
-                        return;
                     }
                     if (isEdit)
                     {

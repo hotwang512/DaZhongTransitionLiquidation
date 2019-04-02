@@ -71,7 +71,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 {
                     var companyCode = sevenSection.CompanyCode;//公司
                     var bankAccount = sevenSection.BankAccount;//银行账号
-                    var initialBalance = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == companyCode && x.BankAccount == bankAccount).First().InitialBalance;//初始余额
+                    var initialBalance = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == companyCode && x.BankAccount == bankAccount).First().InitialBalance;//初始余额
 
                     var bankBalance = sevenSection.BankBalance;//银行余额 
                     var balanceDate = sevenSection.BalanceDate;//余额日期

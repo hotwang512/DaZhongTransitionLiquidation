@@ -54,7 +54,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     }
                     response = db.SqlQueryable<Business_SevenSection>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss." + colname + " and bss.CompanyCode='" + subjectCode + @"' 
- where bs.SectionVGUID='" + sVGUID + "' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + UserInfo.AccountModeCode + "' and bs.Status='1' and bs.Code is not null and bss.Checked='1'").OrderBy("Code asc").ToList();
+ and bss.SubjectCode='" + companyCode + "' and bss.AccountModeCode='" + UserInfo.AccountModeCode + "'  where bs.SectionVGUID='" + sVGUID + "' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + UserInfo.AccountModeCode + "' and bs.Status='1' and bs.Code is not null and bss.Checked='1'").OrderBy("Code asc").ToList();
                 }
 
             });
@@ -150,6 +150,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.SpareTwoSection = item.SpareTwoSection;
                             BVDetail.SubjectSection = item.SubjectSection;
                             BVDetail.SubjectSectionName = item.SubjectSectionName;
+                            BVDetail.SevenSubjectName = item.SevenSubjectName;
+                            BVDetail.BorrowMoneyCount = borrowMoney;
+                            BVDetail.LoanMoneyCount = loanMoney;
+                            BVDetail.JE_LINE_NUMBER = i++;
                             BVDetail.VGUID = Guid.NewGuid();
                             BVDetail.VoucherVGUID = guid;
                             voucherdetailList.Add(BVDetail);
@@ -171,7 +175,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             asset.CURRENCY_CONVERSION_RATE = 1;
                             asset.STATUS = "1";
                             asset.VGUID = Guid.NewGuid();
-                            asset.JE_LINE_NUMBER = i++;
+                            asset.JE_LINE_NUMBER = BVDetail.JE_LINE_NUMBER;
                             asset.SEGMENT1 = item.CompanySection;
                             asset.SEGMENT2 = item.SubjectSection;
                             asset.SEGMENT3 = item.AccountSection;
@@ -179,16 +183,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             asset.SEGMENT5 = item.SpareOneSection;
                             asset.SEGMENT6 = item.SpareTwoSection;
                             asset.SEGMENT7 = item.IntercourseSection;
-                            if(item.BorrowMoney == -1)
-                            {
-                                asset.ENTERED_DR = "";
-                                asset.ENTERED_CR = item.LoanMoney.TryToString();
-                            }
-                            else
-                            {
-                                asset.ENTERED_DR = item.BorrowMoney.TryToString();
-                                asset.ENTERED_CR = "";
-                            }
+                            asset.ENTERED_CR = item.LoanMoney.TryToString();
+                            asset.ENTERED_DR = item.BorrowMoney.TryToString();
+                            asset.ACCOUNTED_DR = borrowMoney.TryToString();
+                            asset.ACCOUNTED_CR = loanMoney.TryToString();
                             assetList.Add(asset);
                         }
                         db.Insertable(voucherdetailList).ExecuteCommand();
@@ -255,9 +253,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //主信息
                 var voucher = db.Queryable<Business_VoucherList>().Single(x => x.VGUID == vguid);
                 //明细信息
-                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).ToList();
+                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("JE_LINE_NUMBER asc").ToList();
                 //附件信息
-                var voucherAttach = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguid).ToList();
+                //var voucherAttach = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguid).ToList();
                 voucherList.AccountingPeriod = voucher.AccountingPeriod.TryToDate();
                 voucherList.Auditor = voucher.Auditor;
                 voucherList.BatchName = voucher.BatchName;//批名自动生成

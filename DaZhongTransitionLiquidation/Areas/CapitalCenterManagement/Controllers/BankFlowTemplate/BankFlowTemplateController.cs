@@ -265,10 +265,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     foreach (var items in bankFlowList)
                     {
                         items.BankAccount = item.BankAccount;
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch).ToList();
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ToList();
                         if (isAny.Count > 0)
                         {
                             isAny[0].BankAccount = item.BankAccount;
+                            isAny[0].TurnIn = items.TurnIn;
+                            isAny[0].TurnOut = items.TurnOut;
                             db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
                             continue;
                         }
@@ -302,7 +304,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     foreach (var items in bankFlowList)
                     {
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch).ToList();
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == items.BankAccount).ToList();
                         if (isAny.Count > 0)
                         {
                             isAny[0].BankAccount = item.BankAccount;

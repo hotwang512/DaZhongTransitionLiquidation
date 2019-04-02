@@ -16,6 +16,7 @@ var IntercourseSection = null;
 var selectIndex = 0;//生成块的数量
 var loginCompanyCode = $("#LoginCompanyCode").val();
 var loginAccountModeCode = $("#LoginAccountModeCode").val();
+var voucherHtmls = "";
 var $page = function () {
 
     this.init = function () {
@@ -31,14 +32,16 @@ var $page = function () {
         $("#BatchName").val(voucherType + date);
         $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + myDate.getDate());
         $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
-        uiEngineHelper.bindSelect('#CompanyCode', CompanyCode, "Code", "Descrption");
+        uiEngineHelper.bindSelect('#CompanySection', CompanyCode, "Code", "Descrption");
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
         if (guid != "" && guid != null) {
             getVoucherDetail();
+            addVoucherListTable();
             $("#VoucherType").attr("disabled", "disableds");
         } else {
-            addSectionDiv();
+            //addSectionDiv();
+            addVoucherListTable(trMore);
             $("#hideButton").show();
         }
         $("#DocumentMaker").val($("#LoginName").val());
@@ -46,7 +49,22 @@ var $page = function () {
         var str = "";
         //新增
         $("#btnAddDetail").on("click", function () {
-            addSectionDiv();
+            //addSectionDiv();
+            var trMore = "";
+            var trIndex = $("#VoucherTable tr").length - 2;
+            if (trIndex > 2) {
+                var trId = $("#VoucherTable tr")[trIndex].id;
+                trIndex = parseInt(trId.substr(trId.length - 1, 1))+1;
+            }
+            trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
+                             "<td style='text-align: center;'><input id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'/></td>" +
+                             "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly'  style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                             "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 120px;' class='input_text form-control money Borrow'/></td>" +
+                             "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 120px;' class='input_text form-control money Loan'/></td>" +
+                             "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
+                      "</tr>"
+                $("#countTr").before(trMore);
+                tdClick();
         });
         //取消
         $("#btnCancel").on("click", function () {
@@ -58,7 +76,7 @@ var $page = function () {
             console.log(index);
             var length2 = $(".nav-i2").length;
             if (index == 1 && length2 == 0) {
-                addSectionDiv();
+                //addSectionDiv();
             } else {
                 autoHeight(index);
             }
@@ -73,7 +91,7 @@ var $page = function () {
                     break;
             }
         }
-        $('#jqxTabs').jqxTabs({ width: '1560px', height: 300, initTabContent: initWidgets });
+        //$('#jqxTabs').jqxTabs({ width: '1560px', height: 300, initTabContent: initWidgets });
         //双击选择科目
         $("#jqxSubjectSection").on('rowDoubleClick', function (event) {
             // event args.
@@ -83,16 +101,24 @@ var $page = function () {
             // row key.
             var key = args.key;
             // data field
-            $("#SubjectSection_" + z1 + "_" + z2).val(row.Descrption);
-            $("#hidSubjectSection_" + z1 + "_" + z2).val(row.Code);
+            //$("#SubjectSection_" + z1 + "_" + z2).val(row.Descrption);
+            //$("#hidSubjectSection_" + z1 + "_" + z2).val(row.Code);
+            //$("#AddCompanyDialog").modal("hide");
+            //var code = $("#CompanySection_" + z1 + "_" + z2).val();
+            if (row.ParentCode == "" || row.ParentCode == null || row.Remark == "1") {
+                jqxNotification("请选择已配置信息节点！", null, "error");
+                return;
+            }
+            $("#SubjectSection").val(row.Descrption);
+            $("#hidSubjectSection").val(row.Code);
             $("#AddCompanyDialog").modal("hide");
-            var code = $("#CompanySection_" + z1 + "_" + z2).val();
+            var code = $("#CompanySection").val();
             AccountSection = loadCompanyCode("C", code, row.Code);
             CostCenterSection = loadCompanyCode("D", code, row.Code);
             SpareOneSection = loadCompanyCode("E", code, row.Code);
             SpareTwoSection = loadCompanyCode("F", code, row.Code);
             IntercourseSection = loadCompanyCode("G", code, row.Code);
-            var str = "_" + z1 + "_" + z2;
+            //var str = "_" + z1 + "_" + z2;
             loadSelectFun(str);
         });
         //保存
@@ -103,21 +129,25 @@ var $page = function () {
             //}
 
             if (validateError <= 0) {
-                var detail = [];
-                var length = $(".nav-i").length;
+                var detailList = [];
+                var length = $("#VoucherTable tr").length - 2;
                 for (var i = 0; i < length; i++) {
-                    var ii = $(".nav-i")[i].id.split("_")[1];//获取DIV的ID下标
-                    var remark = $("#Remark_A_" + ii).val();
-                    var CompanySection = $("#CompanySection_A_" + ii).val();
-                    var SubjectSection = $("#hidSubjectSection_A_" + ii).val();
-                    var SubjectSectionName = $("#SubjectSection_A_" + ii).val();
-                    var AccountSection = $("#AccountSection_A_" + ii).val();
-                    var CostCenterSection = $("#CostCenterSection_A_" + ii).val();
-                    var SpareOneSection = $("#SpareOneSection_A_" + ii).val();
-                    var SpareTwoSection = $("#SpareTwoSection_A_" + ii).val();
-                    var IntercourseSection = $("#IntercourseSection_A_" + ii).val();
-                    var BorrowMoney = $("#BorrowMoney_A_" + ii).val();
-                    var borrowDetail = {
+                    var remark = $("#Remark" + i).val();
+                    var subjectNames = $("#SubjectName" + i).val()
+                    var subjectName = $("#SubjectName" + i).val().split(".");
+                    var CompanySection = subjectName[0];
+                    var SubjectSection = subjectName[1];
+                    var SubjectSectionName = subjectName[7];
+                    var AccountSection = subjectName[2];
+                    var CostCenterSection = subjectName[3];
+                    var SpareOneSection = subjectName[4];
+                    var SpareTwoSection = subjectName[5];
+                    var IntercourseSection = subjectName[6].split(/[\s\n]/)[0];
+                    var borrowMoney = 0;
+                    var loanMoney = 0;
+                    borrowMoney = $(".money")[i * 2].value;
+                    loanMoney = $(".money")[i * 2 + 1].value;
+                    var detail = {
                         "VGUID": "",
                         "Abstract": remark,
                         "CompanySection": CompanySection,
@@ -128,45 +158,16 @@ var $page = function () {
                         "SpareOneSection": SpareOneSection,
                         "SpareTwoSection": SpareTwoSection,
                         "IntercourseSection": IntercourseSection,
-                        "BorrowMoney": parseInt(BorrowMoney),
-                        "LoanMoney": -1
+                        "BorrowMoney": parseInt(borrowMoney),
+                        "LoanMoney": parseInt(loanMoney),
+                        "SevenSubjectName": subjectNames
                     }
-                    detail.push(borrowDetail);
+                    detailList.push(detail);
                 }
-                var lengths = $(".nav-i2").length;
-                for (var j = 0; j < lengths; j++) {
-                    var jj = $(".nav-i2")[j].id.split("_")[1];//获取DIV的ID下标
-                    var remark = $("#Remark_B_" + jj).val();
-                    var CompanySection = $("#CompanySection_B_" + jj).val();
-                    var SubjectSection = $("#hidSubjectSection_B_" + jj).val();
-                    var SubjectSectionName = $("#SubjectSection_B_" + jj).val();
-                    var AccountSection = $("#AccountSection_B_" + jj).val();
-                    var CostCenterSection = $("#CostCenterSection_B_" + jj).val();
-                    var SpareOneSection = $("#SpareOneSection_B_" + jj).val();
-                    var SpareTwoSection = $("#SpareTwoSection_B_" + jj).val();
-                    var IntercourseSection = $("#IntercourseSection_B_" + jj).val();
-                    var LoanMoney = $("#LoanMoney_B_" + jj).val();
-                    var loanDetail = {
-                        "VGUID": "",
-                        "Abstract": remark,
-                        "CompanySection": CompanySection,
-                        "SubjectSection": SubjectSection,
-                        "SubjectSectionName": SubjectSectionName,
-                        "AccountSection": AccountSection,
-                        "CostCenterSection": CostCenterSection,
-                        "SpareOneSection": SpareOneSection,
-                        "SpareTwoSection": SpareTwoSection,
-                        "IntercourseSection": IntercourseSection,
-                        "BorrowMoney": -1,
-                        "LoanMoney": parseInt(LoanMoney)
-                    }
-                    detail.push(loanDetail);
-                }
-                var y = JSON.stringify(detail);
-                console.log(detail);
-                //console.log(y);
+                //var y = JSON.stringify(detailList);
+                console.log(detailList);
                 $("#VoucherType").removeAttr("disabled");
-                $("#CompanyCode").removeAttr("disabled");
+                //$("#CompanyCode").removeAttr("disabled");
                 $.ajax({
                     url: "/VoucherManageManagement/VoucherListDetail/SaveVoucherListDetail",
                     //data: { vguids: selection },
@@ -187,15 +188,15 @@ var $page = function () {
                         "DocumentMaker": $("#DocumentMaker").val(),
                         "Cashier": $("#Cashier").val(),
                         "Attachment": $("#Attachment").val(),
-                        "Detail": detail
+                        "Detail": detailList
                     },
                     type: "post",
                     success: function (msg) {
                         switch (msg.Status) {
                             case "0":
                                 jqxNotification("保存失败！", null, "error");
-                                $("#VoucherType").attr("disabled", "disableds");
-                                $("#CompanyCode").attr("disabled", "disableds");
+                                //$("#VoucherType").attr("disabled", "disableds");
+                                //$("#CompanyCode").attr("disabled", "disableds");
                                 break;
                             case "1":
                                 jqxNotification("保存成功！", null, "success");
@@ -212,9 +213,12 @@ var $page = function () {
             $("#SubjectTable").remove();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("show");
-            var x = $(".nav-i")[0].id.split("_")[1];
-            var companyCode = $("#CompanySection_A_" + x + "  option:selected").text();
-            $("#lblCompany").text(companyCode);
+            //var x = $(".nav-i")[0].id.split("_")[1];
+            if ($("#SubjectName0").val() != null || $("#SubjectName0").val() != "") {
+                var subjectName = $("#SubjectName0").val().split(".");
+                var companyName = subjectName[6].split(/[\s\n]/)[1];;
+                $("#lblCompany").text(companyName);
+            }          
             $("#lblAccountingPeriods").text($("#AccountingPeriod").val());
             $("#lblBatchName").text($("#BatchName").val());
             $("#lblCurrency").text("人民币");
@@ -240,47 +244,18 @@ var $page = function () {
             //var lengths = $(".nav-i").length + $(".nav-i2").length;
             var htmls = "";
             var list1 = "";
-            var list2 = "";
-            var borrowCount = 0;
-            var loanCount = 0;
-            for (var i = 0; i < $(".nav-i").length; i++) {
-                var ii = $(".nav-i")[i].id.split("_")[1];//获取DIV的ID下标
-                var subject = $("#CompanySection_A_" + ii).val() + "." + $("#hidSubjectSection_A_" + ii).val() + "." + $("#AccountSection_A_" + ii).val() + "." +
-                              $("#CostCenterSection_A_" + ii).val() + "." + $("#SpareOneSection_A_" + ii).val() + "." + $("#SpareTwoSection_A_" + ii).val() + "." +
-                              $("#IntercourseSection_A_" + ii).val() + "\n" + "  " + $("#CompanySection_A_" + ii + "  option:selected").text() + "." + $("#SubjectSection_A_" + ii).val() +
-                              $("#AccountSection_A_" + ii + "  option:selected").text() + "." + $("#CostCenterSection_A_" + ii + "  option:selected").text() + "." +
-                              $("#SpareOneSection_A_" + ii + "  option:selected").text() + "." + $("#SpareTwoSection_A_" + ii + "  option:selected").text() + "." +
-                              $("#IntercourseSection_A_" + ii + "  option:selected").text();
-                var BorrowMoney = $("#BorrowMoney_A_" + ii).val();
-                if (BorrowMoney != "") {
-                    BorrowMoney = parseFloat(BorrowMoney).toFixed(2);
-                    borrowCount = parseFloat(borrowCount) + parseFloat(BorrowMoney);
-                }
+            var borrowCount = $("#BorrowCount").val();
+            var loanCount = $("#LoanCount").val();;
+            for (var i = 0; i < $("#VoucherTable tr").length - 2; i++) {
+                var borrowMoney = 0;
+                var loanMoney = 0;
+                borrowMoney = $(".money")[i * 2].value;
+                loanMoney = $(".money")[i * 2 + 1].value;
                 list1 += "<tr style='height:40px'>" +
-                              "<td style='text-align: left;'>" + "  " + $("#Remark_A_" + ii).val() + "</td>" +
-                              "<td style='text-align: left;'>" + "  " + subject + "</td>" +
-                              "<td style='text-align: right;'>" + BorrowMoney + "  " + "</td>" +
-                              "<td style='text-align: center;'></td>" +
-                        "</tr>";
-            }
-            for (var i = 0; i < $(".nav-i2").length; i++) {
-                var ii = $(".nav-i2")[i].id.split("_")[1];//获取DIV的ID下标
-                var subjects = $("#CompanySection_B_" + ii).val() + "." + $("#hidSubjectSection_B_" + ii).val() + "." + $("#AccountSection_B_" + ii).val() + "." +
-                             $("#CostCenterSection_B_" + ii).val() + "." + $("#SpareOneSection_B_" + ii).val() + "." + $("#SpareTwoSection_B_" + ii).val() + "." +
-                             $("#IntercourseSection_B_" + ii).val() + "\n" + "  " + $("#CompanySection_B_" + ii + "  option:selected").text() + "." + $("#SubjectSection_B_" + ii).val() +
-                              $("#AccountSection_B_" + ii + "  option:selected").text() + "." + $("#CostCenterSection_B_" + ii + "  option:selected").text() + "." +
-                              $("#SpareOneSection_B_" + ii + "  option:selected").text() + "." + $("#SpareTwoSection_B_" + ii + "  option:selected").text() + "." +
-                              $("#IntercourseSection_B_" + ii + "  option:selected").text();
-                var LoanMoney = $("#LoanMoney_B_" + ii).val();
-                if (LoanMoney != "") {
-                    LoanMoney = parseFloat(LoanMoney).toFixed(2);
-                    loanCount = parseFloat(loanCount) + parseFloat(LoanMoney);
-                }
-                list2 += "<tr style='height:40px'>" +
-                              "<td style='text-align: left;'>" + "  " + $("#Remark_B_" + ii).val() + "</td>" +
-                              "<td style='text-align: left;'>" + "  " + subjects + "</td>" +
-                              "<td style='text-align: center;'></td>" +
-                              "<td style='text-align: right;'>" + LoanMoney + "  " + "</td>" +
+                              "<td style='text-align: left;'>" + "  " + $("#Remark" + i).val() + "</td>" +
+                              "<td style='text-align: left;'>" + "  " + $("#SubjectName" + i).val() + "</td>" +
+                              "<td style='text-align: center;'>" + borrowMoney + "  " + "</td>" +
+                              "<td style='text-align: center;'>" + loanMoney + "  " + "</td>" +
                         "</tr>";
             }
             htmls = "<table id='SubjectTable' style='width:100%;white-space:pre' border='1' cellspacing='0'>" +
@@ -290,12 +265,12 @@ var $page = function () {
                               "<td style='width: 150px;text-align: center;font-size: 18px;'>借方金额</td>" +
                               "<td style='width: 150px;text-align: center;font-size: 18px;'>贷方金额</td>" +
                         "</tr>"
-                           + list1 + list2 +
+                           + list1 +
                         "<tr style='height:40px'>" +
                               "<td style='text-align: center;'>合计</td>" +
                               "<td style='text-align: center;'></td>" +
-                              "<td style='text-align: right;'>" + borrowCount.toFixed(2) + "  " + "</td>" +
-                              "<td style='text-align: right;'>" + loanCount.toFixed(2) + "  " + "</td>" +
+                              "<td style='text-align: center;'>" + borrowCount + "  " + "</td>" +
+                              "<td style='text-align: center;'>" + loanCount + "  " + "</td>" +
                        "</tr>"
             "</table>";
             $("#VoucherDetail").append(htmls);
@@ -304,6 +279,11 @@ var $page = function () {
         $("#AddNewBankData_CancelBtn").on("click", function () {
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("hide");
+        })
+        //取消
+        $("#SevenSubject_CancelBtn").on("click", function () {
+            $("#ShowSevenSubject").modal({ backdrop: "static", keyboard: false });
+            $("#ShowSevenSubject").modal("hide");
         })
         //拍照上传
         $("#UploadFile").on("click", function () {
@@ -361,6 +341,30 @@ var $page = function () {
                 }
             });
         });
+        //选择7个段
+        $("#btnSaveSeven").on("click", function (){
+            var trIndex1 = $("#hidbtnIndex").val();
+            var companySection = $("#CompanySection").val();
+            var companySectionName = $("#CompanySection  option:selected").text();
+            var subjectSection = $("#hidSubjectSection").val();
+            var subjectSectionName = $("#SubjectSection").val();
+            var accountSection = $("#AccountSection").val();
+            var accountSectionName = $("#AccountSection  option:selected").text();
+            var costCenterSection = $("#CostCenterSection").val();
+            var costCenterSectionName = $("#CostCenterSection  option:selected").text();
+            var spareOneSection = $("#SpareOneSection").val();
+            var spareOneSectionName = $("#SpareOneSection  option:selected").text();
+            var spareTwoSection = $("#SpareTwoSection").val();
+            var spareTwoSectionName = $("#SpareTwoSection  option:selected").text();
+            var intercourseSection = $("#IntercourseSection").val();
+            var intercourseSectionName = $("#IntercourseSection  option:selected").text();
+            var subjectvalue = companySection + "." + subjectSection + "." + accountSection + "." + costCenterSection + "." + spareOneSection + "." + spareTwoSection + "." + intercourseSection
+                               + "\n" + companySectionName + "." + subjectSectionName + "." + accountSectionName + "." + costCenterSectionName + "." + spareOneSectionName + "." + spareTwoSectionName + "." + intercourseSectionName
+            $("#SubjectName" + trIndex1).val(subjectvalue);
+            $("#hideCompanyName").val(companySectionName);
+            $("#ShowSevenSubject").modal({ backdrop: "static", keyboard: false });
+            $("#ShowSevenSubject").modal("hide");
+        })
     }; //addEvent end
 
     function addSectionDiv() {
@@ -461,13 +465,48 @@ var $page = function () {
         });
     }
 
+    function addVoucherListTable() {
+        voucherHtmls = "<table id='VoucherTable' style='width:98%;white-space:pre;margin-left: 16px;' border='1' cellspacing='0'>" +
+                        "<tr style='height:40px'>" +
+                             "<td style='width: 250px;text-align: center;font-size: 18px;'>摘要</td>" +
+                             "<td style='text-align: center;font-size: 18px;'>科目及描述</td>" +
+                             "<td style='width: 120px;text-align: center;font-size: 18px;'>借方金额</td>" +
+                             "<td style='width: 120px;text-align: center;font-size: 18px;'>贷方金额</td>" +
+                             "<td style='width: 50px;text-align: center;'></td>" +
+                       "</tr>" +
+                       "<tr style='height:60px'>" +
+                             "<td style='text-align: center;'><input id='Remark0' type='text' style='width: 248px;' class='input_text form-control'/></td>" +
+                             "<td style='text-align: center;'><textarea id='SubjectName0' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit0' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                             "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 120px;' class='input_text form-control money Borrow' /></td>" +
+                             "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 120px;' class='input_text form-control money Loan' /></td>" +
+                             "<td style='text-align: center;'></td>" +
+                      "</tr>" +
+                       "<tr style='height:60px'>" +
+                             "<td style='text-align: center;'><input id='Remark1' type='text' style='width: 248px;' class='input_text form-control'/></td>" +
+                             "<td style='text-align: center;'><textarea id='SubjectName1' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit1' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                             "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 120px;' class='input_text form-control money Borrow' /></td>" +
+                             "<td style='text-align: right;'><input id='Loan1' type='text' style='width: 120px;' class='input_text form-control money Loan' /></td>" +
+                             "<td style='text-align: center;'></td>" +
+                      "</tr>" +
+                      "<tr id='countTr' style='height:40px'>" +
+                              "<td style='text-align: center;'>合计</td>" +
+                              "<td style='text-align: center;'></td>" +
+                              "<td style='text-align: right;'><input id='BorrowCount' type='text' style='width: 120px;' class='input_text form-control' readonly /></td></td>" +
+                              "<td style='text-align: right;'><input id='LoanCount' type='text' style='width: 120px;' class='input_text form-control' readonly/></td>" +
+                             "<td style='text-align: center;'></td>" +
+                       "</tr>"
+        "</table>";
+        $("#VoucherListTable").append(voucherHtmls);
+        tdClick();
+    }
+   
     function loadSelectFun(str) {
 
-        var id1 = "#AccountSection" + str;
-        var id2 = "#CostCenterSection" + str;
-        var id3 = "#SpareOneSection" + str;
-        var id4 = "#SpareTwoSection" + str;
-        var id5 = "#IntercourseSection" + str;
+        var id1 = "#AccountSection";
+        var id2 = "#CostCenterSection";
+        var id3 = "#SpareOneSection";
+        var id4 = "#SpareTwoSection";
+        var id5 = "#IntercourseSection";
 
         uiEngineHelper.bindSelect(id1, AccountSection, "Code", "Descrption");
         uiEngineHelper.bindSelect(id2, CostCenterSection, "Code", "Descrption");
@@ -503,7 +542,7 @@ var $page = function () {
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
                 var datas = msg.Detail;
-                setVoucherDetail(datas);
+                //setVoucherDetail(datas);
                 createTable(datas);
                 loadAttachments(msg.Attachment);
             }
@@ -616,36 +655,67 @@ var $page = function () {
         console.log(selectIndex);
     }
     function createTable(datas) {
-
+        for (var i = 0; i < datas.length; i++) {
+            $("#Remark" + i).val(datas[i].Abstract);
+            $("#SubjectName" + i).val(datas[i].SevenSubjectName);
+            var borrowMoney = "";
+            var loanMoney = "";
+            if (datas[i].BorrowMoney == "" || datas[i].BorrowMoney == null) {
+                loanMoney = datas[i].LoanMoney;
+                $("#Loan" + i).val(loanMoney);
+                $("#Borrow" + i).val("");
+                $("#Borrow" + i).attr("readonly", "readonly");
+            } else {
+                borrowMoney = datas[i].BorrowMoney;
+                $("#Borrow" + i).val(borrowMoney);
+                $("#Loan" + i).val("");
+                $("#Loan" + i).attr("readonly", "readonly");
+            }
+            //
+            $("#BorrowCount").val(datas[i].BorrowMoneyCount);
+            $("#LoanCount").val(datas[i].LoanMoneyCount);
+            //多余2条,绑定额外的tr
+            if (i > 1) {
+                var trMore = "";
+                trIndex = i;
+                trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
+                                 "<td style='text-align: center;'><input id='Remark" + trIndex + "' type='text' value='" + datas[i].Abstract + "'  style='width: 248px;' class='input_text form-control'/></td>" +
+                                 "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                                 "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 120px;' class='input_text form-control money Borrow'/></td>" +
+                                 "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 120px;' class='input_text form-control money Loan'/></td>" +
+                                 "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
+                          "</tr>"
+                $("#countTr").before(trMore);
+                if (borrowMoney == "" || borrowMoney == null) {
+                    $("#Borrow" + i).attr("readonly", "readonly");
+                } else {
+                    $("#Loan" + i).attr("readonly", "readonly");
+                }
+                tdClick();
+            }
+        }
     }
 };
-//移除明细内容
-function removes(event) {
-    WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", event);
-}
-function dele(event) {
-    var str = event.id;
-    var x = str.split("_")[1];
-    if (index == 0) {
-        $("#Borrow_" + x).remove();
-    } else {
-        $("#Loan_" + x).remove();
-    }
-    autoHeight(index)
-}
+
 //选择科目段
 function searchSubject(event) {
-    var str = event.id;
-    var x = str.split("_")[1];
-    var y = str.split("_")[2];
-    var companyCode = $("#CompanySection_" + x + "_" + y).val();
+    //var str = event.id;
+    //var x = str.split("_")[1];
+    //var y = str.split("_")[2];
+    //var companyCode = $("#CompanySection_" + x + "_" + y).val();
+    //if (companyCode == "") {
+    //    jqxNotification("请选择公司段", null, "error");
+    //    return;
+    //}
+    //z1 = "";
+    //z2 = "";
+    //initSubjectTable(companyCode, x, y);
+    var companyCode = $("#CompanySection").val();
     if (companyCode == "") {
         jqxNotification("请选择公司段", null, "error");
         return;
     }
-    z1 = "";
-    z2 = "";
-    initSubjectTable(companyCode, x, y);
+    initSubjectTable(companyCode);
     $("#AddCompanyDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddCompanyDialog").modal("show");
 }
@@ -889,6 +959,74 @@ function openSocket() {
     }
 }
 
+function removeSubjectTr(obj) {
+    WindowConfirmDialog(deleTr, "您确定要删除当前行？", "确认框", "确定", "取消", obj);
+}
+function deleTr(obj) {
+    var tr = obj.id.substr(obj.id.length - 1, 1);//获取下标;
+    $("#closeTr" + tr).remove();
+    countMoney();
+}
+function tdClick() {
+    $(".money").blur(function (event) {
+        var id = event.target.id;
+        var trIndexs = id.substr(id.length - 1, 1);//获取下标
+        var value = $("#" + id).val();
+        if (value != "") {
+            if (id.substr(0, id.length - 1) == "Borrow") {
+                $("#Loan" + trIndexs).attr("readonly", "readonly");
+            } else {
+                $("#Borrow" + trIndexs).attr("readonly", "readonly");
+            }
+        } else {
+            if (id.substr(0, id.length - 1) == "Borrow") {
+                if ($("#Loan" + trIndexs).val() != "") {
+                    $("#Borrow" + trIndexs).attr("readonly", "readonly");
+                    $("#Loan" + trIndexs).removeAttr("readonly");
+                } else {
+                    $("#Borrow" + trIndexs).removeAttr("readonly");
+                    $("#Loan" + trIndexs).removeAttr("readonly");
+                }
+            } else {
+                if ($("#Borrow" + trIndexs).val() != "") {
+                    $("#Loan" + trIndexs).attr("readonly", "readonly");
+                    $("#Borrow" + trIndexs).removeAttr("readonly");
+                } else {
+                    $("#Borrow" + trIndexs).removeAttr("readonly");
+                    $("#Loan" + trIndexs).removeAttr("readonly");
+                }
+            }
+        }
+        countMoney();
+    });
+    $(".subjectbtn").click(function (event) {
+        var id = event.target.id;
+        var trIndexs = id.substr(id.length - 1, 1);//获取下标
+        var subjectVal = $("#SubjectName" + trIndexs).val();
+        if (subjectVal != "") {
+
+        }
+        $("#ShowSevenSubject").modal({ backdrop: "static", keyboard: false });
+        $("#ShowSevenSubject").modal("show");
+        $("#hidbtnIndex").val(trIndexs);
+    })
+}
+function countMoney() {
+    var borrowCount = 0;
+    var loanCount = 0;
+    for (var i = 0; i < $(".Borrow").length; i++) {
+        if ($(".Borrow")[i].value != "") {
+            borrowCount += parseFloat($(".Borrow")[i].value);
+        } 
+    }
+    for (var i = 0; i < $(".Loan").length; i++) {
+        if ($(".Loan")[i].value != "") {
+            loanCount += parseFloat($(".Loan")[i].value);
+        }
+    }
+    $("#BorrowCount").val(borrowCount);
+    $("#LoanCount").val(loanCount);
+}
 
 
 
@@ -1108,14 +1246,7 @@ function renderedFunc(element) {
 //             }
 //]
 
-
-//var data = [
-//              {
-//                  "BusinessType": "",
-//                  "BusinessProject": "",
-//                  "BusinessSubItem": "",
-//                  "BusinessUnit": "",
-//                  "Number": "",
-//                  "Money": "",
-//              }
-//]
+//0 0 1
+//1 2 3
+//2 4 5
+//3 6 7

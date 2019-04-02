@@ -11,6 +11,7 @@ var vguid = "";
 var $page = function () {
 
     this.init = function () {
+        initSelectPurchaseGoods();
         addEvent();
     }
     //所有事件
@@ -49,6 +50,25 @@ var $page = function () {
                 WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        //提交
+        $("#btnSubmit").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要提交的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
     }; //addEvent end
 
     //删除
@@ -74,8 +94,8 @@ var $page = function () {
     //提交
     function submit(selection) {
         $.ajax({
-            url: "/AssetPurchase/FixedAssetsOrder/UpdataFixedAssetsOrder",
-            data: { vguids: selection, status: "2" },
+            url: "/AssetPurchase/FixedAssetsOrder/SubmitFixedAssetsOrder",
+            data: { vguids: selection},
             //traditional: true,
             type: "post",
             success: function (msg) {
@@ -91,7 +111,21 @@ var $page = function () {
             }
         });
     }
-
+    function initSelectPurchaseGoods() {
+        //使用部门
+        $.ajax({
+            url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
+            data: {},
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
+                $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+                debugger;
+            }
+        });
+    }
     function initTable() {
         //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
         var source =

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 
 
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
@@ -52,6 +53,29 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 saveChanges = db.Deleteable<Business_FixedAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
                 resultModel.IsSuccess = saveChanges == vguids.Count;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
+        public JsonResult SubmitFixedAssetsOrder(List<Guid> vguids)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    foreach (var vguid in vguids)
+                    {
+                        var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
+                        model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
+                        model.SubmitDate = DateTime.Now;
+                        model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                        db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
         }

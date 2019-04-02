@@ -94,10 +94,12 @@ namespace DaZhongTransitionLiquidation.Controllers
             int success = 0;
             foreach (var item in bankFlowList)
             {
-                var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch).ToList();
+                var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                 if (isAny.Count > 0)
                 {
                     isAny[0].BankAccount = item.BankAccount;
+                    isAny[0].TurnIn = item.TurnIn;
+                    isAny[0].TurnOut = item.TurnOut;
                     _db.Updateable(isAny[0]).ExecuteCommand();
                     continue;
                 }

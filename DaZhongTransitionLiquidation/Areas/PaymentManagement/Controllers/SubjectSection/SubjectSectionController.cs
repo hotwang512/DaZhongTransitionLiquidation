@@ -193,7 +193,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             {
                 //int pageCount = 0;               
                 para.pagenum = para.pagenum + 1;
-                response = db.SqlQueryable<Business_SevenSection>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode from Business_SevenSection bs 
+                response = db.SqlQueryable<Business_SevenSection>(@"select bss.checked,bs.Code,bs.Descrption,bs.ParentCode,bs.Remark from Business_SevenSection bs 
  left join Business_SubjectSettingInfo bss on bs.Code=bss.SubjectCode and bss.CompanyCode='" + companyCode + @"'
  and bss.AccountModeCode='" + accountModeCode + "'  where bs.SectionVGUID='B63BD715-C27D-4C47-AB66-550309794D43' and bs.Status='1' and bs.CompanyCode='" + companyCode + "' and bs.AccountModeCode='" + accountModeCode + "' and bs.Code is not null").OrderBy("Code asc").ToList();
                 jsonResult.TotalRows = response.Count;

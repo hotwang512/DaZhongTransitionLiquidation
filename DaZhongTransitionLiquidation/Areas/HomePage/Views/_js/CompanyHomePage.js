@@ -110,7 +110,7 @@ function initTable1() {
             groups: ['Descrption'],
             showgroupsheader: false,
             //showgroupmenuitems: false,
-            columnsHeight: 30,
+            columnsHeight: 50,
             pagermode: 'simple',
             selectionmode: 'singlerow',
             showHeader: false,

@@ -20,5 +20,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public string IntercourseSection { get; set; }
         public decimal? BorrowMoney { get; set; }
         public decimal? LoanMoney { get; set; }
+        public string SevenSubjectName { get; set; }
+        public decimal? BorrowMoneyCount { get; set; }
+        public decimal? LoanMoneyCount { get; set; }
+        public int JE_LINE_NUMBER { get; set; }
     }
 }

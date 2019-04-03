@@ -192,9 +192,7 @@ var $page = function () {
             $("#CompanyBankAccountName").val(msg.CompanyBankAccountName);
             $("#hidPayCompany").val(msg.PayCompany);
             $("#AccountType").val(msg.AccountType); 
-            
-            //var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
-            //$("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
+            $("#PaymentInformation").val(msg.PaymentInformationVguid);
         });
     }
     //上传文件

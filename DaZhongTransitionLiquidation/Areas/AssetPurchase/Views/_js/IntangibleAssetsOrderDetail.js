@@ -92,12 +92,29 @@ var $page = function () {
                         break;
                     }
                 });
-            });
+            }
+        );
+        $('#PaymentInformation').on('select', function (event) {
+            var args = event.args;
+            if (args) {
+                debugger;
+                var item = args.item;
+                $("#hiddenPaymentInformationVguid").val(item.value);
+                $("#hiddenPaymentInformation").val(item.label);
+                //$.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: item.value }, function (msg) {
+                //    $("#BankAccountName").val(msg.BankAccountName);
+                //    $("#BankAccount").val(msg.BankAccount);
+                //    $("#Bank").val(msg.Bank);
+                //    $("#BankNo").val(msg.BankNo);
+                //});
+            }
+        });
     }; //addEvent end
 
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             $("#OrderType").val(msg.OrderType);
+            debugger;
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#SumPayment").val(msg.SumPayment);
@@ -113,7 +130,7 @@ var $page = function () {
                 $("#Attachment").attr("title", msg.ContractName);
             }
             var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
-            $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
+            $("#PaymentInformation").val(msg.PaymentInformationVguid);
         });
     }
     //上传文件
@@ -205,58 +222,27 @@ function computeValue() {
 function initSelect() {
     //使用部门
     $("#OrderType").prepend("<option value=\"\" selected='true'>请选择</>");
-    
-    //付款单位及相关账户信息
-    debugger;
-    var source =
-    {
-        datafields:
-        [
-            { name: 'CompanyOrPerson', type: 'string' },
-            { name: 'BankAccountName', type: 'string' },
-            { name: 'Bank', type: 'string' },
-            { name: 'BankAccount', type: 'string' },
-            { name: 'BankNo', type: 'string' },
-            { name: 'VGUID', type: 'string' }
-        ],
-        datatype: "json",
-        id: "Vguid",
-        data: { "BankAccount": "" },
-        url: "/CapitalCenterManagement/CustomerBankInfo/GetCustomerBankInfo",   //获取数据源的路径
-        updaterow: function (rowid, rowdata) {
-            // synchronize with the server - send update command   
-        }
-    };
-    var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PaymentInformationGrid").jqxGrid(
-     {
-         width: 550,
-         source: dataAdapter,
-         pageable: true,
-         autoheight: true,
-         columnsresize: true,
-         columns: [
-             { text: '公司/单位/个人', datafield: 'CompanyOrPerson', width: '150px', align: 'center', cellsAlign: 'center' },
-             { text: '账号', datafield: 'BankAccount', align: 'center', width: '150px', cellsAlign: 'center', },
-             { text: '户名', datafield: 'BankAccountName', align: 'center', width: '250px', cellsAlign: 'center' },
-             { text: '开户行', datafield: 'Bank', align: 'center', width: '250px', cellsAlign: 'center' },
-             { text: '行号', datafield: 'BankNo', align: 'center', cellsAlign: 'center', width: '150px' },
-             { text: 'VGUID', datafield: 'VGUID', hidden: true }
-         ]
-     });
-    // initialize jqxGrid
-    $("#PaymentInformation").jqxDropDownButton({
-        width: 198, height: 33
-    });
-    $("#PaymentInformationGrid").on('rowselect', function (event) {
-        var args = event.args;
-        var row = $("#PaymentInformationGrid").jqxGrid('getrowdata', args.rowindex);
-        debugger;
-        if (row != undefined) {
-            var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + row['CompanyOrPerson'] + '</div>';
-            $("#PaymentInformation").jqxDropDownButton('setContent', dropDownContent);
-            $("#hiddenPaymentInformationVguid").val(row['VGUID']);
-            $("#hiddenPaymentInformation").val(row['CompanyOrPerson']);
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
+        data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            debugger;
+            var source = new Array();
+            for (var i = 0; i < data.Rows.length; i++) {
+                var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
+                    + "<b>户名</b><div>" + data.Rows[i].BankAccountName + "</div><div style='margin-top: 5px;'><b>账号</b><div>" + data.Rows[i].BankAccount + "</div></div></div>";
+                source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
+            }
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            $("#PaymentInformation").jqxComboBox({
+                source: dataAdapter, selectedIndex: 0,
+                displayMember: "title", valueMember: "value",
+                width: 198, height: 33
+            });
+
         }
     });
 }

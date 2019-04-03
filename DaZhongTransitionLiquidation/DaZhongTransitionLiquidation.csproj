@@ -2398,6 +2398,8 @@
     <Content Include="Template\Business_T1Data_Information.xlsx" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\_LayoutDetail.cshtml" />
+    <Content Include="Template\AssetsLedger.xlsx" />
+    <Content Include="Template\AssetsRetiremen.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

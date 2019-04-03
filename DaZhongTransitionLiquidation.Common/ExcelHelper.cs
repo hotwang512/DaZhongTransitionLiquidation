@@ -1,7 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Web;
 using Aspose.Cells;
 using System.Drawing;
+using System.IO;
 
 namespace DaZhongTransitionLiquidation.Common
 {
@@ -93,5 +95,26 @@ namespace DaZhongTransitionLiquidation.Common
             designer.Process();
             designer.Workbook.Save(HttpContext.Current.Response, fileName, ContentDisposition.Inline, designer.Workbook.SaveOptions);
         }
+        /// <summary>
+        /// 返回Excel文件流
+        /// </summary>
+        /// <param name="dataSource">数据</param>
+        /// <param name="templatePath">模板文件全路径</param>
+        /// <param name="sheetName">工作簿名称</param>
+        /// <returns></returns>
+        public static MemoryStream OutModelFileToStream(DataTable dataSource, string templatePath, string sheetName)
+        {
+            string rootPath = HttpContext.Current.Server.MapPath(templatePath);
+            Workbook wk = new Workbook(rootPath);
+            WorkbookDesigner designer = new WorkbookDesigner(wk);
+            designer.SetDataSource(dataSource);
+            designer.Process();
+            if (!string.IsNullOrEmpty(sheetName))
+            {
+                designer.Workbook.Worksheets[0].Name = sheetName;
+            }
+            return designer.Workbook.SaveToStream();
+        }
+
     }
 }

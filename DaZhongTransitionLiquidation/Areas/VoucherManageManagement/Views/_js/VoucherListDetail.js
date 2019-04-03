@@ -59,8 +59,8 @@ var $page = function () {
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly'  style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                             "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 150px;' class='input_text form-control money Borrow'/></td>" +
-                             "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;' class='input_text form-control money Loan'/></td>" +
+                             "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
+                             "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                              "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
                 $("#countTr").before(trMore);
@@ -260,8 +260,8 @@ var $page = function () {
                 list1 += "<tr style='height:40px'>" +
                               "<td style='text-align: left;'>" + "  " + $("#Remark" + i).val() + "</td>" +
                               "<td style='text-align: left;'>" + "  " + $("#SubjectName" + i).val() + "</td>" +
-                              "<td style='text-align: center;'>" + borrowMoney + "  " + "</td>" +
-                              "<td style='text-align: center;'>" + loanMoney + "  " + "</td>" +
+                              "<td style='text-align: right;'>" + borrowMoney + "  " + "</td>" +
+                              "<td style='text-align: right;'>" + loanMoney + "  " + "</td>" +
                         "</tr>";
             }
             htmls = "<table id='SubjectTable' style='width:100%;white-space:pre' border='1' cellspacing='0'>" +
@@ -275,8 +275,8 @@ var $page = function () {
                         "<tr style='height:40px'>" +
                               "<td style='text-align: center;'>合计</td>" +
                               "<td style='text-align: center;'></td>" +
-                              "<td style='text-align: center;'>" + borrowCount + "  " + "</td>" +
-                              "<td style='text-align: center;'>" + loanCount + "  " + "</td>" +
+                              "<td style='text-align: right;'>" + borrowCount + "  " + "</td>" +
+                              "<td style='text-align: right;'>" + loanCount + "  " + "</td>" +
                        "</tr>"
             "</table>";
             $("#VoucherDetail").append(htmls);
@@ -483,22 +483,22 @@ var $page = function () {
                        "<tr style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark0' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName0' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit0' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                             "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 150px;' class='input_text form-control money Borrow' /></td>" +
-                             "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 150px;' class='input_text form-control money Loan' /></td>" +
+                             "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' /></td>" +
+                             "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
                       "</tr>" +
                        "<tr style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark1' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName1' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit1' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
-                             "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 150px;' class='input_text form-control money Borrow' /></td>" +
-                             "<td style='text-align: right;'><input id='Loan1' type='text' style='width: 150px;' class='input_text form-control money Loan' /></td>" +
+                             "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' /></td>" +
+                             "<td style='text-align: right;'><input id='Loan1' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
                       "</tr>" +
                       "<tr id='countTr' style='height:40px'>" +
                               "<td style='text-align: center;'>合计</td>" +
                               "<td style='text-align: center;'></td>" +
-                              "<td style='text-align: right;'><input id='BorrowCount' type='text' style='width: 150px;' class='input_text form-control' readonly /></td></td>" +
-                              "<td style='text-align: right;'><input id='LoanCount' type='text' style='width: 150px;' class='input_text form-control' readonly/></td>" +
+                              "<td style='text-align: right;'><input id='BorrowCount' type='text' style='width: 150px;text-align: right' class='input_text form-control' readonly /></td></td>" +
+                              "<td style='text-align: right;'><input id='LoanCount' type='text' style='width: 150px;text-align: right' class='input_text form-control' readonly/></td>" +
                              "<td style='text-align: center;'></td>" +
                        "</tr>"
         "</table>";
@@ -692,8 +692,8 @@ var $page = function () {
                 trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
                                  "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'>" + datas[i].Abstract+ "</textarea></td>" +
                                  "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px; '>编辑</button></td>" +
-                                 "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;' class='input_text form-control money Borrow'/></td>" +
-                                 "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;' class='input_text form-control money Loan'/></td>" +
+                                 "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
+                                 "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                                  "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                           "</tr>"
                 $("#countTr").before(trMore);

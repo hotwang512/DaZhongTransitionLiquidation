@@ -5,6 +5,7 @@ var vehicleDefaultData;
 var $page = function () {
     this.init = function () {
         addEvent();
+        $("#PaymentInformation input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;/* padding: 0px 3px; */border: 0px;width: 100%;height: 33px;");
     }
     //所有事件
     function addEvent() {
@@ -242,7 +243,6 @@ function initSelect() {
                 displayMember: "title", valueMember: "value",
                 width: 198, height: 33
             });
-
         }
     });
 }

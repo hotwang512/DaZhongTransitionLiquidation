@@ -9,6 +9,7 @@ var $page = function () {
         initPayCompanyDropdown();
         initComboBox();
         addEvent();
+        $("#PaymentInformation input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;/* padding: 0px 3px; */border: 0px;width: 100%;height: 33px;");
     }
     //所有事件
     function addEvent() {
@@ -358,7 +359,7 @@ function initPayCompanyDropdown() {
     },
     selectionRenderer: function (element, index, label, value) {
         var text = label.replace(/\n/g, " ");
-        return "<span style='left: 4px; top: 6px; position: relative;'>" + text + "</span>";
+        return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
     }
 });
 }

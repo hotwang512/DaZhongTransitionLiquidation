@@ -279,6 +279,7 @@ var $page = function () {
             $("#BankName").removeClass("input_Validate");
             $("#BankAccount").removeClass("input_Validate");
             $("#BankAccountName").removeClass("input_Validate");
+            initBorrowTable(companyCode, accountModeCode)
             $("#AddCompanyBankDataDialog").modal({ backdrop: "static", keyboard: false });
             $("#AddCompanyBankDataDialog").modal("show");
         })
@@ -298,6 +299,8 @@ var $page = function () {
             if (!Validate($("#BankAccountName"))) {
                 validateError++;
             }
+            var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
+            var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
             if (validateError <= 0) {
                 $.ajax({
                     url: "/PaymentManagement/CompanySection/SaveCompanyBankInfo?isEdit=" + isEdit,
@@ -309,6 +312,8 @@ var $page = function () {
                         "AccountType": $("#AccountType").val(),
                         "InitialBalance": $("#InitialBalance").val(),
                         "AccountModeCode": $("#AccountModeCode").val(),
+                        "Borrow": borrow,
+                        "Loan": loan,
                         "VGUID": vguid
                     },
                     type: "post",
@@ -545,6 +550,13 @@ var $page = function () {
                 }
             });
         });
+        //清除借贷信息
+        $("#Remove1").on("click", function (){
+            $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+        })
+        $("#Remove2").on("click", function () {
+            $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+        })
     }; //addEvent end
 
     function loadTable() {
@@ -1333,6 +1345,8 @@ function settingCompany(code, companyName) {
                { name: 'VGUID', type: 'string' },
                { name: 'BankStatus', type: 'bool' },
                { name: 'OpeningDirectBank', type: 'bool' },
+               { name: 'Borrow', type: 'string' },
+               { name: 'Loan', type: 'string' },
                //{ name: 'SectionVGUID', type: 'string' },
                //{ name: 'Remark', type: 'string' },
            ],
@@ -1346,7 +1360,7 @@ function settingCompany(code, companyName) {
     var typeAdapter = new $.jqx.dataAdapter(source);
     $("#jqxCompanySetting").jqxGrid({
         //pageable: false,           
-        width: '1400px',
+        width: '1700px',
         height: 400,
         //pageSize: 10,
         //serverProcessing: true,
@@ -1365,10 +1379,12 @@ function settingCompany(code, companyName) {
             { text: '开户行', datafield: "BankName", groupable: true, width: '280px', align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc },
             { text: '银行账号', datafield: 'BankAccount', groupable: true, width: '180px', align: 'center', editable: false, cellsAlign: 'center' },
             { text: '银行户名', datafield: "BankAccountName", groupable: true, width: '280px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '账户类别', datafield: "AccountType", groupable: true, width: '180px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", width: '170px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '账户类别', datafield: "AccountType", groupable: true, width: '120px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '初始余额', datafield: 'InitialBalance', cellsFormat: "d2", width: '150px', align: 'center', editable: false, cellsAlign: 'center' },
             { text: '默认支付银行', datafield: "BankStatus", groupable: true, width: '110px', align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
-            { text: '是否开通银企直联', datafield: "OpeningDirectBank", groupable: true, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '是否开通银企直联', datafield: "OpeningDirectBank", width: '140px', groupable: true, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '借', datafield: "Borrow", groupable: true, width: '180px', align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '贷', datafield: "Loan", groupable: true,  align: 'center', editable: false, cellsAlign: 'center' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: '账套编码', datafield: 'AccountModeCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
@@ -1380,7 +1396,8 @@ function settingCompany(code, companyName) {
         // row's bound index.
         var rowdata = args.row.bounddata;
         if (rowdata.level != 0) {
-            editBank(rowdata.VGUID, rowdata.CompanyCode, rowdata.BankName, rowdata.BankAccount, rowdata.BankAccountName, rowdata.AccountType, rowdata.InitialBalance);
+            editBank(rowdata.VGUID, rowdata.CompanyCode, rowdata.BankName, rowdata.BankAccount,
+                rowdata.BankAccountName, rowdata.AccountType, rowdata.InitialBalance, rowdata.Borrow, rowdata.Loan);
         }
     });
     //$('#jqxCompanySetting').jqxGrid('expandallgroups');
@@ -1495,7 +1512,7 @@ function renderedFunc(element) {
     return true;
 }
 
-function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, accountType, initialBalance) {
+function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, accountType, initialBalance,borrow, loan) {
     $("#BankName").val("");
     $("#BankAccount").val("");
     $("#BankAccountName").val("");
@@ -1511,6 +1528,12 @@ function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, acc
     if (bankAccountName == null || bankAccountName == "null") {
         bankAccountName = "";
     }
+    if (borrow == null || borrow == "null") {
+        borrow = "";
+    }
+    if (loan == null || loan == "null") {
+        loan = "";
+    }
     $("#BankName").val(bankName);
     $("#BankAccount").val(bankAccount);
     $("#BankAccountName").val(bankAccountName);
@@ -1522,6 +1545,11 @@ function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, acc
     $("#BankName").removeClass("input_Validate");
     $("#BankAccount").removeClass("input_Validate");
     $("#BankAccountName").removeClass("input_Validate");
+    initBorrowTable(companyCode, accountModeCode);
+    var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + borrow + '</div>';
+    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
+    var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + loan + '</div>';
+    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
     $("#AddCompanyBankDataDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddCompanyBankDataDialog").modal("show");
 }
@@ -1545,4 +1573,120 @@ function getCompanyCode() {
         }
     });
     companyCode = $("#CompanyCode").val();
+}
+
+function initBorrowTable(companyCode, accountModeCode) {
+    var source = {
+        datafields:
+        [
+            { name: 'BusinessCode', type: 'string' },
+            { name: 'Company', type: 'string' },
+            { name: 'CompanyCode', type: 'string' },
+            { name: 'AccountingCode', type: 'string' },
+            { name: 'CostCenterCode', type: 'string' },
+            { name: 'SpareOneCode', type: 'string' },
+            { name: 'SpareTwoCode', type: 'string' },
+            { name: 'IntercourseCode', type: 'string' },
+            { name: 'Accounting', type: 'string' },
+            { name: 'CostCenter', type: 'string' },
+            { name: 'SpareOne', type: 'string' },
+            { name: 'SpareTwo', type: 'string' },
+            { name: 'Intercourse', type: 'string' },
+            { name: 'SubjectCode', type: 'string' },
+            { name: 'SubjectVGUID', type: 'string' },
+            { name: 'Checked', type: 'string' },
+            { name: 'Balance', type: 'number' },
+        ],
+        datatype: "json",
+        cache: false,
+        id: "SectionVGUID",
+        data: { companyCode: companyCode, accountModeCode: accountModeCode },
+        url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径
+    };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    //创建卡信息列表（主表）
+    $("#grid1").jqxGrid({
+        pageable: true,
+        width: "100%",
+        autoheight: false,
+        columnsresize: true,
+        pageSize: 15,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        pagermode: 'simple',
+        columnsHeight: 40,
+        columns: [
+            //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+            { text: '编码', datafield: 'BusinessCode', width: 250, pinned: true, align: 'center', cellsAlign: 'center', },
+            { text: '科目段', datafield: 'Company', width: 200, pinned: false, align: 'center', cellsAlign: 'center' },
+            { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用1', datafield: 'SpareOne', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用2', datafield: 'SpareTwo', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '往来段', datafield: 'Intercourse', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '余额', datafield: 'Balance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
+
+            { text: '核算段', datafield: 'AccountingCode', hidden: true },
+            { text: '成本中心段', datafield: 'CostCenterCode', hidden: true },
+            { text: '备用1', datafield: 'SpareOneCode', hidden: true },
+            { text: '备用2', datafield: 'SpareTwoCode', hidden: true },
+            { text: '往来段', datafield: 'IntercourseCode', hidden: true },
+            { text: 'SubjectCode', datafield: 'ParentCode', hidden: true },
+            //{ text: 'BusinessCode', datafield: 'BusinessCode', hidden: true },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+        ]
+    });
+    $("#jqxdropdownbutton1").jqxDropDownButton({
+        width: 277, height: 30
+    });
+    $("#grid1").on('rowclick', function (event) {
+        var args = event.args;
+        var row = $("#grid1").jqxGrid('getrowdata', args.rowindex);
+        var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + row['BusinessCode'] + '</div>';
+        $("#jqxdropdownbutton1").jqxDropDownButton('setContent', dropDownContent);
+    });
+
+    $("#grid2").jqxGrid({
+        pageable: true,
+        width: "100%",
+        autoheight: false,
+        columnsresize: true,
+        pageSize: 15,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        columnsHeight: 40,
+        columns: [
+            //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+            { text: '编码', datafield: 'BusinessCode', width: 250, pinned: true, align: 'center', cellsAlign: 'center', },
+            { text: '科目段', datafield: 'Company', width: 200, pinned: false, align: 'center', cellsAlign: 'center' },
+            { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用1', datafield: 'SpareOne', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '备用2', datafield: 'SpareTwo', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '往来段', datafield: 'Intercourse', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '余额', datafield: 'Balance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
+
+            { text: '核算段', datafield: 'AccountingCode', hidden: true },
+            { text: '成本中心段', datafield: 'CostCenterCode', hidden: true },
+            { text: '备用1', datafield: 'SpareOneCode', hidden: true },
+            { text: '备用2', datafield: 'SpareTwoCode', hidden: true },
+            { text: '往来段', datafield: 'IntercourseCode', hidden: true },
+            { text: 'SubjectCode', datafield: 'ParentCode', hidden: true },
+            //{ text: 'BusinessCode', datafield: 'BusinessCode', hidden: true },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+        ]
+    });
+    $("#jqxdropdownbutton2").jqxDropDownButton({
+        width: 277, height: 30
+    });
+    $("#grid2").on('rowclick', function (event) {
+        var args = event.args;
+        var row = $("#grid2").jqxGrid('getrowdata', args.rowindex);
+        var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + row['BusinessCode'] + '</div>';
+        $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
+    });
 }

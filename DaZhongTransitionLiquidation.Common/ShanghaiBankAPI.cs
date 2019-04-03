@@ -87,25 +87,21 @@ namespace DaZhongTransitionLiquidation.Common
                 bankFlow.Currency = modelData.BIZH;
                 bankFlow.ReceivingUnitInstitution = "";
                 bankFlow.TradingBank = "上海银行";
-                if (details.CDFG == "1")
+                bankFlow.PaymentUnit = modelData.HUMI;//我方
+                bankFlow.PayeeAccount = modelData.ACNO;//我方
+                bankFlow.ReceivingUnit = details.DFHM;//对方
+                bankFlow.ReceivableAccount = details.DFZH;//对方
+                if (details.CDFG == "1")//在系统中做转换处理
+                {
+                    //转入（贷）
+                    bankFlow.TurnIn = details.FSJE.TryToDecimal();
+                    bankFlow.TurnOut = 0; 
+                }
+                else
                 {
                     //转出（借）
                     bankFlow.TurnOut = details.FSJE.TryToDecimal();
                     bankFlow.TurnIn = 0;
-                    bankFlow.PaymentUnit = modelData.HUMI;
-                    bankFlow.PayeeAccount = modelData.ACNO;
-                    bankFlow.ReceivingUnit = details.DFHM;
-                    bankFlow.ReceivableAccount = details.DFZH;
-                }
-                else
-                {
-                    //转入（贷）
-                    bankFlow.TurnIn = details.FSJE.TryToDecimal();
-                    bankFlow.TurnOut = 0;
-                    bankFlow.PaymentUnit = details.DFHM;
-                    bankFlow.PayeeAccount = details.DFZH;
-                    bankFlow.ReceivingUnit = modelData.HUMI;
-                    bankFlow.ReceivableAccount = modelData.ACNO;
                 }
                 bankFlow.VGUID = Guid.NewGuid();
                 string dateString = (details.JYRQ + " " + details.FSSJ);

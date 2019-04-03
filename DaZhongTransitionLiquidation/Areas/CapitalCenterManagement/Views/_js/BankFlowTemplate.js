@@ -181,6 +181,7 @@ var $page = function () {
                 datafields:
                 [
                     //{ name: "checkbox", type: null },
+                    { name: 'AccountModeName', type: 'string' },
                     { name: 'TradingBank', type: 'string' },                   
                     { name: 'TransactionDate', type: 'date' },
                     { name: 'TurnOut', type: 'number' },
@@ -227,19 +228,20 @@ var $page = function () {
                 columnsHeight: 30,
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: 'T24交易流水号', datafield: 'Batch', width: 200, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '交易银行', datafield: 'TradingBank', width: 100, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '交易日期', datafield: 'TransactionDate', width: 150, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '账套', datafield: 'AccountModeName', pinned: true, width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '公司', datafield: 'PaymentUnit', pinned: true, width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: '币种', datafield: 'Currency',  hidden: true, align: 'center', cellsAlign: 'center' },
+                    { text: '我方银行', datafield: 'TradingBank', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '我方账号', datafield: 'PayeeAccount', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '我方开户机构', datafield: 'PaymentUnitInstitution', width: 350, align: 'center', cellsAlign: 'center' },
+                    { text: 'T24交易流水号', datafield: 'Batch', width: 200, align: 'center', cellsAlign: 'center',  },
+                    { text: '交易日期', datafield: 'TransactionDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '转出(借)', datafield: 'TurnOut', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '转入(贷)', datafield: 'TurnIn', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '币种', datafield: 'Currency', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '付款单位', datafield: 'PaymentUnit', width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: '付款人账号', datafield: 'PayeeAccount', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '付款单位开户机构', datafield: 'PaymentUnitInstitution', width: 350, align: 'center', cellsAlign: 'center' },
-                    { text: '收款单位名称', datafield: 'ReceivingUnit', width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: '收款账号', datafield: 'ReceivableAccount', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '收款单位开户机构', datafield: 'ReceivingUnitInstitution', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '余额', datafield: 'Balance', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '对方单位名称', datafield: 'ReceivingUnit', width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: '对方账号', datafield: 'ReceivableAccount', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '对方开户机构', datafield: 'ReceivingUnitInstitution', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '用途', datafield: 'Purpose', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '备注', datafield: 'Remark', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '写入日期', datafield: 'CreateTime', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -258,9 +260,9 @@ var $page = function () {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
             var voucherSubject = rowData.VoucherSubject == " " ? null : rowData.VoucherSubject;
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + voucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + voucherSubject + "','" + rowData.VoucherSummary + "','" + rowData.VoucherSubjectName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.AccountModeName + "</a>";
         } else {
-            container = "<span>" + rowData.Batch + "</span>";
+            container = "<span>" + rowData.AccountModeName + "</span>";
         }
         return container;
     }

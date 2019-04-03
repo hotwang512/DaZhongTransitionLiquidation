@@ -18,5 +18,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         public string AccountModeCode { get; set; }
         public bool BankStatus { get; set; }
         public bool OpeningDirectBank { get; set; }
+        public string Borrow { get; set; }
+        public string Loan { get; set; }
     }
 }

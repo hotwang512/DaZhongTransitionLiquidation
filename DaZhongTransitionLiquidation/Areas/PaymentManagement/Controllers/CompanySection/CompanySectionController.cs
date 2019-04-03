@@ -569,7 +569,9 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             BankName = cBank.BankName,
                             AccountType = cBank.AccountType,
                             InitialBalance = cBank.InitialBalance,
-                            AccountModeCode = cBank.AccountModeCode
+                            AccountModeCode = cBank.AccountModeCode,
+                            Borrow = cBank.Borrow,
+                            Loan = cBank.Loan
                         }).Where(it => it.VGUID == guid).ExecuteCommand();
                     }
                     else

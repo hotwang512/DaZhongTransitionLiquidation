@@ -6,9 +6,12 @@ using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Common;
+
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsRetirement
 {
     public class AssetsRetirementController : BaseController
@@ -40,6 +43,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsR
             });
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public FileResult ExportExcel(DateTime? StartDate, DateTime? EndDate)
+        {
+            DataTable dt = new DataTable();
+            DbBusinessDataService.Command(db =>
+            {
+                dt = db.Queryable<Business_AssetsRetirement_Swap>()
+                    .WhereIF(StartDate != null, i => i.LAST_UPDATE_DATE >= StartDate)
+                    .WhereIF(EndDate != null, i => i.LAST_UPDATE_DATE <= EndDate)
+                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToDataTable();
+            });
+            dt.TableName = "Business_AssetsRetirement_Swap";
+            var ms = ExcelHelper.OutModelFileToStream(dt, "/Template/AssetsRetiremen.xlsx", "资产报废");
+            byte[] fileContents = ms.ToArray();
+            return File(fileContents, "application/ms-excel", "资产报废" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
         }
     }
 }

@@ -4,7 +4,8 @@ var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
-    $EditPermission: function () { return $("#EditPermission") }
+    $EditPermission: function () { return $("#EditPermission") },
+    $btnExport: function () { return $("#btnExport") }
 }; //selector end
 var isEdit = false;
 var vguid = "";
@@ -25,6 +26,14 @@ var $page = function () {
             $("#StartDate").val("");
             $("#EndDate").val("");
         });
+        selector.$btnExport().on("click",
+            function() {
+                window.location.href = "/AssetManagement/AssetsLedger/ExportExcel?StartDate=" +
+                    $("#StartDate").val() +
+                    "&EndDate=" +
+                    $("#EndDate").val();
+            }
+        );
     }; //addEvent end
 
     function initTable() {
@@ -94,7 +103,7 @@ var $page = function () {
                     { text: '启用日期', datafield: 'ASSET_CREATION_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '当前成本', datafield: 'ASSET_COST', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '残值类型', datafield: 'SALVAGE_TYPE', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '残值百分比', datafield: 'SALVAGE_PERCENT', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '残值百分比', datafield: 'SALVAGE_PERCENT', width: 150, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
                     { text: '残值金额', datafield: 'SALVAGE_VALUE', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '本月折旧额', datafield: 'PTD_DEPRECIATION', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: 'YTD折旧', datafield: 'YTD_DEPRECIATION', width: 150, align: 'center', cellsAlign: 'center' },

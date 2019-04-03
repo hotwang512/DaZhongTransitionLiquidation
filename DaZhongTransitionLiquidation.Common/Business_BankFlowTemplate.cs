@@ -40,37 +40,37 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// </summary> 
         public string Currency { get; set; }
         /// <summary>
-        /// Desc:付款单位
+        /// Desc:我方单位
         /// Default:
         /// Nullable:True
         /// </summary> 
         public string PaymentUnit { get; set; }
         /// <summary>
-        /// Desc:付款人账号
+        /// Desc:我方账号
         /// Default:
         /// Nullable:True
         /// </summary> 
         public string PayeeAccount { get; set; }
         /// <summary>
-        /// Desc:付款单位开户机构
+        /// Desc:我方开户机构
         /// Default:
         /// Nullable:True
         /// </summary> 
         public string PaymentUnitInstitution { get; set; }
         /// <summary>
-        /// Desc:收款单位名称
+        /// Desc:对方单位名称
         /// Default:
         /// Nullable:True
         /// </summary> 
         public string ReceivingUnit { get; set; }
         /// <summary>
-        /// Desc:收款账号
+        /// Desc:对方账号
         /// Default:
         /// Nullable:True
         /// </summary> 
         public string ReceivableAccount { get; set; }
         /// <summary>
-        /// Desc:收款单位开户机构
+        /// Desc:对方开户机构
         /// Default:
         /// Nullable:True
         /// </summary> 
@@ -114,6 +114,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// Nullable:True
         /// </summary> 
         public decimal? Balance { get; set; }
-        public string BankAccount { get; set; } 
+        public string BankAccount { get; set; }
+        public string AccountModeCode { get; set; }
+        public string AccountModeName { get; set; }
+        public string CompanyCode { get; set; }
+        public string CompanyName { get; set; }
     }
 }

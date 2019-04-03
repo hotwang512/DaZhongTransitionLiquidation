@@ -2,6 +2,7 @@
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Models;
@@ -94,15 +95,22 @@ namespace DaZhongTransitionLiquidation.Controllers
             int success = 0;
             foreach (var item in bankFlowList)
             {
+                var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
+                var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
                 var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                 if (isAny.Count > 0)
                 {
-                    isAny[0].BankAccount = item.BankAccount;
-                    isAny[0].TurnIn = item.TurnIn;
-                    isAny[0].TurnOut = item.TurnOut;
-                    _db.Updateable(isAny[0]).ExecuteCommand();
+                    item.AccountModeCode = companyBankData.AccountModeCode;
+                    item.AccountModeName = accountModeName;
+                    item.CompanyCode = companyBankData.CompanyCode;
+                    _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                     continue;
                 }
+                item.AccountModeCode = companyBankData.AccountModeCode;
+                item.AccountModeName = accountModeName;
+                item.CompanyCode = companyBankData.CompanyCode;
+                item.CreateTime = DateTime.Now;
+                item.CreatePerson = "sysAdmin";
                 success = _db.Insertable(item).ExecuteCommand();
             }
             BankDataPack.SyncBackFlowAndReconciliation();

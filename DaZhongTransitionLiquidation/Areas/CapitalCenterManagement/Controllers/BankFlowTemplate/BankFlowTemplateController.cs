@@ -49,34 +49,26 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     for (int i = 0; i < worksheet.Cells.MaxDataRow; i++)
                     {
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["账户明细编号-交易流水号"].ToString() && x.TradingBank == "建设银行");
+                        var bankAccount = datatable.Rows[i]["账号"].ToString();
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["账户明细编号-交易流水号"].ToString() && x.TradingBank == "建设银行" && x.BankAccount == bankAccount);
                         if (isAny)
                         {
                             continue;
                         }
+                        var companyBankData = db.Queryable<Business_CompanyBankInfo>().Single(x =>x.BankAccount == bankAccount);
+                        var accountMode = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode);
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "建设银行";
-                        bankFlow.TurnOut = datatable.Rows[i]["借方发生额（支取）"].ObjToDecimal();
-                        bankFlow.TurnIn = datatable.Rows[i]["贷方发生额（收入）"].ObjToDecimal();
-                        bankFlow.BankAccount = datatable.Rows[i]["账号"].ToString();
-                        if (bankFlow.TurnOut == 0 && bankFlow.TurnIn > 0)
-                        {
-                            //本公司收款
-                            bankFlow.ReceivableAccount = datatable.Rows[i]["账号"].ToString();
-                            bankFlow.ReceivingUnit = datatable.Rows[i]["账户名称"].ToString();
-                            bankFlow.PaymentUnit = datatable.Rows[i]["对方户名"].ToString();
-                            bankFlow.PayeeAccount = datatable.Rows[i]["对方账号"].ToString();
-                            bankFlow.PaymentUnitInstitution = datatable.Rows[i]["对方开户机构"].ToString();
-                        }
-                        else
-                        {
-                            //本公司付款
-                            bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
-                            bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
-                            bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方开户机构"].ToString();
-                            bankFlow.PaymentUnit = datatable.Rows[i]["账户名称"].ToString();
-                            bankFlow.PayeeAccount = datatable.Rows[i]["账号"].ToString();
-                        }
+                        bankFlow.AccountModeCode = accountMode.Code;
+                        bankFlow.AccountModeName = accountMode.Descrption;
+                        bankFlow.TurnIn = datatable.Rows[i]["借方发生额（支取）"].ObjToDecimal();
+                        bankFlow.TurnOut = datatable.Rows[i]["贷方发生额（收入）"].ObjToDecimal();
+                        bankFlow.BankAccount = bankAccount;
+                        bankFlow.PaymentUnit = datatable.Rows[i]["账户名称"].ToString();
+                        bankFlow.PayeeAccount = datatable.Rows[i]["账号"].ToString();
+                        bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
+                        bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
+                        bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方开户机构"].ToString();                      
                         bankFlow.TransactionDate = datatable.Rows[i]["交易时间"].ToString().Insert(4, "/").Insert(7, "/").ObjToDate();
                         bankFlow.Balance = datatable.Rows[i]["余额"].ObjToDecimal();
                         bankFlow.Currency = datatable.Rows[i]["币种"].ToString();
@@ -130,36 +122,33 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     for (int i = 0; i < worksheet.Cells.MaxDataRow-1; i++)
                     {
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["核心流水号"].ToString() && x.TradingBank == "交通银行");
+                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["核心流水号"].ToString() && x.TradingBank == "交通银行" && x.BankAccount == bankAccount.ObjToString());
                         if (isAny)
                         {
                             continue;
                         }
+                        var companyBankData = db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == bankAccount.ObjToString());
+                        var accountMode = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode);
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "交通银行";
+                        bankFlow.AccountModeCode = accountMode.Code;
+                        bankFlow.AccountModeName = accountMode.Descrption;
                         bankFlow.BankAccount = bankAccount.ToString();
+                        bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
+                        bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
+                        bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方行名"].ToString();
+                        bankFlow.PaymentUnit = bankAccountName.ToString();
+                        bankFlow.PayeeAccount = bankAccount.ToString();
                         var type = datatable.Rows[i]["借贷标志"].ToString();
                         if (type == "借")
                         {
-                            //本公司收款
-                            bankFlow.ReceivableAccount = bankAccount.ToString();
-                            bankFlow.ReceivingUnit = bankAccountName.ToString();
-                            bankFlow.PaymentUnit = datatable.Rows[i]["对方户名"].ToString();
-                            bankFlow.PayeeAccount = datatable.Rows[i]["对方账号"].ToString();
-                            bankFlow.PaymentUnitInstitution = datatable.Rows[i]["对方行名"].ToString();
-                            bankFlow.TurnOut = datatable.Rows[i]["发生额"].ObjToDecimal();
-                            bankFlow.TurnIn = 0;
+                            bankFlow.TurnOut = 0;
+                            bankFlow.TurnIn = datatable.Rows[i]["发生额"].ObjToDecimal();
                         }
                         else
                         {
-                            //本公司付款
-                            bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
-                            bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
-                            bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方行名"].ToString();
-                            bankFlow.PaymentUnit = bankAccountName.ToString();
-                            bankFlow.PayeeAccount = bankAccount.ToString();
-                            bankFlow.TurnOut = 0;
-                            bankFlow.TurnIn = datatable.Rows[i]["发生额"].ObjToDecimal();
+                            bankFlow.TurnOut = datatable.Rows[i]["发生额"].ObjToDecimal();
+                            bankFlow.TurnIn = 0;
                         }
                         bankFlow.TransactionDate = datatable.Rows[i]["交易时间"].ObjToDate();
                         bankFlow.Balance = datatable.Rows[i]["余额"].ObjToDecimal();
@@ -265,16 +254,23 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     foreach (var items in bankFlowList)
                     {
                         items.BankAccount = item.BankAccount;
+                        var accountModeName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == item.AccountModeCode).Descrption;
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ToList();
-                        if (isAny.Count > 0)
+                        if (isAny.Count == 1)
                         {
-                            isAny[0].BankAccount = item.BankAccount;
-                            isAny[0].TurnIn = items.TurnIn;
-                            isAny[0].TurnOut = items.TurnOut;
-                            db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
+                            //isAny[0].BankAccount = item.BankAccount;
+                            //isAny[0].TurnIn = items.TurnIn;
+                            //isAny[0].TurnOut = items.TurnOut;
+                            items.AccountModeCode = item.AccountModeCode;
+                            items.AccountModeName = accountModeName;
+                            items.CompanyCode = item.CompanyCode;
+                            db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
                         items.BankAccount = item.BankAccount;
+                        items.AccountModeCode = item.AccountModeCode;
+                        items.AccountModeName = accountModeName;
+                        items.CompanyCode = item.CompanyCode;
                         items.CreateTime = DateTime.Now;
                         items.CreatePerson = "sysAdmin";
                         newBankFlowList.Add(items);
@@ -304,16 +300,23 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     foreach (var items in bankFlowList)
                     {
+                        var accountModeName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == item.AccountModeCode).Descrption;
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == items.BankAccount).ToList();
                         if (isAny.Count > 0)
                         {
-                            isAny[0].BankAccount = item.BankAccount;
-                            isAny[0].TurnIn = items.TurnIn;
-                            isAny[0].TurnOut = items.TurnOut;
-                            db.Updateable<Business_BankFlowTemplate>(isAny[0]).ExecuteCommand();
+                            //isAny[0].BankAccount = item.BankAccount;
+                            //isAny[0].TurnIn = items.TurnIn;
+                            //isAny[0].TurnOut = items.TurnOut;
+                            items.AccountModeName = item.AccountModeCode;
+                            items.AccountModeName = accountModeName;
+                            items.CompanyCode = item.CompanyCode;
+                            db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
                         items.BankAccount = item.BankAccount;
+                        items.AccountModeCode = item.AccountModeCode;
+                        items.AccountModeName = accountModeName;
+                        items.CompanyCode = item.CompanyCode;
                         items.CreateTime = DateTime.Now;
                         items.CreatePerson = "sysAdmin";
                         

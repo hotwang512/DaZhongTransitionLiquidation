@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SqlSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet
 {
@@ -106,6 +107,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     {
                         db.Insertable(module).ExecuteCommand();
                     }
+                    //列出组合插入业务配置表
+                    //InsertOrderList();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -116,6 +119,32 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 }
             });
             return Json(resultModel);
+        }
+
+        private void InsertOrderList()
+        {
+            DbBusinessDataService.Command(db =>
+            {
+                db.Ado.UseTran(() =>
+                {
+                    var data = db.Queryable<Business_BusinessTypeSet>().Where(x=>x.ParentVGUID != null).OrderBy("Code asc").ToList();
+                    var czGuid = "C86CA480-74B7-415C-A8A4-741955627727";
+                    var zlGuid = "C86CA480-74B7-415C-A8A4-741955627728";
+                    foreach (var item in data)
+                    {
+                        GetNextItem(db, item, czGuid, zlGuid);
+                    }
+                });
+            });
+        }
+
+        private void GetNextItem(SqlSugarClient db, Business_BusinessTypeSet item, string czGuid, string zlGuid)
+        {
+            var it = item.ParentVGUID == czGuid;
+            if (it)
+            {
+
+            }
         }
     }
 }

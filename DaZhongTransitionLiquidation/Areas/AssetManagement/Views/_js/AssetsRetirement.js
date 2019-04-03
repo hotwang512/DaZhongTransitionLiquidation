@@ -122,7 +122,11 @@ var $page = function () {
             });
     }
     function cellsrenderer(row, column, value, rowData) {
-        return '<span style="margin: 4px; margin-top:8px;">' + value + '%</span>';
+        if (value != "") {
+            return '<span style="margin: 4px; margin-top:8px;">' + value + '%</span>';
+        } else {
+            return value;
+        }
     }
 };
 

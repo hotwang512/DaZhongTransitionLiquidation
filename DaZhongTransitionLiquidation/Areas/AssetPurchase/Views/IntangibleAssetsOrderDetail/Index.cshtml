@@ -29,9 +29,12 @@
         padding-left: 10px;
         color: #555;
     }
-
     .jqx-tabs-content-element {
         overflow: auto !important;
+    }
+    .jqx-dropdownlist-content {
+        padding-left: 5px;
+        padding-top: 3px;
     }
 
     .SearchInput {
@@ -64,7 +67,7 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 440px;">
+    <div class="body_mk" style="height: 120px;">
         <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
             <tr style="height:50px">
                 <td style="text-align: right;">订单类型：</td>
@@ -74,34 +77,17 @@
                         <option value="软件类资产">软件类资产</option>
                     </select>
                 </td>
-                <td style="text-align: right;">付款单位及账户信息：</td>
-                <td style="text-align: left;">
-                    <div id="PaymentInformation">
-                    </div>
-                    <div style="display: none">
-                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
-                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
-                    </div>
-                </td>
+               
+            </tr>
+            <tr style="height: 50px">
                 <td style="text-align: right;">合同总价格：</td>
                 <td style="text-align: left;">
-                    <input id="SumPayment" type="text" value="" style="width: 200px;" class="input_text form-control" />
+                    <input id="SumPayment" type="text" value="" style="width: 200px;" class="input_text form-control"/>
                 </td>
-            </tr>
-            <tr style="height: 50px">
                 <td style="text-align: right;">合同首付款：</td>
-                <td style="text-align: left;"><input id="FirstPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="FirstPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/></td>
                 <td style="text-align: right;">合同尾款：</td>
-                <td style="text-align: left;"><input id="TailPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align: right;">供应商信息：</td>
-                <td style="text-align: left;"><input id="SupplierInformation" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
-            </tr>
-            <tr style="height: 50px">
-                <td style="text-align: right;">采购合同：</td>
-                <td style="text-align: left;">
-                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
-                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
-                </td>
+                <td style="text-align: left;"><input id="TailPayment" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/></td>
             </tr>
             <tr style="display: none">
                 <td></td>
@@ -110,6 +96,91 @@
                 </td>
             </tr>
             <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">供应商信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 120px;">
+        <table id="Supplier" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">供应商名称：</td>
+                <td style="text-align: left;">
+                    <div id="PaymentInformation">
+                    </div>
+                    <div style="display: none">
+                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                    </div>
+                </td>
+                <td style="text-align: right;">户名：</td>
+                <td style="text-align: left;"><input id="BankAccountName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">账号：</td>
+                <td style="text-align: left;"><input id="BankAccount" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="Bank" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">行号：</td>
+                <td style="text-align: left;"><input id="BankNo" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">付款信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 120px;">
+        <table id="PayInfo" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height: 50px">
+                <td style="text-align: right;">付款方式：</td>
+                <td style="text-align: left;">
+                    <select id="PayMode" class="input_text form-control" style="width: 200px;">
+                        <option value="现金" selected="selected">现金</option>
+                        <option value="转账">转账</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">付款公司：</td>
+                <td style="text-align: left;">
+                    <div id="PayCompanyDropdown">
+                    </div>
+                    <input id="hidPayCompany" disabled="disabled" type="text" value="" style="width: 200px;display: none" class="input_text form-control" />
+                </td>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="CompanyBankName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">银行账号：</td>
+                <td style="text-align: left;"><input id="CompanyBankAccount" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">银行户名：</td>
+                <td style="text-align: left;"><input id="CompanyBankAccountName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">银行类别：</td>
+                <td style="text-align: left;"><input id="AccountType" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 240px;">
+        <table id="AttachInfo" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height: 50px">
+                <td style="text-align: right;" width="100">采购合同：</td>
+                <td style="text-align: left;">
+                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
+                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
         </table>
         <form id="contractFormFile" hidden>
             <input type="file" id="ContractFileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.png" />

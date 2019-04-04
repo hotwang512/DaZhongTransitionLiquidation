@@ -4,12 +4,14 @@ var mydate = new Date();
 var vehicleDefaultData;
 var $page = function () {
     this.init = function () {
+        initSelect();
+        initPayCompanyDropdown();
+        initComboBox();
         addEvent();
         $("#PaymentInformation").find("input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
     }
     //所有事件
     function addEvent() {
-        initSelect();
         var guid = $.request.queryString().VGUID;
         debugger;
         $("#VGUID").val(guid);
@@ -24,6 +26,7 @@ var $page = function () {
         //保存
         $("#btnSave").on("click",
             function () {
+                var PayCompanyItem = $("#PayCompanyDropdown").jqxDropDownList('getItemByValue', $("#PayCompanyDropdown").val());
                 var validateError = 0; //未通过验证的数量
                 if (!Validate($("#OrderType"))) {
                     validateError++;
@@ -42,7 +45,18 @@ var $page = function () {
                             "ContractAmount": $("#ContractAmount").val(),
                             "SupplierInformation": $("#SupplierInformation").val(),
                             "ContractName": $("#Attachment").attr("title"),
-                            "ContractFilePath": $("#Attachment").attr("href")
+                            "ContractFilePath": $("#Attachment").attr("href"),
+                            "PayCompany": PayCompanyItem.label,
+                            "SupplierBankAccountName": $("#BankAccountName").val(),
+                            "SupplierBankAccount": $("#BankAccount").val(),
+                            "SupplierBank": $("#Bank").val(),
+                            "SupplierBankNo": $("#BankNo").val(),
+                            "PayType": $("#PayMode").val(),
+                            "CompanyBankName": $("#CompanyBankName").val(),
+                            "CompanyBankAccount": $("#CompanyBankAccount").val(),
+                            "CompanyBankAccountName": $("#CompanyBankAccountName").val(),
+                            "AccountType": $("#AccountType").val(),
+                            "PayCompanyVguid": $("#PayCompanyDropdown").val()
                         },
                         type: "post",
                         success: function (msg) {
@@ -95,6 +109,20 @@ var $page = function () {
                 });
             }
         );
+        $('#PayCompanyDropdown').on('select', function (event) {
+            var args = event.args;
+            if (args) {
+                debugger;
+                var item = args.item;
+                $("#PayCompany").val(item.lable);
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo", { Vguid: $("#PayCompanyDropdown").val() }, function (msg) {
+                    $("#CompanyBankName").val(msg.BankName);
+                    $("#CompanyBankAccount").val(msg.BankAccount);
+                    $("#CompanyBankAccountName").val(msg.BankAccountName);
+                    $("#AccountType").val(msg.AccountType);
+                });
+            }
+        });
         $('#PaymentInformation').on('select', function (event) {
             var args = event.args;
             if (args) {
@@ -102,12 +130,12 @@ var $page = function () {
                 var item = args.item;
                 $("#hiddenPaymentInformationVguid").val(item.value);
                 $("#hiddenPaymentInformation").val(item.label);
-                //$.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: item.value }, function (msg) {
-                //    $("#BankAccountName").val(msg.BankAccountName);
-                //    $("#BankAccount").val(msg.BankAccount);
-                //    $("#Bank").val(msg.Bank);
-                //    $("#BankNo").val(msg.BankNo);
-                //});
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: item.value }, function (msg) {
+                    $("#BankAccountName").val(msg.BankAccountName);
+                    $("#BankAccount").val(msg.BankAccount);
+                    $("#Bank").val(msg.Bank);
+                    $("#BankNo").val(msg.BankNo);
+                });
             }
         });
     }; //addEvent end
@@ -115,7 +143,7 @@ var $page = function () {
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             $("#OrderType").val(msg.OrderType);
-            debugger;
+            //initComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#SumPayment").val(msg.SumPayment);
@@ -130,7 +158,18 @@ var $page = function () {
                 debugger;
                 $("#Attachment").attr("title", msg.ContractName);
             }
-            var dropDownContent = '<div style="position: relative; margin-left: 8px; margin-top: 10px;">' + msg.PaymentInformation + '</div>';
+            $("#SupplierBankAccountName").val(msg.SupplierBankAccountName);
+            $("#SupplierBankAccount").val(msg.SupplierBankAccount);
+            $("#SupplierBank").val(msg.SupplierBank);
+            $("#SupplierBankNo").val(msg.SupplierBankNo);
+            $("#PayMode").val(msg.PayType);
+            debugger;
+            $("#PayCompanyDropdown").val(msg.PayCompanyVguid);
+            $("#CompanyBankName").val(msg.CompanyBankName);
+            $("#CompanyBankAccount").val(msg.CompanyBankAccount);
+            $("#CompanyBankAccountName").val(msg.CompanyBankAccountName);
+            $("#hidPayCompany").val(msg.PayCompany);
+            $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
         });
     }
@@ -247,6 +286,58 @@ function initSelect() {
     });
 }
 
+function initPayCompanyDropdown() {
+    var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdown";
+    var source =
+    {
+        datatype: "json",
+        datafields: [
+            { name: 'VGUID' },
+            { name: 'Descrption' }
+        ],
+        url: url,
+        async: false
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $('#PayCompanyDropdown').jqxDropDownList({
+        filterable: true, selectedIndex: 2, source: dataAdapter, displayMember: "Descrption", dropDownWidth:
+            310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200,
+        renderer: function (index, label, value) {
+            var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
+            return table;
+        },
+        selectionRenderer: function (element, index, label, value) {
+            var text = label.replace(/\n/g, " ");
+            return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
+        }
+    });
+}
+function initComboBox() {
+    //付款单位及相关账户信息
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
+        data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            debugger;
+            var source = new Array();
+            for (var i = 0; i < data.Rows.length; i++) {
+                var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
+                    + "<b>户名</b><div>" + data.Rows[i].BankAccountName + "</div><div style='margin-top: 5px;'><b>账号</b><div>" + data.Rows[i].BankAccount + "</div></div></div>";
+                source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
+            }
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            $("#PaymentInformation").jqxComboBox({
+                source: dataAdapter, selectedIndex: 0,
+                displayMember: "title", valueMember: "value",
+                width: 198, height: 33
+            });
+
+        }
+    });
+}
 function formatDate(NewDtime) {
     var dt = new Date(parseInt(NewDtime.slice(6, 19)));
     var year = dt.getFullYear();

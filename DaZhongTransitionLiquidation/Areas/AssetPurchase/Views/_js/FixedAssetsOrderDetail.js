@@ -192,7 +192,7 @@ var $page = function () {
             $("#CompanyBankAccount").val(msg.CompanyBankAccount);
             $("#CompanyBankAccountName").val(msg.CompanyBankAccountName);
             $("#hidPayCompany").val(msg.PayCompany);
-            $("#AccountType").val(msg.AccountType); 
+            $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
         });
     }

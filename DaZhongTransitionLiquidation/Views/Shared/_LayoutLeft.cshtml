@@ -378,7 +378,7 @@
     @******************************************************会计核算中心******************************************************@
     @if (isSysadmin || hasPaymentPermission1)
     {
-        <div class="menue_header VoucherManage VoucherM VoucherCheck QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -399,7 +399,7 @@
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行类凭证" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
+                    <tr class="menue_item" id="VoucherList_VoucherManageBank" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                         <td class="menue_text" style="font-size: 18px;font-weight: 100;">银行类凭证</td>
                         <td></td>
@@ -503,7 +503,7 @@
                 </div>
             }
         </div>
-        <div class="menue_header VoucherManage VoucherM VoucherCheck QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -533,7 +533,7 @@
             </table>
         </div>
 
-                                <div class="menue_header VoucherManage VoucherM VoucherCheck  QuerySubject" style="display: none;">
+                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject" style="display: none;">
                                     <table style="cursor: pointer;">
                                         <tr>
                                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>

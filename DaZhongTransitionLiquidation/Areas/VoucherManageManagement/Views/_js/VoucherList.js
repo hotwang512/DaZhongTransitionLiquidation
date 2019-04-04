@@ -196,7 +196,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val() },
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "0" },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -279,7 +279,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val() },
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(),"Automatic":"1" },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

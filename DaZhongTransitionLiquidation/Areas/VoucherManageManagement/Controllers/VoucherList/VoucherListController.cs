@@ -32,6 +32,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_VoucherList>()
                 .Where(i => i.Status == searchParams.Status)
+                .Where(i => i.Automatic == searchParams.Automatic)
                 .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod == searchParams.AccountingPeriod)
                 .OrderBy(i => i.VoucherDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

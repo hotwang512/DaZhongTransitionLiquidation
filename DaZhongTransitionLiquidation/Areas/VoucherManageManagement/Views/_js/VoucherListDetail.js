@@ -547,6 +547,7 @@ var $page = function () {
                 $("#DocumentMaker").val(msg.DocumentMaker);
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
+                $("#AccountModeName").val(msg.AccountModeName);
                 var datas = msg.Detail;
                 //setVoucherDetail(datas);
                 createTable(datas);

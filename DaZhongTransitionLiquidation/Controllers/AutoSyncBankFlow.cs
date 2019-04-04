@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
@@ -93,6 +94,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         {
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             int success = 0;
+            List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
             foreach (var item in bankFlowList)
             {
                 var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
@@ -111,7 +113,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                 item.CompanyCode = companyBankData.CompanyCode;
                 item.CreateTime = DateTime.Now;
                 item.CreatePerson = "sysAdmin";
-                success = _db.Insertable(item).ExecuteCommand();
+                bankFlowLists.Add(item); 
+            }
+            if (bankFlowLists.Count > 0)
+            {
+                success = _db.Insertable(bankFlowLists).ExecuteCommand();
+                //根据流水自动生成凭证
+                BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "sysAdmin");
             }
             BankDataPack.SyncBackFlowAndReconciliation();
             return success;

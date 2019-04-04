@@ -194,10 +194,10 @@ var $page = function () {
                     $("#Comeback").hide();
                 }
                 $("#PaymentCompany").text(msg.PaymentCompany);
-                $("#OrderCompany").text(msg.OrderCompany);
+                $("#OrderCompany").val(msg.OrderCompany);
                 $("#Money").text(msg.Money);
                 $("#Payee").text(msg.Payee);
-                $("#PaymentContents").text(msg.PaymentContents);
+                $("#PaymentContents").val(msg.PaymentContents);
 
                 $("#CollectionAccount").val(msg.CollectBankAccouont);
                 $("#CollectionBankAccountName").val(msg.CollectBankAccountName);

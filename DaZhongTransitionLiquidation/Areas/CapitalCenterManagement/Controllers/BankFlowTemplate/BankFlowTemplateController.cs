@@ -3,11 +3,14 @@ using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.Ban
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -87,6 +90,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     if (bankFlowList.Count > 0)
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
+                        //根据流水自动生成凭证
+                        GenerateVoucherList(bankFlowList, UserInfo.LoginName);
                     }
                     //同步银行流水到银行数据表
                     BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate);
@@ -168,6 +173,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     if (bankFlowList.Count > 0)
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
+                        //根据流水自动生成凭证
+                        GenerateVoucherList(bankFlowList, UserInfo.LoginName);
                     }
                     //同步银行流水到银行数据表
                     BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate);
@@ -258,6 +265,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ToList();
                         if (isAny.Count == 1)
                         {
+                            //newBankFlowList.Add(items);
                             //isAny[0].BankAccount = item.BankAccount;
                             //isAny[0].TurnIn = items.TurnIn;
                             //isAny[0].TurnOut = items.TurnOut;
@@ -272,13 +280,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         items.AccountModeName = accountModeName;
                         items.CompanyCode = item.CompanyCode;
                         items.CreateTime = DateTime.Now;
-                        items.CreatePerson = "sysAdmin";
+                        items.CreatePerson = UserInfo.LoginName;
                         newBankFlowList.Add(items);
                     }
                     if (newBankFlowList.Count > 0)
                     {
                         db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
+                        //根据流水自动生成凭证
+                        GenerateVoucherList(newBankFlowList, UserInfo.LoginName);
                     }
+                    
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
@@ -325,8 +336,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     if (newBankFlowList.Count > 0)
                     {
                         db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
-                    }
-                }
+                        //根据流水自动生成凭证
+                        GenerateVoucherList(newBankFlowList, UserInfo.LoginName);
+                    }                }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
@@ -338,6 +350,145 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.AccountModeCode == UserInfo.AccountModeCode).OrderBy("BankAccount asc").ToList();
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
+        }
+        public static void GenerateVoucherList(List<Business_BankFlowTemplate> newBankFlowList, string loginName)
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
+            List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
+            var x = -1;
+            foreach (var item in newBankFlowList)
+            {
+                //主信息
+                Business_VoucherList voucher = new Business_VoucherList();
+                voucher.AccountingPeriod = item.TransactionDate;
+                voucher.AccountModeName = item.AccountModeName;
+                voucher.CompanyCode = item.CompanyCode;
+                voucher.CompanyName = item.PaymentUnit;
+                voucher.BatchName = "银行" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
+                var voucherName = GetVoucherName();
+                x++;
+                var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
+                voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd") + (voucherNo + x).TryToString().PadLeft(4, '0');
+                voucher.DocumentMaker = loginName;
+                voucher.Status = "1";
+                voucher.VoucherDate = item.TransactionDate;
+                voucher.VoucherType = "银行";
+                voucher.Automatic = "1";//自动
+                voucher.CreateTime = DateTime.Now;
+                var guid = Guid.NewGuid();
+                voucher.VGUID = guid;
+                //科目信息
+                Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                BVDetail.Abstract = item.Remark;
+                var sevenSubject = GetSevenSubject(item.BankAccount);
+                var subject = "";
+                if (item.TurnOut == 0)
+                {
+                    //转入(贷)
+                    voucher.CreditAmountTotal = item.TurnIn;
+                    BVDetail.LoanMoney = item.TurnIn;
+                    BVDetail.BorrowMoney = 0;
+                    BVDetail.LoanMoneyCount = item.TurnIn;
+                    BVDetail.BorrowMoneyCount = 0;
+                    subject = sevenSubject.Loan;
+                }
+                else
+                {
+                    //转出(借)
+                    voucher.DebitAmountTotal = item.TurnOut;
+                    BVDetail.BorrowMoney = item.TurnOut;
+                    BVDetail.LoanMoney = 0;
+                    BVDetail.BorrowMoneyCount = item.TurnOut;
+                    BVDetail.LoanMoneyCount = 0;
+                    subject = sevenSubject.Borrow;
+                }
+                if(subject != "" && subject != null)
+                {
+                    if (subject.Contains("\n"))
+                    {
+                        subject = subject.Substring(0, subject.Length - 1);
+                    }
+                    var seven = subject.Split(".");
+                    BVDetail.CompanySection = seven[0];
+                    BVDetail.SubjectSection = seven[1];
+                    BVDetail.AccountSection = seven[2];
+                    BVDetail.CostCenterSection = seven[3];
+                    BVDetail.SpareOneSection = seven[4];
+                    BVDetail.SpareTwoSection = seven[5];
+                    BVDetail.IntercourseSection = seven[6];
+                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                    BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                }
+                BVDetail.JE_LINE_NUMBER = 0;
+                BVDetail.VGUID = Guid.NewGuid();
+                BVDetail.VoucherVGUID = guid;
+                VoucherList.Add(voucher);
+                BVDetailList.Add(BVDetail);
+            }
+            if (VoucherList.Count > 0 && BVDetailList.Count > 0)
+            {
+                db.Insertable(VoucherList).ExecuteCommand();
+                db.Insertable(BVDetailList).ExecuteCommand();
+            }
+        }
+        public static string GetVoucherName()
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            var date = DateTime.Now;
+            var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行'
+                              order by VoucherNo desc", new { @NowDate = date });
+            var batchNo = 0;
+            if (voucherNo.IsValuable() && voucherNo.Length > 4)
+            {
+                batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
+            }
+            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+        }
+        public static Business_CompanyBankInfo GetSevenSubject(string bankAccount)
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            var result = db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == bankAccount);
+            return result;
+        }
+        public static string GetSevenSubjectName(string subject, string acountModeCode, string companyCode)
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            var result = "";
+            var seven = subject.Split(".");
+            var data = db.Queryable<Business_SevenSection>().ToList();
+            var i = 0;
+            var sectionVguid = "";
+            var value = "";
+            foreach (var item in seven)
+            {
+                i++;
+                switch (i)
+                {
+                    case 1: sectionVguid = "A63BD715-C27D-4C47-AB66-550309794D43"; break;//公司
+                    case 2: sectionVguid = "B63BD715-C27D-4C47-AB66-550309794D43"; break;//科目
+                    case 3: sectionVguid = "C63BD715-C27D-4C47-AB66-550309794D43"; break;//核算
+                    case 4: sectionVguid = "D63BD715-C27D-4C47-AB66-550309794D43"; break;//成本中心
+                    case 5: sectionVguid = "E63BD715-C27D-4C47-AB66-550309794D43"; break;//备用1
+                    case 6: sectionVguid = "F63BD715-C27D-4C47-AB66-550309794D43"; break;//备用2
+                    case 7: sectionVguid = "G63BD715-C27D-4C47-AB66-550309794D43"; break;//往来段
+                    default:
+                        break;
+                }
+                if(i == 1)
+                {
+                    value = data.Single(x => x.SectionVGUID == sectionVguid && x.AccountModeCode == acountModeCode
+                                     && x.Code == item).Descrption;
+                }
+                else
+                {
+                    value = data.Single(x => x.SectionVGUID == sectionVguid && x.AccountModeCode == acountModeCode
+                                    && x.CompanyCode == companyCode && x.Code == item).Descrption;
+                }
+                result += value + ".";
+            }
+            result = result.Substring(0, result.Length - 1);
+            return result;
         }
     }
 }

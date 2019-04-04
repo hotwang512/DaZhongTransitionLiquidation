@@ -15,7 +15,7 @@
 
 <style>
     #OrderInfo td {
-        width: 35px;
+        /*width: 35px;*/
     }
 
     #OrderInfo label {
@@ -46,18 +46,18 @@
         <div class="header_text_div"><span class="header_text_span">订单信息</span></div>
     </div>
     <div class="body_mk" style="height: 80px;">
-        <table id="OrderInfo" style="width:90%">
+        <table id="OrderInfo" style="width:100%">
             <tr style="height:80px">
                 <td style="text-align: right;">公司：</td>
-                <td style="text-align: left;"><label id="OrderCompany" for=""></label></td>
-                <td style="text-align: right;">单位/部门/个人：</td>
-                <td style="text-align: left;"><label id="PaymentCompany" for=""></label></td>
+                <td style="text-align: left;">@*<label id="OrderCompany" for=""></label>*@<textarea id='OrderCompany' style='width: 270px;height: 80px;' class='input_text form-control'></textarea></td>
+                <td style="text-align: right;">供应商类别：</td>
+                <td style="text-align: left;width: 100px;"><label id="PaymentCompany" for=""></label></td>
                 <td style="text-align: right;">经办人：</td>
-                <td style="text-align: left;"><label id="Payee" for=""></label></td>
+                <td style="text-align: left;width: 100px;"><label id="Payee" for=""></label></td>
                 <td style="text-align: right;">金额：</td>
-                <td style="text-align: left;"><label id="Money" for=""></label></td>
+                <td style="text-align: left;width: 100px;"><label id="Money" for=""></label></td>
                 <td style="text-align: right;">备注：</td>
-                <td style="text-align: left;"><label id="PaymentContents" for=""></label></td>
+                <td style="text-align: left;">@*<label id="PaymentContents" for=""></label>*@<textarea id='PaymentContents' style='width: 420px;height: 80px;' class='input_text form-control'></textarea></td>
             </tr>
         </table>
     </div>

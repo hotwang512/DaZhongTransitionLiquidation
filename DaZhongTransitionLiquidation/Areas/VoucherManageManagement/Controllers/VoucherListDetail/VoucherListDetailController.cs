@@ -95,6 +95,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 
                     //主表信息 
                     voucherList.AccountingPeriod = voucher.AccountingPeriod;
+                    voucherList.AccountModeName = voucher.AccountModeName;
                     voucherList.Auditor = voucher.Auditor;
                     voucherList.Bookkeeping = voucher.Bookkeeping;
                     voucherList.Cashier = voucher.Cashier;
@@ -116,6 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期)
                         voucherList.VoucherNo = voucherName;//凭证号自动生成
                         voucherList.VGUID = guid;
+                        voucherList.Automatic = "0";//手动
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
                     }
                     else

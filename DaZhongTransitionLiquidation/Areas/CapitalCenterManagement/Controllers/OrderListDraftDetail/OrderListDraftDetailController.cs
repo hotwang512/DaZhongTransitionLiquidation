@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
@@ -83,6 +84,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 //主信息
                 orderList = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == vguid);
+                if(orderList.CollectBankAccountName.TryToGuid() != Guid.Empty)
+                {
+                    orderList.CollectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderList.CollectBankAccountName.TryToGuid()).BankAccountName;
+                }
+                
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }

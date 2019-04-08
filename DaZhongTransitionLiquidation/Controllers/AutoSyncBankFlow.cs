@@ -46,7 +46,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                     foreach (var item in companyBankData)
                     {
                         bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow(item.BankAccount);
-                        success = WirterSyncBankFlow(bankFlowList);
+                        if (bankFlowList.Count > 0)
+                        {
+                            success = WirterSyncBankFlow(bankFlowList);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -79,7 +82,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                         foreach (var item in companyBankData)
                         {
                             bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow(item.BankAccount);
-                            success = WirterSyncBankFlow(bankFlowList);
+                            if (bankFlowList.Count > 0)
+                            {
+                                success = WirterSyncBankFlow(bankFlowList);
+                            }
                         }
                     }
                     catch (Exception ex)

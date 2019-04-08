@@ -8,6 +8,8 @@ var selector = {
 }; //selector end
 var isEdit = false;
 var vguid = "";
+var type = "";
+var tableIndex = 0;
 var $page = function () {
 
     this.init = function () {
@@ -22,6 +24,12 @@ var $page = function () {
         }
         if (status == "2") {
             $("#buttonList2").show();
+        }
+        type = $.request.queryString().Type;
+        if (type == 0 || type == "0") {
+            type = "现金类";
+        } else {
+            type = "银行类";
         }
         //加载列表数据
         initTable();
@@ -39,13 +47,21 @@ var $page = function () {
 
         //新增
         $("#btnAdd").on("click", function () {
-            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index";
+            if (type == "现金类") {
+                window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=0";
+            } else {
+                window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=1";
+            }
+           
             //window.open("/VoucherManageManagement/VoucherListDetail/Index");
         });
         //删除
         $("#btnDelete").on("click", function () {
             var selection = [];
             var grid = $("#jqxTable");
+            if (tableIndex == 1) {
+                grid = $("#jqxTable1");
+            }
             var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
@@ -99,7 +115,9 @@ var $page = function () {
                 WindowConfirmDialog(check, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
-
+        $('#jqxTabs').on('tabclick', function (event) {
+            tableIndex = event.args.item;
+        });
     }; //addEvent end
 
     //删除
@@ -116,7 +134,11 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("删除成功！", null, "success");
-                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        if (tableIndex == 1) {
+                            $("#jqxTable1").jqxDataTable('updateBoundData');
+                        } else {
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                        }
                         break;
                 }
             }
@@ -136,7 +158,11 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("提交成功！", null, "success");
-                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        if (tableIndex == 1) {
+                            $("#jqxTable1").jqxDataTable('updateBoundData');
+                        } else {
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                        }
                         break;
                 }
             }
@@ -156,7 +182,11 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("提交成功！", null, "success");
-                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        if (tableIndex == 1) {
+                            $("#jqxTable1").jqxDataTable('updateBoundData');
+                        } else {
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                        }
                         break;
                 }
             }
@@ -166,6 +196,7 @@ var $page = function () {
     function initTable() {
         //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
         var status = $.request.queryString().Status;
+        
         var source =
             {
                 datafields:
@@ -196,7 +227,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "0" },
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "0", "VoucherType": type },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -279,7 +310,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(),"Automatic":"1" },
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "1", "VoucherType": type },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

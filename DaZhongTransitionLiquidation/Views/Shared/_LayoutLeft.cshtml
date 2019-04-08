@@ -391,7 +391,7 @@
             <table>
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "现金类凭证" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
+                    <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1&&Type=0">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                         <td class="menue_text" style="font-size: 18px;font-weight: 100;">现金类凭证</td>
                         <td></td>
@@ -399,7 +399,7 @@
                 }
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行类凭证" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="VoucherList_VoucherManageBank" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1">
+                    <tr class="menue_item" id="VoucherList_VoucherManageBank" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1&&Type=1">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                         <td class="menue_text" style="font-size: 18px;font-weight: 100;">银行类凭证</td>
                         <td></td>

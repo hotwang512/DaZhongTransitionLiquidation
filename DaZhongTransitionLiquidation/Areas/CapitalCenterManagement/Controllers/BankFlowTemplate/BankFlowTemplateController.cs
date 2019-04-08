@@ -365,7 +365,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.AccountModeName = item.AccountModeName;
                 voucher.CompanyCode = item.CompanyCode;
                 voucher.CompanyName = item.PaymentUnit;
-                voucher.BatchName = "银行" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
+                voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
                 var voucherName = GetVoucherName();
                 x++;
                 var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
@@ -373,7 +373,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.DocumentMaker = loginName;
                 voucher.Status = "1";
                 voucher.VoucherDate = item.TransactionDate;
-                voucher.VoucherType = "银行";
+                voucher.VoucherType = "银行类";
                 voucher.Automatic = "1";//自动
                 voucher.CreateTime = DateTime.Now;
                 var guid = Guid.NewGuid();
@@ -436,7 +436,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             var date = DateTime.Now;
-            var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行'
+            var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类'
                               order by VoucherNo desc", new { @NowDate = date });
             var batchNo = 0;
             if (voucherNo.IsValuable() && voucherNo.Length > 4)

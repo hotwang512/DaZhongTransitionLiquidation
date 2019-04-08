@@ -27,10 +27,18 @@ var $page = function () {
     function addEvent() {
         var myDate = new Date();//获取系统当前时间
         var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
-        var date = myDate.getFullYear() + month + myDate.getDate();
+        var day = (myDate.getDate()) < 10 ? "0" + (myDate.getDate()) : (myDate.getDate());
+        var date = myDate.getFullYear() + month + day;
         var voucherType = $("#VoucherType").val();
+        var type = $.request.queryString().Type;
+        if (type == 0 || type == "0") {
+            voucherType = "现金类";
+        } else {
+            voucherType = "银行类";
+            $("#VoucherType").val(voucherType);
+        }
         $("#BatchName").val(voucherType + date);
-        $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + myDate.getDate());
+        $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + day);
         $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
         uiEngineHelper.bindSelect('#CompanySection', CompanyCode, "Code", "Descrption");
         var guid = $.request.queryString().VGUID;
@@ -41,7 +49,7 @@ var $page = function () {
             $("#VoucherType").attr("disabled", "disableds");
         } else {
             //addSectionDiv();
-            addVoucherListTable(trMore);
+            addVoucherListTable();
             $("#hideButton").show();
         }
         $("#DocumentMaker").val($("#LoginName").val());

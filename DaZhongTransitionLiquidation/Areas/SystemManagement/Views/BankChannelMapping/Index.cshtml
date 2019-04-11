@@ -15,15 +15,18 @@
 
 <table style="margin-top: 10px;">
     <tr style="height: 50px;">
-
         <td style="width: 95px;">
             <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
         </td>
-
         <td style="width: 95px;">
             <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
         </td>
-
+        <td style="width: 95px;">
+            <button id="EditIsableTrue" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="EditIsableFalse" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
+        </td>
     </tr>
 </table>
 <!-- 中部条件 -->
@@ -106,6 +109,36 @@
                                         }
                                     }
                                 </select>
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: left"><span class="spanText">公司</span></td>
+                            <td style="width: 150px;">
+                                <select id="CompanyCode" class="input_text form-control" style="" onchange="companyChange()"></select>
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 90px;text-align: left"><span class="spanText">借</span></td>
+                            <td>
+                                <div id='jqxWidget1'>
+                                    <div id="jqxdropdownbutton1">
+                                        <div style="border-color: transparent;" id="grid1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="Remove1" type="button" style="float: right;margin-top: -28px;">清除</button>
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 90px;text-align: left"><span class="spanText">贷</span></td>
+                            <td>
+                                <div id='jqxWidget2'>
+                                    <div id="jqxdropdownbutton2">
+                                        <div style="border-color: transparent;" id="grid2">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="Remove2" type="button" style="float: right;margin-top: -28px;">清除</button>
                             </td>
                         </tr>
                     </table>

@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -52,6 +53,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     saveChanges = db.Deleteable<Business_VoucherList>(x => x.VGUID == item).ExecuteCommand();
                     //删除副表信息
                     db.Deleteable<Business_VoucherDetail>(x => x.VoucherVGUID == item).ExecuteCommand();
+                    //删除中间表信息
+                    db.Deleteable<Business_AssetsGeneralLedger_Swap>(x => x.SubjectVGUID == item).ExecuteCommand(); 
                     //删除附件信息
                     db.Deleteable<Business_VoucherAttachmentList>(x => x.VoucherVGUID == item).ExecuteCommand();
                     resultModel.IsSuccess = saveChanges == 1;

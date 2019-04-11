@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.Vou
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using SyntacticSugar;
@@ -357,6 +358,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
             var x = -1;
+            var guid = Guid.Empty;
             foreach (var item in newBankFlowList)
             {
                 //主信息
@@ -376,7 +378,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.VoucherType = "银行类";
                 voucher.Automatic = "1";//自动
                 voucher.CreateTime = DateTime.Now;
-                var guid = Guid.NewGuid();
+                guid = Guid.NewGuid();
                 voucher.VGUID = guid;
                 //科目信息
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
@@ -425,11 +427,103 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetail.VoucherVGUID = guid;
                 VoucherList.Add(voucher);
                 BVDetailList.Add(BVDetail);
+                //GetOtherSubject(BVDetailList, newBankFlowList, guid, item);//通过银行渠道找流水
+                GetOtherSubject2(BVDetailList, guid, item);//通过流水找银行渠道
             }
+           
             if (VoucherList.Count > 0 && BVDetailList.Count > 0)
             {
                 db.Insertable(VoucherList).ExecuteCommand();
                 db.Insertable(BVDetailList).ExecuteCommand();
+            }
+        }
+        public static void GetOtherSubject(List<Business_VoucherDetail> BVDetailList, List<Business_BankFlowTemplate> newBankFlowList, Guid guid, Business_BankFlowTemplate item)
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => x.IsUnable != "禁用").ToList();
+            foreach (var it in bankChannel)
+            {
+                var subject = "";
+                var newBank = newBankFlowList.Where(x => x.ReceivableAccount == item.BankAccount).ToList();
+                if (newBank.Count > 0)
+                {
+                    foreach (var bank in newBank)
+                    {
+                        if (bank.VGUID != item.VGUID)
+                        {
+                            continue;
+                        }
+                        if (item.TurnOut == 0)
+                        {
+                            subject = it.Borrow;
+                        }
+                        else
+                        {
+                            subject = it.Loan;
+                        }
+                        if (subject != "" || subject != null)
+                        {
+                            if (subject.Contains("\n"))
+                            {
+                                subject = subject.Substring(0, subject.Length - 1);
+                            }
+                            var seven = subject.Split(".");
+                            BVDetail.CompanySection = seven[0];
+                            BVDetail.SubjectSection = seven[1];
+                            BVDetail.AccountSection = seven[2];
+                            BVDetail.CostCenterSection = seven[3];
+                            BVDetail.SpareOneSection = seven[4];
+                            BVDetail.SpareTwoSection = seven[5];
+                            BVDetail.IntercourseSection = seven[6];
+                            //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                            BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                        }
+                        BVDetail.VGUID = Guid.NewGuid();
+                        BVDetail.VoucherVGUID = guid;
+                        BVDetailList.Add(BVDetail);
+                        return;
+                    }
+                }
+            }
+        }
+        private static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item)
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => x.IsUnable != "禁用" && x.BankAccount == item.ReceivableAccount).ToList();
+            if (bankChannel.Count > 0)
+            {
+                var bankChannelOne = bankChannel.First();
+                var subject = "";
+                if (item.TurnOut == 0)
+                {
+                    subject = bankChannelOne.Borrow;
+                }
+                else
+                {
+                    subject = bankChannelOne.Loan;
+                }
+                if (subject != "" || subject != null)
+                {
+                    if (subject.Contains("\n"))
+                    {
+                        subject = subject.Substring(0, subject.Length - 1);
+                    }
+                    var seven = subject.Split(".");
+                    BVDetail.CompanySection = seven[0];
+                    BVDetail.SubjectSection = seven[1];
+                    BVDetail.AccountSection = seven[2];
+                    BVDetail.CostCenterSection = seven[3];
+                    BVDetail.SpareOneSection = seven[4];
+                    BVDetail.SpareTwoSection = seven[5];
+                    BVDetail.IntercourseSection = seven[6];
+                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                    BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                }
+                BVDetail.VGUID = Guid.NewGuid();
+                BVDetail.VoucherVGUID = guid;
+                BVDetailList.Add(BVDetail);
             }
         }
         public static string GetVoucherName()

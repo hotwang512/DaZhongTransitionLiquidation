@@ -265,6 +265,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 voucherList.Cashier = voucher.Cashier;
                 voucherList.CompanyCode = voucher.CompanyCode;
                 voucherList.CompanyName = voucher.CompanyName;
+                voucherList.AccountModeName = voucher.AccountModeName;
                 voucherList.Currency = voucher.Currency;
                 voucherList.DocumentMaker = voucher.DocumentMaker;
                 voucherList.FinanceDirector = voucher.FinanceDirector;

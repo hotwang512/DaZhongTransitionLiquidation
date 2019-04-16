@@ -35,7 +35,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_IntangibleAssetsOrder>()
-                    .WhereIF(searchParams.OrderType != null, i => i.OrderType == searchParams.OrderType)
+                    .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

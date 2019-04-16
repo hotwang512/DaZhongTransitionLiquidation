@@ -8,7 +8,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     public class Business_IntangibleAssetsOrder
     {
         public Guid VGUID { get; set; }
-        public string OrderType { set; get; }
+        public Guid? PurchaseGoodsVguid { set; get; }
+        public string PurchaseGoods { set; get; }
         public Guid? PaymentInformationVguid { set; get; }
         public string PaymentInformation { set; get; }
         public decimal? SumPayment { set; get; }

@@ -259,12 +259,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPurchaseGoods()
+        public JsonResult GetPurchaseGoods(int OrderCategory)
         {
             var orderTypeData = new List<Business_PurchaseOrderSetting>();
             DbBusinessDataService.Command(db =>
             {
-                orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().ToList();
+                orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.OrderCategory == OrderCategory).ToList();
             });
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);
         }

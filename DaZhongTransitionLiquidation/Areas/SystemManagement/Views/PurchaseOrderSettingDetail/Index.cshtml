@@ -1,7 +1,7 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 @{
-    ViewBag.Title = "采购订单配置/采购基础信息配置明细";
+    ViewBag.Title = "采购资产订单配置/采购资产基础信息配置明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
@@ -60,6 +60,15 @@
                 <td style="text-align: right;">资产子类：</td>
                 <td style="text-align: left;">
                     <div id='ASSET_CATEGORY_MINOR'></div>
+                </td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">资产类别：</td>
+                <td style="text-align: left;">
+                    <select id="OrderCategory" class="input_text form-control" style="width: 200px;">
+                        <option value="0" selected="selected">固定资产</option>
+                        <option value="1">无形资产</option>
+                    </select>
                 </td>
             </tr>
         </table>

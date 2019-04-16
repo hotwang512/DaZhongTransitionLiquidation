@@ -11,6 +11,7 @@ var vguid = "";
 var $page = function () {
 
     this.init = function () {
+        initSelectPurchaseGoods();
         addEvent();
     }
     //所有事件
@@ -69,7 +70,21 @@ var $page = function () {
             }
         });
     }; //addEvent end
-
+    function initSelectPurchaseGoods() {
+        //使用部门
+        $.ajax({
+            url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
+            data: { "OrderCategory": 1 },//无形资产
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
+                $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+                debugger;
+            }
+        });
+    }
     //删除
     function dele(selection) {
         $.ajax({
@@ -119,7 +134,7 @@ var $page = function () {
                 [
                     { name: "checkbox", type: null },
                     { name: 'VGUID', type: 'string' },
-                    { name: 'OrderType', type: 'string' },
+                    { name: 'PurchaseGoods', type: 'string' },
                     { name: 'PaymentInformationVguid', type: 'string' },
                     { name: 'PaymentInformation', type: 'string' },
                     { name: 'SumPayment', type: 'float' },
@@ -137,7 +152,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "OrderType": $("#OrderType").val(), "SubmitStatus": $("#SubmitStatus").val() },
+                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val() },
                 url: "/AssetPurchase/IntangibleAssetsOrder/GetIntangibleAssetsOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -160,7 +175,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '订单类型', datafield: 'OrderType', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同尾款', datafield: 'TailPayment', width: 150, align: 'center', cellsAlign: 'center' },

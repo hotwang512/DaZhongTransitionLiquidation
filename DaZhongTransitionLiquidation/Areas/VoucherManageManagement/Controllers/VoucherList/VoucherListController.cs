@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -32,8 +33,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_VoucherList>()
                 .Where(i => i.Status == searchParams.Status)
+                .Where(i => i.Automatic == searchParams.Automatic)
+                .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
                 .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod == searchParams.AccountingPeriod)
-                .OrderBy(i => i.VoucherDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -50,6 +53,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     saveChanges = db.Deleteable<Business_VoucherList>(x => x.VGUID == item).ExecuteCommand();
                     //删除副表信息
                     db.Deleteable<Business_VoucherDetail>(x => x.VoucherVGUID == item).ExecuteCommand();
+                    //删除中间表信息
+                    db.Deleteable<Business_AssetsGeneralLedger_Swap>(x => x.SubjectVGUID == item).ExecuteCommand(); 
                     //删除附件信息
                     db.Deleteable<Business_VoucherAttachmentList>(x => x.VoucherVGUID == item).ExecuteCommand();
                     resultModel.IsSuccess = saveChanges == 1;

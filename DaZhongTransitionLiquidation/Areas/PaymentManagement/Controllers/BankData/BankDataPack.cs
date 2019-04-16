@@ -40,15 +40,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
                                           rb.BankAccount as ReceiveBankAccount,
                                           rb.BankAccountName as ReceiveBankAccountName,
                                           convert(datetime,convert(varchar(10),f.TransactionDate,20)) as ArrivedTime,
-                                          f.TurnIn as ArrivedTotal,
-                                          f.PaymentUnitInstitution as ExpendBank,
-                                          f.PayeeAccount as ExpendBankAccount,
-                                          f.PaymentUnit as ExpendBankAccountName,
+                                          f.TurnOut as ArrivedTotal,
+                                          f.ReceivingUnitInstitution as ExpendBank,
+                                          f.ReceivableAccount as ExpendBankAccount,
+                                          f.ReceivingUnit as ExpendBankAccountName,
                                           m.Channel as Channel_Id,
                                           f.Batch as temp1
                                           from[dbo].[T_BankChannelMapping] m
-                                          left join [Business_BankFlowTemplate] f on m.BankAccount = f.PayeeAccount
-                                          left join [dbo].[T_ReceiveBank] rb on f.ReceivableAccount=rb.BankAccount
+                                          left join [Business_BankFlowTemplate] f on m.BankAccount = f.PayeeAccount or m.BankAccount = f.ReceivableAccount
+                                          left join [dbo].[T_ReceiveBank] rb on f.ReceivableAccount=rb.BankAccount or rb.BankAccount = f.PayeeAccount
                                           where f.VGUID is not null and f.TransactionDate>'{0}'", date.ObjToString("yyyy-MM-dd"));
             List<T_Bank> bankFlows = new List<T_Bank>();
             DbBusinessDataService dbBusinessDataService = new DbBusinessDataService();

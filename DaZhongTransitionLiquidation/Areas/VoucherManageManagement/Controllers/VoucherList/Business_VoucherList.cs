@@ -106,5 +106,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public string Status { get; set; }
         public string AttachmentDetail { get; set; }
         public DateTime? CreateTime { get; set; }
+        public string AccountModeName { get; set; }
+        public string Automatic { get; set; }
     }
 }

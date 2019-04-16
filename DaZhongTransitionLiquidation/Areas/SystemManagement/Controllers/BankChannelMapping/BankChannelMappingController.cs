@@ -40,7 +40,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.BankCh
                 jsonResult.Rows = db.Queryable<V_BankChannelMapping>()
                 .WhereIF(!string.IsNullOrEmpty(BankAccount), i => i.BankAccount.Contains(BankAccount))
                 .WhereIF(!string.IsNullOrEmpty(Channel), i => i.ChannelName.Contains(Channel))
-                .OrderBy(i => i.VCRTTIME, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy(i => i.BankAccountName, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -110,6 +110,23 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.BankCh
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult UpdateIsUnable(List<Guid> vguids,string isUnable)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                int saveChanges = 0;
+                foreach (var item in vguids)
+                {
+                    saveChanges = db.Updateable<T_BankChannelMapping>().UpdateColumns(it => new T_BankChannelMapping()
+                    {
+                        IsUnable = isUnable,
+                    }).Where(it => it.VGUID == item).ExecuteCommand();
+                }
+                resultModel.IsSuccess = saveChanges == 1;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
     }
 }

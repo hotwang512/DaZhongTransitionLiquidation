@@ -69,6 +69,8 @@ var menueHelp = {
                 break;
             case "VoucherManage": $("#homeModel").text("--会计核算中心")
                 break;
+            case "VoucherManageBank": $("#homeModel").text("--会计核算中心")
+                break;
             case "VoucherCheck": $("#homeModel").text("--会计核算中心")
                 break;
             case "QuerySubject": $("#homeModel").text("--会计核算中心")//*************

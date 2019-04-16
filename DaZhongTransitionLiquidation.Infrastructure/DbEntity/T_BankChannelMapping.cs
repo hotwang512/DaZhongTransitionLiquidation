@@ -25,5 +25,10 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public DateTime? VMDFTIME { get; set; }
 
         public string VMDFUSER { get; set; }
+        public string IsUnable { get; set; }
+        public string Borrow { get; set; }
+        public string Loan { get; set; }
+        public string CompanyCode { get; set; }
+        
     }
 }

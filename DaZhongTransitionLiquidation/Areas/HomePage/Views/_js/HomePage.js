@@ -20,7 +20,7 @@ var $page = function () {
             //会计核算中心
             $("#AccountingCenterManagemnet").click(function () {
                 switch (GetHrefPageId("3")) {
-                    case "301": CookieHelper.SaveCookie("VoucherList_VoucherManage"); window.location.href = "/VoucherManageManagement/VoucherList/Index?Status=1";
+                    case "301": CookieHelper.SaveCookie("VoucherList_VoucherManage"); window.location.href = "/VoucherManageManagement/VoucherList/Index?Status=1&&Type=0";
                         break;
                     //case "302": CookieHelper.SaveCookie("DepartmentalTrainingBudgetReport"); window.location.href = "/Report/DepartmentalTrainingBudgetReport/Index"; break;
                     //case "303": CookieHelper.SaveCookie("PersonalTrainingBudgetReport"); window.location.href = "/Report/PersonalTrainingBudgetReport/Index"; break;

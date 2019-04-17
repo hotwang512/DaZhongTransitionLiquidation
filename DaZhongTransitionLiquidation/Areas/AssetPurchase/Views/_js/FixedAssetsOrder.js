@@ -115,7 +115,7 @@ var $page = function () {
         //使用部门
         $.ajax({
             url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
-            data: {},
+            data: { "OrderCategory": 0},//固定资产
             type: "POST",
             dataType: "json",
             async: false,

@@ -318,7 +318,12 @@ function initComboBox() {
                 displayMember: "title", valueMember: "value",
                 width: 198, height: 33
             });
-
+            $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: $("#PaymentInformation").val() }, function (msg) {
+                $("#BankAccountName").val(msg.BankAccountName);
+                $("#BankAccount").val(msg.BankAccount);
+                $("#Bank").val(msg.Bank);
+                $("#BankNo").val(msg.BankNo);
+            });
         }
     });
 }
@@ -326,7 +331,7 @@ function initSelectPurchaseGoods() {
     //使用部门
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
-        data: {},
+        data: { "OrderCategory": 0 },
         type: "POST",
         dataType: "json",
         async: false,

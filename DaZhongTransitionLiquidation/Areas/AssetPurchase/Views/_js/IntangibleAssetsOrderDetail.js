@@ -5,6 +5,7 @@ var vehicleDefaultData;
 var $page = function () {
     this.init = function () {
         initSelect();
+        initSelectPurchaseGoods();
         initPayCompanyDropdown();
         initComboBox();
         addEvent();
@@ -28,7 +29,7 @@ var $page = function () {
             function () {
                 var PayCompanyItem = $("#PayCompanyDropdown").jqxDropDownList('getItemByValue', $("#PayCompanyDropdown").val());
                 var validateError = 0; //未通过验证的数量
-                if (!Validate($("#OrderType"))) {
+                if (!Validate($("#PurchaseGoods"))) {
                     validateError++;
                 }
                 if (validateError <= 0) {
@@ -36,7 +37,8 @@ var $page = function () {
                         url: "/AssetPurchase/IntangibleAssetsOrderDetail/SaveIntangibleAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
-                            "OrderType": $("#OrderType").val(),
+                            "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
+                            "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
                             "PaymentInformation": $("#hiddenPaymentInformation").val(),
                             "SumPayment": $("#SumPayment").val(),
@@ -142,8 +144,8 @@ var $page = function () {
 
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-            $("#OrderType").val(msg.OrderType);
-            //initComboBox();
+            $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
+            initComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#SumPayment").val(msg.SumPayment);
@@ -253,6 +255,21 @@ var $page = function () {
         return true;
     }
 };
+function initSelectPurchaseGoods() {
+    //使用部门
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
+        data: {"OrderCategory":1},
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
+            $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+            debugger;
+        }
+    });
+}
 function computeValue() {
     if ($("#PurchasePrices").val() != "" && $("#OrderQuantity").val() != "") {
         var value = $("#PurchasePrices").val() * $("#OrderQuantity").val();
@@ -281,6 +298,12 @@ function initSelect() {
                 source: dataAdapter, selectedIndex: 0,
                 displayMember: "title", valueMember: "value",
                 width: 198, height: 33
+            });
+            $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: $("#PaymentInformation").val() }, function (msg) {
+                $("#BankAccountName").val(msg.BankAccountName);
+                $("#BankAccount").val(msg.BankAccount);
+                $("#Bank").val(msg.Bank);
+                $("#BankNo").val(msg.BankNo);
             });
         }
     });

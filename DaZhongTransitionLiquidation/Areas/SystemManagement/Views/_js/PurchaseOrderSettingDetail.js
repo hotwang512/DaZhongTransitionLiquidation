@@ -42,6 +42,7 @@ var $page = function () {
                             "VGUID": $("#VGUID").val(),
                             "AssetCategoryMajor": $("#AssetCategoryMajor").val(),
                             "AssetCategoryMinor": $("#AssetCategoryMinor").val(),
+                            "OrderCategory": $("#OrderCategory").val(),
                             "AssetCategoryMinorVguid": $("#AssetCategoryMinorVguid").val(),
                             "PurchaseGoods": $("#PurchaseGoods").val()
                         },
@@ -89,6 +90,7 @@ var $page = function () {
             dataType: "json",
             success: function (msg) {
                 $("#PurchaseGoods").val(msg.PurchaseGoods);
+                $("#OrderCategory").val(msg.OrderCategory);
                 $("#AssetCategoryMinor").val(msg.AssetCategoryMinor);
                 $("#AssetCategoryMajor").val(msg.AssetCategoryMajor);
                 $("#AssetCategoryMinorVguid").val(msg.AssetCategoryMinorVguid);

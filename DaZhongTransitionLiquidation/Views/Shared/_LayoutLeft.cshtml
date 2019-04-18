@@ -926,7 +926,7 @@
                         </tr>
                     </table>
                 </div>
-            <div class="menue_body" style="display: none;">
+            <div class="menue_body" id="AssetPurchase" style="display: none;">
                 
                 <table style="cursor: pointer;" class="bodyTable">
                     <tr>
@@ -962,7 +962,7 @@
                 <table style="cursor: pointer; margin-left: -8px" class="bodyTable">
                     @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "采购分配" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="#">
+                        <tr class="menue_item" id="PurchaseAssign_AssetPurchase" pageurl="/AssetPurchase/PurchaseAssign/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">采购分配</td>
                             <td></td>
@@ -972,7 +972,7 @@
                 <table style="cursor: pointer; margin-left:-8px" class="bodyTable">
                     @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资金清算" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="#">
+                        <tr class="menue_item" id="PaymentHistory_AssetPurchase" pageurl="#">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">资金清算</td>
                             <td></td>
@@ -1094,7 +1094,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="menue_body" id="AssetPurchase" style="display: none;">
+            <div class="menue_body" id="AssetDisposal" style="display: none;">
                 <table>
                     @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "退车清册" && i.Reads == 1))
                     {

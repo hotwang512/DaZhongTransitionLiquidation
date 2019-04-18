@@ -192,6 +192,7 @@
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrderDetail.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrderDetail.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\PurchaseAssign.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
@@ -282,6 +283,7 @@
     <Content Include="Areas\AssetManagement\Views\AssetsRetirement\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\PurchaseOrderSetting\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\PurchaseOrderSettingDetail\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\PurchaseAssign\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2263,9 +2265,12 @@
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\PurchaseAssign\PurchaseAssignController.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderBelongTo.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderDetails.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_FixedAssetsOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_IntangibleAssetsOrder.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseAssign.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />

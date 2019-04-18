@@ -44,7 +44,6 @@ var $page = function () {
                     default: jqxNotification("You are not authorized!", null, "error");
                 }
             });
-            
 
             //驾驶员结算中心
             $("#DriverCenterManagement").click(function () {
@@ -58,7 +57,7 @@ var $page = function () {
             //大数据管理中心
             $("#BigDataManagement").click(function () {
                 switch (GetHrefPageId("7")) {
-                    case "701": CookieHelper.SaveCookie("BigData_AssetManagement"); window.location.href = "/AssetPurchase/FixedAssetsOrder/Index";
+                    case "701": CookieHelper.SaveCookie("BigData_AssetPurchase"); window.location.href = "/AssetPurchase/FixedAssetsOrder/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
                 }

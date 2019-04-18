@@ -67,10 +67,26 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     foreach (var vguid in vguids)
                     {
                         var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
-                        model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
-                        model.SubmitDate = DateTime.Now;
-                        model.SubmitUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                        if (model.SubmitStatus == FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt())
+                        {
+                            model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
+                            model.SubmitDate = DateTime.Now;
+                            model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                            db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                            //提交完后写入采购分配表
+                            var purchaseAssignmodel =  new Business_PurchaseAssign();
+                            purchaseAssignmodel.VGUID = Guid.NewGuid();
+                            purchaseAssignmodel.CreateDate = DateTime.Now;
+                            purchaseAssignmodel.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            purchaseAssignmodel.FixedAssetsOrderVguid = model.VGUID;
+                            purchaseAssignmodel.PurchaseGoodsVguid = model.PurchaseGoodsVguid;
+                            purchaseAssignmodel.PurchaseGoods = model.PurchaseGoods;
+                            purchaseAssignmodel.OrderQuantity = model.OrderQuantity;
+                            purchaseAssignmodel.PurchasePrices = model.PurchasePrices;
+                            purchaseAssignmodel.ContractAmount = model.ContractAmount;
+                            purchaseAssignmodel.AssetDescription = model.AssetDescription;
+                            db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
+                        }
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

@@ -5,6 +5,7 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySe
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
@@ -357,8 +358,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
+            List<Business_AssetsGeneralLedger_Swap> assetList = new List<Business_AssetsGeneralLedger_Swap>();//凭证中间表List
             var x = -1;
             var guid = Guid.Empty;
+            #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
                 //主信息
@@ -427,14 +430,19 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetail.VoucherVGUID = guid;
                 VoucherList.Add(voucher);
                 BVDetailList.Add(BVDetail);
+                GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 0);//将借贷数据同步中间表
                 //GetOtherSubject(BVDetailList, newBankFlowList, guid, item);//通过银行渠道找流水
-                GetOtherSubject2(BVDetailList, guid, item);//通过流水找银行渠道
+                GetOtherSubject2(BVDetailList, guid, item, assetList, voucher);//通过流水找银行渠道 
             }
-           
+            #endregion
             if (VoucherList.Count > 0 && BVDetailList.Count > 0)
             {
                 db.Insertable(VoucherList).ExecuteCommand();
                 db.Insertable(BVDetailList).ExecuteCommand();
+            }
+            if (assetList.Count > 0)
+            {
+                db.Insertable(assetList).ExecuteCommand();
             }
         }
         public static void GetOtherSubject(List<Business_VoucherDetail> BVDetailList, List<Business_BankFlowTemplate> newBankFlowList, Guid guid, Business_BankFlowTemplate item)
@@ -487,7 +495,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 }
             }
         }
-        private static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item)
+        public static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher)
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
@@ -524,7 +532,42 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetail.VGUID = Guid.NewGuid();
                 BVDetail.VoucherVGUID = guid;
                 BVDetailList.Add(BVDetail);
+                GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 1);//将借贷数据同步中间表
             }
+        }
+        public static void GetAssetsGeneralLedger(Business_VoucherDetail BVDetail, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher, Guid guid, int i)
+        {
+            //凭证中间表
+            Business_AssetsGeneralLedger_Swap asset = new Business_AssetsGeneralLedger_Swap();
+            asset.CREATE_DATE = DateTime.Now;
+            asset.SubjectVGUID = guid;
+            asset.LEDGER_NAME = voucher.AccountModeName;
+            asset.JE_BATCH_NAME = voucher.BatchName;
+            asset.JE_BATCH_DESCRIPTION = "";
+            asset.JE_HEADER_NAME = voucher.VoucherNo;
+            asset.JE_HEADER_DESCRIPTION = "";
+            asset.JE_SOURCE_NAME = "财务共享平台";
+            asset.JE_CATEGORY_NAME = voucher.VoucherType;
+            asset.ACCOUNTING_DATE = voucher.VoucherDate;
+            asset.CURRENCY_CODE = "人民币";
+            asset.CURRENCY_CONVERSION_TYPE = "用户";
+            asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
+            asset.CURRENCY_CONVERSION_RATE = 1;
+            asset.STATUS = "1";
+            asset.VGUID = Guid.NewGuid();
+            asset.JE_LINE_NUMBER = i;
+            asset.SEGMENT1 = BVDetail.CompanySection;
+            asset.SEGMENT2 = BVDetail.SubjectSection;
+            asset.SEGMENT3 = BVDetail.AccountSection;
+            asset.SEGMENT4 = BVDetail.CostCenterSection;
+            asset.SEGMENT5 = BVDetail.SpareOneSection;
+            asset.SEGMENT6 = BVDetail.SpareTwoSection;
+            asset.SEGMENT7 = BVDetail.IntercourseSection;
+            asset.ENTERED_CR = BVDetail.LoanMoney.TryToString();
+            asset.ENTERED_DR = BVDetail.BorrowMoney.TryToString();
+            asset.ACCOUNTED_DR = BVDetail.BorrowMoneyCount.TryToString();
+            asset.ACCOUNTED_CR = BVDetail.LoanMoneyCount.TryToString();
+            assetList.Add(asset);
         }
         public static string GetVoucherName()
         {

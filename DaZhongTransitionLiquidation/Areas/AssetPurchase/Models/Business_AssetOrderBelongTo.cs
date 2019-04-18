@@ -18,6 +18,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string CreateUser { get; set; }
         public string ChangeUser { get; set; }
     }
+    public class Business_AssetOrderBelongToShow
+    {
+        public Guid AssetsOrderVguid { get; set; }
+        public string BelongToCompany { get; set; }
+        public int? AssetNum { get; set; }
+        public decimal? PurchasePrices { get; set; }
+        public decimal? PurchaseCountPrices
+        {
+            get { return AssetNum * PurchasePrices; }
+        }
+
+    }
     public class BelongToCompanyModel
     {
         public string BelongToCompany { get; set; }

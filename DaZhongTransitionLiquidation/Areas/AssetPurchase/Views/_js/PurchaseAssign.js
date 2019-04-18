@@ -21,12 +21,26 @@ var $page = function () {
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
-
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#PurchaseGoods").val("");
             $("#SubmitStatus").val("");
         });
+        $("#OrderBelongToDialog_OKBtn").on("click",
+            function () {
+                $("#OrderBelongToDialog").modal("hide");
+            }
+        );
+        $("#OrderDetailsDialog_OKBtn").on("click",
+            function () {
+                $("#OrderDetailsDialog").modal("hide");
+            }
+        );
+        $("#OrderDetailsDialog_CancelBtn").on("click",
+            function () {
+                $("#OrderDetailsDialog").modal("hide");
+            }
+        );
     }; //addEvent end
   
 
@@ -89,7 +103,10 @@ var $page = function () {
     }
     function cellsSettingRenderer(row, column, value, rowData) {
         var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
-        return '<div style="margin: 8px; margin-top:6px;"><a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a></div>';
+        return '<div style="margin: 8px; margin-top:6px;">' +
+            '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>' +
+            '&nbsp<a style="cursor:pointer"  onclick="ViewBelongTo(\'' + FixedAssetsOrderVguid + '\')">查看</a>' +
+            '</div>';
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value == 1) {
@@ -117,7 +134,7 @@ function Setting(vguid) {
     $("#AssetsOrderVguid").val(vguid);
     var source =
     {
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
+        url: "/AssetPurchase/PurchaseAssign/GetAssetOrderDetails",
         data: { AssetType: "vehicle", AssetsOrderVguid: vguid },
         datatype: "json",
         datafields:
@@ -125,8 +142,6 @@ function Setting(vguid) {
             { name: 'VGUID', type: 'string' },
             { name: 'AssetsOrderVguid', type: 'string' },
             { name: 'AssetManagementCompany', type: 'string' },
-            { name: 'ApprovalFormFileName', type: 'string' },
-            { name: 'ApprovalFormFilePath', type: 'string' },
             { name: 'AssetNum', type: 'number' }
         ]
     };
@@ -146,11 +161,51 @@ function Setting(vguid) {
             {
                 text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center'
             },
-            { text: '资产归属配置', datafield: 'ApprovalFormFilePath', columntype: 'textbox', width: 150, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
+            { text: '资产归属配置',columntype: 'textbox', width: 150, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
         ]
     });
     $("#OrderDetailsDialog").modal("show");
 }
+
+function ViewBelongTo(vguid) {
+    var source =
+    {
+        url: "/AssetPurchase/PurchaseAssign/GetOrderBelong",
+        data: { AssetsOrderVguid: vguid },
+        datatype: "json",
+        datafields:
+        [
+            { name: 'VGUID', type: 'string' },
+            { name: 'AssetsOrderVguid', type: 'string' },
+            { name: 'BelongToCompany', type: 'string' },
+            { name: 'AssetNum', type: 'number' },
+            { name: 'PurchasePrices', type: 'float' },
+            { name: 'PurchaseCountPrices', type: 'float' }
+        ]
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#gridOrderBelong").jqxGrid(
+        {
+            width: "470",
+            autoheight: true,
+            source: dataAdapter,
+            statusbarheight: 25,
+            enabletooltips: true,
+            selectionmode: 'singlerow',
+            columns: [
+                { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: '资产归属公司', datafield: 'BelongToCompany', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
+                {
+                    text: '数量', datafield: 'AssetNum', width: 100, align: 'center', cellsalign: 'center'
+                },
+                { text: '单价', datafield: 'PurchasePrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '总价', datafield: 'PurchaseCountPrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false }
+            ]
+        });
+    $("#OrderBelongToDialog").modal("show");
+}
+
 function cellsrenderer(row, column, value, rowData) {
     var vguid = $('#grid').jqxGrid('getrowdata', row).VGUID;
     return '<div style="margin: 58px; margin-top:6px;"><a style="cursor:pointer"  onclick="settingBelongTo(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';

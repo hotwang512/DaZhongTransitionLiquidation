@@ -41,7 +41,34 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult GetAssetOrderDetails(string AssetType, Guid AssetsOrderVguid)
+        {
+            var listFixedAssetsOrder = new List<Business_AssetOrderDetails>();
+            DbBusinessDataService.Command(db =>
+            {
+                //主信息
+                if (db.Queryable<Business_AssetOrderDetails>().Any(x => x.AssetsOrderVguid == AssetsOrderVguid))
+                {
+                    listFixedAssetsOrder = db.Queryable<Business_AssetOrderDetails>().Where(x => x.AssetsOrderVguid == AssetsOrderVguid).ToList();
+                }
+            });
+            return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult GetOrderBelong(Guid AssetsOrderVguid)
+        {
+            var listFixedAssetsOrder = new List<Business_AssetOrderBelongToShow>();
+            DbBusinessDataService.Command(db =>
+            {
+                listFixedAssetsOrder = db.SqlQueryable<Business_AssetOrderBelongToShow>(
+                        @"SELECT belongto.*,assetsorder.PurchasePrices FROM (
+                        SELECT SUM(AssetNum) AS AssetNum,BelongToCompany,AssetsOrderVguid FROM Business_AssetOrderBelongTo
+                        WHERE AssetsOrderVguid =  '" + AssetsOrderVguid + @"'
+                         GROUP BY BelongToCompany,AssetsOrderVguid) belongto LEFT JOIN dbo.Business_FixedAssetsOrder assetsorder ON
+                         belongto.AssetsOrderVguid = assetsorder.VGUID")
+                    .ToList();
+            });
+            return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetPurchaseAssign(Business_AssetOrderBelongTo searchParams, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_AssetOrderBelongTo>();

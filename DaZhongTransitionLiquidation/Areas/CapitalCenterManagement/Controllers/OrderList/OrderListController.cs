@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -51,8 +52,61 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                 }
                 jsonResult.TotalRows = pageCount;
+
+                //var data = db.Queryable<Business_BusinessTypeSet>().Where(x => x.ParentVGUID != null).OrderBy("Code asc").ToList();
+                //var czGuid = "c86ca480-74b7-415c-a8a4-741955627727";
+                //var zlGuid = "c86ca480-74b7-415c-a8a4-741955627728";
+                //for (int i = 0; i < 2; i++)
+                //{
+                //    if (i == 0)
+                //    {
+                //        var projectCode = "cz";
+                //        var projectName = "出租";
+                //        var isAny = data.Any(x => x.ParentVGUID == czGuid);
+                //        if (isAny)
+                //        {
+                //            var datas = data.Where(x => x.ParentVGUID == czGuid).ToList();
+                //            foreach (var item in datas)
+                //            {
+                //                projectCode += "|" + item.Code;
+                //                projectName += "|" + item.BusinessName;
+                //                GetNextItem(db, item, data, projectCode, projectName);
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        var isAny = data.Any(x => x.ParentVGUID == zlGuid);
+                //        if (isAny)
+                //        {
+                //            var datas = data.Where(x => x.ParentVGUID == zlGuid).ToList();
+                //            foreach (var item in datas)
+                //            {
+                //                //GetNextItem(db, item, item.VGUID.ToString());
+                //            }
+                //        }
+                //    }
+                //}  
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        private void GetNextItem(SqlSugarClient db, Business_BusinessTypeSet item,List<Business_BusinessTypeSet> data, string projectCode,string projectName)
+        {
+            var isAny = data.Where(x => x.ParentVGUID == item.VGUID.ToString()).ToList();
+            if (isAny.Count > 0)
+            {
+                //var datas = data.Where(x => x.ParentVGUID == zlGuid).ToList();
+                foreach (var it in isAny)
+                {
+                    projectCode += "|" + it.Code;
+                    projectName += "|" + it.BusinessName;
+                    GetNextItem(db, it, data, projectCode, projectName);
+                }
+            }
+            else
+            {
+
+            }
         }
         public JsonResult DeleteOrderListInfo(List<Guid> vguids)//Guid[] vguids
         {

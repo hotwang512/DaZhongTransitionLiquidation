@@ -16,5 +16,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public string Loan { get; set; }
         public string KeyData { get; set; }
         public string OrderVGUID { get; set; }
+        public string AccountModeCode { get; set; }
+        public string AccountModeName { get; set; }
+        public string CompanyCode { get; set; }
+        public string CompanyName { get; set; }
     }
 }

@@ -266,7 +266,7 @@ var $page = function () {
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
                     { text: '业务编码', datafield: 'BusinessSubItem1', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '业务项目', datafield: 'BusinessProject', width: 250, align: 'center', cellsAlign: 'center' },
-                    { text: '收款人/部门/单位', datafield: 'PaymentCompany', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '供应商类别', datafield: 'PaymentCompany', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '订单日期', datafield: 'FillingDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
                     { text: '支付方式', datafield: 'PaymentMethod', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '金额', datafield: 'Money', align: 'center', width: 150, cellsAlign: 'center' },

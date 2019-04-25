@@ -107,8 +107,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     {
                         db.Insertable(module).ExecuteCommand();
                     }
-                    //列出组合插入业务配置表
-                    //InsertOrderList();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

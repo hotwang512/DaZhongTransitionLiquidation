@@ -29,17 +29,12 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        //initTable();
+        getCompanyCode();
         var guid = $.request.queryString().VGUID;
         initOrganization();
-        getUserCompanySet(guid);
-        //var id0 = "#CompanyCode";
-        //uiEngineHelper.bindSelect(id0, CompanyCode, "Code", "Descrption");
-
-        //uiEngineHelper.bindSelect('#CollectionCompany', collectionCompany, "VGUID", "CompanyOrPerson");
-        //$("#CollectionCompany").prepend("<option value=\"\" selected='true'>请选择</>");
-        
+        //getUserCompanySet(guid);
         $("#VGUID").val(guid);
+        initSettingTable();
         var myDate = new Date();
         var date = myDate.toLocaleDateString();     //获取当前日期
         $("#SubmitDate").val($.action.replaceAll(date, '/', '-'));
@@ -71,20 +66,20 @@ var $page = function () {
         });
         //保存
         $("#btnSave").on("click", function () {
-            var params = [];
-            for (var i = 0; i < $(".permissions").length; i++) {
-                params.push({
-                    "Isable": $(".permission")[i].checked,
-                    "PayBank": $(".PayBank").eq(i).text(),
-                    "PayAccount": $(".PayAccount").eq(i).text(),
-                    "PayBankAccountName": $(".PayBankAccountName").eq(i).text(),
-                    "Borrow": $(".Borrow").eq(i).text(),
-                    "Loan": $(".Loan").eq(i).text(),
-                    "KeyData": $(".KeyData")[i].value,
-                    "OrderVGUID": $("#VGUID").val()
-                });
-            }
-            var orderDetailValue = JSON.stringify(params);
+            //var params = [];
+            //for (var i = 0; i < $(".permissions").length; i++) {
+            //    params.push({
+            //        "Isable": $(".permission")[i].checked,
+            //        "PayBank": $(".PayBank").eq(i).text(),
+            //        "PayAccount": $(".PayAccount").eq(i).text(),
+            //        "PayBankAccountName": $(".PayBankAccountName").eq(i).text(),
+            //        "Borrow": $(".Borrow").eq(i).text(),
+            //        "Loan": $(".Loan").eq(i).text(),
+            //        "KeyData": $(".KeyData")[i].value,
+            //        "OrderVGUID": $("#VGUID").val()
+            //    });
+            //}
+            //var orderDetailValue = JSON.stringify(params);
             $.ajax({
                 url: "/CapitalCenterManagement/OrderListDetail/SaveOrderListDetail",
                 //data: { vguids: selection },
@@ -118,7 +113,6 @@ var $page = function () {
                     //"PayBankAccountName": $("#PayBankAccountName").val(),
                     //"PayBank": $("#PayBank").val(),
                     "CompanyCode": $("#LoginCompanyCode").val(),
-                    "OrderDetailValue":orderDetailValue
                 },
                 type: "post",
                 success: function (msg) {
@@ -136,12 +130,12 @@ var $page = function () {
             });
         })
         //新增按钮
-        $("#btnAdd").on("click", function () {
-            $("#AddBusinessType").modal("show");
-            $("#BusinessTypeName").val("");
-            $("#BusinessVGUID").val("");
-            initBusinessTypeName();
-        })
+        //$("#btnAdd").on("click", function () {
+        //    $("#AddBusinessType").modal("show");
+        //    $("#BusinessTypeName").val("");
+        //    $("#BusinessVGUID").val("");
+        //    initBusinessTypeName();
+        //})
         $('#CollectionCompany').on('select', function (event) {
             var args = event.args;
             var item = args.item;
@@ -157,86 +151,110 @@ var $page = function () {
         });
         //编辑账套信息
         var vguids = [];
-        $("#btnEditInfo").on("click", function () {
-            vguids = [];
-            var per = $(".permissions");
-            var j = 0;
-            for (var i = 0; i < per.length; i++) {
-                var ischeck = per[i].checked;
-                if (ischeck) {
-                    var id = per[i].getAttribute('pageid');
-                    vguids.push(id);
-                    j = i;
-                }
-            }
-            if (vguids.length != 1) {
-                jqxNotification("请选择一条数据！", null, "error");
-            } else {
-                var companyCode = per[j].getAttribute('comvalue');
-                var accountModeCode = per[j].getAttribute('accvalue');
-                //加载借贷配置列表
-                initTable(companyCode, accountModeCode);
-                //绑定选中数据
-                setPayBankInfo(vguids, companyCode, accountModeCode);
-                selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
-                selector.$AddNewBankDataDialog().modal("show");
-            }
-            
-        })
+        //$("#btnEditInfo").on("click", function () {
+        //    vguids = [];
+        //    var per = $(".permissions");
+        //    var j = 0;
+        //    for (var i = 0; i < per.length; i++) {
+        //        var ischeck = per[i].checked;
+        //        if (ischeck) {
+        //            var id = per[i].getAttribute('pageid');
+        //            vguids.push(id);
+        //            j = i;
+        //        }
+        //    }
+        //    if (vguids.length != 1) {
+        //        jqxNotification("请选择一条数据！", null, "error");
+        //    } else {
+        //        var companyCode = per[j].getAttribute('comvalue');
+        //        var accountModeCode = per[j].getAttribute('accvalue');
+        //        //加载借贷配置列表
+        //        initTable(companyCode, accountModeCode);
+        //        //绑定选中数据
+        //        setPayBankInfo(vguids, companyCode, accountModeCode);
+        //        selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
+        //        selector.$AddNewBankDataDialog().modal("show");
+        //    } 
+        //})
         //弹出框中的取消按钮
+        $("#btnAdd").on("click", function () {
+            selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
+            selector.$AddNewBankDataDialog().modal("show");
+        });
         selector.$AddNewBankData_CancelBtn().on("click", function () {
             selector.$AddNewBankDataDialog().modal("hide");
         });
         //确认
         $("#AddNewBankData_OKButton").on("click", function () {
-            for (var i = 0; i < $(".Borrow").length; i++) {
-                if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
-                    //var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
-                    //var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
-                    var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
-                    $(".Borrow").eq(i).text(val);
-                    //var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
-                    //var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
-                    var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
-                    $(".Loan").eq(i).text(val2);
-                    var val3 = $("#PayBank").val();
-                    $(".PayBank").eq(i).text(val3)
-                    var val4 = $("#PayAccount").val();
-                    $(".PayAccount").eq(i).text(val4)
-                    var val5 = $("#PayBankAccountName").val();
-                    $(".PayBankAccountName").eq(i).text(val5)
+            //for (var i = 0; i < $(".Borrow").length; i++) {
+            //    if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
+            //        //var len = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.length;
+            //        //var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText.substring(0, len - 1);
+            //        var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
+            //        $(".Borrow").eq(i).text(val);
+            //        //var len2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.length;
+            //        //var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText.substring(0, len2 - 1);
+            //        var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
+            //        $(".Loan").eq(i).text(val2);
+            //        var val3 = $("#PayBank").val();
+            //        $(".PayBank").eq(i).text(val3)
+            //        var val4 = $("#PayAccount").val();
+            //        $(".PayAccount").eq(i).text(val4)
+            //        var val5 = $("#PayBankAccountName").val();
+            //        $(".PayBankAccountName").eq(i).text(val5)
+            //    }
+            //}
+            var val = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
+            var val2 = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
+            $.ajax({
+                url: "/CapitalCenterManagement/OrderListDetail/SaveUserCompanySet",
+                //data: { vguids: selection },
+                data: {
+                    "AccountModeCode": $("#AccountModeCode").val(),
+                    "CompanyCode": $("#CompanyCode").val(),
+                    "PayBank": $("#PayBank").val(),
+                    "PayAccount": $("#PayAccount").val(),
+                    "PayBankAccountName": $("#PayBankAccountName").val(),
+                    "Borrow": val,
+                    "Loan": val2,
+                    "OrderVGUID": $("#VGUID").val()
+                },
+                traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("该公司已存在配置！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("保存成功！", null, "success");
+                            $("#jqxSettingTable").jqxGrid('updateBoundData');
+                            break;
+                    }
                 }
-            }
+            });
             selector.$AddNewBankDataDialog().modal("hide");
+        });
+
+        //编辑启用
+        $("#jqxSettingTable").on('cellendedit', function (event) {
+            var args = event.args;
+            var value = args.value;
+            var oldvalue = args.oldvalue;
+            var rowData = args.row;
+            $.ajax({
+                url: "/CapitalCenterManagement/OrderListDetail/UpdataIsable",
+                //data: { vguids: selection },
+                data: { vguids: rowData.VGUID, ischeck: args.value},
+                type: "post",
+                success: function (msg) {
+                    $("#jqxSettingTable").jqxGrid('updateBoundData');
+                }
+            });
         });
     }; //addEvent end
 
-    //付款银行信息（默认）
-    function getPayBankInfo(companyCode, accountModeCode, val3, val4, val5) {
-        var url = "/CapitalCenterManagement/OrderListDetail/GetPayBankInfo";
-        $.ajax({
-            url: url,
-            async: false,
-            data: { companyCode: companyCode, accountModeCode: accountModeCode },
-            type: "post",
-            success: function (result) {
-                uiEngineHelper.bindSelect("#PayBank", result, "BankName", "BankName");
-                if (result.length == 0) {
-                    $("#PayAccount").val("");
-                    $("#PayBankAccountName").val("");
-                } else {
-                    if (val3 != "") {
-                        $("#PayBank").val(val3);
-                        $("#PayAccount").val(val4);
-                        $("#PayBankAccountName").val(val5);
-                    } else {
-                        $("#PayAccount").val(result[0].BankAccount);
-                        $("#PayBankAccountName").val(result[0].BankAccountName);
-                    }
-                }
-            }
-        });
-    }
+   
     //绑定选中数据
     function setPayBankInfo(vguids,companyCode, accountModeCode) {
         for (var i = 0; i < $(".Borrow").length; i++) {
@@ -790,5 +808,103 @@ function getUserCompanySet(guid) {
             var heigth = $(".KeyData").length * 50 + 120;
             document.getElementById('divList').style.height = "" + heigth + "px";
         }
+    });
+}
+
+function getCompanyCode() {
+    var accountMode = $("#AccountModeCode").val();
+    $.ajax({
+        url: "/HomePage/CompanyHomePage/GetCompanyCode",
+        data: { accountMode: accountMode },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "CompanyName");
+            //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+    companyCode = $("#CompanyCode").val();
+    initTable(companyCode, accountMode);
+    getPayBankInfo(companyCode, accountMode, '', '', '');
+}
+
+//付款银行信息（默认）
+function getPayBankInfo(companyCode, accountModeCode, val3, val4, val5) {
+    var url = "/CapitalCenterManagement/OrderListDetail/GetPayBankInfo";
+    $.ajax({
+        url: url,
+        async: false,
+        data: { companyCode: companyCode, accountModeCode: accountModeCode },
+        type: "post",
+        success: function (result) {
+            uiEngineHelper.bindSelect("#PayBank", result, "BankName", "BankName");
+            if (result.length == 0) {
+                $("#PayAccount").val("");
+                $("#PayBankAccountName").val("");
+            } else {
+                if (val3 != "") {
+                    $("#PayBank").val(val3);
+                    $("#PayAccount").val(val4);
+                    $("#PayBankAccountName").val(val5);
+                } else {
+                    $("#PayAccount").val(result[0].BankAccount);
+                    $("#PayBankAccountName").val(result[0].BankAccountName);
+                }
+            }
+        }
+    });
+}
+
+function initSettingTable() {
+    var source = {
+        datafields:
+        [
+            { name: 'VGUID', type: 'string' },
+            { name: 'OrderVGUID', type: 'string' },
+            { name: 'AccountModeName', type: 'string' },
+            { name: 'CompanyName', type: 'string' },
+            { name: 'Isable', type: 'bool' },
+            { name: 'PayBank', type: 'string' },
+            { name: 'PayAccount', type: 'string' },
+            { name: 'PayBankAccountName', type: 'string' },
+            { name: 'Borrow', type: 'string' },
+            { name: 'Loan', type: 'string' },
+            { name: 'AccountModeCode', type: 'string' },
+            { name: 'CompanyCode', type: 'string' },
+        ],
+        datatype: "json",
+        id: "",
+        data: { "OrderVGUID": $("#VGUID").val() },
+        url: "/CapitalCenterManagement/OrderListDetail/GetSettingTable"    //获取数据源的路径
+    };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    $("#jqxSettingTable").jqxGrid({
+        pageable: false,
+        width: "100%",
+        autoheight: false,
+        height: 300,
+        pageSize: 15,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        //pagermode: 'checkbox',
+        columnsHeight: 30,
+        editable: true,
+        columns: [
+            { text: '账套', datafield: 'AccountModeName', width: 180, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '公司', datafield: 'CompanyName', width: 300, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '启用', datafield: 'Isable', width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '开户行', datafield: 'PayBank', width: 180, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '账号', datafield: 'PayAccount', width: 180, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '户名', datafield: 'PayBankAccountName', width: 300, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '借', datafield: 'Borrow', align: 'center', width: 200, cellsAlign: 'center', editable: false },
+            { text: '贷', datafield: 'Loan', align: 'center', cellsAlign: 'center', editable: false },
+            { text: '', datafield: 'AccountModeCode', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '', datafield: 'CompanyCode', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '', datafield: 'VGUID', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '', datafield: 'OrderVGUID', align: 'center', cellsAlign: 'center', hidden: true },
+        ]
     });
 }

@@ -8,6 +8,7 @@ var selector = {
     $AddNewBankData_OKButton: function () { return $("#AddNewBankData_OKButton") },
     $AddNewBankData_CancelBtn: function () { return $("#AddNewBankData_CancelBtn") },
     $pushTree: function () { return $("#pushTree") },
+    $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
 var isEdit = false;
 var vguid = "";
@@ -149,7 +150,7 @@ var $page = function () {
                 //companyChange(value);
             }
         });
-        //编辑账套信息
+        //新增账套信息
         var vguids = [];
         //$("#btnEditInfo").on("click", function () {
         //    vguids = [];
@@ -217,7 +218,8 @@ var $page = function () {
                     "PayBankAccountName": $("#PayBankAccountName").val(),
                     "Borrow": val,
                     "Loan": val2,
-                    "OrderVGUID": $("#VGUID").val()
+                    "OrderVGUID": $("#VGUID").val(),
+                    "VGUID": $("#orderVguid").val()
                 },
                 traditional: true,
                 type: "post",
@@ -886,14 +888,14 @@ function initSettingTable() {
         height: 300,
         pageSize: 15,
         //serverProcessing: true,
-        pagerButtonsCount: 10,
+        //pagerButtonsCount: 10,
         source: typeAdapter,
         theme: "office",
         //pagermode: 'checkbox',
         columnsHeight: 30,
         editable: true,
         columns: [
-            { text: '账套', datafield: 'AccountModeName', width: 180, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '账套', datafield: 'AccountModeName', width: 180, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc},
             { text: '公司', datafield: 'CompanyName', width: 300, align: 'center', cellsAlign: 'center', editable: false },
             { text: '启用', datafield: 'Isable', width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
             { text: '开户行', datafield: 'PayBank', width: 180, align: 'center', cellsAlign: 'center', editable: false },
@@ -907,4 +909,58 @@ function initSettingTable() {
             { text: '', datafield: 'OrderVGUID', align: 'center', cellsAlign: 'center', hidden: true },
         ]
     });
+    $("#jqxSettingTable").on("rowclick", function (event) {
+        // event arguments.
+        var args = event.args;
+        // row's bound index.
+        var rowdata = args.row.bounddata;
+        if (rowdata.level != 0) {
+            editBank(rowdata.VGUID, rowdata.AccountModeCode, rowdata.CompanyCode, rowdata.PayBank, rowdata.PayAccount,
+                rowdata.PayBankAccountName,rowdata.Borrow, rowdata.Loan);
+        }
+    });
+}
+
+function editBankFunc(row, columnfield, value, defaulthtml, columnproperties) {
+    var container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" +value + "</div>";
+    return container;
+}
+
+function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBankAccountName, borrow, loan) {
+    $("#PayBank").val("");
+    $("#PayAccount").val("");
+    $("#PayBankAccountName").val("");
+    $("#AccountModeCode").val(accountModeCode);
+    $("#CompanyCode").val(companyCode);
+    $("#orderVguid").val(guid)
+    isEdit = true;
+    //vguid = guid;
+    if (payBank == null || payBank == "null") {
+        payBank = "";
+    }
+    if (payAccount == null || payAccount == "null") {
+        payAccount = "";
+    }
+    if (payBankAccountName == null || payBankAccountName == "null") {
+        payBankAccountName = "";
+    }
+    if (borrow == null || borrow == "null") {
+        borrow = "";
+    }
+    if (loan == null || loan == "null") {
+        loan = "";
+    }
+    $("#PayBank").val(payBank);
+    $("#PayAccount").val(payAccount);
+    $("#PayBankAccountName").val(payBankAccountName);
+    $("#myModalLabel_title").text("编辑数据");
+    //$("#AddNewBankDataDialog table tr").eq(1).hide();
+    $(".msg").remove();
+    initTable(companyCode, accountModeCode);
+    var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + borrow + '</div>';
+    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
+    var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + loan + '</div>';
+    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
+    selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
+    selector.$AddNewBankDataDialog().modal("show");
 }

@@ -292,14 +292,14 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
         }
         public JsonResult SaveUserCompanySet(Business_UserCompanySetDetail sevenSection)
         {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "1" };
             DbBusinessDataService.Command(db =>
             {
                 var result = db.Ado.UseTran(() =>
                 {
                     sevenSection.AccountModeName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == sevenSection.AccountModeCode).Descrption;
                     sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == sevenSection.AccountModeCode && x.Code == sevenSection.CompanyCode).Descrption;
-                    var isAny = db.Queryable<Business_UserCompanySetDetail>().Any(x => x.OrderVGUID == sevenSection.OrderVGUID && x.CompanyName == sevenSection.CompanyName);
+                    var isAny = db.Queryable<Business_UserCompanySetDetail>().Any(x => x.OrderVGUID == sevenSection.OrderVGUID && x.CompanyName == sevenSection.CompanyName && x.VGUID != sevenSection.VGUID);
                     if (isAny)
                     {
                         resultModel.Status = "0";
@@ -312,7 +312,7 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                     }
                     else
                     {
-                        db.Updateable(sevenSection).ExecuteCommand();
+                        db.Updateable(sevenSection).IgnoreColumns(it => new { it.Isable }).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

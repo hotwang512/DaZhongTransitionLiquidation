@@ -68,15 +68,15 @@
     <div class="body_mk" style="height: 110px;">
         <table id="BankInfo" style="width:90%;margin-top: 13px;">
             <tr style="height:50px">
-                <td style="text-align: right;">收款开户行：</td>
+                <td style="text-align: right;">对方开户行：</td>
                 <td style="text-align: left;"><input id="CollectionBank" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-                <td style="text-align: right;">收款账号：</td>
+                <td style="text-align: right;">对方账号：</td>
                 <td style="text-align: left;"><input id="CollectionAccount" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-                <td style="text-align: right;">收款户名：</td>
+                <td style="text-align: right;">对方户名：</td>
                 <td style="text-align: left;"><input id="CollectionBankAccountName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align: right;">付款开户行：</td>
+                <td style="text-align: right;">我方开户行：</td>
                 <td style="text-align: left;">
                     <select id="PayBank" class="input_text form-control" style="width: 200px" onchange="payBankChange()">
                         @{
@@ -87,9 +87,9 @@
                         }
                     </select>
                 </td>
-                <td style="text-align: right;">付款账号：</td>
+                <td style="text-align: right;">我方账号：</td>
                 <td style="text-align: left;"><input id="PayAccount" type="text" value="@ViewBag.PayAccount[0].BankAccount" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
-                <td style="text-align: right;">付款户名：</td>
+                <td style="text-align: right;">我方户名：</td>
                 <td style="text-align: left;"><input id="PayBankAccountName" type="text" value="@ViewBag.PayAccount[0].BankAccountName" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
             </tr>
         </table>

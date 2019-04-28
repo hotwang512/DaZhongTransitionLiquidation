@@ -29,6 +29,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             ViewBag.PayAccount = GetCompanyBankInfo();
             ViewBag.OrderBaseType = GetOrderBaseType();
             ViewBag.UserCompanySet = GetUserCompanySets();
+            ViewBag.AccountMode = GetAccountMode();
             return View();
         }
         public JsonResult SaveOrderListDetail(Business_OrderList sevenSection)
@@ -51,14 +52,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         db.Updateable(sevenSection).IgnoreColumns(it => new { it.OrderDetailValue}).ExecuteCommand();
                     }
                     //账套公司各项配置
-                    var gjson = sevenSection.OrderDetailValue.JsonToModel<List<Business_UserCompanySetDetail>>();
-                    db.Deleteable<Business_UserCompanySetDetail>(x => x.OrderVGUID == sevenSection.VGUID.TryToString()).ExecuteCommand();
-                    foreach (var item in gjson)
-                    {
-                        item.OrderVGUID = sevenSection.VGUID.TryToString();
-                        item.VGUID = Guid.NewGuid();
-                    }
-                    db.Insertable<Business_UserCompanySetDetail>(gjson).ExecuteCommand();
+                    //var gjson = sevenSection.OrderDetailValue.JsonToModel<List<Business_UserCompanySetDetail>>();
+                    //db.Deleteable<Business_UserCompanySetDetail>(x => x.OrderVGUID == sevenSection.VGUID.TryToString()).ExecuteCommand();
+                    //foreach (var item in gjson)
+                    //{
+                    //    item.OrderVGUID = sevenSection.VGUID.TryToString();
+                    //    item.VGUID = Guid.NewGuid();
+                    //}
+                    //db.Insertable<Business_UserCompanySetDetail>(gjson).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -279,6 +280,65 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                 //jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetSettingTable(string OrderVGUID)
+        {
+            var result = new List<Business_UserCompanySetDetail>();
+            DbBusinessDataService.Command(db =>
+            {
+                result = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVGUID).ToList();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveUserCompanySet(Business_UserCompanySetDetail sevenSection)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "1" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    sevenSection.AccountModeName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == sevenSection.AccountModeCode).Descrption;
+                    sevenSection.CompanyName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == sevenSection.AccountModeCode && x.Code == sevenSection.CompanyCode).Descrption;
+                    var isAny = db.Queryable<Business_UserCompanySetDetail>().Any(x => x.OrderVGUID == sevenSection.OrderVGUID && x.CompanyName == sevenSection.CompanyName && x.VGUID != sevenSection.VGUID);
+                    if (isAny)
+                    {
+                        resultModel.Status = "0";
+                        return;
+                    }
+                    if (sevenSection.VGUID == Guid.Empty)
+                    {
+                        sevenSection.VGUID = Guid.NewGuid();
+                        db.Insertable(sevenSection).ExecuteCommand();
+                    }
+                    else
+                    {
+                        db.Updateable(sevenSection).IgnoreColumns(it => new { it.Isable }).ExecuteCommand();
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                if(resultModel.Status != "0")
+                {
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult UpdataIsable(Guid vguids,bool ischeck)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    db.Updateable<Business_UserCompanySetDetail>().UpdateColumns(it => new Business_UserCompanySetDetail()
+                    { Isable = ischeck }).Where(it => it.VGUID == vguids).ExecuteCommand();
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
         }
     }
 }

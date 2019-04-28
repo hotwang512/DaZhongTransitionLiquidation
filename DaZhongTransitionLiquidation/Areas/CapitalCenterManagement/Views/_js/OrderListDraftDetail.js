@@ -213,6 +213,24 @@ var $page = function () {
     }
     function getAttachmentDetail() {
         $.ajax({
+            url: "/CapitalCenterManagement/OrderListDraft/GetAttachmentInfo",
+            data: { PaymentVGUID: vguid },
+            //data: { PaymentVGUID: '99C8C2E2-3BA0-4533-B28F-08ABDA43A906' },
+            type: "post",
+            async:false,
+            success: function (msg) {
+                if (msg.IsSuccess == true) {
+                    jqxNotification("获取成功！", null, "success");
+                    getAttachment();
+                } else {
+                    jqxNotification(msg.ResultInfo, null, "error");
+                }
+            }
+        });
+       
+    }
+    function getAttachment() {
+        $.ajax({
             url: "/CapitalCenterManagement/OrderListDraftDetail/GetAttachmentInfo",
             data: {
                 "PaymentVGUID": vguid,
@@ -231,9 +249,9 @@ var $page = function () {
                     } else {
                         html = '<a rel="img' + i + '" href="' + msg[i].Attachment + '"><img src="' + msg[i].Attachment + '" target="_blank" style="width: 150px;height: 100px;margin: 3px;" /></a>';
                     }
-                   
+
                     switch (msg[i].AttachmentType) {
-                        case "付款凭证":$("#ImgPaymentReceipt").append(html);
+                        case "付款凭证": $("#ImgPaymentReceipt").append(html);
                             break
                         case "发票": $("#ImgInvoiceReceipt").append(html);
                             break

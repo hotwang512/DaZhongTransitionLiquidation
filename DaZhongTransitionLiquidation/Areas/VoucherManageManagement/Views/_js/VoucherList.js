@@ -370,7 +370,7 @@ var $page = function () {
                 break;
         }
     }
-    $('#jqxTabs').jqxTabs({ width: "100%", height: 450, initTabContent: initWidgets });
+    $('#jqxTabs').jqxTabs({ width: "99%", height: 450, initTabContent: initWidgets });
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {

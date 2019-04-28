@@ -308,25 +308,25 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1"  && x.AccountModeCode == accountModeCode && x.Code == companyCode).Descrption;
                         //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
-                        var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.KeyData == accountModeCode + companyCode).ToList();
+                        var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode).ToList();
                         //获取配置信息（付款银行）
                         if (orderDetail.Count() > 0)
                         {
-                            orderListDraft.OrderBankName = orderDetail[0].PayBank;//付款账号开户行
-                            orderListDraft.OrderBankAccouont = orderDetail[0].PayAccount;//付款账号ACON
-                            orderListDraft.OrderBankAccouontName = orderDetail[0].PayBankAccountName;//付款账号户名
+                            orderListDraft.OrderBankName = orderDetail[0].PayBank;//我方账号开户行
+                            orderListDraft.OrderBankAccouont = orderDetail[0].PayAccount;//我方账号ACON
+                            orderListDraft.OrderBankAccouontName = orderDetail[0].PayBankAccountName;//我方账号户名
                         }
                         orderListDraft.BusinessProject = data.BusinessProject;//业务项目
                         orderListDraft.BusinessSubItem1 = data.BusinessSubItem1;//业务编码
 
-                        orderListDraft.CollectBankName = data.CollectionBank;//收款账号开户行
-                        orderListDraft.CollectBankAccouont = data.CollectionAccount;//收款账号OPAC
-                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;//收款账号户名
-                        orderListDraft.CollectBankNo = data.CollectionBankAccount;//收款银行行号
+                        orderListDraft.CollectBankName = data.CollectionBank;//对方账号开户行
+                        orderListDraft.CollectBankAccouont = data.CollectionAccount;//对方账号OPAC
+                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName;//对方账号户名
+                        orderListDraft.CollectBankNo = data.CollectionBankAccount;//对方银行行号
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod;
-                        orderListDraft.PaymentCompany = data.CollectionCompanyName;//收款人/单位/公司
+                        orderListDraft.PaymentCompany = data.CollectionCompanyName;//供应商类别
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
                         orderListDraft.Founder = OrderListAPI.Sponsor;//发起人

@@ -34,11 +34,22 @@ var $page = function () {
         $("#OrderDetailsDialog_OKBtn").on("click",
             function () {
                 $("#OrderDetailsDialog").modal("hide");
+                initTable();
             }
         );
         $("#OrderDetailsDialog_CancelBtn").on("click",
             function () {
                 $("#OrderDetailsDialog").modal("hide");
+            }
+        );
+        $("#SettingDialog_OKBtn").on("click",
+            function () {
+                $("#SettingModalDialog").modal("hide");
+            }
+        );
+        $("#SettingDialog_CancelBtn").on("click",
+            function () {
+                $("#SettingModalDialog").modal("hide");
             }
         );
     }; //addEvent end

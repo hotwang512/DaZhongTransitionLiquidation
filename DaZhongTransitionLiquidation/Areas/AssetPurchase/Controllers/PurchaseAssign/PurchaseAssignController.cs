@@ -124,8 +124,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         saveObj.BelongToCompany = BelongToCompany;
                         saveObj.AssetOrderDetailsVguid = AssetOrderDetailsVguid;
                         saveObj.AssetsOrderVguid = AssetsOrderVguid;
-                        saveObj.AssetManagementCompany = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == AssetOrderDetailsVguid).First().AssetManagementCompany;
+                        var orderDetails = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == AssetOrderDetailsVguid).First();
+                        saveObj.AssetManagementCompany = orderDetails.AssetManagementCompany;
                         db.Insertable<Business_AssetOrderBelongTo>(saveObj).ExecuteCommand();
+                        var assign = db.Queryable<Business_PurchaseAssign>().Where(c => c.FixedAssetsOrderVguid == AssetsOrderVguid).First();
+                        if (assign.SubmitStatus == 0)
+                        {
+                            assign.SubmitStatus = 1;
+                            db.Updateable<Business_PurchaseAssign>(assign).UpdateColumns(x => new { x.SubmitStatus}).ExecuteCommand();
+                        }
                     }
                     
                 });

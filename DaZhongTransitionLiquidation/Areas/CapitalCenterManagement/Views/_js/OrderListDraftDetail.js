@@ -11,7 +11,7 @@ var $page = function () {
 
     this.init = function () {
         addEvent();
-        getAttachmentDetail();
+        
     }
 
     //所有事件
@@ -189,6 +189,7 @@ var $page = function () {
                 $("#Status").val(msg.Status);
                 if ($("#Status").val() == "1") {
                     $("#btnUp").show();
+                    getAttachmentDetail();
                 }
                 if ($("#Status").val() == "2") {
                     $("#Comeback").hide();
@@ -239,7 +240,8 @@ var $page = function () {
             dataType: "json",
             success: function (msg) {
                 for (var i = 0; i < msg.length; i++) {
-                    var fileVal = msg[i].Attachment.split("/")[4];//1548321598957.png
+                    var num = msg[i].Attachment.split("/").length - 1;
+                    var fileVal = msg[i].Attachment.split("/")[num];//1548321598957.png
                     var fileName = fileVal.split(".")[0];
                     var fileType = fileVal.split(".")[1];
                     var ext = "." + fileType.toUpperCase();

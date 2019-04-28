@@ -15,7 +15,7 @@ var $page = function () {
     var status = $.request.queryString().Status;
     //所有事件
     function addEvent() {
-        
+        loadCollectionCompany();
         if (status == "1") {
             $("#buttonList").show();
         }
@@ -192,7 +192,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "status": status, "BusinessProject": $("#BusinessProject").val() },
+                data: { "status": status, "BusinessProject": $("#BusinessProject").val(), "CollectionCompany": $("#CollectionCompany").val() },
                 url: "/CapitalCenterManagement/OrderList/GetOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -204,7 +204,7 @@ var $page = function () {
         selector.$grid().jqxDataTable(
             {
                 pageable: true,
-                width: "100%",
+                width: "99.9%",
                 height: 400,
                 pageSize: 10,
                 serverProcessing: true,
@@ -253,7 +253,26 @@ var $page = function () {
         return container;
     }
 
-   
+    function loadCollectionCompany() {
+        var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
+        var source =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            { name: 'VGUID' },
+                            { name: 'CompanyOrPerson' }
+                        ],
+                        url: url,
+                        async: false
+                    };
+        var dataAdapter = new $.jqx.dataAdapter(source);
+       
+        $('#CollectionCompany').jqxDropDownList({
+            filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "VGUID",
+            itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
+        });
+        $("#CollectionCompany").jqxDropDownList('insertAt', { label: '请选择', value: '' }, 0);
+    }
 
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";

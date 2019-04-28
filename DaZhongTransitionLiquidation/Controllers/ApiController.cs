@@ -308,7 +308,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1"  && x.AccountModeCode == accountModeCode && x.Code == companyCode).Descrption;
                         //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
-                        var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode).ToList();
+                        var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode && x.Isable == true).ToList();
                         //获取配置信息（付款银行）
                         if (orderDetail.Count() > 0)
                         {
@@ -341,6 +341,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         orderListDraft.VGUID = guid;
                         orderListDraft.Status = "1";
                         orderListDraft.CreateTime = DateTime.Now;
+                        orderListDraft.BusinessSubItem2 = GetBusinessSubItem2();//流水号
                         _db.Insertable<Business_OrderListDraft>(orderListDraft).ExecuteCommand();
                         results = guid.TryToString();
                         Ifsuccess = true;
@@ -367,6 +368,20 @@ namespace DaZhongTransitionLiquidation.Controllers
                     result = results
                 }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public static string GetBusinessSubItem2()
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            var date = DateTime.Now;
+            var voucherNo = db.Ado.GetString(@"select top 1 BusinessSubItem2 from Business_OrderListDraft a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
+                              order by BusinessSubItem2 desc", new { @NowDate = date });
+            var batchNo = 0;
+            if (voucherNo.IsValuable() && voucherNo.Length > 4)
+            {
+                batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
+            }
+            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
 
         /// <summary>

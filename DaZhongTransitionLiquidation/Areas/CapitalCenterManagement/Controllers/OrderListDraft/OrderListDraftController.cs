@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
@@ -82,6 +83,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     Regex rgx = new Regex(@"[\w|\W]{2,4}银行");
                     var rgsOrderBankName = rgx.Match(orderInfo.OrderBankName).Value;
                     var rgsCollectBankName = rgx.Match(orderInfo.CollectBankName).Value;
+                    var collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
                     if (rgsOrderBankName == rgsCollectBankName)
                     {
                         #region 同行
@@ -90,7 +92,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         var data = "{" +
                                         "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
                                         "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
-                                        "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
+                                        "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", collectBankAccountName) +
                                         "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
                                         "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
                                         "\"REMK\":\"{REMK}\"".Replace("{REMK}", "") +
@@ -141,7 +143,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         var data = "{" +
                                         "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
                                         "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
-                                        "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", orderInfo.CollectBankAccountName) +
+                                        "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", collectBankAccountName) +
                                         "\"OPACPBNO\":\"{OPACPBNO}\",".Replace("{OPACPBNO}", orderInfo.CollectBankNo) +
                                         "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
                                         "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +

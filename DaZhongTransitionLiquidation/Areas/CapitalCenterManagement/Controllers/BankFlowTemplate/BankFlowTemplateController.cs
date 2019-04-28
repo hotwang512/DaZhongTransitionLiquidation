@@ -1,5 +1,7 @@
 ﻿using Aspose.Cells;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
@@ -11,6 +13,7 @@ using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using DaZhongTransitionLiquidation.Models;
 using SqlSugar;
 using SyntacticSugar;
 using System;
@@ -18,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -361,6 +365,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             List<Business_AssetsGeneralLedger_Swap> assetList = new List<Business_AssetsGeneralLedger_Swap>();//凭证中间表List
             var x = -1;
             var guid = Guid.Empty;
+            var orderListDraft = db.Queryable<Business_OrderListDraft>().ToList();
+            var orderList = db.Queryable<Business_OrderList>().ToList();
+            var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
             #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
@@ -432,7 +439,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetailList.Add(BVDetail);
                 GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 0);//将借贷数据同步中间表
                 //GetOtherSubject(BVDetailList, newBankFlowList, guid, item);//通过银行渠道找流水
-                GetOtherSubject2(BVDetailList, guid, item, assetList, voucher);//通过流水找银行渠道 
+                GetOtherSubject2(BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
             }
             #endregion
             if (VoucherList.Count > 0 && BVDetailList.Count > 0)
@@ -495,7 +502,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 }
             }
         }
-        public static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher)
+        public static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher
+            ,List<Business_OrderListDraft> orderListDraft, List<Business_OrderList> orderList, List<Business_UserCompanySetDetail> userCompanySet)
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
@@ -506,7 +514,25 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 var subject = "";
                 if (item.TurnOut == 0)
                 {
-                    subject = bankChannelOne.Borrow;
+                    //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
+                    Regex regExp = new Regex(" ^[0 - 9] * $");
+                    if (item.Purpose.Length == 19 && regExp.IsMatch(item.Purpose))
+                    {
+                        var osno = orderListDraft.Where(x => x.OSNO == item.Purpose).ToList();
+                        if (osno.Count == 1)
+                        {
+                            var order = orderList.Where(x => x.BusinessSubItem1 == osno[0].BusinessSubItem1).First();
+                            var orderDetail = userCompanySet.Where(x => x.OrderVGUID == order.VGUID.ToString() && x.CompanyName == osno[0].OrderCompany && x.Isable == true).ToList();
+                            if(orderDetail.Count > 0)
+                            {
+                                subject = orderDetail[0].Borrow;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        subject = bankChannelOne.Borrow;
+                    }
                 }
                 else
                 {

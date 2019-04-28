@@ -264,7 +264,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
-                    { text: '业务编码', datafield: 'BusinessSubItem1', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '流水号', datafield: 'BusinessSubItem2', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '业务项目', datafield: 'BusinessProject', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '供应商类别', datafield: 'PaymentCompany', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '订单日期', datafield: 'FillingDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd", },
@@ -273,7 +273,7 @@ var $page = function () {
                     { text: '交易状态', datafield: 'BankStatus', align: 'center', width: 180, cellsAlign: 'center', hidden: true },
                     { text: '交易最终结果描述', datafield: 'BankStatusName', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '附件信息', datafield: 'AttachmentInfo', align: 'center', cellsAlign: 'center', hidden: true },
-
+                    { text: '业务编码', datafield: 'BusinessSubItem1', width: 250, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '订单时间', datafield: 'OrderTime', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '来客人数', datafield: 'VisitorsNumber', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '陪同人数', datafield: 'EscortNumber', width: 200, align: 'center', cellsAlign: 'center', hidden: true },
@@ -296,9 +296,9 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem1 + "</a>";
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem2 + "</a>";
         } else {
-            container = "<span>" + rowData.BusinessSubItem1 + "</span>";
+            container = "<span>" + rowData.BusinessSubItem2 + "</span>";
         }
         return container;
     }

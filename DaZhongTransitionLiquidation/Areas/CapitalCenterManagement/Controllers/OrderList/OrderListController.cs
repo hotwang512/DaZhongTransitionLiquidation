@@ -32,7 +32,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_OrderList>()
                 .Where(i => i.Status == searchParams.Status)
-                .WhereIF(searchParams.BusinessType != null, i => i.BusinessType == searchParams.BusinessType)
+                .WhereIF(searchParams.BusinessProject != null, i => i.BusinessProject.Contains(searchParams.BusinessProject))
+                .WhereIF(searchParams.CollectionCompany != null, i => i.CollectionCompany == searchParams.CollectionCompany)
                 .OrderBy("BusinessSubItem1 asc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 var data = db.Queryable<Business_CustomerBankInfo>().ToList();
                 foreach (var item in jsonResult.Rows)

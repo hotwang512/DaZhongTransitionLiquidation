@@ -58,7 +58,8 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-
+      
+        
         public JsonResult GetCustomerBankInfo(Guid OrderSettingVguid, string BankAccount, string BankCategory, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_BankInfoSetting>();

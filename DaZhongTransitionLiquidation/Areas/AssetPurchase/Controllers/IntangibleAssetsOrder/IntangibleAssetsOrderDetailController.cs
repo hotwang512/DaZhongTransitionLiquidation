@@ -117,17 +117,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             }
             return Json(resultModel);
         }
-        public JsonResult GetUseDepartment()
-        {
-            var departmentData = new List<Business_SevenSection>();
-            DbBusinessDataService.Command(db =>
-            {
-                departmentData = db.Queryable<Business_SevenSection>().Where(x =>
-                    x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == "1002" &&
-                    x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
-            });
-            return Json(departmentData, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetUseDepartment()
+        //{
+        //    var departmentData = new List<Business_SevenSection>();
+        //    DbBusinessDataService.Command(db =>
+        //    {
+        //        departmentData = db.Queryable<Business_SevenSection>().Where(x =>
+        //            x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == "1002" &&
+        //            x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
+        //    });
+        //    return Json(departmentData, JsonRequestBehavior.AllowGet);
+        //}
         public JsonResult SubmitIntangibleAssetsOrder(Guid vguid)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };

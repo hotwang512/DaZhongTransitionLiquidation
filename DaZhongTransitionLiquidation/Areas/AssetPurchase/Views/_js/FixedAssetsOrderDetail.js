@@ -4,7 +4,7 @@ var mydate = new Date();
 var vehicleDefaultData;
 var $page = function () {
     this.init = function () {
-        initSelect();
+        //initSelect();
         initSelectPurchaseGoods();
         initPayCompanyDropdown();
         initComboBox();
@@ -49,9 +49,9 @@ var $page = function () {
                             "PurchasePrices": $("#PurchasePrices").val(),
                             "ContractAmount": $("#ContractAmount").val(),
                             "AssetDescription": $("#AssetDescription").val(),
-                            "UseDepartmentVguid": $("#UseDepartment").val(),
-                            "UseDepartment": $("#UseDepartment").find("option:selected").text() == "请选择" ? "" : $("#UseDepartment").find("option:selected").text(),
-                            "AcceptanceDate": $("#AcceptanceDate").val(),
+                            //"UseDepartmentVguid": $("#UseDepartment").val(),
+                            //"UseDepartment": $("#UseDepartment").find("option:selected").text() == "请选择" ? "" : $("#UseDepartment").find("option:selected").text(),
+                            //"AcceptanceDate": $("#AcceptanceDate").val(),
                             "PaymentDate": $("#PaymentDate").val(),
                             "ContractName": $("#Attachment").attr("title"),
                             "ContractFilePath": $("#Attachment").attr("href"),
@@ -166,11 +166,11 @@ var $page = function () {
             $("#PurchasePrices").val(msg.PurchasePrices);
             $("#ContractAmount").val(msg.ContractAmount);
             $("#AssetDescription").val(msg.AssetDescription);
-            $("#UseDepartment").val(msg.UseDepartmentVguid);
+            //$("#UseDepartment").val(msg.UseDepartmentVguid);
             debugger;
-            if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
-                $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
-            }
+            //if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
+            //    $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
+            //}
             if (msg.PaymentDate != null && msg.PaymentDate != "") {
                 $("#PaymentDate").val(formatDate(msg.PaymentDate));
             }
@@ -282,20 +282,20 @@ function computeValue() {
         $("#ContractAmount").val(value);
     }
 }
-function initSelect()
-{
-    $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
-        data: {},
-        type: "POST",
-        dataType: "json",
-        async: false,
-        success: function (msg) {
-            uiEngineHelper.bindSelect('#UseDepartment', msg, "VGUID", "Descrption");
-            $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
-        }
-    });
-}
+//function initSelect()
+//{
+//    $.ajax({
+//        url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
+//        data: {},
+//        type: "POST",
+//        dataType: "json",
+//        async: false,
+//        success: function (msg) {
+//            uiEngineHelper.bindSelect('#UseDepartment', msg, "VGUID", "Descrption");
+//            $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
+//        }
+//    });
+//}
 function initComboBox() {
     //付款单位及相关账户信息
     $.ajax({

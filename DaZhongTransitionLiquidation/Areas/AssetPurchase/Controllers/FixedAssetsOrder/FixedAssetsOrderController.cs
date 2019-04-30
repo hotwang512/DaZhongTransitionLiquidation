@@ -50,10 +50,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             DbBusinessDataService.Command(db =>
             {
                 int saveChanges = 1;
-                //删除主表信息
-                saveChanges = db.Deleteable<Business_FixedAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
-                resultModel.IsSuccess = saveChanges == vguids.Count;
-                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                //查看是否有提交的订单，如果有提示提交后不可以删除
+                var isAnySubmited = db.Queryable<Business_FixedAssetsOrder>().Any(c => vguids.Contains(c.VGUID) && c.SubmitStatus == FixedAssetsSubmitStatusEnum.Submited.TryToInt());
+                if (isAnySubmited)
+                {
+                    resultModel.ResultInfo = "存在已提交的订单，订单提交后不允许删除";
+                    resultModel.IsSuccess = false;
+                    resultModel.Status = "2";
+                }
+                else
+                {
+                    //删除主表信息
+                    saveChanges = db.Deleteable<Business_FixedAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
+                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
             });
             return Json(resultModel);
         }

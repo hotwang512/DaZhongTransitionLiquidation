@@ -8,6 +8,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     public class Business_FixedAssetsOrder
     {
         public Guid VGUID { get; set; }
+        public string OrderNumber { get; set; }
         public Guid? PurchaseGoodsVguid { set; get; }
         public string PurchaseGoods { set; get; }
         public Guid? PaymentInformationVguid { set; get; }
@@ -16,9 +17,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public decimal? PurchasePrices { set; get; }
         public decimal? ContractAmount { set; get; }
         public string AssetDescription { set; get; }
-        public Guid? UseDepartmentVguid { get; set; }
-        public string UseDepartment { set; get; }
-        public DateTime? AcceptanceDate { set; get; }
         public DateTime? PaymentDate { set; get; }
         public string ContractName { set; get; }
         public string ContractFilePath { set; get; }

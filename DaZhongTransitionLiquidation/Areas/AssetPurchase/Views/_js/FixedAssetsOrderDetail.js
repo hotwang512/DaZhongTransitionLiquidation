@@ -114,6 +114,11 @@ var $page = function () {
             function () {
                 $("#OrderDetailsDialog").modal("hide");
             });
+        //打印
+        $("#btnPrint").on("click",
+            function () {
+                $("#CreditDialog").modal("show");
+            });
         //计算金额
         $("#PurchasePrices").on("blur",
             function () {

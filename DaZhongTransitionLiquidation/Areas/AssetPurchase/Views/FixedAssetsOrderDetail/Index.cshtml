@@ -62,6 +62,9 @@
             <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
         </td>
         <td style="width: 95px;">
+            <button id="btnPrint" type="button" class="buttons" style="width: 130px;margin-right: 18px"><i class="iconfont btn_icon" style="color: black !important;">&#xe613; </i><span style="margin-left: 7px; float: left;">打印付款凭证</span></button>
+        </td>
+        <td style="width: 95px;">
             <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
         </td>
     </tr>
@@ -244,4 +247,20 @@
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="CreditDialog">
+<div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+    <div class="modal-content" style="width: 520px; margin-left: auto; margin-right: auto;">
+        <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">付款凭证</h4>
+        </div>
+        <div class="modal-body" style="width: 100%; height: 300px; overflow: auto">
+                
+        </div>
+        <div class="modal-footer">
+            <button id="CreditDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+        </div>
+    </div>
+</div>
 </div>

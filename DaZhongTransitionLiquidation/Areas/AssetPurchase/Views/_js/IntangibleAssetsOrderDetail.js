@@ -93,14 +93,9 @@ var $page = function () {
                 $("#ContractFileInput").click();
             });
         //确定
-        $("#OrderDetailsDialog_OKBtn").on("click",
+        $("#btnPrint").on("click",
             function () {
-                $("#OrderDetailsDialog").modal("hide");
-            });
-        //取消
-        $("#OrderDetailsDialog_CancelBtn").on("click",
-            function () {
-                $("#OrderDetailsDialog").modal("hide");
+                $("#CreditDialog").modal("show");
             });
         //提交
         $("#btnSubmit").on("click",

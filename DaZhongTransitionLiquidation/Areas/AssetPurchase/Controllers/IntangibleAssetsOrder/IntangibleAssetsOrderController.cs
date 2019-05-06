@@ -50,10 +50,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             DbBusinessDataService.Command(db =>
             {
                 int saveChanges = 1;
-                //删除主表信息
-                saveChanges = db.Deleteable<Business_IntangibleAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
-                resultModel.IsSuccess = saveChanges == vguids.Count;
-                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                var isAnySubmited = db.Queryable<Business_IntangibleAssetsOrder>().Any(c => vguids.Contains(c.VGUID) && (c.SubmitStatus == IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt() || c.SubmitStatus == IntangibleAssetsSubmitStatusEnum.Submited.TryToInt()));
+                if (isAnySubmited)
+                {
+                    resultModel.ResultInfo = "存在已提交的订单，订单提交后不允许删除";
+                    resultModel.IsSuccess = false;
+                    resultModel.Status = "2";
+                }
+                else
+                {
+                    //删除主表信息
+                    saveChanges = db.Deleteable<Business_IntangibleAssetsOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
+                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
             });
             return Json(resultModel);
         }

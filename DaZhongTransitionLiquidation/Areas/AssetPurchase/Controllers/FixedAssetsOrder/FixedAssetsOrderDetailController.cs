@@ -52,10 +52,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
 
                         var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
                             .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_FixedAssetsOrder>()
+                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
                             .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new {c.OrderNumber}).ToList();
-                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList);
-                        var maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
+                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).ToList();
+                        var maxOrderNumRight = 0;
+                        if (currentDayList.Any())
+                        {
+                            maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
+                        }
                         maxOrderNumRight = maxOrderNumRight + 1;
                         sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4,'0');
                         sevenSection.CreateDate = DateTime.Now;
@@ -88,7 +92,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             return Json(model, JsonRequestBehavior.AllowGet); ;
         }
 
-        public JsonResult GetAssetOrderDetails(string AssetType, Guid AssetsOrderVguid)
+        public JsonResult GetAssetOrderDetails(Guid AssetsOrderVguid,Guid PurchaseOrderSettingVguid)
         {
             var listFixedAssetsOrder = new List<Business_AssetOrderDetails>();
             DbBusinessDataService.Command(db =>
@@ -101,44 +105,35 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             if (listFixedAssetsOrder.Count == 0)
             {
-                listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetType, AssetsOrderVguid);
+                listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetsOrderVguid, PurchaseOrderSettingVguid);
             }
             return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet); ;
         }
 
-        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(string AssetType, Guid AssetsOrderVguid)
+        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(Guid AssetsOrderVguid,Guid PurchaseOrderSettingVguid)
         {
             var cache = CacheManager<Sys_User>.GetInstance();
             var list = new List<Business_AssetOrderDetails>();
             var listCompany = new List<string>();
-            if (AssetType == "vehicle")
-            {
-                listCompany.Add("浦东");
-                listCompany.Add("市南");
-                listCompany.Add("九分");
-            }
-            else
-            {
-                listCompany.Add("集团");
-                listCompany.Add("虹口");
-                listCompany.Add("奉贤");
-            }
-            listCompany.Add("新亚");
-            listCompany.Add("交运");
-            listCompany.Add("万祥");
-            listCompany.Add("营管部");
-            for (int i = 0; i < listCompany.Count; i++)
-            {
-                var model = new Business_AssetOrderDetails();
-                model.VGUID = Guid.NewGuid();
-                model.AssetsOrderVguid = AssetsOrderVguid;
-                model.CreateDate = DateTime.Now;
-                model.CreateUser = cache[PubGet.GetUserKey].UserName;
-                model.AssetManagementCompany = listCompany[i];
-                list.Add(model);
-            }
+            //获取采购物品配置的资产管理公司
             DbBusinessDataService.Command(db =>
             {
+                var listManagementCompany = db.Queryable<Business_PurchaseManagementCompany>()
+                    .Where(c => c.PurchaseOrderSettingVguid == PurchaseOrderSettingVguid).ToList();
+                foreach (var item in listManagementCompany)
+                {
+                    if (!db.Queryable<Business_AssetOrderDetails>()
+                        .Any(c => c.AssetsOrderVguid == AssetsOrderVguid && c.AssetManagementCompany == item.ManagementCompany))
+                    {
+                        var model = new Business_AssetOrderDetails();
+                        model.VGUID = Guid.NewGuid();
+                        model.AssetsOrderVguid = AssetsOrderVguid;
+                        model.CreateDate = DateTime.Now;
+                        model.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        model.AssetManagementCompany = item.ManagementCompany;
+                        list.Add(model);
+                    }
+                }
                 db.Insertable<Business_AssetOrderDetails>(list).ExecuteCommand();
             });
             return list;
@@ -270,12 +265,29 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPurchaseGoods(int OrderCategory)
+        public JsonResult GetPurchaseGoods(int OrderCategory,Guid[] PurchaseDepartment)
         {
+            var PurchaseDepartmentStr = "";
+            
             var orderTypeData = new List<Business_PurchaseOrderSetting>();
             DbBusinessDataService.Command(db =>
             {
-                orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.OrderCategory == OrderCategory).ToList();
+                if (PurchaseDepartment == null)
+                {
+                    orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.OrderCategory == OrderCategory).ToList();
+                }
+                else
+                {
+                    foreach (var str in PurchaseDepartment)
+                    {
+                        PurchaseDepartmentStr = PurchaseDepartmentStr + str + "','";
+                    }
+
+                    PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0,PurchaseDepartmentStr.Length - 3);
+                    orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
+                    Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
+                    WHERE bpd.DepartmentVguid IN ('"+ PurchaseDepartmentStr + "')").ToList();
+                }
             });
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);
         }

@@ -47,12 +47,12 @@
 </style>
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
-        @if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 2)
+        @*@if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 2)
         {
-            <td style="width: 95px;">
+            <td style="width: 95px;">移到列表页
                 <button id="btnSubmit" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
             </td>
-        }
+        }*@
         <td style="width: 95px;">
             <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
         </td>
@@ -77,6 +77,10 @@
                         <option value="软件类资产">软件类资产</option>
                     </select>
                 </td>*@
+                <td style="text-align: right;">采购部门：</td>
+                <td style="text-align: left;">
+                    <div id="PurchaseDepartment"></div>
+                </td>
                 <td style="text-align: right;">采购物品：</td>
                 <td style="text-align: left;">
                     <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;"></select>

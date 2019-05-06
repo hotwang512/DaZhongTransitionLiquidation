@@ -9,6 +9,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     {
         public Guid VGUID { get; set; }
         public string OrderNumber { get; set; }
+        public string PurchaseDepartmentIDs { get; set; }
         public Guid? PurchaseGoodsVguid { set; get; }
         public string PurchaseGoods { set; get; }
         public Guid? PaymentInformationVguid { set; get; }

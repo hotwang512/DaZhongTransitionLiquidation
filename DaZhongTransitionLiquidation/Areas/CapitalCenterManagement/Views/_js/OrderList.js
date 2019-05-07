@@ -191,7 +191,7 @@ var $page = function () {
                     { name: 'CollectionCompanyName', type: 'string' },
                 ],
                 datatype: "json",
-                id: "VGUID",
+                //id: "VGUID",
                 data: { "status": status, "BusinessProject": $("#BusinessProject").val(), "CollectionCompany": $("#CollectionCompany").val() },
                 url: "/CapitalCenterManagement/OrderList/GetOrderListDatas"   //获取数据源的路径
             };
@@ -206,7 +206,7 @@ var $page = function () {
                 pageable: true,
                 width: "99.9%",
                 height: 400,
-                pageSize: 10,
+                pageSize: 999999999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,

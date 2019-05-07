@@ -65,6 +65,8 @@ var menueHelp = {
                 break;
             case "AccountReport": $("#homeModel").text("--资金结算中心")
                 break;
+            case "CapitalFloM": $("#homeModel").text("--资金结算中心")
+                break;
             case "PaymentOrder": $("#homeModel").text("--资金结算中心") //*************
                 break;
             case "VoucherManage": $("#homeModel").text("--会计核算中心")

@@ -98,9 +98,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
                         GenerateVoucherList(bankFlowList, UserInfo.LoginName);
+                        //同步银行流水到银行数据表
+                        BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
-                    //同步银行流水到银行数据表
-                    BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate);
                     data.IsSuccess = true;
                 }
                 else
@@ -181,9 +181,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
                         GenerateVoucherList(bankFlowList, UserInfo.LoginName);
+                        //同步银行流水到银行数据表
+                        BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
-                    //同步银行流水到银行数据表
-                    BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate);
                     data.IsSuccess = true;
                 }
                 else
@@ -515,7 +515,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 if (item.TurnOut == 0)
                 {
                     //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
-                    Regex regExp = new Regex(" ^[0 - 9] * $");
+                    Regex regExp = new Regex("^[0-9]*$");
                     if (item.Purpose.Length == 19 && regExp.IsMatch(item.Purpose))
                     {
                         var osno = orderListDraft.Where(x => x.OSNO == item.Purpose).ToList();

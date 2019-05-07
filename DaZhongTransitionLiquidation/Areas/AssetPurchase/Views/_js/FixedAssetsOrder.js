@@ -83,6 +83,9 @@ var $page = function () {
                     case "0":
                         jqxNotification("删除失败！", null, "error");
                         break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo, null, "error");
+                        break;
                     case "1":
                         jqxNotification("删除成功！", null, "success");
                         $("#jqxTable").jqxDataTable('updateBoundData');
@@ -134,6 +137,7 @@ var $page = function () {
                 [
                     { name: "checkbox", type: null },
                     { name: 'VGUID', type: 'string' },
+                    { name: 'OrderNumber', type: 'string' },
                     { name: 'PurchaseGoods', type: 'string' },
                     { name: 'PaymentInformationVguid', type: 'string' },
                     { name: 'PaymentInformation', type: 'string' },
@@ -141,7 +145,6 @@ var $page = function () {
                     { name: 'PurchasePrices', type: 'float' },
                     { name: 'ContractAmount', type: 'float' },
                     { name: 'AssetDescription', type: 'string' },
-                    { name: 'UseDepartment', type: 'string' },
                     { name: 'AcceptanceDate', type: 'date' },
                     { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
@@ -178,6 +181,8 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: '订单状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '付款信息关联ID', datafield: 'PaymentInformationVguid', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
@@ -185,13 +190,11 @@ var $page = function () {
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '使用部门', datafield: 'UseDepartment', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '预计验收日期', datafield: 'AcceptanceDate', width: 150, align: 'center', cellsAlign: 'center' ,cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '预计验收日期', datafield: 'AcceptanceDate', width: 150, align: 'center', cellsAlign: 'center' ,cellsformat: "yyyy-MM-dd HH:mm:ss",hidden:true },
                     { text: '预计付款日期', datafield: 'PaymentDate', width: 150, align: 'center', cellsAlign: 'center', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '付款方式', datafield: 'PayType', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款公司', datafield: 'PayCompany', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center' ,cellsRenderer: cellsRendererSubmit},
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },

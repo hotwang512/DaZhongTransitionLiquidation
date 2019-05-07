@@ -2345,9 +2345,11 @@
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementPack.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_PurchaseManagementCompany.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseOrderSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
+    <Compile Include="Areas\SystemManagement\Models\PurchaseDepartmentModel.cs" />
     <Compile Include="Areas\SystemManagement\Models\v_BankPurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\SystemManagementAreaRegistration.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_AssetsGeneralLedger_Swap.cs" />

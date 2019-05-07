@@ -4,14 +4,16 @@ var mydate = new Date();
 var vehicleDefaultData;
 var $page = function () {
     this.init = function () {
-        initSelect();
+        //initSelect();
         initSelectPurchaseGoods();
         initPayCompanyDropdown();
         initComboBox();
+        initSelectPurchaseDepartment();
         addEvent();
         $("#PaymentInformation").find(".jqx-combobox-input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
     }
     //所有事件
+
     function addEvent() {
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
@@ -35,12 +37,19 @@ var $page = function () {
                 }
                 debugger;
                 if (validateError <= 0) {
+                    var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
+
+                    var DepartmentModelList = [];
+                    for (var i = 0; i < checkedItems.length; i++) {
+                        DepartmentModelList.push(checkedItems[i].value);
+                    };
                     debugger;
                     $.ajax({
                         url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
+                            "PurchaseDepartmentIDs": DepartmentModelList.join(","),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
                             "PayCompanyVguid": $("#PayCompanyDropdown").val(),
@@ -49,9 +58,9 @@ var $page = function () {
                             "PurchasePrices": $("#PurchasePrices").val(),
                             "ContractAmount": $("#ContractAmount").val(),
                             "AssetDescription": $("#AssetDescription").val(),
-                            "UseDepartmentVguid": $("#UseDepartment").val(),
-                            "UseDepartment": $("#UseDepartment").find("option:selected").text() == "请选择" ? "" : $("#UseDepartment").find("option:selected").text(),
-                            "AcceptanceDate": $("#AcceptanceDate").val(),
+                            //"UseDepartmentVguid": $("#UseDepartment").val(),
+                            //"UseDepartment": $("#UseDepartment").find("option:selected").text() == "请选择" ? "" : $("#UseDepartment").find("option:selected").text(),
+                            //"AcceptanceDate": $("#AcceptanceDate").val(),
                             "PaymentDate": $("#PaymentDate").val(),
                             "ContractName": $("#Attachment").attr("title"),
                             "ContractFilePath": $("#Attachment").attr("href"),
@@ -84,7 +93,12 @@ var $page = function () {
             });
         $("#OrderQuantity").on("click",
             function () {
-                initTable();
+                debugger;
+                if ($("#PurchaseGoods").val() != "") {
+                    initTable();
+                } else {
+                    jqxNotification("请选择采购物品！", null, "error");
+                }
             });
         $("#UploadContractFile").on("click",
             function() {
@@ -99,6 +113,11 @@ var $page = function () {
         $("#OrderDetailsDialog_CancelBtn").on("click",
             function () {
                 $("#OrderDetailsDialog").modal("hide");
+            });
+        //打印
+        $("#btnPrint").on("click",
+            function () {
+                $("#CreditDialog").modal("show");
             });
         //计算金额
         $("#PurchasePrices").on("blur",
@@ -154,11 +173,37 @@ var $page = function () {
             function () {
                 initComboBox();
             });
+        $("#PurchaseDepartment").on('checkChange', function (event) {
+            if (event.args) {
+                //var item = event.args.item;
+                //var value = item.value;
+                //var label = item.label;
+                //var checked = item.checked;
+                var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
+
+                var DepartmentModelList = [];
+                for (var i = 0; i < checkedItems.length; i++) {
+                    DepartmentModelList.push(checkedItems[i].value);
+                };
+                debugger;
+                initSelectPurchaseGoods(DepartmentModelList);
+            }
+        });
     }; //addEvent end
 
     function getFixedAssetsOrderDetail() {
         $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+            debugger;
+            if (msg.PurchaseDepartmentIDs != null) {
+                var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
+                for (var i = 0; i < PurchaseDepartment.length; i++) {
+                    var item = $("#PurchaseDepartment").jqxDropDownList('getItemByValue', PurchaseDepartment[i]);
+                    $("#PurchaseDepartment").jqxDropDownList('checkItem', item);
+                }
+            }
+            $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
+            $("#PurchaseGoods").attr("disabled", true);
             initComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
@@ -166,11 +211,11 @@ var $page = function () {
             $("#PurchasePrices").val(msg.PurchasePrices);
             $("#ContractAmount").val(msg.ContractAmount);
             $("#AssetDescription").val(msg.AssetDescription);
-            $("#UseDepartment").val(msg.UseDepartmentVguid);
+            //$("#UseDepartment").val(msg.UseDepartmentVguid);
             debugger;
-            if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
-                $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
-            }
+            //if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
+            //    $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
+            //}
             if (msg.PaymentDate != null && msg.PaymentDate != "") {
                 $("#PaymentDate").val(formatDate(msg.PaymentDate));
             }
@@ -282,20 +327,36 @@ function computeValue() {
         $("#ContractAmount").val(value);
     }
 }
-function initSelect()
-{
-    $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
-        data: {},
-        type: "POST",
-        dataType: "json",
-        async: false,
-        success: function (msg) {
-            uiEngineHelper.bindSelect('#UseDepartment', msg, "VGUID", "Descrption");
-            $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
-        }
-    });
+function initSelectPurchaseDepartment() {
+    var source =
+    {
+        datatype: "json",
+        type: "post",
+        datafields: [
+            { name: 'Descrption' },
+            { name: 'VGUID' }
+        ],
+        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
+        async: false
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 198, height: 33 });
+    $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
 }
+//function initSelect()
+//{
+//    $.ajax({
+//        url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
+//        data: {},
+//        type: "POST",
+//        dataType: "json",
+//        async: false,
+//        success: function (msg) {
+//            uiEngineHelper.bindSelect('#UseDepartment', msg, "VGUID", "Descrption");
+//            $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
+//        }
+//    });
+//}
 function initComboBox() {
     //付款单位及相关账户信息
     $.ajax({
@@ -327,11 +388,11 @@ function initComboBox() {
         }
     });
 }
-function initSelectPurchaseGoods() {
+function initSelectPurchaseGoods(PurchaseDepartment) {
     //使用部门
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
-        data: { "OrderCategory": 0 },
+        data: { "OrderCategory": 0, "PurchaseDepartment": PurchaseDepartment },
         type: "POST",
         dataType: "json",
         async: false,
@@ -456,7 +517,7 @@ function getDetailData() {
     debugger;
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
-        data: { AssetType: "vehicle", AssetsOrderVguid: $("#VGUID").val() },
+        data: { AssetsOrderVguid: $("#VGUID").val(), PurchaseOrderSettingVguid: $("#PurchaseGoods").val() },
         async :false,
         type: "get",
         success: function (result) {

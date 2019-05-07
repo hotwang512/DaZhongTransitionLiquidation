@@ -94,13 +94,16 @@ var $page = function () {
             type: "post",
             success: function (msg) {
                 switch (msg.Status) {
-                    case "0":
-                        jqxNotification("删除失败！", null, "error");
-                        break;
-                    case "1":
-                        jqxNotification("删除成功！", null, "success");
-                        $("#jqxTable").jqxDataTable('updateBoundData');
-                        break;
+                case "0":
+                    jqxNotification("删除失败！", null, "error");
+                    break;
+                case "2":
+                    jqxNotification(msg.ResultInfo, null, "error");
+                    break;
+                case "1":
+                    jqxNotification("删除成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
                 }
             }
         });
@@ -134,6 +137,7 @@ var $page = function () {
                 [
                     { name: "checkbox", type: null },
                     { name: 'VGUID', type: 'string' },
+                    { name: 'OrderNumber', type: 'string' },
                     { name: 'PurchaseGoods', type: 'string' },
                     { name: 'PaymentInformationVguid', type: 'string' },
                     { name: 'PaymentInformation', type: 'string' },
@@ -175,6 +179,8 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: '订单状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },
@@ -183,7 +189,6 @@ var $page = function () {
                     { text: '付款方式', datafield: 'PayType', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款公司', datafield: 'PayCompany', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
-                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer:cellsRendererSubmit},
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },

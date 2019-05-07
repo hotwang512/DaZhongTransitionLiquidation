@@ -3,6 +3,7 @@
 var selector = {
     $grid: function () { return $("#jqxTable") },
     $settinggrid: function () { return $("#jqxSettingTable") },
+    $settingdepgrid: function () { return $("#jqxDepartmentTable") },
     $bankinfogrid: function () { return $("#jqxBankInfoTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
@@ -145,7 +146,7 @@ var $page = function () {
         //创建卡信息列表（主表）
         selector.$bankinfogrid().jqxDataTable(
             {
-                pageable: false,
+                pageable: true,
                 width: "100%",
                 height: 400,
                 pageSize: 10,
@@ -231,7 +232,8 @@ var $page = function () {
                 datafields:
                 [
                     { name: "Setting", type: null },
-                    { name: "checkbox", type: null },
+                    { name: "SettingDepartment", type: null },
+                    { name: "SettingAssetManagementCompany", type: null },
                     { name: 'PurchaseGoods', type: 'string' },
                     { name: 'AssetCategoryMajor', type: 'string' },
                     { name: 'AssetCategoryMinor', type: 'string' },
@@ -266,8 +268,9 @@ var $page = function () {
                 columnsResize: true,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-
-                    { text: '配置供应商', datafield: 'Setting',hidden:false, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingRenderer },
+                    { text: '配置供应商', datafield: 'Setting', hidden: false, width: 90, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingRenderer },
+                    //{ text: '配置部门', datafield: 'SettingDepartment', hidden: false, width: 70, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingDepartmentRenderer },
+                    //{ text: '配置资产管理公司', datafield: 'SettingAssetManagementCompany', hidden: false, width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingAssetManagementCompany},
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '资产主类', datafield: 'AssetCategoryMajor', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '资产子类', datafield: 'AssetCategoryMinor', width: 200, align: 'center', cellsAlign: 'center' },
@@ -295,6 +298,14 @@ var $page = function () {
         var vguid = rowData.VGUID;
         return '<div style="margin: 8px; margin-top:6px;"><a style="cursor:pointer"  onclick="Setting(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';
     }
+    function cellsSettingDepartmentRenderer(row, column, value, rowData) {
+        var vguid = rowData.VGUID;
+        return '<div style="margin: 8px; margin-top:6px;"><a style="cursor:pointer"  onclick="cellsSettingDepartment(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';
+    }
+    function cellsSettingAssetManagementCompany(row, column, value, rowData) {
+        var vguid = rowData.VGUID;
+        return '<div style="margin: 8px; margin-top:6px;"><a style="cursor:pointer"  onclick="cellsSettingAssetManagementCompany(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';
+    }
     function rendererFunc() {
         var checkBox = "<div id='jqx_datatable_checkbox_all' class='jqx_datatable_checkbox_all' style='z-index: 999; margin-left:7px ;margin-top: 7px;'>";
         checkBox += "</div>";
@@ -319,6 +330,95 @@ var $page = function () {
         return true;
     }
 };
+function cellsSettingAssetManagementCompany(vguid) {
+    $("#PurchaseOrderSettingVguid").val(vguid);
+    var source =
+            {
+                datafields:
+                [
+                    { name: "checkbox", type: null },
+                    { name: 'CompanyOrPerson', type: 'string' },
+                    { name: 'BankAccount', type: 'string' },
+                    { name: 'BankAccountName', type: 'string' },
+                    { name: 'Bank', type: 'string' },
+                    { name: 'BankNo', type: 'BankNo' },
+                    { name: 'VGUID', type: 'string' }
+                ],
+                datatype: "json",
+                id: "VGUID",
+                data: { "VGUID": vguid },
+                url: "/Systemmanagement/PurchaseOrderSetting/GetPurchaseSupplierListDatas"   //获取数据源的路径
+            };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    debugger;
+    selector.$settinggrid().jqxDataTable(
+        {
+            pageable: true,
+            width: "100%",
+            height: 400,
+            pageSize: 10,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 40,
+            columnsResize: true,
+            columns: [
+                //{ text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                { text: '供应商类别', datafield: 'CompanyOrPerson', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '账号', datafield: 'BankAccount', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '户名', datafield: 'BankAccountName', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '开户行', datafield: 'Bank', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '行号', datafield: 'BankNo', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true }
+            ]
+        });
+    $("#SettingModalDialog").modal("show");
+}
+function cellsSettingDepartment(vguid) {
+    $("#PurchaseOrderSettingVguid").val(vguid);
+    var source =
+            {
+                datafields:
+                [
+                    { name: "checkbox", type: null },
+                    { name: 'Descrption', type: 'string' },
+                    { name: 'VGUID', type: 'string' }
+                ],
+                datatype: "json",
+                id: "VGUID",
+                data: { "VGUID": vguid },
+                url: "/Systemmanagement/PurchaseOrderSetting/GetDepartmentListDatas"   //获取数据源的路径
+            };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    debugger;
+    selector.$settingdepgrid().jqxDataTable(
+        {
+            pageable: true,
+            width: "100%",
+            height: 400,
+            pageSize: 10,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 40,
+            columnsResize: true,
+            columns: [
+                { text: '账号', datafield: 'Descrption', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true }
+            ]
+        });
+    $("#DepartmentModalDialog").modal("show");
+}
 function Setting(vguid) {
     $("#PurchaseOrderSettingVguid").val(vguid);
     var source =

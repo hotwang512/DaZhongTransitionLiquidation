@@ -24,4 +24,18 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         public string CreateUser { get; set; }
         public string ChangeUser { get; set; }
     }
+    public class Business_PurchaseDepartment
+    {
+        public Guid VGUID { get; set; }
+        public string DepartmentName { get; set; }
+        public Guid? DepartmentVguid { get; set; }
+        public Guid? PurchaseOrderSettingVguid { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public string CreateUser { get; set; }
+    }
+    public class PurchaseOrderSettingModel: Business_PurchaseOrderSetting
+    {
+        public List<PurchaseDepartmentModel> DepartmentModelList { get; set; }
+        public List<string> ManagementCompanyList { get; set; }
+    }
 }

@@ -27,7 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             return View();
         }
 
-        public JsonResult SavePurchaseOrderSetting(Business_PurchaseOrderSetting sevenSection)
+        public JsonResult SavePurchaseOrderSetting(PurchaseOrderSettingModel saveModel)
         {
             var resultModel = new ResultModel<string>() {IsSuccess = false, Status = "0"};
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -35,19 +35,53 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    if (sevenSection.VGUID == Guid.Empty)
+                    if (saveModel.VGUID == Guid.Empty)
                     {
-                        sevenSection.VGUID = Guid.NewGuid();
-                        sevenSection.CreateDate = DateTime.Now;
-                        sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        db.Insertable<Business_PurchaseOrderSetting>(sevenSection).ExecuteCommand();
+                        saveModel.VGUID = Guid.NewGuid();
+                        saveModel.CreateDate = DateTime.Now;
+                        saveModel.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        db.Insertable<Business_PurchaseOrderSetting>(saveModel).ExecuteCommand();
+                        foreach (var departmentModel in saveModel.DepartmentModelList)
+                        {
+                            var depModal = new Business_PurchaseDepartment();
+                            depModal.VGUID = Guid.NewGuid();
+                            depModal.PurchaseOrderSettingVguid = saveModel.VGUID;
+                            depModal.DepartmentName = departmentModel.Descrption;
+                            depModal.DepartmentVguid = departmentModel.VGUID;
+                            depModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            depModal.CreateDate = DateTime.Now;
+                            db.Insertable<Business_PurchaseDepartment>(depModal).ExecuteCommand();
+                        }
+                        foreach (var managementCompany in saveModel.ManagementCompanyList)
+                        {
+                            var managementCompanyModal = new Business_PurchaseManagementCompany();
+                            managementCompanyModal.VGUID = Guid.NewGuid();
+                            managementCompanyModal.PurchaseOrderSettingVguid = saveModel.VGUID;
+                            managementCompanyModal.ManagementCompany = managementCompany;
+                            managementCompanyModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            managementCompanyModal.CreateDate = DateTime.Now;
+                            db.Insertable<Business_PurchaseManagementCompany>(managementCompanyModal).ExecuteCommand();
+                        }
                     }
                     else
                     {
-                        sevenSection.ChangeDate = DateTime.Now;
-                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_PurchaseOrderSetting>(sevenSection)
+                        saveModel.ChangeDate = DateTime.Now;
+                        saveModel.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        db.Updateable<Business_PurchaseOrderSetting>(saveModel)
                             .IgnoreColumns(x => new {x.CreateDate, x.CreateUser }).ExecuteCommand();
+                        db.Deleteable<Business_PurchaseDepartment>()
+                            .Where(c => c.PurchaseOrderSettingVguid == saveModel.VGUID).ExecuteCommand();
+                        foreach (var departmentModel in saveModel.DepartmentModelList)
+                        {
+                            var depModal = new Business_PurchaseDepartment();
+                            depModal.VGUID = Guid.NewGuid();
+                            depModal.PurchaseOrderSettingVguid = saveModel.VGUID;
+                            depModal.DepartmentName = departmentModel.Descrption;
+                            depModal.DepartmentVguid = departmentModel.VGUID;
+                            depModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            depModal.CreateDate = DateTime.Now;
+                            db.Insertable<Business_PurchaseDepartment>(depModal).ExecuteCommand();
+                        }
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
@@ -56,17 +90,67 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             });
             return Json(resultModel);
         }
-
+        public JsonResult DeleteManagementCompany(Guid VGUID)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                db.Deleteable<Business_PurchaseManagementCompany>()
+                    .Where(c => c.VGUID == VGUID).ExecuteCommand();
+                resultModel.IsSuccess = true;
+                resultModel.Status = "1";
+            });
+            return Json(resultModel);
+        }
+        public JsonResult AddManagementCompany(Business_PurchaseManagementCompany saveModel)
+        {
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                saveModel.VGUID = Guid.NewGuid();
+                saveModel.CreateDate = DateTime.Now;
+                saveModel.CreateUser = cache[PubGet.GetUserKey].UserName;
+                db.Insertable<Business_PurchaseManagementCompany>(saveModel).ExecuteCommand();
+                resultModel.IsSuccess = true;
+                resultModel.Status = "1";
+            });
+            return Json(resultModel);
+        }
         public JsonResult GetPurchaseOrderSettingDetail(Guid vguid)
         {
-            Business_PurchaseOrderSetting model = new Business_PurchaseOrderSetting();
+            var resultModel = new ResultModel<Business_PurchaseOrderSetting,List<PurchaseDepartmentModel>>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                model = db.Queryable<Business_PurchaseOrderSetting>().Single(x => x.VGUID == vguid);
+                resultModel.ResultInfo = db.Queryable<Business_PurchaseOrderSetting>().Single(x => x.VGUID == vguid);
+                resultModel.ResultInfo2 = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT *, CASE
+                   WHEN bpd.DepartmentVguid IS NULL THEN
+                       'NoCheck'
+                   ELSE
+                       'Checked'
+                           END AS IsCheck
+                    FROM
+                    (
+                        SELECT VGUID,Descrption
+                        FROM Business_SevenSection
+                        WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
+                              AND AccountModeCode = '1002'
+                              AND CompanyCode = '01'
+                              AND Status = '1'
+                              AND Code LIKE '10%'
+                    ) AS bss
+                        RIGHT JOIN
+                        (
+                            SELECT DepartmentVguid
+                            FROM Business_PurchaseDepartment
+                            WHERE PurchaseOrderSettingVguid = '"+ vguid +@"'
+                        ) bpd
+                    ON bpd.DepartmentVguid = bss.VGUID").ToList();
             });
-            return Json(model, JsonRequestBehavior.AllowGet);
-            ;
+            resultModel.IsSuccess = true;
+            resultModel.Status = "1";
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetMinorListDatas(string MAJOR)
         {
@@ -77,6 +161,34 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             });
             var result = list.GroupBy(c => new { c.AssetMinor,c.AssetMinorVguid }).Select(c => c.Key).ToList();
             return Json(result,JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetBusiness_PurchaseDepartment(Guid? Vguid, GridParams para)
+        {
+            var jsonResult = new JsonResultModel<Business_PurchaseManagementCompany>();
+            DbBusinessDataService.Command(db =>
+            {
+                int pageCount = 0;
+                para.pagenum = para.pagenum + 1;
+                jsonResult.Rows = db.Queryable<Business_PurchaseManagementCompany>().Where(i => i.PurchaseOrderSettingVguid == Vguid).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.TotalRows = pageCount;
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPurchaseDepartmentListDatas()
+        {
+            var list = new List<PurchaseDepartmentModel>();
+            DbBusinessDataService.Command(db =>
+            {
+                list = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
+                    FROM Business_SevenSection
+                    WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
+                          AND AccountModeCode = '1002'
+                          AND CompanyCode = '01'
+                          AND Status = '1'
+                          AND Code LIKE '10%'").ToList();
+            });
+               
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
         
     }

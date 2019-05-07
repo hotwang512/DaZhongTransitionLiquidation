@@ -43,6 +43,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     var model = db.Queryable<Business_IntangibleAssetsOrder>().Where(c => c.VGUID == sevenSection.VGUID);
                     if (model.Count() == 0)
                     {
+                        var orderNumberLeft = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+                        //查出当前日期数据库中最大的订单号
+                        var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
+                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
+                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).ToList();
+                        var maxOrderNumRight = 0;
+                        if (currentDayList.Any())
+                        {
+                            maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
+                        }
+                        maxOrderNumRight = maxOrderNumRight + 1;
+                        sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
@@ -53,7 +67,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     {
                         sevenSection.ChangeDate = DateTime.Now;
                         sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_IntangibleAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus }).ExecuteCommand();
+                        db.Updateable<Business_IntangibleAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus,x.OrderNumber }).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
@@ -117,17 +131,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             }
             return Json(resultModel);
         }
-        public JsonResult GetUseDepartment()
-        {
-            var departmentData = new List<Business_SevenSection>();
-            DbBusinessDataService.Command(db =>
-            {
-                departmentData = db.Queryable<Business_SevenSection>().Where(x =>
-                    x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == "1002" &&
-                    x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
-            });
-            return Json(departmentData, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetUseDepartment()
+        //{
+        //    var departmentData = new List<Business_SevenSection>();
+        //    DbBusinessDataService.Command(db =>
+        //    {
+        //        departmentData = db.Queryable<Business_SevenSection>().Where(x =>
+        //            x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == "1002" &&
+        //            x.CompanyCode == "01" && x.Status == "1" && x.Code.StartsWith("10")).ToList();
+        //    });
+        //    return Json(departmentData, JsonRequestBehavior.AllowGet);
+        //}
         public JsonResult SubmitIntangibleAssetsOrder(Guid vguid)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };

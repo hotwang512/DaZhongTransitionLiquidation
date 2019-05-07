@@ -8,6 +8,7 @@ var $page = function () {
         initSelectPurchaseGoods();
         initPayCompanyDropdown();
         initComboBox();
+        initSelectPurchaseDepartment();
         addEvent();
         $("#PaymentInformation").find("input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
     }
@@ -33,11 +34,18 @@ var $page = function () {
                     validateError++;
                 }
                 if (validateError <= 0) {
+                    var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
+
+                    var DepartmentModelList = [];
+                    for (var i = 0; i < checkedItems.length; i++) {
+                        DepartmentModelList.push(checkedItems[i].value);
+                    };
                     $.ajax({
                         url: "/AssetPurchase/IntangibleAssetsOrderDetail/SaveIntangibleAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
+                            "PurchaseDepartmentIDs": DepartmentModelList.join(","),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
                             "PaymentInformation": $("#hiddenPaymentInformation").val(),
@@ -85,14 +93,9 @@ var $page = function () {
                 $("#ContractFileInput").click();
             });
         //确定
-        $("#OrderDetailsDialog_OKBtn").on("click",
+        $("#btnPrint").on("click",
             function () {
-                $("#OrderDetailsDialog").modal("hide");
-            });
-        //取消
-        $("#OrderDetailsDialog_CancelBtn").on("click",
-            function () {
-                $("#OrderDetailsDialog").modal("hide");
+                $("#CreditDialog").modal("show");
             });
         //提交
         $("#btnSubmit").on("click",
@@ -144,6 +147,13 @@ var $page = function () {
 
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+            var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
+            for (var i = 0; i < PurchaseDepartment.length; i++) {
+                var item = $("#PurchaseDepartment").jqxDropDownList('getItemByValue', PurchaseDepartment[i]);
+                $("#PurchaseDepartment").jqxDropDownList('checkItem', item);
+            }
+            $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+            $("#PurchaseGoods").attr("disabled", true);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             initComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
@@ -255,6 +265,22 @@ var $page = function () {
         return true;
     }
 };
+function initSelectPurchaseDepartment() {
+    var source =
+    {
+        datatype: "json",
+        type: "post",
+        datafields: [
+            { name: 'Descrption' },
+            { name: 'VGUID' }
+        ],
+        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
+        async: false
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, placeHolder: "请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 198, height: 33 });
+    $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
+}
 function initSelectPurchaseGoods() {
     //使用部门
     $.ajax({

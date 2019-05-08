@@ -204,7 +204,7 @@ var $page = function () {
         selector.$grid().jqxDataTable(
             {
                 pageable: true,
-                width: "99.9%",
+                width: "100%",
                 height: 400,
                 pageSize: 999999999,
                 serverProcessing: true,
@@ -216,14 +216,14 @@ var $page = function () {
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanySection', datafield: 'CompanySection', hidden: true },
                     //{ text: '业务类型', datafield: 'BusinessType', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '业务编码', datafield: 'BusinessSubItem1', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '业务项目', datafield: 'BusinessProject', width: 400, align: 'center', cellsAlign: 'center' },
+                    { text: '业务编码', datafield: 'BusinessSubItem1', width: 320, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '业务项目', datafield: 'BusinessProject', width: 450, align: 'center', cellsAlign: 'center' },
                    
                     //{ text: '业务子项2', datafield: 'BusinessSubItem2', width: 200, align: 'center', cellsAlign: 'center', },
                     //{ text: '业务子项3', datafield: 'BusinessSubItem3', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '供应商类别', datafield: 'CollectionCompanyName', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '供应商类别', datafield: 'CollectionCompanyName', width: 180, align: 'center', cellsAlign: 'center', },
                     { text: '银行账号', datafield: 'CollectionAccount', width: 200, align: 'center', cellsAlign: 'center', },
-                    { text: '银行户名', datafield: 'CollectionBankAccountName', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '银行户名', datafield: 'CollectionBankAccountName', width: 180, align: 'center', cellsAlign: 'center', },
                     { text: '开户行', datafield: 'CollectionBank', align: 'center', cellsAlign: 'center', },
 
                     { text: '摘要', datafield: 'Abstract', width: 200, align: 'center', cellsAlign: 'center', hidden: true },

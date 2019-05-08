@@ -15,7 +15,7 @@ var vguid = "";
 var index = 0;//切换借贷
 //var CompanyCode = loadCompanyCode("A");
 var collectionCompany = loadCollectionCompany();
-var businessType = loadBusinessType();
+//var businessType = loadBusinessType();
 var AccountSection = null;
 var CostCenterSection = null;
 var SpareOneSection = null;
@@ -36,9 +36,11 @@ var $page = function () {
         //getUserCompanySet(guid);
         $("#VGUID").val(guid);
         initSettingTable();
-        var myDate = new Date();
-        var date = myDate.toLocaleDateString();     //获取当前日期
-        $("#SubmitDate").val($.action.replaceAll(date, '/', '-'));
+        var tradeDate = new Date();
+        var month = (tradeDate.getMonth() + 1) > 9 ? (tradeDate.getMonth() + 1) : "0" + (tradeDate.getMonth() + 1);
+        var day = tradeDate.getDate() > 9 ? tradeDate.getDate() : "0" + tradeDate.getDate();
+        var date = tradeDate.getFullYear() + "-" + month + "-" + day;     //获取当前日期
+        $("#SubmitDate").val(date);
         if (guid != "" && guid != null) {
             getOrderListDetail();
         } else {
@@ -86,6 +88,7 @@ var $page = function () {
                 //data: { vguids: selection },
                 data: {
                     "VGUID": $("#VGUID").val(),
+                    "OrderDetailValue": $("#VGUID").val(),
                     "BusinessType": $("#pushPeopleDropDownButton").val(),
                     "BusinessProject": $("#BusinessProject").text(),//拼接类型
                     "BusinessSubItem1": $("#BusinessSubItem1").val(),//拼接编号
@@ -287,16 +290,16 @@ var $page = function () {
             dataType: "json",
             success: function (msg) {
                 $("#Status").val(msg.Status);
-                if ($("#Status").val() == "1") {
-                    $("#hideButton").show();
-                }
+                //if ($("#Status").val() == "1") {
+                //    $("#hideButton").show();
+                //}
                 //AccountSection = loadCompanyCode("C", msg.CompanySection, msg.SubjectSection);
                 //CostCenterSection = loadCompanyCode("D", msg.CompanySection, msg.SubjectSection);
                 //SpareOneSection = loadCompanyCode("E", msg.CompanySection, msg.SubjectSection);
                 //SpareTwoSection = loadCompanyCode("F", msg.CompanySection, msg.SubjectSection);
                 //IntercourseSection = loadCompanyCode("G", msg.CompanySection, msg.SubjectSection);
                 //loadSelectFun();
-                $("#pushPeopleDropDownButton").val(msg.BusinessType);
+                $("#BusinessType").val(msg.BusinessType);
                 $("#BusinessProject").text(msg.BusinessProject);
                 $("#BusinessSubItem1").val(msg.BusinessSubItem1);
 
@@ -316,7 +319,12 @@ var $page = function () {
                 $("#CollectionBankAccount").val(msg.CollectionBankAccount);
                 $("#CollectionBankAccountName").val(msg.CollectionBankAccountName);
                 $("#CollectionBank").val(msg.CollectionBank);
-                $("#PaymentMethod").val(msg.PaymentMethod);
+                if (msg.PaymentMethod == "" || msg.PaymentMethod == null) {
+                    $("#PaymentMethod").val("银行");
+                } else {
+                    $("#PaymentMethod").val(msg.PaymentMethod);
+                }
+                
                 //$("#PayAccount").val(msg.PayAccount);
                 //$("#PayBankAccountName").val(msg.PayBankAccountName);
                 //$("#PayBank").val(msg.PayBank);
@@ -527,19 +535,19 @@ function loadCollectionCompany() {
     });
 }
 
-function loadBusinessType() {
-    var url = "/CapitalCenterManagement/OrderListDetail/GetBusinessType";
-    $.ajax({
-        url: url,
-        async: false,
-        data: {},
-        type: "post",
-        success: function (result) {
-            uiEngineHelper.bindSelect('#BusinessType', result, "ListKey", "BusinessTypeName");
-            $("#BusinessType").prepend("<option value=\"\" selected='true'>请选择</>");
-        }
-    });
-}
+//function loadBusinessType() {
+//    var url = "/CapitalCenterManagement/OrderListDetail/GetBusinessType";
+//    $.ajax({
+//        url: url,
+//        async: false,
+//        data: {},
+//        type: "post",
+//        success: function (result) {
+//            uiEngineHelper.bindSelect('#BusinessType', result, "ListKey", "BusinessTypeName");
+//            $("#BusinessType").prepend("<option value=\"\" selected='true'>请选择</>");
+//        }
+//    });
+//}
 
 $(function () {
     var page = new $page();

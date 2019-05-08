@@ -180,7 +180,7 @@
     @******************************************************资金结算中心******************************************************@
     @if (isSysadmin || hasPaymentPermission)
     {
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -202,7 +202,7 @@
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "备用金管理" && i.Reads == 1))
                 {
                 <table>
-                    <tr class="menue_item" id="CashManager_CapitalFloM" pageurl="/CapitalCenterManagement/CashTransaction/Index">
+                    <tr class="menue_item" id="CashManager_CapitalFloM" pageurl="/CapitalCenterManagement/CashManager/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                         <td class="menue_text">备用金管理</td>
                         <td></td>
@@ -251,8 +251,38 @@
                 }
 
             </div>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                    <td class="menue_text_header">借款管理</td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "" && i.Reads == 1))
+                {
+                    <table>
+                        <tr class="menue_item" id="FundReconciliation_CapitalFlow" pageurl="/CapitalCenterManagement/FundReconciliation/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "" && i.Reads == 1))
+                {
+                    <table>
+                        <tr class="menue_item" id="BankFlowTemplate_CapitalFlow" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
+
+            </div>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -305,7 +335,7 @@
                     }*@
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -334,7 +364,7 @@
                 }
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>

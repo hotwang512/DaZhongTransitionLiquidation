@@ -37,7 +37,7 @@
         margin-right:8px;
     }
 </style>
-<table id="hideButton" style="margin-top: 10px;display:none">
+<table id="hideButton" style="margin-top: 10px;">
     <tr style="height: 50px;">
         <td style="width: 95px;">
             <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
@@ -73,10 +73,11 @@
             <tr style="height:50px">
                 <td style="text-align: right;">业务类型：</td>
                 <td style="text-align: left;" colspan="5">
-                    <div id="pushPeopleDropDownButton" class="input_text form-control">
+                    @*<div id="pushPeopleDropDownButton" class="input_text form-control">
                         <div style="" id="pushTree">
                         </div>
-                    </div>
+                    </div>*@
+                    <input id="BusinessType" type="text" style="display:none" class="input_text form-control" readonly="readonly" />
                     <label id="BusinessProject" for="" style="margin-left: 10px;margin-top: 5px;"></label>
                     <input id="BusinessSubItem1" type="text" style="width: 800px;" class="hide" />
                     @*<select id="BusinessType" class="input_text form-control" style="width: 200px;"></select>*@

@@ -41,15 +41,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 {
                     var guid = new Guid(sevenSection.CollectionCompany);
                     sevenSection.CollectionCompanyName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == guid).CompanyOrPerson;
-                    if (sevenSection.VGUID == Guid.Empty)
+                    var isAny = db.Queryable<Business_OrderList>().Any(x => x.VGUID == sevenSection.VGUID);
+                    if (!isAny)
                     {
-                        sevenSection.VGUID = Guid.NewGuid();
+                        //sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.CreateTime = DateTime.Now;
-                        db.Insertable(sevenSection).IgnoreColumns(it => new { it.OrderDetailValue }).ExecuteReturnIdentity();
+                        db.Insertable(sevenSection).ExecuteCommand();
                     }
                     else
                     {
-                        db.Updateable(sevenSection).IgnoreColumns(it => new { it.OrderDetailValue}).ExecuteCommand();
+                        db.Updateable(sevenSection).ExecuteCommand();
                     }
                     //账套公司各项配置
                     //var gjson = sevenSection.OrderDetailValue.JsonToModel<List<Business_UserCompanySetDetail>>();
@@ -73,7 +74,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                orderList = db.Queryable<Business_OrderList>().Single(x => x.VGUID == vguid);
+                orderList = db.SqlQueryable<Business_OrderList>(@" select a.BusinessSubItem1,a.BusinessProject,a.VGUID,b.BusinessType,b.Founder,b.Status,b.CollectionCompany,b.Number,b.PaymentMethod,b.AttachmentNumber,
+b.InvoiceNumber,b.CollectionAccount,b.CollectionBankAccount,b.CollectionBankAccountName,b.CollectionBank,b.CompanyCode,b.OrderDetailValue from v_Business_BusinessTypeSet as a
+left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => x.VGUID == vguid);
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }

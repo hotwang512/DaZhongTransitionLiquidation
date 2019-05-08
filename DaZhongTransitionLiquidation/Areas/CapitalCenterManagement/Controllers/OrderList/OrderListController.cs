@@ -30,11 +30,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_OrderList>()
-                .Where(i => i.Status == searchParams.Status)
+                jsonResult.Rows = db.SqlQueryable<Business_OrderList>(@" select a.BusinessSubItem1,a.BusinessProject,a.VGUID,b.BusinessType,b.Founder,b.Status,b.CollectionCompany,b.CollectionCompanyName,b.Number,b.PaymentMethod,b.AttachmentNumber,
+b.InvoiceNumber,b.CollectionAccount,b.CollectionBankAccount,b.CollectionBankAccountName,b.CollectionBank,b.CompanyCode,b.OrderDetailValue from v_Business_BusinessTypeSet as a
+left join Business_OrderList as b on a.VGUID = b.OrderDetailValue")
+                //.Where(i => i.Status == searchParams.Status)
                 .WhereIF(searchParams.BusinessProject != null, i => i.BusinessProject.Contains(searchParams.BusinessProject))
                 .WhereIF(searchParams.CollectionCompany != null, i => i.CollectionCompany == searchParams.CollectionCompany)
-                .OrderBy("BusinessSubItem1 asc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("BusinessSubItem1 asc").ToList();
                 var data = db.Queryable<Business_CustomerBankInfo>().ToList();
                 foreach (var item in jsonResult.Rows)
                 {
@@ -53,61 +55,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                 }
                 jsonResult.TotalRows = pageCount;
-
-                //var data = db.Queryable<Business_BusinessTypeSet>().Where(x => x.ParentVGUID != null).OrderBy("Code asc").ToList();
-                //var czGuid = "c86ca480-74b7-415c-a8a4-741955627727";
-                //var zlGuid = "c86ca480-74b7-415c-a8a4-741955627728";
-                //for (int i = 0; i < 2; i++)
-                //{
-                //    if (i == 0)
-                //    {
-                //        var projectCode = "cz";
-                //        var projectName = "出租";
-                //        var isAny = data.Any(x => x.ParentVGUID == czGuid);
-                //        if (isAny)
-                //        {
-                //            var datas = data.Where(x => x.ParentVGUID == czGuid).ToList();
-                //            foreach (var item in datas)
-                //            {
-                //                projectCode += "|" + item.Code;
-                //                projectName += "|" + item.BusinessName;
-                //                GetNextItem(db, item, data, projectCode, projectName);
-                //            }
-                //        }
-                //    }
-                //    else
-                //    {
-                //        var isAny = data.Any(x => x.ParentVGUID == zlGuid);
-                //        if (isAny)
-                //        {
-                //            var datas = data.Where(x => x.ParentVGUID == zlGuid).ToList();
-                //            foreach (var item in datas)
-                //            {
-                //                //GetNextItem(db, item, item.VGUID.ToString());
-                //            }
-                //        }
-                //    }
-                //}  
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
-        }
-        private void GetNextItem(SqlSugarClient db, Business_BusinessTypeSet item,List<Business_BusinessTypeSet> data, string projectCode,string projectName)
-        {
-            var isAny = data.Where(x => x.ParentVGUID == item.VGUID.ToString()).ToList();
-            if (isAny.Count > 0)
-            {
-                //var datas = data.Where(x => x.ParentVGUID == zlGuid).ToList();
-                foreach (var it in isAny)
-                {
-                    projectCode += "|" + it.Code;
-                    projectName += "|" + it.BusinessName;
-                    GetNextItem(db, it, data, projectCode, projectName);
-                }
-            }
-            else
-            {
-
-            }
         }
         public JsonResult DeleteOrderListInfo(List<Guid> vguids)//Guid[] vguids
         {

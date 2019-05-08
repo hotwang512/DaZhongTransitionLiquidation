@@ -119,6 +119,14 @@ var $page = function () {
                 bindManagementCompanyData();
             }
         });
+        $("#ManagementCompanyDialog_OKBtn").on("click",
+            function (event) {
+                $("#ManagementCompanyModalDialog").modal("hide");
+            });
+        $("#ManagementCompanyDialog_CancelBtn").on("click",
+            function (event) {
+                $("#ManagementCompanyModalDialog").modal("hide");
+            });
     }; //addEvent end
     function cellsDeleteRenderer(row, column, value, rowData) {
         var vguid = rowData.VGUID;
@@ -235,10 +243,11 @@ function GetManagementCompanyData() {
             height: 300,
             pageSize: 10,
             serverProcessing: true,
+            autoRowHeight: true,
             pagerButtonsCount: 10,
             source: typeAdapter,
             theme: "office",
-            columnsHeight: 30,
+            //columnsHeight: 30,
             columnsResize: true,
             columns: [
                 { text: '资产管理公司', datafield: 'ManagementCompany', width: 338, align: 'center', cellsAlign: 'center' },

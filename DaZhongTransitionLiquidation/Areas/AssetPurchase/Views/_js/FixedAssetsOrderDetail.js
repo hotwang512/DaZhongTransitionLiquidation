@@ -340,7 +340,7 @@ function initSelectPurchaseDepartment() {
         async: false
     };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 198, height: 33 });
+    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
     $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
 }
 //function initSelect()

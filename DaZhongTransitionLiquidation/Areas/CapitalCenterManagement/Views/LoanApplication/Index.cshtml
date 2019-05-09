@@ -1,0 +1,89 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "借款管理/借款申请";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/LoanApplication.js")"></script>
+}
+
+@section css{
+
+}
+<style type="text/css">
+    .jqx-grid-cell-pinned-office {
+        background-color: none !important;
+    }
+    .btnLR{
+        width:110px;
+    }
+    </style>
+
+@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+{ 
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnLoan" type="button" class="buttons btnLR"><i class="iconfont btn_icon" style="color: black !important;">&#xe7bb;</i><span style="">申请借款</span></button>
+                </td>
+                <td style="width: 190px;">
+                    <button id="btnRepay" type="button" class="buttons btnLR" style="margin-left: 10px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe7bb;</i><span style="">申请还款</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
+
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 70px;">
+        <table style="margin-top: 20px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">申请日期：</td>
+                <td class="td_input">
+                    <input id="ApplyDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td>
+                @*<td class="td_span">部门：</td>
+                <td class="td_input">
+                    <select id="OrgName" class="input_text form-control" style="width: 210px;"></select>
+                </td>*@              
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>      
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>         
+            </tr>
+</table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<style>
+    /*.input_text {
+        width: 340px;
+    }*/
+    .td_span {
+    text-align: right;
+    width: 115px;
+}
+</style>
+<!-- 底部表格 -->
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />

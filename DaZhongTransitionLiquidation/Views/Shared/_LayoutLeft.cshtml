@@ -180,7 +180,7 @@
     @******************************************************资金结算中心******************************************************@
     @if (isSysadmin || hasPaymentPermission)
     {
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFlowL" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -259,12 +259,12 @@
                 </tr>
             </table>
             <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "" && i.Reads == 1))
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "借款申请" && i.Reads == 1))
                 {
                     <table>
-                        <tr class="menue_item" id="FundReconciliation_CapitalFlow" pageurl="/CapitalCenterManagement/FundReconciliation/Index">
+                        <tr class="menue_item" id="LoanApplication_CapitalFlowL" pageurl="/CapitalCenterManagement/LoanApplication/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text"></td>
+                            <td class="menue_text">借款申请</td>
                             <td></td>
                         </tr>
                     </table>
@@ -272,7 +272,7 @@
                 @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "" && i.Reads == 1))
                 {
                     <table>
-                        <tr class="menue_item" id="BankFlowTemplate_CapitalFlow" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">
+                        <tr class="menue_item" id="BankFlowTemplate_CapitalFlowL" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text"></td>
                             <td></td>
@@ -282,7 +282,7 @@
 
             </div>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFlowL" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -335,7 +335,7 @@
                     }*@
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFlowL" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -364,7 +364,7 @@
                 }
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFlowL" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>

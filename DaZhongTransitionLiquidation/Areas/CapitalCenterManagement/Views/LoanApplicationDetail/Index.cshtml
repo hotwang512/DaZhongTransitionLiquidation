@@ -1,7 +1,7 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 @{
-    ViewBag.Title = "现金管理/备用金管理明细";
+    ViewBag.Title = "借款管理/借款申请明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
     var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>
@@ -11,7 +11,7 @@
     @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="@Url.CusContent("~/_theme/tool/jquery.PrintArea.min.js")"></script>
-    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/CashManagerDetail.js")"></script>
+    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/LoanApplicationDetail.js")"></script>
     }
     <style>
         .input_text {
@@ -65,28 +65,36 @@
                     <td style="text-align: left;"><input id="ApplyDate" type="text" style="" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
                 </tr>
                 <tr style="height:50px">
-                    <td style="text-align: right;width: 150px;">全称：</td>
-                    <td style="text-align: left;"><input id="BankAccountName" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
-                    <td style="text-align: right;">账号：</td>
-                    <td style="text-align: left;"><input id="BankAccount" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
-                    <td style="text-align: right;">开户银行：</td>
-                    <td style="text-align: left;"><input id="BankName" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
-                </tr>
-                <tr style="height:50px">
-                    <td style="text-align: right;">提现金额(小写)：</td>
-                    <td style="text-align: left;"><input id="Money" type="text" style="" class="input_text form-control" /></td>
-                    <td style="text-align: right;">提现金额(大写)：</td>
-                    <td style="text-align: left;"><input id="MoneyA" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                    <td style="text-align: right;width: 150px;">申请人：</td>
+                    <td style="text-align: left;"><input id="Applicants" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                    <td style="text-align: right;">部门：</td>
+                    <td style="text-align: left;"><select id="OrgId" class="input_text form-control" style="width: 430px"></select></td>
                     <td style="text-align: right;">支票编号：</td>
                     <td style="text-align: left;"><input id="CheckNo" type="text" style="" class="input_text form-control" /></td>
                 </tr>
                 <tr style="height:50px">
-                    <td style="text-align: right;">提现事由：</td>
+                    <td style="text-align: right;">申请金额(小写)：</td>
+                    <td style="text-align: left;"><input id="Money" type="text" style="" class="input_text form-control" /></td>
+                    <td style="text-align: right;">申请金额(大写)：</td>
+                    <td style="text-align: left;"><input id="MoneyA" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                    <td style="text-align: right;">用途：</td>
+                    <td style="text-align: left;"><input id="Purpose" type="text" style="" class="input_text form-control" /></td>
+                </tr>
+                <tr style="height:50px">
+                    <td style="text-align: right;">备注：</td>
                     <td style="text-align: left;"><input id="Remark" type="text" style="" class="input_text form-control" /></td>
+                    <td style="text-align: right;">总经理：</td>
+                    <td style="text-align: left;"><input id="GeneralManager" type="text" style="" class="input_text form-control" /></td>
+                    <td style="text-align: right;">财务经理：</td>
+                    <td style="text-align: right;"><input id="FinancialManager" type="text" style="" class="input_text form-control" /></td>
+                </tr>
+                <tr style="height:50px">
+                    <td style="text-align: right;">部门负责人：</td>
+                    <td style="text-align: left;"><input id="DivisionDirector" type="text" style="" class="input_text form-control" /></td>
                     <td style="text-align: right;">出纳：</td>
                     <td style="text-align: left;"><input id="Cashier" type="text" style="" class="input_text form-control" /></td>
-                    <td style="text-align: right;">审核：</td>
-                    <td style="text-align: right;"><input id="Auditor" type="text" style="" class="input_text form-control" /><input id="VGUID" name="VGUID" class="hide" /></td>
+                    <td style="text-align: right;"></td>
+                    <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
                 </tr>
             </table>
         </div>

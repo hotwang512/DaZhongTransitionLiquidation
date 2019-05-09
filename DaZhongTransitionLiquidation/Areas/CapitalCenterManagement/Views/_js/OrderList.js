@@ -16,12 +16,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         loadCollectionCompany();
-        if (status == "1") {
-            $("#buttonList").show();
-        }
-        if (status == "2") {
-            $("#buttonList2").show();
-        }
+       
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {

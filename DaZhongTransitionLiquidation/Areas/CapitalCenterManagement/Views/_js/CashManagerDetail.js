@@ -2,15 +2,12 @@
 
     this.init = function () {
         addEvent();
+        getCashManagerDetail();
     };
-    var selector = this.selector =
-        {
-            
-        }
+    var selector = this.selector = {};
 
     function addEvent() {
         getCompanyCode();
-        getOrderListDetail();
         //获取当前日期
         var tradeDate = new Date();
         var month = (tradeDate.getMonth() + 1) > 9 ? (tradeDate.getMonth() + 1) : "0" + (tradeDate.getMonth() + 1);
@@ -135,7 +132,7 @@ function getBankInfo() {
         }
     });
 }
-function getOrderListDetail() {
+function getCashManagerDetail() {
     var guid = $.request.queryString().VGUID;
     $.ajax({
         url: "/CapitalCenterManagement/CashManagerDetail/GetCashManagerInfo",
@@ -163,7 +160,7 @@ function getOrderListDetail() {
         }
     });
 }
-
+/** 时间转换 */
 function ChangeDateFormat(val) {
     if (val != null) {
         var date = new Date(parseInt(val.replace("/Date(", "").replace(")/", ""), 10));
@@ -174,7 +171,6 @@ function ChangeDateFormat(val) {
     }
     return "";
 }
-
 /** 数字金额大写转换(可以处理整数,小数,负数) */
 function smalltoBIG(n) {
     var fraction = ['角', '分'];

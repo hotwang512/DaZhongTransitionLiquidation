@@ -1,5 +1,4 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
-using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -10,14 +9,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CashManagerDetail
+namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.LoanApplicationDetail
 {
-    public class CashManagerDetailController : BaseController
+    public class LoanApplicationDetailController : BaseController
     {
-        public CashManagerDetailController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        public LoanApplicationDetailController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
         }
-        // GET: CapitalCenterManagement/CashManagerDetail
+        // GET: CapitalCenterManagement/LoanApplicationDetail
         public ActionResult Index()
         {
             ViewBag.GetAccountMode = GetAccountModes();
@@ -32,36 +31,37 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return result;
         }
-        public JsonResult GetBankInfo(string accountMode, string companyCode)
+        public JsonResult GetOrgInfo(string accountMode, string companyCode)
         {
-            var jsonResult = new Business_CompanyBankInfo();
+            var jsonResult = new List<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
             {
-                jsonResult = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.AccountModeCode == accountMode && x.CompanyCode == companyCode && x.AccountType == "基本户").First();
+                jsonResult = db.Queryable<Business_SevenSection>().Where(x => x.AccountModeCode == accountMode && x.CompanyCode == companyCode && x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43"
+                                                                    && x.Code.Substring(0,2) == "10" && x.Status == "1").OrderBy("Code asc").ToList();
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCashManagerInfo(Guid vguid)
+        public JsonResult GetLoanApplicationInfo(Guid vguid)
         {
-            Business_CashManagerInfo orderList = new Business_CashManagerInfo();
+            Business_LoanApplication orderList = new Business_LoanApplication();
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                orderList = db.Queryable<Business_CashManagerInfo>().Single(x=>x.VGUID == vguid);
+                orderList = db.Queryable<Business_LoanApplication>().Single(x => x.VGUID == vguid);
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult SaveCashManagerDetail(Business_CashManagerInfo sevenSection)
+        public JsonResult SaveLoanApplication(Business_LoanApplication sevenSection)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var isAny = db.Queryable<Business_CashManagerInfo>().Any(x => x.VGUID == sevenSection.VGUID);
+                    var isAny = db.Queryable<Business_LoanApplication>().Any(x => x.VGUID == sevenSection.VGUID);
                     if (!isAny)
                     {
-                        var no = db.Ado.GetString(@"select top 1 No from Business_CashManagerInfo a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
+                        var no = db.Ado.GetString(@"select top 1 No from Business_LoanApplication a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
                                   order by No desc", new { @NowDate = DateTime.Now });
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.No = GetVoucherName(no);

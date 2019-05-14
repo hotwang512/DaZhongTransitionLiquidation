@@ -2,7 +2,7 @@
 
     this.init = function () {
         addEvent();
-        getCashManagerDetail();
+        getLoanApplicationDetail();
     };
     var selector = this.selector = {};
 
@@ -16,34 +16,47 @@
         if ($("#ApplyDate").val() == "") {
             $("#ApplyDate").val(date);
         }
-        
+        $("#Applicants").val($("#LoginName").val());
         //金额转化大写
         $("#Money").blur(function () {
             var money = $("#Money").val();
-            if (money != "") {var value = smalltoBIG(money);$("#MoneyA").val(value);}
+            if (money != "") { var value = smalltoBIG(money); $("#MoneyA").val(value); }
         });
         //预览
         $("#Preview").on("click", function () {
             var companyName = $('#CompanyCode option:selected').text();
+            var orgName = $('#OrgId option:selected').text();
             $("#lblCompanyName").text(companyName);
             $("#lblApplyDate").text($("#ApplyDate").val());
             $("#lblNo").text($("#lblNoA").text());
-            $("#lblBankAccountName").text($("#BankAccountName").val());
-            $("#lblBankAccount").text($("#BankAccount").val());
-            $("#lblBankName").text($("#BankName").val());
+            $("#lblApplicants").text($("#Applicants").val());
+            $("#lblOrgName").text(orgName);
             $("#lblMoneyA").text($("#MoneyA").val());
             $("#lblMoney").text($("#Money").val());
+            $("#lblPurpose").text($("#Purpose").val());
             $("#lblCheckNo").text($("#CheckNo").val());
             $("#lblRemark").text($("#Remark").val());
+            $("#lblGeneralManager").text($("#GeneralManager").val());
+            $("#lblFinancialManager").text($("#FinancialManager").val());
+            $("#lblDivisionDirector").text($("#DivisionDirector").val());
             $("#lblCashier").text($("#Cashier").val());
-            $("#lblAuditor").text($("#Auditor").val());
+            
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("show");
+        });
+        //打印
+        $("#btnPrint").on("click", function () {
+            $(".printTable").printArea();
+        })
+        //取消
+        $("#AddNewBankData_CancelBtn").on("click", function () {
+            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
+            $("#ShowDialog").modal("hide");
         });
         //保存
         $("#btnSave").on("click", function () {
             $.ajax({
-                url: "/CapitalCenterManagement/CashManagerDetail/SaveCashManagerDetail",
+                url: "/CapitalCenterManagement/LoanApplicationDetail/SaveLoanApplication",
                 data: {
                     AccountModeCode: $("#AccountModeCode").val(),
                     AccountModeName: $('#AccountModeCode option:selected').text(),
@@ -51,14 +64,17 @@
                     CompanyName: $('#CompanyCode option:selected').text(),
                     ApplyDate: $("#ApplyDate").val(),
                     No: $("#lblNoA").text(),
-                    BankAccountName: $("#BankAccountName").val(),
-                    BankAccount: $("#BankAccount").val(),
-                    BankName: $("#BankName").val(),
+                    Applicants: $("#Applicants").val(),
+                    OrgId: $("#OrgId").val(),
+                    OrgName: $('#OrgId option:selected').text(),
+                    Purpose: $("#Purpose").val(),
                     Money: $("#Money").val(),
                     CheckNo: $("#CheckNo").val(),
                     Remark: $("#Remark").val(),
+                    GeneralManager: $("#GeneralManager").val(),
+                    FinancialManager: $("#FinancialManager").val(),
+                    DivisionDirector: $("#DivisionDirector").val(),
                     Cashier: $("#Cashier").val(),
-                    Auditor: $("#Auditor").val(),
                     VGUID: $("#VGUID").val()
                 },
                 type: "POST",
@@ -77,18 +93,6 @@
                     }
                 }
             });
-        });
-        //打印
-        $("#btnPrint").on("click", function () {
-            $(".printTable").printArea();
-        })
-        //取消
-        $("#AddNewBankData_CancelBtn").on("click", function () {
-            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
-            $("#ShowDialog").modal("hide");
-        });
-        $("#btnCancel").on("click", function () {
-            history.go(-1);
         });
     }
 };
@@ -109,33 +113,31 @@ function getCompanyCode() {
         success: function (msg) {
             uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "CompanyName");
             //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
-            getBankInfo();
+            getOrgInfo();
         }
     });
     //companyCode = $("#CompanyCode").val();
 }
-function getBankInfo() {
+function getOrgInfo() {
     var accountMode = $("#AccountModeCode").val();
     var companyCode = $("#CompanyCode").val();
     $.ajax({
-        url: "/CapitalCenterManagement/CashManagerDetail/GetBankInfo",
+        url: "/CapitalCenterManagement/LoanApplicationDetail/GetOrgInfo",
         data: { accountMode: accountMode, companyCode: companyCode },
         type: "POST",
         dataType: "json",
         async: false,
         success: function (msg) {
             if (msg != null && msg != "") {
-                $("#BankAccountName").val(msg.BankAccountName);
-                $("#BankAccount").val(msg.BankAccount);
-                $("#BankName").val(msg.BankName);
+                uiEngineHelper.bindSelect('#OrgId', msg, "Code", "Descrption");
             }
         }
     });
 }
-function getCashManagerDetail() {
+function getLoanApplicationDetail() {
     var guid = $.request.queryString().VGUID;
     $.ajax({
-        url: "/CapitalCenterManagement/CashManagerDetail/GetCashManagerInfo",
+        url: "/CapitalCenterManagement/LoanApplicationDetail/GetLoanApplicationInfo",
         data: {
             "vguid": guid,
         },
@@ -147,20 +149,21 @@ function getCashManagerDetail() {
             var date = ChangeDateFormat(msg.ApplyDate);
             $("#ApplyDate").val(date);
             $("#lblNoA").text(msg.No);
-            $("#BankAccountName").val(msg.BankAccountName);
-            $("#BankAccount").val(msg.BankAccount);
-            $("#BankName").val(msg.BankName);
+            $("#OrgId").val(msg.OrgId);
+            $("#Applicants").val(msg.Applicants);
+            $("#Purpose").val(msg.Purpose);
             $("#Money").val(msg.Money);
             $("#CheckNo").val(msg.CheckNo);
             $("#Remark").val(msg.Remark);
             $("#Cashier").val(msg.Cashier);
-            $("#Auditor").val(msg.Auditor);
+            $("#GeneralManager").val(msg.GeneralManager);
+            $("#FinancialManager").val(msg.FinancialManager);
+            $("#DivisionDirector").val(msg.DivisionDirector);
             $("#VGUID").val(msg.VGUID);
             if (msg.Money != "") { var value = smalltoBIG(msg.Money); $("#MoneyA").val(value); }
         }
     });
 }
-/** 时间转换 */
 function ChangeDateFormat(val) {
     if (val != null) {
         var date = new Date(parseInt(val.replace("/Date(", "").replace(")/", ""), 10));

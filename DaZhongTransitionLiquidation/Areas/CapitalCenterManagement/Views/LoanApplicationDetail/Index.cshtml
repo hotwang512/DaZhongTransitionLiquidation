@@ -1,0 +1,174 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+@{
+    ViewBag.Title = "借款管理/借款申请明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
+    var accountModeName = ViewBag.GetAccountMode as List<Business_SevenSection>;
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/_theme/tool/jquery.PrintArea.min.js")"></script>
+    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/LoanApplicationDetail.js")"></script>
+}
+<style>
+    .input_text {
+        width: 250px !important;
+        height: 35px;
+        border: 1px;
+        border-style: solid;
+        border-color: #dddddd;
+        -moz-box-shadow: 0px 1px 10px #dddddd;
+        -webkit-box-shadow: 0px 1px 10px #dddddd;
+        box-shadow: 0 0 10px #dddddd;
+        background-color: white !important;
+        border-radius: 4px;
+        float: left;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;">
+    <tr style="height: 50px;">
+        <td style="width: 95px;">
+            <button id="Preview" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">预览</span></button>
+            @*<button id="btnSave" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>*@
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">主信息</span>   <label id="lblNoA" for="" class="header_text_span" style=""></label></div>
+    </div>
+    <div class="body_mk" style="height: 300px;">
+        <table id="VoucherList" style="width:100%;margin-top: 20px;">
+            <tr style="height:50px">
+                <td style="text-align: right;width: 150px;">账套：</td>
+                <td style="text-align: left;">
+                    <select id="AccountModeCode" class="input_text form-control" style="width: 250px" onchange="getCompanyCode()">
+                        @{
+                            foreach (var item in accountModeName)
+                            {
+                                <option value="@item.Code">@item.Descrption</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td style="text-align: right;width: 150px;">公司：</td>
+                <td style="text-align: left;"><select id="CompanyCode" class="input_text form-control" style="width: 430px" onchange="getBankInfo()"></select></td>
+                <td style="text-align: right;width: 150px;">申请日期：</td>
+                <td style="text-align: left;"><input id="ApplyDate" type="text" style="" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;width: 150px;">申请人：</td>
+                <td style="text-align: left;"><input id="Applicants" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                <td style="text-align: right;">部门：</td>
+                <td style="text-align: left;"><select id="OrgId" class="input_text form-control" style="width: 430px"></select></td>
+                <td style="text-align: right;">支票编号：</td>
+                <td style="text-align: left;"><input id="CheckNo" type="text" style="" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">申请金额(小写)：</td>
+                <td style="text-align: left;"><input id="Money" type="text" style="" class="input_text form-control" /></td>
+                <td style="text-align: right;">申请金额(大写)：</td>
+                <td style="text-align: left;"><input id="MoneyA" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                <td style="text-align: right;">用途：</td>
+                <td style="text-align: left;"><input id="Purpose" type="text" style="" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">备注：</td>
+                <td style="text-align: left;"><input id="Remark" type="text" style="" class="input_text form-control" /></td>
+                <td style="text-align: right;">总经理：</td>
+                <td style="text-align: left;"><input id="GeneralManager" type="text" style="" class="input_text form-control" /></td>
+                <td style="text-align: right;">财务经理：</td>
+                <td style="text-align: right;"><input id="FinancialManager" type="text" style="" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">部门负责人：</td>
+                <td style="text-align: left;"><input id="DivisionDirector" type="text" style="" class="input_text form-control" /></td>
+                <td style="text-align: right;">出纳：</td>
+                <td style="text-align: left;"><input id="Cashier" type="text" style="" class="input_text form-control" /></td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="ShowDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 1400px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">预览申请单</h4>
+            </div>
+            <div class="modal-body printTable" style="width: 100%;">
+                <table id="VoucherList" style="width:80%;margin-left: 150px;" border="0" cellspacing="0">
+                    <tr style="height:35px">
+                        @*<td style="text-align: center;font-size: 18px;" colspan="5"><label id="lblCompany" for="" style="font-size: 14px;font-family: SimSun;"></label></td>*@
+                        <td style="text-align: center;font-size: 14px;" colspan="5"><label id="lblCompanyName" for="" style=""></label></td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;" colspan="5">借款申请单</td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;" colspan="4"></td>
+                        <td style="text-align: right;font-size: 14px;">流水号：<label id="lblNo" for="" style=""></label></td>
+                    </tr>
+                </table>
+                <table id="VoucherListTitle" style="width:80%;margin-left: 150px;" border="1" cellspacing="0">
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;width:200px">申请人</td>
+                        <td style="text-align: center;font-size: 14px;"><label id="lblApplicants" for="" style="margin-top: 4px;"></label></td>
+                        <td style="text-align: center;font-size: 14px;width:200px">部门</td>
+                        <td style="text-align: center;font-size: 14px;"><label id="lblOrgName" for="" style="margin-top: 4px;"></label></td>
+                        <td style="text-align: center;font-size: 14px;width:200px">申请日期</td>
+                        <td style="text-align: center;font-size: 14px;"><label id="lblApplyDate" for="" style="margin-top: 4px;"></label></td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;">申请金额</td>
+                        <td style="text-align: left;font-size: 14px;" colspan="3">大写：人民币  <label id="lblMoneyA" for="" style=""></label></td>
+                        <td style="text-align: left;font-size: 14px;" colspan="2">小写：¥ <label id="lblMoney" for="" style=""></label></td>
+                    </tr>
+                    <tr style="height:35px">
+
+                        <td style="text-align: center;font-size: 14px;">用途</td>
+                        <td style="text-align: left;font-size: 14px;" colspan="3"><label id="lblPurpose" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;">支票编号</td>
+                        <td style="text-align: center;font-size: 14px;"><label id="lblCheckNo" for="" style=""></label></td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;">备注</td>
+                        <td style="text-align: left;font-size: 14px;" colspan="5"><label id="lblRemark" for="" style=""></label></td>
+                    </tr>
+                </table>
+                <table style="width:80%;margin-left: 150px;" border="0" cellspacing="0">
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;width:180px">总经理</td>
+                        <td style="text-align: center;font-size: 14px;width:200px"><label id="lblGeneralManager" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;width:180px">财务经理</td>
+                        <td style="text-align: center;font-size: 14px;width:200px"><label id="lblFinancialManager" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;width:180px">部门负责人</td>
+                        <td style="text-align: center;font-size: 14px;width:200px"><label id="lblDivisionDirector" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;width:180px">出纳</td>
+                        <td style="text-align: center;font-size: 14px;width:200px"><label id="lblCashier" for="" style=""></label></td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                <button id="btnPrint" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+                @*<button id="btnPrint" type="button" class="btn buttons" style=""><i class="" style="color: black !important;"></i><span style="margin-left: 7px; float: left;">打印</span></button>*@
+                <button id="AddNewBankData_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="jqxLoader" style="z-index:1045">
+</div>
+

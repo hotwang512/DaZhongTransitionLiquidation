@@ -1526,7 +1526,7 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header OracleButt SystemManage OrderSetting" style="display: none;">
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1605,13 +1605,12 @@
                     <table>
                         @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "采购资产基础信息配置" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="PurchaseOrderConfiguration_PurchaseOrderSetting" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
+                            <tr class="menue_item" id="PurchaseOrderSetting_PurchaseOrderSetting" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">采购资产基础信息配置</td>
                                 <td></td>
                             </tr>
                         }
-
                     </table>
                 </div>
     }

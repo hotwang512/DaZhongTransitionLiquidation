@@ -213,7 +213,7 @@ var $page = function () {
             async: false
             };
             var dataAdapter = new $.jqx.dataAdapter(source);
-            $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 198, height: 33 });
+            $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 198, height: 33, placeHolder: "请选择" });
             $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
     }
 };

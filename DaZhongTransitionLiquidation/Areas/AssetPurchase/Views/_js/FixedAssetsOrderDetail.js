@@ -156,31 +156,36 @@ var $page = function () {
             }
         });
         $('#PayCompanyDropdown').on('select', function (event) {
+
             var args = event.args;
-            if (args) {
+            if (args && $("#PayMode").val() != "现金") {
                 debugger;
                 var item = args.item;
                 $("#PayCompany").val(item.lable);
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo", { Vguid: $("#PayCompanyDropdown").val() }, function (msg) {
-                    $("#CompanyBankName").val(msg.BankName);
-                    $("#CompanyBankAccount").val(msg.BankAccount);
-                    $("#CompanyBankAccountName").val(msg.BankAccountName);
-                    $("#AccountType").val(msg.AccountType);
-                });
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
+                    { Vguid: $("#PayCompanyDropdown").val() },
+                    function(msg) {
+                        $("#CompanyBankName").val(msg.BankName);
+                        $("#CompanyBankAccount").val(msg.BankAccount);
+                        $("#CompanyBankAccountName").val(msg.BankAccountName);
+                        $("#AccountType").val(msg.AccountType);
+                    });
+            } else {
+                $("#CompanyBankName").val("");
+                $("#CompanyBankAccount").val("");
+                $("#CompanyBankAccountName").val("");
+                $("#AccountType").val("");
             }
         });
         $("#PurchaseGoods").on("change",
             function () {
                 initComboBox();
+                $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                $("#PurchaseGoods").attr("disabled", true);
             });
         $("#PurchaseDepartment").on('checkChange', function (event) {
             if (event.args) {
-                //var item = event.args.item;
-                //var value = item.value;
-                //var label = item.label;
-                //var checked = item.checked;
                 var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-
                 var DepartmentModelList = [];
                 for (var i = 0; i < checkedItems.length; i++) {
                     DepartmentModelList.push(checkedItems[i].value);
@@ -189,6 +194,16 @@ var $page = function () {
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
+
+        $("#PayMode").on("change",
+            function () {
+                if ($("#PayMode").val() == "现金") {
+                    $("#CompanyBankName").val("");
+                    $("#CompanyBankAccount").val("");
+                    $("#CompanyBankAccountName").val("");
+                    $("#AccountType").val("");
+                }
+            });
     }; //addEvent end
 
     function getFixedAssetsOrderDetail() {
@@ -202,6 +217,7 @@ var $page = function () {
                 }
             }
             $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+            initSelectPurchaseGoods();
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").attr("disabled", true);
             initComboBox();
@@ -377,6 +393,7 @@ function initComboBox() {
             $("#PaymentInformation").jqxComboBox({
                 source: dataAdapter, selectedIndex: 0,
                 displayMember: "title", valueMember: "value",
+                searchMode: 'contains',
                 width: 198, height: 33
             });
             $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: $("#PaymentInformation").val() }, function (msg) {
@@ -418,7 +435,7 @@ function initPayCompanyDropdown() {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $('#PayCompanyDropdown').jqxDropDownList({
         filterable: true, selectedIndex: 2, source: dataAdapter, displayMember: "Descrption", dropDownWidth:
-            310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200,
+            310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200,searchMode:'contains',
         renderer: function (index, label, value) {
             var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
         return table;

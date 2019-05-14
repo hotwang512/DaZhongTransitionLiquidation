@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.IntangibleAssetsOrder
 {
@@ -178,5 +179,32 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             });
             return model.SubmitStatus.TryToInt();
         }
+        public JsonResult GetPurchaseGoods(int OrderCategory, Guid[] PurchaseDepartment)
+        {
+            var PurchaseDepartmentStr = "";
+
+            var orderTypeData = new List<Business_PurchaseOrderSetting>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (PurchaseDepartment == null)
+                {
+                    orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.OrderCategory == OrderCategory).ToList();
+                }
+                else
+                {
+                    foreach (var str in PurchaseDepartment)
+                    {
+                        PurchaseDepartmentStr = PurchaseDepartmentStr + str + "','";
+                    }
+
+                    PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0, PurchaseDepartmentStr.Length - 3);
+                    orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
+                    Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
+                    WHERE OrderCategory = '1' And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
+                }
+            });
+            return Json(orderTypeData, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

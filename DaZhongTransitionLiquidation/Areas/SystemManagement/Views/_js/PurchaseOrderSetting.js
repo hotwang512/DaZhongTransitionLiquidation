@@ -55,8 +55,11 @@ var $page = function () {
             }
         });
         $("#btnAddSetting").on("click",
-            function() {
+            function () {
+                debugger;
+                InitBankCategorySelect();
                 initBankTable();
+                $("#BankAccount").val("");
                 $("#BankInfoModalDialog").modal("show");
                 
             });
@@ -115,7 +118,11 @@ var $page = function () {
                 initBankTable();
             }
         );
-        
+        $("#SettingDialog_OKBtn").on("click",
+            function () {
+                $("#SettingModalDialog").modal("hide");
+            }
+        );
     }; //addEvent end
 
     function initBankTable() {
@@ -469,6 +476,7 @@ function Setting(vguid) {
     $("#SettingModalDialog").modal("show");
 }
 function InitBankCategorySelect() {
+    $("#BankCategory").jqxDropDownList('clear');
     var url = "/Systemmanagement/PurchaseOrderSetting/GetBankCategoryListDatas";
     // prepare the data
     var source =
@@ -481,10 +489,7 @@ function InitBankCategorySelect() {
         async: false
     };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#BankCategory").jqxDropDownList({
-        selectedIndex: 2, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "CompanyOrPerson", width: 200, height: 30,
-    });
-    $("#BankCategory").jqxDropDownList({ placeHolder: "请选择" });
+    $("#BankCategory").jqxDropDownList({ source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "CompanyOrPerson", width: 200, height: 30,placeHolder: "请选择" });
 }
 $(function () {
     var page = new $page();

@@ -16,7 +16,6 @@ var $page = function () {
         $("#PaymentInformation").find(".jqx-combobox-input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
     }
     //所有事件
-
     function addEvent() {
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);

@@ -2,6 +2,9 @@
 var vguid = "";
 var mydate = new Date();
 var vehicleDefaultData;
+//拍照数据（base64）
+var baseUrl = "ws://127.0.0.1:12345";
+var socket;
 var $page = function () {
     this.init = function () {
         initSelect();
@@ -19,6 +22,7 @@ var $page = function () {
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
             getIntangibleAssetsOrderDetail();
+            getAttachment();
         }
         //取消
         $("#btnCancel").on("click",
@@ -92,6 +96,27 @@ var $page = function () {
             function () {
                 $("#ContractFileInput").click();
             });
+        //拍照
+        $(".camera").on("click",
+            function () {
+                $("#AttachmentType").val($(this).attr("AttachmentType"));
+                baseUrl = "ws://127.0.0.1:12345";
+                openSocket();
+                $("#devPhoto").hide();
+                $("#Upload_OKBtn").hide();
+                $("#photographPri").show();
+                //$("#AcceptDialog").modal("hide");
+                //showLoading();
+                $("#UploadPictureDialog").modal({ backdrop: "static", keyboard: false });
+                $("#UploadPictureDialog").modal("show");
+            });
+        //本地上传
+        $(".upload").on("click",
+            function () {
+                $("#AttachmentType").val($(this).attr("AttachmentType"));
+                $("#LocalFileInput").click();
+            });
+
         //确定
         $("#btnPrint").on("click",
             function () {
@@ -334,7 +359,44 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
         }
     });
 }
+//统一上传文件
+$("#LocalFileInput").on("change",
+    function () {
 
+        var filePath = this.value;
+        var fileExt = filePath.substring(filePath.lastIndexOf("."))
+            .toLowerCase();
+        if (!checkFileExt(fileExt)) {
+            jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+            this.value = "";
+            return;
+        } else {
+            layer.load();
+
+            $("#localFormFile").ajaxSubmit({
+                url: "/AssetPurchase/FixedAssetsOrderDetail/AllUploadLocalFile",
+                type: "post",
+                data: {
+                    'Vguid': $("#VGUID").val(),
+                    'AttachmentType': $("#AttachmentType").val()
+                },
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("上传失败！", null, "error");
+                        $('#LocalFileInput').val('');
+                        break;
+                    case "1":
+                        jqxNotification("上传成功！", null, "success");
+                        $('#LocalFileInput').val('');
+                        getAttachment();
+                        break;
+                    }
+                }
+            });
+        }
+    });
 function initSelect() {
     //使用部门
     $("#OrderType").prepend("<option value=\"\" selected='true'>请选择</>");
@@ -420,6 +482,143 @@ function initComboBox() {
 
         }
     });
+}
+function getAttachment() {
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetAttachmentInfo",
+        data: {
+            "VGUID": $("#VGUID").val()
+        },
+        type: "post",
+        dataType: "json",
+        success: function (msg) {
+            $("#ImgPaymentReceipt").html("");
+            $("#ImgInvoiceReceipt").html("");
+            $("#ImgApprovalReceipt").html("");
+            $("#ImgContract").html("");
+            $("#ImgDetailList").html("");
+            $("#ImgOtherReceipt").html("");
+            for (var i = 0; i < msg.length; i++) {
+                debugger;
+                var num;
+                var fileName = "";
+                var fileType = "";
+                if (msg[i].Attachment.indexOf("https") != -1) {
+                    num = msg[i].Attachment.split("/").length - 1;
+                    fileName = msg[i].Attachment.split("/")[num];
+                    fileType = fileName.split(".")[1];
+                } else {
+                    num = msg[i].Attachment.lastIndexOf("\\") + 1;
+                    fileName = msg[i].Attachment.substring(num, msg[i].Attachment.length);
+                    fileType = fileName.split(".")[1];
+                }
+                var ext = "." + fileType.toUpperCase();
+                var html = "";
+                if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                    html = '<div class="AttachmentDiv"><img src="/_theme/images/' + fileType + '.png" style="width: 25px;height: 25px;margin: 3px;" /><a href="' + msg[i].Attachment + '" target="_blank">' + fileName + '</a>&nbsp&nbsp&nbsp<a id=' + msg[i].VGUID + ' onclick="delAttachment(\'' + msg[i].VGUID + '\')" class="delAttachment">删除</a></div>';
+                } else {
+                    html = '<div class="AttachmentDiv"><img src="/_theme/images/Picture.png" style="width: 25px;height: 25px;margin: 3px;" /><a href="' + msg[i].Attachment + '" target="_blank">' + fileName + '</a>&nbsp&nbsp&nbsp<a id=' + msg[i].VGUID + ' onclick="delAttachment(\'' + msg[i].VGUID + '\')" class="delAttachment">删除</a></div>';
+                }
+
+                switch (msg[i].AttachmentType) {
+                    case "付款凭证": $("#ImgPaymentReceipt").append(html);
+                        break;
+                    case "发票": $("#ImgInvoiceReceipt").append(html);
+                        break;
+                    case "OA审批单": $("#ImgApprovalReceipt").append(html);
+                        break;
+                    case "合同": $("#ImgContract").append(html);
+                        break;
+                    case "清单、清册": $("#ImgDetailList").append(html);
+                        break;
+                    case "其他": $("#ImgOtherReceipt").append(html);
+                        break;
+                    default:
+                }
+            }
+        }
+    });
+}
+function delAttachment(delID) {
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/DeleteAttachment",
+        data: { VGUID: delID },
+        traditional: true,
+        type: "post",
+        success: function (msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("删除失败！", null, "error");
+                break;
+            case "1":
+                jqxNotification("删除成功！", null, "success");
+                getAttachment();
+                break;
+            }
+        }
+    });
+}
+//拍照
+function openSocket() {
+
+    socket = new WebSocket(baseUrl);
+    socket.onclose = function () {
+        console.error("web channel closed");
+    };
+    socket.onerror = function (error) {
+        console.error("web channel error: " + error);
+    };
+    socket.onopen = function () {
+        new QWebChannel(socket, function (channel) {
+            // make dialog object accessible globally
+            window.dialog = channel.objects.dialog;
+            //dialog.set_configValue("set_savePath:D:\\img");
+            //网页关闭函数
+            window.onbeforeunload = function () {
+                dialog.get_actionType("closeSignal");
+            }
+            window.onunload = function () {
+                dialog.get_actionType("closeSignal");
+            }
+            //拍照按钮点击
+            document.getElementById("photographPri").onclick = function () {
+                dialog.photoBtnClicked("primaryDev_");
+                dialog.get_actionType("savePhotoPriDev");
+            };
+            //纠偏裁边
+            document.getElementById("setdeskew").onclick = function () {
+                dialog.get_actionType("setdeskew");
+            };
+
+            //服务器返回消息
+            dialog.sendPrintInfo.connect(function (message) {
+                //设备分辨率
+                message = message.substr(14);
+                //图片保存后返回路径关键字savePhoto_success:
+                if (message.indexOf("savePhoto_success:") >= 0) {
+                    imgPath = message.substr(18);
+                }
+            });
+            //接收图片流用来展示，多个，较小的base64数据
+            dialog.send_priImgData.connect(function (message) {
+                var element = document.getElementById("bigPriDev");
+                element.src = "data:image/jpg;base64," + message;
+            });
+            //接收拍照base64
+            dialog.send_priPhotoData.connect(function (message) {
+                var element = document.getElementById("devPhoto");
+                element.src = "data:image/jpg;base64," + message;
+            });
+            //网页加载完成信号
+            dialog.html_loaded("one");
+        });
+    }
+}
+function checkFileExt(ext) {
+    if (!ext.match(/.jpg|.png|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {
+        return false;
+    }
+    return true;
 }
 function formatDate(NewDtime) {
     var dt = new Date(parseInt(NewDtime.slice(6, 19)));

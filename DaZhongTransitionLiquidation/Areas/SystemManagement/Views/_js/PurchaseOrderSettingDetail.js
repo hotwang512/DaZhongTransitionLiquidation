@@ -4,14 +4,14 @@ var mydate = new Date();
 var ManagementCompany = [];
 var $page = function () {
     this.init = function () {
+        initSelect();
+        initSelectMinor();
+        initSelectPurchaseDepartment();
+        GetManagementCompanyData();
         addEvent();
     }
     //所有事件
     function addEvent() {
-        initSelect();
-        initSelectMinor();
-        initSelectPurchaseDepartment();
-        
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
@@ -21,9 +21,10 @@ var $page = function () {
             $("#hideButton").show();
         }
         //取消
-        $("#btnCancel").on("click", function () {
-            history.go(-1);
-        })
+        $("#btnCancel").on("click",
+            function() {
+                history.go(-1);
+            });
         //保存
         $("#btnSave").on("click",
             function() {
@@ -40,7 +41,13 @@ var $page = function () {
                 var DepartmentModelList = [];
                 var items = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
                 for (var i = 0; i < items.length; i++) {
-                    DepartmentModelList.push({ "VGUID": items[i].value, "Descrption": items[i].label })
+                    DepartmentModelList.push({ "VGUID": items[i].value, "Descrption": items[i].label });
+                };
+                var ManagementCompanyList = [];
+                var rows = $('#jqxManagementCompanyTable').jqxGrid('getboundrows');
+                debugger;
+                for (var j = 0; j < rows.length; j++) {
+                    ManagementCompanyList.push({ "IsCheck": rows[j].IsCheck, "CompanyCode": rows[j].CompanyCode, "AccountModeCode": rows[j].AccountModeCode, "ManagementCompany": rows[j].ManagementCompany, "Descrption": rows[j].Descrption, "KeyData": rows[j].KeyData });
                 };
                 if (validateError <= 0) {
                     debugger;
@@ -54,7 +61,7 @@ var $page = function () {
                             "AssetCategoryMinorVguid": $("#AssetCategoryMinorVguid").val(),
                             "PurchaseGoods": $("#PurchaseGoods").val(),
                             "DepartmentModelList": DepartmentModelList,
-                            "ManagementCompanyList": ManagementCompany
+                            "ManagementCompanyList": ManagementCompanyList
                         },
                         type: "post",
                         success: function (msg) {
@@ -87,9 +94,9 @@ var $page = function () {
             }
         });
         $("#AssetManagementCompany").on('click', function (event) {
-            if (GetQueryString("VGUID") != null) {
-                GetManagementCompanyData();
-            }
+            //if (GetQueryString("VGUID") != null) {
+            //    GetManagementCompanyData();
+            //}
             $("#ManagementCompanyModalDialog").modal("show");
         });
         $("#btnAddManagementCompany").on('click', function (event) {
@@ -217,7 +224,7 @@ var $page = function () {
             $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
     }
 };
-function GetManagementCompanyData() {
+function GetManagementCompanyData_bak() {
     var source =
     {
         datafields:
@@ -253,6 +260,55 @@ function GetManagementCompanyData() {
                 { text: '资产管理公司', datafield: 'ManagementCompany', width: 338, align: 'center', cellsAlign: 'center' },
                 { text: '删除', hidden: false, width: 110, align: 'center', cellsAlign: 'center', cellsRenderer: cellsDeleteRenderer },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true }
+            ]
+        });
+}
+function GetManagementCompanyData() {
+    var source =
+        {
+            datafields:
+            [
+                { name: 'AccountModeCode', type: 'string' },
+                { name: 'Descrption', type: 'string' },
+                { name: 'CompanyCode', type: 'string' },
+                { name: 'ManagementCompany', type: 'string' },
+                { name: 'IsCheck', type: 'bool' },
+                { name: 'KeyData', type: 'string' }
+            ],
+            datatype: "json",
+            id: "KeyData",
+            data: { VGUID: $.request.queryString().VGUID },
+            url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseManagementCompanyData"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+
+    //创建卡信息列表（主表）
+    $("#jqxManagementCompanyTable").jqxGrid(
+        {
+            pageable: true,
+            width: "98%",
+            height: 380,
+            pageSize: 10,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            groupable: true,
+            groupsexpandedbydefault: true,
+            groups: ['Descrption'],
+            showgroupsheader: false,
+            columnsHeight: 30,
+            editable: true,
+            pagermode: 'simple',
+            selectionmode: 'none',
+            columns: [
+                {
+                    text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox'
+                },
+                { text: '账套编码', datafield: 'AccountModeCode', width: 120, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false ,hidden:true},
+                { text: '公司编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司描述', datafield: 'ManagementCompany', width: 463, align: 'center', cellsAlign: 'center', editable: false },
+                { text: 'KeyData', datafield: 'KeyData', hidden: true }
             ]
         });
 }
@@ -321,6 +377,66 @@ function bindManagementCompanyData() {
                 { text: '资产管理公司', datafield: 'ManagementCompany', width: 338, align: 'center', cellsAlign: 'center' },
                 { text: '删除', hidden: false, width: 110, align: 'center', cellsAlign: 'center', cellsRenderer: cellsDeleteRenderer },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true }
+            ]
+        });
+}
+//公司配置
+function initManagementCompanyData() {
+    var source =
+        {
+            datafields:
+            [
+                { name: 'Code', type: 'string' },
+                { name: 'Descrption', type: 'string' },
+                { name: 'CompanyCode', type: 'string' },
+                { name: 'CompanyName', type: 'string' },
+                { name: 'IsCheck', type: 'bool' },
+                { name: 'KeyData', type: 'string' },
+                //{ name: 'Block', type: 'string' },
+                { name: 'UserVGUID', type: 'string' },
+            ],
+            datatype: "json",
+            id: "KeyData",
+            data: { UserVGUID: $.request.queryString().Vguid },
+            url: "/Systemmanagement/UserManagement/GetUserCompanyInfo"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+
+    //创建卡信息列表（主表）
+    $("#jqxTable1").jqxGrid(
+        {
+            pageable: true,
+            width: "98%",
+            height: 380,
+            pageSize: 10,
+            //serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            groupable: true,
+            groupsexpandedbydefault: true,
+            groups: ['Descrption'],
+            showgroupsheader: false,
+            columnsHeight: 30,
+            editable: true,
+            pagermode: 'simple',
+            selectionmode: 'none',
+            columns: [
+                //{ text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                {
+                    text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox',
+                },
+                { text: '账套编码', datafield: 'Code', width: 120, align: 'center', cellsAlign: 'center', editable: false, },
+                { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '公司描述', datafield: 'CompanyName', width: 450, align: 'center', cellsAlign: 'center', editable: false },
+                //{
+                //    text: '版块', datafield: 'Block', align: 'center', cellsAlign: 'center', columntype: 'dropdownlist',
+                //    createeditor: function (row, value, editor) {
+                //        editor.jqxDropDownList({ source: countriesAdapter, displayMember: 'label', valueMember: 'value' });
+                //    }
+                //},
+                { text: 'KeyData', datafield: 'SectionVGUID', hidden: true },
             ]
         });
 }

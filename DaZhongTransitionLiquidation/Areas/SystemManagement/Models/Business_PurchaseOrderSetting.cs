@@ -36,6 +36,6 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
     public class PurchaseOrderSettingModel: Business_PurchaseOrderSetting
     {
         public List<PurchaseDepartmentModel> DepartmentModelList { get; set; }
-        public List<string> ManagementCompanyList { get; set; }
+        public List<Business_PurchaseManagementCompany> ManagementCompanyList { get; set; }
     }
 }

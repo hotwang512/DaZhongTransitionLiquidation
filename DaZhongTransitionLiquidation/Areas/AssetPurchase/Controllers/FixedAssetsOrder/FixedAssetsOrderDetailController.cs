@@ -100,7 +100,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 //主信息
                 if (db.Queryable<Business_AssetOrderDetails>().Any(x => x.AssetsOrderVguid == AssetsOrderVguid))
                 {
-                    listFixedAssetsOrder = db.Queryable<Business_AssetOrderDetails>().Where(x => x.AssetsOrderVguid == AssetsOrderVguid).ToList();
+                    listFixedAssetsOrder = db.Queryable<Business_AssetOrderDetails>().Where(x => x.AssetsOrderVguid == AssetsOrderVguid).OrderBy(c => c.AssetManagementCompany).ToList();
                 }
             });
             if (listFixedAssetsOrder.Count == 0)
@@ -119,7 +119,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             DbBusinessDataService.Command(db =>
             {
                 var listManagementCompany = db.Queryable<Business_PurchaseManagementCompany>()
-                    .Where(c => c.PurchaseOrderSettingVguid == PurchaseOrderSettingVguid).ToList();
+                    .Where(c => c.PurchaseOrderSettingVguid == PurchaseOrderSettingVguid && c.IsCheck == true).ToList();
                 foreach (var item in listManagementCompany)
                 {
                     if (!db.Queryable<Business_AssetOrderDetails>()
@@ -134,9 +134,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         list.Add(model);
                     }
                 }
-                db.Insertable<Business_AssetOrderDetails>(list).ExecuteCommand();
+                if (list.Count > 0)
+                {
+                    db.Insertable<Business_AssetOrderDetails>(list).ExecuteCommand();
+                }
             });
-            return list;
+            return list.OrderBy(c => c.AssetManagementCompany).ToList();
         }
 
         public JsonResult DeleteApprovalFile(Guid vguid)

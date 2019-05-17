@@ -489,7 +489,7 @@ function initTable() {
         columns: [
             { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true,editable:false },
             { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
-            { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 340, align: 'center', cellsAlign: 'center', editable: false },
             {
                 text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center', columntype: 'textbox',
                 validation: function (cell, value) {
@@ -514,7 +514,7 @@ function initTable() {
                     }
                 ]
             },
-            { text: '各单位OA审批单上传', datafield: 'ApprovalFormFilePath', columntype: 'textbox', width: 150,editable:false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
+            { text: '各单位OA审批单上传', datafield: 'ApprovalFormFilePath', columntype: 'textbox', width: 150,editable:false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center',hidden:true }
         ]
     });
     $("#OrderDetailsDialog").modal("show");

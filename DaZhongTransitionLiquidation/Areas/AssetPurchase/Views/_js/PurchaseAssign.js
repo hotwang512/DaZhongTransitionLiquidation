@@ -104,7 +104,7 @@ var $page = function () {
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '配置状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -159,7 +159,7 @@ function Setting(vguid) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $("#grid").jqxGrid(
     {
-        width: "460",
+        width: "475",
         autoheight: true,
         source: dataAdapter,
         statusbarheight: 25,
@@ -168,11 +168,11 @@ function Setting(vguid) {
         columns: [
             { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
             { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
-            { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 325, align: 'center', cellsAlign: 'center', editable: false },
             {
-                text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center'
+                text: '数量', datafield: 'AssetNum', width: 50, align: 'center', cellsalign: 'center'
             },
-            { text: '资产归属配置',columntype: 'textbox', width: 150, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
+            { text: '资产归属配置',columntype: 'textbox', width: 100, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
         ]
     });
     $("#OrderDetailsDialog").modal("show");
@@ -219,7 +219,7 @@ function ViewBelongTo(vguid) {
 
 function cellsrenderer(row, column, value, rowData) {
     var vguid = $('#grid').jqxGrid('getrowdata', row).VGUID;
-    return '<div style="margin: 58px; margin-top:6px;"><a style="cursor:pointer"  onclick="settingBelongTo(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';
+    return '<div style="margin: 35px; margin-top:6px;"><a style="cursor:pointer"  onclick="settingBelongTo(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';
 }
 function settingBelongTo(AssetOrderDetailsVguid) {
     var orderdetailsurl = "/AssetPurchase/PurchaseAssign/GetPurchaseAssign";

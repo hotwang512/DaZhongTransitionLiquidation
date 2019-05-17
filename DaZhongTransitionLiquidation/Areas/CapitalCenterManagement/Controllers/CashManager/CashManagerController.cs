@@ -30,7 +30,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_CashManagerInfo>()
-                .WhereIF(searchParams.BankName != null, i => i.BankAccount == searchParams.BankName)
+                .WhereIF(searchParams.BankAccount != null, i => i.BankAccount == searchParams.BankAccount)
                 .WhereIF(searchParams.ApplyDate != null, i => i.ApplyDate == searchParams.ApplyDate)
                 .OrderBy(i => i.No, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

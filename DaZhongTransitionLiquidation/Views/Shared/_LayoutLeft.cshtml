@@ -249,7 +249,16 @@
                     </tr>
                 </table>
                 }
-
+                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资金调拨管理" && i.Reads == 1))
+                {
+                    <table>
+                        <tr class="menue_item" id="CapitalAllocation_CapitalFlow" pageurl="/CapitalCenterManagement/CapitalAllocation/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">资金调拨管理</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
             </div>
             <table style="cursor: pointer;" class="bodyTable">
                 <tr>

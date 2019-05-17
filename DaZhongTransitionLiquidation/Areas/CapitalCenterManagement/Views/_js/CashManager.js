@@ -52,7 +52,7 @@
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "ApplyDate": $("#ApplyDate").val(), "BankName": $("#BankName").val() },
+                data: { "ApplyDate": $("#ApplyDate").val(), "BankAccount": $("#BankName").val() },
                 url: "/CapitalCenterManagement/CashManager/GetCashManagerData"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -78,7 +78,7 @@
                     { text: '账套', datafield: 'AccountModeName', pinned: true, width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '公司', datafield: 'CompanyName', pinned: true, width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '申请日期', datafield: 'ApplyDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '全称', datafield: 'BankAccountName', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '户名', datafield: 'BankAccountName', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '账号', datafield: 'BankAccount', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '开户银行', datafield: 'BankName', width: 350, align: 'center', cellsAlign: 'center' },
                     { text: '提现金额', datafield: 'Money', cellsFormat: "d2", width: 100, align: 'center', cellsAlign: 'center', },

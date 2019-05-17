@@ -148,29 +148,37 @@ var $page = function () {
                 $("#devPhoto").show();
             });
         $("#Upload_OKBtn").on("click", function () {
-            $('#jqxLoader').jqxLoader('open');
-            $.ajax({
-                url: "AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
-                data: {
-                    "Vguid": $("#VGUID").val(),
-                    "ImageBase64Str": $("#devPhoto").attr("src"),
-                    "AttachmentType": $("#AttachmentType").val()
-                },
-                type: "post",
-                success: function (msg) {
-                    $('#jqxLoader').jqxLoader('close');
-                    switch (msg.Status) {
+            //$('#jqxLoader').jqxLoader('open');
+            debugger;
+            if ($("#devPhoto").attr("src") != undefined) {
+                layer.load();
+                $.ajax({
+                    url: "AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
+                    data: {
+                        "Vguid": $("#VGUID").val(),
+                        "ImageBase64Str": $("#devPhoto").attr("src"),
+                        "AttachmentType": $("#AttachmentType").val()
+                    },
+                    type: "post",
+                    success: function(msg) {
+                        $('#jqxLoader').jqxLoader('close');
+                        switch (msg.Status) {
                         case "0":
                             jqxNotification("上传失败！", null, "error");
+                            layer.closeAll('loading');
                             break;
                         case "1":
                             jqxNotification("上传成功！", null, "success");
+                            layer.closeAll('loading');
                             getAttachment();
                             $("#UploadPictureDialog").modal("hide");
                             break;
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                jqxNotification("未拍照！", null, "error");
+            }
         });
         $("#Upload_CancelBtn").on("click", function () {
             $("#UploadPictureDialog").modal("hide");
@@ -687,7 +695,6 @@ function getDetailData() {
         async :false,
         type: "get",
         success: function (result) {
-            
             vehicleDefaultData = result;
         }
     });
@@ -744,7 +751,7 @@ function getAttachment() {
             $("#ImgOtherReceipt").html("");
             for (var i = 0; i < msg.length; i++) {
                 debugger;
-                var num = 0
+                var num;
                 var fileName = "";
                 var fileType = "";
                 if (msg[i].Attachment.indexOf("https") != -1) {

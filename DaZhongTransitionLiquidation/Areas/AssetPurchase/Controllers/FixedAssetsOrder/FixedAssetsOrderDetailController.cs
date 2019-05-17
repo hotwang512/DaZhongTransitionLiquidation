@@ -10,11 +10,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
+using Business_AssetOrderDetails = DaZhongTransitionLiquidation.Areas.AssetPurchase.Models.Business_AssetOrderDetails;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
 {
@@ -384,6 +388,116 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 model = db.Queryable<Business_CompanyBankInfo>().Where(c => c.CompanyCode == sevenSection.Code && c.AccountModeCode == AccountModeCode && c.BankStatus).First();
             });
             return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UploadToImageServer(Guid Vguid, string ImageBase64Str, string AttachmentType)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var imageServerUrl = ConfigSugar.GetAppString("ImageServerUrl");
+            var resultData = FileUploadHelper.UploadToImageServer(ImageBase64Str);
+            var saveModel = new Business_AssetAttachmentList();
+            if (resultData != "")
+            {
+                var modelData = resultData.JsonToModel<JsonResultModelApi<Api_FileInfo>>();
+                if (modelData.code == 0)
+                {
+                    var fileData = modelData.data[0];
+                    if (!fileData.fileName.IsNullOrEmpty())
+                    {
+                        DbBusinessDataService.Command(db =>
+                        {
+                            var result = db.Ado.UseTran(() =>
+                            {
+                                saveModel.VGUID = Guid.NewGuid();
+                                saveModel.Attachment = imageServerUrl + fileData.fileName;
+                                saveModel.AttachmentType = AttachmentType;
+                                saveModel.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                                saveModel.AssetOrderVGUID = Vguid;
+                                saveModel.CreateTime = DateTime.Now;
+                                db.Insertable<Business_AssetAttachmentList>(saveModel).ExecuteCommand();
+                            });
+                            resultModel.IsSuccess = result.IsSuccess;
+                            resultModel.ResultInfo = saveModel.Attachment;
+                            resultModel.ResultInfo2 = fileData.fileName;
+                            resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+                        });
+                    }
+                }
+            }
+            return Json(resultModel);
+        }
+        public JsonResult AllUploadLocalFile(Guid Vguid, string AttachmentType, HttpPostedFileBase File)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            if (File != null)
+            {
+                var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AssetAttachFile\\";
+                var fileName = File.FileName;
+                var isExits = true;
+                var i = 1;
+                while (isExits)
+                {
+                    if (FileHelper.Contains(System.AppDomain.CurrentDomain.BaseDirectory + uploadPath, fileName, false))
+                    {
+                        fileName = File.FileName.Split(".")[0] + "(" + i + ")." + File.FileName.Split(".")[1];
+                    }
+                    else
+                    {
+                        isExits = false;
+                    }
+                    i++;
+                }
+                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath + fileName;
+                try
+                {
+                    File.SaveAs(filePath);
+                    DbBusinessDataService.Command(db =>
+                    {
+                        var result = db.Ado.UseTran(() =>
+                        {
+                            var sevenSection = new Business_AssetAttachmentList();
+                            sevenSection.VGUID = Guid.NewGuid();
+                            sevenSection.AssetOrderVGUID = Vguid;
+                            sevenSection.Attachment = "\\" + uploadPath + fileName;
+                            sevenSection.AttachmentType = AttachmentType;
+                            sevenSection.CreateTime = DateTime.Now;
+                            sevenSection.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                            db.Insertable<Business_AssetAttachmentList>(sevenSection).ExecuteCommand();
+                        });
+                        resultModel.IsSuccess = result.IsSuccess;
+                        resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+                    });
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
+                }
+            }
+            return Json(resultModel);
+        }
+        public JsonResult GetAttachmentInfo(Guid VGUID)
+        {
+            List<Business_AssetAttachmentList> VAList = new List<Business_AssetAttachmentList>();
+            DbBusinessDataService.Command(db =>
+            {
+                VAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID).ToList();
+            });
+            return Json(VAList, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteAttachment(Guid VGUID)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                int saveChanges = 1;
+                //删除主表信息
+                saveChanges = db.Deleteable<Business_AssetAttachmentList>(x => x.VGUID == VGUID).ExecuteCommand();
+                resultModel.IsSuccess = saveChanges == 1;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
         }
     }
 }

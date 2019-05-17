@@ -196,26 +196,49 @@ var $page = function () {
         })
         $("#Upload_OKBtn").on("click", function () {
             $('#jqxLoader').jqxLoader('open');
+            //$.ajax({
+            //    url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadImg",
+            //    data: {
+            //        "Vguid": $("#VGUID").val(),
+            //        "ImageBase64Str": $("#devPhoto").attr("src"),
+            //    },
+            //    type: "post",
+            //    success: function (msg) {
+            //        $('#jqxLoader').jqxLoader('close');
+            //        switch (msg.Status) {
+            //            case "0":
+            //                jqxNotification("上传失败！", null, "error");
+            //                break;
+            //            case "1":
+            //                jqxNotification("上传成功！", null, "success");
+            //                $("#Attachment").show();
+            //                $("#Attachment").attr("href", msg.ResultInfo);
+            //                $("#Attachment").html(msg.ResultInfo2);
+            //                $("#UploadPictureDialog").modal("hide");
+            //                break;
+            //        }
+            //    }
+            //});
             $.ajax({
-                url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadImg",
+                url: "/AssetManagement/AssetMaintenanceInfoDetail/UploadToImageServer",
                 data: {
                     "Vguid": $("#VGUID").val(),
-                    "ImageBase64Str": $("#devPhoto").attr("src"),
+                    "ImageBase64Str": $("#devPhoto").attr("src")
                 },
                 type: "post",
                 success: function (msg) {
                     $('#jqxLoader').jqxLoader('close');
                     switch (msg.Status) {
-                        case "0":
-                            jqxNotification("上传失败！", null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("上传成功！", null, "success");
-                            $("#Attachment").show();
-                            $("#Attachment").attr("href", msg.ResultInfo);
-                            $("#Attachment").html(msg.ResultInfo2);
-                            $("#UploadPictureDialog").modal("hide");
-                            break;
+                    case "0":
+                        jqxNotification("上传失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("上传成功！", null, "success");
+                        $("#Attachment").show();
+                        $("#Attachment").attr("href", msg.ResultInfo);
+                        $("#Attachment").html(msg.ResultInfo2);
+                        $("#UploadPictureDialog").modal("hide");
+                        break;
                     }
                 }
             });

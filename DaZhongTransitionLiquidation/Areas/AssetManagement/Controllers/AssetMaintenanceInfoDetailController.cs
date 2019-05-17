@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Common;
 using AutoMapper;
+using System.Net;
+using System.Web.Script.Serialization;
+using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsMaintenance
 {
@@ -203,6 +206,46 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     resultModel.ResultInfo2 = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);
                     resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
                 });
+            }
+            return Json(resultModel);
+        }
+        public JsonResult UploadToImageServer(Guid Vguid, string ImageBase64Str)
+        {
+            var sevenSection = new Business_AssetMaintenanceInfo();
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var imageServerUrl = ConfigSugar.GetAppString("ImageServerUrl");
+            var resultData = FileUploadHelper.UploadToImageServer(ImageBase64Str);
+            if (resultData != "")
+            {
+                var modelData = resultData.JsonToModel<JsonResultModelApi<Api_FileInfo>>();
+                if (modelData.code == 0)
+                {
+                    var fileData = modelData.data[0];
+                    if (!fileData.fileName.IsNullOrEmpty())
+                    {
+                        DbBusinessDataService.Command(db =>
+                        {
+                            var result = db.Ado.UseTran(() =>
+                            {
+                                sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
+                                sevenSection.ACCEPTANCE_CERTIFICATE = imageServerUrl + fileData.fileName;
+                                sevenSection.CHANGE_DATE = DateTime.Now;
+                                sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                                db.Updateable(sevenSection).UpdateColumns(x => new
+                                {
+                                    x.CHANGE_DATE,
+                                    x.CHANGE_USER,
+                                    x.ACCEPTANCE_CERTIFICATE
+                                }).ExecuteCommand();
+                            });
+                            resultModel.IsSuccess = result.IsSuccess;
+                            resultModel.ResultInfo = sevenSection.ACCEPTANCE_CERTIFICATE;
+                            resultModel.ResultInfo2 = fileData.fileName;
+                            resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+                        });
+                    }
+                }
             }
             return Json(resultModel);
         }

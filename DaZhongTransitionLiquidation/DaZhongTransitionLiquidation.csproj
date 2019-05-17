@@ -325,6 +325,7 @@
     <Content Include="_theme\images\1.png" />
     <Content Include="_theme\images\error-bg.png" />
     <Content Include="_theme\images\error-btn.png" />
+    <Content Include="_theme\images\Picture.png" />
     <Content Include="_theme\images\Waiting.gif" />
     <Content Include="_theme\jqwidgets-ver3.8.1\images\about-26.png" />
     <Content Include="_theme\jqwidgets-ver3.8.1\images\add.png" />
@@ -2212,6 +2213,7 @@
     <Content Include="_theme\tool\jquery-form.min.js" />
     <Content Include="_theme\tool\jquery.PrintArea.min.js" />
     <Content Include="_theme\tool\jquery.validate.js" />
+    <Content Include="_theme\tool\qwebchannel.js" />
     <Content Include="_theme\Validate\img\triangle_left.png" />
     <Content Include="_theme\Validate\validate.css" />
     <Content Include="_theme\Validate\validate.js" />
@@ -2265,6 +2267,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetAttachmentList.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetOrderDetails.cs" />
@@ -2467,8 +2470,10 @@
     <Folder Include="Temp\" />
     <Folder Include="uploads\AcceptFile\" />
     <Folder Include="uploads\ApprovalFormFile\" />
+    <Folder Include="uploads\AssetAttachFile\" />
     <Folder Include="uploads\PurchaseContract\" />
     <Folder Include="Views\NewApi\" />
+    <Folder Include="Views\PhotoUpload\" />
     <Folder Include="_theme\temp\file\" />
     <Folder Include="_theme\temp\img\" />
   </ItemGroup>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 
 namespace DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity
 {
@@ -19,5 +20,11 @@ namespace DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity
         public decimal SumPaymentAmount { get; set; }
 
         public decimal SumRemitamount { get; set; }
+    }
+    public class JsonResultModelApi<T>
+    {
+        public T[] data { get; set; }
+        public int code { get; set; }
+        public string message { get; set; }
     }
 }

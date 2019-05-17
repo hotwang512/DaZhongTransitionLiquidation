@@ -2,6 +2,9 @@
 var vguid = "";
 var mydate = new Date();
 var vehicleDefaultData;
+//拍照数据（base64）
+var baseUrl = "ws://127.0.0.1:12345";
+var socket;
 var $page = function () {
     this.init = function () {
         //initSelect();
@@ -19,6 +22,7 @@ var $page = function () {
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
             getFixedAssetsOrderDetail();
+            getAttachment();
         } else {
             $("#VGUID").val(newguid());
             $("#AssetsOrderVguid").val(newguid());
@@ -35,7 +39,6 @@ var $page = function () {
                 if (!Validate($("#PurchaseGoods"))) {
                     validateError++;
                 }
-                debugger;
                 if (validateError <= 0) {
                     var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
 
@@ -43,7 +46,6 @@ var $page = function () {
                     for (var i = 0; i < checkedItems.length; i++) {
                         DepartmentModelList.push(checkedItems[i].value);
                     };
-                    debugger;
                     $.ajax({
                         url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
@@ -93,7 +95,6 @@ var $page = function () {
             });
         $("#OrderQuantity").on("click",
             function () {
-                debugger;
                 if ($("#PurchaseGoods").val() != "") {
                     initTable();
                 } else {
@@ -119,6 +120,61 @@ var $page = function () {
             function () {
                 $("#CreditDialog").modal("show");
             });
+        //拍照
+        $(".camera").on("click",
+            function () {
+                $("#AttachmentType").val($(this).attr("AttachmentType"));
+                baseUrl = "ws://127.0.0.1:12345";
+                openSocket();
+                $("#devPhoto").hide();
+                $("#Upload_OKBtn").hide();
+                $("#photographPri").show();
+                //$("#AcceptDialog").modal("hide");
+                //showLoading();
+                $("#UploadPictureDialog").modal({ backdrop: "static", keyboard: false });
+                $("#UploadPictureDialog").modal("show");
+            });
+        //本地上传
+        $(".upload").on("click",
+            function () {
+                $("#AttachmentType").val($(this).attr("AttachmentType"));
+                $("#LocalFileInput").click();
+            });
+            
+        $("#photographPri").on("click",
+            function() {
+                $("#Upload_OKBtn").show();
+                $("#photographPri").hide();
+                $("#devPhoto").show();
+            });
+        $("#Upload_OKBtn").on("click", function () {
+            $('#jqxLoader').jqxLoader('open');
+            $.ajax({
+                url: "AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
+                data: {
+                    "Vguid": $("#VGUID").val(),
+                    "ImageBase64Str": $("#devPhoto").attr("src"),
+                    "AttachmentType": $("#AttachmentType").val()
+                },
+                type: "post",
+                success: function (msg) {
+                    $('#jqxLoader').jqxLoader('close');
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("上传失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("上传成功！", null, "success");
+                            getAttachment();
+                            $("#UploadPictureDialog").modal("hide");
+                            break;
+                    }
+                }
+            });
+        });
+        $("#Upload_CancelBtn").on("click", function () {
+            $("#UploadPictureDialog").modal("hide");
+        });
         //计算金额
         $("#PurchasePrices").on("blur",
             function () {
@@ -143,7 +199,7 @@ var $page = function () {
         $('#PaymentInformation').on('select', function (event) {
             var args = event.args;
             if (args) {
-                debugger;
+                
                 var item = args.item;
                 $("#hiddenPaymentInformationVguid").val(item.value);
                 $("#hiddenPaymentInformation").val(item.label);
@@ -159,7 +215,7 @@ var $page = function () {
 
             var args = event.args;
             if (args && $("#PayMode").val() != "现金") {
-                debugger;
+                
                 var item = args.item;
                 $("#PayCompany").val(item.lable);
                 $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
@@ -190,11 +246,10 @@ var $page = function () {
                 for (var i = 0; i < checkedItems.length; i++) {
                     DepartmentModelList.push(checkedItems[i].value);
                 };
-                debugger;
+                
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
-
         $("#PayMode").on("change",
             function () {
                 if ($("#PayMode").val() == "现金") {
@@ -204,11 +259,17 @@ var $page = function () {
                     $("#AccountType").val("");
                 }
             });
+        $("#jqxLoader").jqxLoader({ isModal: true, width: 100, height: 60, imagePosition: 'top' });
     }; //addEvent end
-
+    function checkFileExt(ext) {
+        if (!ext.match(/.jpg|.png|.jpeg|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {
+            return false;
+        }
+        return true;
+    }
     function getFixedAssetsOrderDetail() {
         $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-            debugger;
+            
             if (msg.PurchaseDepartmentIDs != null) {
                 var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
                 for (var i = 0; i < PurchaseDepartment.length; i++) {
@@ -228,7 +289,7 @@ var $page = function () {
             $("#ContractAmount").val(msg.ContractAmount);
             $("#AssetDescription").val(msg.AssetDescription);
             //$("#UseDepartment").val(msg.UseDepartmentVguid);
-            debugger;
+            
             //if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
             //    $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
             //}
@@ -239,7 +300,7 @@ var $page = function () {
             if (msg.ContractName != null && msg.ContractFilePath != null) {
                 $("#Attachment").show();
                 $("#Attachment").attr("href", msg.ContractFilePath);
-                debugger;
+                
                 $("#Attachment").attr("title", msg.ContractName);
             }
             $("#ContractFilePath").val(msg.ContractFilePath);
@@ -257,9 +318,9 @@ var $page = function () {
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
         });
     }
-    //上传文件
+    //采购合同上传文件
     $("#ContractFileInput").on("change", function () {
-        debugger;
+        
         var filePath = this.value;
         var fileExt = filePath.substring(filePath.lastIndexOf("."))
             .toLowerCase();
@@ -274,7 +335,7 @@ var $page = function () {
                 type: "post",
                 data: {
                     'Vguid': $("#VGUID").val()
-        },
+                },
                 success: function (msg) {
                     layer.closeAll('loading');
                     switch (msg.Status) {
@@ -294,10 +355,10 @@ var $page = function () {
             });
         }
     })
-    //上传文件
+    //采购数量中OA审批单上传文件
     $("#FileInput").on("change",
-        function() {
-            debugger;
+        function () {
+            
             var filePath = this.value;
             var fileExt = filePath.substring(filePath.lastIndexOf("."))
                 .toLowerCase();
@@ -313,7 +374,7 @@ var $page = function () {
                     data: {
                         'VGUID': $("#FileInput").attr("cdata")
                     },
-                    success: function(msg) {
+                    success: function (msg) {
                         layer.closeAll('loading');
                         switch (msg.Status) {
                         case "0":
@@ -330,17 +391,105 @@ var $page = function () {
                 });
             }
         });
-    function checkFileExt(ext) {
-        if (!ext.match(/.jpg|.png|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {
-            return false;
-        }
-        return true;
-    }
+    //统一上传文件
+    $("#LocalFileInput").on("change",
+        function () {
+            
+            var filePath = this.value;
+            var fileExt = filePath.substring(filePath.lastIndexOf("."))
+                .toLowerCase();
+            if (!checkFileExt(fileExt)) {
+                jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+                this.value = "";
+                return;
+            } else {
+                layer.load();
+                
+                $("#localFormFile").ajaxSubmit({
+                    url: "/AssetPurchase/FixedAssetsOrderDetail/AllUploadLocalFile",
+                    type: "post",
+                    data: {
+                        'Vguid': $("#VGUID").val(),
+                        'AttachmentType': $("#AttachmentType").val()
+                    },
+                    success: function (msg) {
+                        layer.closeAll('loading');
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("上传失败！", null, "error");
+                            $('#LocalFileInput').val('');
+                            break;
+                        case "1":
+                            jqxNotification("上传成功！", null, "success");
+                            $('#LocalFileInput').val('');
+                            getAttachment();
+                            break;
+                        }
+                    }
+                });
+            }
+        });
 };
 function computeValue() {
     if ($("#PurchasePrices").val() != "" && $("#OrderQuantity").val() != "") {
         var value = $("#PurchasePrices").val() * $("#OrderQuantity").val();
         $("#ContractAmount").val(value);
+    }
+}
+//拍照
+function openSocket() {
+    
+    socket = new WebSocket(baseUrl);
+    socket.onclose = function () {
+        console.error("web channel closed");
+    };
+    socket.onerror = function (error) {
+        console.error("web channel error: " + error);
+    };
+    socket.onopen = function () {
+        new QWebChannel(socket, function (channel) {
+            // make dialog object accessible globally
+            window.dialog = channel.objects.dialog;
+            //dialog.set_configValue("set_savePath:D:\\img");
+            //网页关闭函数
+            window.onbeforeunload = function () {
+                dialog.get_actionType("closeSignal");
+            }
+            window.onunload = function () {
+                dialog.get_actionType("closeSignal");
+            }
+            //拍照按钮点击
+            document.getElementById("photographPri").onclick = function () {
+                dialog.photoBtnClicked("primaryDev_");
+                dialog.get_actionType("savePhotoPriDev");
+            };
+            //纠偏裁边
+            document.getElementById("setdeskew").onclick = function () {
+                dialog.get_actionType("setdeskew");
+            };
+
+            //服务器返回消息
+            dialog.sendPrintInfo.connect(function (message) {
+                //设备分辨率
+                message = message.substr(14);
+                //图片保存后返回路径关键字savePhoto_success:
+                if (message.indexOf("savePhoto_success:") >= 0) {
+                    imgPath = message.substr(18);
+                }
+            });
+            //接收图片流用来展示，多个，较小的base64数据
+            dialog.send_priImgData.connect(function (message) {
+                var element = document.getElementById("bigPriDev");
+                element.src = "data:image/jpg;base64," + message;
+            });
+            //接收拍照base64
+            dialog.send_priPhotoData.connect(function (message) {
+                var element = document.getElementById("devPhoto");
+                element.src = "data:image/jpg;base64," + message;
+            });
+            //网页加载完成信号
+            dialog.html_loaded("one");
+        });
     }
 }
 function initSelectPurchaseDepartment() {
@@ -382,7 +531,7 @@ function initComboBox() {
         dataType: "json",
         async: false,
         success: function (data) {
-            debugger;
+            
             var source = new Array();
             for (var i = 0; i < data.Rows.length; i++) {
                 var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
@@ -416,7 +565,7 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
         success: function (msg) {
             uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
             $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
-            debugger;
+            
         }
     });
 }
@@ -453,7 +602,7 @@ function initTable() {
         localdata: vehicleDefaultData,
         datatype: "json",
         updaterow: function (rowid, rowdata, commit) {
-            debugger;
+            
             $.ajax({
                 url: "/AssetPurchase/FixedAssetsOrderDetail/UpdateAssetNum",
                 data: { vguid: rowdata.VGUID, AssetNum: rowdata.AssetNum },
@@ -531,14 +680,14 @@ function cellsrenderer(row, column, value, rowData) {
     }
 }
 function getDetailData() {
-    debugger;
+    
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
         data: { AssetsOrderVguid: $("#VGUID").val(), PurchaseOrderSettingVguid: $("#PurchaseGoods").val() },
         async :false,
         type: "get",
         success: function (result) {
-            debugger;
+            
             vehicleDefaultData = result;
         }
     });
@@ -555,7 +704,7 @@ function formatDate(NewDtime) {
     //return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
 }
 function deleteApprovalFile(vguid) {
-    debugger;
+    
     //删除文件
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/DeleteApprovalFile",
@@ -578,6 +727,82 @@ function uploadApprovalFormFile(vguid) {
     $("#FileInput").attr("cdata", vguid);
     $("#FileInput").click();
 }
+function getAttachment() {
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetAttachmentInfo",
+        data: {
+            "VGUID": $("#VGUID").val()
+        },
+        type: "post",
+        dataType: "json",
+        success: function (msg) {
+            $("#ImgPaymentReceipt").html("");
+            $("#ImgInvoiceReceipt").html("");
+            $("#ImgApprovalReceipt").html("");
+            $("#ImgContract").html("");
+            $("#ImgDetailList").html("");
+            $("#ImgOtherReceipt").html("");
+            for (var i = 0; i < msg.length; i++) {
+                debugger;
+                var num = 0
+                var fileName = "";
+                var fileType = "";
+                if (msg[i].Attachment.indexOf("https") != -1) {
+                    num = msg[i].Attachment.split("/").length - 1;
+                    fileName = msg[i].Attachment.split("/")[num];
+                    fileType = fileName.split(".")[1];
+                } else {
+                    num = msg[i].Attachment.lastIndexOf("\\") + 1;
+                    fileName = msg[i].Attachment.substring(num, msg[i].Attachment.length);
+                    fileType = fileName.split(".")[1];
+                }
+                var ext = "." + fileType.toUpperCase();
+                var html = "";
+                if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                    html = '<div class="AttachmentDiv"><img src="/_theme/images/' + fileType + '.png" style="width: 25px;height: 25px;margin: 3px;" /><a href="' + msg[i].Attachment + '" target="_blank">' + fileName + '</a>&nbsp&nbsp&nbsp<a id=' + msg[i].VGUID + ' onclick="delAttachment(\'' + msg[i].VGUID + '\')" class="delAttachment">删除</a></div>';
+                } else {
+                    html = '<div class="AttachmentDiv"><img src="/_theme/images/Picture.png" style="width: 25px;height: 25px;margin: 3px;" /><a href="' + msg[i].Attachment + '" target="_blank">' + fileName + '</a>&nbsp&nbsp&nbsp<a id=' + msg[i].VGUID + ' onclick="delAttachment(\'' + msg[i].VGUID + '\')" class="delAttachment">删除</a></div>';
+                }
+
+                switch (msg[i].AttachmentType) {
+                    case "付款凭证": $("#ImgPaymentReceipt").append(html);
+                        break;
+                    case "发票": $("#ImgInvoiceReceipt").append(html);
+                        break;
+                    case "OA审批单": $("#ImgApprovalReceipt").append(html);
+                        break;
+                    case "合同": $("#ImgContract").append(html);
+                        break;
+                    case "清单、清册": $("#ImgDetailList").append(html);
+                        break;
+                    case "其他": $("#ImgOtherReceipt").append(html);
+                        break;
+                    default:
+                }
+            }
+        }
+    });
+}
+
+function delAttachment(delID) {
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/DeleteAttachment",
+        data: { VGUID: delID },
+        traditional: true,
+        type: "post",
+        success: function(msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("删除失败！", null, "error");
+                break;
+            case "1":
+                jqxNotification("删除成功！", null, "success");
+                getAttachment();
+                break;
+            }
+        }
+    });
+}
 
 $(function () {
     var page = new $page();
@@ -590,6 +815,12 @@ function newguid() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+function checkFileExt(ext) {
+    if (!ext.match(/.jpg|.png|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {
+        return false;
+    }
+    return true;
 }
 function isNumber(val) {
     var regPos = /^\d+(\.\d+)?$/; //非负浮点数

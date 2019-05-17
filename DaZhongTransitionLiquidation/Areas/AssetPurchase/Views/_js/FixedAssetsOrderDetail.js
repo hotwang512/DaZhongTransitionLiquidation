@@ -153,7 +153,7 @@ var $page = function () {
             if ($("#devPhoto").attr("src") != undefined) {
                 layer.load();
                 $.ajax({
-                    url: "AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
+                    url: "/AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
                     data: {
                         "Vguid": $("#VGUID").val(),
                         "ImageBase64Str": $("#devPhoto").attr("src"),

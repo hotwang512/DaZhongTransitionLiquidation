@@ -327,7 +327,6 @@ var $page = function () {
     }
     //采购合同上传文件
     $("#ContractFileInput").on("change", function () {
-        
         var filePath = this.value;
         var fileExt = filePath.substring(filePath.lastIndexOf("."))
             .toLowerCase();

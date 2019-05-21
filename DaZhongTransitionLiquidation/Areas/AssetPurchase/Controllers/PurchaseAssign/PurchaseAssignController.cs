@@ -189,8 +189,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         var consistent = true;
                         var result = db.Ado.UseTran(() =>
                         {
-                            var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
-                                .Where(c => c.FixedAssetsOrderVguid == vguid).First();
                             var orderDetails = db.Queryable<Business_AssetOrderDetails>()
                                 .Where(c => c.AssetsOrderVguid == vguid).ToList();
                             if (orderDetails.Sum(c => c.AssetNum) != list.Sum(c => c.AssetNum))
@@ -224,14 +222,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     belongTo.CreateUser = cache[PubGet.GetUserKey].UserName;
                                     sevenSectionList.Add(belongTo);
                                 }
-
                                 db.Deleteable<Business_AssetOrderBelongTo>().Where(c => c.AssetsOrderVguid == vguid).ExecuteCommand();
                                 db.Insertable<Business_AssetOrderBelongTo>(sevenSectionList).ExecuteCommand();
-                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                                purchaseAssign.ChangeDate = DateTime.Now;
-                                purchaseAssign.SubmitStatus = 1;
-                                db.Updateable(purchaseAssign)
-                                    .UpdateColumns(it => new { it.ChangeUser, it.ChangeDate,it.SubmitStatus }).ExecuteCommand();
                             }
                         });
                         resultModel.IsSuccess = consistent && result.IsSuccess;
@@ -243,6 +235,35 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
                 }
             }
+            return Json(resultModel);
+        }
+        public JsonResult SubmitAssign(Guid vguid)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
+                        .Where(c => c.FixedAssetsOrderVguid == vguid).First();
+                    if (purchaseAssign.SubmitStatus == 0)
+                    {
+                        purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        purchaseAssign.ChangeDate = DateTime.Now;
+                        purchaseAssign.SubmitStatus = 1;
+                        db.Updateable(purchaseAssign)
+                            .UpdateColumns(it => new { it.ChangeUser, it.ChangeDate, it.SubmitStatus }).ExecuteCommand();
+                        resultModel.Status = "1";
+                    }
+                    else
+                    {
+                        resultModel.Status = "2";
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? resultModel.Status : "0";
+            });
             return Json(resultModel);
         }
     } 

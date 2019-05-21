@@ -28,7 +28,29 @@ var $page = function () {
         });
         $("#OrderBelongToDialog_OKBtn").on("click",
             function () {
-                $("#OrderBelongToDialog").modal("hide");
+                debugger;
+                $.ajax({
+                    url: "/AssetPurchase/PurchaseAssign/SubmitAssign",
+                    data: {
+                        "vguid": $("#AssetsOrderVguid").val()
+                    },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("提交失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("提交成功！", null, "success");
+                                $("#OrderBelongToDialog").modal("hide");
+                                initTable();
+                                break;
+                            case "2":
+                                $("#OrderBelongToDialog").modal("hide");
+                                break;
+                        }
+                    }
+                });
             }
         );
         $("#OrderDetailsDialog_OKBtn").on("click",
@@ -143,7 +165,7 @@ var $page = function () {
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '配置状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -161,16 +183,32 @@ var $page = function () {
     //配置改为导入
     function cellsSettingRenderer(row, column, value, rowData) {
         var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
-        return '<div style="margin: 8px; margin-top:6px;">' +
-            '<a style="cursor:pointer"  onclick="Import(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">导入</a>' +
-            '&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' + FixedAssetsOrderVguid + '\')">查看</a>' +
-            '</div>';
+        debugger;
+        if (rowData.SubmitStatus == 0) {
+            return '<div style="margin: 8px; margin-top:6px;">' +
+                '<a style="cursor:pointer"  onclick="Import(\'' +
+                FixedAssetsOrderVguid +
+                '\')" id="' +
+                FixedAssetsOrderVguid +
+                '">导入</a>' +
+                '&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                FixedAssetsOrderVguid +
+                '\')">提交</a>' +
+                '</div>';
+        } else {
+            return '<div style="margin-top:6px;">' +
+                '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+            FixedAssetsOrderVguid +
+                '\')">查看</a>' +
+                '</div>';
+        }
+        
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value === 1) {
-            return '<span style="margin: 4px; margin-top:8px;">已配置</span>';
+            return '<span style="margin: 4px; margin-top:8px;">已提交</span>';
         } else if (value === 0) {
-            return '<span style="margin: 4px; margin-top:8px;">待配置</span>';
+            return '<span style="margin: 4px; margin-top:8px;">待提交</span>';
         }
     }
     function initSelectPurchaseGoods() {
@@ -268,6 +306,7 @@ function Import(vguid) {
     $("#LocalFileInput").click();
 }
 function ViewAssign(vguid) {
+    $("#AssetsOrderVguid").val(vguid);
     var source =
     {
         url: "/AssetPurchase/PurchaseAssign/GetOrderBelong",

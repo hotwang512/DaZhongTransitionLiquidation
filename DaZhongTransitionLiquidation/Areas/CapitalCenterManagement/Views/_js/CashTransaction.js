@@ -85,7 +85,7 @@
                     { text: '我方银行', datafield: 'TradingBank', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '我方账号', datafield: 'PayeeAccount', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '我方开户机构', datafield: 'PaymentUnitInstitution', width: 350, align: 'center', cellsAlign: 'center' },
-                    { text: 'T24交易流水号', datafield: 'Batch', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '交易流水号', datafield: 'Batch', width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '交易日期', datafield: 'TransactionDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '转入(贷)', datafield: 'TurnOut', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '转出(借)', datafield: 'TurnIn', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },

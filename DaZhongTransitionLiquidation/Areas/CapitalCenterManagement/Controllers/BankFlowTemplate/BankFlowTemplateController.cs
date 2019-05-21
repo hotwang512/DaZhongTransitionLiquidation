@@ -507,17 +507,18 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => x.IsUnable != "禁用" && x.BankAccount == item.ReceivableAccount).ToList();
+            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => (x.IsUnable == "启用" || x.IsUnable == null) && x.BankAccount == item.ReceivableAccount).ToList();
             if (bankChannel.Count > 0)
             {
                 var bankChannelOne = bankChannel.First();
                 var subject = "";
                 if (item.TurnOut == 0)
                 {
-                    //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
+                    //付款业务
                     Regex regExp = new Regex("^[0-9]*$");
                     if (item.Purpose.Length == 19 && regExp.IsMatch(item.Purpose))
                     {
+                        //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
                         var osno = orderListDraft.Where(x => x.OSNO == item.Purpose).ToList();
                         if (osno.Count == 1)
                         {
@@ -531,11 +532,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     else
                     {
-                        subject = bankChannelOne.Borrow;
+                        //subject = bankChannelOne.Borrow;
                     }
                 }
                 else
                 {
+                    //收款业务
                     subject = bankChannelOne.Loan;
                 }
                 if (subject != "" || subject != null)

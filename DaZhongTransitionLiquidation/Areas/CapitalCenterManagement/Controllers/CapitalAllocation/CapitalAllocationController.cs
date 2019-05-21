@@ -36,10 +36,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 .WhereIF(searchParams.ApplyDate != null, i => i.ApplyDate == searchParams.ApplyDate)
                 .OrderBy(i => i.No, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
+                var data = db.Queryable<Business_CompanyBankInfo>().ToList();
                 foreach (var item in jsonResult.Rows)
                 {
-                    item.TurnInBankName = db.Queryable<Business_CompanyBankInfo>().Single(x => x.AccountModeCode == item.TurnInAccountModeCode && x.CompanyCode == item.TurnInCompanyCode && x.BankAccount == item.TurnInBankAccount).BankName;
-                    item.TurnOutBankName = db.Queryable<Business_CompanyBankInfo>().Single(x => x.AccountModeCode == item.TurnOutAccountModeCode && x.CompanyCode == item.TurnOutCompanyCode && x.BankAccount == item.TurnOutBankAccount).BankName;
+                    item.TurnInBankName = data.Single(x => x.AccountModeCode == item.TurnInAccountModeCode && x.CompanyCode == item.TurnInCompanyCode && x.BankAccount == item.TurnInBankAccount).BankName;
+                    item.TurnOutBankName = data.Single(x => x.AccountModeCode == item.TurnOutAccountModeCode && x.CompanyCode == item.TurnOutCompanyCode && x.BankAccount == item.TurnOutBankAccount).BankName;
                 }
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

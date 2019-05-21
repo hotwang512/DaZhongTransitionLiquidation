@@ -7,6 +7,7 @@
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="@Url.CusContent("~/Areas/AssetPurchase/Views/_js/PurchaseAssign.js")"></script>
+    <script src="@Url.CusContent("~/_theme/_js/jquery.form.js")"></script>
 }
 
 @section css{
@@ -115,3 +116,6 @@
 <!-- 底部表格 -->
 <input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
 <input type="hidden" id="AssetsOrderVguid"/>
+<form id="localFormFile" hidden>
+    <input type="file" id="LocalFileInput" name="file" accept=".xls,.xlsx" />
+</form>

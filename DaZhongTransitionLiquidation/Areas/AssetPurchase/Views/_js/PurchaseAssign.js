@@ -52,6 +52,45 @@ var $page = function () {
                 $("#SettingModalDialog").modal("hide");
             }
         );
+        //统一上传文件
+        $("#LocalFileInput").on("change",
+            function () {
+                var filePath = this.value;
+                var fileExt = filePath.substring(filePath.lastIndexOf("."))
+                    .toLowerCase();
+                if (!checkFileExt(fileExt)) {
+                    jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+                    this.value = "";
+                    return;
+                } else {
+                    layer.load();
+                    $("#localFormFile").ajaxSubmit({
+                        url: "/AssetPurchase/PurchaseAssign/ImportAssignFile",
+                        type: "post",
+                        data: {
+                            'vguid': $("#AssetsOrderVguid").val()
+                        },
+                        success: function (msg) {
+                            layer.closeAll('loading');
+                            switch (msg.Status) {
+                                case "0":
+                                    if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
+                                        jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
+                                    } else {
+                                        jqxNotification("导入失败", null, "error");
+                                    }
+                                $('#LocalFileInput').val('');
+                                break;
+                            case "1":
+                                jqxNotification("导入成功！", null, "success");
+                                $('#LocalFileInput').val('');
+                                getAttachment();
+                                break;
+                            }
+                        }
+                    });
+                }
+            });
     }; //addEvent end
   
 
@@ -112,17 +151,25 @@ var $page = function () {
                 ]
             });
     }
+    //function cellsSettingRenderer(row, column, value, rowData) {
+    //    var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
+    //    return '<div style="margin: 8px; margin-top:6px;">' +
+    //        '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>' +
+    //        '&nbsp<a style="cursor:pointer"  onclick="ViewBelongTo(\'' + FixedAssetsOrderVguid + '\')">查看</a>' +
+    //        '</div>';
+    //}
+    //配置改为导入
     function cellsSettingRenderer(row, column, value, rowData) {
         var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
         return '<div style="margin: 8px; margin-top:6px;">' +
-            '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>' +
-            '&nbsp<a style="cursor:pointer"  onclick="ViewBelongTo(\'' + FixedAssetsOrderVguid + '\')">查看</a>' +
+            '<a style="cursor:pointer"  onclick="Import(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">导入</a>' +
+            '&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' + FixedAssetsOrderVguid + '\')">查看</a>' +
             '</div>';
     }
     function cellsRendererSubmit(row, column, value, rowData) {
-        if (value == 1) {
+        if (value === 1) {
             return '<span style="margin: 4px; margin-top:8px;">已配置</span>';
-        } else if (value == 0) {
+        } else if (value === 0) {
             return '<span style="margin: 4px; margin-top:8px;">待配置</span>';
         }
     }
@@ -216,7 +263,48 @@ function ViewBelongTo(vguid) {
         });
     $("#OrderBelongToDialog").modal("show");
 }
-
+function Import(vguid) {
+    $("#AssetsOrderVguid").val(vguid);
+    $("#LocalFileInput").click();
+}
+function ViewAssign(vguid) {
+    var source =
+    {
+        url: "/AssetPurchase/PurchaseAssign/GetOrderBelong",
+        data: { AssetsOrderVguid: vguid },
+        datatype: "json",
+        datafields:
+        [
+            { name: 'VGUID', type: 'string' },
+            { name: 'AssetsOrderVguid', type: 'string' },
+            { name: 'BelongToCompany', type: 'string' },
+            { name: 'AssetNum', type: 'number' },
+            { name: 'PurchasePrices', type: 'float' },
+            { name: 'PurchaseCountPrices', type: 'float' }
+        ]
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#gridOrderBelong").jqxGrid(
+        {
+            width: "470",
+            autoheight: true,
+            source: dataAdapter,
+            statusbarheight: 25,
+            enabletooltips: true,
+            selectionmode: 'singlerow',
+            columns: [
+                { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: '资产归属公司', datafield: 'BelongToCompany', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
+                {
+                    text: '数量', datafield: 'AssetNum', width: 100, align: 'center', cellsalign: 'center'
+                },
+                { text: '单价', datafield: 'PurchasePrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '总价', datafield: 'PurchaseCountPrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false }
+            ]
+        });
+    $("#OrderBelongToDialog").modal("show");
+}
 function cellsrenderer(row, column, value, rowData) {
     var vguid = $('#grid').jqxGrid('getrowdata', row).VGUID;
     return '<div style="margin: 35px; margin-top:6px;"><a style="cursor:pointer"  onclick="settingBelongTo(\'' + vguid + '\')" id="' + vguid + '">配置</a></div>';
@@ -299,7 +387,7 @@ function settingBelongTo(AssetOrderDetailsVguid) {
         toolbarHeight: 35,
         renderToolbar: function (toolBar) {
             var toTheme = function (className) {
-                if (theme == "") return className;
+                if (theme === "") return className;
                 return className + " " + className + "-" + theme;
             }
             // appends buttons to the status bar.
@@ -452,6 +540,12 @@ function settingBelongTo(AssetOrderDetailsVguid) {
         ]
     });
     $("#SettingModalDialog").modal("show");
+}
+function checkFileExt(ext) {
+    if (!ext.match(/.xls|.xlsx/i)) {
+        return false;
+    }
+    return true;
 }
 $(function () {
     var page = new $page();

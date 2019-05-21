@@ -2290,6 +2290,7 @@
     <Compile Include="Areas\AssetPurchase\Models\Business_FixedAssetsOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_IntangibleAssetsOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseAssign.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Excel_PurchaseAssignModel.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
@@ -2438,6 +2439,7 @@
     <Content Include="Views\Shared\_LayoutDetail.cshtml" />
     <Content Include="Template\AssetsLedger.xlsx" />
     <Content Include="Template\AssetsRetiremen.xlsx" />
+    <Content Include="Template\PurchaseAssign.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2481,6 +2483,7 @@
     <Folder Include="uploads\AcceptFile\" />
     <Folder Include="uploads\ApprovalFormFile\" />
     <Folder Include="uploads\AssetAttachFile\" />
+    <Folder Include="uploads\PurchaseAssign\" />
     <Folder Include="uploads\PurchaseContract\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="Views\PhotoUpload\" />

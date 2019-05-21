@@ -16,7 +16,7 @@
         if ($("#ApplyDate").val() == "") {
             $("#ApplyDate").val(date);
         }
-        
+        $("#Cashier").val($("#LoginName").val());
         //金额转化大写
         $("#Money").blur(function () {
             var money = $("#Money").val();

@@ -72,7 +72,7 @@ var $page = function () {
             var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
             if (validateError <= 0) {
                 $.ajax({
-                    url: "/SystemManagement/BankChannelMapping/SaveBankChannelInfo?isEdit=" + isEdit,
+                    url: "/CapitalCenterManagement/PaySettingList/SaveBankChannelInfo?isEdit=" + isEdit,
                     data: {
                         BankAccount: selector.$txtBankAccount_Dialog().val(),
                         BankAccountName: selector.$txtBankAccountName_Dialog().val(),
@@ -80,7 +80,7 @@ var $page = function () {
                         Channel: selector.$txtChannel_Dialog().val(),
                         CompanyCode: $("#CompanyCode").val(),
                         Borrow: borrow,
-                        Loan:loan,
+                        Loan: loan,
                         VGUID: vguid
                     },
                     type: "post",
@@ -120,7 +120,7 @@ var $page = function () {
             if (selection.length < 1) {
                 jqxNotification("请选择您要删除的数据！", null, "error");
             } else {
-                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消",selection);
+                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
         //编辑是否启用
@@ -193,7 +193,7 @@ var $page = function () {
                 datatype: "json",
                 id: "Vguid",
                 data: { "BankAccount": selector.$txtBankName().val(), "Channel": selector.$txtChannelName().val() },
-                url: "/Systemmanagement/BankChannelMapping/GetBankChannelMappingInfos"   //获取数据源的路径
+                url: "/CapitalCenterManagement/PaySettingList/GetBankChannelMappingInfos"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -216,11 +216,11 @@ var $page = function () {
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '账号', width: 250, datafield: 'BankAccount', align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
                     { text: '户名', width: 350, datafield: 'BankAccountName', align: 'center', cellsAlign: 'center', },
-                    { text: '开户行', width: 450, datafield: 'Bank', align: 'center', cellsAlign: 'center', },
-                    { text: '渠道名称', datafield: 'ChannelName', align: 'center', cellsAlign: 'center', },
-                    { text: '借', datafield: "Borrow",  width: '180px',hidden: true, align: 'center', cellsAlign: 'center' },
-                    { text: '贷', datafield: "Loan", width: '180px', hidden: true,align: 'center',cellsAlign: 'center' },
-                    { text: '是否禁用', datafield: "IsUnable", align: 'center', cellsAlign: 'center', },
+                    { text: '开户行', width: 380, datafield: 'Bank', align: 'center', cellsAlign: 'center', },
+                    { text: '渠道名称', datafield: 'ChannelName', width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '借', datafield: "Borrow", width: '180px', align: 'center', cellsAlign: 'center' },
+                    { text: '贷', datafield: "Loan", width: '180px', align: 'center', cellsAlign: 'center' },
+                    { text: '是否禁用', datafield: "IsUnable", align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '渠道编码', datafield: 'Channel', hidden: true },
                     { text: '公司', datafield: 'CompanyCode', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
@@ -288,7 +288,7 @@ var $page = function () {
     //删除
     function dele(selection) {
         $.ajax({
-            url: "/Systemmanagement/BankChannelMapping/DeleteBankChannelInfo",
+            url: "/CapitalCenterManagement/PaySettingList/DeleteBankChannelInfo",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -305,7 +305,7 @@ var $page = function () {
     var isUnable = "";
     function updateIsUnable(selection) {
         $.ajax({
-            url: "/SystemManagement/BankChannelMapping/UpdateIsUnable",
+            url: "/CapitalCenterManagement/PaySettingList/UpdateIsUnable",
             data: { vguids: selection, isUnable: isUnable },
             //traditional: true,
             type: "post",
@@ -323,7 +323,7 @@ var $page = function () {
                     } else {
                         jqxNotification("禁用失败！", null, "error");
                     }
-                    
+
                 }
             }
         });

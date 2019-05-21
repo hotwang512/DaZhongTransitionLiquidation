@@ -78,7 +78,7 @@
                     { text: '账套', datafield: 'AccountModeName', pinned: true, width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '公司', datafield: 'CompanyName', pinned: true, width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '申请日期', datafield: 'ApplyDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '户名', datafield: 'BankAccountName', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '户名', datafield: 'BankAccountName', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '账号', datafield: 'BankAccount', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '开户银行', datafield: 'BankName', width: 350, align: 'center', cellsAlign: 'center' },
                     { text: '提现金额', datafield: 'Money', cellsFormat: "d2", width: 100, align: 'center', cellsAlign: 'center', },

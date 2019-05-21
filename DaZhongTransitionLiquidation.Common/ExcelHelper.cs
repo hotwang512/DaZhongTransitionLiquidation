@@ -116,5 +116,13 @@ namespace DaZhongTransitionLiquidation.Common
             return designer.Workbook.SaveToStream();
         }
 
+        public static DataTable ExportToDataTable(string excelFilePath, bool showTitle = true)
+        {
+            Workbook workbook = new Workbook(excelFilePath);
+            Cells cells = workbook.Worksheets[0].Cells;
+
+            DataTable dt = cells.ExportDataTable(0, 0, cells.MaxDataRow + 1, cells.MaxColumn + 1, showTitle);
+            return dt;
+        }
     }
 }

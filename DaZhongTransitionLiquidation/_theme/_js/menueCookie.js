@@ -107,7 +107,8 @@ var menueHelp = {
                 break;
             case "OrderSetting": $("#homeModel").text("--系统管理")
                 break;
-                
+            case "PaySetting": $("#homeModel").text("--系统管理")
+                break;
             default:
         }
     }

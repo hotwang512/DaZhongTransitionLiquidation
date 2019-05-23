@@ -146,22 +146,21 @@ var $page = function () {
                 computeValue();
             });
         $('#PayCompanyDropdown').on('select', function (event) {
+            $("#CompanyBankName").val("");
+            $("#CompanyBankAccount").val("");
+            $("#CompanyBankAccountName").val("");
+            $("#AccountType").val("");
             var args = event.args;
             if (args && $("#PayMode").val() != "现金") {
                 debugger;
                 var item = args.item;
-                $("#PayCompany").val(item.lable);
+                $("#PayCompany").val(item.label);
                 $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo", { Vguid: $("#PayCompanyDropdown").val() }, function (msg) {
                     $("#CompanyBankName").val(msg.BankName);
                     $("#CompanyBankAccount").val(msg.BankAccount);
                     $("#CompanyBankAccountName").val(msg.BankAccountName);
                     $("#AccountType").val(msg.AccountType);
                 });
-            } else {
-                $("#CompanyBankName").val("");
-                $("#CompanyBankAccount").val("");
-                $("#CompanyBankAccountName").val("");
-                $("#AccountType").val("");
             }
         });
         $('#PaymentInformation').on('select', function (event) {

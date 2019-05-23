@@ -819,5 +819,24 @@ namespace DaZhongTransitionLiquidation.Common
             }
             return "";
         }
+        public static string FileToBase64(string filePath)
+        {
+            string base64Str = "";
+            try
+            {
+                FileStream filestream = new FileStream(filePath, FileMode.Open);
+                byte[] bt = new byte[filestream.Length];
+                //调用read读取方法
+                filestream.Read(bt, 0, bt.Length);
+                base64Str = Convert.ToBase64String(bt);
+                filestream.Close();
+                return "data:image/png;base64," + base64Str;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message);
+                return "";
+            }
+        }
     }
 }

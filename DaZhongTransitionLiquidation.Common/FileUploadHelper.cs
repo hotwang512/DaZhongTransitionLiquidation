@@ -326,5 +326,29 @@ namespace DaZhongTransitionLiquidation.Common
                 return "";
             }
         }
+        public static string UploadToFileServer(string FileName,string ImageBase64Str)
+        {
+            var url = ConfigSugar.GetAppString("ImageServerUploadUrl");
+            var token = ConfigSugar.GetAppString("ImageServerUploadToken");
+            var data = "{" +
+                       "\"message\":\"{message}\",".Replace("{message}", ImageBase64Str) +
+                       "\"fileName\":\"{fileName}\",".Replace("{fileName}", FileName) +
+                       "\"token\":\"{token}\"".Replace("{token}", token) +
+                       "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), "POST", data);
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("上传文件失败:{0},result:{1}", data, ex.ToString()));
+                return "";
+            }
+        }
     }
 }

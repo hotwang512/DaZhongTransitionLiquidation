@@ -21,6 +21,7 @@ var $page = function () {
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
             getFixedAssetsOrderDetail();
+            $("#tdPrint").show();
             getAttachment();
         } else {
             $("#VGUID").val(newguid());
@@ -219,25 +220,24 @@ var $page = function () {
             }
         });
         $('#PayCompanyDropdown').on('select', function (event) {
-
+            $("#CompanyBankName").val("");
+            $("#CompanyBankAccount").val("");
+            $("#CompanyBankAccountName").val("");
+            $("#AccountType").val("");
             var args = event.args;
             if (args && $("#PayMode").val() != "现金") {
-                
                 var item = args.item;
-                $("#PayCompany").val(item.lable);
+                $("#PayCompany").val(item.label);
+
                 $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
                     { Vguid: $("#PayCompanyDropdown").val() },
-                    function(msg) {
+                    function (msg) {
+                        debugger;
                         $("#CompanyBankName").val(msg.BankName);
                         $("#CompanyBankAccount").val(msg.BankAccount);
                         $("#CompanyBankAccountName").val(msg.BankAccountName);
                         $("#AccountType").val(msg.AccountType);
                     });
-            } else {
-                $("#CompanyBankName").val("");
-                $("#CompanyBankAccount").val("");
-                $("#CompanyBankAccountName").val("");
-                $("#AccountType").val("");
             }
         });
         $("#PurchaseGoods").on("change",

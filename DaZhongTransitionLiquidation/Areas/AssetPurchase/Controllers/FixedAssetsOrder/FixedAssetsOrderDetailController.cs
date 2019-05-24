@@ -431,6 +431,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
+            var imageServerUrl = ConfigSugar.GetAppString("ImageServerUrl");
             if (File != null)
             {
                 var uploadPath = ConfigSugar.GetAppString("UploadPath") + "\\" + "AssetAttachFile\\";
@@ -453,22 +454,36 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 try
                 {
                     File.SaveAs(filePath);
-                    DbBusinessDataService.Command(db =>
+                    var FileBase64Str = FileHelper.FileToBase64(filePath);
+                    var resultData = FileUploadHelper.UploadToFileServer(fileName, FileBase64Str);
+
+                    if (resultData != "")
                     {
-                        var result = db.Ado.UseTran(() =>
+                        var modelData = resultData.JsonToModel<JsonResultModelApi<Api_FileInfo>>();
+                        if (modelData.code == 0)
                         {
-                            var sevenSection = new Business_AssetAttachmentList();
-                            sevenSection.VGUID = Guid.NewGuid();
-                            sevenSection.AssetOrderVGUID = Vguid;
-                            sevenSection.Attachment = "\\" + uploadPath + fileName;
-                            sevenSection.AttachmentType = AttachmentType;
-                            sevenSection.CreateTime = DateTime.Now;
-                            sevenSection.CreatePerson = cache[PubGet.GetUserKey].UserName;
-                            db.Insertable<Business_AssetAttachmentList>(sevenSection).ExecuteCommand();
-                        });
-                        resultModel.IsSuccess = result.IsSuccess;
-                        resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-                    });
+                            var fileData = modelData.data[0];
+                            if (!fileData.fileName.IsNullOrEmpty())
+                            {
+                                DbBusinessDataService.Command(db =>
+                                {
+                                    var result = db.Ado.UseTran(() =>
+                                    {
+                                        var sevenSection = new Business_AssetAttachmentList();
+                                        sevenSection.VGUID = Guid.NewGuid();
+                                        sevenSection.AssetOrderVGUID = Vguid;
+                                        sevenSection.Attachment = imageServerUrl + fileData.fileId;//"\\" + uploadPath + fileName;
+                                        sevenSection.AttachmentType = AttachmentType;
+                                        sevenSection.CreateTime = DateTime.Now;
+                                        sevenSection.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                                        db.Insertable<Business_AssetAttachmentList>(sevenSection).ExecuteCommand();
+                                    });
+                                    resultModel.IsSuccess = result.IsSuccess;
+                                    resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
+                                });
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

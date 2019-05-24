@@ -677,23 +677,35 @@ var $page = function () {
             var loanMoney = "";
             if (datas[i].BorrowMoney == "" || datas[i].BorrowMoney == null) {
                 loanMoney = datas[i].LoanMoney;
-                loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
-                $("#Loan" + i).val(loanMoney);
-                $("#Borrow" + i).val("");
-                $("#Borrow" + i).attr("readonly", "readonly");
+                if (loanMoney != null) {
+                    loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+                    $("#Loan" + i).val(loanMoney);
+                    $("#Borrow" + i).val("");
+                    $("#Borrow" + i).attr("readonly", "readonly");
+                }
             } else {
                 borrowMoney = datas[i].BorrowMoney;
-                borrowMoney = parseFloat(borrowMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
-                $("#Borrow" + i).val(borrowMoney);
-                $("#Loan" + i).val("");
-                $("#Loan" + i).attr("readonly", "readonly");
+                if (borrowMoney != null) {
+                    borrowMoney = parseFloat(borrowMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+                    $("#Borrow" + i).val(borrowMoney);
+                    $("#Loan" + i).val("");
+                    $("#Loan" + i).attr("readonly", "readonly");
+                }
             }
-            var bCount = datas[i].BorrowMoneyCount;
+            var bCount = "";
+            if (datas[i].BorrowMoneyCount != null) {
+                bCount = datas[i].BorrowMoneyCount;
+                $("#BorrowCount").val(parseFloat(bCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            }
             //bCount = bCount.toString().replace(/,/g, '');
-            $("#BorrowCount").val(parseFloat(bCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-            var lCount = datas[i].LoanMoneyCount;
+            
+            var lCount = "";
+            if (datas[i].LoanMoneyCount != null) {
+                lCount = datas[i].LoanMoneyCount;
+                $("#LoanCount").val(parseFloat(lCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            }
             //lCount = lCount.toString().replace(/,/g, '');
-            $("#LoanCount").val(parseFloat(lCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            
             //多余2条,绑定额外的tr
             if (i > 1) {
                 var trMore = "";

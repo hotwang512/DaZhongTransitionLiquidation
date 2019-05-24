@@ -9,71 +9,47 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
     {
         public Guid VGUID { get; set; }
         /// <summary>
-        /// Desc:交易银行
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public string TradingBank { get; set; }
-        /// <summary>
-        /// Desc:交易日期
+        /// Desc:支付日期
         /// Default:
         /// Nullable:True
         /// </summary> 
         public DateTime? TransactionDate { get; set; }
         /// <summary>
-        /// Desc:转出（借)
+        /// Desc:支付金额
         /// Default:
         /// Nullable:True
         /// </summary> 
         public decimal? TurnOut { get; set; }
         /// <summary>
-        /// Desc:转入（贷）
+        /// Desc:可用余额
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public decimal? TurnIn { get; set; }
+        public decimal? UseBalance { get; set; }
         /// <summary>
-        /// Desc:币种
+        /// Desc:剩余余额
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string Currency { get; set; }
+        public decimal? Balance { get; set; }
         /// <summary>
-        /// Desc:我方单位
+        /// Desc:报销人员
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string PaymentUnit { get; set; }
+        public string ReimbursementMan { get; set; }
         /// <summary>
-        /// Desc:我方账号
+        /// Desc:报销部门
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string PayeeAccount { get; set; }
+        public string ReimbursementOrgName { get; set; }
         /// <summary>
-        /// Desc:我方开户机构
+        /// Desc:报销部门Code
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string PaymentUnitInstitution { get; set; }
-        /// <summary>
-        /// Desc:对方单位名称
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public string ReceivingUnit { get; set; }
-        /// <summary>
-        /// Desc:对方账号
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public string ReceivableAccount { get; set; }
-        /// <summary>
-        /// Desc:对方开户机构
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public string ReceivingUnitInstitution { get; set; }
+        public string ReimbursementOrgCode { get; set; }
         /// <summary>
         /// Desc:用途
         /// Default:
@@ -81,13 +57,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         /// </summary> 
         public string Purpose { get; set; }
         /// <summary>
-        /// Desc:备注
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public string Remark { get; set; }
-        /// <summary>
-        /// Desc:T24交易流水号
+        /// Desc:交易流水号
         /// Default:
         /// Nullable:True
         /// </summary> 
@@ -107,13 +77,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public string VoucherSubjectName { get; set; }
         public DateTime? CreateTime { get; set; }
         public string CreatePerson { get; set; }
-        /// <summary>
-        /// Desc:余额
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public decimal? Balance { get; set; }
-        public string BankAccount { get; set; }
         public string AccountModeCode { get; set; }
         public string AccountModeName { get; set; }
         public string CompanyCode { get; set; }

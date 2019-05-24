@@ -39,7 +39,7 @@
         <div class="header_text_div"><span class="header_text_span">选择</span></div>
     </div>
     <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 800px; margin-left: 20px;">
+        <table style="margin-top: 20px; width: 1300px; margin-left: 20px;">
             <tr style="height: 45px;">
                 <td class="td_span">账套：</td>
                 <td class="td_input">
@@ -55,6 +55,29 @@
                 <td class="td_span"><span id="hideCompany">公司：</span></td>
                 <td class="td_input">
                     <select id="CompanyCode" class="input_text form-control" style=""></select>
+                </td>
+                <td class="td_span"><span id="hideCompany">年：</span></td>
+                <td class="td_input">
+                    <select id="Year" class="input_text form-control" style="width:150px">
+                        @{
+                            for (int i = 0; i < 10; i++)
+                            {
+                                int j = i + 2019;
+                                <option value="@j">@j</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td class="td_span"><span id="hideCompany">月：</span></td>
+                <td class="td_input">
+                    <select id="Month" class="input_text form-control" style="width:150px">
+                        @{
+                            for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
                 </td>
             </tr>
 

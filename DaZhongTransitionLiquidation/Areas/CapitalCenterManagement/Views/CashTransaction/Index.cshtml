@@ -21,14 +21,14 @@
 
 @if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
 { 
-    <table style="margin-top: 10px;display:none">
+    <table style="margin-top: 10px;">
         <tr style="height: 50px;">
             @if (currentModuleRolePermission.Adds == 1)
             {
                 <td style="width: 190px;">
-                    <button id="btnSync" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">同步当天银行数据</span></button>
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
-                <td style="width: 190px;">
+                @*<td style="width: 190px;">
                     <button id="btnYesterdaySync" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">同步昨天银行数据</span></button>
                 </td>
                 <td style="width: 190px;">
@@ -38,7 +38,7 @@
                 <td style="width: 190px;">
                     <button id="btnImportingBCM" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">导入交通银行数据</span></button>
                     <input id="uploadFileBCM" type="file" accept=".xls,.xlsx" style="display:none;" />
-                </td>
+                </td>*@
             }
         </tr>
     </table>
@@ -53,10 +53,9 @@
     <div class="body_mk" style="height: 105px;">
         <table style="margin-top: 20px; margin-left: 20px;">
             <tr style="height: 45px;">
-                <td class="td_span">交易银行：</td>
+                <td class="td_span">报销人员：</td>
                 <td class="td_input">
-                    @*<input id="TradingBank" type="text" class="input_text form-control" />*@
-                    <select id="TradingBank" class="input_text form-control" style="width: 210px;"></select>
+                    <input id="ReimbursementMan" type="text" class="input_text form-control" />
                 </td>
                 <td class="td_span">交易开始日期：</td>
                 <td class="td_input">
@@ -67,9 +66,9 @@
                 </td>               
             </tr>
             <tr style="height: 45px;">
-                <td class="td_span">付款单位：</td>
+                <td class="td_span">公司：</td>
                 <td class="td_input">
-                    <input id="PaymentUnit" type="text" class="input_text form-control" />
+                    <input id="CompanyName" type="text" class="input_text form-control" />
                 </td>
                 <td class="td_span">交易结束日期：</td>
                 <td class="td_input">

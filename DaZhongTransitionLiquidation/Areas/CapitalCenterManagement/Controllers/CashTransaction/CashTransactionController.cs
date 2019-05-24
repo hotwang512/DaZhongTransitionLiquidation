@@ -31,9 +31,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 DateTime transactionDateEnd = Convert.ToDateTime(TransactionDateEnd + " 23:59:59");
                 jsonResult.Rows = db.Queryable<Business_CashTransaction>()
-                .WhereIF(searchParams.TradingBank != null, i => i.BankAccount == searchParams.TradingBank)
+                .WhereIF(searchParams.ReimbursementMan != null, i => i.ReimbursementMan == searchParams.ReimbursementMan)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
-                .WhereIF(searchParams.PaymentUnit != null, i => i.PaymentUnit == searchParams.PaymentUnit)
+                .WhereIF(searchParams.CompanyName != null, i => i.CompanyName.Contains(searchParams.CompanyName))
                 .OrderBy(i => i.TransactionDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

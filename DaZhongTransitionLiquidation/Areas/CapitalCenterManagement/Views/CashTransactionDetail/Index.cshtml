@@ -1,0 +1,90 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+@{
+    ViewBag.Title = "现金管理/现金交易流水明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>
+    ;
+    var accountModeName = ViewBag.GetAccountMode as List<Business_SevenSection>;
+    }
+    @section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/_theme/tool/jquery.PrintArea.min.js")"></script>
+    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/CashTransactionDetail.js")"></script>
+    }
+    <style>
+        .input_text {
+            width: 250px !important;
+            height: 35px;
+            border: 1px;
+            border-style: solid;
+            border-color: #dddddd;
+            -moz-box-shadow: 0px 1px 10px #dddddd;
+            -webkit-box-shadow: 0px 1px 10px #dddddd;
+            box-shadow: 0 0 10px #dddddd;
+            background-color: white !important;
+            border-radius: 4px;
+            float: left;
+        }
+    </style>
+    <table id="hideButton" style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            <td style="width: 95px;">
+                @*<button id="Preview" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">预览</span></button>*@
+                <button id="btnSave" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+            <td style="width: 95px;">
+                <button id="btnCancel" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </td>
+        </tr>
+    </table>
+
+    <div class="mk">
+        <div class="header_mk">
+            <div class="header_icon"></div>
+            <div class="header_text_div"><span class="header_text_span">主信息</span>   <label id="lblNoA" for="" class="header_text_span" style=""></label></div>
+        </div>
+        <div class="body_mk" style="height: 300px;">
+            <table id="VoucherList" style="width:100%;margin-top: 20px;">
+                <tr style="height:50px">
+                    <td style="text-align: right;width: 150px;">账套：</td>
+                    <td style="text-align: left;">
+                        <select id="AccountModeCode" class="input_text form-control" style="width: 250px" onchange="getCompanyCode()">
+                            @{
+                            foreach (var item in accountModeName)
+                            {
+                                <option value="@item.Code">@item.Descrption</option>
+                            }
+                            }
+                        </select>
+                    </td>
+                    <td style="text-align: right;width: 150px;">公司：</td>
+                    <td style="text-align: left;"><select id="CompanyCode" class="input_text form-control" style="width: 430px" onchange="getOrgInfo()"></select></td>
+                    <td style="text-align: right;">可用余额：</td>
+                    <td style="text-align: left;"><input id="UseBalance" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                </tr>
+                <tr style="height:50px">
+                    <td style="text-align: right;width: 150px;">支付日期：</td>
+                    <td style="text-align: left;"><input id="TransactionDate" type="text" style="" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+                    <td style="text-align: right;">支付金额：</td>
+                    <td style="text-align: left;"><input id="TurnOut" type="text" style="" class="input_text form-control" /></td>
+                    <td style="text-align: right;">剩余余额：</td>
+                    <td style="text-align: left;"><input id="Balance" type="text" style="" class="input_text form-control" readonly="readonly"/></td>
+                </tr>              
+                <tr style="height:50px">
+                    <td style="text-align: right;">报销部门：</td>
+                    <td style="text-align: left;"><select id="ReimbursementOrgCode" class="input_text form-control" style="width: 430px"></select></td>
+                    <td style="text-align: right;">报销人员：</td>
+                    <td style="text-align: right;"><input id="ReimbursementMan" type="text" style="" class="input_text form-control" /></td>
+                    <td style="text-align: right;">用途：</td>
+                    <td style="text-align: left;"><input id="Purpose" type="text" style="" class="input_text form-control" /><input id="VGUID" name="VGUID" class="hide" /></td>
+                    
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="jqxLoader" style="z-index:1045">
+    </div>
+

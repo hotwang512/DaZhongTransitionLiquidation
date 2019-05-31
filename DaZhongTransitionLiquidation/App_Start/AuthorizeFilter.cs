@@ -51,7 +51,7 @@ namespace DaZhongTransitionLiquidation
                     filterContext.Result = new RedirectResult("/Login/Index");
                     return;
                 }
-                if (cache[PubGet.GetUserKey].LoginName.ToLower() == "sysadmin")  //系统管理员不做验证
+                if (cache[PubGet.GetUserKey].LoginName.ToLower() == "admin")  //系统管理员不做验证
                 {
                     return;
                 }

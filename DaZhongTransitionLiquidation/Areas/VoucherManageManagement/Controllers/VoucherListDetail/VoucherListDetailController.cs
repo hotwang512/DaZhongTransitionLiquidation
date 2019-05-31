@@ -269,7 +269,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 voucherList.Currency = voucher.Currency;
                 voucherList.DocumentMaker = voucher.DocumentMaker;
                 voucherList.FinanceDirector = voucher.FinanceDirector;
-                //voucherList.Status = "1";
+                voucherList.Status = voucher.Status;
                 voucherList.VoucherDate = voucher.VoucherDate;
                 voucherList.VoucherNo = voucher.VoucherNo;//凭证号自动生成
                 voucherList.VoucherType = voucher.VoucherType;

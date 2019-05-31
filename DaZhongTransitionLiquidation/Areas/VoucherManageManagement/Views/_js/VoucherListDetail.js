@@ -541,6 +541,8 @@ var $page = function () {
                 $("#Status").val(msg.Status);
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();
+                } else {
+                    $("#btnSave").hide();
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳

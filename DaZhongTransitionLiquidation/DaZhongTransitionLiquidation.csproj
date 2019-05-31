@@ -2392,6 +2392,7 @@
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
+    <Compile Include="Controllers\DZLoginInfo.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ApiController.cs" />

@@ -4,7 +4,7 @@
 @{
     var currentUserRoleModules = ViewBag.CurrentUserRoleModules as List<V_Sys_Role_Module>;
     var userInfo = ViewBag.User as Sys_User;
-    bool isSysadmin = userInfo?.LoginName == "sysAdmin";
+    bool isadmin = userInfo?.LoginName == "admin";
     bool hasSystemManagementPermission = currentUserRoleModules.Any(i => i.PageName == "系统管理" && i.Reads == 1);
     bool hasPaymentPermission = currentUserRoleModules.Any(i => i.PageName == "资金结算中心" && i.Reads == 1);
     bool hasPaymentPermission1 = currentUserRoleModules.Any(i => i.PageName == "会计核算中心" && i.Reads == 1);
@@ -29,7 +29,7 @@
             padding-left: 12px;
         }
     </style>
-    @if (isSysadmin || hasPaymentPermission)
+    @if (isadmin || hasPaymentPermission)
     {
         <div class="menue_header" style="display: none;">
             <table style="cursor: pointer;">
@@ -66,7 +66,7 @@
                         <td></td>
                     </tr>
                 }
-                @if (currentUserRoleModules.Any(i => i.PageName == "渠道管理" && i.Reads == 1) || isSysadmin)
+                @if (currentUserRoleModules.Any(i => i.PageName == "渠道管理" && i.Reads == 1) || isadmin)
                 {
                     <tr class="menue_item" id="ChannelManagement" pageurl="/Systemmanagement/ChannelManagement/Channel">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -74,7 +74,7 @@
                         <td></td>
                     </tr>
                 }
-                @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
+                @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isadmin)
                 {
                     <tr class="menue_item" id="SubjectManagement" pageurl="/Systemmanagement/SubjectManagement/SubjectManagement">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -82,7 +82,7 @@
                         <td></td>
                     </tr>
                 }
-                @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
+                @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isadmin)
                 {
                     <tr class="menue_item" id="BankChannelMapping" pageurl="/Systemmanagement/BankChannelMapping/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -101,7 +101,7 @@
             </table>
         </div>
     }
-    @if (isSysadmin || hasReportPermission)
+    @if (isadmin || hasReportPermission)
     {
         <div class="menue_header" style="display: none;">
             <table style="cursor: pointer;">
@@ -122,7 +122,7 @@
                         <td></td>
                     </tr>
                 }
-                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "异常数据报表" && i.Reads == 1))
+                @*@if (isadmin || currentUserRoleModules.Any(i => i.PageName == "异常数据报表" && i.Reads == 1))
                     {
                     <tr class="menue_item" id="ExceptionData" pageurl="/ReportManagement/ExceptionDataReport/ExceptionData">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -141,7 +141,7 @@
             </table>
         </div>
     }
-    @if (hasSystemManagementPermission || isSysadmin)
+    @if (hasSystemManagementPermission || isadmin)
     {
         <div class="menue_header" style="display: none;">
             <table style="cursor: pointer;">
@@ -154,7 +154,7 @@
         </div>
         <div class="menue_body" style="display: none;">
             <table>
-                @if (currentUserRoleModules.Any(i => i.PageName == "用户管理" && i.Reads == 1) || isSysadmin)
+                @if (currentUserRoleModules.Any(i => i.PageName == "用户管理" && i.Reads == 1) || isadmin)
                 {
                     <tr class="menue_item" id="UserManagement" pageurl="/Systemmanagement/UserManagement/UserInfos">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -162,7 +162,7 @@
                         <td></td>
                     </tr>
                 }
-                @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isSysadmin)
+                @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isadmin)
                 {
                     <tr class="menue_item" id="AuthorityManagement" pageurl="/Systemmanagement/AuthorityManagement/AuthorityInfo">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -178,7 +178,7 @@
 
 
     @******************************************************资金结算中心******************************************************@
-    @if (isSysadmin || hasPaymentPermission)
+    @if (isadmin || hasPaymentPermission)
     {
         <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL" style="display: none;">
             <table style="cursor: pointer;">
@@ -199,7 +199,7 @@
             </table>
             <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
 
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "备用金管理" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "备用金管理" && i.Reads == 1))
                 {
                 <table>
                     <tr class="menue_item" id="CashManager_CapitalFloM" pageurl="/CapitalCenterManagement/CashManager/Index">
@@ -209,7 +209,7 @@
                     </tr>
                 </table>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "现金交易流水" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "现金交易流水" && i.Reads == 1))
                 {
                 <table>
                     <tr class="menue_item" id="CashTransaction_CapitalFloM" pageurl="/CapitalCenterManagement/CashTransaction/Index">
@@ -229,7 +229,7 @@
                 </tr>
             </table>
             <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资金对账模块" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "资金对账模块" && i.Reads == 1))
                 {
                 <table>
                     <tr class="menue_item" id="FundReconciliation_CapitalFlow" pageurl="/CapitalCenterManagement/FundReconciliation/Index">
@@ -239,7 +239,7 @@
                     </tr>
                 </table>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行交易流水" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "银行交易流水" && i.Reads == 1))
                 {
                 <table>
                     <tr class="menue_item" id="BankFlowTemplate_CapitalFlow" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">
@@ -249,7 +249,7 @@
                     </tr>
                 </table>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资金调拨管理" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "资金调拨管理" && i.Reads == 1))
                 {
                     <table>
                         <tr class="menue_item" id="CapitalAllocation_CapitalFlow" pageurl="/CapitalCenterManagement/CapitalAllocation/Index">
@@ -268,7 +268,7 @@
                 </tr>
             </table>
             <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "借款申请" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "借款申请" && i.Reads == 1))
                 {
                     <table>
                         <tr class="menue_item" id="LoanApplication_CapitalFloL" pageurl="/CapitalCenterManagement/LoanApplication/Index">
@@ -278,7 +278,7 @@
                         </tr>
                     </table>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "" && i.Reads == 1))
                 {
                     <table>
                         <tr class="menue_item" id="BankFlowTemplate_CapitalFloL" pageurl="/CapitalCenterManagement/BankFlowTemplate/Index">
@@ -301,7 +301,7 @@
         </div>
         <div class="menue_body" id="PaymentOrder" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待提交订单" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "待提交订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderListDraft_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=1">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -309,7 +309,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已提交订单" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "已提交订单" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="OrderWaiting_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=2">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -317,7 +317,7 @@
                     <td></td>
                 </tr>
                 }
-                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
+                @*@if (isadmin || currentUserRoleModules.Any(i => i.PageName == "已过账订单" && i.Reads == 1))
                     {
                     <tr class="menue_item" id="OrderChecked_PaymentOrder" pageurl="/CapitalCenterManagement/OrderListDraft/Index?Status=3">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -325,7 +325,7 @@
                         <td></td>
                     </tr>
                     }*@
-                @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
+                @*@if (isadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息" && i.Reads == 1))
                     {
                     <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -333,7 +333,7 @@
                         <td></td>
                     </tr>
                     }
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="OrderList_PaymentOrder" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -354,7 +354,7 @@
         </div>
         <div class="menue_body" id="AccountReport" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行余额调节表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "银行余额调节表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="BalanceAdjustment_AccountReport" pageurl="/CapitalCenterManagement/BankBalanceAdjustment/Index?Status=1">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -362,7 +362,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "现金盘点表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "现金盘点表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="CashInventory_AccountReport" pageurl="/CapitalCenterManagement/CashInventory/Index?Status=2">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -383,7 +383,7 @@
         </div>
         <div class="menue_body" id="PaymentOrder" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "个人账号信息" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "个人账号信息" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="PersonInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -391,7 +391,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "公司账号信息" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "公司账号信息" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -414,7 +414,7 @@
         </div>
     }
     @******************************************************会计核算中心******************************************************@
-    @if (isSysadmin || hasPaymentPermission1)
+    @if (isadmin || hasPaymentPermission1)
     {
         <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject" style="display: none;">
             <table style="cursor: pointer;">
@@ -427,7 +427,7 @@
         </div>
         <div class="menue_body" id="VoucherManage" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "现金类凭证" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "现金类凭证" && i.Reads == 1))
                 {
                     <tr class="menue_item" id="VoucherList_VoucherManage" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1&&Type=0">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -435,7 +435,7 @@
                         <td></td>
                     </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行类凭证" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "银行类凭证" && i.Reads == 1))
                 {
                     <tr class="menue_item" id="VoucherList_VoucherManageBank" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1&&Type=1">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -444,7 +444,7 @@
                     </tr>
                 }
             </table>
-            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "摊销类凭证" && i.Reads == 1))
+            @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "摊销类凭证" && i.Reads == 1))
             {
                 <table style="cursor: pointer;" class="bodyTable">
                     <tr>
@@ -468,7 +468,7 @@
                     </table>
                 </div>
             }
-            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "计提类凭证" && i.Reads == 1))
+            @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "计提类凭证" && i.Reads == 1))
             {
                 <table style="cursor: pointer;" class="bodyTable">
                     <tr>
@@ -492,7 +492,7 @@
                     </table>
                 </div>
             }
-            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "转账类凭证" && i.Reads == 1))
+            @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "转账类凭证" && i.Reads == 1))
             {
                 <table style="cursor: pointer;" class="bodyTable">
                     <tr>
@@ -516,7 +516,7 @@
                     </table>*@
                 </div>
             }
-            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "结转类凭证" && i.Reads == 1))
+            @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结转类凭证" && i.Reads == 1))
             {
                 <table style="cursor: pointer;" class="bodyTable">
                     <tr>
@@ -552,7 +552,7 @@
         </div>
         <div class="menue_body" id="VoucherCheck" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "待审核" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "待审核" && i.Reads == 1))
                                         {
                                         <tr class="menue_item" id="VoucherWaiting_VoucherCheck" pageurl="/VoucherManageManagement/VoucherList/Index?Status=2">
                                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -560,7 +560,7 @@
                                             <td></td>
                                         </tr>
                                         }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "已审核" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "已审核" && i.Reads == 1))
                                         {
                                         <tr class="menue_item" id="VoucherChecked_VoucherCheck" pageurl="/VoucherManageManagement/VoucherList/Index?Status=3">
                                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -582,7 +582,7 @@
                                 </div>
                                 <div class="menue_body" id="QuerySubject" style="display: none;">
                                     <table>
-                                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "ORACLE凭证库" && i.Reads == 1))
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "ORACLE凭证库" && i.Reads == 1))
                                         {
                                         <tr class="menue_item" id="VoucherQuery_QuerySubject" pageurl="/QuerySubjectManagement/VoucherQuery/Index">
                                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -594,7 +594,7 @@
                                 </div>
     }
     @******************************************************费用报销中心******************************************************@
-    @if (isSysadmin || hasReportPermission)
+    @if (isadmin || hasReportPermission)
             {
         <div class="menue_header ROrderListManage" style="display: none;">
             <table style="cursor: pointer;">
@@ -607,7 +607,7 @@
         </div>
         <div class="menue_body" id="ROrderListManage" style="display: none;">
             <table>
-                @if (currentUserRoleModules.Any(i => i.PageName == "订单草稿" && i.Reads == 1) || isSysadmin)
+                @if (currentUserRoleModules.Any(i => i.PageName == "订单草稿" && i.Reads == 1) || isadmin)
                 {
                 <tr class="menue_item" id="ReimbursementCenter_ROrderListManage" pageurl="/ReimbursementCenter/ROrderListDraft/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -619,7 +619,7 @@
         </div>
     }
     @******************************************************报表管理中心******************************************************@
-    @if (isSysadmin || hasReportPermission)
+    @if (isadmin || hasReportPermission)
             {
         <div class="menue_header  FinancialStatements" style="display: none;">
             <table style="cursor: pointer;">
@@ -632,7 +632,7 @@
         </div>
         <div class="menue_body" id="FinancialStatements" style="display: none;">
             <table>
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "独立资产负债表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "独立资产负债表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="IndependentBalanceSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentBalanceSheet/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -640,7 +640,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "独立资产利润表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "独立资产利润表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="IndependentProfitSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentProfitSheet/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -648,7 +648,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "独立资现金流量表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "独立资现金流量表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="IndependentCashSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/IndependentCashSheet/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -656,7 +656,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产负债表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产负债表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="ConsolidatedBalanceSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedBalanceSheet/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -664,7 +664,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产利润表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产利润表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="ConsolidatedProfitSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedProfitSheet/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -672,7 +672,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产现金流量表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "合并资产现金流量表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="ConsolidatedCashSheet_FinancialStatements" pageurl="/FinancialStatementsManagement/ConsolidatedCashSheet/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -680,7 +680,7 @@
                     <td></td>
                 </tr>
                 }
-                @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额明细表" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额明细表" && i.Reads == 1))
                 {
                 <tr class="menue_item" id="SubjectBalanceStatement_FinancialStatements" pageurl="/FinancialStatementsManagement/SubjectBalanceStatement/Index">
                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -692,7 +692,7 @@
         </div>
     } 
     @******************************************************驾驶员结算中心******************************************************@
-    @if (isSysadmin || hasPaymentPermission)
+    @if (isadmin || hasPaymentPermission)
             {
         <div class="menue_header BaseData Reconc AmountReport" style="display: none;">
             <table style="cursor: pointer;">
@@ -730,7 +730,7 @@
                 </div>
                 <div class="menue_bodychildchild" style="display: none;">
                     <table>
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "营收数据" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "营收数据" && i.Reads == 1))
                         {
                         <tr class="menue_item" id="PaymentHistory_BaseData" pageurl="/PaymentManagement/RevenuePayment/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -739,7 +739,7 @@
                         </tr>
 
                         }
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "T+1数据" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "T+1数据" && i.Reads == 1))
                         {
                         <tr class="menue_item" id="NextDayData_BaseData" pageurl="/PaymentManagement/NextDayData/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -747,7 +747,7 @@
                             <td></td>
                         </tr>
                         }
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "银行数据" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "银行数据" && i.Reads == 1))
                         {
                         <tr class="menue_item" id="BankData_BaseData" pageurl="/PaymentManagement/BankData/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -756,7 +756,7 @@
                         </tr>
                         }
 
-                        @*@if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "7个段" && i.Reads == 1))
+                        @*@if (isadmin || currentUserRoleModules.Any(i => i.PageName == "7个段" && i.Reads == 1))
                             {
                                 <tr class="menue_item" id="CompanySection" pageurl="/PaymentManagement/CompanySection/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -777,7 +777,7 @@
                 </div>
                 <div class="menue_bodychildchild" style="display: none;">
                     <table>
-                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道管理" && i.Reads == 1) || isSysadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道管理" && i.Reads == 1) || isadmin)
                         {
                         <tr class="menue_item" id="ChannelManagement_Reconc" pageurl="/Systemmanagement/ChannelManagement/Channel">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -785,7 +785,7 @@
                             <td></td>
                         </tr>
                         }
-                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isadmin)
                         {
                         <tr class="menue_item" id="SubjectManagement_Reconc" pageurl="/Systemmanagement/SubjectManagement/SubjectManagement">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -793,7 +793,7 @@
                             <td></td>
                         </tr>
                         }
-                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isSysadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isadmin)
                         {
                         <tr class="menue_item" id="BankChannelMapping_Reconc" pageurl="/Systemmanagement/BankChannelMapping/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -801,7 +801,7 @@
                             <td></td>
                         </tr>
                         }
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
                         {
                         <tr class="menue_item" id="Reconciliation_Reconc" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -823,7 +823,7 @@
                 <div class="menue_bodychildchild" style="display: none;">
                     <table>
 
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "金额报表" && i.Reads == 1))
                         {
                         <tr class="menue_item" id="AmountReport_AmountReport" pageurl="/ReportManagement/AmountReport/AmountReport">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -953,7 +953,7 @@
                 </div>
     }
     @******************************************************资产管理******************************************************@
-        @if (isSysadmin || hasReportPermission2)
+        @if (isadmin || hasReportPermission2)
         {
             <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
                     <table style="cursor: pointer;">
@@ -977,7 +977,7 @@
                 <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
                     <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
                         <table>
-                            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
+                            @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
                             {
                                 <tr class="menue_item" id="FixedAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -985,7 +985,7 @@
                                     <td></td>
                                 </tr>
                             }
-                            @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
+                            @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
                             {
                                 <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/IntangibleAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -998,7 +998,7 @@
                 </div>
 
                 <table style="cursor: pointer; margin-left: -8px" class="bodyTable">
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "采购分配" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "采购分配" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="PurchaseAssign_AssetPurchase" pageurl="/AssetPurchase/PurchaseAssign/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1008,7 +1008,7 @@
                     }
                 </table>
                 <table style="cursor: pointer; margin-left:-8px" class="bodyTable">
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资金清算" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "资金清算" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="PaymentHistory_AssetPurchase" pageurl="#">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1029,7 +1029,7 @@
                 </div>
             <div class="menue_body" id="NewAssets" style="display: none;">
                     <table>
-                        @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
+                        @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="AssetsMaintenance_NewAssets" pageurl="/AssetManagement/AssetsMaintenance/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1051,7 +1051,7 @@
             </div>
             <div class="menue_body" id="AssetChange" style="display: none;">
                 <table>
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "车牌号变更" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "车牌号变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1059,7 +1059,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "经营模式变更" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "经营模式变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1067,7 +1067,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "存放地点变更" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "存放地点变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1075,7 +1075,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "OBD绑定车牌号变更" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "OBD绑定车牌号变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1083,7 +1083,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产原值变更" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产原值变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1104,7 +1104,7 @@
             </div>
             <div class="menue_body" id="AssetAllocation" style="display: none;">
                 <table>
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "内部调拨" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "内部调拨" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1112,7 +1112,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "外部调拨" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "外部调拨" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1134,7 +1134,7 @@
             </div>
             <div class="menue_body" id="AssetDisposal" style="display: none;">
                 <table>
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "退车清册" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "退车清册" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1142,7 +1142,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1150,7 +1150,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
+                    @if (isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1171,7 +1171,7 @@
             </div>
             <div class="menue_body" id="AssetManagement" style="display: none;">
                 <table>
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "Oracle资产清册" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "Oracle资产清册" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetsLedger/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1179,7 +1179,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "车管系统清册" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "车管系统清册" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1187,7 +1187,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产报废清册" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "资产报废清册" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetsRetirement_AssetManagement" pageurl="/AssetManagement/AssetsRetirement/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1195,7 +1195,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "折旧方法维护" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "折旧方法维护" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1203,7 +1203,7 @@
                             <td></td>
                         </tr>
                     }
-                    @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "资产管理报表" && i.Reads == 1))
+                    @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "资产管理报表" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1215,7 +1215,7 @@
             </div>
         }
     @******************************************************税务管理中心******************************************************@
-    @if (hasSystemManagementPermission || isSysadmin)
+    @if (hasSystemManagementPermission || isadmin)
     {
         <div class="menue_header TaxCalculation TaxAdmin InvoiceManage" style="display: none;">
             <table style="cursor: pointer;">
@@ -1347,7 +1347,7 @@
             </div>
     }
     @******************************************************预算管理中心******************************************************@
-    @if (hasSystemManagementPermission || isSysadmin)
+    @if (hasSystemManagementPermission || isadmin)
     {
         <div class="menue_header RevenueBudget CostBudget OutlayBudget" style="display: none;">
             <table style="cursor: pointer;">
@@ -1380,7 +1380,7 @@
         </div>
     }
     @******************************************************审计管理中心******************************************************@
-@if (hasSystemManagementPermission || isSysadmin)
+@if (hasSystemManagementPermission || isadmin)
 {
     <div class="menue_header LiXinAudit GovernmentAudit" style="display: none;">
         <table style="cursor: pointer;">
@@ -1447,7 +1447,7 @@
         </div>
 }
 @******************************************************统计管理中心******************************************************@
-@if (hasSystemManagementPermission || isSysadmin)
+@if (hasSystemManagementPermission || isadmin)
 {
     <div class="menue_header IndustryStatistics StatisticalNetworkingPlatform" style="display: none;">
         <table style="cursor: pointer;">
@@ -1495,7 +1495,7 @@
         </div>
 }
     @******************************************************系统管理******************************************************@
-    @if (hasSystemManagementPermission || isSysadmin)
+    @if (hasSystemManagementPermission || isadmin)
             {
         <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting" style="display: none;">
             <table style="cursor: pointer;">
@@ -1508,7 +1508,7 @@
         </div>
                 <div class="menue_body" style="display: none;">
                     <table>
-                        @if (currentUserRoleModules.Any(i => i.PageName == "用户管理" && i.Reads == 1) || isSysadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "用户管理" && i.Reads == 1) || isadmin)
                         {
                             <tr class="menue_item" id="UserManagement_SystemManage" pageurl="/Systemmanagement/UserManagement/UserInfos">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1516,7 +1516,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isSysadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "角色权限管理" && i.Reads == 1) || isadmin)
                         {
                             <tr class="menue_item" id="AuthorityManagement_SystemManage" pageurl="/Systemmanagement/AuthorityManagement/AuthorityInfo">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1524,7 +1524,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (currentUserRoleModules.Any(i => i.PageName == "模块管理" && i.Reads == 1) || isSysadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "模块管理" && i.Reads == 1) || isadmin)
                         {
                             <tr class="menue_item" id="MenuManagement_SystemManage" pageurl="/Systemmanagement/ModuleManagement/index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1545,7 +1545,7 @@
                 </div>
                 <div class="menue_body" id="OracleButt" style="display: none;">
                     <table>
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目维护(8个段)" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "科目维护(8个段)" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="SubjectMaintenance_OracleButt" pageurl="/PaymentManagement/CompanySection/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1553,7 +1553,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "对接状态" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "对接状态" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="ButtStatus_OracleButt" pageurl="/OracleButtManagement/ButtStatus/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1561,7 +1561,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额维护" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额维护" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="SubjectBalance_OracleButt" pageurl="/PaymentManagement/SubjectBalance/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1582,7 +1582,7 @@
                 </div>
                 <div class="menue_body" id="OrderSetting" style="display: none;">
                     <table>
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "业务配置" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "业务配置" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="BusinessTypeSet_OrderSetting" pageurl="/CapitalCenterManagement/BusinessTypeSet/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1590,7 +1590,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置维护" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "订单业务配置维护" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="OrderList_OrderSetting" pageurl="/CapitalCenterManagement/OrderList/Index?Status=1">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1611,7 +1611,7 @@
                 </div>
                 <div class="menue_body" id="PaySetting" style="display: none;">
                     <table>
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "业务配置维护" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "业务配置维护" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="OrderList_PaySetting" pageurl="/CapitalCenterManagement/PaySettingList/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -1632,7 +1632,7 @@
                 </div>
                 <div class="menue_body" id="PurchaseOrderSetting" style="display: none;">
                     <table>
-                        @if (isSysadmin || currentUserRoleModules.Any(i => i.PageName == "采购资产基础信息配置" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "采购资产基础信息配置" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="PurchaseOrderSetting_PurchaseOrderSetting" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>

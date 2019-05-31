@@ -196,7 +196,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
                 roleModelInfo.RoleVGUID = roleInfo.Vguid;
                 roleModelInfo.ModuleVGUID = module.Vguid;
                 roleModelInfo.CreatedDate = DateTime.Now;
-                roleModelInfo.CreatedUser = "sysAdmin";
+                roleModelInfo.CreatedUser = "admin";
                 roleModelInfos.Add(roleModelInfo);
             } //end foreach of sysModules
 

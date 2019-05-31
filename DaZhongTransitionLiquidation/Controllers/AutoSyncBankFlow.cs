@@ -118,14 +118,14 @@ namespace DaZhongTransitionLiquidation.Controllers
                 item.AccountModeName = accountModeName;
                 item.CompanyCode = companyBankData.CompanyCode;
                 item.CreateTime = DateTime.Now;
-                item.CreatePerson = "sysAdmin";
+                item.CreatePerson = "admin";
                 bankFlowLists.Add(item); 
             }
             if (bankFlowLists.Count > 0)
             {
                 success = _db.Insertable(bankFlowLists).ExecuteCommand();
                 //根据流水自动生成凭证
-                BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "sysAdmin");
+                BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
             }
             BankDataPack.SyncBackFlowAndReconciliation();
             return success;

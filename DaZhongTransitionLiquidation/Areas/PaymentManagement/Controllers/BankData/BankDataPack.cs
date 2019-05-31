@@ -66,7 +66,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
                         if (!exist)
                         {
                             bankFlow.VCRTTIME = DateTime.Now;
-                            bankFlow.VCRTUSER = "sysadmin";
+                            bankFlow.VCRTUSER = "admin";
                             db.Insertable(bankFlow).ExecuteCommand();
                         }
                     });

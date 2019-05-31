@@ -100,6 +100,10 @@ var $page = function () {
             initTable();
             //$("#jqxTable2").jqxTreeGrid('updateBoundData');
         })
+        //切换月份
+        $('#Month').on('change', function (event) {
+            initTable();
+        })
     }; //addEvent end
 };
 
@@ -153,12 +157,12 @@ function initTable() {
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
             { text: '编码', datafield: 'BusinessCode', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFuncs },
-            { text: '科目段', datafield: 'Company', width: 200, align: 'center', cellsAlign: 'center' },
-            { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
-            { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
-            { text: '备用1', datafield: 'SpareOne', width: 200, align: 'center', cellsAlign: 'center', },
-            { text: '备用2', datafield: 'SpareTwo', width: 200, align: 'center', cellsAlign: 'center', },
-            { text: '往来段', datafield: 'Intercourse', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '科目段', datafield: 'Company', width: 260, align: 'center', cellsAlign: 'center' },
+            { text: '核算段', datafield: 'Accounting', width: 180, align: 'center', cellsAlign: 'center', },
+            { text: '成本中心段', datafield: 'CostCenter', width: 180, align: 'center', cellsAlign: 'center', },
+            { text: '备用1', datafield: 'SpareOne', width: 180, align: 'center', cellsAlign: 'center', },
+            { text: '备用2', datafield: 'SpareTwo', width: 180, align: 'center', cellsAlign: 'center', },
+            { text: '往来段', datafield: 'Intercourse', width: 180, align: 'center', cellsAlign: 'center', },
             { text: '余额', datafield: 'Balance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
               
             { text: '核算段', datafield: 'AccountingCode', hidden: true },                                    

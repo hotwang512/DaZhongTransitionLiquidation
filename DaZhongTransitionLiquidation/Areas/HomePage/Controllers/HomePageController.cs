@@ -32,7 +32,7 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             DbBusinessDataService.Command(db =>
             {
                 //var data = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserVGUID && x.Block == "1").Count();
-                if (UserInfo.LoginName.ToLower() == "sysadmin")
+                if (UserInfo.LoginName.ToLower() == "admin")
                 {
                     //                    response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
                     // (t1.Code+t2.Code) as KeyData from Business_SevenSection t1 

@@ -26,10 +26,14 @@ var $page = function () {
             $("#buttonList2").show();
         }
         type = $.request.queryString().Type;
-        if (type == 0 || type == "0") {
-            type = "现金类";
+        if (type == null) {
+            type = "";
         } else {
-            type = "银行类";
+            if (type == 0 || type == "0") {
+                type = "现金类";
+            } else {
+                type = "银行类";
+            }
         }
         //加载列表数据
         initTable();
@@ -80,7 +84,12 @@ var $page = function () {
         //提交
         $("#btnUp").on("click", function () {
             var selection = [];
-            var grid = $("#jqxTable");
+            var grid = "";
+            if (tableIndex == 1) {
+                grid = $("#jqxTable1");
+            } else {
+                grid = $("#jqxTable");
+            }
             var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
@@ -99,7 +108,12 @@ var $page = function () {
         //审核
         $("#btnCheck").on("click", function () {
             var selection = [];
-            var grid = $("#jqxTable");
+            var grid = "";
+            if (tableIndex == 1) {
+                grid = $("#jqxTable1");
+            } else {
+                grid = $("#jqxTable");
+            }
             var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
@@ -164,6 +178,9 @@ var $page = function () {
                             $("#jqxTable").jqxDataTable('updateBoundData');
                         }
                         break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo + "条凭证借贷不相平,提交失败！", null, "error");
+                        break;
                 }
             }
         });
@@ -195,8 +212,7 @@ var $page = function () {
 
     function initTable() {
         //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
-        var status = $.request.queryString().Status;
-        
+        var status = $.request.queryString().Status; 
         var source =
             {
                 datafields:
@@ -252,7 +268,7 @@ var $page = function () {
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: '批名', datafield: 'BatchName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: false, align: 'center', cellsAlign: 'center' },
-                    { text: '公司', datafield: 'CompanyName', width: 300, pinned: false, align: 'center', cellsAlign: 'center', },
+                    { text: '公司', datafield: 'CompanyName', width: 350, pinned: false, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '币种', datafield: 'Currency',hidden: true, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
@@ -335,9 +351,9 @@ var $page = function () {
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: '批名', datafield: 'BatchName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: false, align: 'center', cellsAlign: 'center' },
-                    { text: '营运公司', datafield: 'CompanyName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', },
+                    { text: '营运公司', datafield: 'CompanyName', width: 350, pinned: false, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
-                    { text: '币种', datafield: 'Currency', width: 150, align: 'center', cellsAlign: 'center', },
+                    { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
@@ -415,3 +431,6 @@ $(function () {
     var page = new $page();
     page.init();
 });
+
+
+

@@ -34,7 +34,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
             {
                 ConditionalType = ConditionalType.NoEqual,
                 FieldName = "LoginName",
-                FieldValue = "sysAdmin"
+                FieldValue = "admin"
             });
             return conditionalModels;
         }

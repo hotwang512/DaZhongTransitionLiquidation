@@ -35,11 +35,12 @@
                 datafields:
                 [
                     //{ name: "checkbox", type: null },
+                    { name: 'Batch', type: 'string' },
                     { name: 'AccountModeName', type: 'string' },
                     { name: 'AccountModeCode', type: 'string' },
                     { name: 'CompanyName', type: 'string' },
                     { name: 'CompanyCode', type: 'string' },
-                    { name: 'TransactionDate', type: 'date' },   
+                    { name: 'TransactionDate', type: 'date' },
                     { name: 'UseBalance', type: 'number' },
                     { name: 'TurnOut', type: 'number' },
                     { name: 'Balance', type: 'number' },
@@ -78,10 +79,11 @@
                 columnsHeight: 35,
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '交易流水号', datafield: 'Batch', pinned: true, width: 200, align: 'center', cellsAlign: 'center', },
+                    { text: '交易流水号', datafield: 'Batch', pinned: true, width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '账套', datafield: 'AccountModeName', pinned: true, width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '公司', datafield: 'CompanyName', pinned: true, width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: '支付日期', datafield: 'TransactionDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '支付日期', datafield: 'TransactionDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '可用金额', datafield: 'UseBalance', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '支付金额', datafield: 'TurnOut', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '现金余额', datafield: 'Balance', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '报销部门', datafield: 'ReimbursementOrgName', width: 150, align: 'center', cellsAlign: 'center' },
@@ -95,7 +97,10 @@
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]
             });
-
+        function detailFunc(row, column, value, rowData) {
+            var container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
+            return container;
+        }
     }
 };
 
@@ -116,4 +121,7 @@ function getBankInfo() {
 
         }
     });
+}
+function link(VGUID) {
+    window.location.href = "/CapitalCenterManagement/CashTransactionDetail/Index?VGUID=" + VGUID;
 }

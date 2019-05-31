@@ -1,4 +1,5 @@
-﻿var $page = function () {
+﻿var guid = $.request.queryString().VGUID;
+var $page = function () {
 
     this.init = function () {
         addEvent();
@@ -7,12 +8,22 @@
     var selector = this.selector = {};
 
     function addEvent() {
+        if (guid != "" && guid != null) {
+            $("#UseBalance").val("");
+        }
         getCompanyCode();
         $("#btnCancel").on("click", function () {
             history.go(-1);
         });
         //保存
         $("#btnSave").on("click", function () {
+            var turnOut = $("#TurnOut").val();
+            var useBalance = $("#UseBalance").val();
+            var balance = $("#Balance").val();
+            if (turnOut != "" && useBalance != "" && balance == "") {
+                jqxNotification("请修改支付金额！", null, "error");
+                return;
+            }
             $.ajax({
                 url: "/CapitalCenterManagement/CashTransactionDetail/SaveCashTransactionDetail",
                 data: {
@@ -28,7 +39,8 @@
                     ReimbursementOrgName: $('#ReimbursementOrgCode option:selected').text(),
                     ReimbursementMan: $("#ReimbursementMan").val(),
                     Purpose: $("#Purpose").val(),
-                    VGUID: $("#VGUID").val()
+                    VGUID: $("#VGUID").val(),
+                    Batch: $("#Batch").val()
                 },
                 type: "POST",
                 dataType: "json",
@@ -52,7 +64,13 @@
             var turnOut = $("#TurnOut").val();
             var useBalance = $("#UseBalance").val();
             if (turnOut != "") {
-                $("#UseBalance").val(parseFloat(useBalance) - parseFloat(turnOut));
+                var val = parseFloat(useBalance) - parseFloat(turnOut);
+                if (val < 0) {
+                    jqxNotification("可用余额不足！", null, "error");
+                    $("#Balance").val("");
+                } else {
+                    $("#Balance").val(val);
+                } 
             }
         });
     }
@@ -95,7 +113,6 @@ function getOrgInfo() {
     });
 }
 function getCashManagerDetail() {
-    var guid = $.request.queryString().VGUID;
     $.ajax({
         url: "/CapitalCenterManagement/CashTransactionDetail/GetCashTransactionInfo",
         data: {
@@ -106,7 +123,7 @@ function getCashManagerDetail() {
         success: function (msg) {
             $("#AccountModeCode").val(msg.AccountModeCode);
             $("#CompanyCode").val(msg.CompanyCode);
-            var date = ChangeDateFormat(msg.ApplyDate);
+            var date = ChangeDateFormat(msg.TransactionDate);
             $("#TransactionDate").val(date);
             $("#UseBalance").val(msg.UseBalance);
             $("#TurnOut").val(msg.TurnOut);
@@ -115,7 +132,7 @@ function getCashManagerDetail() {
             $("#ReimbursementMan").val(msg.ReimbursementMan);
             $("#Purpose").val(msg.Purpose);
             $("#VGUID").val(msg.VGUID);
-            
+            $("#Batch").val(msg.Batch);
         }
     });
 }

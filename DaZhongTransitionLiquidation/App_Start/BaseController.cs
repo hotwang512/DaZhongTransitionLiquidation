@@ -30,7 +30,7 @@ namespace DaZhongTransitionLiquidation
             if (UserInfo != null)   
             {
                 ViewBag.CurrentUserRoleModules = GetCurrentUserRoleModules();
-                if (UserInfo.LoginName == "sysAdmin") return;
+                if (UserInfo.LoginName == "admin") return;
                 //缓存当前用户的权限
                 var roleModules = GetCurrentUserRoleModules().Select(i => new U_RoleModule { PageID = i.PageID, PageName = i.PageName }).ToList();
                 CacheManager<List<U_RoleModule>>.GetInstance().Add(UserInfo.Vguid.ToString(), roleModules);
@@ -45,7 +45,7 @@ namespace DaZhongTransitionLiquidation
                 UserInfo = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
                 if (!UserInfo.IsNullOrEmpty())
                 {
-                    if (UserInfo.LoginName.ToLower() == "sysadmin")
+                    if (UserInfo.LoginName.ToLower() == "admin")
                     {
                         //                    response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
                         // (t1.Code+t2.Code) as KeyData from Business_SevenSection t1 

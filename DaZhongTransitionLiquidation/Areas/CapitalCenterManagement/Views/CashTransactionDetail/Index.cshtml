@@ -4,9 +4,9 @@
     ViewBag.Title = "现金管理/现金交易流水明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
-    var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>
-    ;
+    var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
     var accountModeName = ViewBag.GetAccountMode as List<Business_SevenSection>;
+    var useBalance = ViewBag.GetUseBalance;
     }
     @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -62,7 +62,7 @@
                     <td style="text-align: right;width: 150px;">公司：</td>
                     <td style="text-align: left;"><select id="CompanyCode" class="input_text form-control" style="width: 430px" onchange="getOrgInfo()"></select></td>
                     <td style="text-align: right;">可用余额：</td>
-                    <td style="text-align: left;"><input id="UseBalance" type="text" style="" class="input_text form-control" readonly="readonly" /></td>
+                    <td style="text-align: left;"><input id="UseBalance" type="text" style="" class="input_text form-control" value="@useBalance" readonly="readonly" /></td>
                 </tr>
                 <tr style="height:50px">
                     <td style="text-align: right;width: 150px;">支付日期：</td>
@@ -78,7 +78,10 @@
                     <td style="text-align: right;">报销人员：</td>
                     <td style="text-align: right;"><input id="ReimbursementMan" type="text" style="" class="input_text form-control" /></td>
                     <td style="text-align: right;">用途：</td>
-                    <td style="text-align: left;"><input id="Purpose" type="text" style="" class="input_text form-control" /><input id="VGUID" name="VGUID" class="hide" /></td>
+                    <td style="text-align: left;"><input id="Purpose" type="text" style="" class="input_text form-control" />
+                        <input id="VGUID" name="VGUID" class="hide" />
+                        <input id="Batch" name="Batch" class="hide" />
+                    </td>
                     
                 </tr>
             </table>

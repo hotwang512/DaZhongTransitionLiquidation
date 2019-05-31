@@ -34,7 +34,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 .WhereIF(searchParams.ReimbursementMan != null, i => i.ReimbursementMan == searchParams.ReimbursementMan)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
                 .WhereIF(searchParams.CompanyName != null, i => i.CompanyName.Contains(searchParams.CompanyName))
-                .OrderBy(i => i.TransactionDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy(i => i.Batch, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

@@ -68,17 +68,36 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
+                var i = 1;
+                int saveChanges = 1;
                 foreach (var item in vguids)
                 {
-                    int saveChanges = 1;
-                    //更新主表信息
-                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                    
+                    var voucher = db.Queryable<Business_VoucherDetail>().Where(it => it.VoucherVGUID == item).ToList();
+                    var loanMoney = voucher == null ? null : voucher.Sum(x => x.LoanMoney);//贷方总金额
+                    var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
+                    if(loanMoney == borrowMoney)
                     {
-                        Status = status,
-                    }).Where(it => it.VGUID == item).ExecuteCommand();
+                        //更新主表信息
+                        saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                        {
+                            Status = status,
+                        }).Where(it => it.VGUID == item).ExecuteCommand();
+
+                    }
+                    else
+                    {
+                        var j = i++;
+                        resultModel.Status = "2";
+                        resultModel.ResultInfo = j.ToString();
+                        continue;
+                    } 
+                }
+                if(resultModel.Status != "2")
+                {
                     resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-                }
+                }               
             });
             return Json(resultModel);
         }

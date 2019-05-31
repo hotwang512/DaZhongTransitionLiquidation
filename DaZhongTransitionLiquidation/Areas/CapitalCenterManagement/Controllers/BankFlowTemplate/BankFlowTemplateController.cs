@@ -335,7 +335,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         items.AccountModeName = accountModeName;
                         items.CompanyCode = item.CompanyCode;
                         items.CreateTime = DateTime.Now;
-                        items.CreatePerson = "sysAdmin";
+                        items.CreatePerson = "admin";
                         
                         newBankFlowList.Add(items);
                     }

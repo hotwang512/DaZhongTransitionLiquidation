@@ -139,5 +139,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         /// </summary>           
         public string AccountModeCode { get; set; }
         public string AccountModeName { get; set; }
+        public string Token { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,36 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.GetAccountMode = GetAccountModes();
+            ViewBag.GetUseBalance = GetUseBalance();
             return View();
         }
+
+        public decimal? GetUseBalance()
+        {
+            decimal? result = 0;
+            DbBusinessDataService.Command(db =>
+            {
+                //现金交易流水
+                var data = db.Queryable<Business_CashTransaction>().OrderBy("Batch asc").ToList();
+                //备用金提现后用支票号匹配银行流水
+                var cashData = db.SqlQueryable<Business_CashManagerInfo>(@"select * from Business_CashManagerInfo where CheckNo in (select VoucherSubject from Business_BankFlowTemplate 
+                                    where TradingBank='交通银行' and ReceivingUnit='现金')")
+                                    .OrderBy("No asc").ToList();
+                if (data.Count > 0)
+                {
+                    var userBalance = data.First().UseBalance;//第一笔流水可用余额
+                    var money = cashData.Sum(x => x.Money) - cashData.First().Money;//备用金提现总金额 - 第一笔备用金提现
+                    var turnOut = data.Sum(x => x.TurnOut);//现金流水支出总金额
+                    result = userBalance + money - turnOut;
+                }
+                else
+                {
+                    //可用余额初始值 = 期初余额 + 备用金提现
+                }
+            });
+            return result;
+        }
+
         public List<Business_SevenSection> GetAccountModes()
         {
             var result = new List<Business_SevenSection>();
@@ -52,7 +81,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     if (!isAny)
                     {
                         var no = db.Ado.GetString(@"select top 1 Batch from Business_CashTransaction a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
-                                  order by No desc", new { @NowDate = DateTime.Now });
+                                  order by Batch desc", new { @NowDate = DateTime.Now });
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.Batch = GetVoucherName(no);
                         sevenSection.CreateTime = DateTime.Now;

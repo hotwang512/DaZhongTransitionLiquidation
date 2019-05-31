@@ -202,7 +202,7 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
             DbBusinessDataService.Command(db =>
             {
                 var userVGUID = UserInfo.Vguid;
-                if(UserInfo.LoginName == "sysAdmin")
+                if(UserInfo.LoginName == "admin")
                 {
                     organizations = db.Queryable<Business_BusinessTypeSet>().OrderBy("Code asc").ToList();
                 }
@@ -236,7 +236,7 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
             {
                 var cache = CacheManager<Sys_User>.GetInstance();
                 var UserVGUID = cache[PubGet.GetUserKey].Vguid;
-                if (UserInfo.LoginName == "sysAdmin")
+                if (UserInfo.LoginName == "admin")
                 {
                     result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
 left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + "' and b.OrderVGUID = '" + orderVguid + @"'  and a.Block='1' ").OrderBy("Code asc,CompanyCode asc").ToList();
@@ -256,7 +256,7 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
             {
                 var cache = CacheManager<Sys_User>.GetInstance();
                 var UserVGUID = cache[PubGet.GetUserKey].Vguid;
-                if (UserInfo.LoginName == "sysAdmin")
+                if (UserInfo.LoginName == "admin")
                 {
                     result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas
 from Business_UserCompanySet as a where a.Block='1' and a.UserVGUID='" + UserVGUID + "'").OrderBy("Code asc,CompanyCode asc").ToList();

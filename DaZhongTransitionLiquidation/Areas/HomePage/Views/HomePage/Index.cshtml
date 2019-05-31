@@ -1,7 +1,7 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
     Sys_User user = ViewBag.SysUser;
-    bool isSysadmin = user?.LoginName == "sysAdmin";
+    bool isadmin = user?.LoginName == "admin";
     //Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as List<Sys_Role_Module>;
 }
@@ -109,15 +109,15 @@
         <div class="home-message" style="text-align: left;">
             @for (int i = 0; i < 9; i++)
             {
-                if (!isSysadmin && i >= currentModuleRolePermission.Count)
+                if (!isadmin && i >= currentModuleRolePermission.Count)
                 {
                     continue;
                 }
-                if (isSysadmin && i > 0)
+                if (isadmin && i > 0)
                 {
                     continue;
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "50F3C129-5C30-4B2F-A942-6B309C6278C6" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "50F3C129-5C30-4B2F-A942-6B309C6278C6" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="DriverCenterManagement" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">
@@ -128,7 +128,7 @@
                 </div>
             </a>
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "185A294A-8BC7-4F9B-943A-B4F6F8791587" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "185A294A-8BC7-4F9B-943A-B4F6F8791587" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="CapitalCenterManagement" data-coordinate="1">
                 <div class="home-message-modular">
@@ -139,7 +139,7 @@
                 </div>
             </a>
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "2C708F01-9229-48B8-9CAB-63407D1945E0" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "2C708F01-9229-48B8-9CAB-63407D1945E0" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="AccountingCenterManagemnet" data-coordinate="1">
                 <div class="home-message-modular">
@@ -150,7 +150,7 @@
                 </div>
             </a>
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "368296C7-667C-4316-96BC-1370ED9C50BC" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "368296C7-667C-4316-96BC-1370ED9C50BC" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="BigDataManagement" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">
@@ -163,7 +163,7 @@
             </a>
                 }
 
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "B9B5E47C-C646-4D0B-877D-BA456968C346" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "B9B5E47C-C646-4D0B-877D-BA456968C346" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="ReimbursementCenterManagemnet" data-coordinate="1">
                 <div class="home-message-modular">
@@ -175,7 +175,7 @@
             </a>
                 }
 
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="FinancialManagemnet" data-coordinate="1">
                 <div class="home-message-modular">
@@ -186,7 +186,7 @@
                 </div>
             </a>
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
                 {
                     <a url="" href="#" id="ReportCenterManagemnet" data-coordinate="1">
                         <div class="home-message-modular">
@@ -197,7 +197,7 @@
                         </div>
                     </a>
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
                 {
                     <a url="" href="#" id="TaxAuditManagement" data-coordinate="1">
                         <div class="home-message-modular">
@@ -209,7 +209,7 @@
                     </a>
                 }
 
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "6BAA4F3E-BCEA-45C4-8D57-F2E9A96CE06C" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "6BAA4F3E-BCEA-45C4-8D57-F2E9A96CE06C" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="BudgetManagemnet" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">
@@ -221,7 +221,7 @@
             </a>
                 }
 
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="CountManagement" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">
@@ -232,7 +232,7 @@
                 </div>
             </a>
                 }
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
                 {
                     <a url="" href="#" id="AuditManagement" class="moudle" data-coordinate="1">
                         <div class="home-message-modular">
@@ -244,7 +244,7 @@
                     </a>
                 }
 
-                if (isSysadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "23EF85FF-E6F1-46B7-8DBD-8FD99BEBB24A" && currentModuleRolePermission[i].Reads == 1)
+                if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "23EF85FF-E6F1-46B7-8DBD-8FD99BEBB24A" && currentModuleRolePermission[i].Reads == 1)
                 {
             <a url="" href="#" id="SystemManagement" class="moudle" data-coordinate="1">
                 <div class="home-message-modular">

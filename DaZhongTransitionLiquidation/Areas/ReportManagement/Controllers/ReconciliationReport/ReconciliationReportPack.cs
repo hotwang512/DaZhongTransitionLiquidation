@@ -39,7 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     {
                         RevenuepaymentReconciliation(
                             dbBusinessDataService,
-                            "sysadmin",
+                            "admin",
                             business_Reconciliation.BankBillDate.Value,
                             revenueDate,
                             business_Reconciliation.Channel_Id,
@@ -79,7 +79,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                     {
                         RevenuepaymentReconciliation(
                             dbBusinessDataService,
-                            "sysadmin",
+                            "admin",
                             business_Reconciliation.BankBillDate.Value,
                             revenueDate,
                             business_Reconciliation.Channel_Id,

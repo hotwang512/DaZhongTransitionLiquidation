@@ -69,6 +69,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "建设银行";
                         bankFlow.AccountModeCode = accountMode.Code;
+                        bankFlow.CompanyCode = "01";
                         bankFlow.AccountModeName = accountMode.Descrption;
                         bankFlow.TurnIn = datatable.Rows[i]["借方发生额（支取）"].ObjToDecimal();
                         bankFlow.TurnOut = datatable.Rows[i]["贷方发生额（收入）"].ObjToDecimal();
@@ -143,6 +144,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "交通银行";
                         bankFlow.AccountModeCode = accountMode.Code;
+                        bankFlow.CompanyCode = "01";
                         bankFlow.AccountModeName = accountMode.Descrption;
                         bankFlow.BankAccount = bankAccount.ToString();
                         bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();

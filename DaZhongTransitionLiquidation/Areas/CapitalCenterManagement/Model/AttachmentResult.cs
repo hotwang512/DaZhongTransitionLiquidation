@@ -8,7 +8,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
     public class AttachmentResult
     {
         public bool success { get; set; }
-        public string errmsg { get; set; }
+        public string message { get; set; }
         public AttachmentResultData data { get; set; }
     }
     public class AttachmentResultData

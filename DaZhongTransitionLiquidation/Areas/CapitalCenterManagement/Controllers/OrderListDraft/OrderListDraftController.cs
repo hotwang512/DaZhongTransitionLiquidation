@@ -315,6 +315,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                 AttachmentInfo = attachInfo,
                             }).Where(it => it.VGUID == VGUID).ExecuteCommand();
                             db.Insertable(VAList).ExecuteCommand();
+                            resultModel.ResultInfo = modelData.message;
                         }
                         else
                         {
@@ -325,7 +326,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     else
                     {
                         resultModel.IsSuccess = false;
-                        resultModel.ResultInfo = modelData.errmsg; ;
+                        resultModel.ResultInfo = modelData.message;
                     }
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
                 }

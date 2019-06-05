@@ -221,7 +221,11 @@ var $page = function () {
             async:false,
             success: function (msg) {
                 if (msg.IsSuccess == true) {
-                    jqxNotification("获取成功！", null, "success");
+                    if (msg.ResultInfo != "" && msg.ResultInfo != null) {
+                        jqxNotification(msg.ResultInfo, null, "success");
+                    } else {
+                        jqxNotification("获取成功！", null, "success");
+                    }
                     getAttachment();
                 } else {
                     jqxNotification(msg.ResultInfo, null, "error");

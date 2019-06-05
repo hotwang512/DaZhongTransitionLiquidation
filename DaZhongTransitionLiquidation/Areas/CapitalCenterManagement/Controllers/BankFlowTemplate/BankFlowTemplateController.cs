@@ -69,6 +69,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "建设银行";
                         bankFlow.AccountModeCode = accountMode.Code;
+                        bankFlow.CompanyCode = "01";
                         bankFlow.AccountModeName = accountMode.Descrption;
                         bankFlow.TurnIn = datatable.Rows[i]["借方发生额（支取）"].ObjToDecimal();
                         bankFlow.TurnOut = datatable.Rows[i]["贷方发生额（收入）"].ObjToDecimal();
@@ -143,6 +144,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "交通银行";
                         bankFlow.AccountModeCode = accountMode.Code;
+                        bankFlow.CompanyCode = "01";
                         bankFlow.AccountModeName = accountMode.Descrption;
                         bankFlow.BankAccount = bankAccount.ToString();
                         bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
@@ -566,23 +568,33 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         public static void GetAssetsGeneralLedger(Business_VoucherDetail BVDetail, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher, Guid guid, int i)
         {
             //凭证中间表
+            var type = "";
+            switch (voucher.VoucherType)
+            {
+                case "现金": type = "x.现金"; break;
+                case "银行": type = "y.银行"; break;
+                case "转账": type = "z.转账"; break;
+                default:break;
+            }
             Business_AssetsGeneralLedger_Swap asset = new Business_AssetsGeneralLedger_Swap();
             asset.CREATE_DATE = DateTime.Now;
-            asset.SubjectVGUID = guid;
+            //asset.SubjectVGUID = guid;
+            asset.LINE_ID = guid;
             asset.LEDGER_NAME = voucher.AccountModeName;
             asset.JE_BATCH_NAME = voucher.BatchName;
             asset.JE_BATCH_DESCRIPTION = "";
             asset.JE_HEADER_NAME = voucher.VoucherNo;
             asset.JE_HEADER_DESCRIPTION = "";
-            asset.JE_SOURCE_NAME = "财务共享平台";
-            asset.JE_CATEGORY_NAME = voucher.VoucherType;
+            asset.JE_SOURCE_NAME = "大众出租财务共享平台";
+            asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转账)
             asset.ACCOUNTING_DATE = voucher.VoucherDate;
-            asset.CURRENCY_CODE = "人民币";
-            asset.CURRENCY_CONVERSION_TYPE = "用户";
+            asset.CURRENCY_CODE = "RMB";//币种
+            asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空
             asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
-            asset.CURRENCY_CONVERSION_RATE = 1;
+            asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
             asset.STATUS = "1";
-            asset.VGUID = Guid.NewGuid();
+            //asset.VGUID = Guid.NewGuid();
+            asset.TRASACTION_ID = Guid.NewGuid();
             asset.JE_LINE_NUMBER = i;
             asset.SEGMENT1 = BVDetail.CompanySection;
             asset.SEGMENT2 = BVDetail.SubjectSection;
@@ -593,8 +605,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             asset.SEGMENT7 = BVDetail.IntercourseSection;
             asset.ENTERED_CR = BVDetail.LoanMoney.TryToString();
             asset.ENTERED_DR = BVDetail.BorrowMoney.TryToString();
-            asset.ACCOUNTED_DR = BVDetail.BorrowMoneyCount.TryToString();
-            asset.ACCOUNTED_CR = BVDetail.LoanMoneyCount.TryToString();
+            asset.ACCOUNTED_DR = BVDetail.BorrowMoney.TryToString();
+            asset.ACCOUNTED_CR = BVDetail.LoanMoney.TryToString();
             assetList.Add(asset);
         }
         public static string GetVoucherName()

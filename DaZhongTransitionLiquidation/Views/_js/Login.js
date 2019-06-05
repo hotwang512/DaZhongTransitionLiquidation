@@ -25,11 +25,12 @@ var $page = function () {
             if (userName.length == 0) {
                 jqxNotification("请输入用户名！", null, "error");
                 selector.$txtName().focus();
-            } else if (!reg.test(userName)) {
-                jqxNotification("无效的用户名！", null, "error");
-                selector.$txtName().val("");
-                selector.$txtName().focus();
             }
+            //else if (!reg.test(userName)) {
+            //    jqxNotification("无效的用户名！", null, "error");
+            //    selector.$txtName().val("");
+            //    selector.$txtName().focus();
+            //}
             else if (pwd.length === 0) {
                 jqxNotification("请输入密码！", null, "error");
                 selector.$txtPwd().focus();

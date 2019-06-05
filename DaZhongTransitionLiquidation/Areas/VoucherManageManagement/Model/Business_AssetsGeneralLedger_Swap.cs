@@ -171,6 +171,17 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         /// Nullable:True
         /// </summary> 
         public string STATUS { get; set; }
-
+        /// <summary>
+        /// Desc:自增长ID
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public Guid TRASACTION_ID { get; set; }
+        /// <summary>
+        /// Desc:日记账行ID
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public Guid LINE_ID { get; set; }
     }
 }

@@ -2326,6 +2326,8 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransaction.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\GeneralLedgerBalance.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\LedgerSubject.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\UserCompanySetDetail.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />

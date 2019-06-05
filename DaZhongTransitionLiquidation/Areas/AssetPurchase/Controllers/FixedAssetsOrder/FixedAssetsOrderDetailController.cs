@@ -6,8 +6,10 @@ using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using SyntacticSugar;
 using SqlSugar;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
@@ -70,6 +72,41 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
                         sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
                         db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
+
+                        //请求清算平台、待付款请求生成支付凭证接口
+                        var pendingPaymentmodel = new PendingPaymentModel();
+                        pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
+                        pendingPaymentmodel.FunctionSiteId = "61";
+                        pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
+                        pendingPaymentmodel.ServiceCategory = "";
+                        pendingPaymentmodel.BusinessProject = "0101|010101";
+                        pendingPaymentmodel.invoiceNumber = "1";
+                        pendingPaymentmodel.numberOfAttachments = "5";
+                        pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
+                        pendingPaymentmodel.Summary = sevenSection.AssetDescription;
+                        //统计附件信息
+                        var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == sevenSection.VGUID).ToList();
+                        pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
+                        pendingPaymentmodel.InvoiceReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
+                        pendingPaymentmodel.ApprovalReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
+                        pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
+                        pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
+                        pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+
+                        var apiReault = PendingPaymentApi(pendingPaymentmodel);
+                        var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
+                        if (pendingRedult.success)
+                        {
+                            var orderModel = db.Queryable<Business_FixedAssetsOrder>()
+                                .Where(x => x.VGUID == sevenSection.VGUID).First();
+                            orderModel.PaymentInformationVguid = pendingRedult.data[0].vguid;
+                            orderModel.PaymentVoucherUrl = pendingRedult.data[0].url;
+                            db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl,x.PaymentInformationVguid }).ExecuteCommand();
+                        }
+                        else
+                        {
+                            LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
+                        }
                     }
                     else
                     {
@@ -84,6 +121,24 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
 
             return Json(resultModel);
+        }
+
+        public string JoinStr(List<Business_AssetAttachmentList> list)
+        {
+            var strArr = "";
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    strArr = strArr + item.Attachment + ",";
+                }
+                strArr = strArr.Substring(0, strArr.Length - 1);
+                return strArr;
+            }
+            else
+            {
+                return strArr;
+            }
         }
         public JsonResult GetFixedAssetsOrder(Guid vguid)
         {
@@ -399,7 +454,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             var saveModel = new Business_AssetAttachmentList();
             if (resultData != "")
             {
-                var modelData = resultData.JsonToModel<JsonResultModelApi<Api_FileInfo>>();
+                var modelData = resultData.JsonToModel<JsonResultFileModelApi<Api_FileInfo>>();
                 if (modelData.code == 0)
                 {
                     var fileData = modelData.data[0];
@@ -459,7 +514,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
 
                     if (resultData != "")
                     {
-                        var modelData = resultData.JsonToModel<JsonResultModelApi<Api_FileInfo>>();
+                        var modelData = resultData.JsonToModel<JsonResultFileModelApi<Api_FileInfo>>();
                         if (modelData.code == 0)
                         {
                             var fileData = modelData.data[0];
@@ -472,7 +527,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                         var sevenSection = new Business_AssetAttachmentList();
                                         sevenSection.VGUID = Guid.NewGuid();
                                         sevenSection.AssetOrderVGUID = Vguid;
-                                        sevenSection.Attachment = imageServerUrl + fileData.fileId;//"\\" + uploadPath + fileName;
+                                        sevenSection.Attachment = fileData.fileId;//"\\" + uploadPath + fileName;
                                         sevenSection.AttachmentType = AttachmentType;
                                         sevenSection.CreateTime = DateTime.Now;
                                         sevenSection.CreatePerson = cache[PubGet.GetUserKey].UserName;
@@ -494,12 +549,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
         }
         public JsonResult GetAttachmentInfo(Guid VGUID)
         {
-            List<Business_AssetAttachmentList> VAList = new List<Business_AssetAttachmentList>();
+            var imageServerUrl = ConfigSugar.GetAppString("ImageServerUrl");
+            List<Business_AssetAttachmentList> BAList = new List<Business_AssetAttachmentList>();
             DbBusinessDataService.Command(db =>
-            {
-                VAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID).ToList();
-            });
-            return Json(VAList, JsonRequestBehavior.AllowGet);
+                {
+                    BAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID)
+                        .ToList();
+                });
+            BAList.ForEach(x => { x.Attachment = imageServerUrl + x.Attachment; });
+            return Json(BAList, JsonRequestBehavior.AllowGet);
         }
         public JsonResult DeleteAttachment(Guid VGUID)
         {
@@ -513,6 +571,59 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
+        }
+        public string PendingPaymentApi(PendingPaymentModel model)
+        {
+            var url = ConfigSugar.GetAppString("PendingPaymentUrl");
+            var data = "{" +
+                       "\"IdentityToken\":\"{IdentityToken}\",".Replace("{IdentityToken}", model.IdentityToken) +
+                       "\"FunctionSiteId\":\"{FunctionSiteId}\",".Replace("{FunctionSiteId}", "61") +
+                       "\"OperatorIP\":\"{OperatorIP}\",".Replace("{OperatorIP}", GetSystemInfo.GetClientLocalIPv4Address()) +
+                       "\"ServiceCategory\":\"{ServiceCategory}\",".Replace("{ServiceCategory}", model.ServiceCategory) +
+                       "\"BusinessProject\":\"{BusinessProject}\",".Replace("{BusinessProject}", model.BusinessProject) +
+                       "\"invoiceNumber\":\"{invoiceNumber}\",".Replace("{invoiceNumber}", model.invoiceNumber) +
+                       "\"numberOfAttachments\":\"{numberOfAttachments}\",".Replace("{numberOfAttachments}", model.numberOfAttachments) +
+                       "\"Amount\":\"{Amount}\",".Replace("{Amount}", model.Amount) +
+                       "\"Summary\":\"{Summary}\",".Replace("{Summary}", model.Summary);
+            if (model.PaymentReceipt != "")
+            {
+                data += "\"PaymentReceipt\":\"{PaymentReceipt}\",".Replace("{PaymentReceipt}", model.PaymentReceipt);
+            }
+            if (model.InvoiceReceipt != "")
+            {
+                data += "\"InvoiceReceipt\":\"{InvoiceReceipt}\",".Replace("{InvoiceReceipt}", model.InvoiceReceipt);
+            }
+            if (model.ApprovalReceipt != "")
+            {
+                data += "\"ApprovalReceipt\":\"{ApprovalReceipt}\",".Replace("{ApprovalReceipt}", model.ApprovalReceipt);
+            }
+            if (model.Contract != "")
+            {
+                data += "\"Contract\":\"{Contract}\",".Replace("{Contract}", model.Contract);
+            }
+            if (model.DetailList != "")
+            {
+                data += "\"DetailList\":\"{DetailList}\",".Replace("{DetailList}", model.DetailList);
+            }
+            if (model.OtherReceipt != "")
+            {
+                data += "\"OtherReceipt\":\"{OtherReceipt}\"".Replace("{OtherReceipt}", model.OtherReceipt);
+            }
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), "POST", data);
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                return "";
+            }
         }
     }
 }

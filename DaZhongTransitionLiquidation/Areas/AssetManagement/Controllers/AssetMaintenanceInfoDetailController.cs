@@ -218,7 +218,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             var resultData = FileUploadHelper.UploadToImageServer(ImageBase64Str);
             if (resultData != "")
             {
-                var modelData = resultData.JsonToModel<JsonResultModelApi<Api_FileInfo>>();
+                var modelData = resultData.JsonToModel<JsonResultFileModelApi<Api_FileInfo>>();
                 if (modelData.code == 0)
                 {
                     var fileData = modelData.data[0];

@@ -757,7 +757,8 @@ function getAttachment() {
                     fileName = msg[i].Attachment.split("/")[num];
                     fileType = fileName.split(".")[1];
                 } else {
-                    num = msg[i].Attachment.lastIndexOf("\\") + 1;
+                    debugger;
+                    num = msg[i].Attachment.lastIndexOf("/") + 1;
                     fileName = msg[i].Attachment.substring(num, msg[i].Attachment.length);
                     fileType = fileName.split(".")[1];
                 }

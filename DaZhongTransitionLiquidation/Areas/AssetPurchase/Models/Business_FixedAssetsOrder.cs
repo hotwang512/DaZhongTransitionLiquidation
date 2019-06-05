@@ -39,5 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string ChangeUser { set; get; }
         public DateTime? SubmitDate { set; get; }
         public string SubmitUser { set; get; }
+        public Guid? PaymentVoucherVguid { get; set; }
+        public string PaymentVoucherUrl { get; set; }
     }
 }

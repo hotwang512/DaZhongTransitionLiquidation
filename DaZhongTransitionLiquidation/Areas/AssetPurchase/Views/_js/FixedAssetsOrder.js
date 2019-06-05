@@ -51,6 +51,26 @@ var $page = function () {
             }
         });
         //提交
+        //$("#btnSubmit").on("click", function () {
+        //    var selection = [];
+        //    var grid = $("#jqxTable");
+        //    var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+        //    checedBoxs.each(function () {
+        //        var th = $(this);
+        //        if (th.is(":checked")) {
+        //            var index = th.attr("index");
+        //            var data = grid.jqxDataTable('getRows')[index];
+        //            selection.push(data.VGUID);
+        //        }
+        //    });
+        //    if (selection.length < 1) {
+        //        jqxNotification("请选择您要提交的数据！", null, "error");
+        //    } else {
+        //        WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+        //    }
+        //});
+        //填写信息后提交，调用清算平台、待付款请求生成支付凭证接口
+        //先调用接口，成功后再提交
         $("#btnSubmit").on("click", function () {
             var selection = [];
             var grid = $("#jqxTable");
@@ -63,10 +83,25 @@ var $page = function () {
                     selection.push(data.VGUID);
                 }
             });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要提交的数据！", null, "error");
+            if (selection.length > 1) {
+                jqxNotification("请选择一条数据！", null, "error");
             } else {
-                WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+                $.ajax({
+                    url: "/AssetPurchase/FixedAssetsOrder/SubmitFixedAssetsOrder",
+                    data: { vguid: selection[0] },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("提交失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("提交成功！", null, "success");
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        }
+                    }
+                });
             }
         });
     }; //addEvent end

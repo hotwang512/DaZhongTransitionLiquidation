@@ -134,7 +134,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     //删除现有明细数据
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
                     //删除现有中间表数据
-                    db.Deleteable<Business_AssetsGeneralLedger_Swap>().Where(x => x.SubjectVGUID == voucher.VGUID).ExecuteCommand();
+                    db.Deleteable<Business_AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == voucher.VGUID).ExecuteCommand();
                     if (voucher.Detail != null)
                     {
                         var i = 0;
@@ -160,23 +160,33 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.VoucherVGUID = guid;
                             voucherdetailList.Add(BVDetail);
                             //凭证中间表
+                            var type = "";
+                            switch (voucher.VoucherType)
+                            {
+                                case "现金": type = "x.现金"; break;
+                                case "银行": type = "y.银行"; break;
+                                case "转账": type = "z.转账"; break;
+                                default: break;
+                            }
                             Business_AssetsGeneralLedger_Swap asset = new Business_AssetsGeneralLedger_Swap();
                             asset.CREATE_DATE = DateTime.Now;
-                            asset.SubjectVGUID = guid;
+                            //asset.SubjectVGUID = guid;
+                            asset.LINE_ID = guid;
                             asset.LEDGER_NAME = voucher.AccountModeName;
                             asset.JE_BATCH_NAME = batchName;
                             asset.JE_BATCH_DESCRIPTION = "";
                             asset.JE_HEADER_NAME = voucherName;
                             asset.JE_HEADER_DESCRIPTION = "";
-                            asset.JE_SOURCE_NAME = "财务共享平台";
-                            asset.JE_CATEGORY_NAME = voucherType;
+                            asset.JE_SOURCE_NAME = "大众出租财务共享平台";
+                            asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转账)
                             asset.ACCOUNTING_DATE = voucher.VoucherDate;
-                            asset.CURRENCY_CODE = "人民币";
-                            asset.CURRENCY_CONVERSION_TYPE = "用户";
+                            asset.CURRENCY_CODE = "RMB";//币种
+                            asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空
                             asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
-                            asset.CURRENCY_CONVERSION_RATE = 1;
+                            asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
                             asset.STATUS = "1";
-                            asset.VGUID = Guid.NewGuid();
+                            //asset.VGUID = Guid.NewGuid();
+                            asset.TRASACTION_ID = Guid.NewGuid();
                             asset.JE_LINE_NUMBER = BVDetail.JE_LINE_NUMBER;
                             asset.SEGMENT1 = item.CompanySection;
                             asset.SEGMENT2 = item.SubjectSection;
@@ -187,8 +197,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             asset.SEGMENT7 = item.IntercourseSection;
                             asset.ENTERED_CR = item.LoanMoney.TryToString();
                             asset.ENTERED_DR = item.BorrowMoney.TryToString();
-                            asset.ACCOUNTED_DR = borrowMoney.TryToString();
-                            asset.ACCOUNTED_CR = loanMoney.TryToString();
+                            asset.ACCOUNTED_DR = item.BorrowMoney.TryToString();
+                            asset.ACCOUNTED_CR = item.LoanMoney.TryToString();
                             assetList.Add(asset);
                         }
                         db.Insertable(voucherdetailList).ExecuteCommand();

@@ -101,7 +101,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 .Where(x => x.VGUID == sevenSection.VGUID).First();
                             orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                             orderModel.PaymentVoucherUrl = pendingRedult.data.url;
-                            db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl,x.PaymentInformationVguid }).ExecuteCommand();
+                            db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl,x.PaymentVoucherVguid }).ExecuteCommand();
                         }
                         else
                         {

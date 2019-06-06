@@ -24,6 +24,7 @@ var $page = function () {
             getIntangibleAssetsOrderDetail();
             getAttachment();
         } else {
+            $("#btnPrint").parent().hide();
             $("#VGUID").val(newguid());
         }
         //取消
@@ -122,6 +123,7 @@ var $page = function () {
         //确定
         $("#btnPrint").on("click",
             function () {
+                document.getElementById('ifrPrint').src = $("#ifrPrint").attr("src");
                 $("#CreditDialog").modal("show");
             });
         //提交
@@ -241,6 +243,7 @@ var $page = function () {
             $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
+            $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
         });
     }
     //上传文件
@@ -308,6 +311,8 @@ var $page = function () {
                                 break;
                             case "1":
                                 jqxNotification("上传成功！", null, "success");
+                                //上传成功后调用清算平台、付款凭证附件上传接口
+                                PendingPaymentAttachmentUpload();
                                 $('#FileInput').val('');
                                 initTable()
                                 break;
@@ -328,6 +333,22 @@ function computeValue() {
         var value = $("#SumPayment").val() - $("#FirstPayment").val();
         $("#TailPayment").val(value);
     }
+}
+function PendingPaymentAttachmentUpload() {
+    $.ajax({
+        url: "/AssetPurchase/IntangibleAssetsOrderDetail/PendingPaymentAttachmentUpload",
+        data: { "PaymentVoucherVguid": $("#PaymentVoucherVguid").val(), "Vguid": $("#VGUID").val() },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("调用接口失败！", null, "error");
+                break;
+            }
+        }
+    });
 }
 function initSelectPurchaseDepartment() {
     var source =

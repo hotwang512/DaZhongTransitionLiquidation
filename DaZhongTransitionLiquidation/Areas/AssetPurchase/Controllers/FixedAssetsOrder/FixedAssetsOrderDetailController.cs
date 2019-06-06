@@ -75,15 +75,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
 
                         //请求清算平台、待付款请求生成支付凭证接口
                         var pendingPaymentmodel = new PendingPaymentModel();
-                        pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
-                        pendingPaymentmodel.FunctionSiteId = "61";
-                        pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
-                        pendingPaymentmodel.ServiceCategory = "";
-                        pendingPaymentmodel.BusinessProject = "0101|010101";
-                        pendingPaymentmodel.invoiceNumber = "1";
-                        pendingPaymentmodel.numberOfAttachments = "5";
-                        pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
-                        pendingPaymentmodel.Summary = sevenSection.AssetDescription;
                         //统计附件信息
                         var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == sevenSection.VGUID).ToList();
                         pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
@@ -92,6 +83,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
                         pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                         pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+
+                        pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
+                        pendingPaymentmodel.FunctionSiteId = "61";
+                        pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
+                        pendingPaymentmodel.ServiceCategory = "";
+                        pendingPaymentmodel.BusinessProject = "0101|010101";
+                        pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
+                        pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
+                        pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
+                        pendingPaymentmodel.Summary = sevenSection.AssetDescription;
 
                         var apiReault = PendingPaymentApi(pendingPaymentmodel);
                         var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();

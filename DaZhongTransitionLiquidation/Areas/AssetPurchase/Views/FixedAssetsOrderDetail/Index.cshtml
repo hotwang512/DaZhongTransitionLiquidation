@@ -81,14 +81,14 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">采购信息</span></div>
     </div>
-    <div class="body_mk" style="height: 180px;">
+    <div class="body_mk" style="height: 240px;">
         <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
             <tr style="height:50px">
                 <td style="text-align: right;">采购部门：</td>
                 <td style="text-align: left;">
                     <div id="PurchaseDepartment" style="padding-left:6px"></div>
                 </td>
-                <td style="text-align: right;">采购物品：</td>
+                <td style="text-align:">采购物品：</td>
                 <td style="text-align: left;">
                     <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;"></select>
                 </td>
@@ -104,8 +104,11 @@
                 <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height: 50px">
-                <td style="text-align: right;">采购说明：</td>
-                <td style="text-align: left;"><input id="AssetDescription" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right; vertical-align: top;padding-top: 15px">采购说明：</td>
+                <td style="text-align: left;" colspan="4">
+                    @* <input id="AssetDescription" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/> *@
+                    <textarea id="AssetDescription" style="width: 528px; height: 100px;margin-top: 8px"  class="input_text form-control"  validatetype="required"></textarea>
+                </td>
                 @*<td style="text-align: right;">验收日期：</td>
                 <td style="text-align: left;">
                     <input id="AcceptanceDate" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">

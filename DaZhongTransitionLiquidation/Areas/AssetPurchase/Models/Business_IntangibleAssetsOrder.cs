@@ -12,6 +12,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string OrderNumber { set; get; }
         public string PurchaseDepartmentIDs { set; get; }
         public string PurchaseGoods { set; get; }
+        public string AssetDescription { set; get; }
         public Guid? PaymentInformationVguid { set; get; }
         public string PaymentInformation { set; get; }
         public decimal? SumPayment { set; get; }

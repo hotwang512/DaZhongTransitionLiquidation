@@ -172,6 +172,11 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("上传成功！", null, "success");
+                            //上传成功后调用清算平台、付款凭证附件上传接口
+                            var guid = $.request.queryString().VGUID;
+                            if (guid != "" && guid != null) {
+                                PendingPaymentAttachmentUpload();
+                            }
                             layer.closeAll('loading');
                             getAttachment();
                             $("#UploadPictureDialog").modal("hide");
@@ -432,7 +437,10 @@ var $page = function () {
                             jqxNotification("上传成功！", null, "success");
                             $('#LocalFileInput').val('');
                             //上传成功后调用清算平台、付款凭证附件上传接口
-                            PendingPaymentAttachmentUpload();
+                            var guid = $.request.queryString().VGUID;
+                            if (guid != "" && guid != null) {
+                                PendingPaymentAttachmentUpload();
+                            }
                             getAttachment();
                             break;
                         }

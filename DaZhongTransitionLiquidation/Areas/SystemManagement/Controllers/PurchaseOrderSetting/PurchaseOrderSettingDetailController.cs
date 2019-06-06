@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.PurchaseOrderSetting
@@ -264,7 +265,16 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetBusinessProject(string BusinessProject)
+        {
+            var list = new List<BusinessProjectModel>();
+            DbBusinessDataService.Command(db =>
+            {
+                list = BusinessProject != "" ? db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE BusinessProject LIKE '%" + BusinessProject + "%'").ToList() 
+                    : db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet").ToList();
+            });
 
-        
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
     }
 }

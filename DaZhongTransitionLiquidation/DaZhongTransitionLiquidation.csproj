@@ -2287,6 +2287,7 @@
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\PurchaseAssign\PurchaseAssignController.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\BusinessProjectModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderBelongTo.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderDetails.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_FixedAssetsOrder.cs" />

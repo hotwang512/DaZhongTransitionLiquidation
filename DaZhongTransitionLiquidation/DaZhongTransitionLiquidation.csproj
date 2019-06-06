@@ -2294,6 +2294,7 @@
     <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseAssign.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Excel_PurchaseAssignModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\PendingPaymentModel.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\PendingResultModel.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />

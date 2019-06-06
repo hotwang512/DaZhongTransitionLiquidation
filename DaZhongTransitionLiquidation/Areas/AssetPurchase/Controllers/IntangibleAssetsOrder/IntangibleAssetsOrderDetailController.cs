@@ -8,11 +8,15 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
+
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.IntangibleAssetsOrder
 {
 
@@ -58,11 +62,45 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         }
                         maxOrderNumRight = maxOrderNumRight + 1;
                         sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
-                        sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
                         sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
                         db.Insertable<Business_IntangibleAssetsOrder>(sevenSection).ExecuteCommand();
+
+                        //请求清算平台、待付款请求生成支付凭证接口
+                        var pendingPaymentmodel = new PendingPaymentModel();
+                        pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
+                        pendingPaymentmodel.FunctionSiteId = "61";
+                        pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
+                        pendingPaymentmodel.ServiceCategory = "";
+                        pendingPaymentmodel.BusinessProject = "0101|010101";
+                        pendingPaymentmodel.invoiceNumber = "1";
+                        pendingPaymentmodel.numberOfAttachments = "5";
+                        pendingPaymentmodel.Amount = sevenSection.SumPayment.ToString();
+                        pendingPaymentmodel.Summary = "";
+                        //统计附件信息
+                        var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == sevenSection.VGUID).ToList();
+                        pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
+                        pendingPaymentmodel.InvoiceReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
+                        pendingPaymentmodel.ApprovalReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
+                        pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
+                        pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
+                        pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+
+                        var apiReault = PendingPaymentApi(pendingPaymentmodel);
+                        var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
+                        if (pendingRedult.success)
+                        {
+                            var orderModel = db.Queryable<Business_FixedAssetsOrder>()
+                                .Where(x => x.VGUID == sevenSection.VGUID).First();
+                            orderModel.PaymentInformationVguid = pendingRedult.data.vguid;
+                            orderModel.PaymentVoucherUrl = pendingRedult.data.url;
+                            db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentInformationVguid }).ExecuteCommand();
+                        }
+                        else
+                        {
+                            LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
+                        }
                     }
                     else
                     {
@@ -77,6 +115,76 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             });
 
             return Json(resultModel);
+        }
+        public string PendingPaymentApi(PendingPaymentModel model)
+        {
+            var url = ConfigSugar.GetAppString("PendingPaymentUrl");
+            var data = "{" +
+                       "\"IdentityToken\":\"{IdentityToken}\",".Replace("{IdentityToken}", model.IdentityToken) +
+                       "\"FunctionSiteId\":\"{FunctionSiteId}\",".Replace("{FunctionSiteId}", "61") +
+                       "\"OperatorIP\":\"{OperatorIP}\",".Replace("{OperatorIP}", GetSystemInfo.GetClientLocalIPv4Address()) +
+                       "\"ServiceCategory\":\"{ServiceCategory}\",".Replace("{ServiceCategory}", model.ServiceCategory) +
+                       "\"BusinessProject\":\"{BusinessProject}\",".Replace("{BusinessProject}", model.BusinessProject) +
+                       "\"invoiceNumber\":\"{invoiceNumber}\",".Replace("{invoiceNumber}", model.invoiceNumber) +
+                       "\"numberOfAttachments\":\"{numberOfAttachments}\",".Replace("{numberOfAttachments}", model.numberOfAttachments) +
+                       "\"Amount\":\"{Amount}\",".Replace("{Amount}", model.Amount) +
+                       "\"Summary\":\"{Summary}\",".Replace("{Summary}", model.Summary);
+            if (model.PaymentReceipt != "")
+            {
+                data += "\"PaymentReceipt\":\"{PaymentReceipt}\",".Replace("{PaymentReceipt}", model.PaymentReceipt);
+            }
+            if (model.InvoiceReceipt != "")
+            {
+                data += "\"InvoiceReceipt\":\"{InvoiceReceipt}\",".Replace("{InvoiceReceipt}", model.InvoiceReceipt);
+            }
+            if (model.ApprovalReceipt != "")
+            {
+                data += "\"ApprovalReceipt\":\"{ApprovalReceipt}\",".Replace("{ApprovalReceipt}", model.ApprovalReceipt);
+            }
+            if (model.Contract != "")
+            {
+                data += "\"Contract\":\"{Contract}\",".Replace("{Contract}", model.Contract);
+            }
+            if (model.DetailList != "")
+            {
+                data += "\"DetailList\":\"{DetailList}\",".Replace("{DetailList}", model.DetailList);
+            }
+            if (model.OtherReceipt != "")
+            {
+                data += "\"OtherReceipt\":\"{OtherReceipt}\"".Replace("{OtherReceipt}", model.OtherReceipt);
+            }
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), "POST", data);
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                return "";
+            }
+        }
+        public string JoinStr(List<Business_AssetAttachmentList> list)
+        {
+            var strArr = "";
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    strArr = strArr + item.Attachment + ",";
+                }
+                strArr = strArr.Substring(0, strArr.Length - 1);
+                return strArr;
+            }
+            else
+            {
+                return strArr;
+            }
         }
         public JsonResult GetIntangibleAssetsOrder(Guid vguid)
         {

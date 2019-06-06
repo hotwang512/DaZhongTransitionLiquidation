@@ -99,8 +99,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         {
                             var orderModel = db.Queryable<Business_FixedAssetsOrder>()
                                 .Where(x => x.VGUID == sevenSection.VGUID).First();
-                            orderModel.PaymentInformationVguid = pendingRedult.data[0].vguid;
-                            orderModel.PaymentVoucherUrl = pendingRedult.data[0].url;
+                            orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
+                            orderModel.PaymentVoucherUrl = pendingRedult.data.url;
                             db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl,x.PaymentInformationVguid }).ExecuteCommand();
                         }
                         else
@@ -572,6 +572,98 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(resultModel);
         }
+
+        public JsonResult PendingPaymentAttachmentUpload(Guid PaymentVoucherVguid, Guid Vguid)
+        {
+            var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                //请求清算平台、待付款请求生成支付凭证接口
+                var pendingPaymentmodel = new PendingPaymentModel();
+                pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
+                pendingPaymentmodel.FunctionSiteId = "61";
+                pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
+                //统计附件信息
+                var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>()
+                    .Where(x => x.AssetOrderVGUID == Vguid).ToList();
+                pendingPaymentmodel.PaymentReceipt =
+                    JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
+                pendingPaymentmodel.InvoiceReceipt =
+                    JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
+                pendingPaymentmodel.ApprovalReceipt =
+                    JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
+                pendingPaymentmodel.Contract =
+                    JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
+                pendingPaymentmodel.DetailList =
+                    JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
+                pendingPaymentmodel.OtherReceipt =
+                    JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+
+                var apiReault = PendingPaymentAttachmentApi(pendingPaymentmodel, PaymentVoucherVguid);
+                var pendingRedult = apiReault.JsonToModel<PendingResultModel>();
+                resultModel.IsSuccess = pendingRedult.success;
+                resultModel.Status = pendingRedult.success ? "1":"0";
+                resultModel.ResultInfo = pendingRedult.code;
+                resultModel.ResultInfo2 = pendingRedult.message;
+                if (!pendingRedult.success)
+                {
+                    LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
+                }
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
+        public string PendingPaymentAttachmentApi(PendingPaymentModel model,Guid PaymentVoucherVguid)
+        {
+            var url = ConfigSugar.GetAppString("PendingPaymentAttachmentUrl");
+            var data = "{" +
+                       "\"IdentityToken\":\"{IdentityToken}\",".Replace("{IdentityToken}", model.IdentityToken) +
+                       "\"FunctionSiteId\":\"{FunctionSiteId}\",".Replace("{FunctionSiteId}", "61") +
+                       "\"OperatorIP\":\"{OperatorIP}\",".Replace("{OperatorIP}",
+                           GetSystemInfo.GetClientLocalIPv4Address()) +
+                       "\"vguid\":\"{vguid}\",".Replace("{vguid}", PaymentVoucherVguid.ToString());
+            if (model.PaymentReceipt != "")
+            {
+                data += "\"PaymentReceipt\":\"{PaymentReceipt}\",".Replace("{PaymentReceipt}", model.PaymentReceipt);
+            }
+            if (model.InvoiceReceipt != "")
+            {
+                data += "\"InvoiceReceipt\":\"{InvoiceReceipt}\",".Replace("{InvoiceReceipt}", model.InvoiceReceipt);
+            }
+            if (model.ApprovalReceipt != "")
+            {
+                data += "\"ApprovalReceipt\":\"{ApprovalReceipt}\",".Replace("{ApprovalReceipt}", model.ApprovalReceipt);
+            }
+            if (model.Contract != "")
+            {
+                data += "\"Contract\":\"{Contract}\",".Replace("{Contract}", model.Contract);
+            }
+            if (model.DetailList != "")
+            {
+                data += "\"DetailList\":\"{DetailList}\",".Replace("{DetailList}", model.DetailList);
+            }
+            if (model.OtherReceipt != "")
+            {
+                data += "\"OtherReceipt\":\"{OtherReceipt}\"".Replace("{OtherReceipt}", model.OtherReceipt);
+            }
+            data = data.Substring(0, data.Length - 1);
+            data = data + "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), "POST", data);
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                return "";
+            }
+        }
         public string PendingPaymentApi(PendingPaymentModel model)
         {
             var url = ConfigSugar.GetAppString("PendingPaymentUrl");
@@ -609,6 +701,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             {
                 data += "\"OtherReceipt\":\"{OtherReceipt}\"".Replace("{OtherReceipt}", model.OtherReceipt);
             }
+
+            data = data.Substring(0, data.Length - 1);
+            data = data + "}";
             try
             {
                 WebClient wc = new WebClient();

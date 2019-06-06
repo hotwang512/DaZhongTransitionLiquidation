@@ -127,6 +127,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(resultModel);
         }
-       
+
     }
 }

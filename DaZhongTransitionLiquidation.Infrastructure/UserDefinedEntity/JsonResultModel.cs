@@ -29,7 +29,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity
     }
     public class JsonResultModelApi<T>
     {
-        public T[] data { get; set; }
+        public T data { get; set; }
         public bool success { get; set; }
         public string message { get; set; }
     }

@@ -20,6 +20,8 @@ var $page = function () {
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
+            debugger;
+            $("#btnSave").parent().hide();
             getFixedAssetsOrderDetail();
             $("#tdPrint").show();
             getAttachment();
@@ -76,7 +78,7 @@ var $page = function () {
                             "CompanyBankAccount": $("#CompanyBankAccount").val(),
                             "CompanyBankAccountName": $("#CompanyBankAccountName").val(),
                             "AccountType": $("#AccountType").val()
-                },
+                        },
                         type: "post",
                         success: function(msg) {
                             switch (msg.Status) {
@@ -118,6 +120,7 @@ var $page = function () {
         //打印
         $("#btnPrint").on("click",
             function () {
+                document.getElementById('ifrPrint').src = $("#ifrPrint").attr("src");
                 $("#CreditDialog").modal("show");
             });
         //拍照
@@ -276,7 +279,6 @@ var $page = function () {
     }
     function getFixedAssetsOrderDetail() {
         $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-            
             if (msg.PurchaseDepartmentIDs != null) {
                 var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
                 for (var i = 0; i < PurchaseDepartment.length; i++) {
@@ -323,6 +325,8 @@ var $page = function () {
             $("#hidPayCompany").val(msg.PayCompany);
             $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
+            $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
+            $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
         });
     }
     //采购合同上传文件
@@ -410,7 +414,6 @@ var $page = function () {
                 return;
             } else {
                 layer.load();
-                
                 $("#localFormFile").ajaxSubmit({
                     url: "/AssetPurchase/FixedAssetsOrderDetail/AllUploadLocalFile",
                     type: "post",
@@ -428,6 +431,8 @@ var $page = function () {
                         case "1":
                             jqxNotification("上传成功！", null, "success");
                             $('#LocalFileInput').val('');
+                            //上传成功后调用清算平台、付款凭证附件上传接口
+                            PendingPaymentAttachmentUpload();
                             getAttachment();
                             break;
                         }
@@ -436,6 +441,22 @@ var $page = function () {
             }
         });
 };
+function PendingPaymentAttachmentUpload() {
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/PendingPaymentAttachmentUpload",
+        data: { "PaymentVoucherVguid": $("#PaymentVoucherVguid").val(),"Vguid": $("#VGUID").val() },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("调用接口失败！", null, "error");
+                break;
+            }
+        }
+    });
+}
 function computeValue() {
     if ($("#PurchasePrices").val() != "" && $("#OrderQuantity").val() != "") {
         var value = $("#PurchasePrices").val() * $("#OrderQuantity").val();

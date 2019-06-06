@@ -23,6 +23,8 @@ var $page = function () {
         if (guid != "" && guid != null) {
             getIntangibleAssetsOrderDetail();
             getAttachment();
+        } else {
+            $("#VGUID").val(newguid());
         }
         //取消
         $("#btnCancel").on("click",
@@ -238,6 +240,7 @@ var $page = function () {
             $("#hidPayCompany").val(msg.PayCompany);
             $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
+            $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
         });
     }
     //上传文件
@@ -635,7 +638,13 @@ $(function () {
     var page = new $page();
     page.init();
 });
-
+//生成guid
+function newguid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
 function isNumber(val) {
     var regPos = /^\d+(\.\d+)?$/; //非负浮点数
     var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数

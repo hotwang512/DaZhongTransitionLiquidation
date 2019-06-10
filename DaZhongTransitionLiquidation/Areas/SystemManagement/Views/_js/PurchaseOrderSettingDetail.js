@@ -7,6 +7,8 @@ var $page = function () {
         initSelect();
         initSelectMinor();
         initSelectPurchaseDepartment();
+        initBusinessProject();
+        //initBusinessSubItem();
         GetManagementCompanyData();
         addEvent();
     }
@@ -60,6 +62,7 @@ var $page = function () {
                             "OrderCategory": $("#OrderCategory").val(),
                             "AssetCategoryMinorVguid": $("#AssetCategoryMinorVguid").val(),
                             "PurchaseGoods": $("#PurchaseGoods").val(),
+                            "BusinessSubItem": $("#BusinessSubItem").text(),
                             "DepartmentModelList": DepartmentModelList,
                             "ManagementCompanyList": ManagementCompanyList
                         },
@@ -155,6 +158,9 @@ var $page = function () {
                 $("#AssetCategoryMajor").val(msg.ResultInfo.AssetCategoryMajor);
                 $("#AssetCategoryMinorVguid").val(msg.ResultInfo.AssetCategoryMinorVguid);
                 $("#ASSET_CATEGORY_MAJOR").val(msg.ResultInfo.AssetCategoryMajor);
+                $("#BusinessSubItem").text(msg.ResultInfo.BusinessSubItem);
+                $("#BusinessProject").val(msg.ResultInfo.BusinessSubItem);
+                
                 initSelectMinor(msg.ResultInfo.AssetCategoryMinorVguid);
                 for (var i = 0; i < msg.ResultInfo2.length; i++) {
                     var item = $("#PurchaseDepartment").jqxDropDownList('getItemByValue', msg.ResultInfo2[i].VGUID);
@@ -220,8 +226,45 @@ var $page = function () {
             async: false
             };
             var dataAdapter = new $.jqx.dataAdapter(source);
-            $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 198, height: 33, placeHolder: "请选择" });
+            $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID",width: 198, height: 33, placeHolder: "请选择" });
             $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
+    }
+    function initBusinessProject() {
+        var url = "/Systemmanagement/PurchaseOrderSettingDetail/GetBusinessProject";
+        // prepare the data
+        var source =
+        {
+            datatype: "json",
+            data: {
+                "BusinessProject": ""
+            },
+            datafields: [
+                { name: 'BusinessProject' },
+                { name: 'BusinessSubItem1' }
+            ],
+            url: url,
+            async: false
+        };
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        $("#BusinessProject").jqxDropDownList({
+            selectedIndex: 0,
+            filterable: true,
+            source: dataAdapter,
+            displayMember: "BusinessProject",
+            valueMember: "BusinessSubItem1",
+            searchMode: 'contains',
+            width: 200,
+            height: 30
+        });
+        $("#BusinessProject").on('select', function (event) {
+            if (event.args) {
+                var item = event.args.item;
+                debugger;
+                if (item) {
+                    $("#BusinessSubItem").text(event.args.item.value);
+                }
+            }
+        });
     }
 };
 function GetManagementCompanyData_bak() {

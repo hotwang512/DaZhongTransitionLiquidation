@@ -19,10 +19,14 @@ var $page = function () {
     function addEvent() {
         var guid = $.request.queryString().VGUID;
         debugger;
-        $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
+            $("#VGUID").val(guid);
+            $("#btnSave").parent().hide();
             getIntangibleAssetsOrderDetail();
             getAttachment();
+        } else {
+            $("#btnPrint").parent().hide();
+            $("#VGUID").val(newguid());
         }
         //取消
         $("#btnCancel").on("click",
@@ -51,6 +55,7 @@ var $page = function () {
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
                             "PurchaseDepartmentIDs": DepartmentModelList.join(","),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
+                            "AssetDescription": $("#AssetDescription").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
                             "PaymentInformation": $("#hiddenPaymentInformation").val(),
                             "SumPayment": $("#SumPayment").val(),
@@ -116,10 +121,60 @@ var $page = function () {
                 $("#AttachmentType").val($(this).attr("AttachmentType"));
                 $("#LocalFileInput").click();
             });
-
+        $("#photographPri").on("click",
+           function () {
+               $("#Upload_OKBtn").show();
+               $("#photographPri").hide();
+               $("#devPhoto").show();
+           });
+        $("#Upload_OKBtn").on("click", function () {
+            //$('#jqxLoader').jqxLoader('open');
+            debugger;
+            if ($("#devPhoto").attr("src") != undefined) {
+                layer.load();
+                $.ajax({
+                    url: "/AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
+                    data: {
+                        "Vguid": $("#VGUID").val(),
+                        "ImageBase64Str": $("#devPhoto").attr("src"),
+                        "AttachmentType": $("#AttachmentType").val()
+                    },
+                    type: "post",
+                    success: function (msg) {
+                        $('#jqxLoader').jqxLoader('close');
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("上传失败！", null, "error");
+                                layer.closeAll('loading');
+                                break;
+                            case "1":
+                                jqxNotification("上传成功！", null, "success");
+                                //上传成功后调用清算平台、付款凭证附件上传接口
+                                var guid = $.request.queryString().VGUID;
+                                if (guid != "" && guid != null) {
+                                    PendingPaymentAttachmentUpload();
+                                }
+                                layer.closeAll('loading');
+                                getAttachment();
+                                $("#UploadPictureDialog").modal("hide");
+                                break;
+                        }
+                    }
+                });
+            } else {
+                jqxNotification("未拍照！", null, "error");
+            }
+        });
+        $("#Upload_CancelBtn").on("click", function () {
+            $("#UploadPictureDialog").modal("hide");
+        });
         //确定
         $("#btnPrint").on("click",
             function () {
+                debugger;
+                if ($("#ifrPrint").attr("src") != undefined) {
+                    document.getElementById('ifrPrint').src = $("#ifrPrint").attr("src");
+                }
                 $("#CreditDialog").modal("show");
             });
         //提交
@@ -213,6 +268,7 @@ var $page = function () {
             initComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
+            $("#AssetDescription").val(msg.AssetDescription);
             $("#SumPayment").val(msg.SumPayment);
             $("#FirstPayment").val(msg.FirstPayment);
             $("#TailPayment").val(msg.TailPayment);
@@ -238,6 +294,8 @@ var $page = function () {
             $("#hidPayCompany").val(msg.PayCompany);
             $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
+            $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
+            $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
         });
     }
     //上传文件
@@ -305,6 +363,11 @@ var $page = function () {
                                 break;
                             case "1":
                                 jqxNotification("上传成功！", null, "success");
+                                //上传成功后调用清算平台、付款凭证附件上传接口
+                                var guid = $.request.queryString().VGUID;
+                                if (guid != "" && guid != null) {
+                                    PendingPaymentAttachmentUpload();
+                                }
                                 $('#FileInput').val('');
                                 initTable()
                                 break;
@@ -325,6 +388,22 @@ function computeValue() {
         var value = $("#SumPayment").val() - $("#FirstPayment").val();
         $("#TailPayment").val(value);
     }
+}
+function PendingPaymentAttachmentUpload() {
+    $.ajax({
+        url: "/AssetPurchase/IntangibleAssetsOrderDetail/PendingPaymentAttachmentUpload",
+        data: { "PaymentVoucherVguid": $("#PaymentVoucherVguid").val(), "Vguid": $("#VGUID").val() },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("调用接口失败！", null, "error");
+                break;
+            }
+        }
+    });
 }
 function initSelectPurchaseDepartment() {
     var source =
@@ -635,7 +714,13 @@ $(function () {
     var page = new $page();
     page.init();
 });
-
+//生成guid
+function newguid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
 function isNumber(val) {
     var regPos = /^\d+(\.\d+)?$/; //非负浮点数
     var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数

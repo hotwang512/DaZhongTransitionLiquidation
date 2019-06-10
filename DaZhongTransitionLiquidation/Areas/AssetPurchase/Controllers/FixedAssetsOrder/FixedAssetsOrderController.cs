@@ -7,8 +7,11 @@ using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Models;
 
@@ -86,7 +89,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             model.SubmitUser = cache[PubGet.GetUserKey].UserName;
                             db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                             //提交完后写入采购分配表
-                            var purchaseAssignmodel =  new Business_PurchaseAssign();
+                            var purchaseAssignmodel = new Business_PurchaseAssign();
                             purchaseAssignmodel.VGUID = Guid.NewGuid();
                             purchaseAssignmodel.CreateDate = DateTime.Now;
                             purchaseAssignmodel.CreateUser = cache[PubGet.GetUserKey].UserName;
@@ -124,5 +127,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(resultModel);
         }
+
     }
 }

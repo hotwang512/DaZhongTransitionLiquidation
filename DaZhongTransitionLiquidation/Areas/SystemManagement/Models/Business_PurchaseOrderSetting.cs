@@ -18,6 +18,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         public string AssetCategoryMajor { get; set; }
         public string AssetCategoryMinor { get; set; }
         public int OrderCategory { get; set; }
+        public string BusinessSubItem { get; set; }
         public Guid? AssetCategoryMinorVguid { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? ChangeDate { get; set; }

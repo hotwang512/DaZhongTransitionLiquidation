@@ -581,11 +581,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     .First();
                 var businessTypeSetData = db.Queryable<v_Business_BusinessTypeSet>()
                     .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
-                var business_UserCompanySetDetailVguid = businessTypeSetData.VGUID.ToString();
-                result = db.Queryable<Business_UserCompanySetDetail>()
-                    .Where(x => x.OrderVGUID == business_UserCompanySetDetailVguid && x.Isable && x.AccountModeCode == AccountModeCode).First();
-                result.VGUID = db.Queryable<Business_SevenSection>()
-                    .Where(x => x.Descrption == result.CompanyName).First().VGUID;
+                var businessTypeSetDataVguid = businessTypeSetData.VGUID.ToString();
+                if (db.Queryable<Business_UserCompanySetDetail>()
+                    .Any(x => x.OrderVGUID == businessTypeSetDataVguid && x.Isable &&
+                              x.AccountModeCode == AccountModeCode))
+                {
+                    result = db.Queryable<Business_UserCompanySetDetail>()
+                        .Where(x => x.OrderVGUID == businessTypeSetDataVguid && x.Isable && x.AccountModeCode == AccountModeCode).First();
+                    result.VGUID = db.Queryable<Business_SevenSection>()
+                        .Where(x => x.Descrption == result.CompanyName).First().VGUID;
+                }
             });
             return Json(result);
         }

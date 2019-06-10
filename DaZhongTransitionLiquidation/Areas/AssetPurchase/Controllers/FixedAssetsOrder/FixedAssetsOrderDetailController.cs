@@ -14,12 +14,15 @@ using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using Business_AssetOrderDetails = DaZhongTransitionLiquidation.Areas.AssetPurchase.Models.Business_AssetOrderDetails;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
@@ -83,12 +86,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
                         pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                         pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+                        var PurchaseGoodsVguid = model.First().PurchaseGoodsVguid;
+                        var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
+                            .Where(x => x.VGUID == PurchaseGoodsVguid).First();
+                        var orderListData = db.Queryable<Business_OrderList>()
+                            .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
+
+                        pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
+                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1;
+                        pendingPaymentmodel.PaymentCompany = orderListData.CollectionCompanyName;
 
                         pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
                         pendingPaymentmodel.FunctionSiteId = "61";
                         pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
-                        pendingPaymentmodel.ServiceCategory = "";
-                        pendingPaymentmodel.BusinessProject = "0101|010101";
                         pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
                         pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
@@ -559,6 +569,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 });
             BAList.ForEach(x => { x.Attachment = imageServerUrl + x.Attachment; });
             return Json(BAList, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPaymentInformationByBusinessSubItem(Guid PurchaseGoodsVguid)
+        {
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
+            var result = new Business_UserCompanySetDetail();
+            DbBusinessDataService.Command(db =>
+            {
+                var goodsData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseGoodsVguid)
+                    .First();
+                var businessTypeSetData = db.Queryable<v_Business_BusinessTypeSet>()
+                    .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
+                var business_UserCompanySetDetailVguid = businessTypeSetData.VGUID.ToString();
+                result = db.Queryable<Business_UserCompanySetDetail>()
+                    .Where(x => x.OrderVGUID == business_UserCompanySetDetailVguid && x.Isable && x.AccountModeCode == AccountModeCode).First();
+                result.VGUID = db.Queryable<Business_SevenSection>()
+                    .Where(x => x.Descrption == result.CompanyName).First().VGUID;
+            });
+            return Json(result);
         }
         public JsonResult DeleteAttachment(Guid VGUID)
         {

@@ -99,6 +99,7 @@
     <Compile Include="StoredProcedureEntity\usp_GetTotalAmount.cs" />
     <Compile Include="ViewEntity\v_Bank.cs" />
     <Compile Include="ViewEntity\V_BankChannelMapping.cs" />
+    <Compile Include="ViewEntity\v_Business_BusinessTypeSet.cs" />
     <Compile Include="ViewEntity\v_Business_Data_Total.cs" />
     <Compile Include="ViewEntity\v_Business_Reconciliation.cs" />
     <Compile Include="ViewEntity\V_Business_T1Data_Information.cs" />

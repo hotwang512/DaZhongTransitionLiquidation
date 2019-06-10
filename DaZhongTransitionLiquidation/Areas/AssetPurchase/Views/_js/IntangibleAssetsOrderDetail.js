@@ -253,6 +253,20 @@ var $page = function () {
                     $("#AccountType").val("");
                 }
             });
+        $("#PurchaseGoods").on("change",
+            function () {
+                initComboBox();
+                $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                $("#PurchaseGoods").attr("disabled", true);
+                //付款信息根据 编码 （判断如果有的话） 带入设置的值
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
+                    $("#PayCompanyDropdown").val(msg.VGUID);
+                    $("#CompanyBankName").val(msg.PayBank);
+                    $("#CompanyBankAccount").val(msg.PayAccount);
+                    $("#CompanyBankAccountName").val(msg.PayBankAccountName);
+                    //$("#AccountType").val("");
+                });
+            });
     }; //addEvent end
 
     function getIntangibleAssetsOrderDetail() {

@@ -22,5 +22,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string Contract { get; set; }
         public string DetailList { get; set; }
         public string OtherReceipt { get; set; }
+        public string PaymentCompany { get; set; }
     }
 }

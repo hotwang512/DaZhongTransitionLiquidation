@@ -5,56 +5,38 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
 {
-    public class GeneralLedgerBalance
+    public class Business_LedgerSubject_Swap
     {
         /// <summary>
-        /// Desc:总账账簿
+        /// Desc:账簿
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string LEDGER_NAME { get; set; }
+        public string BOOK { get; set; }
         /// <summary>
-        /// Desc:科目组合ID
+        /// Desc:传Oracle中值集名
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string CCID { get; set; }
+        public string VALUE_SET { get; set; }
         /// <summary>
-        /// Desc:科目组合（代码）
+        /// Desc:传入科目代码
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string COMBINATION { get; set; }
+        public string CODE { get; set; }
         /// <summary>
-        /// Desc:余额对应期间
+        /// Desc:传入科目说明
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public DateTime? PERIOD { get; set; }
+        public string DESCRIPTION { get; set; }
         /// <summary>
-        /// Desc:期初余额
+        /// Desc:有效标识(有效Y，无效为N)
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public decimal? BEGIN_BALANCE { get; set; }
-        /// <summary>
-        /// Desc:期间借方发生额
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public decimal? PTD_DR { get; set; }
-        /// <summary>
-        /// Desc:期间贷方发生额
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public decimal? PTD_CR { get; set; }
-        /// <summary>
-        /// Desc:期末余额
-        /// Default:
-        /// Nullable:True
-        /// </summary> 
-        public decimal? END_BALANCE { get; set; }
+        public string ACTIVE_FLAG { get; set; }
         /// <summary>
         /// Desc:记录更新时间
         /// Default:
@@ -67,5 +49,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         /// Nullable:True
         /// </summary> 
         public DateTime? CREATE_DATE { get; set; }
+        public Guid VGUID { get; set; }
     }
 }

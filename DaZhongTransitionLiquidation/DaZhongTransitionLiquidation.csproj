@@ -2323,13 +2323,14 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\PaySettingList\PaySettingListController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\AttachmentResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\BankPreAuthResult.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_AssetsGeneralLedgerDetail_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CapitalAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashManagerInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransaction.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />
-    <Compile Include="Areas\CapitalCenterManagement\Model\GeneralLedgerBalance.cs" />
-    <Compile Include="Areas\CapitalCenterManagement\Model\LedgerSubject.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_GeneralLedgerBalance_Swap.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_LedgerSubject_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\UserCompanySetDetail.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />

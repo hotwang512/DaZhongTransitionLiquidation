@@ -263,7 +263,7 @@ from Business_UserCompanySet as a where a.Block='1' and a.UserVGUID='" + UserVGU
                 }
                 else
                 {
-                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.* from Business_UserCompanySet as a
+                    result = db.SqlQueryable<UserCompanySetDetail>(@"select a.Code,a.Descrption,a.CompanyCode,a.CompanyName,a.VGUID as Guids,a.KeyData as KeyDatas ,b.VGUID,b.Isable,b.PayBank,b.PayAccount,b.PayBankAccountName,b.Borrow,b.Loan,b.KeyData,b.OrderVGUID from Business_UserCompanySet as a
 left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.UserVGUID='" + UserVGUID + @"' and a.IsCheck='1' and a.Block='1'").OrderBy("Code asc,CompanyCode asc").ToList();
                 }         
             });

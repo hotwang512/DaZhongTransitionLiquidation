@@ -23,5 +23,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string DetailList { get; set; }
         public string OtherReceipt { get; set; }
         public string PaymentCompany { get; set; }
+        public string CollectBankAccountName { get; set; }
+        public string CollectBankAccouont { get; set; }
+        public string CollectBankName { get; set; }
+        public string CollectBankNo { get; set; }
     }
 }

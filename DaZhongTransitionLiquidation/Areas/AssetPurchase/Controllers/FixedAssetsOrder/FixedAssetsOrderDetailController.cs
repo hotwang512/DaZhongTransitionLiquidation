@@ -86,15 +86,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
                         pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                         pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-                        var PurchaseGoodsVguid = model.First().PurchaseGoodsVguid;
                         var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
-                            .Where(x => x.VGUID == PurchaseGoodsVguid).First();
+                            .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
                         var orderListData = db.Queryable<Business_OrderList>()
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
 
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
                         pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1;
-                        pendingPaymentmodel.PaymentCompany = orderListData.CollectionCompanyName;
+                        //根据供应商账号找到供应商类别
+                        pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
+                            .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;
+                        pendingPaymentmodel.CollectBankAccountName = sevenSection.SupplierBankAccountName;
+                        pendingPaymentmodel.CollectBankAccouont = sevenSection.SupplierBankAccount;
+                        pendingPaymentmodel.CollectBankName = sevenSection.SupplierBank;
+                        pendingPaymentmodel.CollectBankNo = sevenSection.SupplierBankNo;
 
                         pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
                         pendingPaymentmodel.FunctionSiteId = "61";

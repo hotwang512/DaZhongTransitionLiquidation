@@ -12,6 +12,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
@@ -82,14 +83,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
                         pendingPaymentmodel.FunctionSiteId = "61";
                         pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
-                        var PurchaseGoodsVguid = model.First().PurchaseGoodsVguid;
                         var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
-                            .Where(x => x.VGUID == PurchaseGoodsVguid).First();
+                            .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
                         var orderListData = db.Queryable<Business_OrderList>()
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
+
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
                         pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1;
-                        pendingPaymentmodel.PaymentCompany = orderListData.CollectionCompanyName;
+                        //根据供应商账号找到供应商类别
+                        pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
+                            .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;
+                        pendingPaymentmodel.CollectBankAccountName = sevenSection.SupplierBankAccountName;
+                        pendingPaymentmodel.CollectBankAccouont = sevenSection.SupplierBankAccount;
+                        pendingPaymentmodel.CollectBankName = sevenSection.SupplierBank;
+                        pendingPaymentmodel.CollectBankNo = sevenSection.SupplierBankNo;
+
                         pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
                         pendingPaymentmodel.Amount = sevenSection.SumPayment.ToString();

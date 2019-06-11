@@ -18,6 +18,7 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.IntangibleAssetsOrder
 {
@@ -86,11 +87,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
                             .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
 
-                        var orderListData = db.Queryable<Business_OrderList>()
+                        var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
 
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
-                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1;
+                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
                         //根据供应商账号找到供应商类别
                         pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
                             .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;

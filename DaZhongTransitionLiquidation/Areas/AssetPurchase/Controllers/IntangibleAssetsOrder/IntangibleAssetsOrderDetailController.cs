@@ -85,6 +85,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
                         var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
                             .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
+
                         var orderListData = db.Queryable<Business_OrderList>()
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
 
@@ -97,6 +98,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         pendingPaymentmodel.CollectBankAccouont = sevenSection.SupplierBankAccount;
                         pendingPaymentmodel.CollectBankName = sevenSection.SupplierBank;
                         pendingPaymentmodel.CollectBankNo = sevenSection.SupplierBankNo;
+                        pendingPaymentmodel.PaymentMethod = sevenSection.PayType;
 
                         pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
@@ -141,6 +143,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                        "\"OperatorIP\":\"{OperatorIP}\",".Replace("{OperatorIP}", GetSystemInfo.GetClientLocalIPv4Address()) +
                        "\"ServiceCategory\":\"{ServiceCategory}\",".Replace("{ServiceCategory}", model.ServiceCategory) +
                        "\"BusinessProject\":\"{BusinessProject}\",".Replace("{BusinessProject}", model.BusinessProject) +
+                       "\"PaymentCompany\":\"{PaymentCompany}\",".Replace("{PaymentCompany}", model.PaymentCompany) +
+                       "\"CollectBankAccountName\":\"{CollectBankAccountName}\",".Replace("{CollectBankAccountName}", model.CollectBankAccountName) +
+                       "\"CollectBankAccouont\":\"{CollectBankAccouont}\",".Replace("{CollectBankAccouont}", model.CollectBankAccouont) +
+                       "\"CollectBankName\":\"{CollectBankName}\",".Replace("{CollectBankName}", model.CollectBankName) +
+                       "\"CollectBankNo\":\"{CollectBankNo}\",".Replace("{CollectBankNo}", model.CollectBankNo) +
+                       "\"PaymentMethod\":\"{PaymentMethod}\",".Replace("{PaymentMethod}", model.PaymentMethod) +
                        "\"invoiceNumber\":\"{invoiceNumber}\",".Replace("{invoiceNumber}", model.invoiceNumber) +
                        "\"numberOfAttachments\":\"{numberOfAttachments}\",".Replace("{numberOfAttachments}", model.numberOfAttachments) +
                        "\"Amount\":\"{Amount}\",".Replace("{Amount}", model.Amount) +

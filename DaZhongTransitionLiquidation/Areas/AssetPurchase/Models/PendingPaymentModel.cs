@@ -28,5 +28,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string CollectBankName { get; set; }
         public string CollectBankNo { get; set; }
         public string PaymentMethod { get; set; }
+        public string AccountSetCode { get; set; }
     }
 }

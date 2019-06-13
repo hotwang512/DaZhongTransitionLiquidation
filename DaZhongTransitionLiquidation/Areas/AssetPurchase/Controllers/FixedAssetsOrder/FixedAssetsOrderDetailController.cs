@@ -86,15 +86,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
                         pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                         pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-                        var PurchaseGoodsVguid = model.First().PurchaseGoodsVguid;
                         var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
-                            .Where(x => x.VGUID == PurchaseGoodsVguid).First();
-                        var orderListData = db.Queryable<Business_OrderList>()
+                            .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
+                        var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
 
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
-                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1;
-                        pendingPaymentmodel.PaymentCompany = orderListData.CollectionCompanyName;
+                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
+                        //根据供应商账号找到供应商类别
+                        pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
+                            .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;
+                        pendingPaymentmodel.CollectBankAccountName = sevenSection.SupplierBankAccountName;
+                        pendingPaymentmodel.CollectBankAccouont = sevenSection.SupplierBankAccount;
+                        pendingPaymentmodel.CollectBankName = sevenSection.SupplierBank;
+                        pendingPaymentmodel.CollectBankNo = sevenSection.SupplierBankNo;
+                        pendingPaymentmodel.PaymentMethod = sevenSection.PayType;
 
                         pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
                         pendingPaymentmodel.FunctionSiteId = "61";
@@ -103,6 +109,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
                         pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
                         pendingPaymentmodel.Summary = sevenSection.AssetDescription;
+                        pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
 
                         var apiReault = PendingPaymentApi(pendingPaymentmodel);
                         var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
@@ -706,8 +713,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                        "\"IdentityToken\":\"{IdentityToken}\",".Replace("{IdentityToken}", model.IdentityToken) +
                        "\"FunctionSiteId\":\"{FunctionSiteId}\",".Replace("{FunctionSiteId}", "61") +
                        "\"OperatorIP\":\"{OperatorIP}\",".Replace("{OperatorIP}", GetSystemInfo.GetClientLocalIPv4Address()) +
+                       "\"AccountSetCode\":\"{AccountSetCode}\",".Replace("{AccountSetCode}", model.AccountSetCode) +
                        "\"ServiceCategory\":\"{ServiceCategory}\",".Replace("{ServiceCategory}", model.ServiceCategory) +
                        "\"BusinessProject\":\"{BusinessProject}\",".Replace("{BusinessProject}", model.BusinessProject) +
+                       "\"PaymentCompany\":\"{PaymentCompany}\",".Replace("{PaymentCompany}", model.PaymentCompany) +
+                       "\"CollectBankAccountName\":\"{CollectBankAccountName}\",".Replace("{CollectBankAccountName}", model.CollectBankAccountName) +
+                       "\"CollectBankAccouont\":\"{CollectBankAccouont}\",".Replace("{CollectBankAccouont}", model.CollectBankAccouont) +
+                       "\"CollectBankName\":\"{CollectBankName}\",".Replace("{CollectBankName}", model.CollectBankName) +
+                       "\"CollectBankNo\":\"{CollectBankNo}\",".Replace("{CollectBankNo}", model.CollectBankNo) +
+                       "\"PaymentMethod\":\"{PaymentMethod}\",".Replace("{PaymentMethod}", model.PaymentMethod) +
                        "\"invoiceNumber\":\"{invoiceNumber}\",".Replace("{invoiceNumber}", model.invoiceNumber) +
                        "\"numberOfAttachments\":\"{numberOfAttachments}\",".Replace("{numberOfAttachments}", model.numberOfAttachments) +
                        "\"Amount\":\"{Amount}\",".Replace("{Amount}", model.Amount) +

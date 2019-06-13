@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
 {
-    public class Business_AssetsGeneralLedger_Swap
+    public class AssetsGeneralLedger_Swap
     {
         public Guid VGUID { get; set; }
         public Guid SubjectVGUID { get; set; }

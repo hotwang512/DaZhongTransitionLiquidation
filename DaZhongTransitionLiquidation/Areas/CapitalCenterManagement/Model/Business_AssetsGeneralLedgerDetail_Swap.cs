@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
 {
-    public class Business_AssetsGeneralLedgerDetail_Swap
+    public class AssetsGeneralLedgerDetail_Swap
     {
         public string LEDGER_NAME { get; set; }
         public string JE_BATCH_NAME { get; set; }

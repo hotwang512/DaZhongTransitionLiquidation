@@ -257,6 +257,15 @@ var $page = function () {
                 }
             });
         });
+
+        //清空
+        $("#btnClear").on("click", function () {
+            $("#CollectionCompany").jqxDropDownList('clearSelection');
+            $("#CollectionAccount").val("");
+            $("#CollectionBank").val("");
+            $("#CollectionBankAccount").val("");
+            $("#CollectionBankAccountName").val("");
+        })
     }; //addEvent end
 
    

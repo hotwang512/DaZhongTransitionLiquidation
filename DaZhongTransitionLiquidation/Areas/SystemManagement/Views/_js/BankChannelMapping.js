@@ -68,8 +68,6 @@ var $page = function () {
             if (!Validate(selector.$txtChannel_Dialog())) {
                 validateError++;
             }
-            var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
-            var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
             if (validateError <= 0) {
                 $.ajax({
                     url: "/SystemManagement/BankChannelMapping/SaveBankChannelInfo?isEdit=" + isEdit,
@@ -78,9 +76,6 @@ var $page = function () {
                         BankAccountName: selector.$txtBankAccountName_Dialog().val(),
                         Bank: selector.$txtBank_Dialog().val(),
                         Channel: selector.$txtChannel_Dialog().val(),
-                        CompanyCode: $("#CompanyCode").val(),
-                        Borrow: borrow,
-                        Loan:loan,
                         VGUID: vguid
                     },
                     type: "post",
@@ -163,13 +158,7 @@ var $page = function () {
                 WindowConfirmDialog(updateIsUnable, "您确定要禁用选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
-        //清除借贷信息
-        $("#Remove1").on("click", function () {
-            $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
-        })
-        $("#Remove2").on("click", function () {
-            $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
-        })
+
     }; //addEvent end
 
 
@@ -231,22 +220,12 @@ var $page = function () {
 
     function channelDetailFunc(row, column, value, rowData) {
         var container = "";
-        var borrow = "";
-        if (rowData.Borrow != null) {
-            borrow = rowData.Borrow.split(/[\s\n]/)[0];
-        }
-        var loan = "";
-        if (rowData.Borrow != null) {
-            loan = rowData.Loan.split(/[\s\n]/)[0];
-        }
         if (selector.$EditPermission().val() == "1") {
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','"
                 + rowData.BankAccount + "','"
                 + rowData.BankAccountName + "','"
                 + rowData.Bank + "','"
-                + rowData.CompanyCode + "','"
-                + borrow + "','"
-                + loan + "','"
+                
                 + rowData.Channel + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BankAccount + "</a>";
         } else {
             container = "<span>" + rowData.BankAccount + "</span>";
@@ -335,17 +314,15 @@ function add() {
     selector.$txtBankAccountName_Dialog().val("");
     selector.$txtBank_Dialog().val("");
     selector.$txtChannel_Dialog().val("");
-    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
-    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     isEdit = false;
     vguid = "";
     $("#myModalLabel_title").text("新增银行渠道映射");
     selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddBankChannelDialog().modal("show");
-    initBorrowTable(companyCode, accountMode);
+    //initBorrowTable(companyCode, accountMode);
 }
 
-function edit(guid, BankAccount, BankAccountName, Bank, CompanyCode, Borrow, Loan, Channel) {
+function edit(guid, BankAccount, BankAccountName, Bank,  Channel) {
     selector.$txtBankAccount_Dialog().val("");
     selector.$txtBankAccountName_Dialog().val("");
     selector.$txtBank_Dialog().val("");
@@ -357,12 +334,9 @@ function edit(guid, BankAccount, BankAccountName, Bank, CompanyCode, Borrow, Loa
     selector.$txtBankAccountName_Dialog().val(BankAccountName);
     selector.$txtBank_Dialog().val(Bank);
     selector.$txtChannel_Dialog().val(Channel);
-    $("#CompanyCode").val(CompanyCode);
-    initBorrowTable(CompanyCode, accountMode);
-    var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + Borrow + '</div>';
-    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
-    var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + Loan + '</div>';
-    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
+    
+    //initBorrowTable(CompanyCode, accountMode);
+   
 
     $(".msg").remove();
     selector.$txtBankAccount_Dialog().removeClass("input_Validate");
@@ -511,9 +485,9 @@ function initBorrowTable(companyCode, accountMode) {
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
     });
 }
-function companyChange() {
-    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
-    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
-    companyCode = $("#CompanyCode").val();
-    initBorrowTable(companyCode, accountMode);
-}
+//function companyChange() {
+//    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+//    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+//    companyCode = $("#CompanyCode").val();
+//    initBorrowTable(companyCode, accountMode);
+//}

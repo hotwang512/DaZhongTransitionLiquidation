@@ -364,7 +364,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
-            List<Business_AssetsGeneralLedger_Swap> assetList = new List<Business_AssetsGeneralLedger_Swap>();//凭证中间表List
+            List<AssetsGeneralLedger_Swap> assetList = new List<AssetsGeneralLedger_Swap>();//凭证中间表List
             var x = -1;
             var guid = Guid.Empty;
             var orderListDraft = db.Queryable<Business_OrderListDraft>().ToList();
@@ -504,7 +504,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 }
             }
         }
-        public static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher
+        public static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher
             ,List<Business_OrderListDraft> orderListDraft, List<Business_OrderList> orderList, List<Business_UserCompanySetDetail> userCompanySet)
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
@@ -565,7 +565,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 1);//将借贷数据同步中间表
             }
         }
-        public static void GetAssetsGeneralLedger(Business_VoucherDetail BVDetail, List<Business_AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher, Guid guid, int i)
+        public static void GetAssetsGeneralLedger(Business_VoucherDetail BVDetail, List<AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher, Guid guid, int i)
         {
             //凭证中间表
             var type = "";
@@ -576,7 +576,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 case "转账": type = "z.转账"; break;
                 default:break;
             }
-            Business_AssetsGeneralLedger_Swap asset = new Business_AssetsGeneralLedger_Swap();
+            AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
             asset.CREATE_DATE = DateTime.Now;
             //asset.SubjectVGUID = guid;
             asset.LINE_ID = guid;

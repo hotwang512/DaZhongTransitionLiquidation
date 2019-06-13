@@ -275,6 +275,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             try
             {
+                LogHelper.WriteLog(string.Format("Data:{0}", OrderListAPI.ModelToJson()));
                 ExpCheck.Exception(OrderListAPI.AccountSetCode == null, "支付单位账套代码为空！");
                 //ExpCheck.Exception(OrderListAPI.ServiceCategory == null, "类别为空！");
                 ExpCheck.Exception(OrderListAPI.BusinessProject == null, "项目为空！");//编码cz|01010101
@@ -296,14 +297,16 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
                     //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
                     //从订单配置表中取出数据
-                    var data = _db.SqlQueryable<Business_OrderList>(@"select a.BusinessSubItem1,a.BusinessProject,a.VGUID,b.BusinessType,b.Founder,b.Status,b.CollectionCompany,b.CollectionCompanyName,b.Number,b.PaymentMethod,b.AttachmentNumber,
+                    var datas = _db.SqlQueryable<Business_OrderList>(@"select a.BusinessSubItem1,a.BusinessProject,a.VGUID,b.BusinessType,b.Founder,b.Status,b.CollectionCompany,b.CollectionCompanyName,b.Number,b.PaymentMethod,b.AttachmentNumber,
 b.InvoiceNumber,b.CollectionAccount,b.CollectionBankAccount,b.CollectionBankAccountName,b.CollectionBank,b.CompanyCode,b.OrderDetailValue from v_Business_BusinessTypeSet as a
-left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").WhereIF(BusinessProject != null, i => i.BusinessSubItem1.Contains(BusinessProject1) && i.BusinessSubItem1.Contains(BusinessProject2))
-                               .WhereIF(companyCode != null, i => i.CompanyCode == companyCode)
+left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
+                    var data = datas.Where(i => i.BusinessSubItem1.Contains(BusinessProject1) && i.BusinessSubItem1.Contains(BusinessProject2))
+                        .ToList().FirstOrDefault();
+                              
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
                                //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
                                //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
-                               .ToList().FirstOrDefault();
+                               //.ToList().FirstOrDefault();
                     //数据存入订单草稿表，生成订单
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
@@ -321,14 +324,14 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").WhereIF(Busi
                         orderListDraft.BusinessProject = data.BusinessProject;//业务项目
                         orderListDraft.BusinessSubItem1 = data.BusinessSubItem1;//业务编码
 
-                        orderListDraft.CollectBankName = data.CollectionBank == "" ? OrderListAPI.CollectBankName : data.CollectionBank;//对方账号开户行
-                        orderListDraft.CollectBankAccouont = data.CollectionAccount == "" ? OrderListAPI.CollectBankNo : data.CollectionAccount;//对方账号OPAC
-                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName == "" ? OrderListAPI.CollectBankAccountName : data.CollectionBankAccountName;//对方账号户名
-                        orderListDraft.CollectBankNo = data.CollectionBankAccount == "" ? OrderListAPI.CollectBankAccouont : data.CollectionBankAccount;//对方银行行号
+                        orderListDraft.CollectBankName = data.CollectionBank == null ? OrderListAPI.CollectBankName : data.CollectionBank;//对方账号开户行
+                        orderListDraft.CollectBankAccouont = data.CollectionAccount == null ? OrderListAPI.CollectBankNo : data.CollectionAccount;//对方账号OPAC
+                        orderListDraft.CollectBankAccountName = data.CollectionBankAccountName == null ? OrderListAPI.CollectBankAccountName : data.CollectionBankAccountName;//对方账号户名
+                        orderListDraft.CollectBankNo = data.CollectionBankAccount == null ? OrderListAPI.CollectBankAccouont : data.CollectionBankAccount;//对方银行行号
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
-                        orderListDraft.PaymentMethod = data.PaymentMethod == "" ? OrderListAPI.PaymentMethod : data.PaymentMethod;
-                        orderListDraft.PaymentCompany = data.CollectionCompanyName == "" ? OrderListAPI.PaymentCompany : data.CollectionCompanyName;//供应商类别
+                        orderListDraft.PaymentMethod = data.PaymentMethod == null ? OrderListAPI.PaymentMethod : data.PaymentMethod;
+                        orderListDraft.PaymentCompany = data.CollectionCompanyName == null ? OrderListAPI.PaymentCompany : data.CollectionCompanyName;//供应商类别
                         orderListDraft.PaymentContents = OrderListAPI.Summary;
                         orderListDraft.FillingDate = DateTime.Now;
                         orderListDraft.Founder = OrderListAPI.Sponsor;//发起人

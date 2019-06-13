@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
 {
-    public class Business_GeneralLedgerBalance_Swap
+    public class GeneralLedgerBalance_Swap
     {
         /// <summary>
         /// Desc:总账账簿

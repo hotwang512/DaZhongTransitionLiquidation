@@ -129,12 +129,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     //科目信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
                     //凭证中间表List
-                    List<Business_AssetsGeneralLedger_Swap> assetList = new List<Business_AssetsGeneralLedger_Swap>();
+                    List<AssetsGeneralLedger_Swap> assetList = new List<AssetsGeneralLedger_Swap>();
                     
                     //删除现有明细数据
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
                     //删除现有中间表数据
-                    db.Deleteable<Business_AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == voucher.VGUID).ExecuteCommand();
+                    db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == voucher.VGUID).ExecuteCommand();
                     if (voucher.Detail != null)
                     {
                         var i = 0;
@@ -168,7 +168,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                                 case "转账": type = "z.转账"; break;
                                 default: break;
                             }
-                            Business_AssetsGeneralLedger_Swap asset = new Business_AssetsGeneralLedger_Swap();
+                            AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                             asset.CREATE_DATE = DateTime.Now;
                             //asset.SubjectVGUID = guid;
                             asset.LINE_ID = guid;

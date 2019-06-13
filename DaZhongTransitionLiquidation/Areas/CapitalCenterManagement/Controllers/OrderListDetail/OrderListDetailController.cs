@@ -39,8 +39,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var guid = new Guid(sevenSection.CollectionCompany);
-                    sevenSection.CollectionCompanyName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == guid).CompanyOrPerson;
+                    if(sevenSection.CollectionCompany != null)
+                    {
+                        var guid = new Guid(sevenSection.CollectionCompany);
+                        sevenSection.CollectionCompanyName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == guid).CompanyOrPerson;
+                    }
                     var isAny = db.Queryable<Business_OrderList>().Any(x => x.VGUID == sevenSection.VGUID);
                     if (!isAny)
                     {

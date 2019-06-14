@@ -451,7 +451,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             }
             if (assetList.Count > 0)
             {
-                db.Insertable(assetList).ExecuteCommand();
+                db.Insertable(assetList).IgnoreColumns(it => new { it.VGUID, it.SubjectVGUID }).ExecuteCommand();
             }
         }
         public static void GetOtherSubject(List<Business_VoucherDetail> BVDetailList, List<Business_BankFlowTemplate> newBankFlowList, Guid guid, Business_BankFlowTemplate item)
@@ -571,9 +571,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var type = "";
             switch (voucher.VoucherType)
             {
-                case "现金": type = "x.现金"; break;
-                case "银行": type = "y.银行"; break;
-                case "转账": type = "z.转账"; break;
+                case "现金类": type = "x.现金"; break;
+                case "银行类": type = "y.银行"; break;
+                case "转账类": type = "z.转账"; break;
                 default:break;
             }
             AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();

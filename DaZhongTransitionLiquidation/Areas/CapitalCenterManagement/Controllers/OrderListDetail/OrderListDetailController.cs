@@ -389,17 +389,21 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                     var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == companyOrPerson).ToList();
                     foreach (var item in data)
                     {
-                        Business_CustomerBankSetting customer = new Business_CustomerBankSetting();
-                        customer.VGUID = Guid.NewGuid();
-                        customer.CustomerID = item.VGUID.TryToString();
-                        customer.Isable = false;
-                        if (item.VGUID == vguids.TryToGuid())
+                        var isAny = db.Queryable<Business_CustomerBankSetting>().Any(x => x.CustomerID == item.VGUID.TryToString() && x.OrderVGUID == orderVguid);
+                        if (!isAny)
                         {
-                            customer.CustomerID = vguids;
-                            customer.Isable = ischeck;
+                            Business_CustomerBankSetting customer = new Business_CustomerBankSetting();
+                            customer.VGUID = Guid.NewGuid();
+                            customer.CustomerID = item.VGUID.TryToString();
+                            customer.Isable = false;
+                            if (item.VGUID == vguids.TryToGuid())
+                            {
+                                customer.CustomerID = vguids;
+                                customer.Isable = ischeck;
+                            }
+                            customer.OrderVGUID = orderVguid;
+                            db.Insertable(customer).ExecuteCommand();
                         }
-                        customer.OrderVGUID = orderVguid;
-                        db.Insertable(customer).ExecuteCommand();
                     } 
                 });
                 resultModel.IsSuccess = result.IsSuccess;

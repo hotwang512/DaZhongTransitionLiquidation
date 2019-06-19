@@ -29,13 +29,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsR
         }
         public JsonResult GetAssetsRetirementListDatas(DateTime? StartDate, DateTime? EndDate, GridParams para)
         {
-            var jsonResult = new JsonResultModel<Business_AssetsRetirement_Swap>();
+            var jsonResult = new JsonResultModel<AssetsRetirement_Swap>();
 
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_AssetsRetirement_Swap>()
+                jsonResult.Rows = db.Queryable<AssetsRetirement_Swap>()
                     .WhereIF(StartDate != null, i => i.RETIRE_DATE >= StartDate)
                     .WhereIF(EndDate != null, i => i.RETIRE_DATE <= EndDate)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -49,12 +49,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsR
             DataTable dt = new DataTable();
             DbBusinessDataService.Command(db =>
             {
-                dt = db.Queryable<Business_AssetsRetirement_Swap>()
+                dt = db.Queryable<AssetsRetirement_Swap>()
                     .WhereIF(StartDate != null, i => i.LAST_UPDATE_DATE >= StartDate)
                     .WhereIF(EndDate != null, i => i.LAST_UPDATE_DATE <= EndDate)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToDataTable();
             });
-            dt.TableName = "Business_AssetsRetirement_Swap";
+            dt.TableName = "AssetsRetirement_Swap";
             var ms = ExcelHelper.OutModelFileToStream(dt, "/Template/AssetsRetiremen.xlsx", "资产报废");
             byte[] fileContents = ms.ToArray();
             return File(fileContents, "application/ms-excel", "资产报废" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");

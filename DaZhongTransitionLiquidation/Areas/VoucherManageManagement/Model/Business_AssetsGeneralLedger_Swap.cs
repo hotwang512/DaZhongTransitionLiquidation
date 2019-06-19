@@ -10,7 +10,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public Guid VGUID { get; set; }
         public Guid SubjectVGUID { get; set; }
         /// <summary>
-        /// Desc:账套名称
+        /// Desc:账套名称 
         /// Default:
         /// Nullable:True
         /// </summary> 

@@ -385,7 +385,15 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid && x.CustomerID == vguids).ExecuteCommand();
+                    var csAny = db.Queryable<Business_CustomerBankSetting>().Any(x => x.CustomerID == vguids.TryToString() && x.OrderVGUID == orderVguid);
+                    if (csAny)
+                    {
+                        db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid && x.CustomerID == vguids).ExecuteCommand();
+                    }
+                    else
+                    {
+                        db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid).ExecuteCommand();
+                    }
                     var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == companyOrPerson).ToList();
                     foreach (var item in data)
                     {

@@ -123,18 +123,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     else
                     {
                         voucherList.VGUID = voucher.VGUID;
-                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo }).ExecuteCommand();
+                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo ,it.Automatic}).ExecuteCommand();
                     }
-                   
                     //科目信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
                     //凭证中间表List
                     List<AssetsGeneralLedger_Swap> assetList = new List<AssetsGeneralLedger_Swap>();
-                    
                     //删除现有明细数据
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
-                    //删除现有中间表数据
-                    db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == voucher.VGUID).ExecuteCommand();
+                    
                     if (voucher.Detail != null)
                     {
                         var i = 0;
@@ -159,51 +156,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.VGUID = Guid.NewGuid();
                             BVDetail.VoucherVGUID = guid;
                             voucherdetailList.Add(BVDetail);
-                            //凭证中间表
-                            var type = "";
-                            switch (voucher.VoucherType)
-                            {
-                                case "现金": type = "x.现金"; break;
-                                case "银行": type = "y.银行"; break;
-                                case "转账": type = "z.转账"; break;
-                                default: break;
-                            }
-                            AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
-                            asset.CREATE_DATE = DateTime.Now;
-                            //asset.SubjectVGUID = guid;
-                            asset.LINE_ID = guid;
-                            asset.LEDGER_NAME = voucher.AccountModeName;
-                            asset.JE_BATCH_NAME = batchName;
-                            asset.JE_BATCH_DESCRIPTION = "";
-                            asset.JE_HEADER_NAME = voucherName;
-                            asset.JE_HEADER_DESCRIPTION = "";
-                            asset.JE_SOURCE_NAME = "大众出租财务共享平台";
-                            asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转账)
-                            asset.ACCOUNTING_DATE = voucher.VoucherDate;
-                            asset.CURRENCY_CODE = "RMB";//币种
-                            asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空
-                            asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
-                            asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
-                            asset.STATUS = "1";
-                            //asset.VGUID = Guid.NewGuid();
-                            asset.TRASACTION_ID = Guid.NewGuid();
-                            asset.JE_LINE_NUMBER = BVDetail.JE_LINE_NUMBER;
-                            asset.SEGMENT1 = item.CompanySection;
-                            asset.SEGMENT2 = item.SubjectSection;
-                            asset.SEGMENT3 = item.AccountSection;
-                            asset.SEGMENT4 = item.CostCenterSection;
-                            asset.SEGMENT5 = item.SpareOneSection;
-                            asset.SEGMENT6 = item.SpareTwoSection;
-                            asset.SEGMENT7 = item.IntercourseSection;
-                            asset.ENTERED_CR = item.LoanMoney.TryToString();
-                            asset.ENTERED_DR = item.BorrowMoney.TryToString();
-                            asset.ACCOUNTED_DR = item.BorrowMoney.TryToString();
-                            asset.ACCOUNTED_CR = item.LoanMoney.TryToString();
-                            assetList.Add(asset);
+                           
                         }
                         db.Insertable(voucherdetailList).ExecuteCommand();
-                        //同步至中间表
-                        db.Insertable(assetList).ExecuteCommand();
                     }
                     if (attachment != null)
                     {

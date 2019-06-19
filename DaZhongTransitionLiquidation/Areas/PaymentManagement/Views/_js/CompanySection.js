@@ -47,10 +47,10 @@ var $page = function () {
         //同步现有数据,隐藏
         $("#btnTongBu").on("click", function () {
             $.ajax({
-                url: "/PaymentManagement/CompanySection/SynchronousData",
+                url: "/PaymentManagement/CompanySection/SyncSubjectData",
                 //data: { vguids: selection },
                 data: {
-                    companyCode: companyCode, accountModeCode: accountModeCode, index: index
+                   
                 },
                 //traditional: true,
                 type: "post",

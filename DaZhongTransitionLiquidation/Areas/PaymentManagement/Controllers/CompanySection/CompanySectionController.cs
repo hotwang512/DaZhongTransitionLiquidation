@@ -692,15 +692,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             });
             return result;
         }
-        public List<Business_SevenSection> GetAccountMode()
-        {
-            var result = new List<Business_SevenSection>();
-            DbBusinessDataService.Command(db =>
-            {
-                result = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
-            });
-            return result;
-        }
+        //public List<Business_SevenSection> GetAccountMode()
+        //{
+        //    var result = new List<Business_SevenSection>();
+        //    DbBusinessDataService.Command(db =>
+        //    {
+        //        result = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
+        //    });
+        //    return result;
+        //}
         public JsonResult UpdataBankStatus(Guid vguids,string datafield,bool ischeck,string accountModeCode,string companyCode)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
@@ -755,6 +755,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     SevenSection.Add(item);
                 }
                 db.Insertable(SevenSection).ExecuteCommand();
+            });
+            return Json(resultModel);
+        }
+        public JsonResult SyncSubjectData()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+               
             });
             return Json(resultModel);
         }

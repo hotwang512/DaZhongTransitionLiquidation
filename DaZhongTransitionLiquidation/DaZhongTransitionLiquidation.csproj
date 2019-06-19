@@ -2327,12 +2327,14 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CapitalAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashManagerInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransaction.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_CustomerBankSetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_GeneralLedgerBalance_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LedgerSubject_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\UserCompanySetDetail.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\v_Business_CustomerBankInfo.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
     <Compile Include="Areas\HomePage\HomePageAreaRegistration.cs" />

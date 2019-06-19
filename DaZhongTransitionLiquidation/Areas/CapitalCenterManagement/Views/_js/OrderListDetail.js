@@ -92,30 +92,10 @@ var $page = function () {
                     "BusinessType": $("#pushPeopleDropDownButton").val(),
                     "BusinessProject": $("#BusinessProject").text(),//拼接类型
                     "BusinessSubItem1": $("#BusinessSubItem1").val(),//拼接编号
-
-                    //"BusinessSubItem2": $("#BusinessSubItem2").val(),
-                    //"BusinessSubItem3": $("#BusinessSubItem3").val(),
-                    //"CompanySection": $("#CompanyCode").val(),
-                    //"SubjectName": $("#SubjectName").val(),
-                    //"SubjectSection": $("#SubjectSection").val(),
-                    //"AccountSection": $("#AccountSection").val(),
-                    //"CostCenterSection": $("#CostCenterSection").val(),
-                    //"SpareOneSection": $("#SpareOneSection").val(),
-                    //"SpareTwoSection": $("#SpareTwoSection").val(),
-                    //"IntercourseSection": $("#IntercourseSection").val(),
-
                     "Status": $("#Status").val(),
                     "Founder": $("#LoginName").val(),
-
                     "CollectionCompany": $("#CollectionCompany").val(),
-                    "CollectionAccount": $("#CollectionAccount").val(),
-                    "CollectionBankAccount": $("#CollectionBankAccount").val(),
-                    "CollectionBank": $("#CollectionBank").val(),
-                    "CollectionBankAccountName": $("#CollectionBankAccountName").val(),
                     "PaymentMethod": $("#PaymentMethod").val(),
-                    //"PayAccount": $("#PayAccount").val(),
-                    //"PayBankAccountName": $("#PayBankAccountName").val(),
-                    //"PayBank": $("#PayBank").val(),
                     "CompanyCode": $("#LoginCompanyCode").val(),
                 },
                 type: "post",
@@ -146,10 +126,8 @@ var $page = function () {
             var guid = $("#VGUID").val();
             if (args) {
                 var label = item.label;
-                collectionBankChange(label);
-                $("#CollectionAccount").val("");
-                $("#CollectionBank").val("");
-                $("#CollectionBankAccount").val("");
+                //collectionBankChange(label);
+                initCustomerBank(label);
                 //companyChange(value);
             }
         });
@@ -257,7 +235,21 @@ var $page = function () {
                 }
             });
         });
-
+        $("#jqxCustomerBankInfo").on('cellendedit', function (event) {
+            var args = event.args;
+            var value = args.value;
+            var oldvalue = args.oldvalue;
+            var rowData = args.row;
+            $.ajax({
+                url: "/CapitalCenterManagement/OrderListDetail/UpdataCustomerIsable",
+                //data: { vguids: selection },
+                data: { vguids: rowData.VGUID, ischeck: args.value, orderVguid: $("#VGUID").val(), companyOrPerson: $("#CollectionCompany").text() },
+                type: "post",
+                success: function (msg) {
+                    $("#jqxCustomerBankInfo").jqxGrid('updateBoundData');
+                }
+            });
+        });
         //清空
         $("#btnClear").on("click", function () {
             $("#CollectionCompany").jqxDropDownList('clearSelection');
@@ -299,44 +291,15 @@ var $page = function () {
             dataType: "json",
             success: function (msg) {
                 $("#Status").val(msg.Status);
-                //if ($("#Status").val() == "1") {
-                //    $("#hideButton").show();
-                //}
-                //AccountSection = loadCompanyCode("C", msg.CompanySection, msg.SubjectSection);
-                //CostCenterSection = loadCompanyCode("D", msg.CompanySection, msg.SubjectSection);
-                //SpareOneSection = loadCompanyCode("E", msg.CompanySection, msg.SubjectSection);
-                //SpareTwoSection = loadCompanyCode("F", msg.CompanySection, msg.SubjectSection);
-                //IntercourseSection = loadCompanyCode("G", msg.CompanySection, msg.SubjectSection);
-                //loadSelectFun();
                 $("#BusinessType").val(msg.BusinessType);
                 $("#BusinessProject").text(msg.BusinessProject);
                 $("#BusinessSubItem1").val(msg.BusinessSubItem1);
-
-                //$("#BusinessSubItem2").val(msg.BusinessSubItem2);
-                //$("#BusinessSubItem3").val(msg.BusinessSubItem3);
-                //$("#CompanyCode").val(msg.CompanySection);
-                //$("#SubjectName").val(msg.SubjectName);
-                //$("#SubjectSection").val(msg.SubjectSection);
-                //$("#AccountSection").val(msg.AccountSection);
-                //$("#CostCenterSection").val(msg.CostCenterSection);
-                //$("#SpareOneSection").val(msg.SpareOneSection);
-                //$("#SpareTwoSection").val(msg.SpareTwoSection);
-                //$("#IntercourseSection").val(msg.IntercourseSection);
-
                 $("#CollectionCompany").val(msg.CollectionCompany);
-                $("#CollectionAccount").val(msg.CollectionAccount);
-                $("#CollectionBankAccount").val(msg.CollectionBankAccount);
-                $("#CollectionBankAccountName").val(msg.CollectionBankAccountName);
-                $("#CollectionBank").val(msg.CollectionBank);
                 if (msg.PaymentMethod == "" || msg.PaymentMethod == null) {
                     $("#PaymentMethod").val("银行");
                 } else {
                     $("#PaymentMethod").val(msg.PaymentMethod);
                 }
-                
-                //$("#PayAccount").val(msg.PayAccount);
-                //$("#PayBankAccountName").val(msg.PayBankAccountName);
-                //$("#PayBank").val(msg.PayBank);
             }
         });
     }
@@ -456,33 +419,33 @@ function collectionBankChange(label) {
         data: { "CollectionCompany": label },
         type: "post",
         success: function (result) {
-            uiEngineHelper.bindSelect('#CollectionBankAccountName', result, "VGUID", "BankAccountName");
-            $("#CollectionBankAccountName").prepend("<option value=\"\" selected='true'>请选择</>");
+            //uiEngineHelper.bindSelect('#CollectionBankAccountName', result, "VGUID", "BankAccountName");
+            //$("#CollectionBankAccountName").prepend("<option value=\"\" selected='true'>请选择</>");
            
         }
     });
 }
-function companyChange() {
-    var value = $("#CollectionBankAccountName").val();
-    if (value == "") {
-        $("#CollectionAccount").val("");
-        $("#CollectionBank").val("");
-        $("#CollectionBankAccount").val("");
-        return;
-    }
-    $.ajax({
-        url: "/CapitalCenterManagement/OrderListDetail/GetCompanyChange",
-        //async: false,
-        data: { CollectionCompany: value },
-        type: "post",
-        success: function (result) {
-            var values = result[0];
-            $("#CollectionAccount").val(values.BankAccount);
-            $("#CollectionBank").val(values.Bank);
-            $("#CollectionBankAccount").val(values.BankNo);
-        }
-    });
-}
+//function companyChange() {
+//    var value = $("#CollectionBankAccountName").val();
+//    if (value == "") {
+//        $("#CollectionAccount").val("");
+//        $("#CollectionBank").val("");
+//        $("#CollectionBankAccount").val("");
+//        return;
+//    }
+//    $.ajax({
+//        url: "/CapitalCenterManagement/OrderListDetail/GetCompanyChange",
+//        //async: false,
+//        data: { CollectionCompany: value },
+//        type: "post",
+//        success: function (result) {
+//            var values = result[0];
+//            $("#CollectionAccount").val(values.BankAccount);
+//            $("#CollectionBank").val(values.Bank);
+//            $("#CollectionBankAccount").val(values.BankNo);
+//        }
+//    });
+//}
 function payBankChange() {
     var payBankValue = $("#PayBank").val();
     $.ajax({
@@ -902,7 +865,7 @@ function initSettingTable() {
         pageable: false,
         width: "100%",
         autoheight: false,
-        height: 300,
+        height: 200,
         pageSize: 15,
         //serverProcessing: true,
         //pagerButtonsCount: 10,
@@ -912,9 +875,9 @@ function initSettingTable() {
         columnsHeight: 30,
         editable: true,
         columns: [
-            { text: '账套', datafield: 'AccountModeName', width: 180, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc},
-            { text: '公司', datafield: 'CompanyName', width: 300, align: 'center', cellsAlign: 'center', editable: false },
             { text: '启用', datafield: 'Isable', width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '账套', datafield: 'AccountModeName', width: 180, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc},
+            { text: '公司', datafield: 'CompanyName', width: 300, align: 'center', cellsAlign: 'center', editable: false }, 
             { text: '开户行', datafield: 'PayBank', width: 180, align: 'center', cellsAlign: 'center', editable: false },
             { text: '账号', datafield: 'PayAccount', width: 180, align: 'center', cellsAlign: 'center', editable: false },
             { text: '户名', datafield: 'PayBankAccountName', width: 300, align: 'center', cellsAlign: 'center', editable: false },
@@ -980,4 +943,54 @@ function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBa
     $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
     selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddNewBankDataDialog().modal("show");
+}
+
+function initCustomerBank(label) {
+    var source =
+            {
+                datafields:
+                [
+                    { name: "checkbox", type: null },
+                    { name: 'CompanyOrPerson', type: 'string' },
+                    { name: 'BankAccountName', type: 'string' },
+                    { name: 'Isable', type: 'bool' },
+                    { name: 'Bank', type: 'string' },
+                    { name: 'BankAccount', type: 'string' },
+                    { name: 'BankNo', type: 'string' },
+                    { name: 'VGUID', type: 'string' }
+                ],
+                datatype: "json",
+                id: "Vguid",
+                data: { "CollectionCompany": label, "OrderVGUID": $("#VGUID").val() },
+                url: "/CapitalCenterManagement/OrderListDetail/GetCollectionBankChange"   //获取数据源的路径
+            };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    var typeAdapter = new $.jqx.dataAdapter(source);
+    $("#jqxCustomerBankInfo").jqxGrid({
+        pageable: false,
+        width: "100%",
+        autoheight: false,
+        height: 200,
+        pageSize: 15,
+        //serverProcessing: true,
+        //pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        //pagermode: 'checkbox',
+        columnsHeight: 30,
+        editable: true,
+        columns: [
+            { text: '启用', datafield: 'Isable', width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
+            { text: '供应商类别', datafield: 'CompanyOrPerson', width: '250px', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '账号', datafield: 'BankAccount', align: 'center', width: '350px', cellsAlign: 'center', editable: false },
+            { text: '户名', datafield: 'BankAccountName', align: 'center', width: '350px', cellsAlign: 'center', editable: false },
+            { text: '开户行', datafield: 'Bank', align: 'center', width: '350px', cellsAlign: 'center', editable: false },
+            { text: '行号', datafield: 'BankNo', align: 'center', cellsAlign: 'center', editable: false },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true }
+        ]
+    });
 }

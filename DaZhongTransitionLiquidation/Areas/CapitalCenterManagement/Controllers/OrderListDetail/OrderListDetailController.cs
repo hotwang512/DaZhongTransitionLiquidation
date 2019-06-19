@@ -9,6 +9,7 @@ using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,26 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         sevenSection.CollectionCompanyName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == guid).CompanyOrPerson;
                     }
                     var isAny = db.Queryable<Business_OrderList>().Any(x => x.VGUID == sevenSection.VGUID);
+                    var customer = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == sevenSection.VGUID.ToString() && x.Isable == true);
+                    if(customer.Count() == 1)
+                    {
+                        var cus = customer.First();
+                        var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.VGUID == cus.CustomerID.TryToGuid()).First();
+                        sevenSection.CollectionAccount = data.BankAccount;
+                        sevenSection.CollectionBankAccount = data.BankNo;
+                        sevenSection.CollectionBank = data.Bank;
+                        sevenSection.CollectionBankAccountName = data.BankAccountName;
+                    }
+                    if(customer.Count() > 1)
+                    {
+                        var data = db.SqlQueryable<Business_CustomerBankInfo>(@"select * from Business_CustomerBankInfo 
+                                    where VGUID in (select CustomerID from Business_CustomerBankSetting  where OrderVGUID='"+ sevenSection.VGUID.ToString() + @"' 
+                                    and Isable='1')").ToList();
+                        foreach (var item in data)
+                        {
+                            sevenSection.CollectionBankAccountName += item.BankAccountName + ",";
+                        }
+                    }
                     if (!isAny)
                     {
                         //sevenSection.VGUID = Guid.NewGuid();
@@ -113,15 +134,26 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult GetCollectionBankChange(string CollectionCompany)
+        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID)
         {
-            List<Business_CustomerBankInfo> orderList = new List<Business_CustomerBankInfo>();
+            var result = new List<v_Business_CustomerBankInfo>();
             DbBusinessDataService.Command(db =>
             {
-                //主信息
-                orderList = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == CollectionCompany).ToList();
+                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID).ToList();
+                if (data.Count > 0)
+                {
+                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
+left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
+left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID").Where(x => x.CompanyOrPerson == CollectionCompany && x.OrderVGUID == OrderVGUID)
+                    .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                }
+                else
+                {
+                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select * from Business_CustomerBankInfo").Where(x => x.CompanyOrPerson == CollectionCompany).ToList();
+                }
+               
             });
-            return Json(orderList, JsonRequestBehavior.AllowGet); ;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         public JsonResult SaveBusinessTypeName(string BusinessTypeName, string BusinessVGUID)
         {
@@ -339,6 +371,36 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                 {
                     db.Updateable<Business_UserCompanySetDetail>().UpdateColumns(it => new Business_UserCompanySetDetail()
                     { Isable = ischeck }).Where(it => it.VGUID == vguids).ExecuteCommand();
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
+        public JsonResult UpdataCustomerIsable(string vguids, bool ischeck,string orderVguid,string companyOrPerson)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid && x.CustomerID == vguids).ExecuteCommand();
+                    var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == companyOrPerson).ToList();
+                    foreach (var item in data)
+                    {
+                        Business_CustomerBankSetting customer = new Business_CustomerBankSetting();
+                        customer.VGUID = Guid.NewGuid();
+                        customer.CustomerID = item.VGUID.TryToString();
+                        customer.Isable = false;
+                        if (item.VGUID == vguids.TryToGuid())
+                        {
+                            customer.CustomerID = vguids;
+                            customer.Isable = ischeck;
+                        }
+                        customer.OrderVGUID = orderVguid;
+                        db.Insertable(customer).ExecuteCommand();
+                    } 
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

@@ -37,23 +37,23 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue")
                 .WhereIF(searchParams.BusinessProject != null, i => i.BusinessProject.Contains(searchParams.BusinessProject))
                 .WhereIF(searchParams.CollectionCompany != null, i => i.CollectionCompany == searchParams.CollectionCompany)
                 .OrderBy("BusinessSubItem1 asc").ToList();
-                var data = db.Queryable<Business_CustomerBankInfo>().ToList();
-                foreach (var item in jsonResult.Rows)
-                {
-                    try
-                    {
-                        var vguid = new Guid(item.CollectionBankAccountName);
-                        if (vguid != Guid.Empty)
-                        {
-                            var bankAccountName = data.Single(x => x.VGUID == vguid).BankAccountName;
-                            item.CollectionBankAccountName = bankAccountName;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-                }
+                //var data = db.Queryable<Business_CustomerBankInfo>().ToList();
+                //foreach (var item in jsonResult.Rows)
+                //{
+                //    try
+                //    {
+                //        var vguid = new Guid(item.CollectionBankAccountName);
+                //        if (vguid != Guid.Empty)
+                //        {
+                //            var bankAccountName = data.Single(x => x.VGUID == vguid).BankAccountName;
+                //            item.CollectionBankAccountName = bankAccountName;
+                //        }
+                //    }
+                //    catch (Exception)
+                //    {
+                //        continue;
+                //    }
+                //}
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

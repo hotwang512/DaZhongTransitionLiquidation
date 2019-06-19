@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
@@ -311,6 +312,20 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
+                        var CustomerData = _db.SqlQueryable<Business_CustomerBankInfo>(@"select * from Business_CustomerBankInfo 
+                                    where VGUID in (select CustomerID from Business_CustomerBankSetting  where OrderVGUID='" + data.VGUID.TryToString() + @"' 
+                                    and Isable='1')").ToList();
+                        //待支付订单生成若只提供编码必须供应商信息唯一，不唯一或空返回错误
+                        if (CustomerData.Count != 1 && OrderListAPI.PaymentCompany == null)
+                        {
+                            errmsg = "只提供编码必须供应商信息唯一";
+                            return Json(new
+                            {
+                                success = false,
+                                errmsg = errmsg,
+                                result = results
+                            }, JsonRequestBehavior.AllowGet);
+                        }
                         var orderCompany = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1"  && x.AccountModeCode == accountModeCode && x.Code == companyCode).Descrption;
                         //var bankInfo = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == companyCode && x.AccountType == "基本户" && x.AccountModeCode == accountModeCode).First();
                         var orderDetail = _db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == data.VGUID.TryToString() && x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode && x.Isable == true).ToList();

@@ -439,7 +439,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetail.VoucherVGUID = guid;
                 VoucherList.Add(voucher);
                 BVDetailList.Add(BVDetail);
-                GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 0);//将借贷数据同步中间表
+                //GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 0);//将借贷数据同步中间表
                 //GetOtherSubject(BVDetailList, newBankFlowList, guid, item);//通过银行渠道找流水
                 GetOtherSubject2(BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
             }
@@ -562,7 +562,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetail.VGUID = Guid.NewGuid();
                 BVDetail.VoucherVGUID = guid;
                 BVDetailList.Add(BVDetail);
-                GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 1);//将借贷数据同步中间表
+                //GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 1);//将借贷数据同步中间表
             }
         }
         public static void GetAssetsGeneralLedger(Business_VoucherDetail BVDetail, List<AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher, Guid guid, int i)

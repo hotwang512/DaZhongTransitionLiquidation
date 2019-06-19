@@ -119,18 +119,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             //var sevenSwapSection = new Business_AssetMaintenanceInfo_Swap();
 
-            var sevenSwapSection = Mapper.Map<Business_AssetMaintenanceInfo_Swap>(sevenSection);
+            var sevenSwapSection = Mapper.Map<AssetMaintenanceInfo_Swap>(sevenSection);
             DbBusinessDataService.Command(db =>
             {
                 
-                if (!db.Queryable<Business_AssetMaintenanceInfo_Swap>().Any(c => c.VGUID == sevenSection.VGUID))
+                if (!db.Queryable<AssetMaintenanceInfo_Swap>().Any(c => c.ASSET_ID == sevenSection.VGUID))
                 {
-                    db.Insertable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
+                    db.Insertable<AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
                 }
                 else
                 {
                     sevenSection.CHANGE_DATE = DateTime.Now;
-                    db.Updateable<Business_AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
+                    db.Updateable<AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
                 }
             });
             return true;
@@ -301,12 +301,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 {
                     //写入中间表
                     var assetMaintenanceInfo = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                    var assetMaintenanceSwapInfo = Mapper.Map<Business_AssetMaintenanceInfo_Swap>(assetMaintenanceInfo);
+                    var assetMaintenanceSwapInfo = Mapper.Map<AssetMaintenanceInfo_Swap>(assetMaintenanceInfo);
                     
-                    assetMaintenanceSwapInfo.CHANGE_DATE = DateTime.Now;
-                    assetMaintenanceSwapInfo.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
                     assetMaintenanceSwapInfo.STATUS = AcceptStatus.Accepted;
-                    db.Updateable<Business_AssetMaintenanceInfo_Swap>(assetMaintenanceSwapInfo).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER }).ExecuteCommand();
+                    db.Updateable<AssetMaintenanceInfo_Swap>(assetMaintenanceSwapInfo).IgnoreColumns(x => new { x.CREATE_DATE,x.ASSET_ID,x.TRANSACTION_ID }).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

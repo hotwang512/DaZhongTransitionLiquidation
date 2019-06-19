@@ -11,7 +11,7 @@ namespace DaZhongTransitionLiquidation.AutoMapper.Profiles
     {
         protected override void Configure()
         {
-            CreateMap<Business_AssetMaintenanceInfo, Business_AssetMaintenanceInfo_Swap>();
+            CreateMap<Business_AssetMaintenanceInfo, AssetMaintenanceInfo_Swap>();
         }
     }
 }

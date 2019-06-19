@@ -134,12 +134,12 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID)
+        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID,string CustomerID)
         {
             var result = new List<v_Business_CustomerBankInfo>();
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID).ToList();
+                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID && x.CustomerID == CustomerID).ToList();
                 if (data.Count > 0)
                 {
                     result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 

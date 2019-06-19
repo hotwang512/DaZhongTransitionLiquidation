@@ -961,7 +961,7 @@ function initCustomerBank(label) {
                 ],
                 datatype: "json",
                 id: "Vguid",
-                data: { "CollectionCompany": label, "OrderVGUID": $("#VGUID").val() },
+                data: { "CollectionCompany": label, "OrderVGUID": $("#VGUID").val(), "CustomerID": $('#CollectionCompany').val() },
                 url: "/CapitalCenterManagement/OrderListDetail/GetCollectionBankChange"   //获取数据源的路径
             };
     var typeAdapter = new $.jqx.dataAdapter(source, {

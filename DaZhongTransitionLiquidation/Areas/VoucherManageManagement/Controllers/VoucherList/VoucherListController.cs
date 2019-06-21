@@ -85,7 +85,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             Status = status,
                         }).Where(it => it.VGUID == item).ExecuteCommand();
                         //审核成功写入中间表
-                        InsertAssetsGeneralLedger(item, db);
+                        if(status == "3")
+                        {
+                            InsertAssetsGeneralLedger(item, db);
+                        } 
                     }
                     else
                     {
@@ -107,16 +110,16 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         private void InsertAssetsGeneralLedger(Guid item, SqlSugarClient db)
         {
             //删除现有中间表数据
-            db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item).ExecuteCommand();
+            db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item.TryToString()).ExecuteCommand();
             //凭证中间表
             var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
             var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item).ToList();
             var type = "";
             switch (voucher.VoucherType)
             {
-                case "现金": type = "x.现金"; break;
-                case "银行": type = "y.银行"; break;
-                case "转账": type = "z.转账"; break;
+                case "现金类": type = "x.现金"; break;
+                case "银行类": type = "y.银行"; break;
+                case "转账类": type = "z.转账"; break;
                 default: break;
             }
             //asset.VGUID = Guid.NewGuid();
@@ -125,7 +128,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
                 //asset.SubjectVGUID = guid;
-                asset.LINE_ID = item;
+                asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;
                 asset.JE_BATCH_NAME = voucher.BatchName;
                 asset.JE_BATCH_DESCRIPTION = "";
@@ -138,8 +141,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空
                 asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
                 asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
-                asset.STATUS = "1";
-                asset.TRASACTION_ID = Guid.NewGuid();
+                asset.STATUS = "N";
+                asset.TRASACTION_ID = Guid.NewGuid().TryToString();
                 asset.JE_LINE_NUMBER = items.JE_LINE_NUMBER;
                 asset.SEGMENT1 = items.CompanySection;
                 asset.SEGMENT2 = items.SubjectSection;

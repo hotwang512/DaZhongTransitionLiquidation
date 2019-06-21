@@ -134,12 +134,12 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID)
+        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID,string CustomerID)
         {
             var result = new List<v_Business_CustomerBankInfo>();
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID).ToList();
+                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID && x.CustomerID == CustomerID).ToList();
                 if (data.Count > 0)
                 {
                     result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
@@ -385,21 +385,33 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid && x.CustomerID == vguids).ExecuteCommand();
+                    var csAny = db.Queryable<Business_CustomerBankSetting>().Any(x => x.CustomerID == vguids.TryToString() && x.OrderVGUID == orderVguid);
+                    if (csAny)
+                    {
+                        db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid && x.CustomerID == vguids).ExecuteCommand();
+                    }
+                    else
+                    {
+                        db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid).ExecuteCommand();
+                    }
                     var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == companyOrPerson).ToList();
                     foreach (var item in data)
                     {
-                        Business_CustomerBankSetting customer = new Business_CustomerBankSetting();
-                        customer.VGUID = Guid.NewGuid();
-                        customer.CustomerID = item.VGUID.TryToString();
-                        customer.Isable = false;
-                        if (item.VGUID == vguids.TryToGuid())
+                        var isAny = db.Queryable<Business_CustomerBankSetting>().Any(x => x.CustomerID == item.VGUID.TryToString() && x.OrderVGUID == orderVguid);
+                        if (!isAny)
                         {
-                            customer.CustomerID = vguids;
-                            customer.Isable = ischeck;
+                            Business_CustomerBankSetting customer = new Business_CustomerBankSetting();
+                            customer.VGUID = Guid.NewGuid();
+                            customer.CustomerID = item.VGUID.TryToString();
+                            customer.Isable = false;
+                            if (item.VGUID == vguids.TryToGuid())
+                            {
+                                customer.CustomerID = vguids;
+                                customer.Isable = ischeck;
+                            }
+                            customer.OrderVGUID = orderVguid;
+                            db.Insertable(customer).ExecuteCommand();
                         }
-                        customer.OrderVGUID = orderVguid;
-                        db.Insertable(customer).ExecuteCommand();
                     } 
                 });
                 resultModel.IsSuccess = result.IsSuccess;

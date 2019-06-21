@@ -176,13 +176,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public Guid TRASACTION_ID { get; set; }
+        public string TRASACTION_ID { get; set; }
         /// <summary>
         /// Desc:日记账行ID
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public Guid LINE_ID { get; set; }
+        public string LINE_ID { get; set; }
         public string JE_LINE_DESCRIPTION { get; set; }
     }
 }

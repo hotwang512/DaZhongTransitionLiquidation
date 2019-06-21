@@ -579,7 +579,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
             asset.CREATE_DATE = DateTime.Now;
             //asset.SubjectVGUID = guid;
-            asset.LINE_ID = guid;
+            asset.LINE_ID = guid.ToString();
             asset.LEDGER_NAME = voucher.AccountModeName;
             asset.JE_BATCH_NAME = voucher.BatchName;
             asset.JE_BATCH_DESCRIPTION = "";
@@ -594,7 +594,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
             asset.STATUS = "1";
             //asset.VGUID = Guid.NewGuid();
-            asset.TRASACTION_ID = Guid.NewGuid();
+            asset.TRASACTION_ID = Guid.NewGuid().ToString();
             asset.JE_LINE_NUMBER = i;
             asset.SEGMENT1 = BVDetail.CompanySection;
             asset.SEGMENT2 = BVDetail.SubjectSection;

@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -763,7 +764,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-               
+                var data1 = db.Queryable<LedgerSubject_Swap>().ToList();
+                var data12 = db.Queryable<Business_SevenSection>().ToList();
             });
             return Json(resultModel);
         }

@@ -9,8 +9,8 @@ var $page = function () {
     this.init = function () {
         //initSelect();
         initSelectPurchaseGoods();
+        initPaymentInformationComboBox();
         initPayCompanyDropdown();
-        initComboBox();
         initSelectPurchaseDepartment();
         addEvent();
         $("#PaymentInformation").find(".jqx-combobox-input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
@@ -215,7 +215,6 @@ var $page = function () {
         $('#PaymentInformation').on('select', function (event) {
             var args = event.args;
             if (args) {
-                
                 var item = args.item;
                 $("#hiddenPaymentInformationVguid").val(item.value);
                 $("#hiddenPaymentInformation").val(item.label);
@@ -228,6 +227,7 @@ var $page = function () {
             }
         });
         $('#PayCompanyDropdown').on('select', function (event) {
+            debugger;
             $("#CompanyBankName").val("");
             $("#CompanyBankAccount").val("");
             $("#CompanyBankAccountName").val("");
@@ -236,34 +236,34 @@ var $page = function () {
             if (args && $("#PayMode").val() != "现金") {
                 var item = args.item;
                 $("#PayCompany").val(item.label);
-
                 $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
                     { Vguid: $("#PayCompanyDropdown").val() },
                     function (msg) {
                         debugger;
-                        $("#CompanyBankName").val(msg.BankName);
-                        $("#CompanyBankAccount").val(msg.BankAccount);
-                        $("#CompanyBankAccountName").val(msg.BankAccountName);
+                        $("#CompanyBankName").val(msg.PayBank);
+                        $("#CompanyBankAccount").val(msg.PayAccount);
+                        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
                         $("#AccountType").val(msg.AccountType);
                     });
             }
         });
         $("#PurchaseGoods").on("change",
             function () {
-                initComboBox();
+                initPaymentInformationComboBox();
                 $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
                 $("#PurchaseGoods").attr("disabled", true);
                 //付款信息根据 编码 （判断如果有的话） 带入设置的值
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
-                    debugger;
-                    if (msg.PayBank != null) {
-                        $("#PayCompanyDropdown").val(msg.VGUID);
-                        $("#CompanyBankName").val(msg.PayBank);
-                        $("#CompanyBankAccount").val(msg.PayAccount);
-                        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
-                        //$("#AccountType").val("");
-                    }
-                });
+                //$.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
+                //    debugger;
+                //    if (msg.PayBank != null) {
+                //        $("#PayCompanyDropdown").val(msg.VGUID);
+                //        $("#CompanyBankName").val(msg.PayBank);
+                //        $("#CompanyBankAccount").val(msg.PayAccount);
+                //        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
+                //        //$("#AccountType").val("");
+                //    }
+                //});
+                GetCompanyBankInfoDropdownByCode();
             });
         $("#PurchaseDepartment").on('checkChange', function (event) {
             if (event.args) {
@@ -287,6 +287,36 @@ var $page = function () {
             });
         $("#jqxLoader").jqxLoader({ isModal: true, width: 100, height: 60, imagePosition: 'top' });
     }; //addEvent end
+    function GetCompanyBankInfoDropdownByCode() {
+        debugger;
+        var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdownByCode";
+        var source =
+        {
+            datatype: "json",
+            datafields: [
+                { name: 'VGUID' },
+                { name: 'CompanyName' }
+            ],
+            url: url,
+            data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+            async: false
+        };
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        debugger;
+        $('#PayCompanyDropdown').jqxDropDownList({
+            enableSelection: true,
+            filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
+                310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
+            renderer: function (index, label, value) {
+                var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
+                return table;
+            },
+            selectionRenderer: function (element, index, label, value) {
+                var text = label.replace(/\n/g, " ");
+                return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
+            }
+        });
+    }
     function checkFileExt(ext) {
         if (!ext.match(/.jpg|.png|.jpeg|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {
             return false;
@@ -306,7 +336,8 @@ var $page = function () {
             initSelectPurchaseGoods();
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").attr("disabled", true);
-            initComboBox();
+            initPaymentInformationComboBox();
+            GetCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#OrderQuantity").val(msg.OrderQuantity);
@@ -568,7 +599,7 @@ function initSelectPurchaseDepartment() {
 //        }
 //    });
 //}
-function initComboBox() {
+function initPaymentInformationComboBox() {
     //付款单位及相关账户信息
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
@@ -616,20 +647,8 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
     });
 }
 function initPayCompanyDropdown() {
-    var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdown";
-    var source =
-    {
-        datatype: "json",
-        datafields: [
-            { name: 'VGUID' },
-            { name: 'Descrption' }
-        ],
-        url: url,
-        async: false
-    };
-    var dataAdapter = new $.jqx.dataAdapter(source);
-    $('#PayCompanyDropdown').jqxDropDownList({
-        filterable: true, selectedIndex: 2, source: dataAdapter, displayMember: "Descrption", dropDownWidth:
+    $('#PayCompanyDropdown').jqxDropDownList({enableSelection:false,
+        filterable: true, selectedIndex: 2, source: null, displayMember: "Descrption", dropDownWidth:
             310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200,searchMode:'contains',
         renderer: function (index, label, value) {
             var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';

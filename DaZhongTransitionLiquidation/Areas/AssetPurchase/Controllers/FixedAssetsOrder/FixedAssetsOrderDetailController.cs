@@ -92,7 +92,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
 
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
-                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
+                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|"
+                                                              + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
                         //根据供应商账号找到供应商类别
                         pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
                             .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;
@@ -406,13 +407,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             var PurchaseOrderSettingGuid = PurchaseOrderSetting.TryToGuid();
             if (PurchaseOrderSettingGuid != Guid.Empty)
             {
-                var jsonResult = new JsonResultModel<v_BankInfoSetting>();
+                var jsonResult = new JsonResultModel<v_Business_CustomerBankInfo>();
                 DbBusinessDataService.Command(db =>
                 {
-                    jsonResult.Rows = db.Queryable<v_BankInfoSetting>().Where(i => i.IsCheck == "Checked")
-                        .WhereIF(PurchaseOrderSettingGuid != Guid.Empty,
-                            i => i.PurchaseOrderSettingVguid == PurchaseOrderSettingGuid)
-                        .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                    var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseOrderSettingGuid).First().BusinessSubItem;
+                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
+                    var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVguid).ToList();
+                    if (data.Count > 0)
+                    {
+                        jsonResult.Rows = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
+left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
+left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isable = '1'").Where(x => x.OrderVGUID == OrderVguid)
+                            .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                    }
+                    else
+                    {
+                        jsonResult.Rows = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select * from Business_CustomerBankInfo").ToList();
+                    }
                 });
                 return Json(jsonResult, JsonRequestBehavior.AllowGet);
             }
@@ -450,18 +461,48 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCompanyBankInfo(Guid Vguid)
+        public JsonResult GetCompanyBankInfoDropdownByCode(Guid PurchaseOrderSetting)
         {
             var cache = CacheManager<Sys_User>.GetInstance();
             var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
-            var model = new Business_CompanyBankInfo();
+            var list = new List<Business_UserCompanySetDetail>();
             DbBusinessDataService.Command(db =>
             {
-                var sevenSection = db.Queryable<Business_SevenSection>().Where(c => c.VGUID == Vguid).First();
-                model = db.Queryable<Business_CompanyBankInfo>().Where(c => c.CompanyCode == sevenSection.Code && c.AccountModeCode == AccountModeCode && c.BankStatus).First();
+                var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseOrderSetting).First().BusinessSubItem;
+                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
+                var data = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid).ToList();
+                if (data.Count > 0)
+                {
+                    list = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid && x.AccountModeCode == AccountModeCode && x.Isable)
+                        .OrderBy(i => i.CompanyCode).ToList();
+                }
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //public JsonResult GetCompanyBankInfo(Guid Vguid)
+        //{
+        //    var cache = CacheManager<Sys_User>.GetInstance();
+        //    var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
+        //    var model = new Business_CompanyBankInfo();
+        //    DbBusinessDataService.Command(db =>
+        //    {
+        //        var sevenSection = db.Queryable<Business_SevenSection>().Where(c => c.VGUID == Vguid).First();
+        //        model = db.Queryable<Business_CompanyBankInfo>().Where(c => c.CompanyCode == sevenSection.Code && c.AccountModeCode == AccountModeCode && c.BankStatus).First();
+        //    });
+        //    return Json(model, JsonRequestBehavior.AllowGet);
+        //}
+        public JsonResult GetCompanyBankInfo(Guid Vguid)
+        {
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var model = new Business_UserCompanySetDetail();
+            DbBusinessDataService.Command(db =>
+            {
+                model = db.Queryable<Business_UserCompanySetDetail>().Where(c => c.VGUID == Vguid).First();
             });
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
 
         public JsonResult UploadToImageServer(Guid Vguid, string ImageBase64Str, string AttachmentType)
         {
@@ -589,7 +630,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 var businessTypeSetData = db.Queryable<v_Business_BusinessTypeSet>()
                     .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
                 var businessTypeSetDataVguid = businessTypeSetData.VGUID.ToString();
-                if (db.Queryable<Business_UserCompanySetDetail>()
+                if (db.Queryable<Business_UserCompanySetDetail>()//Business_CustomerBankSetting
                     .Any(x => x.OrderVGUID == businessTypeSetDataVguid && x.Isable &&
                               x.AccountModeCode == AccountModeCode))
                 {

@@ -10,7 +10,7 @@ var $page = function () {
         initSelect();
         initSelectPurchaseGoods();
         initPayCompanyDropdown();
-        initComboBox();
+        initPaymentInformationComboBox();
         initSelectPurchaseDepartment();
         addEvent();
         $("#PaymentInformation").find("input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
@@ -201,21 +201,24 @@ var $page = function () {
                 computeValue();
             });
         $('#PayCompanyDropdown').on('select', function (event) {
+            debugger;
             $("#CompanyBankName").val("");
             $("#CompanyBankAccount").val("");
             $("#CompanyBankAccountName").val("");
             $("#AccountType").val("");
             var args = event.args;
             if (args && $("#PayMode").val() != "现金") {
-                debugger;
                 var item = args.item;
                 $("#PayCompany").val(item.label);
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo", { Vguid: $("#PayCompanyDropdown").val() }, function (msg) {
-                    $("#CompanyBankName").val(msg.BankName);
-                    $("#CompanyBankAccount").val(msg.BankAccount);
-                    $("#CompanyBankAccountName").val(msg.BankAccountName);
-                    $("#AccountType").val(msg.AccountType);
-                });
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
+                    { Vguid: $("#PayCompanyDropdown").val() },
+                    function (msg) {
+                        debugger;
+                        $("#CompanyBankName").val(msg.PayBank);
+                        $("#CompanyBankAccount").val(msg.PayAccount);
+                        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
+                        $("#AccountType").val(msg.AccountType);
+                    });
             }
         });
         $('#PaymentInformation').on('select', function (event) {
@@ -254,21 +257,50 @@ var $page = function () {
                 }
             });
         $("#PurchaseGoods").on("change",
-            function () {
-                initComboBox();
-                $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
-                $("#PurchaseGoods").attr("disabled", true);
-                //付款信息根据 编码 （判断如果有的话） 带入设置的值
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
-                    if (msg.PayBank != null) {
-                        $("#PayCompanyDropdown").val(msg.VGUID);
-                        $("#CompanyBankName").val(msg.PayBank);
-                        $("#CompanyBankAccount").val(msg.PayAccount);
-                        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
-                        //$("#AccountType").val("");
-                    }
-                });
-            });
+             function () {
+                 initPaymentInformationComboBox();
+                 $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                 $("#PurchaseGoods").attr("disabled", true);
+                 //付款信息根据 编码 （判断如果有的话） 带入设置的值
+                 //$.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
+                 //    debugger;
+                 //    if (msg.PayBank != null) {
+                 //        $("#PayCompanyDropdown").val(msg.VGUID);
+                 //        $("#CompanyBankName").val(msg.PayBank);
+                 //        $("#CompanyBankAccount").val(msg.PayAccount);
+                 //        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
+                 //        //$("#AccountType").val("");
+                 //    }
+                 //});
+                 debugger;
+                 var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdownByCode";
+                 var source =
+                 {
+                     datatype: "json",
+                     datafields: [
+                         { name: 'VGUID' },
+                         { name: 'CompanyName' }
+                     ],
+                     url: url,
+                     data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+                     async: false
+                 };
+                 var dataAdapter = new $.jqx.dataAdapter(source);
+                 debugger;
+                 $('#PayCompanyDropdown').jqxDropDownList({
+                     enableSelection: true,
+                     filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
+                         310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
+                     renderer: function (index, label, value) {
+                         var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
+                         return table;
+                     },
+                     selectionRenderer: function (element, index, label, value) {
+                         var text = label.replace(/\n/g, " ");
+                         return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
+                     }
+                 });
+             });
     }; //addEvent end
 
     function getIntangibleAssetsOrderDetail() {
@@ -281,7 +313,7 @@ var $page = function () {
             $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             $("#PurchaseGoods").attr("disabled", true);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
-            initComboBox();
+            initPaymentInformationComboBox();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#AssetDescription").val(msg.AssetDescription);
@@ -539,6 +571,7 @@ function initPayCompanyDropdown() {
     };
     var dataAdapter = new $.jqx.dataAdapter(source);
     $('#PayCompanyDropdown').jqxDropDownList({
+        disabled:false,
         filterable: true, selectedIndex: 2, source: dataAdapter, displayMember: "Descrption", dropDownWidth:
             310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
         renderer: function (index, label, value) {
@@ -551,7 +584,7 @@ function initPayCompanyDropdown() {
         }
     });
 }
-function initComboBox() {
+function initPaymentInformationComboBox() {
     //付款单位及相关账户信息
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",

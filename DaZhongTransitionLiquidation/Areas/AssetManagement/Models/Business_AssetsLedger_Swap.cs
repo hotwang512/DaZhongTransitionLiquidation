@@ -136,7 +136,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public decimal? EXP_ACCOUNT { get; set; }
+        public string EXP_ACCOUNT { get; set; }
 
         /// <summary>
         /// Desc:对应资产分配界面的＄?弹性域段1

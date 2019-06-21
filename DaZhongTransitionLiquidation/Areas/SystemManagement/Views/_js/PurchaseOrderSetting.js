@@ -275,7 +275,7 @@ var $page = function () {
                 columnsResize: true,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '配置供应商', datafield: 'Setting', hidden: false, width: 90, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingRenderer },
+                    { text: '配置供应商', datafield: 'Setting',width: 90, align: 'center', cellsAlign: 'center',hidden:true, cellsRenderer: cellsSettingRenderer },
                     //{ text: '配置部门', datafield: 'SettingDepartment', hidden: false, width: 70, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingDepartmentRenderer },
                     //{ text: '配置资产管理公司', datafield: 'SettingAssetManagementCompany', hidden: false, width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingAssetManagementCompany},
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center' },

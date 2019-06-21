@@ -91,7 +91,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                             .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
 
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
-                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
+                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|" + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
                         //根据供应商账号找到供应商类别
                         pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
                             .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;

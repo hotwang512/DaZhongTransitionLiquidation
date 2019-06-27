@@ -1,51 +1,41 @@
-﻿using DaZhongTransitionLiquidation.Common.Pub;
-using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
-using DaZhongTransitionLiquidation.Infrastructure.Dao;
-using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
-using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
-using SyntacticSugar;
-using SqlSugar;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
-using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
-using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
-using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
+using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
+using SqlSugar;
+using SyntacticSugar;
 using Business_AssetOrderDetails = DaZhongTransitionLiquidation.Areas.AssetPurchase.Models.Business_AssetOrderDetails;
 
-namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
+namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrder
 {
-
-    public class FixedAssetsOrderDetailController : BaseController
+    public class TaxFeeOrderDetailController : BaseController
     {
-        // GET: AssetManagement/FixedAssetsOrderDetail
-        public FixedAssetsOrderDetailController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        // GET: AssetPurchase/TaxFeeOrderDetail
+        public TaxFeeOrderDetailController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
 
         }
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
-            var vguid = Request["VGUID"].TryToGuid();
-            if (vguid != Guid.Empty)
-            {
-                ViewBag.SubmitStatus = GetSubmitStatus(Request["VGUID"].TryToGuid());
-            }
             return View();
         }
-        public JsonResult SaveFixedAssetsOrder(Business_FixedAssetsOrder sevenSection)
+        public JsonResult SaveTaxFeeOrder(Business_TaxFeeOrder sevenSection)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -53,7 +43,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == sevenSection.VGUID);
+                    var model = db.Queryable<Business_TaxFeeOrder>().Where(c => c.VGUID == sevenSection.VGUID);
                     if (model.Count() == 0)
                     {
                         var orderNumberLeft = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
@@ -71,11 +61,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
                         }
                         maxOrderNumRight = maxOrderNumRight + 1;
-                        sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4,'0');
+                        sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
                         sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
-                        db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
+                        db.Insertable<Business_TaxFeeOrder>(sevenSection).ExecuteCommand();
 
                         //请求清算平台、待付款请求生成支付凭证接口
                         var pendingPaymentmodel = new PendingPaymentModel();
@@ -87,10 +77,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
                         pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                         pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-                        var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
-                            .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
                         var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
-                            .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
+                            .Where(x => x.BusinessSubItem1 == sevenSection.PayItemCode).First();
 
                         pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
                         pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|"
@@ -109,19 +97,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
                         pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
-                        pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
-                        pendingPaymentmodel.Summary = sevenSection.AssetDescription;
+                        pendingPaymentmodel.Amount = sevenSection.SumPayment.ToString();
+                        pendingPaymentmodel.Summary = sevenSection.PurchaseDescription;
                         pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
 
                         var apiReault = PendingPaymentApi(pendingPaymentmodel);
                         var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
                         if (pendingRedult.success)
                         {
-                            var orderModel = db.Queryable<Business_FixedAssetsOrder>()
+                            var orderModel = db.Queryable<Business_TaxFeeOrder>()
                                 .Where(x => x.VGUID == sevenSection.VGUID).First();
                             orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                             orderModel.PaymentVoucherUrl = pendingRedult.data.url;
-                            db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl,x.PaymentVoucherVguid }).ExecuteCommand();
+                            db.Updateable<Business_TaxFeeOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
                         }
                         else
                         {
@@ -132,7 +120,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     {
                         sevenSection.ChangeDate = DateTime.Now;
                         sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_FixedAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus,x.OrderNumber }).ExecuteCommand();
+                        db.Updateable<Business_TaxFeeOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus, x.OrderNumber }).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
@@ -142,7 +130,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
 
             return Json(resultModel);
         }
-
         public string JoinStr(List<Business_AssetAttachmentList> list)
         {
             var strArr = "";
@@ -160,98 +147,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 return strArr;
             }
         }
-        public JsonResult GetFixedAssetsOrder(Guid vguid)
+        public JsonResult GetTaxFeeOrder(Guid vguid)
         {
-            Business_FixedAssetsOrder model = new Business_FixedAssetsOrder();
+            Business_TaxFeeOrder model = new Business_TaxFeeOrder();
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                model = db.Queryable<Business_FixedAssetsOrder>().Single(x => x.VGUID == vguid);
+                model = db.Queryable<Business_TaxFeeOrder>().Single(x => x.VGUID == vguid);
             });
             return Json(model, JsonRequestBehavior.AllowGet); ;
-        }
-
-        public JsonResult GetAssetOrderDetails(Guid AssetsOrderVguid,Guid PurchaseOrderSettingVguid)
-        {
-            var listFixedAssetsOrder = new List<Business_AssetOrderDetails>();
-            DbBusinessDataService.Command(db =>
-            {
-                //主信息
-                if (db.Queryable<Business_AssetOrderDetails>().Any(x => x.AssetsOrderVguid == AssetsOrderVguid))
-                {
-                    listFixedAssetsOrder = db.Queryable<Business_AssetOrderDetails>().Where(x => x.AssetsOrderVguid == AssetsOrderVguid).OrderBy(c => c.AssetManagementCompany).ToList();
-                }
-            });
-            if (listFixedAssetsOrder.Count == 0)
-            {
-                listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetsOrderVguid, PurchaseOrderSettingVguid);
-            }
-            return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet); ;
-        }
-
-        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(Guid AssetsOrderVguid,Guid PurchaseOrderSettingVguid)
-        {
-            var cache = CacheManager<Sys_User>.GetInstance();
-            var list = new List<Business_AssetOrderDetails>();
-            var listCompany = new List<string>();
-            //获取采购物品配置的资产管理公司
-            DbBusinessDataService.Command(db =>
-            {
-                var listManagementCompany = db.Queryable<Business_PurchaseManagementCompany>()
-                    .Where(c => c.PurchaseOrderSettingVguid == PurchaseOrderSettingVguid && c.IsCheck == true).ToList();
-                foreach (var item in listManagementCompany)
-                {
-                    if (!db.Queryable<Business_AssetOrderDetails>()
-                        .Any(c => c.AssetsOrderVguid == AssetsOrderVguid && c.AssetManagementCompany == item.ManagementCompany))
-                    {
-                        var model = new Business_AssetOrderDetails();
-                        model.VGUID = Guid.NewGuid();
-                        model.AssetsOrderVguid = AssetsOrderVguid;
-                        model.CreateDate = DateTime.Now;
-                        model.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        model.AssetManagementCompany = item.ManagementCompany;
-                        list.Add(model);
-                    }
-                }
-                if (list.Count > 0)
-                {
-                    db.Insertable<Business_AssetOrderDetails>(list).ExecuteCommand();
-                }
-            });
-            return list.OrderBy(c => c.AssetManagementCompany).ToList();
-        }
-
-        public JsonResult DeleteApprovalFile(Guid vguid)
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            DbBusinessDataService.Command(db =>
-            {
-                var result = db.Ado.UseTran(() =>
-                {
-                    var updateObj = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == vguid).First();
-                    updateObj.ApprovalFormFileName = "";
-                    updateObj.ApprovalFormFilePath = "";
-                    db.Updateable(updateObj).ExecuteCommand();
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-            });
-            return Json(resultModel);
-        }
-        public JsonResult UpdateAssetNum(Guid vguid, int AssetNum)
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            DbBusinessDataService.Command(db =>
-            {
-                var result = db.Ado.UseTran(() =>
-                {
-                    var updateObj = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == vguid).First();
-                    db.Updateable(updateObj).UpdateColumns(it => new { it.AssetNum }).ReSetValue(it => it.AssetNum == AssetNum).ExecuteCommand();
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-            });
-            return Json(resultModel);
         }
         public JsonResult UploadLocalFile(Guid Vguid, HttpPostedFileBase File)
         {
@@ -292,50 +196,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             }
             return Json(resultModel);
         }
-        public JsonResult UploadContractFile(Guid Vguid, HttpPostedFileBase File)
-        {
-            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
-            var cache = CacheManager<Sys_User>.GetInstance();
-            if (File != null)
-            {
-                var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
-                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "PurchaseContract\\" + newFileName;
-                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
-                try
-                {
-                    File.SaveAs(filePath);
-                    DbBusinessDataService.Command(db =>
-                    {
-                        var result = db.Ado.UseTran(() =>
-                        {
-                            var sevenSection = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == Vguid).First();
-                            if (sevenSection != null)
-                            {
-                                sevenSection.ContractFilePath = uploadPath;
-                                sevenSection.ContractName = File.FileName;
-                                sevenSection.ChangeDate = DateTime.Now;
-                                sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                                db.Updateable(sevenSection).UpdateColumns(x => new {
-                                    x.ChangeDate,
-                                    x.ChangeUser,
-                                    x.ContractFilePath,
-                                    x.ContractName
-                                }).ExecuteCommand();
-                            }
-                        });
-                        resultModel.IsSuccess = result.IsSuccess;
-                        resultModel.ResultInfo = uploadPath;
-                        resultModel.ResultInfo2 = File.FileName;
-                        resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-                    });
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
-                }
-            }
-            return Json(resultModel);
-        }
         public JsonResult GetUseDepartment()
         {
             var departmentData = new List<Business_SevenSection>();
@@ -347,34 +207,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPurchaseGoods(int OrderCategory,Guid[] PurchaseDepartment)
-        {
-            var PurchaseDepartmentStr = "";
-            
-            var orderTypeData = new List<Business_PurchaseOrderSetting>();
-            DbBusinessDataService.Command(db =>
-            {
-                if (PurchaseDepartment == null)
-                {
-                    orderTypeData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.OrderCategory == OrderCategory).ToList();
-                }
-                else
-                {
-                    foreach (var str in PurchaseDepartment)
-                    {
-                        PurchaseDepartmentStr = PurchaseDepartmentStr + str + "','";
-                    }
-
-                    PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0,PurchaseDepartmentStr.Length - 3);
-                    orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
-                    Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
-                    WHERE OrderCategory = '0' And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
-                }
-            });
-            return Json(orderTypeData, JsonRequestBehavior.AllowGet);
-        }
-        
-        public JsonResult SubmitFixedAssetsOrder(Guid vguid)
+        public JsonResult SubmitTaxFeeOrder(Guid vguid)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -382,11 +215,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
+                    var model = db.Queryable<Business_TaxFeeOrder>().Where(c => c.VGUID == vguid).First();
                     model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
                     model.SubmitDate = DateTime.Now;
                     model.SubmitUser = cache[PubGet.GetUserKey].UserName;
-                    db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                    db.Updateable<Business_TaxFeeOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -396,23 +229,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
         }
         public int GetSubmitStatus(Guid vguid)
         {
-            var model = new Business_FixedAssetsOrder();
+            var model = new Business_TaxFeeOrder();
             DbBusinessDataService.Command(db =>
             {
-                model = db.Queryable<Business_FixedAssetsOrder>().Single(x => x.VGUID == vguid);
+                model = db.Queryable<Business_TaxFeeOrder>().Single(x => x.VGUID == vguid);
             });
             return model.SubmitStatus.TryToInt();
         }
-        public JsonResult GetCustomerBankInfoList(string PurchaseOrderSetting)
+        public JsonResult GetCustomerBankInfoList(string PayItem)
         {
-            var PurchaseOrderSettingGuid = PurchaseOrderSetting.TryToGuid();
-            if (PurchaseOrderSettingGuid != Guid.Empty)
+            if (PayItem != "")
             {
                 var jsonResult = new JsonResultModel<v_Business_CustomerBankInfo>();
                 DbBusinessDataService.Command(db =>
                 {
-                    var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseOrderSettingGuid).First().BusinessSubItem;
-                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
+                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == PayItem).First().VGUID.ToString();
                     var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVguid).ToList();
                     if (data.Count > 0)
                     {
@@ -462,15 +293,14 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCompanyBankInfoDropdownByCode(Guid PurchaseOrderSetting)
+        public JsonResult GetCompanyBankInfoDropdownByCode(string PayItem)
         {
             var cache = CacheManager<Sys_User>.GetInstance();
             var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
             var list = new List<Business_UserCompanySetDetail>();
             DbBusinessDataService.Command(db =>
             {
-                var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseOrderSetting).First().BusinessSubItem;
-                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
+                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == PayItem).First().VGUID.ToString();
                 var data = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid).ToList();
                 if (data.Count > 0)
                 {
@@ -480,19 +310,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-
-        //public JsonResult GetCompanyBankInfo(Guid Vguid)
-        //{
-        //    var cache = CacheManager<Sys_User>.GetInstance();
-        //    var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
-        //    var model = new Business_CompanyBankInfo();
-        //    DbBusinessDataService.Command(db =>
-        //    {
-        //        var sevenSection = db.Queryable<Business_SevenSection>().Where(c => c.VGUID == Vguid).First();
-        //        model = db.Queryable<Business_CompanyBankInfo>().Where(c => c.CompanyCode == sevenSection.Code && c.AccountModeCode == AccountModeCode && c.BankStatus).First();
-        //    });
-        //    return Json(model, JsonRequestBehavior.AllowGet);
-        //}
+    
         public JsonResult GetCompanyBankInfo(Guid Vguid)
         {
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -503,7 +321,6 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(model, JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult UploadToImageServer(Guid Vguid, string ImageBase64Str, string AttachmentType)
         {
@@ -612,21 +429,21 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             var imageServerUrl = ConfigSugar.GetAppString("ImageServerUrl");
             List<Business_AssetAttachmentList> BAList = new List<Business_AssetAttachmentList>();
             DbBusinessDataService.Command(db =>
-                {
-                    BAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID)
-                        .ToList();
-                });
+            {
+                BAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID)
+                    .ToList();
+            });
             BAList.ForEach(x => { x.Attachment = imageServerUrl + x.Attachment; });
             return Json(BAList, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPaymentInformationByBusinessSubItem(Guid PurchaseGoodsVguid)
+        public JsonResult GetPaymentInformationByBusinessSubItem(Guid PayItemVguid)
         {
             var cache = CacheManager<Sys_User>.GetInstance();
             var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
             var result = new Business_UserCompanySetDetail();
             DbBusinessDataService.Command(db =>
             {
-                var goodsData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseGoodsVguid)
+                var goodsData = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PayItemVguid)
                     .First();
                 var businessTypeSetData = db.Queryable<v_Business_BusinessTypeSet>()
                     .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
@@ -659,7 +476,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
 
         public JsonResult PendingPaymentAttachmentUpload(Guid PaymentVoucherVguid, Guid Vguid)
         {
-            var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
@@ -687,7 +504,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                 var apiReault = PendingPaymentAttachmentApi(pendingPaymentmodel, PaymentVoucherVguid);
                 var pendingRedult = apiReault.JsonToModel<PendingResultModel>();
                 resultModel.IsSuccess = pendingRedult.success;
-                resultModel.Status = pendingRedult.success ? "1":"0";
+                resultModel.Status = pendingRedult.success ? "1" : "0";
                 resultModel.ResultInfo = pendingRedult.code;
                 resultModel.ResultInfo2 = pendingRedult.message;
                 if (!pendingRedult.success)
@@ -697,7 +514,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        public string PendingPaymentAttachmentApi(PendingPaymentModel model,Guid PaymentVoucherVguid)
+        public string PendingPaymentAttachmentApi(PendingPaymentModel model, Guid PaymentVoucherVguid)
         {
             var url = ConfigSugar.GetAppString("PendingPaymentAttachmentUrl");
             var data = "{" +
@@ -810,6 +627,32 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
                 return "";
             }
+        }
+
+        public JsonResult GetPayItem()
+        {
+            var list = new List<BusinessProjectModel>();
+            DbBusinessDataService.Command(db =>
+            {
+                list = db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE BusinessSubItem1 LIKE 'cz|03|0301|%'").ToList();
+            });
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetFeeByVehicleModel(string PayItem, string VehicleModel)
+        {
+            var model = new Business_VehicleExtrasFeeSetting();
+            DbBusinessDataService.Command(db =>
+                {
+                    if (db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x =>
+                        x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel))
+                    {
+                        model = db.Queryable<Business_VehicleExtrasFeeSetting>().Where(x =>
+                            x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel).First();
+                    }
+                });
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
     }
 }

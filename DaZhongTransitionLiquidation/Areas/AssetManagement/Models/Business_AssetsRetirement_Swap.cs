@@ -71,7 +71,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public DateTime? PERIOD { get; set; }
+        public string PERIOD { get; set; }
 
         /// <summary>
         /// Desc:
@@ -164,12 +164,35 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// </summary>           
         public DateTime? LAST_UPDATE_DATE { get; set; }
 
+        public string ASSET_ID { get; set; }
+
         /// <summary>
-        /// Desc:
+        /// Desc:资产处置方式
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public Guid? ASSET_ID { get; set; }
+        public string DISPOSA_TYPE { get; set; }
+
+        /// <summary>
+        /// Desc:资产处置金额
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DISPOSA_AMOUNT { get; set; }
+
+        /// <summary>
+        /// Desc:资产处置税金
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DISPOSAL_TAX { get; set; }
+
+        /// <summary>
+        /// Desc:资产处置损益
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DISPOSAL_PL { get; set; }
 
     }
 }

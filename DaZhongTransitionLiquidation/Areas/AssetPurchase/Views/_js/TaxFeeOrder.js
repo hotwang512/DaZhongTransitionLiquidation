@@ -9,9 +9,8 @@ var selector = {
 var isEdit = false;
 var vguid = "";
 var $page = function () {
-
     this.init = function () {
-        initSelectPurchaseGoods();
+        initSelectVehicleModel();
         addEvent();
     }
     //所有事件
@@ -29,7 +28,7 @@ var $page = function () {
         });
         //新增
         $("#btnAdd").on("click", function () {
-            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index";
+            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index";
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -50,25 +49,6 @@ var $page = function () {
                 WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
-        //提交
-        //$("#btnSubmit").on("click", function () {
-        //    var selection = [];
-        //    var grid = $("#jqxTable");
-        //    var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-        //    checedBoxs.each(function () {
-        //        var th = $(this);
-        //        if (th.is(":checked")) {
-        //            var index = th.attr("index");
-        //            var data = grid.jqxDataTable('getRows')[index];
-        //            selection.push(data.VGUID);
-        //        }
-        //    });
-        //    if (selection.length < 1) {
-        //        jqxNotification("请选择您要提交的数据！", null, "error");
-        //    } else {
-        //        WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
-        //    }
-        //});
         //填写信息后提交，调用清算平台、待付款请求生成支付凭证接口
         //先调用接口，成功后再提交
         $("#btnSubmit").on("click", function () {
@@ -87,29 +67,28 @@ var $page = function () {
                 jqxNotification("请选择一条数据！", null, "error");
             } else {
                 $.ajax({
-                    url: "/AssetPurchase/FixedAssetsOrder/SubmitFixedAssetsOrder",
+                    url: "/AssetPurchase/TaxFeeOrder/SubmitTaxFeeOrder",
                     data: { vguid: selection[0] },
                     type: "post",
                     success: function (msg) {
                         switch (msg.Status) {
-                        case "0":
-                            jqxNotification("提交失败！", null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("提交成功！", null, "success");
-                            $("#jqxTable").jqxDataTable('updateBoundData');
-                            break;
+                            case "0":
+                                jqxNotification("提交失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("提交成功！", null, "success");
+                                $("#jqxTable").jqxDataTable('updateBoundData');
+                                break;
                         }
                     }
                 });
             }
         });
     }; //addEvent end
-
     //删除
     function dele(selection) {
         $.ajax({
-            url: "/AssetPurchase/FixedAssetsOrder/DeleteFixedAssetsOrder",
+            url: "/AssetPurchase/TaxFeeOrder/DeleteTaxFeeOrder",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -132,8 +111,8 @@ var $page = function () {
     //提交
     function submit(selection) {
         $.ajax({
-            url: "/AssetPurchase/FixedAssetsOrder/SubmitFixedAssetsOrder",
-            data: { vguids: selection},
+            url: "/AssetPurchase/TaxFeeOrder/SubmitFixedAssetsOrder",
+            data: { vguids: selection },
             //traditional: true,
             type: "post",
             success: function (msg) {
@@ -149,17 +128,16 @@ var $page = function () {
             }
         });
     }
-    function initSelectPurchaseGoods() {
-        //使用部门
+    function initSelectVehicleModel() {
         $.ajax({
-            url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
-            data: { "OrderCategory": 0},//固定资产
-            type: "POST",
+            url: "/Systemmanagement/VehicleExtrasFeeSettingDetail/GetVehicleModelDropDown",
+            type: "GET",
             dataType: "json",
             async: false,
             success: function (msg) {
-                uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
-                $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+                debugger;
+                uiEngineHelper.bindSelect('#VehicleModel', msg, "Code", "Descrption");
+                $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
                 debugger;
             }
         });
@@ -173,15 +151,13 @@ var $page = function () {
                     { name: "checkbox", type: null },
                     { name: 'VGUID', type: 'string' },
                     { name: 'OrderNumber', type: 'string' },
-                    { name: 'PurchaseGoods', type: 'string' },
-                    { name: 'PaymentInformationVguid', type: 'string' },
+                    { name: 'PayItem', type: 'string' },
+                    { name: 'VehicleModel', type: 'string' },
                     { name: 'PaymentInformation', type: 'string' },
                     { name: 'OrderQuantity', type: 'number' },
-                    { name: 'PurchasePrices', type: 'float' },
-                    { name: 'ContractAmount', type: 'float' },
-                    { name: 'AssetDescription', type: 'string' },
-                    { name: 'AssetDescription', type: 'string' },
-                    { name: 'AcceptanceDate', type: 'date' },
+                    { name: 'UnitPrice', type: 'float' },
+                    { name: 'SumPayment', type: 'float' },
+                    { name: 'PurchaseDescription', type: 'string' },
                     { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
                     { name: 'ContractFilePath', type: 'string' },
@@ -195,8 +171,8 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val() },
-                url: "/AssetPurchase/FixedAssetsOrder/GetFixedAssetsOrderListDatas"   //获取数据源的路径
+                data: { "VehicleModelCode": $("#VehicleModel").val(), "SubmitStatus": $("#SubmitStatus").val() },
+                url: "/AssetPurchase/TaxFeeOrder/GetOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -219,16 +195,13 @@ var $page = function () {
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '付款信息关联ID', datafield: 'PaymentInformationVguid', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '付款项目', datafield: 'PayItem', width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: '车型', datafield: 'VehicleModel', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '采购数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '预计验收日期', datafield: 'AcceptanceDate', width: 150, align: 'center', cellsAlign: 'center' ,cellsformat: "yyyy-MM-dd HH:mm:ss",hidden:true },
-                    { text: '预计付款日期', datafield: 'PaymentDate', width: 150, align: 'center', cellsAlign: 'center', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '单价', datafield: 'UnitPrice', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '合同金额', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '采购说明', datafield: 'PurchaseDescription', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款方式', datafield: 'PayType', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款公司', datafield: 'PayCompany', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -244,7 +217,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID;
+            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID;
         });
     }
 
@@ -252,12 +225,12 @@ var $page = function () {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
     function cellsRendererSubmit(row, column, value, rowData) {
-        if (value == 2) {
-            return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
+        if (value == 1) {
+            return '<span style="margin: 4px; margin-top:8px;">待支付</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">待发起支付</span>';
-        } else if (value == 1) {
-            return '<span style="margin: 4px; margin-top:8px;">待支付</span>';
+        } else if (value == 2) {
+            return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
         }
     }
     function rendererFunc() {

@@ -955,7 +955,7 @@
     @******************************************************资产管理******************************************************@
         @if (true)//isadmin || hasReportPermission2)
         {
-            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -975,7 +975,7 @@
                 </table>
                 
                 <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
-                    <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+                    <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                         <table>
                             @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
                             {
@@ -990,6 +990,15 @@
                                 <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/IntangibleAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                     <td class="menue_text">无形资产</td>
+                                    <td></td>
+                                </tr>
+                            }
+
+                            @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
+                            {
+                                <tr class="menue_item" id="TaxFeeOrder_AssetPurchase" pageurl="/AssetPurchase/TaxFeeOrder/Index">
+                                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                    <td class="menue_text">车辆税费</td>
                                     <td></td>
                                 </tr>
                             }
@@ -1018,7 +1027,7 @@
                     }
                 </table>
             </div>
-            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1031,7 +1040,7 @@
                     <table>
                         @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="AssetsMaintenance_NewAssets" pageurl="/AssetManagement/AssetsMaintenance/Index">
+                            <tr class="menue_item" id="AssetsMaintenance_NewAssets" pageurl="">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">流程管理</td>
                                 <td></td>
@@ -1040,7 +1049,7 @@
                     </table>
                 </div>
 
-            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                 <table style="cursor: pointer;">
                     <tr>
                         <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1093,7 +1102,7 @@
                     }
                 </table>
             </div>
-            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                 <table style="cursor: pointer;">
                     <tr>
                         <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1123,7 +1132,7 @@
                 </table>
             </div>
             
-            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                 <table style="cursor: pointer;">
                     <tr>
                         <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1160,7 +1169,7 @@
                     }
                 </table>
             </div>
-            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation" style="display: none;">
+            <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                 <table style="cursor: pointer;">
                     <tr>
                         <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1181,7 +1190,7 @@
                     }
                     @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "车管系统清册" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="">
+                        <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">车管系统清册</td>
                             <td></td>
@@ -1191,7 +1200,7 @@
                     {
                         <tr class="menue_item" id="AssetsRetirement_AssetManagement" pageurl="/AssetManagement/AssetsRetirement/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">资产报废清册</td>
+                            <td class="menue_text">Oracle资产报废清册</td>
                             <td></td>
                         </tr>
                     }
@@ -1637,6 +1646,11 @@
                             <tr class="menue_item" id="PurchaseOrderSetting_PurchaseOrderSetting" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">采购资产基础信息配置</td>
+                                <td></td>
+                            </tr>
+                            <tr class="menue_item" id="PurchaseFaxOrderSetting_PurchaseOrderSetting" pageurl="/Systemmanagement/VehicleExtrasFeeSetting/Index?Status=1">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">车辆类资产费用标准</td>
                                 <td></td>
                             </tr>
                         }

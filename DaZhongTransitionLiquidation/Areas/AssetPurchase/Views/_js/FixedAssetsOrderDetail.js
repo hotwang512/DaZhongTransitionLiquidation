@@ -668,7 +668,6 @@ function initTable() {
         localdata: vehicleDefaultData,
         datatype: "json",
         updaterow: function (rowid, rowdata, commit) {
-            
             $.ajax({
                 url: "/AssetPurchase/FixedAssetsOrderDetail/UpdateAssetNum",
                 data: { vguid: rowdata.VGUID, AssetNum: rowdata.AssetNum },
@@ -746,7 +745,6 @@ function cellsrenderer(row, column, value, rowData) {
     }
 }
 function getDetailData() {
-    
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
         data: { AssetsOrderVguid: $("#VGUID").val(), PurchaseOrderSettingVguid: $("#PurchaseGoods").val() },

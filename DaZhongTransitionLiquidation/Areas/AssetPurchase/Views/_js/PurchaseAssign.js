@@ -185,16 +185,32 @@ var $page = function () {
         var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
         debugger;
         if (rowData.SubmitStatus == 0) {
-            return '<div style="margin: 8px; margin-top:6px;">' +
-                '<a style="cursor:pointer"  onclick="Import(\'' +
-                FixedAssetsOrderVguid +
-                '\')" id="' +
-                FixedAssetsOrderVguid +
-                '">导入</a>' +
-                '&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-                FixedAssetsOrderVguid +
-                '\')">提交</a>' +
-                '</div>';
+            //出租车时导入Excel分配，其它需要手动分配
+            if (rowData.PurchaseGoods == "出租车") {
+                return '<div style="margin: 8px; margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="Import(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')" id="' +
+                    FixedAssetsOrderVguid +
+                    '">导入</a>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')">提交</a>' +
+                    '</div>';
+            } else {
+                return '<div style="margin: 8px; margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="Import(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')" id="' +
+                    FixedAssetsOrderVguid +
+                    '">导入</a>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')">提交</a>' +
+                    '</div>';
+            }
         } else {
             return '<div style="margin-top:6px;">' +
                 '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
@@ -330,6 +346,9 @@ function ViewAssign(vguid) {
             source: dataAdapter,
             statusbarheight: 25,
             enabletooltips: true,
+            pageable: true,
+            columnsresize: true,
+            pagesize: 5,
             selectionmode: 'singlerow',
             columns: [
                 { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },

@@ -176,11 +176,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         var assign = new Excel_PurchaseAssignModel();
-                        assign.EngineNumber = dt.Rows[i][0].ToString();
-                        assign.ChassisNumber = dt.Rows[i][1].ToString();
+                        assign.ChassisNumber = dt.Rows[i][0].ToString();
+                        assign.EngineNumber = dt.Rows[i][1].ToString();
                         assign.AssetManagementCompany = dt.Rows[i][2].ToString();
                         assign.BelongToCompany = dt.Rows[i][3].ToString();
-                        assign.AssetNum = dt.Rows[i][4].TryToInt();
+                        assign.UseDepartment = dt.Rows[i][4].ToString();
                         list.Add(assign);
                     }
                     //校验总数是否一致，校验管理公司是否一致
@@ -189,23 +189,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         var consistent = true;
                         var result = db.Ado.UseTran(() =>
                         {
-                            var orderDetails = db.Queryable<Business_AssetOrderDetails>()
-                                .Where(c => c.AssetsOrderVguid == vguid).ToList();
-                            if (orderDetails.Sum(c => c.AssetNum) != list.Sum(c => c.AssetNum))
-                            {
-                                consistent = false;
-                                resultModel.ResultInfo = "订单总数不一致";
-                            }
-                            foreach (var item in list)
-                            {
-                                if (!orderDetails.Any(x => x.AssetManagementCompany == item.AssetManagementCompany))
-                                {
-                                    consistent = false;
-                                    resultModel.ResultInfo2 = "管理公司不一致";
-                                }
-                            }
-                            if (consistent)
-                            {
+                            //var orderDetails = db.Queryable<Business_AssetOrderDetails>()
+                            //    .Where(c => c.AssetsOrderVguid == vguid).ToList();
+                            //if (orderDetails.Sum(c => c.AssetNum) != list.Sum(c => c.AssetNum))
+                            //{
+                            //    consistent = false;
+                            //    resultModel.ResultInfo = "订单总数不一致";
+                            //}
+                            //foreach (var item in list)
+                            //{
+                            //    if (!orderDetails.Any(x => x.AssetManagementCompany == item.AssetManagementCompany))
+                            //    {
+                            //        consistent = false;
+                            //        resultModel.ResultInfo2 = "管理公司不一致";
+                            //    }
+                            //}
+                            //if (consistent)
+                            //{
                                 //写入数据库
                                 var sevenSectionList = new List<Business_AssetOrderBelongTo>();
                                 foreach (var item in list)
@@ -215,7 +215,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     belongTo.EngineNumber = item.EngineNumber;
                                     belongTo.ChassisNumber = item.ChassisNumber;
                                     belongTo.AssetManagementCompany = item.AssetManagementCompany;
-                                    belongTo.AssetNum = item.AssetNum;
+                                    belongTo.AssetNum = 1;
                                     belongTo.AssetsOrderVguid = vguid;
                                     belongTo.BelongToCompany = item.BelongToCompany;
                                     belongTo.CreateDate = DateTime.Now;
@@ -224,7 +224,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 }
                                 db.Deleteable<Business_AssetOrderBelongTo>().Where(c => c.AssetsOrderVguid == vguid).ExecuteCommand();
                                 db.Insertable<Business_AssetOrderBelongTo>(sevenSectionList).ExecuteCommand();
-                            }
+                            //}
                         });
                         resultModel.IsSuccess = consistent && result.IsSuccess;
                         resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";

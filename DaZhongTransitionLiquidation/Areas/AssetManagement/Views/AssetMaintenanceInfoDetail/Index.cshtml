@@ -59,150 +59,195 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">主信息</span></div>
     </div>
-    <div class="body_mk" style="height: 800px;">
+    <div class="body_mk" style="height: 220px;">
         <table id="AssetMaintenance" style="width:100%;margin-top:20px">
             <tr style="height:50px">
                 <td style="text-align:right;">GroupID：</td>
                 <td style="text-align:left;"><input id="GROUP_ID" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align:right;">组织编号：</td>
-                <td style="text-align:left;"><input id="ORGANIZATION_NUM" type="text" style="width:180px;" class="input_text form-control" validatetype="required"></td>
-                <td style="text-align:right;">发动机号：</td>
-                <td style="text-align:left;"><input id="ENGINE_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">车架号：</td>
-                <td style="text-align:left;"><input id="CHASSIS_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-
-                <td style="text-align:right;">资产账簿：</td>
-                <td style="text-align:left;"><input id="BOOK_TYPE_CODE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">车牌号：</td>
+                <td style="text-align:left;"><input id="PLATE_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required"></td>
                 <td style="text-align:right;">标签号：</td>
                 <td style="text-align:left;"><input id="TAG_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">说明：</td>
-                <td style="text-align:left;"><input id="DESCRIPTION" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align:right;">数量：</td>
-                <td style="text-align:left;"><input id="QUANTITY" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align:right;">资产主类：</td>
-                <td style="text-align:left;"><input id="ASSET_CATEGORY_MAJOR" type="text" style="width:180px;" class="input_text form-control"/></td>
+                <td style="text-align:right;">车辆简称：</td>
+                <td style="text-align:left;"><input id="VEHICLE_SHORTNAME" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
+
+                <td style="text-align:right;">管理公司：</td>
+                <td style="text-align:left;"><input id="MANAGEMENT_COMPANY" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">资产所属公司：</td>
+                <td style="text-align:left;"><input id="BELONGTO_COMPANY" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">资产次类：</td>
+                <td style="text-align:right;">Oracle资产编号：</td>
+                <td style="text-align:left;"><input id="ASSET_ID" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align:right;">车辆状态：</td>
+                <td style="text-align:left;"><input id="VEHICLE_STATE" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align:right;">营运状态：</td>
+                <td style="text-align:left;"><input id="OPERATING_STATE" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align:right;">资产说明：</td>
+                <td style="text-align:left;"><input id="DESCRIPTION" type="text" style="width:180px;" class="input_text form-control" /></td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">车辆基本信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 220px;">
+        <table style="width:100%;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align:right;">发动机号：</td>
+                <td style="text-align:left;"><input id="ENGINE_NUMBER" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">车架号：</td>
+                <td style="text-align:left;"><input id="CHASSIS_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align:right;">出厂日期：</td>
+                <td style="text-align:left;"><input id="PRODUCTION_DATE" type="text" style="width: 180px;" class="input_text form-control" validatetype="required" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align:right;">购买日期：</td>
+                <td style="text-align:left;"><input id="PURCHASE_DATE" type="text" style="width: 180px;" class="input_text form-control" validatetype="required" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
+                <td style="text-align:right;">上牌日期：</td>
+                <td style="text-align:left;"><input id="LISENSING_DATE" type="text" style="width: 180px;" class="input_text form-control" validatetype="required" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
+                <td style="text-align:right;">投产日期 ：</td>
+                <td style="text-align:left;"><input id="COMMISSIONING_DATE" type="text" style="width: 180px;" class="input_text form-control" validatetype="required" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
+            </tr>
+            <tr style="height:50px"><td style="text-align:right;">车龄：</td>
+                <td style="text-align:left;"><input id="VEHICLE_AGE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">退车日期：</td>
+                <td style="text-align:left;"><input id="BACK_CAR_DATE" type="text" style="width: 180px;" class="input_text form-control" validatetype="required" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
+                <td style="text-align:right;">燃料种类：</td>
+                <td style="text-align:left;"><input id="FUEL_TYPE" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align:right;">排量信息：</td>
+                <td style="text-align:left;"><input id="DELIVERY_INFORMATION" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">固定资产原值信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 210px;">
+        <table style="width: 100%; margin-top: 20px">
+            <tr style="height:50px">
+                <td style="text-align:right;">资产数量:</td><td style="text-align:left;"><input id="QUANTITY" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">资产原值:</td><td style="text-align:left;"><input id="ASSET_COST" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">裸车价:</td><td style="text-align:left;"><input id="NUDE_CAR_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align:right;">购置税:</td><td style="text-align:left;"><input id="PURCHASE_TAX" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">上牌费:</td><td style="text-align:left;"><input id="LISENSING_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">出库费:</td><td style="text-align:left;"><input id="OUT_WAREHOUSE_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align:right;">顶灯费:</td><td style="text-align:left;"><input id="DOME_LIGHT_FEE	" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">防劫费:</td><td style="text-align:left;"><input id="ANTI_ROBBERY_FEE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">装车费:</td><td style="text-align:left;"><input id="LOADING_FEE	" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align:right;">内顶费:</td><td style="text-align:left;"><input id="INNER_ROOF_FEE	" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">计价器:</td><td style="text-align:left;"><input id="TAXIMETER_FEE	" type="text" style="width:180px;" class="input_text form-control" /></td>
+            </tr>
+        </table>
+</div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">车辆处置信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 120px;">
+        <table style="width: 100%; margin-top: 20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">资产处置方式 ：</td><td style="text-align: left;"><input id="ASSET_DISPOSITION_TYPE" type="text" style="width: 180px;" class="input_text form-control"/></td>
+                <td style="text-align: right;">Oracle报废信息：</td><td style="text-align: left;"><input id="SCRAP_INFORMATION" type="text" style="width: 180px;" class="input_text form-control"/></td>
+                <td style="text-align: right;">资产处置金额 ：</td><td style="text-align: left;"><input id="DISPOSAL_AMOUNT" type="text" style="width: 180px;" class="input_text form-control"/></td>
+            </tr>
+            <tr style="height:50px">
+                <td style="text-align: right;">资产处置税金 ：</td><td style="text-align: left;"><input id="DISPOSAL_TAX" type="text" style="width: 180px;" class="input_text form-control"/></td>
+                <td style="text-align: right;">资产处置损益 ：</td><td style="text-align: left;"><input id="DISPOSAL_PROFIT_LOSS" type="text" style="width: 180px;" class="input_text form-control"/></td>
+                <td style="text-align: right;">退车车龄 ：</td><td style="text-align: left;"><input id="BAK_CAR_AGE" type="text" style="width: 180px;" class="input_text form-control"/></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">财务信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 320px;">
+        <table style="width: 100%; margin-top: 20px">
+            <tr style="height:50px">
+                <td style="text-align:right;">资产主类	：</td>
+                <td style="text-align:left;"><input id="ASSET_CATEGORY_MAJOR" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">资产次类	：</td>
                 <td style="text-align:left;"><input id="ASSET_CATEGORY_MINOR" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">启用日期：</td>
-                <td style="text-align:left;"><input id="ASSET_CREATION_DATE" type="text" style="width: 180px;" class="input_text form-control" validatetype="required" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
-                <td style="text-align:right;">当前成本：</td>
-                <td style="text-align:left;"><input id="ASSET_COST" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align:right;">使用年限(年)：</td>
+                <td style="text-align:left;"><input id="LIFE_YEARS" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">残值类型：</td>
-                <td style="text-align:left;"><input id="SALVAGE_TYPE" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align:right;">残值百分比：</td>
-                <td style="text-align:left;"><input id="SALVAGE_PERCENT" type="text" style="width:180px;" class="input_text form-control"/></td>
-                <td style="text-align:right;">残值金额：</td>
-                <td style="text-align:left;"><input id="SALVAGE_VALUE" type="text" style="width:180px;" class="input_text form-control"/></td>
+                <td style="text-align:right;">使用年限(月)：</td>
+                <td style="text-align:left;"><input id="LIFE_MONTHS" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">残值类型	：</td>
+                <td style="text-align:left;"><input id="SALVAGE_TYPE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">残值率：</td>
+                <td style="text-align:left;"><input id="SALVAGE_PERCENT" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">YTD折旧：</td>
-                <td style="text-align:left;"><input id="YTD_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control"/></td>
-                <td style="text-align:right;">累计折旧：</td>
-                <td style="text-align:left;"><input id="ACCT_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">折旧方法：</td>
+                <td style="text-align:right;">残值金额	：</td>
+                <td style="text-align:left;"><input id="SALVAGE_VALUE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">摊销标记	：</td>
+                <td style="text-align:left;"><input id="AMORTIZATION_FLAG" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">折旧方法	：</td>
                 <td style="text-align:left;"><input id="METHOD" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">使用寿命：</td>
-                <td style="text-align:left;"><input id="LIFE_MONTHS" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">摊销标记：</td>
-                <td style="text-align:left;"><input id="AMORTIZATION_FLAG" type="text" style="width:180px;" class="input_text form-control" /></td>
-
-                <td style="text-align:right;">费用账户组合段1：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT1" type="text" style="width:180px;" class="input_text form-control" disabled /></td>
+                <td style="text-align:right;">资产账簿	：</td>
+                <td style="text-align:left;"><input id="BOOK_TYPE_CODE" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">总账帐簿	：</td>
+                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT5" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">资产成本帐户：</td>
+                <td style="text-align:left;"><input id="ASSET_COST_ACCOUNT" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">费用账户组合段2：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT2" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">费用账户组合段3：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT3" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">费用账户组合段4：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT4" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-
+                <td style="text-align:right;">资产结算帐户：</td>
+                <td style="text-align:left;"><input id="ASSET_SETTLEMENT_ACCOUNT" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">折旧费用段：</td>
+                <td style="text-align:left;"><input id="DEPRECIATION_EXPENSE_SEGMENT" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">累计折旧帐户：</td>
+                <td style="text-align:left;"><input id="ACCT_DEPRECIATION_ACCOUNT" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
             <tr style="height:50px">
-                <td style="text-align:right;">费用账户组合段5：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT5" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">费用账户组合段6：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT6" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">费用账户组合段7：</td>
-                <td style="text-align:left;"><input id="EXP_ACCOUNT_SEGMENT7" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
+                <td style="text-align:right;">YTD折旧：</td>
+                <td style="text-align:left;"><input id="YTD_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">累计折旧：</td>
+                <td style="text-align:left;"><input id="ACCT_DEPRECIATION" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">财务信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 200px;">
+        <table style="width: 100%; margin-top: 20px">
             <tr style="height:50px">
-                <td style="text-align:right;">存放地点1：</td>
-                <td style="text-align:left;"><input id="FA_LOC_1" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align:right;">存放地点2：</td>
-                <td style="text-align:left;"><input id="FA_LOC_2" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-                <td style="text-align:right;">存放地点3：</td>
-                <td style="text-align:left;"><input id="FA_LOC_3" type="text" style="width:180px;" class="input_text form-control" validatetype="required" /></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">报废标识：</td>
-                <td style="text-align:left;"><input id="RETIRE_FLAG" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">报废数量：</td>
-                <td style="text-align:left;"><input id="RETIRE_QUANTITY" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">报废成本：</td>
-                <td style="text-align:left;"><input id="RETIRE_COST" type="text" style="width:180px;" class="input_text form-control" /></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">报废日期：</td>
-                <td style="text-align:left;"><input id="RETIRE_DATE" type="text" style="width: 180px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
-                <td style="text-align:right;">事务处理标识：</td>
-                <td style="text-align:left;"><input id="TRANSACTION_ID" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">最后更新时间：</td>
-                <td style="text-align:left;"><input id="LAST_UPDATE_DATE" type="text" style="width: 180px;" class="input_text form-control" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })"></td>
-
-
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">上牌费：</td>
-                <td style="text-align:left;"><input id="LISENSING_FEE" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">出库费：</td>
-                <td style="text-align:left;"><input id="OUT_WAREHOUSE_FEE" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">顶灯费：</td>
-                <td style="text-align:left;"><input id="DOME_LIGHT_FEE" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">防劫费：</td>
-                <td style="text-align:left;"><input id="ANTI_ROBBERY_FEE" type="text" style="width:180px;" class="input_text form-control"  disabled/></td>
-                <td style="text-align:right;">装车费：</td>
-                <td style="text-align:left;"><input id="LOADING_FEE" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align:right;">内顶费：</td>
-                <td style="text-align:left;"><input id="INNER_ROOF_FEE" type="text" style="width:180px;" class="input_text form-control"  disabled/></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">计价器：</td>
-                <td style="text-align:left;"><input id="TAXIMETER_FEE" type="text" style="width:180px;" class="input_text form-control"  disabled/></td>
-                <td style="text-align:right;">OBD：</td>
-                <td style="text-align:left;"><input id="OBD_FEE" type="text" style="width:180px;" class="input_text form-control"  disabled/></td>
-                <td style="text-align:right;">购置税：</td>
-                <td style="text-align:left;"><input id="PURCHASE_TAX" type="text" style="width:180px;" class="input_text form-control" disabled/></td>
-                <td style="text-align: right;"><input id="Status" name="Status" value="1" class="hide" /><input id="VGUID" name="VGUID" class="hide" /></td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align:right;">车牌号：</td>
-                <td style="text-align:left;"><input id="PLATE_NUMBER" type="text" style="width:180px;" class="input_text form-control" validatetype="required"/></td>
-                <td style="text-align:right;" class="status">处理状态：</td>
-                <td style="text-align:left;" class="status"><input id="STATUS" type="text" style="width:180px;" disabled class="input_text form-control" /></td>
-            </tr>
-            
-            <tr style="height:50px;display:none">
-                <td style="text-align:right;">创建日期：</td>
-                <td style="text-align:left;"><input id="CREATE_DATE" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">修改日期：</td>
-                <td style="text-align:left;"><input id="CHANGE_DATE" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">创建人：</td>
-                <td style="text-align:left;"><input id="CREATE_USER" type="text" style="width:180px;" class="input_text form-control" /></td>
-                <td style="text-align:right;">修改人：</td>
-                <td style="text-align:left;"><input id="CHANGE_USER" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">经营模式主类	：</td>
+                <td style="text-align:left;"><input id="MODEL_MAJOR" type="text" style="width:180px;" class="input_text form-control" /></td>
+                <td style="text-align:right;">模式子类	：</td>
+                <td style="text-align:left;" colspan="3"><input id="MODEL_MINOR" type="text" style="width:180px;" class="input_text form-control" /></td>
             </tr>
         </table>
     </div>

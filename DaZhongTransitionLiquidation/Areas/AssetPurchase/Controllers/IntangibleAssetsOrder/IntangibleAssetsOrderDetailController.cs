@@ -55,9 +55,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         //查出当前日期数据库中最大的订单号
                         var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
                             .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                        var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
+                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
                         var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
                             .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).ToList();
+                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
                         var maxOrderNumRight = 0;
                         if (currentDayList.Any())
                         {

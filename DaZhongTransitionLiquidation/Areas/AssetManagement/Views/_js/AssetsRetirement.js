@@ -23,15 +23,21 @@ var $page = function () {
         });
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#StartDate").val("");
-            $("#EndDate").val("");
+            $("#TagNumber").val("");
+            $("#CategoryMajor").val("");
+            $("#CategoryMinor").val("");
+            $("#PERIOD").val("");
         });
         selector.$btnExport().on("click",
             function () {
-                window.location.href = "/AssetManagement/AssetsRetirement/ExportExcel?StartDate=" +
-                    $("#StartDate").val() +
-                    "&EndDate=" +
-                    $("#EndDate").val();
+                window.location.href = "/AssetManagement/AssetsRetirement/ExportExcel?PERIOD=" +
+                    $("#PERIOD").val() +
+                    "&TagNumber=" +
+                    $("#TagNumber").val() +
+                    "&CategoryMajor=" +
+                    $("#CategoryMajor").val() +
+                    "&CategoryMinor=" +
+                    $("#CategoryMinor").val();
             }
         );
     }; //addEvent end
@@ -44,7 +50,7 @@ var $page = function () {
                 [
                     { name: 'VGUID', type: 'string' },
                     { name: 'BOOK_TYPE_CODE', type: 'string' },
-                    { name: 'PERIOD_CODE', type: 'string' },
+                    { name: 'PERIOD', type: 'string' },
                     { name: 'TAG_NUMBER', type: 'string' },
                     { name: 'DESCRIPTION', type: 'string' },
                     { name: 'QUANTITY', type: 'number' },
@@ -64,14 +70,15 @@ var $page = function () {
                     { name: 'RETIRE_PL', type: 'float' },
                     { name: 'LAST_UPDATE_DATE', type: 'date' },
                     { name: 'CREATE_DATE', type: 'date' },
-                    { name: 'CHANGE_DATE', type: 'date' },
-                    { name: 'CREATE_USER', type: 'string' },
-                    { name: 'CHANGE_USER', type: 'string' },
-                    { name: 'VGUID', type: 'string' }
+                    { name: 'ASSET_ID', type: 'string' },
+                    { name: 'DISPOSA_TYPE', type: 'string' },
+                    { name: 'DISPOSA_AMOUNT', type: 'float' },
+                    { name: 'DISPOSAL_TAX', type: 'float' },
+                    { name: 'DISPOSAL_PL', type: 'float' }
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "StartDate": $("#StartDate").val(), "EndDate": $("#EndDate").val() },
+                data: { "PERIOD": $("#PERIOD").val(), "TagNumber": $("#TagNumber").val(), "CategoryMajor": $("#CategoryMajor").val(), "CategoryMinor": $("#CategoryMinor").val() },
                 url: "/AssetManagement/AssetsRetirement/GetAssetsRetirementListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -93,7 +100,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: '资产账簿', datafield: 'BOOK_TYPE_CODE', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '期间', datafield: 'PERIOD_CODE', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '期间', datafield: 'PERIOD', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '说明', datafield: 'DESCRIPTION', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '数量', datafield: 'QUANTITY', width: 150, align: 'center', cellsAlign: 'center' },
@@ -110,14 +117,13 @@ var $page = function () {
                     { text: '报废成本', datafield: 'RETIRE_COST', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '报废日期', datafield: 'RETIRE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '报废累计折旧', datafield: 'RETIRE_ACCT_DEPRECIATION', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '报废损益额', datafield: 'RETIRE_PL', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '存放地点3', datafield: 'FA_LOC_3', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产处置方式', datafield: 'DISPOSA_TYPE', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产处置金额', datafield: 'DISPOSA_AMOUNT', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产处置税金', datafield: 'DISPOSAL_TAX', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产处置损益', datafield: 'DISPOSAL_PL', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产编号', datafield: 'ASSET_ID', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '最后更新时间', datafield: 'LAST_UPDATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '修改日期', datafield: 'CHANGE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '创建人', datafield: 'CREATE_USER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '修改人', datafield: 'CHANGE_USER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
+                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" }
                 ]
             });
     }

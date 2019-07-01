@@ -68,16 +68,24 @@
     public enum IntangibleAssetsSubmitStatusEnum
     {
         /// <summary>
-        /// 首付款待提交
+        /// 首付款待发起支付
         /// </summary>
         FirstPaymentUnSubmit = 0,
         /// <summary>
-        /// 尾款待提交
+        /// 首付款待支付
         /// </summary>
-        TailPaymentUnSubmit = 1,
+        FirstPaymentUnPay = 1,
         /// <summary>
-        /// 已提交
+        /// 尾款待发起支付
         /// </summary>
-        Submited = 2
+        TailPaymentUnSubmit = 2,
+        /// <summary>
+        /// 尾款待支付
+        /// </summary>
+        TailPaymentUnPay = 3,
+        /// <summary>
+        /// 已支付
+        /// </summary>
+        Submited = 4
     }
 }

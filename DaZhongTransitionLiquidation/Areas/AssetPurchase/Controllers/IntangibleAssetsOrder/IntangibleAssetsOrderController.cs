@@ -78,35 +78,47 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     foreach (var vguid in vguids)
                     {
                         var model = db.Queryable<Business_IntangibleAssetsOrder>().Where(c => c.VGUID == vguid).First();
-                        model.SubmitStatus = model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt() ? IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt() : IntangibleAssetsSubmitStatusEnum.Submited.TryToInt();
-                        model.SubmitDate = DateTime.Now;
-                        model.SubmitUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_IntangibleAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
-                        //提交后写入[Business_OrderListDraft]表
-                        var draft = new Business_OrderListDraft();
-                        draft.VGUID = Guid.NewGuid();
-                        draft.PaymentCompany = model.PaymentInformation;
-                        draft.PaymentMethod = model.PayType;
-                        draft.CreateTime = DateTime.Now;
-                        draft.OrderBankAccouont = model.CompanyBankAccount;
-                        draft.OrderBankAccouontName = model.CompanyBankAccountName;
-                        draft.CollectBankAccountName = model.SupplierBankAccountName;
-                        draft.CollectBankAccouont = model.SupplierBankAccount;
-                        draft.OrderBankName = model.CompanyBankName;
-                        draft.CollectBankName = model.SupplierBank;
-                        draft.OrderCompany = model.CompanyBankAccountName;
-                        draft.CollectBankNo = model.SupplierBankNo;
+                        //model.SubmitStatus = model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt() ? IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt() : IntangibleAssetsSubmitStatusEnum.Submited.TryToInt();
                         if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt())
                         {
-                            draft.Money = model.FirstPayment;
-                            draft.PaymentContents = "首付款";
-                        }
-                        else if(model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt())
+                            model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnPay.TryToInt();
+                        }else if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt())
                         {
-                            draft.Money = model.TailPayment;
-                            draft.PaymentContents = "尾款";
+                            model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.TailPaymentUnPay.TryToInt();
                         }
-                        db.Insertable<Business_OrderListDraft>(draft).ExecuteCommand();
+
+                        if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.TailPaymentUnPay.TryToInt() ||
+                            model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnPay.TryToInt())
+                        {
+                            model.SubmitDate = DateTime.Now;
+                            model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                            db.Updateable<Business_IntangibleAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                            //提交后写入[Business_OrderListDraft]表
+                            var draft = new Business_OrderListDraft();
+                            draft.VGUID = Guid.NewGuid();
+                            draft.PaymentCompany = model.PaymentInformation;
+                            draft.PaymentMethod = model.PayType;
+                            draft.CreateTime = DateTime.Now;
+                            draft.OrderBankAccouont = model.CompanyBankAccount;
+                            draft.OrderBankAccouontName = model.CompanyBankAccountName;
+                            draft.CollectBankAccountName = model.SupplierBankAccountName;
+                            draft.CollectBankAccouont = model.SupplierBankAccount;
+                            draft.OrderBankName = model.CompanyBankName;
+                            draft.CollectBankName = model.SupplierBank;
+                            draft.OrderCompany = model.CompanyBankAccountName;
+                            draft.CollectBankNo = model.SupplierBankNo;
+                            if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt())
+                            {
+                                draft.Money = model.FirstPayment;
+                                draft.PaymentContents = "首付款";
+                            }
+                            else if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt())
+                            {
+                                draft.Money = model.TailPayment;
+                                draft.PaymentContents = "尾款";
+                            }
+                            db.Insertable<Business_OrderListDraft>(draft).ExecuteCommand();
+                        }
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

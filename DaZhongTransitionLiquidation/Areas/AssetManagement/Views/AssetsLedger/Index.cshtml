@@ -36,24 +36,31 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
     </div>
-    <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+    <div class="body_mk" style="height: 100px;">
+        <table style="margin-top: 20px; width: 700px; margin-left: 20px;">
             <tr style="height: 45px;">
-                <td class="td_span" style="width: 130px">最后更新时间：</td>
+                <td class="td_span">期间：</td>
                 <td class="td_input">
-                    <input id="StartDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                    <input id="PERIOD" type="text" style="width: 210px;" class="input_text form-control" />
                 </td>
-                <td><span style="margin-left: -10px">-</span></td>
+                <td class="td_span">标签号：</td>
                 <td class="td_input">
-                    <input id="EndDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                    <input id="TagNumber" type="text" style="width: 210px;" class="input_text form-control" />
                 </td>
-                @*<td class="td_span">处理状态：</td>
-                <td class="td_input">
-                    <input id="Status" type="text" style="width: 210px;" class="input_text form-control" />
-                </td>*@
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
                 </td>
+            </tr>
+            <tr>
+                <td class="td_span">主类：</td>
+                <td class="td_input">
+                    <input id="CategoryMajor" type="text" style="width: 210px;" class="input_text form-control" />
+                </td>
+                <td class="td_span">次类：</td>
+                <td class="td_input">
+                    <input id="CategoryMinor" type="text" style="width: 210px;" class="input_text form-control" />
+                </td>
+
                 <td>
                     <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
                 </td>

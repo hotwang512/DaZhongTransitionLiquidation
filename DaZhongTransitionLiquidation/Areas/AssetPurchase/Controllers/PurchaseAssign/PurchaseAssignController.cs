@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseAssign
@@ -52,8 +53,47 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                 {
                     listFixedAssetsOrder = db.Queryable<Business_AssetOrderDetails>().Where(x => x.AssetsOrderVguid == AssetsOrderVguid).ToList();
                 }
+                else
+                {
+                    //根据采购物品获取资产管理公司
+                    listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetsOrderVguid);
+                }
             });
             return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet); ;
+        }
+        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(Guid AssetsOrderVguid)
+        {
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var list = new List<Business_AssetOrderDetails>();
+            var listCompany = new List<string>();
+            //获取采购物品配置的资产管理公司
+            DbBusinessDataService.Command(db =>
+            {
+                //获取采购物品ID
+                var PurchaseOrderSettingVguid = db.Queryable<Business_FixedAssetsOrder>()
+                    .Where(c => c.VGUID == AssetsOrderVguid).First().PurchaseGoodsVguid;
+                var listManagementCompany = db.Queryable<Business_PurchaseManagementCompany>()
+                    .Where(c => c.PurchaseOrderSettingVguid == PurchaseOrderSettingVguid && c.IsCheck == true).ToList();
+                foreach (var item in listManagementCompany)
+                {
+                    if (!db.Queryable<Business_AssetOrderDetails>()
+                        .Any(c => c.AssetsOrderVguid == AssetsOrderVguid && c.AssetManagementCompany == item.ManagementCompany))
+                    {
+                        var model = new Business_AssetOrderDetails();
+                        model.VGUID = Guid.NewGuid();
+                        model.AssetsOrderVguid = AssetsOrderVguid;
+                        model.CreateDate = DateTime.Now;
+                        model.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        model.AssetManagementCompany = item.ManagementCompany;
+                        list.Add(model);
+                    }
+                }
+                if (list.Count > 0)
+                {
+                    db.Insertable<Business_AssetOrderDetails>(list).ExecuteCommand();
+                }
+            });
+            return list.OrderBy(c => c.AssetManagementCompany).ToList();
         }
         public JsonResult GetOrderBelong(Guid AssetsOrderVguid)
         {
@@ -70,7 +110,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
             });
             return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet);
         }
-        /*
         public JsonResult GetPurchaseAssign(Business_AssetOrderBelongTo searchParams, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_AssetOrderBelongTo>();
@@ -86,7 +125,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        */
 
         public JsonResult GetBelongToCompany()
         {
@@ -100,7 +138,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
             list.Add(new BelongToCompanyModel { BelongToCompany = "营管部" });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        /*
         public JsonResult SaveBelongToRow(Guid? vguid, Guid AssetOrderDetailsVguid,Guid AssetsOrderVguid,int AssetNum, string BelongToCompany)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
@@ -145,7 +182,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
             });
             return Json(resultModel);
         }
-        */
         public JsonResult DeleteBelongToRow(Guid vguid)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
@@ -176,11 +212,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         var assign = new Excel_PurchaseAssignModel();
-                        assign.EngineNumber = dt.Rows[i][0].ToString();
-                        assign.ChassisNumber = dt.Rows[i][1].ToString();
+                        assign.ChassisNumber = dt.Rows[i][0].ToString();
+                        assign.EngineNumber = dt.Rows[i][1].ToString();
                         assign.AssetManagementCompany = dt.Rows[i][2].ToString();
                         assign.BelongToCompany = dt.Rows[i][3].ToString();
-                        assign.AssetNum = dt.Rows[i][4].TryToInt();
+                        assign.UseDepartment = dt.Rows[i][4].ToString();
                         list.Add(assign);
                     }
                     //校验总数是否一致，校验管理公司是否一致
@@ -189,23 +225,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         var consistent = true;
                         var result = db.Ado.UseTran(() =>
                         {
-                            var orderDetails = db.Queryable<Business_AssetOrderDetails>()
-                                .Where(c => c.AssetsOrderVguid == vguid).ToList();
-                            if (orderDetails.Sum(c => c.AssetNum) != list.Sum(c => c.AssetNum))
-                            {
-                                consistent = false;
-                                resultModel.ResultInfo = "订单总数不一致";
-                            }
-                            foreach (var item in list)
-                            {
-                                if (!orderDetails.Any(x => x.AssetManagementCompany == item.AssetManagementCompany))
-                                {
-                                    consistent = false;
-                                    resultModel.ResultInfo2 = "管理公司不一致";
-                                }
-                            }
-                            if (consistent)
-                            {
+                            //var orderDetails = db.Queryable<Business_AssetOrderDetails>()
+                            //    .Where(c => c.AssetsOrderVguid == vguid).ToList();
+                            //if (orderDetails.Sum(c => c.AssetNum) != list.Sum(c => c.AssetNum))
+                            //{
+                            //    consistent = false;
+                            //    resultModel.ResultInfo = "订单总数不一致";
+                            //}
+                            //foreach (var item in list)
+                            //{
+                            //    if (!orderDetails.Any(x => x.AssetManagementCompany == item.AssetManagementCompany))
+                            //    {
+                            //        consistent = false;
+                            //        resultModel.ResultInfo2 = "管理公司不一致";
+                            //    }
+                            //}
+                            //if (consistent)
+                            //{
                                 //写入数据库
                                 var sevenSectionList = new List<Business_AssetOrderBelongTo>();
                                 foreach (var item in list)
@@ -215,16 +251,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     belongTo.EngineNumber = item.EngineNumber;
                                     belongTo.ChassisNumber = item.ChassisNumber;
                                     belongTo.AssetManagementCompany = item.AssetManagementCompany;
-                                    belongTo.AssetNum = item.AssetNum;
+                                    belongTo.AssetNum = 1;
                                     belongTo.AssetsOrderVguid = vguid;
                                     belongTo.BelongToCompany = item.BelongToCompany;
+                                    belongTo.UseDepartment = item.UseDepartment;
                                     belongTo.CreateDate = DateTime.Now;
                                     belongTo.CreateUser = cache[PubGet.GetUserKey].UserName;
                                     sevenSectionList.Add(belongTo);
                                 }
                                 db.Deleteable<Business_AssetOrderBelongTo>().Where(c => c.AssetsOrderVguid == vguid).ExecuteCommand();
                                 db.Insertable<Business_AssetOrderBelongTo>(sevenSectionList).ExecuteCommand();
-                            }
+                            //}
                         });
                         resultModel.IsSuccess = consistent && result.IsSuccess;
                         resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";

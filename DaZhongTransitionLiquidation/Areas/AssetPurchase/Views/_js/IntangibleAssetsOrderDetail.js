@@ -36,14 +36,12 @@ var $page = function () {
         //保存
         $("#btnSave").on("click",
             function () {
-                var PayCompanyItem = $("#PayCompanyDropdown").jqxDropDownList('getItemByValue', $("#PayCompanyDropdown").val());
                 var validateError = 0; //未通过验证的数量
                 if (!Validate($("#PurchaseGoods"))) {
                     validateError++;
                 }
                 if (validateError <= 0) {
                     var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-
                     var DepartmentModelList = [];
                     for (var i = 0; i < checkedItems.length; i++) {
                         DepartmentModelList.push(checkedItems[i].value);
@@ -65,7 +63,7 @@ var $page = function () {
                             "SupplierInformation": $("#SupplierInformation").val(),
                             "ContractName": $("#Attachment").attr("title"),
                             "ContractFilePath": $("#Attachment").attr("href"),
-                            "PayCompany": PayCompanyItem.label,
+                            "PayCompany": $("#PayCompanyDropdown").text(),
                             "SupplierBankAccountName": $("#BankAccountName").val(),
                             "SupplierBankAccount": $("#BankAccount").val(),
                             "SupplierBank": $("#Bank").val(),
@@ -93,10 +91,10 @@ var $page = function () {
                     });
                 }
             });
-        $("#OrderQuantity").on("click",
-            function () {
-                initTable();
-            });
+        //$("#OrderQuantity").on("click",
+        //    function () {
+        //        initTable();
+        //    });
         $("#UploadContractFile").on("click",
             function () {
                 $("#ContractFileInput").click();
@@ -558,21 +556,9 @@ function initSelect() {
 }
 
 function initPayCompanyDropdown() {
-    var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdown";
-    var source =
-    {
-        datatype: "json",
-        datafields: [
-            { name: 'VGUID' },
-            { name: 'Descrption' }
-        ],
-        url: url,
-        async: false
-    };
-    var dataAdapter = new $.jqx.dataAdapter(source);
     $('#PayCompanyDropdown').jqxDropDownList({
         disabled:false,
-        filterable: true, selectedIndex: 2, source: dataAdapter, displayMember: "Descrption", dropDownWidth:
+        filterable: true, selectedIndex: 2, source: null, displayMember: "Descrption", dropDownWidth:
             310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
         renderer: function (index, label, value) {
             var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';

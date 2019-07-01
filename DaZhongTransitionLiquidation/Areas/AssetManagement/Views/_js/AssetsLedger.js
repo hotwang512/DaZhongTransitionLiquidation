@@ -23,15 +23,21 @@ var $page = function () {
         });
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#StartDate").val("");
-            $("#EndDate").val("");
+            $("#TagNumber").val("");
+            $("#CategoryMajor").val("");
+            $("#CategoryMinor").val("");
+            $("#PERIOD").val("");
         });
         selector.$btnExport().on("click",
             function() {
                 window.location.href = "/AssetManagement/AssetsLedger/ExportExcel?StartDate=" +
-                    $("#StartDate").val() +
-                    "&EndDate=" +
-                    $("#EndDate").val();
+                    $("#PERIOD").val() +
+                    "&TagNumber=" +
+                    $("#TagNumber").val() +
+                    "&CategoryMajor=" +
+                    $("#CategoryMajor").val() +
+                    "&CategoryMinor=" +
+                    $("#CategoryMinor").val();
             }
         );
     }; //addEvent end
@@ -64,15 +70,12 @@ var $page = function () {
                     { name: 'FA_LOC_2', type: 'string' },
                     { name: 'FA_LOC_3', type: 'string' },
                     { name: 'LAST_UPDATE_DATE', type: 'date' },
-                    { name: 'CREATE_DATE', type: 'date' },
-                    { name: 'CHANGE_DATE', type: 'date' },
-                    { name: 'CREATE_USER', type: 'string' },
-                    { name: 'CHANGE_USER', type: 'string' },
-                    { name: 'VGUID', type: 'string' }
+                    { name: 'ASSET_ID', type: 'string' },
+                    { name: 'CREATE_DATE', type: 'date' }
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "StartDate": $("#StartDate").val(), "EndDate": $("#EndDate").val() },
+                data: { "PERIOD": $("#PERIOD").val(), "TagNumber": $("#TagNumber").val(), "CategoryMajor": $("#CategoryMajor").val(), "CategoryMinor": $("#CategoryMinor").val() },
                 url: "/AssetManagement/AssetsLedger/GetAssetsLedgerListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -114,12 +117,9 @@ var $page = function () {
                     { text: '存放地点1', datafield: 'FA_LOC_1', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '存放地点2', datafield: 'FA_LOC_2', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '存放地点3', datafield: 'FA_LOC_3', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产编号', datafield: 'ASSET_ID', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '最后更新时间', datafield: 'LAST_UPDATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '修改日期', datafield: 'CHANGE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '创建人', datafield: 'CREATE_USER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '修改人', datafield: 'CHANGE_USER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
+                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" }
                 ]
             });
     }

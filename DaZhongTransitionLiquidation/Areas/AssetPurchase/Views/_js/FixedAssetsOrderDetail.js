@@ -48,6 +48,7 @@ var $page = function () {
                     for (var i = 0; i < checkedItems.length; i++) {
                         DepartmentModelList.push(checkedItems[i].value);
                     };
+                    debugger;
                     $.ajax({
                         url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
@@ -68,7 +69,7 @@ var $page = function () {
                             "PaymentDate": $("#PaymentDate").val(),
                             "ContractName": $("#Attachment").attr("title"),
                             "ContractFilePath": $("#Attachment").attr("href"),
-                            "PayCompany": $("#hidPayCompany").val(),
+                            "PayCompany": $("#PayCompanyDropdown").text(),
                             "SupplierBankAccountName": $("#BankAccountName").val(),
                             "SupplierBankAccount": $("#BankAccount").val(),
                             "SupplierBank": $("#Bank").val(),
@@ -95,14 +96,14 @@ var $page = function () {
                     });
                 }
             });
-        $("#OrderQuantity").on("click",
-            function () {
-                if ($("#PurchaseGoods").val() != "") {
-                    initTable();
-                } else {
-                    jqxNotification("请选择采购物品！", null, "error");
-                }
-            });
+        //$("#OrderQuantity").on("click",
+        //    function () {
+        //        if ($("#PurchaseGoods").val() != "") {
+        //            initTable();
+        //        } else {
+        //            jqxNotification("请选择采购物品！", null, "error");
+        //        }
+        //    });
         $("#UploadContractFile").on("click",
             function() {
                 $("#ContractFileInput").click();
@@ -667,7 +668,6 @@ function initTable() {
         localdata: vehicleDefaultData,
         datatype: "json",
         updaterow: function (rowid, rowdata, commit) {
-            
             $.ajax({
                 url: "/AssetPurchase/FixedAssetsOrderDetail/UpdateAssetNum",
                 data: { vguid: rowdata.VGUID, AssetNum: rowdata.AssetNum },
@@ -745,7 +745,6 @@ function cellsrenderer(row, column, value, rowData) {
     }
 }
 function getDetailData() {
-    
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
         data: { AssetsOrderVguid: $("#VGUID").val(), PurchaseOrderSettingVguid: $("#PurchaseGoods").val() },

@@ -37,13 +37,13 @@
         padding-left: 5px;
         padding-top: 3px;
     }
-    .SearchInput {
+    /*.SearchInput {
         background-image: url(/_theme/jqwidgets-ver5.5.0/images/search_lg.png);
         background-size: 20px 20px;
         background-position: right;
         background-repeat: no-repeat;
         cursor: pointer;
-    }
+    }*/
     .SubmitStatus {
         display: none;
     }
@@ -96,7 +96,7 @@
             <tr style="height: 50px">
                 <td style="text-align: right;">采购数量：</td>
                 <td style="text-align: left;">
-                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput"  validatetype="required"/>
                 </td>
                 <td style="text-align: right;">采购单价：</td>
                 <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>

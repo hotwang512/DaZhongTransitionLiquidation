@@ -101,23 +101,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             purchaseAssignmodel.ContractAmount = model.ContractAmount;
                             purchaseAssignmodel.AssetDescription = model.AssetDescription;
                             db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
-                            //提交后写入[Business_OrderListDraft]表
-                            var draft = new Business_OrderListDraft();
-                            draft.VGUID = Guid.NewGuid();
-                            draft.PaymentCompany = model.PaymentInformation;
-                            draft.Money = model.ContractAmount;
-                            draft.PaymentMethod = model.PayType;
-                            draft.CreateTime = DateTime.Now;
-                            draft.PaymentContents = model.AssetDescription;
-                            draft.OrderBankAccouont = model.CompanyBankAccount;
-                            draft.OrderBankAccouontName = model.CompanyBankAccountName;
-                            draft.CollectBankAccountName = model.SupplierBankAccountName;
-                            draft.CollectBankAccouont = model.SupplierBankAccount;
-                            draft.OrderBankName = model.CompanyBankName;
-                            draft.CollectBankName = model.SupplierBank;
-                            draft.OrderCompany = model.CompanyBankAccountName;
-                            draft.CollectBankNo = model.SupplierBankNo;
-                            db.Insertable<Business_OrderListDraft>(draft).ExecuteCommand();
                         }
                     }
                 });

@@ -53,25 +53,30 @@ var $page = function () {
                 });
             }
         );
-        $("#OrderDetailsDialog_OKBtn").on("click",
-            function () {
-                $("#OrderDetailsDialog").modal("hide");
-                initTable();
-            }
-        );
+        //$("#OrderDetailsDialog_OKBtn").on("click",
+        //    function () {
+        //        $("#OrderDetailsDialog").modal("hide");
+        //        initTable();
+        //    }
+        //);
         $("#OrderDetailsDialog_CancelBtn").on("click",
             function () {
                 $("#OrderDetailsDialog").modal("hide");
             }
         );
-        $("#SettingDialog_OKBtn").on("click",
+        //$("#SettingDialog_OKBtn").on("click",
+        //    function () {
+        //        $("#SettingModalDialog").modal("hide");
+        //    }
+        //);
+        $("#SettingDialog_CancelBtn").on("click",
             function () {
                 $("#SettingModalDialog").modal("hide");
             }
         );
-        $("#SettingDialog_CancelBtn").on("click",
+        $("#OrderBelongToDialog_CancelBtn").on("click",
             function () {
-                $("#SettingModalDialog").modal("hide");
+                $("#OrderBelongToDialog").modal("hide");
             }
         );
         //统一上传文件
@@ -158,6 +163,7 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
+                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '配置资产', datafield: 'Setting', hidden: false, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingRenderer },
                     { text: 'FixedAssetsOrderVguid', datafield: 'FixedAssetsOrderVguid', width: 150, align: 'center', cellsAlign: 'center', hidden:true },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
@@ -165,7 +171,6 @@ var $page = function () {
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -185,16 +190,28 @@ var $page = function () {
         var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
         debugger;
         if (rowData.SubmitStatus == 0) {
-            return '<div style="margin: 8px; margin-top:6px;">' +
-                '<a style="cursor:pointer"  onclick="Import(\'' +
-                FixedAssetsOrderVguid +
-                '\')" id="' +
-                FixedAssetsOrderVguid +
-                '">导入</a>' +
-                '&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-                FixedAssetsOrderVguid +
-                '\')">提交</a>' +
-                '</div>';
+            //出租车时导入Excel分配，其它需要手动分配
+            if (rowData.PurchaseGoods == "出租车") {
+                return '<div style="margin: 8px; margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="Import(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')" id="' +
+                    FixedAssetsOrderVguid +
+                    '">导入</a>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')">提交</a>' +
+                    '</div>';
+            } else {
+                return '<div style="margin: 8px; margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')">提交</a>' +
+                    '</div>';
+            }
         } else {
             return '<div style="margin-top:6px;">' +
                 '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
@@ -233,6 +250,17 @@ function Setting(vguid) {
         url: "/AssetPurchase/PurchaseAssign/GetAssetOrderDetails",
         data: { AssetType: "vehicle", AssetsOrderVguid: vguid },
         datatype: "json",
+        updaterow: function (rowid, rowdata, commit) {
+            $.ajax({
+                url: "/AssetPurchase/FixedAssetsOrderDetail/UpdateAssetNum",
+                data: { vguid: rowdata.VGUID, AssetNum: rowdata.AssetNum },
+                async: false,
+                type: "post",
+                success: function (result) {
+                }
+            });
+            commit(true);
+        },
         datafields:
         [
             { name: 'VGUID', type: 'string' },
@@ -244,18 +272,41 @@ function Setting(vguid) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $("#grid").jqxGrid(
     {
-        width: "475",
+        width: "545",
         autoheight: true,
         source: dataAdapter,
+        showstatusbar: true,
         statusbarheight: 25,
+        editable: true,
         enabletooltips: true,
-        selectionmode: 'singlerow',
+        showaggregates: true,
+        selectionmode: 'multiplecellsadvanced',
         columns: [
             { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
             { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
-            { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 325, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '资产管理公司', datafield: 'AssetManagementCompany',  width: 325, align: 'center', cellsAlign: 'center', editable: false },
             {
-                text: '数量', datafield: 'AssetNum', width: 50, align: 'center', cellsalign: 'center'
+                text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center', columntype: 'textbox',
+                validation: function (cell, value) {
+                    debugger;
+                    if (value == "")
+                        return true;
+                    if (!isNumber(value)) {
+                        return { result: false, message: "请输入数字" };
+                    }
+                    return true;
+                },
+                aggregates: [
+                    {
+                        '合计':
+                            function (aggregatedValue, currentValue) {
+                                if (currentValue != "") {
+                                    aggregatedValue += currentValue;
+                                }
+                                return aggregatedValue;
+                            }
+                    }
+                ]
             },
             { text: '资产归属配置',columntype: 'textbox', width: 100, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
         ]
@@ -330,6 +381,9 @@ function ViewAssign(vguid) {
             source: dataAdapter,
             statusbarheight: 25,
             enabletooltips: true,
+            pageable: true,
+            columnsresize: true,
+            pagesize: 5,
             selectionmode: 'singlerow',
             columns: [
                 { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
@@ -585,6 +639,15 @@ function checkFileExt(ext) {
         return false;
     }
     return true;
+}
+function isNumber(val) {
+    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+    var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+    if (regPos.test(val) || regNeg.test(val)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 $(function () {
     var page = new $page();

@@ -29,7 +29,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetAssetsLedgerListDatas(DateTime? StartDate, DateTime? EndDate, GridParams para)
+        public JsonResult GetAssetsLedgerListDatas(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor, GridParams para)
         {
             var jsonResult = new JsonResultModel<AssetsLedger_Swap>();
 
@@ -38,22 +38,26 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<AssetsLedger_Swap>()
-                    .WhereIF(StartDate != null, i => i.LAST_UPDATE_DATE >= StartDate)
-                    .WhereIF(EndDate != null, i => i.LAST_UPDATE_DATE <= EndDate)
+                    .WhereIF(PERIOD != null, i => i.PERIOD_CODE.Contains(PERIOD))
+                    .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
+                    .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
+                    .WhereIF(CategoryMinor != null, i => i.ASSET_CATEGORY_MINOR.Contains(CategoryMinor))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public FileResult ExportExcel(DateTime? StartDate, DateTime? EndDate)
+        public FileResult ExportExcel(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor)
         {
             DataTable dt = new DataTable();
                 DbBusinessDataService.Command(db =>
                 {
                     dt = db.Queryable<AssetsLedger_Swap>()
-                        .WhereIF(StartDate != null, i => i.LAST_UPDATE_DATE >= StartDate)
-                        .WhereIF(EndDate != null, i => i.LAST_UPDATE_DATE <= EndDate)
+                        .WhereIF(PERIOD != null, i => i.PERIOD_CODE.Contains(PERIOD))
+                        .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
+                        .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
+                        .WhereIF(CategoryMinor != null, i => i.ASSET_CATEGORY_MINOR.Contains(CategoryMinor))
                         .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToDataTable();
                 });
                 dt.TableName = "AssetsLedger_Swap";

@@ -125,12 +125,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             //asset.VGUID = Guid.NewGuid();
             foreach (var items in voucherDetail)
             {
+                var four = voucher.VoucherNo.Substring(voucher.VoucherNo.Length - 4, 4);
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
                 //asset.SubjectVGUID = guid;
                 asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;
-                asset.JE_BATCH_NAME = voucher.BatchName;
+                asset.JE_BATCH_NAME = voucher.BatchName + four;
                 asset.JE_BATCH_DESCRIPTION = "";
                 asset.JE_HEADER_NAME = voucher.VoucherNo;
                 asset.JE_HEADER_DESCRIPTION = "";
@@ -151,10 +152,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.SEGMENT5 = items.SpareOneSection;
                 asset.SEGMENT6 = items.SpareTwoSection;
                 asset.SEGMENT7 = items.IntercourseSection;
-                asset.ENTERED_CR = items.LoanMoney.TryToString();
-                asset.ENTERED_DR = items.BorrowMoney.TryToString();
+                asset.ENTERED_CR = items.LoanMoney.TryToString() == "" ? "0" : items.LoanMoney.TryToString();
+                asset.ENTERED_DR = items.BorrowMoney.TryToString() == "" ? "0" : items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_CR = items.LoanMoney.TryToString();
+                //asset.SubjectCount = items.CompanySection + "." + items.SubjectSection + "." + items.AccountSection + "." + items.CostCenterSection + "." + items.SpareOneSection + "." + items.SpareTwoSection + "." + items.IntercourseSection;
                 //同步至中间表
                 db.Insertable(asset).IgnoreColumns(it => new { it.VGUID, it.SubjectVGUID }).ExecuteCommand();
             }

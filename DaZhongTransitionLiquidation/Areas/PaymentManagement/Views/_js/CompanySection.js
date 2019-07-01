@@ -46,23 +46,21 @@ var $page = function () {
         });
         //同步现有数据,隐藏
         $("#btnTongBu").on("click", function () {
-            $.ajax({
-                url: "/PaymentManagement/CompanySection/SyncSubjectData",
-                //data: { vguids: selection },
-                data: {
-                   
-                },
-                //traditional: true,
-                type: "post",
-                success: function (msg) {
-                    jqxNotification("操作成功！", null, "success");
-                    if (index == 2) {
-                        $("#jqxTable2").jqxTreeGrid('updateBoundData');
-                    } else {
-                        $("#jqxTable" + index).jqxDataTable('updateBoundData');
-                    }
-                }
-            });
+            initSubjectTable();
+            $("#AddSubjectTable").modal({ backdrop: "static", keyboard: false });
+            $("#AddSubjectTable").modal("show");
+            //$.ajax({
+            //    url: "/PaymentManagement/CompanySection/SyncSubjectData",
+            //    data: {
+            //    },
+            //    type: "post",
+            //    success: function (msg) {
+            //        var data = msg.ResultInfo;
+            //    }
+            //});
+        });
+        $("#Refresh").on("click", function () {
+            initSubjectTable();
         });
         //新增
         selector.$btnAdd().on("click", function () {
@@ -119,6 +117,29 @@ var $page = function () {
         //核算段设置弹出框中的取消按钮
         $("#AddAccount_CancelBtn").on("click", function () {
             $("#AddAccountSettingDialog").modal("hide");
+        });
+        //ORACLE同步弹出框中的取消按钮
+        $("#AddSubject_CancelBtn").on("click", function () {
+            $("#AddSubjectTable").modal("hide");
+        });
+        //ORACLE同步弹出框中的保存按钮
+        $("#AddSubject_OKButton").on("click", function () {
+            var tableData = $('#jqxSubjectTable').jqxGrid('getboundrows');
+            if (tableData != null) {
+                $.ajax({
+                    url: "/PaymentManagement/CompanySection/SaveSubjectData",
+                    data: { jsonData: JSON.stringify(tableData) },
+                    type: "post",
+                    success: function (msg) {
+                        if (msg.IsSuccess == true) {
+                            jqxNotification("保存成功！", null, "success");
+                            $("#AddSubjectTable").modal("hide");
+                        } else {
+                            jqxNotification("保存失败！", null, "error");
+                        }
+                    }
+                });
+            }
         });
         //公司段设置弹出框中的保存按钮
         $("#AddSection_OKButton").on("click", function () {
@@ -746,11 +767,11 @@ var $page = function () {
                 { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', pinned: true, cellsRenderer: statusFunc },
                 //{ text: '账套段', datafield: 'IsAccountModeCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
                 //{ text: '公司段', datafield: 'IsCompanyCode', width: 180, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },  
-                { text: '核算段', datafield: 'IsAccountingCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                { text: '成本中心段', datafield: 'IsCostCenterCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                { text: '备用1', datafield: 'IsSpareOneCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                { text: '备用2', datafield: 'IsSpareTwoCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                { text: '往来段', datafield: 'IsIntercourseCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '核算段', datafield: 'IsAccountingCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFuncSubject },
+                { text: '成本中心段', datafield: 'IsCostCenterCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFuncSubject },
+                { text: '备用1', datafield: 'IsSpareOneCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFuncSubject },
+                { text: '备用2', datafield: 'IsSpareTwoCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFuncSubject },
+                { text: '往来段', datafield: 'IsIntercourseCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFuncSubject },
                 { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
                 { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
                 { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
@@ -1052,13 +1073,20 @@ var $page = function () {
         return container;
     }
 
-    function settingFunc(row, column, value, rowData) {
+    function settingFuncSubject(row, column, value, rowData) {
         var container = "";
-        if (rowData.ParentCode != null && rowData.ParentCode != "" && rowData.Remark != "1") {
+        if (rowData.ParentCode != null && rowData.Remark != "1") {
             container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
             if (value != "" && (value == "True" || value == true)) {
                 container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
             }
+        }
+        return container;
+    }
+    function settingFunc(row, column, value, rowData) {
+         var container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
+        if (value != "" && (value == "True" || value == true)) {
+            container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
         }
         return container;
     }
@@ -1688,5 +1716,63 @@ function initBorrowTable(companyCode, accountModeCode) {
         var row = $("#grid2").jqxGrid('getrowdata', args.rowindex);
         var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + row['BusinessCode'] + '</div>';
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
+    });
+}
+
+function initSubjectTable() {
+    var source = {
+        datafields:
+        [
+            { name: 'BOOK', type: 'string' },
+            { name: 'VALUE_SET', type: 'string' },
+            { name: 'CODE', type: 'string' },
+            { name: 'DESCRIPTION', type: 'string' },
+            { name: 'ACTIVE_FLAG', type: 'bool' },
+            { name: 'ParentCode', type: 'string' },
+        ],
+        datatype: "json",
+        id: "",
+        data: {},
+        url: "/PaymentManagement/CompanySection/SyncSubjectData"   //获取数据源的路径
+    };
+    var typeAdapter = new $.jqx.dataAdapter(source);
+
+    //创建卡信息列表（主表）
+    $("#jqxSubjectTable").jqxGrid({
+        pageable: false,
+        width: "100%",
+        autoheight: false,
+        height:500,
+        pageSize: 10,
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        groupable: true,
+        groupsexpandedbydefault: true,
+        groups: ['BOOK', 'VALUE_SET'],
+        showgroupsheader: false,
+        //showgroupmenuitems: false,
+        columnsHeight: 50,
+        pagermode: 'simple',
+        selectionmode: 'singlecell',
+        editable: true,
+        columns: [
+            { text: '账套', datafield: "BOOK", width: 200, align: 'center', cellsAlign: 'center' },
+            { text: '所属科目', datafield: 'VALUE_SET', width: 150, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '编码', datafield: 'CODE', width: 120, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '描述', datafield: 'DESCRIPTION', width: 300, align: 'center', cellsAlign: 'center', editable: false },
+            {
+                text: '状态', datafield: 'ACTIVE_FLAG', align: 'center', width: 120, cellsAlign: 'center', editable: false, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                    if (value == "Y") {
+                        return "<div style='margin:4px;text-align: center'>启用</div>";
+                    }
+                    else {
+                        return "<div style='margin:4px;text-align: center'>禁用</div>";
+                    }
+                }
+            },
+            { text: '父级编码', datafield: 'ParentCode', align: 'center', cellsAlign: 'center', editable: true },
+        ]
     });
 }

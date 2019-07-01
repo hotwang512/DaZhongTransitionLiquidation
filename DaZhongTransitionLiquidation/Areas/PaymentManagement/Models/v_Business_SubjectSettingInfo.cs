@@ -24,5 +24,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string SubjectVGUID { get; set; }
         public string Checked { get; set; }
         public decimal? Balance { get; set; }
+        public decimal? ENTERED_DR { get; set; }
+        public decimal? ENTERED_CR { get; set; }
+        public decimal? END_BALANCE { get; set; }
     }
 }

@@ -49,6 +49,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         /// Nullable:True
         /// </summary> 
         public DateTime? CREATE_DATE { get; set; }
-        public Guid VGUID { get; set; }
+        public string ParentCode { get; set; }
+        public string CheckStatus { get; set; }
     }
 }

@@ -212,6 +212,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftPrint.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\PaySettingList.js" />
+    <Content Include="Areas\FinancialStatementsManagement\Views\_js\SubjectBalanceStatement.js" />
     <Content Include="Areas\HomePage\Views\_js\CompanyHomePage.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />
@@ -302,6 +303,8 @@
     <Content Include="Areas\CapitalCenterManagement\Views\CapitalAllocationDetail\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\PaySettingList\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\CashTransactionDetail\Index.cshtml" />
+    <Content Include="Areas\FinancialStatementsManagement\Views\web.config" />
+    <Content Include="Areas\FinancialStatementsManagement\Views\SubjectBalanceStatement\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2335,6 +2338,8 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\v_Business_CustomerBankInfo.cs" />
+    <Compile Include="Areas\FinancialStatementsManagement\Controllers\SubjectBalanceStatement\SubjectBalanceStatementController.cs" />
+    <Compile Include="Areas\FinancialStatementsManagement\FinancialStatementsManagementAreaRegistration.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
     <Compile Include="Areas\HomePage\HomePageAreaRegistration.cs" />
@@ -2359,6 +2364,7 @@
     <Compile Include="Areas\PaymentManagement\Models\Business_SevenSection.cs" />
     <Compile Include="Areas\PaymentManagement\Models\Business_SubjectBalance.cs" />
     <Compile Include="Areas\PaymentManagement\Models\V_AccountSetting.cs" />
+    <Compile Include="Areas\PaymentManagement\Models\v_Business_SevenSection.cs" />
     <Compile Include="Areas\PaymentManagement\Models\v_Business_SubjectSettingInfo.cs" />
     <Compile Include="Areas\PaymentManagement\PaymentManagementAreaRegistration.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftController.cs" />
@@ -2486,6 +2492,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
     <Folder Include="Areas\AssetPurchase\Views\Shared\" />
+    <Folder Include="Areas\FinancialStatementsManagement\Models\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />
     <Folder Include="Areas\TaxAdministrationCenter\Controllers\" />

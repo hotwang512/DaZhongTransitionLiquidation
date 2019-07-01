@@ -210,7 +210,7 @@ var $page = function () {
                             case "1":
                                 jqxNotification("保存成功！", null, "success");
                                 history.go(-1);
-                                window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                                //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                 break;
                         }
                     }

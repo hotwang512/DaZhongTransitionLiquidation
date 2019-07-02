@@ -39,7 +39,7 @@ var $page = function () {
             //财务管理中心
             $("#FinancialManagemnet").click(function () {
                 switch (GetHrefPageId("5")) {
-                    case "501": CookieHelper.SaveCookie("ReportManage_FinancialStatements"); window.location.href = "/PaymentManagement/RevenuePayment/Index";
+                    case "501": CookieHelper.SaveCookie("ReportManage_FinancialStatements"); window.location.href = "/FinancialStatementsManagement/SubjectBalanceStatement/Index";
                         break;
                     default: jqxNotification("You are not authorized!", null, "error");
                 }

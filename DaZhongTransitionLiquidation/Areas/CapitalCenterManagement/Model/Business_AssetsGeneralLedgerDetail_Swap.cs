@@ -31,5 +31,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public DateTime? CREATE_DATE { get; set; }
         public Guid LINE_ID { get; set; }
         public Guid JE_LINE_ID { get; set; }
+        public string SOURCE { get; set; }
     }
 }

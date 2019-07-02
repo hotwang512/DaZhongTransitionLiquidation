@@ -75,7 +75,7 @@ var $page = function () {
             var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
             for (var i = 0; i < checkrow.length; i++) {
                 var rowdata = checkrow[i];
-                selection.push(rowdata.Vguid);
+                selection.push(rowdata.VGUID);
             }
             if (selection.length < 1) {
                 jqxNotification("请选择您要删除的数据！", null, "error");

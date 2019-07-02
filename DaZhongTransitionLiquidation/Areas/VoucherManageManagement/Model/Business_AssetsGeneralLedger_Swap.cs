@@ -184,5 +184,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         /// </summary> 
         public string LINE_ID { get; set; }
         public string JE_LINE_DESCRIPTION { get; set; }
+        /// <summary>
+        /// Desc:来源
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string SOURCE { get; set; }
+        public string SubjectCount { get; set; }
+        public string MESSAGE { get; set; }
     }
 }

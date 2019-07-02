@@ -761,11 +761,281 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         }
         public JsonResult SyncSubjectData()
         {
+            var response = new List<LedgerSubject_Swap>();
+            DbBusinessDataService.Command(db =>
+            {
+                var data1 = db.Queryable<LedgerSubject_Swap>().Where(x=>x.CheckStatus != "2").ToList();//查询未检测的数据
+                var data2 = db.SqlQueryable<v_Business_SevenSection>(@"select a.*,b.Descrption as AccountCodeName from Business_SevenSection as a 
+left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43'").ToList();
+                List<string> section = new List<string>();//["COM", "ACC", "HS", "BY1", "BY2", "CC", "WL" ];
+                section.Add("COM"); section.Add("ACC"); section.Add("HS"); section.Add("CC"); 
+                section.Add("BY1"); section.Add("BY2"); section.Add("WL");
+                List<string> section2 = new List<string>();
+                section2.Add("A63BD715-C27D-4C47-AB66-550309794D43"); section2.Add("B63BD715-C27D-4C47-AB66-550309794D43"); section2.Add("C63BD715-C27D-4C47-AB66-550309794D43"); section2.Add("D63BD715-C27D-4C47-AB66-550309794D43");
+                section2.Add("E63BD715-C27D-4C47-AB66-550309794D43"); section2.Add("F63BD715-C27D-4C47-AB66-550309794D43"); section2.Add("G63BD715-C27D-4C47-AB66-550309794D43");
+                List<LedgerSubject_Swap> LedgerCOM = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerACC = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerHS = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerCC = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerBY1 = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerBY2 = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerWL = new List<LedgerSubject_Swap>();
+                List<LedgerSubject_Swap> LedgerAccount = new List<LedgerSubject_Swap>();
+                for (int i = 0; i < 7; i++)
+                {
+                    var sectionList = data1.Where(x => x.VALUE_SET.Contains(section[i])).ToList();
+                    if (i == 3)
+                    {
+                        sectionList = data1.Where(x => x.VALUE_SET.Contains("CC") && !x.VALUE_SET.Contains("ACC")).ToList();
+                    }
+                    var sectionList2 = data2.Where(x => x.SectionVGUID == section2[i]).ToList();
+                    foreach (var sec in sectionList)
+                    {
+                        var isAny = sectionList2.Any(x => x.AccountCodeName == sec.BOOK && x.Code == sec.CODE);
+                        var status = sec.ACTIVE_FLAG == "Y" ? "1" : "0";
+                        //若同步数据已存在,状态不同且为禁用,将本地状态更新为禁用
+                        var isAnyStatus = sectionList2.Any(x => x.AccountCodeName == sec.BOOK && x.Code == sec.CODE && sec.ACTIVE_FLAG == "N" && x.Status != status);
+                        if (!isAny || isAnyStatus)
+                        {
+                            switch (i)
+                            {
+                                case 0: LedgerCOM.Add(sec); break;
+                                case 1: LedgerACC.Add(sec); break;
+                                case 2: LedgerHS.Add(sec); break;
+                                case 3: LedgerCC.Add(sec); break;
+                                case 4: LedgerBY1.Add(sec); break;
+                                case 5: LedgerBY2.Add(sec); break;
+                                case 6: LedgerWL.Add(sec); break;
+                                default:break;
+                            } 
+                        }
+                    } 
+                }
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("COM", LedgerCOM, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("ACC", LedgerACC, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("HS", LedgerHS, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("CC", LedgerCC, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("BY1", LedgerBY1, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("BY2", LedgerBY2, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("WL", LedgerWL, 8 * 60 * 60);
+                LedgerAccount.AddRange(LedgerCOM);
+                LedgerAccount.AddRange(LedgerACC);
+                LedgerAccount.AddRange(LedgerHS);
+                LedgerAccount.AddRange(LedgerCC);
+                LedgerAccount.AddRange(LedgerBY1);
+                LedgerAccount.AddRange(LedgerBY2);
+                LedgerAccount.AddRange(LedgerWL);
+                response = LedgerAccount;
+            });
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveSubjectData(string jsonData)
+        {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-                var data1 = db.Queryable<LedgerSubject_Swap>().ToList();
-                var data12 = db.Queryable<Business_SevenSection>().ToList();
+                var tableData = jsonData.JsonToModel<List<LedgerSubject_Swap>>();
+                var comData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["COM"];
+                var accData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["ACC"];
+                var hsData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["HS"];
+                var ccData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["CC"];
+                var by1Data = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["BY1"];
+                var by2Data = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["BY2"];
+                var wlData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["WL"];
+                List<LedgerSubject_Swap> LedgerAccount = new List<LedgerSubject_Swap>();
+                List<Business_SevenSection> sectionList = new List<Business_SevenSection>();
+                if (comData.Count > 0)
+                {
+                    #region 公司段
+                    foreach (var item in comData)
+                    {
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        Business_SevenSection section = new Business_SevenSection();
+                        section.VGUID = Guid.NewGuid();
+                        section.Code = item.CODE;
+                        section.Descrption = item.DESCRIPTION;
+                        section.SectionVGUID = "A63BD715-C27D-4C47-AB66-550309794D43";
+                        section.VCRTUSER = UserInfo.LoginName;
+                        section.VCRTTIME = item.CREATE_DATE;
+                        section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                        section.AccountModeCode = accountModeCode;
+                        sectionList.Add(section);
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(comData);
+                    #endregion
+                }
+                if (accData.Count > 0)
+                {
+                    #region 科目段
+                    foreach (var item in accData)
+                    {
+                        //db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        var parentCode = tableData.Where(x => x.CODE == item.CODE && x.BOOK == item.BOOK).FirstOrDefault().ParentCode;
+                        foreach (var com in companyList)
+                        {
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.ParentCode = parentCode == null ? item.CODE.Substring(0, item.CODE.Length - 2) : parentCode;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.CompanyCode = com.Code;
+                            sectionList.Add(section);
+                        }
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(accData);
+                    #endregion
+                }
+                if (hsData.Count > 0)
+                {
+                    #region 核算段
+                    foreach (var item in hsData)
+                    {
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "C63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        foreach (var com in companyList)
+                        {
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "C63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.CompanyCode = com.Code;
+                            sectionList.Add(section);  
+                        }
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(hsData);
+                    #endregion
+                }
+                if (ccData.Count > 0)
+                {
+                    #region 成本中心段
+                    foreach (var item in ccData)
+                    {
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        foreach (var com in companyList)
+                        {
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "D63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.CompanyCode = com.Code;
+                            sectionList.Add(section);
+                        }
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(ccData);
+                    #endregion
+                }
+                if (by1Data.Count > 0)
+                {
+                    #region 备用1
+                    foreach (var item in by1Data)
+                    {
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        foreach (var com in companyList)
+                        {
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "E63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.CompanyCode = com.Code;
+                            sectionList.Add(section);
+                        }
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(by1Data);
+                    #endregion
+                }
+                if (by2Data.Count > 0)
+                {
+                    #region 备用2
+                    foreach (var item in by2Data)
+                    {
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "F63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        foreach (var com in companyList)
+                        {
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "F63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.CompanyCode = com.Code;
+                            sectionList.Add(section);
+                        }
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(by2Data);
+                    #endregion
+                }
+                if (wlData.Count > 0)
+                {
+                    #region 往来段
+                    foreach (var item in wlData)
+                    {
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "G63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        foreach (var com in companyList)
+                        {
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "G63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.CompanyCode = com.Code;
+                            sectionList.Add(section);
+                        }
+                        item.CheckStatus = "2";
+                    }
+                    LedgerAccount.AddRange(wlData);
+                    #endregion
+                }
+                if (sectionList.Count > 0)
+                {
+                    //db.Insertable(sectionList).ExecuteCommand();
+                    //db.Updateable(LedgerAccount).ExecuteCommand();
+                    resultModel.IsSuccess = true;
+                }
             });
             return Json(resultModel);
         }

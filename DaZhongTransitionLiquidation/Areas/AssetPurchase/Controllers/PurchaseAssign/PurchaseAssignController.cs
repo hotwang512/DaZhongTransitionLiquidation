@@ -34,7 +34,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_PurchaseAssign>()
+                jsonResult.Rows = db.SqlQueryable<Business_PurchaseAssign>("SELECT pa.* FROM Business_PurchaseAssign pa LEFT JOIN Business_FixedAssetsOrder fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
                     .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -212,11 +212,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         var assign = new Excel_PurchaseAssignModel();
-                        assign.ChassisNumber = dt.Rows[i][0].ToString();
-                        assign.EngineNumber = dt.Rows[i][1].ToString();
-                        assign.AssetManagementCompany = dt.Rows[i][2].ToString();
-                        assign.BelongToCompany = dt.Rows[i][3].ToString();
-                        assign.UseDepartment = dt.Rows[i][4].ToString();
+                        assign.VehicleModel = dt.Rows[i][0].ToString();
+                        assign.ChassisNumber = dt.Rows[i][1].ToString();
+                        assign.EngineNumber = dt.Rows[i][2].ToString();
+                        assign.AssetManagementCompany = dt.Rows[i][3].ToString();
+                        assign.BelongToCompany = dt.Rows[i][4].ToString();
+                        assign.UseDepartment = dt.Rows[i][5].ToString();
                         list.Add(assign);
                     }
                     //校验总数是否一致，校验管理公司是否一致
@@ -248,6 +249,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 {
                                     var belongTo = new Business_AssetOrderBelongTo();
                                     belongTo.VGUID = Guid.NewGuid();
+                                    belongTo.VehicleModel = item.VehicleModel;
                                     belongTo.EngineNumber = item.EngineNumber;
                                     belongTo.ChassisNumber = item.ChassisNumber;
                                     belongTo.AssetManagementCompany = item.AssetManagementCompany;
@@ -286,6 +288,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         .Where(c => c.FixedAssetsOrderVguid == vguid).First();
                     if (purchaseAssign.SubmitStatus == 0)
                     {
+                        //提交写入到资产审核表
+                        var BelongToList = new List<Business_AssetOrderBelongTo>();
                         purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
                         purchaseAssign.ChangeDate = DateTime.Now;
                         purchaseAssign.SubmitStatus = 1;

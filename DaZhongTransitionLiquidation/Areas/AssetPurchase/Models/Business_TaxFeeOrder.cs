@@ -10,7 +10,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     ///车辆税费订单表
     ///</summary>
     [SugarTable("Business_TaxFeeOrder")]
-    public partial class Business_TaxFeeOrder
+    public class Business_TaxFeeOrder
     {
         public Business_TaxFeeOrder()
         {
@@ -244,5 +244,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         /// </summary>           
         public string PaymentVoucherUrl { get; set; }
 
+    }
+
+    public class SaveBusiness_TaxFeeOrderModel: Business_TaxFeeOrder
+    {
+        public string OrderNumData { get; set; }
     }
 }

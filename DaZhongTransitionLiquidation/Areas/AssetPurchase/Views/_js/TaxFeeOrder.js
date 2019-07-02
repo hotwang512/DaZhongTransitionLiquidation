@@ -68,7 +68,7 @@ var $page = function () {
             } else {
                 $.ajax({
                     url: "/AssetPurchase/TaxFeeOrder/SubmitTaxFeeOrder",
-                    data: { vguid: selection[0] },
+                    data: { vguids: selection },
                     type: "post",
                     success: function (msg) {
                         switch (msg.Status) {

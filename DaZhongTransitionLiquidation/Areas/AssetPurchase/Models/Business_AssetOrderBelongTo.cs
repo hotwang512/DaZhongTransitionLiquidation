@@ -16,6 +16,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string BelongToCompany { get; set; }
         public string UseDepartment { get; set; }
         public int AssetNum { get; set; }
+        public string VehicleModel { set; get; }
         public DateTime? CreateDate { get; set; }
         public DateTime? ChangeDate { get; set; }
         public string CreateUser { get; set; }

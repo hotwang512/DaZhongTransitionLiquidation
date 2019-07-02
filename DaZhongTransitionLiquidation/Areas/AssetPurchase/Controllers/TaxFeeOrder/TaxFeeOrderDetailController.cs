@@ -35,7 +35,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult SaveTaxFeeOrder(Business_TaxFeeOrder sevenSection)
+        public JsonResult SaveTaxFeeOrder(SaveBusiness_TaxFeeOrderModel sevenSection)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -62,6 +62,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                         }
                         maxOrderNumRight = maxOrderNumRight + 1;
                         sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
+                        var OrderNumList = sevenSection.OrderNumData.Split(",");
+                        foreach (var item in OrderNumList)
+                        {
+                            var orderNumModel = new Business_PurchaseOrderNum();
+                            orderNumModel.VGUID = Guid.NewGuid();
+                            orderNumModel.FaxOrderVguid = sevenSection.VGUID;
+                            orderNumModel.PayItemCode = sevenSection.PayItemCode;
+                            orderNumModel.PayItem = sevenSection.PayItem;
+                            orderNumModel.FixedAssetOrderVguid = item.TryToGuid();
+                            orderNumModel.OrderQuantity = db.Queryable<Business_FixedAssetsOrder>()
+                                .Where(x => x.VGUID == orderNumModel.FixedAssetOrderVguid).First().OrderQuantity;
+                            orderNumModel.CreateDate = DateTime.Now;
+                            sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            db.Insertable<Business_PurchaseOrderNum>(orderNumModel).ExecuteCommand();
+                        }
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
                         sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
@@ -634,7 +649,12 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             var list = new List<BusinessProjectModel>();
             DbBusinessDataService.Command(db =>
             {
-                list = db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE BusinessSubItem1 LIKE 'cz|03|0301|%'").ToList();
+                list = db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101'").ToList();
+                foreach (var item in list)
+                {
+                    item.BusinessProject = item.BusinessProject.Substring(item.BusinessProject.LastIndexOf("|")+1,
+                        item.BusinessProject.Length - item.BusinessProject.LastIndexOf("|")-1);
+                }
             });
 
             return Json(list, JsonRequestBehavior.AllowGet);
@@ -642,17 +662,51 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
 
         public JsonResult GetFeeByVehicleModel(string PayItem, string VehicleModel)
         {
-            var model = new Business_VehicleExtrasFeeSetting();
+            var list = new List<Business_VehicleExtrasFeeSetting>();
             DbBusinessDataService.Command(db =>
                 {
                     if (db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x =>
                         x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel))
                     {
-                        model = db.Queryable<Business_VehicleExtrasFeeSetting>().Where(x =>
-                            x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel).First();
+                        list = db.Queryable<Business_VehicleExtrasFeeSetting>().Where(x =>
+                            x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel).ToList();
                     }
                 });
-            return Json(model, JsonRequestBehavior.AllowGet);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPurchaseOrderNum(string PayItemCode)
+        {
+            var list = new List<PurchaseOrderSelectNum>();
+            DbBusinessDataService.Command(db =>
+            {
+                var submitedList = db.Queryable<Business_FixedAssetsOrder>().Where(x =>
+                    x.SubmitStatus == FixedAssetsSubmitStatusEnum.Submited.TryToInt()).ToList();
+                if (submitedList.Count > 0)
+                {
+                    var sql =
+                        "SELECT fao.VGUID AS FixedAssetsOrderVguid,fao.OrderQuantity,fao.OrderNumber, pon.PayItemCode FROM (SELECT * FROM dbo.Business_FixedAssetsOrder WHERE SubmitStatus = 2 ) fao LEFT JOIN (SELECT * FROM Business_PurchaseOrderNum WHERE PayItemCode = '" +
+                        PayItemCode + "') AS  pon ON fao.VGUID = pon.FixedAssetOrderVguid";
+                    list = db.SqlQueryable<PurchaseOrderSelectNum>(sql).Where(x => x.PayItemCode == null).ToList();
+                }
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPurchaseOrderNumDetail(string PayItemCode)
+        {
+            var list = new List<PurchaseOrderSelectNum>();
+            DbBusinessDataService.Command(db =>
+            {
+                var submitedList = db.Queryable<Business_FixedAssetsOrder>().Where(x =>
+                    x.SubmitStatus == FixedAssetsSubmitStatusEnum.Submited.TryToInt()).ToList();
+                if (submitedList.Count > 0)
+                {
+                    var sql =
+                        @"SELECT fao.VGUID AS FixedAssetsOrderVguid,fao.OrderQuantity,fao.OrderNumber, pon.PayItemCode,CASE	WHEN pon.PayItemCode IS NULL THEN 1 ELSE 0 END AS IsChecked FROM (SELECT * FROM dbo.Business_FixedAssetsOrder WHERE SubmitStatus = 2 ) fao LEFT JOIN (SELECT * FROM Business_PurchaseOrderNum WHERE PayItemCode = '" +
+                        PayItemCode + "') AS  pon ON fao.VGUID = pon.FixedAssetOrderVguid";
+                    list = db.SqlQueryable<PurchaseOrderSelectNum>(sql).Where(x => x.PayItemCode != null).ToList();
+                }
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
 }

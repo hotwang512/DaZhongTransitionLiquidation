@@ -58,9 +58,13 @@
         /// </summary>
         UnSubmit = 0,
         /// <summary>
-        /// 已提交
+        /// 已提交待支付
         /// </summary>
-        Submited = 1
+        UnPay = 1,
+        /// <summary>
+        /// 已支付
+        /// </summary>
+        Submited = 2
     }
     /// <summary>
     /// 无形资产订单提交状态

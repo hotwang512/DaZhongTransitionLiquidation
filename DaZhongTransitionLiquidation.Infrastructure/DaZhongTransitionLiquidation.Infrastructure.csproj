@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ApiResultEntity\Api_FileInfo.cs" />
     <Compile Include="ApiResultEntity\Api_PendingPayment.cs" />
+    <Compile Include="ApiResultEntity\Api_NewVehicleAsset.cs" />
     <Compile Include="Dao\DbBusinessDataConfig.cs" />
     <Compile Include="Dao\DbBusinessDataService.cs" />
     <Compile Include="Dao\DbConfig.cs" />

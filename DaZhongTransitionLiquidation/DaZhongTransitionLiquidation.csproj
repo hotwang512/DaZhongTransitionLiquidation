@@ -183,6 +183,7 @@
   <ItemGroup>
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
@@ -2297,6 +2298,7 @@
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetOrderDetails.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetReview.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsLedger_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsRetirement_Swap.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />

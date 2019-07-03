@@ -33,4 +33,10 @@ namespace DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity
         public bool success { get; set; }
         public string message { get; set; }
     }
+    public class JsonResultListApi<T>
+    {
+        public List<T> data { get; set; }
+        public bool success { get; set; }
+        public string message { get; set; }
+    }
 }

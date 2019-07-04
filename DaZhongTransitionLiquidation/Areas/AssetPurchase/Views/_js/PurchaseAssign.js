@@ -46,6 +46,7 @@ var $page = function () {
                                 initTable();
                                 break;
                             case "2":
+                                jqxNotification(msg.ResultInfo, null, "success");
                                 $("#OrderBelongToDialog").modal("hide");
                                 break;
                         }

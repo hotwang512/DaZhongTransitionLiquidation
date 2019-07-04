@@ -183,6 +183,7 @@
   <ItemGroup>
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
@@ -315,6 +316,7 @@
     <Content Include="Areas\SystemManagement\Views\PurchaseFaxOrderSettingDetail\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\VehicleExtrasFeeSetting\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\VehicleExtrasFeeSettingDetail\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\ReviewAsset\Index.cshtml" />
     <Content Include="Areas\FinancialStatementsManagement\Views\web.config" />
     <Content Include="Areas\FinancialStatementsManagement\Views\SubjectBalanceStatement\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
@@ -346,6 +348,7 @@
     <Content Include="_theme\DatePicker\skin\WdatePicker.css" />
     <Content Include="_theme\DatePicker\WdatePicker.js" />
     <Content Include="_theme\images\1.png" />
+    <Content Include="_theme\images\Developing.png" />
     <Content Include="_theme\images\error-bg.png" />
     <Content Include="_theme\images\error-btn.png" />
     <Content Include="_theme\images\Picture.png" />
@@ -2289,11 +2292,13 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsLedger\AssetsLedgerController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetAttachmentList.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetOrderDetails.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_AssetReview.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsLedger_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsRetirement_Swap.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
@@ -2310,6 +2315,7 @@
     <Compile Include="Areas\AssetPurchase\Models\Business_FixedAssetsOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_IntangibleAssetsOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseAssign.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseOrderNum.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_TaxFeeOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Excel_PurchaseAssignModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\PendingPaymentModel.cs" />
@@ -2429,6 +2435,7 @@
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\DZLoginInfo.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
@@ -2480,6 +2487,7 @@
     <Content Include="Template\AssetsLedger.xlsx" />
     <Content Include="Template\AssetsRetiremen.xlsx" />
     <Content Include="Template\PurchaseAssign.xlsx" />
+    <Content Include="Views\Error\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -103,10 +103,14 @@
             <tr style="height: 50px">
                 <td style="text-align: right;">采购数量：</td>
                 <td style="text-align: left;">
-                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/>
+                    @*<input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/>*@
+                    <div id="OrderQuantity" style="padding-left:6px"></div>
                 </td>
                 <td style="text-align: right;">采购单价：</td>
-                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;">
+                    <select id="PurchasePrices" class="input_text form-control" style="width: 200px;">
+                    </select>
+                </td>
                 <td style="text-align: right;">采购金额：</td>
                 <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
             </tr>
@@ -411,6 +415,7 @@
 </div>
 <div style="display: none">
     <input id="AttachmentType" />
+    <input id="SumQuantity"/>
     @*清算平台待支付订单唯一标识*@
     <input id="PaymentVoucherVguid" />
 </div>

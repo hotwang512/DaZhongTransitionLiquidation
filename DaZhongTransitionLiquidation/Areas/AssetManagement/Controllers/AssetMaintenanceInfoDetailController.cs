@@ -123,7 +123,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
             DbBusinessDataService.Command(db =>
             {
                 
-                if (!db.Queryable<AssetMaintenanceInfo_Swap>().Any(c => c.ASSET_ID == sevenSection.VGUID))
+                if (!db.Queryable<AssetMaintenanceInfo_Swap>().Any(c => c.TRANSACTION_ID == sevenSection.VGUID))
                 {
                     db.Insertable<AssetMaintenanceInfo_Swap>(sevenSwapSection).ExecuteCommand();
                 }

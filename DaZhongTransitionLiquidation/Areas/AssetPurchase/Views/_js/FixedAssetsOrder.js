@@ -72,6 +72,7 @@ var $page = function () {
         //填写信息后提交，调用清算平台、待付款请求生成支付凭证接口
         //先调用接口，成功后再提交
         $("#btnSubmit").on("click", function () {
+            debugger;
             var selection = [];
             var grid = $("#jqxTable");
             var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
@@ -88,7 +89,7 @@ var $page = function () {
             } else {
                 $.ajax({
                     url: "/AssetPurchase/FixedAssetsOrder/SubmitFixedAssetsOrder",
-                    data: { vguid: selection[0] },
+                    data: { vguids: selection },
                     type: "post",
                     success: function (msg) {
                         switch (msg.Status) {

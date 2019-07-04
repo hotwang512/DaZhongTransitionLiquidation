@@ -666,10 +666,10 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             DbBusinessDataService.Command(db =>
                 {
                     if (db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x =>
-                        x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel))
+                        x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel && x.Status == 1))
                     {
                         list = db.Queryable<Business_VehicleExtrasFeeSetting>().Where(x =>
-                            x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel).ToList();
+                            x.BusinessSubItem == PayItem && x.VehicleModelCode == VehicleModel && x.Status == 1).ToList();
                     }
                 });
             return Json(list, JsonRequestBehavior.AllowGet);

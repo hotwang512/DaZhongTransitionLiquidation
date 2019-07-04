@@ -1019,7 +1019,7 @@
                 <table style="cursor: pointer; margin-left:-8px" class="bodyTable">
                     @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资金清算" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="PaymentHistory_AssetPurchase" pageurl="#">
+                        <tr class="menue_item" id="PaymentHistory_AssetPurchase" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">资金清算</td>
                             <td></td>
@@ -1209,6 +1209,14 @@
                         <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">折旧方法维护</td>
+                            <td></td>
+                        </tr>
+                    }
+                    @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "经营模式维护" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="ManageModel_AssetManagement" pageurl="/AssetManagement/ManageModel/Index">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">经营模式维护</td>
                             <td></td>
                         </tr>
                     }

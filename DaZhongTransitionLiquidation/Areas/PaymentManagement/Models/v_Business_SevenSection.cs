@@ -31,5 +31,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string AccountModeCode { get; set; }
         public string CompanyCode { get; set; }
         public string AccountCodeName { get; set; }
+        public bool Sync { get; set; }
     }
 }

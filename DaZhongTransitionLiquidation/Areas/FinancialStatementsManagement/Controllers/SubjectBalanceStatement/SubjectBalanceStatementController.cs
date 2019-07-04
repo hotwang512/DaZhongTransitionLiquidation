@@ -11,6 +11,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SqlSugar;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 
 namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Controllers
 {
@@ -37,7 +39,7 @@ namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Contr
             });
             return result;
         }
-        public JsonResult GetSubjectBalance(string companyCode, string accountModeCode,string accountModeName,string month,string check, GridParams para)
+        public JsonResult GetSubjectBalance(string companyCode, string accountModeCode, string accountModeName, string month, string check, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_Business_SubjectSettingInfo>();
             DbBusinessDataService.Command(db =>
@@ -46,7 +48,7 @@ namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Contr
                 para.pagenum = para.pagenum + 1;
                 if (check == "T")
                 {
-                    var SubjectBalanceList = CheckSubjectBalanceList(db,companyCode, accountModeCode, accountModeName, month);
+                    var SubjectBalanceList = CheckSubjectBalanceList(db, companyCode, accountModeCode, accountModeName, month);
                     jsonResult.Rows = SubjectBalanceList;
                     jsonResult.TotalRows = pageCount;
                     return;
@@ -54,13 +56,14 @@ namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Contr
                 //查询期初7个段组合编码,期初余额
                 var SubjectBalance = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode", new { AccountModeCode = accountModeCode, CompanyCode = companyCode }).ToList();
                 //查询账期下的借贷额
-                var Assets = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount ,Sum(cast(ENTERED_DR as decimal(20,2))) as ENTERED_DR
-,Sum(cast(ENTERED_CR as decimal(20,2))) as ENTERED_CR from AssetsGeneralLedger_Swap where LEDGER_NAME=@AccountModeName and SEGMENT1=@CompanyCode and MONTH(ACCOUNTING_DATE)=@Month
+                var Assets = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount ,Sum(cast(CASE ENTERED_DR WHEN '' THEN '0' else ENTERED_DR end as decimal(20,2))) as ENTERED_DR
+,Sum(cast(CASE ENTERED_CR WHEN '' THEN '0' else ENTERED_CR end as decimal(20,2))) as ENTERED_CR from AssetsGeneralLedger_Swap where LEDGER_NAME=@AccountModeName and SEGMENT1=@CompanyCode and MONTH(ACCOUNTING_DATE)=@Month
 Group By (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7)", new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month }).ToList();
                 foreach (var item in SubjectBalance)
                 {
+                    item.Company = item.Company + "." + item.Accounting + "." + item.CostCenter + "." + item.SpareOne + "." + item.SpareTwo + "." + item.Intercourse;
                     var drcr = Assets.Where(x => x.SubjectCount == item.BusinessCode).FirstOrDefault();
-                    if(drcr != null)
+                    if (drcr != null)
                     {
                         try
                         {
@@ -82,7 +85,7 @@ Group By (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGME
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public List<v_Business_SubjectSettingInfo> CheckSubjectBalanceList(SqlSugarClient db,string companyCode, string accountModeCode, string accountModeName, string month)
+        public List<v_Business_SubjectSettingInfo> CheckSubjectBalanceList(SqlSugarClient db, string companyCode, string accountModeCode, string accountModeName, string month)
         {
             //从缓存中获取科目余额
             var SubjectBalance = CacheManager<List<v_Business_SubjectSettingInfo>>.GetInstance()[PubGet.GetUserKey + "SubjectBalance"];
@@ -120,13 +123,116 @@ Group By COMBINATION", new { AccountModeName = accountModeName, CompanyCode = co
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                var data = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,
-JE_HEADER_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR,STATUS,MESSAGE from AssetsGeneralLedger_Swap where MONTH(ACCOUNTING_DATE)=@Month and LEDGER_NAME=@AccountModeName 
+                var data = new List<AssetsGeneralLedger_Swap>();
+                var AssetsData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,
+JE_HEADER_NAME,ACCOUNTING_DATE,cast(CASE ENTERED_DR WHEN '' THEN '0' else ENTERED_DR end as decimal(20,2)) as ENTERED_DR,cast(CASE ENTERED_CR WHEN '' THEN '0' else ENTERED_CR end as decimal(20,2)) as ENTERED_CR,STATUS,MESSAGE from AssetsGeneralLedger_Swap where MONTH(ACCOUNTING_DATE)=@Month and LEDGER_NAME=@AccountModeName 
 and SEGMENT1=@CompanyCode ", new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month }).ToList();
-                jsonResult.Rows = data.Where(x => x.SubjectCount == businessCode).ToList();
+                AssetsData = AssetsData.Where(x => x.SubjectCount == businessCode).ToList();
+                var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
+from AssetsGeneralLedgerDetail_Swap where LEDGER_NAME=@AccountModeName and substring(COMBINATION,0,3)=@CompanyCode and MONTH(ACCOUNTING_DATE)=@Month and COMBINATION=@SubjectCount",
+                new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month, SubjectCount = businessCode }).ToList();
+                foreach (var item in AssetsDetailData)
+                {
+                    item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;
+                    item.ENTERED_DR = item.ENTERED_DR == null ? "0.00" : item.ENTERED_DR;
+                    var isAny = AssetsData.Any(x => x.SubjectCount == item.SubjectCount && x.LEDGER_NAME == item.LEDGER_NAME && x.JE_HEADER_NAME == item.JE_HEADER_NAME && x.ENTERED_DR == item.ENTERED_DR && x.ENTERED_CR == item.ENTERED_CR);
+                    if (!isAny)
+                    {
+                        data.Add(item);
+                    }
+                }
+                jsonResult.Rows = data;
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SyncAssetsData(string jsonData)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var voucherList = new List<Business_VoucherList>();
+                var voucherDetail = new List<Business_VoucherDetail>();
+                var sevenData1 = db.Queryable<Business_SevenSection>().Where(x=>x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                var sevenData2 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                var sevenData3 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Automatic == "3").ToList();
+                var assetsData = db.Queryable<AssetsGeneralLedgerDetail_Swap>().ToList();
+                var tableData = jsonData.JsonToModel<List<AssetsGeneralLedger_Swap>>();
+                foreach (var item in tableData)
+                {
+                    var isAny = voucherData.Any(x => x.VoucherNo == item.JE_HEADER_NAME.Split(" ")[0]);
+                    if (isAny)
+                    {
+                        continue;
+                    }
+                    var account = sevenData2.SingleOrDefault(x => x.Descrption == item.LEDGER_NAME).Code;
+                    var company = sevenData1.SingleOrDefault(x => x.AccountModeCode == account && x.Code == item.SubjectCount.Split(".")[0]).Descrption;
+                    var credit = item.ENTERED_CR == "0"? item.ENTERED_DR: item.ENTERED_CR;
+                    var debit = item.ENTERED_DR == "0" ? item.ENTERED_CR : item.ENTERED_DR;
+                    Business_VoucherList voucher = new Business_VoucherList();
+                    voucher.AccountingPeriod = item.ACCOUNTING_DATE;
+                    voucher.AccountModeName = item.LEDGER_NAME;
+                    voucher.Auditor = "";
+                    voucher.Bookkeeping = "";
+                    voucher.Cashier = "";
+                    voucher.CompanyCode = item.SubjectCount.Split(".")[0];
+                    voucher.CompanyName = company;
+                    voucher.Currency = "";
+                    voucher.DocumentMaker = "";
+                    voucher.FinanceDirector = "";
+                    voucher.Status = "3";
+                    voucher.VoucherDate = item.ACCOUNTING_DATE;
+                    voucher.VoucherType = item.JE_CATEGORY_NAME.Split(".")[1] + "类";
+                    voucher.CreditAmountTotal = credit.TryToDecimal();
+                    voucher.DebitAmountTotal = debit.TryToDecimal();
+                    voucher.CreateTime = DateTime.Now;
+                    var guid = Guid.NewGuid();
+                    voucher.BatchName = item.JE_BATCH_NAME.Split(" ")[0];
+                    voucher.VoucherNo = item.JE_HEADER_NAME.Split(" ")[0];
+                    voucher.VGUID = guid;
+                    voucher.Automatic = "3";//Oracle同步
+                    voucherList.Add(voucher);
+                    //凭证明细表
+                    var assetsDataList = assetsData.Where(x => x.LEDGER_NAME == item.LEDGER_NAME && x.JE_HEADER_NAME == item.JE_HEADER_NAME && x.ACCOUNTING_DATE == item.ACCOUNTING_DATE).ToList();
+                    if (assetsDataList.Count > 0)
+                    {
+                        foreach (var ass in assetsDataList)
+                        {
+                            var subject = sevenData3.Where(x => x.Code == ass.COMBINATION.Split(".")[1]).FirstOrDefault().Descrption;
+                            Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                            BVDetail.Abstract = "Oracle同步数据";
+                            BVDetail.CompanySection = ass.COMBINATION.Split(".")[0];
+                            BVDetail.SubjectSection = ass.COMBINATION.Split(".")[1];
+                            BVDetail.SubjectSectionName = subject;
+                            BVDetail.AccountSection = ass.COMBINATION.Split(".")[2];
+                            BVDetail.CostCenterSection = ass.COMBINATION.Split(".")[3];
+                            BVDetail.SpareOneSection = ass.COMBINATION.Split(".")[4];
+                            BVDetail.SpareTwoSection = ass.COMBINATION.Split(".")[5];
+                            BVDetail.IntercourseSection = ass.COMBINATION.Split(".")[6];           
+                            BVDetail.SevenSubjectName = ass.COMBINATION + ass.COMBINATION_DESCRIPTION;
+                            BVDetail.BorrowMoney = ass.ENTERED_DR;
+                            BVDetail.LoanMoney = ass.ENTERED_CR;
+                            BVDetail.BorrowMoneyCount = ass.ENTERED_DR;
+                            BVDetail.LoanMoneyCount = ass.ENTERED_CR;
+                            BVDetail.JE_LINE_NUMBER = 0;
+                            BVDetail.VGUID = Guid.NewGuid();
+                            BVDetail.VoucherVGUID = guid;
+                            voucherDetail.Add(BVDetail);
+                        }
+                    }
+                }
+                if(voucherList.Count > 0 && voucherDetail.Count > 0)
+                {
+                    db.Insertable(voucherList).ExecuteCommand();
+                    db.Insertable(voucherDetail).ExecuteCommand();
+                    resultModel.IsSuccess = true;
+                }else
+                {
+                    resultModel.Status = "1";
+                }
+            });
+            return Json(resultModel);
         }
     }
 }

@@ -105,6 +105,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             Descrption = sevenSection.Descrption,
                             AccountModeCode = sevenSection.AccountModeCode,
                             Remark = sevenSection.Remark,
+                            OrgID = sevenSection.OrgID,
+                            Abbreviation = sevenSection.Abbreviation,
                             VMDFTIME = DateTime.Now,
                             VMDFUSER = UserInfo.LoginName
                         }).Where(it => it.VGUID == guid).ExecuteCommand();
@@ -265,7 +267,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                                 disable = "2";
                             }
                         }
-                        EditStatus(code, item, status);
+                        EditStatus(code, item, status, data);
                     }                  
                     resultModel.IsSuccess = true;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
@@ -277,11 +279,11 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             return Json(resultModel);
         }
 
-        private void EditStatus(string code,Guid guid,string status)
+        private void EditStatus(string code,Guid guid,string status,List<Business_SevenSection> datas)
         {
             DbBusinessDataService.Command(db =>
             {
-                var datas = db.Queryable<Business_SevenSection>();
+                //var datas = db.Queryable<Business_SevenSection>();
                 var isAnyParent = datas.Where(x => x.ParentCode == code && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
                 if (isAnyParent.Count > 0)
                 {
@@ -289,7 +291,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     {
                         db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
                         { Status = status, VMDFTIME = DateTime.Now, VMDFUSER = UserInfo.LoginName }).Where(it => it.VGUID == item.VGUID).ExecuteCommand();
-                        EditStatus(item.Code,item.VGUID, status);
+                        EditStatus(item.Code,item.VGUID, status, datas);
                     }
                     //db.Deleteable<Business_SevenSection>(x => x.ParentCode == code && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
                 }
@@ -764,9 +766,11 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var response = new List<LedgerSubject_Swap>();
             DbBusinessDataService.Command(db =>
             {
-                var data1 = db.Queryable<LedgerSubject_Swap>().Where(x=>x.CheckStatus != "2").ToList();//查询未检测的数据
+                //var data1 = db.Queryable<LedgerSubject_Swap>().Where(x => x.CheckStatus != "2" || x.CheckStatus == null).ToList();//查询未检测的数据
+                var lastDate = db.Queryable<LedgerSubject_Swap>().OrderBy("LAST_UPDATE_DATE desc").First().LAST_UPDATE_DATE.Value.ToString("yyyy-MM-dd hh:mm").TryToDate();
+                var data1 = db.Queryable<LedgerSubject_Swap>().Where(x => x.LAST_UPDATE_DATE >= lastDate).ToList();//查询最后一批进入中间表的数据
                 var data2 = db.SqlQueryable<v_Business_SevenSection>(@"select a.*,b.Descrption as AccountCodeName from Business_SevenSection as a 
-left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43'").ToList();
+                            left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43'").ToList();
                 List<string> section = new List<string>();//["COM", "ACC", "HS", "BY1", "BY2", "CC", "WL" ];
                 section.Add("COM"); section.Add("ACC"); section.Add("HS"); section.Add("CC"); 
                 section.Add("BY1"); section.Add("BY2"); section.Add("WL");
@@ -791,10 +795,13 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                     var sectionList2 = data2.Where(x => x.SectionVGUID == section2[i]).ToList();
                     foreach (var sec in sectionList)
                     {
-                        var isAny = sectionList2.Any(x => x.AccountCodeName == sec.BOOK && x.Code == sec.CODE);
                         var status = sec.ACTIVE_FLAG == "Y" ? "1" : "0";
-                        //若同步数据已存在,状态不同且为禁用,将本地状态更新为禁用
-                        var isAnyStatus = sectionList2.Any(x => x.AccountCodeName == sec.BOOK && x.Code == sec.CODE && sec.ACTIVE_FLAG == "N" && x.Status != status);
+                        
+                        var dd = sectionList2.Where(x => x.AccountCodeName == sec.BOOK && (x.Sync != true || x.Sync.IsNullOrEmpty())).ToList();
+                        //完全新增数据
+                        var isAny = sectionList2.Any(x => x.AccountCodeName == sec.BOOK && x.Code == sec.CODE);
+                        //同账簿下非禁止同步数据,编号不一致或者状态不一致
+                        var isAnyStatus = sectionList2.Any(x => x.AccountCodeName == sec.BOOK && x.Code == sec.CODE && x.Sync != true && x.Status != status);
                         if (!isAny || isAnyStatus)
                         {
                             switch (i)
@@ -811,13 +818,14 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                         }
                     } 
                 }
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("COM", LedgerCOM, 8 * 60 * 60);
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("ACC", LedgerACC, 8 * 60 * 60);
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("HS", LedgerHS, 8 * 60 * 60);
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("CC", LedgerCC, 8 * 60 * 60);
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("BY1", LedgerBY1, 8 * 60 * 60);
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("BY2", LedgerBY2, 8 * 60 * 60);
-                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add("WL", LedgerWL, 8 * 60 * 60);
+                string uniqueKey = PubGet.GetUserKey;
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "COM", LedgerCOM, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "ACC", LedgerACC, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "HS", LedgerHS, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "CC", LedgerCC, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "BY1", LedgerBY1, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "BY2", LedgerBY2, 8 * 60 * 60);
+                CacheManager<List<LedgerSubject_Swap>>.GetInstance().Add(uniqueKey + "WL", LedgerWL, 8 * 60 * 60);
                 LedgerAccount.AddRange(LedgerCOM);
                 LedgerAccount.AddRange(LedgerACC);
                 LedgerAccount.AddRange(LedgerHS);
@@ -825,32 +833,33 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                 LedgerAccount.AddRange(LedgerBY1);
                 LedgerAccount.AddRange(LedgerBY2);
                 LedgerAccount.AddRange(LedgerWL);
-                response = LedgerAccount;
+                response = LedgerAccount.ToList().OrderBy(x => x.CODE).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SaveSubjectData(string jsonData)
+        public JsonResult SaveSubjectData(string jsonData,List<string> code)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var tableData = jsonData.JsonToModel<List<LedgerSubject_Swap>>();
-                var comData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["COM"];
-                var accData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["ACC"];
-                var hsData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["HS"];
-                var ccData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["CC"];
-                var by1Data = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["BY1"];
-                var by2Data = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["BY2"];
-                var wlData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()["WL"];
+                var comData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "COM"];
+                var accData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "ACC"];
+                var hsData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "HS"];
+                var ccData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "CC"];
+                var by1Data = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "BY1"];
+                var by2Data = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "BY2"];
+                var wlData = CacheManager<List<LedgerSubject_Swap>>.GetInstance()[PubGet.GetUserKey + "WL"];
                 List<LedgerSubject_Swap> LedgerAccount = new List<LedgerSubject_Swap>();
                 List<Business_SevenSection> sectionList = new List<Business_SevenSection>();
+                var sevenData = db.Queryable<Business_SevenSection>().ToList();
                 if (comData.Count > 0)
                 {
                     #region 公司段
                     foreach (var item in comData)
-                    {
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                    { 
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
                         Business_SevenSection section = new Business_SevenSection();
                         section.VGUID = Guid.NewGuid();
                         section.Code = item.CODE;
@@ -860,6 +869,7 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                         section.VCRTTIME = item.CREATE_DATE;
                         section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                         section.AccountModeCode = accountModeCode;
+                        section.Remark = "Oracle同步数据";
                         sectionList.Add(section);
                         item.CheckStatus = "2";
                     }
@@ -871,9 +881,14 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                     #region 科目段
                     foreach (var item in accData)
                     {
-                        //db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                        var isAnyCode = code.Contains(item.CODE);
+                        if (isAnyCode)
+                        {
+                            continue;
+                        }
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
                         var parentCode = tableData.Where(x => x.CODE == item.CODE && x.BOOK == item.BOOK).FirstOrDefault().ParentCode;
                         foreach (var com in companyList)
                         {
@@ -885,9 +900,14 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                             section.VCRTUSER = UserInfo.LoginName;
                             section.VCRTTIME = item.CREATE_DATE;
                             section.ParentCode = parentCode == null ? item.CODE.Substring(0, item.CODE.Length - 2) : parentCode;
+                            if(item.CODE.Length <= 4)
+                            {
+                                section.ParentCode = null;
+                            }
                             section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                             section.AccountModeCode = accountModeCode;
                             section.CompanyCode = com.Code;
+                            section.Remark = "Oracle同步数据";
                             sectionList.Add(section);
                         }
                         item.CheckStatus = "2";
@@ -900,9 +920,9 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                     #region 核算段
                     foreach (var item in hsData)
                     {
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "C63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "C63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
                         foreach (var com in companyList)
                         {
                             Business_SevenSection section = new Business_SevenSection();
@@ -915,6 +935,7 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                             section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                             section.AccountModeCode = accountModeCode;
                             section.CompanyCode = com.Code;
+                            section.Remark = "Oracle同步数据";
                             sectionList.Add(section);  
                         }
                         item.CheckStatus = "2";
@@ -926,10 +947,10 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                 {
                     #region 成本中心段
                     foreach (var item in ccData)
-                    {
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                    {                
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
                         foreach (var com in companyList)
                         {
                             Business_SevenSection section = new Business_SevenSection();
@@ -942,6 +963,7 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                             section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                             section.AccountModeCode = accountModeCode;
                             section.CompanyCode = com.Code;
+                            section.Remark = "Oracle同步数据";
                             sectionList.Add(section);
                         }
                         item.CheckStatus = "2";
@@ -953,10 +975,10 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                 {
                     #region 备用1
                     foreach (var item in by1Data)
-                    {
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                    {              
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
                         foreach (var com in companyList)
                         {
                             Business_SevenSection section = new Business_SevenSection();
@@ -969,6 +991,7 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                             section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                             section.AccountModeCode = accountModeCode;
                             section.CompanyCode = com.Code;
+                            section.Remark = "Oracle同步数据";
                             sectionList.Add(section);
                         }
                         item.CheckStatus = "2";
@@ -980,10 +1003,10 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                 {
                     #region 备用2
                     foreach (var item in by2Data)
-                    {
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "F63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                    {                       
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "F63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
                         foreach (var com in companyList)
                         {
                             Business_SevenSection section = new Business_SevenSection();
@@ -996,6 +1019,7 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                             section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                             section.AccountModeCode = accountModeCode;
                             section.CompanyCode = com.Code;
+                            section.Remark = "Oracle同步数据";
                             sectionList.Add(section);
                         }
                         item.CheckStatus = "2";
@@ -1007,10 +1031,10 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                 {
                     #region 往来段
                     foreach (var item in wlData)
-                    {
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "G63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                    {                       
                         var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        var companyList = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "G63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
                         foreach (var com in companyList)
                         {
                             Business_SevenSection section = new Business_SevenSection();
@@ -1023,6 +1047,7 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                             section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
                             section.AccountModeCode = accountModeCode;
                             section.CompanyCode = com.Code;
+                            section.Remark = "Oracle同步数据";
                             sectionList.Add(section);
                         }
                         item.CheckStatus = "2";
@@ -1032,10 +1057,23 @@ left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.Section
                 }
                 if (sectionList.Count > 0)
                 {
-                    //db.Insertable(sectionList).ExecuteCommand();
-                    //db.Updateable(LedgerAccount).ExecuteCommand();
+                    db.Insertable(sectionList).ExecuteCommand();
+                    //db.Updateable(LedgerAccount).Where(x=>x.CheckStatus == null).ExecuteCommand();
+                    //db.Ado.SqlQuery<LedgerSubject_Swap>(@"update LedgerSubject_Swap set CheckStatus='2' where CheckStatus is null");
                     resultModel.IsSuccess = true;
                 }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult UpdataSyncStatus(Guid vguids, bool ischeck)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                db.Updateable<Business_SevenSection>().UpdateColumns(it => new Business_SevenSection()
+                {
+                    Sync = ischeck,
+                }).Where(it => it.VGUID == vguids).ExecuteCommand();
             });
             return Json(resultModel);
         }

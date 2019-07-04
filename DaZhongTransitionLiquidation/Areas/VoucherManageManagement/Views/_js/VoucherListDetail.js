@@ -232,6 +232,9 @@ var $page = function () {
             if ($("#SubjectName0").val() != null || $("#SubjectName0").val() != "") {
                 var subjectName = $("#SubjectName0").val().split(".");
                 var companyName = subjectName[6].split(/[\s\n]/)[1];
+                if (subjectName[6].split(/[\s\n]/).length < 2) {
+                    companyName = subjectName[6].substring(1, subjectName[6].length);
+                }
                 $("#lblCompany").text(companyName);
             }          
             $("#lblAccountingPeriods").text($("#AccountingPeriod").val());

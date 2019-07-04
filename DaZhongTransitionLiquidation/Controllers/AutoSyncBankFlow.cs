@@ -96,6 +96,73 @@ namespace DaZhongTransitionLiquidation.Controllers
                 Thread.Sleep((int)(1000));
             }
         }
+        public static void AutoSyncBankSeavice()
+        {
+            Thread LogThread = new Thread(new ThreadStart(DoSyncBankCBCBCM));
+            //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+            LogThread.IsBackground = true;
+            LogThread.Start();//起线程  
+        }
+        public static void DoSyncBankCBCBCM()
+        {
+            while (true)
+            {
+                //同步交行&建行交易流水
+                List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+                var success = 0;
+                try
+                {
+                    SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
+                    var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行").ToList();
+                    var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();
+                    bankFlowList = GetBankData(_db,bankData, bankFlowList, bankFlowData);
+                    if (bankFlowList.Count > 0)
+                    {
+                        //按交易日期排序取最小值
+                        bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
+                        //success = WirterSyncBankFlow(bankFlowList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
+                }
+                double timeSpan = ConfigSugar.GetAppString("TimeSpan").TryToInt();
+                Thread.Sleep((int)(timeSpan * 1000 * 60 * 60));
+            }
+        }
+        private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData)
+        {
+            foreach (var details in bankData)
+            {
+                var isAny = bankFlowData.Any(x => x.Batch == details.TRX_SEQUENCE_ID.TryToString() && x.TradingBank == details.ATTRIBUTE4);
+                if (isAny)
+                {
+                    continue;
+                }
+                Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
+                bankFlow.BankAccount = details.ATTRIBUTE3;
+                bankFlow.Currency = "人民币";
+                bankFlow.ReceivingUnitInstitution = "";
+                bankFlow.TradingBank = details.ATTRIBUTE4;
+                bankFlow.PaymentUnit = "大众交通（集团）股份有限公司大众出租汽车分公司";//我方
+                bankFlow.PayeeAccount = details.ATTRIBUTE3;//我方
+                bankFlow.ReceivingUnit = details.TRX_ACCOUNT_NAME;//对方
+                bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
+                bankFlow.TurnIn = details.ENTER_CR.TryToDecimal();
+                bankFlow.TurnOut = details.ENTER_DR.TryToDecimal();
+                bankFlow.VGUID = Guid.NewGuid();
+                bankFlow.TransactionDate = details.TRX_DATE.TryToDate();
+                bankFlow.PaymentUnitInstitution = "";
+                bankFlow.Purpose = details.USE;
+                bankFlow.Remark = details.DESCRIPTION;
+                bankFlow.Batch = details.TRX_SEQUENCE_ID.TryToString();
+                bankFlow.VoucherSubjectName = "Oracle同步数据";
+                bankFlowList.Add(bankFlow);
+            }
+            return bankFlowList;
+        }
+
         public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
         {
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();

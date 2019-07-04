@@ -30,6 +30,9 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public bool IsCompanyBank { get; set; }
         public string AccountModeCode { get; set; }
         public string CompanyCode { get; set; }
+        public string OrgID { get; set; }
+        public string Abbreviation { get; set; }
+        public bool Sync { get; set; }
     }
     public class SevenSectionDropdown
     {

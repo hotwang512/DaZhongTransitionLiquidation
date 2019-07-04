@@ -46,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
 
         public JsonResult SubmitReviewAsset(string YearMonth)
         {
-            var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "1" };
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var reviewList = db.Queryable<Business_AssetReview>()
@@ -95,17 +95,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             //经营模式子类
                             reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
                             //经营模式子类
+                            reviewItem.ISVERIFY = true;
                         }
                         else
                         {
                             resultModel.IsSuccess = false;
-                            resultModel.Status = "0";
+                            resultModel.Status = "2";
+                            resultModel.ResultInfo = "数据存在不一致";
                             break;
                         }
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
                     }
                     if (resultModel.IsSuccess)
                     {
-                        db.Insertable<Business_AssetReview>(reviewList).IgnoreColumns(it => new { it.ISVERIFY, it.START_VEHICLE_DATE }).ExecuteCommand();
+                        db.Updateable<Business_AssetReview>(reviewList).IgnoreColumns(it => new { it.ISVERIFY, it.START_VEHICLE_DATE }).ExecuteCommand();
                         //资产新增后写入Oracle中间表
                         var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                         foreach (var item in reviewList)
@@ -145,7 +149,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 else
                 {
                     resultModel.IsSuccess = false;
-                    resultModel.Status = "0";
+                    resultModel.Status = "2";
+                    resultModel.ResultInfo = "数量不一致";
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

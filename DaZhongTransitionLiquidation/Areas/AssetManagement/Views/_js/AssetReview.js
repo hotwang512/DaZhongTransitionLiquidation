@@ -56,6 +56,10 @@ var $page = function () {
                         jqxNotification("审核成功！", null, "success");
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo, null, "success");
+                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        break;
                 }
             }
         });

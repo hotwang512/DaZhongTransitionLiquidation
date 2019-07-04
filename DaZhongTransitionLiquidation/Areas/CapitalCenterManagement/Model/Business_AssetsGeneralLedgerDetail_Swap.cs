@@ -29,8 +29,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public decimal? ACCOUNTED_CR { get; set; }
         public DateTime? LAST_UPDATE_DATE { get; set; }
         public DateTime? CREATE_DATE { get; set; }
-        public Guid LINE_ID { get; set; }
-        public Guid JE_LINE_ID { get; set; }
+        public string LINE_ID { get; set; }
+        public string JE_LINE_ID { get; set; }
         public string SOURCE { get; set; }
     }
 }

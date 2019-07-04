@@ -56,6 +56,9 @@ var $page = function () {
         $("#AddSubject_CancelBtn").on("click", function () {
             $("#AddSubjectTable").modal("hide");
         });
+        $("#AddSubject_OKButton").on("click", function () {
+            syncAssetsData();
+        });
     }; //addEvent end
 };
 
@@ -66,6 +69,7 @@ function initTable(check) {
             datafields:
             [
                 { name: 'BusinessCode', type: 'string' },
+                { name: 'Company', type: 'string' },
                 { name: 'Balance', type: 'number' },//期初余额
                 { name: 'ENTERED_DR', type: 'number' },//本期借方
                 { name: 'ENTERED_CR', type: 'number' },//本期贷方
@@ -97,7 +101,8 @@ function initTable(check) {
         columnsHeight: 40,
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-            { text: '编码', datafield: 'BusinessCode', width: 250, align: 'center', cellsAlign: 'center', },
+            { text: '编码', datafield: 'BusinessCode', width: 200, align: 'center', cellsAlign: 'center', },
+            { text: '组合', datafield: 'Company', width: 450, align: 'center', cellsAlign: 'center', },
             { text: '期初余额', datafield: 'Balance', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
             { text: '本期借方', datafield: 'ENTERED_DR', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
             { text: '本期贷方', datafield: 'ENTERED_CR', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
@@ -155,6 +160,7 @@ function initSubjectTable(businessCode) {
                 { name: 'LEDGER_NAME', type: 'string' },
                 { name: 'JE_BATCH_NAME', type: 'string' },
                 { name: 'JE_HEADER_NAME', type: 'string' },
+                { name: 'JE_CATEGORY_NAME', type: 'string' },
                 { name: 'ACCOUNTING_DATE', type: 'date' },
                 { name: 'ENTERED_DR', type: 'number' },//本期借方
                 { name: 'ENTERED_CR', type: 'number' },//本期贷方
@@ -186,15 +192,33 @@ function initSubjectTable(businessCode) {
         pagermode: 'simple',
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-            { text: '编码', datafield: 'SubjectCount', width: 180, align: 'center', cellsAlign: 'center', },
+            { text: '编码', datafield: 'SubjectCount', width: 180, align: 'center', cellsAlign: 'center', hidden: true },
             { text: '账簿', datafield: 'LEDGER_NAME', width: 180, align: 'center', cellsAlign: 'center', },
-            { text: '批名', datafield: 'JE_BATCH_NAME', width: 150, align: 'center', cellsAlign: 'center', },
-            { text: '凭证号', datafield: 'JE_HEADER_NAME', width: 120, align: 'center', cellsAlign: 'center', },
+            { text: '批名', datafield: 'JE_BATCH_NAME', width: 450, align: 'center', cellsAlign: 'center', },
+            { text: '凭证号', datafield: 'JE_HEADER_NAME', width: 250, align: 'center', cellsAlign: 'center', },
             { text: '记账日期', datafield: 'ACCOUNTING_DATE', width: 120, align: 'center', cellsAlign: 'center', cellsformat: "yyyy-MM-dd" },
             { text: '本期借方', datafield: 'ENTERED_DR', width: 120, cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
-            { text: '本期贷方', datafield: 'ENTERED_CR', width: 120, cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
-            { text: '状态', datafield: 'STATUS', width: 50, align: 'center', cellsAlign: 'center', },
-            { text: '描述', datafield: 'MESSAGE', align: 'center', cellsAlign: 'center', }
+            { text: '本期贷方', datafield: 'ENTERED_CR', cellsFormat: "d2", align: 'center', cellsAlign: 'center' },
+            { text: '状态', datafield: 'STATUS', width: 50, align: 'center', cellsAlign: 'center',hidden:true },
+            { text: '描述', datafield: 'MESSAGE', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '', datafield: 'JE_CATEGORY_NAME', align: 'center', cellsAlign: 'center', hidden: true }
         ]
     });
+}
+function syncAssetsData() {
+    var tableData = $('#jqxSubjectTable').jqxGrid('getboundrows')
+    $.ajax({
+        url: "/FinancialStatementsManagement/SubjectBalanceStatement/SyncAssetsData",
+        data: { jsonData: JSON.stringify(tableData) },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.IsSuccess == true) {
+                jqxNotification("同步成功！", null, "success");
+            }
+            if (msg.Status == "1") {
+                jqxNotification("这批数据已经同步！", null, "success");
+            }
+        }
+    })
 }

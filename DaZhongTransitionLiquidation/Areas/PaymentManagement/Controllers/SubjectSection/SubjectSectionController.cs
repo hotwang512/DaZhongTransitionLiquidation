@@ -50,7 +50,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                     foreach (var item in response)
                     {
                         //EditStatus(item.Code,item.VGUID, sevenList, sevenLists, response);
-                        var isAnyAccountingCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.AccountingCode != null);
+                        var isAnyAccountingCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.AccountingCode != null && x.AccountModeCode == item.AccountModeCode);
                         if (isAnyAccountingCode)
                         {
                             item.IsAccountingCode = true;
@@ -59,7 +59,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         {
                             item.IsAccountingCode = false;
                         }
-                        var isAnyCostCenterCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.CostCenterCode != null);
+                        var isAnyCostCenterCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.CostCenterCode != null && x.AccountModeCode == item.AccountModeCode);
                         if (isAnyCostCenterCode)
                         {
                             item.IsCostCenterCode = true;
@@ -68,7 +68,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         {
                             item.IsCostCenterCode = false;
                         }
-                        var isAnySpareOneCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.SpareOneCode != null);
+                        var isAnySpareOneCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.SpareOneCode != null && x.AccountModeCode == item.AccountModeCode);
                         if (isAnySpareOneCode)
                         {
                             item.IsSpareOneCode = true;
@@ -77,7 +77,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         {
                             item.IsSpareOneCode = false;
                         }
-                        var isAnySpareTwoCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.SpareTwoCode != null);
+                        var isAnySpareTwoCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.SpareTwoCode != null && x.AccountModeCode == item.AccountModeCode);
                         if (isAnySpareTwoCode)
                         {
                             item.IsSpareTwoCode = true;
@@ -86,7 +86,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         {
                             item.IsSpareTwoCode = false;
                         }
-                        var isAnyIntercourseCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.IntercourseCode != null);
+                        var isAnyIntercourseCode = data.Any(x => x.SubjectCode == companyCode && x.CompanyCode == item.Code && x.IntercourseCode != null && x.AccountModeCode == item.AccountModeCode);
                         if (isAnyIntercourseCode)
                         {
                             item.IsIntercourseCode = true;

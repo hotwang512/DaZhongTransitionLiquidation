@@ -152,8 +152,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.SEGMENT5 = items.SpareOneSection;
                 asset.SEGMENT6 = items.SpareTwoSection;
                 asset.SEGMENT7 = items.IntercourseSection;
-                asset.ENTERED_CR = items.LoanMoney.TryToString() == "" ? "0" : items.LoanMoney.TryToString();
-                asset.ENTERED_DR = items.BorrowMoney.TryToString() == "" ? "0" : items.BorrowMoney.TryToString();
+                asset.ENTERED_CR = items.LoanMoney.TryToString() ;
+                asset.ENTERED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_CR = items.LoanMoney.TryToString();
                 //asset.SubjectCount = items.CompanySection + "." + items.SubjectSection + "." + items.AccountSection + "." + items.CostCenterSection + "." + items.SpareOneSection + "." + items.SpareTwoSection + "." + items.IntercourseSection;

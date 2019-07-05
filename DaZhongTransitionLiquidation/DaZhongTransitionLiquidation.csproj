@@ -113,6 +113,10 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenPop, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_lib\OpenPop.dll</HintPath>
+    </Reference>
     <Reference Include="SqlSugar, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\SqlSugar.dll</HintPath>
@@ -331,6 +335,7 @@
     <Content Include="_lib\Autofac.Integration.Mvc.dll" />
     <Content Include="_lib\log4net.dll" />
     <Content Include="_lib\Newtonsoft.Json.dll" />
+    <Content Include="_lib\OpenPop.dll" />
     <Content Include="_lib\SqlSugar.dll" />
     <Content Include="_lib\SyntacticSugar.dll" />
     <Content Include="_theme\bootstrap-datepicker\bootstrap-datepicker.min.css" />
@@ -2439,6 +2444,7 @@
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\DZLoginInfo.cs" />
+    <Compile Include="Controllers\AutoSyncEmailController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2538,6 +2544,7 @@
     <Folder Include="uploads\AssetAttachFile\" />
     <Folder Include="uploads\PurchaseAssign\" />
     <Folder Include="uploads\PurchaseContract\" />
+    <Folder Include="Views\Email\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="Views\PhotoUpload\" />
     <Folder Include="_theme\temp\file\" />

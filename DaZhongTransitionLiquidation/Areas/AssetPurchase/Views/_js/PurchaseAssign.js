@@ -220,7 +220,7 @@ var $page = function () {
                     FixedAssetsOrderVguid +
                     '\')" id="' +
                     FixedAssetsOrderVguid +
-                    '">重新导入</a>' +
+                    '">导入</a>' +
                     '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
                     '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
                     FixedAssetsOrderVguid +

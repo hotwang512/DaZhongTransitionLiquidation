@@ -60,6 +60,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
+        public string MANAGEMENT_COMPANY_CODE { get; set; }
         public string MANAGEMENT_COMPANY { get; set; }
 
         /// <summary>
@@ -67,6 +68,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
+        public string BELONGTO_COMPANY_CODE { get; set; }
         public string BELONGTO_COMPANY { get; set; }
 
         /// <summary>

@@ -59,11 +59,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var newVehicleList = resultApiModel.data;
                 var lista = reviewList.Select(x => new
                     AssetDifference
-                    { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY, BELONGTO_COMPANY = x.BELONGTO_COMPANY }).ToList();
+                    { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY_CODE, BELONGTO_COMPANY = x.BELONGTO_COMPANY_CODE }).ToList();
                 var listb = newVehicleList.Select(x => new
                     AssetDifference
                     { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY, BELONGTO_COMPANY = x.BELONGTO_COMPANY }).ToList();
-                
+                //获取所有的公司
+                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                 if (reviewList.Count() == resultApiModel.data.Count())
                 {
                     //获取所有的经营模式
@@ -184,6 +186,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     }
                     else
                     {
+                        //Code转名称
+                        foreach (var data in listc)
+                        {
+                            data.BELONGTO_COMPANY =
+                                ssList.Where(x => x.OrgID == data.BELONGTO_COMPANY).First().Descrption;
+                            data.MANAGEMENT_COMPANY =
+                                ssList.Where(x => x.OrgID == data.MANAGEMENT_COMPANY).First().Abbreviation;
+                        }
                         resultModel.IsSuccess = false;
                         resultModel.Status = "2";
                         resultModel.ResultInfo = "数据对比不一致";
@@ -194,6 +204,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 {
                     var listc = new List<AssetDifference>();
                     listc = lista.Count > listb.Count ? lista.Except(listb).ToList() : listb.Except(lista).ToList();
+                    //Code转名称
+                    foreach (var data in listc)
+                    {
+                        data.BELONGTO_COMPANY =
+                            ssList.Where(x => x.OrgID == data.BELONGTO_COMPANY).First().Descrption;
+                        data.MANAGEMENT_COMPANY =
+                            ssList.Where(x => x.OrgID == data.MANAGEMENT_COMPANY).First().Abbreviation;
+                    }
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
                     resultModel.ResultInfo = reviewList.Count > resultApiModel.data.Count ? "审核数量大于获取数据" : "审核数量小于获取数据";

@@ -60,8 +60,8 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             var list = new List<BusinessProjectModel>();
             DbBusinessDataService.Command(db =>
             {
-                list = BusinessProject != "" ? db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE BusinessProject LIKE '%" + BusinessProject + "%'").ToList()
-                    : db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet").ToList();
+                list = BusinessProject != "" ? db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101' and BusinessProject LIKE '%" + BusinessProject + "%'").ToList()
+                    : db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet Where  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101'").ToList();
             });
 
             return Json(list, JsonRequestBehavior.AllowGet);

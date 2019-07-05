@@ -29,13 +29,17 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 if (DateTime.Now.ToString("HH:ss") == syncTime)
                 {
-                    List<string> fileNames = GetEmailAttachments();
-                    if (fileNames.Count > 0)
-                    {
-                        ImportFile(fileNames);
-                    }
+                    ExceSyncEmail();
                 }
                 Thread.Sleep(1000);
+            }
+        }
+        public static void ExceSyncEmail()
+        {
+            List<string> fileNames = GetEmailAttachments();
+            if (fileNames.Count > 0)
+            {
+                ImportFile(fileNames);
             }
         }
         private static List<string> GetEmailAttachments()
@@ -86,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             foreach (var fileName in fileNames)
             {
                 nextDayDataPack.ImportDataHuiDouQuan(fileName);
-               
+
             }
 
         }

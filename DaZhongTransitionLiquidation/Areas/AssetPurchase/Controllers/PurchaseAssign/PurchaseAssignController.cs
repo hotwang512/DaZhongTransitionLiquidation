@@ -374,6 +374,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             if (isSubmit)
                             {
                                 //提交写入到资产审核表
+                                if (db.Queryable<Business_AssetReview>().Any(x => x.FIXED_ASSETS_ORDERID == vguid))
+                                {
+                                    db.Deleteable<Business_AssetReview>().Where(c => c.FIXED_ASSETS_ORDERID == vguid).ExecuteCommand();
+                                }
                                 var belongToList = db.Queryable<Business_AssetOrderBelongTo>()
                                     .Where(x => x.AssetsOrderVguid == vguid).ToList();
                                 var orderNumberLeft = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
@@ -493,6 +497,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.EXP_ACCOUNT_SEGMENT = ssModel.Descrption;
                                     assetReview.YTD_DEPRECIATION = 0;
                                     assetReview.ACCT_DEPRECIATION = 0;
+                                    assetReview.FIXED_ASSETS_ORDERID = vguid;
                                     assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
                                     assetReview.CREATE_DATE = DateTime.Now;
                                     assetReviewList.Add(assetReview);

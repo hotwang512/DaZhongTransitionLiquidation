@@ -2,63 +2,462 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SqlSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
 {
-    public class Business_AssetMaintenanceInfo
+    ///<summary>
+    ///资产维护
+    ///</summary>
+    [SugarTable("Business_AssetMaintenanceInfo")]
+    public partial class Business_AssetMaintenanceInfo
     {
+        public Business_AssetMaintenanceInfo()
+        {
+
+
+        }
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:False
+        /// </summary>           
+        [SugarColumn(IsPrimaryKey = true)]
         public Guid VGUID { get; set; }
-        public string ASSET_CATEGORY_MAJOR { set; get; }
-        public string ASSET_CATEGORY_MINOR { set; get; }
-        public string GROUP_ID { set; get; }
-        public string ORGANIZATION_NUM { set; get; }
-        public string ENGINE_NUMBER { set; get; }
-        public string PLATE_NUMBER { set; get; }
-        public string CHASSIS_NUMBER { set; get; }
-        public string BOOK_TYPE_CODE { set; get; }
-        public string TAG_NUMBER { set; get; }
-        public string DESCRIPTION { set; get; }
-        public int? QUANTITY { set; get; }
-        public DateTime? ASSET_CREATION_DATE { set; get; }
-        public double? ASSET_COST { set; get; }
-        public string SALVAGE_TYPE { set; get; }
-        public double? SALVAGE_PERCENT { set; get; }
-        public double? SALVAGE_VALUE { set; get; }
-        public double? YTD_DEPRECIATION { set; get; }
-        public string ACCT_DEPRECIATION { set; get; }
-        public string METHOD { set; get; }
-        public int? LIFE_MONTHS { set; get; }
-        public string AMORTIZATION_FLAG { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT1 { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT2 { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT3 { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT4 { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT5 { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT6 { set; get; }
-        public double? EXP_ACCOUNT_SEGMENT7 { set; get; }
-        public string FA_LOC_1 { set; get; }
-        public string FA_LOC_2 { set; get; }
-        public string FA_LOC_3 { set; get; }
-        public string RETIRE_FLAG { set; get; }
-        public int? RETIRE_QUANTITY { set; get; }
-        public double? RETIRE_COST { set; get; }
-        public DateTime? RETIRE_DATE { set; get; }
-        public int? TRANSACTION_ID { set; get; }
-        public DateTime? LAST_UPDATE_DATE { set; get; }
-        public double? LISENSING_FEE { set; get; }
-        public double? OUT_WAREHOUSE_FEE { set; get; }
-        public double? DOME_LIGHT_FEE { set; get; }
-        public double? ANTI_ROBBERY_FEE { set; get; }
-        public double? LOADING_FEE { set; get; }
-        public double? INNER_ROOF_FEE { set; get; }
-        public double? TAXIMETER_FEE { set; get; }
-        public double? OBD_FEE { set; get; }
-        public double? PURCHASE_TAX { set; get; }
-        public string ACCEPTANCE_CERTIFICATE { set; get; }
-        public DateTime? CREATE_DATE { set; get; }
-        public DateTime? CHANGE_DATE { set; get; }
-        public string CREATE_USER { set; get; }
-        public string CHANGE_USER { set; get; }
-        public string STATUS { set; get; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ORIGINALID { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string GROUP_ID { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string PLATE_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string TAG_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string VEHICLE_SHORTNAME { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ORGANIZATION_NUM { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string MANAGEMENT_COMPANY { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string BELONGTO_COMPANY { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ASSET_ID { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string VEHICLE_STATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string OPERATING_STATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string DESCRIPTION { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ENGINE_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string CHASSIS_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? PRODUCTION_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? PURCHASE_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? LISENSING_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? COMMISSIONING_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? VEHICLE_AGE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? BACK_CAR_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string FUEL_TYPE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string DELIVERY_INFORMATION { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public int? QUANTITY { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? ASSET_COST { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? NUDE_CAR_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? PURCHASE_TAX { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? LISENSING_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? OUT_WAREHOUSE_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DOME_LIGHT_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? ANTI_ROBBERY_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? LOADING_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? INNER_ROOF_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? TAXIMETER_FEE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ASSET_DISPOSITION_TYPE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string SCRAP_INFORMATION { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DISPOSAL_AMOUNT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DISPOSAL_TAX { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? DISPOSAL_PROFIT_LOSS { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? BAK_CAR_AGE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ASSET_CATEGORY_MAJOR { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ASSET_CATEGORY_MINOR { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public int? LIFE_YEARS { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public int? LIFE_MONTHS { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string SALVAGE_TYPE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? SALVAGE_PERCENT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? SALVAGE_VALUE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string AMORTIZATION_FLAG { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string METHOD { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string BOOK_TYPE_CODE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ASSET_COST_ACCOUNT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ASSET_SETTLEMENT_ACCOUNT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string DEPRECIATION_EXPENSE_SEGMENT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ACCT_DEPRECIATION_ACCOUNT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:0
+        /// Nullable:True
+        /// </summary>           
+        public decimal? YTD_DEPRECIATION { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:0
+        /// Nullable:True
+        /// </summary>           
+        public decimal? ACCT_DEPRECIATION { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string EXP_ACCOUNT_SEGMENT { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string MODEL_MAJOR { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string MODEL_MINOR { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? CREATE_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public DateTime? CHANGE_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string CREATE_USER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string CHANGE_USER { get; set; }
+
     }
 }

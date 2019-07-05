@@ -57,15 +57,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                                 sevenSection.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
                                 var account = assetCategory.ASSET_COST_ACCOUNT;
                                 var arr = account.Split(".");
-                                sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
-                                sevenSection.EXP_ACCOUNT_SEGMENT2 = Convert.ToDouble(arr[1]);
-                                sevenSection.EXP_ACCOUNT_SEGMENT3 = Convert.ToDouble(arr[2]);
-                                sevenSection.EXP_ACCOUNT_SEGMENT4 = Convert.ToDouble(arr[3]);
-                                sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
-                                sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
-                                sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT2 = Convert.ToDouble(arr[1]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT3 = Convert.ToDouble(arr[2]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT4 = Convert.ToDouble(arr[3]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
+                                //sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
                             }
-                            sevenSection.STATUS = AcceptStatus.UnAccept;
+                            //sevenSection.STATUS = AcceptStatus.UnAccept;
                             db.Insertable<Business_AssetMaintenanceInfo>(sevenSection).ExecuteCommand();                       
                             //中间表数据
                             var resultSwap = SaveAssetMaintenanceInfo_Swap(sevenSection);
@@ -92,15 +92,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                             sevenSection.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
                             var account = assetCategory.ASSET_COST_ACCOUNT;
                             var arr = account.Split(".");
-                            sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
-                            sevenSection.EXP_ACCOUNT_SEGMENT2 = Convert.ToDouble(arr[1]);
-                            sevenSection.EXP_ACCOUNT_SEGMENT3 = Convert.ToDouble(arr[2]);
-                            sevenSection.EXP_ACCOUNT_SEGMENT4 = Convert.ToDouble(arr[3]);
-                            sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
-                            sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
-                            sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT1 = Convert.ToDouble(arr[0]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT2 = Convert.ToDouble(arr[1]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT3 = Convert.ToDouble(arr[2]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT4 = Convert.ToDouble(arr[3]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT5 = Convert.ToDouble(arr[4]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT6 = Convert.ToDouble(arr[5]);
+                            //sevenSection.EXP_ACCOUNT_SEGMENT7 = Convert.ToDouble(arr[6]);
                         }
-                        db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER, x.ACCEPTANCE_CERTIFICATE, x.STATUS }).ExecuteCommand();
+                        //db.Updateable<Business_AssetMaintenanceInfo>(sevenSection).IgnoreColumns(x => new { x.CREATE_DATE, x.CREATE_USER, x.ACCEPTANCE_CERTIFICATE, x.STATUS }).ExecuteCommand();
                         //中间表数据
                         var resultSwap = SaveAssetMaintenanceInfo_Swap(sevenSection);
                     }
@@ -192,13 +192,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     var result = db.Ado.UseTran(() =>
                     {
                         sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                        sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
+                        //sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
                         sevenSection.CHANGE_DATE = DateTime.Now;
                         sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
                         db.Updateable(sevenSection).UpdateColumns(x => new {
                             x.CHANGE_DATE,
                             x.CHANGE_USER,
-                            x.ACCEPTANCE_CERTIFICATE
+                            //x.ACCEPTANCE_CERTIFICATE
                         }).ExecuteCommand();
                     });
                     resultModel.IsSuccess = result.IsSuccess;
@@ -229,18 +229,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                             var result = db.Ado.UseTran(() =>
                             {
                                 sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                                sevenSection.ACCEPTANCE_CERTIFICATE = imageServerUrl + fileData.fileName;
+                                //sevenSection.ACCEPTANCE_CERTIFICATE = imageServerUrl + fileData.fileName;
                                 sevenSection.CHANGE_DATE = DateTime.Now;
                                 sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
                                 db.Updateable(sevenSection).UpdateColumns(x => new
                                 {
                                     x.CHANGE_DATE,
                                     x.CHANGE_USER,
-                                    x.ACCEPTANCE_CERTIFICATE
+                                    //x.ACCEPTANCE_CERTIFICATE
                                 }).ExecuteCommand();
                             });
                             resultModel.IsSuccess = result.IsSuccess;
-                            resultModel.ResultInfo = sevenSection.ACCEPTANCE_CERTIFICATE;
+                            //resultModel.ResultInfo = sevenSection.ACCEPTANCE_CERTIFICATE;
                             resultModel.ResultInfo2 = fileData.fileName;
                             resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
                         });
@@ -267,13 +267,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                         var result = db.Ado.UseTran(() =>
                         {
                             sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
-                            sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
+                            //sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
                             sevenSection.CHANGE_DATE = DateTime.Now;
                             sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
                             db.Updateable(sevenSection).UpdateColumns(x => new {
                                 x.CHANGE_DATE,
                                 x.CHANGE_USER,
-                                x.ACCEPTANCE_CERTIFICATE
+                                //x.ACCEPTANCE_CERTIFICATE
                             }).ExecuteCommand();
                         });
                         resultModel.IsSuccess = result.IsSuccess;
@@ -335,10 +335,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 assetData.TAG_NUMBER = sevenSection.TAG_NUMBER;
                 assetData.DESCRIPTION = sevenSection.DESCRIPTION;
                 assetData.QUANITIY = sevenSection.QUANTITY;
-                assetMaintenanceInfo.STATUS = AcceptStatus.Accepted;
+                //assetMaintenanceInfo.STATUS = AcceptStatus.Accepted;
                 assetMaintenanceInfo.CHANGE_DATE = DateTime.Now;
                 assetMaintenanceInfo.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
-                db.Updateable<Business_AssetMaintenanceInfo>(assetMaintenanceInfo).UpdateColumns(x => new { x.STATUS, x.CHANGE_DATE}).ExecuteCommand();
+                //db.Updateable<Business_AssetMaintenanceInfo>(assetMaintenanceInfo).UpdateColumns(x => new { x.STATUS, x.CHANGE_DATE}).ExecuteCommand();
                 resultModel.IsSuccess = AssetMaintenanceAPI.SendAssetInfo(assetData);
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });

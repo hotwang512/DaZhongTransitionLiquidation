@@ -10,21 +10,46 @@ namespace DaZhongTransitionLiquidation.Common
 {
     public class AssetMaintenanceAPI
     {
-        public static List<AssetMaintenanceInfoFlowData> GetAssetMaintenanceInfoData()
+        //每月全量取营收系统、获取车辆固定资产
+        public static List<ModifyVehicleApiModel> GetModifyVehicleAsset()
         {
-            List<AssetMaintenanceInfoFlowData> assetFlowList = new List<AssetMaintenanceInfoFlowData>();
-            var url = ConfigSugar.GetAppString("AssetMaintenanceTradingFlowUrl");
-            var data = "{" +
-                            "\"Data\":\"{Data}\"".Replace("{Data}", "") +
-                            "}";
+            List<ModifyVehicleApiModel> assetFlowList = new List<ModifyVehicleApiModel>();
+            var url = ConfigSugar.GetAppString("ModifyVehicleAssetUrl");
             try
             {
                 WebClient wc = new WebClient();
                 wc.Headers.Clear();
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url),"GET", data);
-                var modelData = resultData.JsonToModel<AssetMaintenanceInfoFlowResult>();
+                var resultData = wc.UploadString(new Uri(url),"GET");
+                var modelData = resultData.JsonToModel<ModifyVehicleApiResult>();
+                if (modelData.success)
+                {
+                    assetFlowList = modelData.data;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "", ex.ToString()));
+            }
+            return assetFlowList;
+        }
+        //根据月份获取退车车辆固定资产
+        public static List<ScrapVehicleApiModel> GetScrapVehicleAsset(string YearMonth)
+        {
+            List<ScrapVehicleApiModel> assetFlowList = new List<ScrapVehicleApiModel>();
+            var url = ConfigSugar.GetAppString("ScrapVehicleAssetUrl");
+            var data = "{" +
+                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "") +
+                       "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), "GET", data);
+                var modelData = resultData.JsonToModel<ScrapVehicleApiResult>();
                 if (modelData.success)
                 {
                     assetFlowList = modelData.data;

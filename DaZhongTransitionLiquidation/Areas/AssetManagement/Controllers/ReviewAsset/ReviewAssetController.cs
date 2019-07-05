@@ -58,6 +58,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var newVehicleList = resultApiModel.data;
                 if (reviewList.Count() == resultApiModel.data.Count())
                 {
+                    //获取所有的经营模式
+                    var manageModelList = db.Queryable<Business_ManageModel>().ToList();
                     //对比数据
                     foreach (var reviewItem in reviewList)
                     {
@@ -92,9 +94,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             reviewItem.VEHICLE_AGE = months;
                             reviewItem.YTD_DEPRECIATION = 0;
                             reviewItem.ACCT_DEPRECIATION = 0;
-                            //经营模式子类
-                            reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
-                            //经营模式子类
+                            //经营模式子类 传过来的经营模式上级
+                            var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
+                            reviewItem.MODEL_MINOR = manageModelList
+                                .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                            //经营模式主类 传过来的经营模式上上级
+                            var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
+                            reviewItem.MODEL_MAJOR = manageModelList
+                                .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
                             reviewItem.ISVERIFY = true;
                         }
                         else

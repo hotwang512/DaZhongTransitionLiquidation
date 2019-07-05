@@ -2305,6 +2305,8 @@
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsLedger_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsRetirement_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />

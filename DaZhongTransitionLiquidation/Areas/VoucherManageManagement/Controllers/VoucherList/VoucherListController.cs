@@ -10,6 +10,8 @@ using SqlSugar;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using SyntacticSugar;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -160,6 +162,115 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //同步至中间表
                 db.Insertable(asset).IgnoreColumns(it => new { it.VGUID, it.SubjectVGUID }).ExecuteCommand();
             }
+        }
+
+        public JsonResult SyncAssetsData()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var data = new List<AssetsGeneralLedger_Swap>();
+                //从已审核凭证中提取数据
+                var AssetsData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (b.CompanySection+'.'+b.SubjectSection+'.'+b.AccountSection+'.'+b.CostCenterSection+'.'+b.SpareOneSection+'.'+b.SpareTwoSection+'.'+b.IntercourseSection) as SubjectCount,a.AccountModeName as LEDGER_NAME,a.BatchName as JE_BATCH_NAME,
+a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as ENTERED_DR,b.LoanMoney as ENTERED_CR from Business_VoucherList as a left join Business_VoucherDetail as b on a.VGUID = b.VoucherVGUID
+ where a.Status='3' ").ToList();
+                //从总账明细中提取数据
+                var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
+from AssetsGeneralLedgerDetail_Swap ").ToList();
+                foreach (var item in AssetsDetailData)
+                {
+                    //item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;
+                    //item.ENTERED_DR = item.ENTERED_DR == null ? "0.00" : item.ENTERED_DR;
+                    var isAny = AssetsData.Any(x => x.LEDGER_NAME == item.LEDGER_NAME && x.SubjectCount == item.SubjectCount && x.ACCOUNTING_DATE == item.ACCOUNTING_DATE && item.JE_HEADER_NAME.Contains(x.JE_HEADER_NAME) && x.ENTERED_DR == item.ENTERED_DR && x.ENTERED_CR == item.ENTERED_CR);
+                    if (!isAny)
+                    {
+                        data.Add(item);
+                    }
+                }
+                //将与Oracle差异的数据同步至中间表
+                var voucherList = new List<Business_VoucherList>();
+                var voucherDetail = new List<Business_VoucherDetail>();
+                var sevenData1 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                var sevenData2 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                var sevenData3 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                //var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Automatic == "3").ToList();
+                var assetsData = db.Queryable<AssetsGeneralLedgerDetail_Swap>().ToList();
+                //var tableData = jsonData.JsonToModel<List<AssetsGeneralLedger_Swap>>();
+                foreach (var item in data)
+                {
+                    var isAny = voucherList.Any(x => x.VoucherNo == item.JE_HEADER_NAME.Split(" ")[0]);
+                    if (isAny)
+                    {
+                        continue;
+                    }
+                    var account = sevenData2.SingleOrDefault(x => x.Descrption == item.LEDGER_NAME).Code;
+                    var company = sevenData1.SingleOrDefault(x => x.AccountModeCode == account && x.Code == item.SubjectCount.Split(".")[0]).Descrption;
+                    var credit = item.ENTERED_CR == "0" ? item.ENTERED_DR : item.ENTERED_CR;
+                    var debit = item.ENTERED_DR == "0" ? item.ENTERED_CR : item.ENTERED_DR;
+                    Business_VoucherList voucher = new Business_VoucherList();
+                    voucher.AccountingPeriod = item.ACCOUNTING_DATE;
+                    voucher.AccountModeName = item.LEDGER_NAME;
+                    voucher.Auditor = "";
+                    voucher.Bookkeeping = "";
+                    voucher.Cashier = "";
+                    voucher.CompanyCode = item.SubjectCount.Split(".")[0];
+                    voucher.CompanyName = company;
+                    voucher.Currency = "";
+                    voucher.DocumentMaker = "";
+                    voucher.FinanceDirector = "";
+                    voucher.Status = "2";
+                    voucher.VoucherDate = item.ACCOUNTING_DATE;
+                    voucher.VoucherType = item.JE_CATEGORY_NAME.Split(".")[1] + "类";
+                    voucher.CreditAmountTotal = credit.TryToDecimal();
+                    voucher.DebitAmountTotal = debit.TryToDecimal();
+                    voucher.CreateTime = DateTime.Now;
+                    var guid = Guid.NewGuid();
+                    voucher.BatchName = item.JE_BATCH_NAME.Split(" ")[0];
+                    voucher.VoucherNo = item.JE_HEADER_NAME.Split(" ")[0];
+                    voucher.VGUID = guid;
+                    voucher.Automatic = "3";//Oracle同步
+                    voucherList.Add(voucher);
+                    //凭证明细表
+                    var assetsDataList = assetsData.Where(x => x.LEDGER_NAME == item.LEDGER_NAME && x.JE_HEADER_NAME == item.JE_HEADER_NAME && x.ACCOUNTING_DATE == item.ACCOUNTING_DATE).ToList();
+                    if (assetsDataList.Count > 0)
+                    {
+                        foreach (var ass in assetsDataList)
+                        {
+                            var subject = sevenData3.Where(x => x.Code == ass.COMBINATION.Split(".")[1]).FirstOrDefault().Descrption;
+                            Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                            BVDetail.Abstract = "Oracle同步数据";
+                            BVDetail.CompanySection = ass.COMBINATION.Split(".")[0];
+                            BVDetail.SubjectSection = ass.COMBINATION.Split(".")[1];
+                            BVDetail.SubjectSectionName = subject;
+                            BVDetail.AccountSection = ass.COMBINATION.Split(".")[2];
+                            BVDetail.CostCenterSection = ass.COMBINATION.Split(".")[3];
+                            BVDetail.SpareOneSection = ass.COMBINATION.Split(".")[4];
+                            BVDetail.SpareTwoSection = ass.COMBINATION.Split(".")[5];
+                            BVDetail.IntercourseSection = ass.COMBINATION.Split(".")[6];
+                            BVDetail.SevenSubjectName = ass.COMBINATION + ass.COMBINATION_DESCRIPTION;
+                            BVDetail.BorrowMoney = ass.ENTERED_DR;
+                            BVDetail.LoanMoney = ass.ENTERED_CR;
+                            BVDetail.BorrowMoneyCount = ass.ENTERED_DR;
+                            BVDetail.LoanMoneyCount = ass.ENTERED_CR;
+                            BVDetail.JE_LINE_NUMBER = 0;
+                            BVDetail.VGUID = Guid.NewGuid();
+                            BVDetail.VoucherVGUID = guid;
+                            voucherDetail.Add(BVDetail);
+                        }
+                    }
+                }
+                if (voucherList.Count > 0 && voucherDetail.Count > 0)
+                {
+                    db.Insertable(voucherList).ExecuteCommand();
+                    db.Insertable(voucherDetail).ExecuteCommand();
+                    resultModel.IsSuccess = true;
+                }
+                else
+                {
+                    resultModel.Status = "1";
+                }
+            });
+            return Json(resultModel);
         }
     }
 }

@@ -16,6 +16,7 @@ var companyCode = $("#CompanyCode").val();
 var accountModeCode = $("#AccountModeCode").val();
 var accountModeName = $("#AccountModeCode  option:selected").text();
 var month = myDate.getMonth() + 1;
+var year = $("#Year").val();
 var $page = function () {
 
     this.init = function () {
@@ -26,23 +27,23 @@ var $page = function () {
     function addEvent() {
         getCompanyCode();
         $("#Month").val(month);
-        //弹出框中的取消按钮
-        //selector.$AddNewBankData_CancelBtn().on("click", function () {
-        //    selector.$AddNewBankDataDialog().modal("hide");
-        //});
 
-        //切换公司值
+        //切换公司
         $('#CompanyCode').on('change', function (event) {
             companyCode = $("#CompanyCode").val();
             console.log(companyCode);
             initTable();
-            //$("#jqxTable2").jqxTreeGrid('updateBoundData');
         })
+        //切换账套
         $('#AccountModeCode').on('change', function (event) {
             accountModeCode = $("#AccountModeCode").val();
             console.log(accountModeCode);
             initTable();
-            //$("#jqxTable2").jqxTreeGrid('updateBoundData');
+        })
+        //切换年份
+        $('#Year').on('change', function (event) {
+            year = $("#Year").val();
+            initTable();
         })
         //切换月份
         $('#Month').on('change', function (event) {
@@ -50,14 +51,17 @@ var $page = function () {
             initTable();
         })
         $('#btnCheck').on("click", function () {
-            var check = "T";
-            initTable(check);
+            //验证当前账期下是否存在待审核凭证
+            var isAnyVoucher = checkVoucher();
+            if (isAnyVoucher) {
+                jqxNotification("当前账期下存在待审核凭证！", null, "error");
+            } else {
+                var check = "T";
+                initTable(check);
+            } 
         })
         $("#AddSubject_CancelBtn").on("click", function () {
             $("#AddSubjectTable").modal("hide");
-        });
-        $("#AddSubject_OKButton").on("click", function () {
-            syncAssetsData();
         });
     }; //addEvent end
 };
@@ -80,7 +84,7 @@ function initTable(check) {
             //cache: false,
             async: false,
             //id: "VGUID",
-            data: { companyCode: companyCode, accountModeCode: accountModeCode, accountModeName: accountModeName, month: month, check: check },
+            data: { companyCode: companyCode, accountModeCode: accountModeCode, accountModeName: accountModeName, month: month,year:year, check: check },
             url: "/FinancialStatementsManagement/SubjectBalanceStatement/GetSubjectBalance"    //获取数据源的路径
         };
     var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -170,7 +174,7 @@ function initSubjectTable(businessCode) {
             datatype: "json",
             //cache: false,
             //async: false,
-            data: { businessCode: businessCode, companyCode: companyCode, accountModeCode: accountModeCode, accountModeName: accountModeName, month: month },
+            data: { businessCode: businessCode, companyCode: companyCode, accountModeCode: accountModeCode, accountModeName: accountModeName, month: month, year:year},
             url: "/FinancialStatementsManagement/SubjectBalanceStatement/CheckSubjectBalance"    //获取数据源的路径
         };
     var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -205,20 +209,19 @@ function initSubjectTable(businessCode) {
         ]
     });
 }
-function syncAssetsData() {
-    var tableData = $('#jqxSubjectTable').jqxGrid('getboundrows')
+function checkVoucher() {
+    var isAny = false;
     $.ajax({
-        url: "/FinancialStatementsManagement/SubjectBalanceStatement/SyncAssetsData",
-        data: { jsonData: JSON.stringify(tableData) },
+        url: "/FinancialStatementsManagement/SubjectBalanceStatement/CheckVoucher",
+        data: { companyCode: companyCode, accountModeCode: accountModeCode, accountModeName: accountModeName, month: month, year: year },
         type: "POST",
         dataType: "json",
+        async: false,
         success: function (msg) {
-            if (msg.IsSuccess == true) {
-                jqxNotification("同步成功！", null, "success");
-            }
             if (msg.Status == "1") {
-                jqxNotification("这批数据已经同步！", null, "success");
+                isAny = true;
             }
         }
-    })
+    });
+    return isAny;
 }

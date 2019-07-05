@@ -25,6 +25,8 @@ var $page = function () {
         }
         if (status == "2") {
             $("#buttonList2").show();
+            $("#Oracle").show();
+            //$("#AddSubject_OKButton").show();
         }
         if (status == "3") {
             $("#Oracle").show();
@@ -135,6 +137,10 @@ var $page = function () {
         });
         $('#jqxTabs').on('tabclick', function (event) {
             tableIndex = event.args.item;
+        });
+        //同步
+        $("#AddSubject_OKButton").on("click", function () {
+            syncAssetsData();
         });
     }; //addEvent end
 
@@ -522,5 +528,21 @@ $(function () {
     page.init();
 });
 
-
+function syncAssetsData() {
+    //var tableData = $('#jqxSubjectTable').jqxGrid('getboundrows')
+    $.ajax({
+        url: "/VoucherManageManagement/VoucherList/SyncAssetsData",
+        data: { },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.IsSuccess == true) {
+                jqxNotification("同步成功！", null, "success");
+            }
+            if (msg.Status == "1") {
+                jqxNotification("这批数据已经同步！", null, "success");
+            }
+        }
+    })
+}
 

@@ -766,9 +766,9 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var response = new List<LedgerSubject_Swap>();
             DbBusinessDataService.Command(db =>
             {
-                //var data1 = db.Queryable<LedgerSubject_Swap>().Where(x => x.CheckStatus != "2" || x.CheckStatus == null).ToList();//查询未检测的数据
-                var lastDate = db.Queryable<LedgerSubject_Swap>().OrderBy("LAST_UPDATE_DATE desc").First().LAST_UPDATE_DATE.Value.ToString("yyyy-MM-dd hh:mm").TryToDate();
-                var data1 = db.Queryable<LedgerSubject_Swap>().Where(x => x.LAST_UPDATE_DATE >= lastDate).ToList();//查询最后一批进入中间表的数据
+                var data1 = db.Queryable<LedgerSubject_Swap>().Where(x => x.CheckStatus != "2" || x.CheckStatus == null).ToList();//查询未检测的数据
+                //var lastDate = db.Queryable<LedgerSubject_Swap>().OrderBy("LAST_UPDATE_DATE desc").First().LAST_UPDATE_DATE.Value.ToString("yyyy-MM-dd hh:mm").TryToDate();
+                //var data1 = db.Queryable<LedgerSubject_Swap>().Where(x => x.LAST_UPDATE_DATE >= lastDate).ToList();//查询最后一批进入中间表的数据
                 var data2 = db.SqlQueryable<v_Business_SevenSection>(@"select a.*,b.Descrption as AccountCodeName from Business_SevenSection as a 
                             left join Business_SevenSection as b on a.AccountModeCode = b.Code and b.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43'").ToList();
                 List<string> section = new List<string>();//["COM", "ACC", "HS", "BY1", "BY2", "CC", "WL" ];
@@ -1059,7 +1059,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     db.Insertable(sectionList).ExecuteCommand();
                     //db.Updateable(LedgerAccount).Where(x=>x.CheckStatus == null).ExecuteCommand();
-                    //db.Ado.SqlQuery<LedgerSubject_Swap>(@"update LedgerSubject_Swap set CheckStatus='2' where CheckStatus is null");
+                    db.Ado.SqlQuery<LedgerSubject_Swap>(@"update LedgerSubject_Swap set CheckStatus='2' where CheckStatus is null");
                     resultModel.IsSuccess = true;
                 }
             });

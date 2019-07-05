@@ -151,6 +151,9 @@ var $page = function () {
                         if (msg.IsSuccess == true) {
                             jqxNotification("保存成功！", null, "success");
                             $("#AddSubjectTable").modal("hide");
+                            if (index == 2) {
+                                $("#jqxTable2").jqxTreeGrid("updateBoundData");
+                            }
                         } else {
                             jqxNotification("保存失败！", null, "error");
                         }
@@ -591,7 +594,7 @@ var $page = function () {
             });
         });
         //清除借贷信息
-        $("#Remove1").on("click", function (){
+        $("#Remove1").on("click", function () {
             $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
         })
         $("#Remove2").on("click", function () {
@@ -712,31 +715,31 @@ var $page = function () {
         });
         //创建卡信息列表（主表）
         $("#jqxTable1").jqxDataTable({
-                pageable: true,
-                width: "100%",
-                height: 500,
-                pageSize: 99999999,
-                serverProcessing: true,
-                pagerButtonsCount: 10,
-                source: typeAdapter,
-                theme: "office",
-                columnsHeight: 40,
-                columns: [
-                    { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '描述', datafield: 'Descrption', width: 400, align: 'center', cellsAlign: 'center' },
-                    { text: '组织ID', datafield: 'OrgID', width: 80, align: 'center', cellsAlign: 'center' },
-                    { text: '简称', datafield: 'Abbreviation', width: 120, align: 'center', cellsAlign: 'center' },
-                    { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
-                    { text: '禁止同步', datafield: 'Sync', width: 100, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererClickFunc, autoRowHeight: false },
-                    { text: '银行账号设置', datafield: 'IsCompanyBank', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: setCompanyFunc },
-                    { text: '科目段', datafield: 'IsSubjectCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                    { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
-                    { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
+            pageable: true,
+            width: "100%",
+            height: 500,
+            pageSize: 99999999,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 40,
+            columns: [
+                { text: "", datafield: "checkbox", width: 40, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                { text: '编码', datafield: 'Code', width: 80, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                { text: '描述', datafield: 'Descrption', width: 400, align: 'center', cellsAlign: 'center' },
+                { text: '组织ID', datafield: 'OrgID', width: 80, align: 'center', cellsAlign: 'center' },
+                { text: '简称', datafield: 'Abbreviation', width: 120, align: 'center', cellsAlign: 'center' },
+                { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: statusFunc },
+                { text: '禁止同步', datafield: 'Sync', width: 100, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererClickFunc, autoRowHeight: false },
+                { text: '银行账号设置', datafield: 'IsCompanyBank', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: setCompanyFunc },
+                { text: '科目段', datafield: 'IsSubjectCode', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
+                { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
+                { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true },
 
-                ]
-            });
+            ]
+        });
 
     }
     //科目段
@@ -1121,7 +1124,7 @@ var $page = function () {
         return container;
     }
     function settingFunc(row, column, value, rowData) {
-         var container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
+        var container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
         if (value != "" && (value == "True" || value == true)) {
             container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #fb0f0f;\">已设置</a>";;
         }
@@ -1465,7 +1468,7 @@ function settingCompany(code, companyName) {
             { text: '默认支付银行', datafield: "BankStatus", groupable: true, width: '110px', align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
             { text: '是否开通银企直联', datafield: "OpeningDirectBank", width: '140px', groupable: true, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
             { text: '借', datafield: "Borrow", groupable: true, width: '180px', align: 'center', editable: false, cellsAlign: 'center' },
-            { text: '贷', datafield: "Loan", groupable: true,  align: 'center', editable: false, cellsAlign: 'center' },
+            { text: '贷', datafield: "Loan", groupable: true, align: 'center', editable: false, cellsAlign: 'center' },
             { text: '公司编码', datafield: 'CompanyCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: '账套编码', datafield: 'AccountModeCode', hidden: true, align: 'center', cellsAlign: 'center' },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
@@ -1584,7 +1587,9 @@ function CheckBoxClick(VGUID, value) {
         data: { vguids: VGUID, ischeck: changeValue },
         type: "post",
         success: function (msg) {
-
+            if (index == 2) {
+                $("#jqxTable2").jqxTreeGrid("updateBoundData");
+            }
         }
     });
 }
@@ -1615,7 +1620,7 @@ function renderedFunc(element) {
     return true;
 }
 
-function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, accountType, initialBalance,borrow, loan) {
+function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, accountType, initialBalance, borrow, loan) {
     $("#BankName").val("");
     $("#BankAccount").val("");
     $("#BankAccountName").val("");
@@ -1818,7 +1823,7 @@ function initSubjectTable() {
         selectionmode: 'checkBox',
         width: "100%",
         autoheight: false,
-        height:500,
+        height: 500,
         pageSize: 10,
         //serverProcessing: true,
         pagerButtonsCount: 10,

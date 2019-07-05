@@ -123,7 +123,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 t1Data.Vguid = business_Revenuepayment.VGUID = Guid.NewGuid();
 
                 t1Data.CreatedDate = business_Revenuepayment.CreateDate = DateTime.Now;
-                t1Data.ChangeUser = business_Revenuepayment.CreateUser = "RevenueSystem";
+                t1Data.CreatedUser = business_Revenuepayment.CreateUser = "RevenueSystem";
 
                 db.Ado.UseTran(delegate
                 {

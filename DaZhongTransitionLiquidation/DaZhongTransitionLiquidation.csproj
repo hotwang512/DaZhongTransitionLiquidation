@@ -188,6 +188,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsRetirement.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\ManageModel.js" />
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrderDetail.js" />
@@ -319,6 +320,7 @@
     <Content Include="Areas\AssetManagement\Views\ReviewAsset\Index.cshtml" />
     <Content Include="Areas\FinancialStatementsManagement\Views\web.config" />
     <Content Include="Areas\FinancialStatementsManagement\Views\SubjectBalanceStatement\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\ManageModel\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2292,6 +2294,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsLedger\AssetsLedgerController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetAttachmentList.cs" />
@@ -2301,6 +2304,7 @@
     <Compile Include="Areas\AssetManagement\Models\Business_AssetReview.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsLedger_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsRetirement_Swap.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ManageModel.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />

@@ -214,11 +214,26 @@ var $page = function () {
                     '</div>';
             }
         } else {
-            return '<div style="margin-top:6px;">' +
-                '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-            FixedAssetsOrderVguid +
-                '\')">查看</a>' +
-                '</div>';
+            if (rowData.PurchaseGoods == "出租车") {
+                return '<div style="margin: 8px; margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="Import(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')" id="' +
+                    FixedAssetsOrderVguid +
+                    '">重新导入</a>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
+                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')">提交</a>' +
+                    '</div>';
+            } else {
+                return '<div style="margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')">查看</a>' +
+                    '</div>';
+            }
+
         }
         
     }

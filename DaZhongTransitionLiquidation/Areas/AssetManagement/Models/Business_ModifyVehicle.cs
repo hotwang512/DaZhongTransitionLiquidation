@@ -121,7 +121,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public bool? ISVERIFY { get; set; }
+        public bool ISVERIFY { get; set; }
 
         /// <summary>
         /// Desc:

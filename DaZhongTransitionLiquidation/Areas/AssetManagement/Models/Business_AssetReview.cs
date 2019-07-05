@@ -420,6 +420,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string MODEL_MINOR { get; set; }
 
         public string START_VEHICLE_DATE { get; set; }
+        public Guid FIXED_ASSETS_ORDERID { get; set; }
         /// <summary>
         /// Desc:
         /// Default:
@@ -457,5 +458,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
 
         public string ORIGINALID { get; set; }
 
+    }
+
+    public class AssetDifference
+    {
+        public string ENGINE_NUMBER { get; set; }
+        public string CHASSIS_NUMBER { get; set; }
+        public string MANAGEMENT_COMPANY { get; set; }
+        public string BELONGTO_COMPANY { get; set; }
     }
 }

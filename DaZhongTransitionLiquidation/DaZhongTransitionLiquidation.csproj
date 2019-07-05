@@ -321,6 +321,7 @@
     <Content Include="Areas\FinancialStatementsManagement\Views\web.config" />
     <Content Include="Areas\FinancialStatementsManagement\Views\SubjectBalanceStatement\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\ManageModel\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetModifyReview\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2295,6 +2296,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetAttachmentList.cs" />

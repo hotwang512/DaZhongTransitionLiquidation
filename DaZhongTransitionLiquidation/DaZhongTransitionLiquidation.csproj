@@ -2443,6 +2443,7 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\VoucherListDetailController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\Business_VoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\v_AssetsGeneralLedger_Swap.cs" />
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
     <Compile Include="AutoMapper\Configuration.cs" />
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />

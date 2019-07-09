@@ -22,7 +22,6 @@ namespace DaZhongTransitionLiquidation.Controllers
 {
     public class AutoSyncBankFlow : Controller
     {
-
         public static void AutoSyncSeavice()
         {
             Thread LogThread = new Thread(new ThreadStart(DoSyncBank));
@@ -41,16 +40,18 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //var tradingStartDate = DateTime.Parse("2018-11-01");
                     //var tradingEndDate = DateTime.Parse("2018-11-27");
                     //bankFlowList = ShanghaiBankAPI.GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate);
-                    SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
-                    var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
-                    foreach (var item in companyBankData)
+                    using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow(item.BankAccount);
-                        if (bankFlowList.Count > 0)
+                        var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                        foreach (var item in companyBankData)
                         {
-                            success = WirterSyncBankFlow(bankFlowList);
+                            bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow(item.BankAccount);
+                            if (bankFlowList.Count > 0)
+                            {
+                                success = WirterSyncBankFlow(bankFlowList);
+                            }
                         }
-                    }
+                    }    
                 }
                 catch (Exception ex)
                 {
@@ -77,14 +78,16 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var success = 0;
                     try
                     {
-                        SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
-                        var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
-                        foreach (var item in companyBankData)
+                        using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                         {
-                            bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow(item.BankAccount);
-                            if (bankFlowList.Count > 0)
+                            var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                            foreach (var item in companyBankData)
                             {
-                                success = WirterSyncBankFlow(bankFlowList);
+                                bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow(item.BankAccount);
+                                if (bankFlowList.Count > 0)
+                                {
+                                    success = WirterSyncBankFlow(bankFlowList);
+                                }
                             }
                         }
                     }
@@ -112,16 +115,18 @@ namespace DaZhongTransitionLiquidation.Controllers
                 var success = 0;
                 try
                 {
-                    SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
-                    var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行").ToList();
-                    var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();
-                    bankFlowList = GetBankData(_db,bankData, bankFlowList, bankFlowData);
-                    if (bankFlowList.Count > 0)
+                    using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        //按交易日期排序取最小值
-                        bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
-                        //success = WirterSyncBankFlow(bankFlowList);
-                    }
+                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行").ToList();
+                        var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();
+                        bankFlowList = GetBankData(_db, bankData, bankFlowList, bankFlowData);
+                        if (bankFlowList.Count > 0)
+                        {
+                            //按交易日期排序取最小值
+                            bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
+                            //success = WirterSyncBankFlow(bankFlowList);
+                        }
+                    }    
                 }
                 catch (Exception ex)
                 {
@@ -165,35 +170,37 @@ namespace DaZhongTransitionLiquidation.Controllers
 
         public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
         {
-            SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             int success = 0;
-            List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
-            foreach (var item in bankFlowList)
-            {
-                var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
-                var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
-                var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
-                if (isAny.Count > 0)
+            using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
+            { 
+                List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
+                foreach (var item in bankFlowList)
                 {
+                    var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
+                    var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
+                    var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
+                    if (isAny.Count > 0)
+                    {
+                        item.AccountModeCode = companyBankData.AccountModeCode;
+                        item.AccountModeName = accountModeName;
+                        item.CompanyCode = companyBankData.CompanyCode;
+                        _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                        continue;
+                    }
                     item.AccountModeCode = companyBankData.AccountModeCode;
                     item.AccountModeName = accountModeName;
                     item.CompanyCode = companyBankData.CompanyCode;
-                    _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
-                    continue;
+                    item.CreateTime = DateTime.Now;
+                    item.CreatePerson = "admin";
+                    bankFlowLists.Add(item);
                 }
-                item.AccountModeCode = companyBankData.AccountModeCode;
-                item.AccountModeName = accountModeName;
-                item.CompanyCode = companyBankData.CompanyCode;
-                item.CreateTime = DateTime.Now;
-                item.CreatePerson = "admin";
-                bankFlowLists.Add(item); 
-            }
-            if (bankFlowLists.Count > 0)
-            {
-                success = _db.Insertable(bankFlowLists).ExecuteCommand();
-                //根据流水自动生成凭证
-                BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
-            }
+                if (bankFlowLists.Count > 0)
+                {
+                    success = _db.Insertable(bankFlowLists).ExecuteCommand();
+                    //根据流水自动生成凭证
+                    BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
+                }
+            }    
             BankDataPack.SyncBackFlowAndReconciliation();
             return success;
         }
@@ -210,19 +217,21 @@ namespace DaZhongTransitionLiquidation.Controllers
             bool isDo = true;
             while (isDo)
             {
-                SqlSugarClient db = DbBusinessDataConfig.GetInstance();
-                var orderList = db.Queryable<Business_OrderListDraft>().Where(x => x.Status == "2" && ((x.BankStatus != "0000" && x.BankStatus != "0003" && x.BankStatus != "0005") || x.BankStatus == null)).ToList();
-                if (orderList != null)
+                using (SqlSugarClient db = DbBusinessDataConfig.GetInstance())
                 {
-                    List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
-                    foreach (var item in orderList)
+                    var orderList = db.Queryable<Business_OrderListDraft>().Where(x => x.Status == "2" && ((x.BankStatus != "0000" && x.BankStatus != "0003" && x.BankStatus != "0005") || x.BankStatus == null)).ToList();
+                    if (orderList != null)
                     {
-                        if (item.OSNO != null && item.OSNO != "")
+                        List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
+                        foreach (var item in orderList)
                         {
-                            CheckTransferResult(item, db, changeOrderList);
+                            if (item.OSNO != null && item.OSNO != "")
+                            {
+                                CheckTransferResult(item, db, changeOrderList);
+                            }
                         }
-                    }
-                    //返回changeOrderList
+                        //返回changeOrderList
+                    } 
                 }
                 double timeSpan = ConfigSugar.GetAppString("TimeSpanMin").TryToInt();
                 Thread.Sleep((int)(timeSpan * 1000 * 60));

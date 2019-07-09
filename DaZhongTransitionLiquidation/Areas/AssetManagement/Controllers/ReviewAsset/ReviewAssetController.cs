@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
@@ -46,7 +47,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
 
         public JsonResult SubmitReviewAsset(string YearMonth)
         {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string, List<AssetDifference>>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var reviewList = db.Queryable<Business_AssetReview>()
@@ -56,101 +57,165 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var apiReault = GetNewVehicleAsset(YearMonth);
                 var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_NewVehicleAsset>>();
                 var newVehicleList = resultApiModel.data;
+                var lista = reviewList.Select(x => new
+                    AssetDifference
+                    { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY_CODE, BELONGTO_COMPANY = x.BELONGTO_COMPANY_CODE }).ToList();
+                var listb = newVehicleList.Select(x => new
+                    AssetDifference
+                    { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY, BELONGTO_COMPANY = x.BELONGTO_COMPANY }).ToList();
+                //获取所有的公司
+                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                 if (reviewList.Count() == resultApiModel.data.Count())
                 {
+                    //获取所有的经营模式
+                    var manageModelList = db.Queryable<Business_ManageModel>().ToList();
                     //对比数据
-                    foreach (var reviewItem in reviewList)
+                    var listc = new List<AssetDifference>();
+                    listc = lista.Except(listb).ToList();
+                    if (listc.Count <= 0)
                     {
-                        if(newVehicleList.Any(x => x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER
-                                                   && x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER
-                                                   && x.MANAGEMENT_COMPANY == reviewItem.MANAGEMENT_COMPANY
-                                                   && x.BELONGTO_COMPANY == reviewItem.BELONGTO_COMPANY))
+                        foreach (var reviewItem in reviewList)
                         {
-                            var newVehicle = newVehicleList.First(x =>
-                                x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER &&
-                                x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER);
-                            reviewItem.ORIGINALID = newVehicle.ORIGINALID;
-                            reviewItem.PLATE_NUMBER = newVehicle.PLATE_NUMBER;
-                            reviewItem.VEHICLE_SHORTNAME = newVehicle.VEHICLE_SHORTNAME;
-                            reviewItem.VEHICLE_STATE = newVehicle.VEHICLE_STATE;
-                            reviewItem.OPERATING_STATE = newVehicle.OPERATING_STATE;
-                            reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
-                            reviewItem.ENGINE_NUMBER = newVehicle.ENGINE_NUMBER;
-                            reviewItem.CHASSIS_NUMBER = newVehicle.CHASSIS_NUMBER;
-                            reviewItem.PRODUCTION_DATE = newVehicle.PRODUCTION_DATE;
-                            reviewItem.ORIGINALID = newVehicle.ORIGINALID;
-                            reviewItem.PURCHASE_DATE = newVehicle.PURCHASE_DATE;
-                            reviewItem.LISENSING_DATE = newVehicle.LISENSING_DATE;
-                            reviewItem.COMMISSIONING_DATE = newVehicle.COMMISSIONING_DATE;
-                            reviewItem.FUEL_TYPE = newVehicle.FUEL_TYPE;
-                            reviewItem.DELIVERY_INFORMATION = newVehicle.DELIVERY_INFORMATION;
-                            reviewItem.ISVERIFY = true;
-                            //Oracle标签号  出租车车辆 沪XXXXXXX-19N     N:新增 M:改标签 C:改账套 
-                            reviewItem.TAG_NUMBER = newVehicle.PLATE_NUMBER + "-" + DateTime.Now.Year.ToString().Remove(0,2) + "N";
-                            //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
-                            var months = ((DateTime.Now.Year - newVehicle.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - newVehicle.LISENSING_DATE.TryToDate().Month);
-                            reviewItem.VEHICLE_AGE = months;
-                            reviewItem.YTD_DEPRECIATION = 0;
-                            reviewItem.ACCT_DEPRECIATION = 0;
-                            //经营模式子类
-                            reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
-                            //经营模式子类
-                            reviewItem.ISVERIFY = true;
+                            if (newVehicleList.Any(x => x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER
+                                                        && x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER
+                                                        && x.MANAGEMENT_COMPANY == reviewItem.MANAGEMENT_COMPANY
+                                                        && x.BELONGTO_COMPANY == reviewItem.BELONGTO_COMPANY))
+                            {
+                                var newVehicle = newVehicleList.First(x =>
+                                    x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER &&
+                                    x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER);
+                                reviewItem.ORIGINALID = newVehicle.ORIGINALID;
+                                reviewItem.PLATE_NUMBER = newVehicle.PLATE_NUMBER;
+                                reviewItem.VEHICLE_SHORTNAME = newVehicle.VEHICLE_SHORTNAME;
+                                reviewItem.VEHICLE_STATE = newVehicle.VEHICLE_STATE;
+                                reviewItem.OPERATING_STATE = newVehicle.OPERATING_STATE;
+                                reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
+                                reviewItem.ENGINE_NUMBER = newVehicle.ENGINE_NUMBER;
+                                reviewItem.CHASSIS_NUMBER = newVehicle.CHASSIS_NUMBER;
+                                reviewItem.PRODUCTION_DATE = newVehicle.PRODUCTION_DATE;
+                                reviewItem.ORIGINALID = newVehicle.ORIGINALID;
+                                reviewItem.PURCHASE_DATE = newVehicle.PURCHASE_DATE;
+                                reviewItem.LISENSING_DATE = newVehicle.LISENSING_DATE;
+                                reviewItem.COMMISSIONING_DATE = newVehicle.COMMISSIONING_DATE;
+                                reviewItem.FUEL_TYPE = newVehicle.FUEL_TYPE;
+                                reviewItem.DELIVERY_INFORMATION = newVehicle.DELIVERY_INFORMATION;
+                                reviewItem.ISVERIFY = true;
+                                //Oracle标签号  出租车车辆 沪XXXXXXX-19N     N:新增 M:改标签 C:改账套 
+                                reviewItem.TAG_NUMBER = newVehicle.PLATE_NUMBER + "-" + DateTime.Now.Year.ToString().Remove(0, 2) + "N";
+                                //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
+                                var months = ((DateTime.Now.Year - newVehicle.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - newVehicle.LISENSING_DATE.TryToDate().Month);
+                                reviewItem.VEHICLE_AGE = months;
+                                reviewItem.YTD_DEPRECIATION = 0;
+                                reviewItem.ACCT_DEPRECIATION = 0;
+                                //经营模式子类 传过来的经营模式上级
+                                var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
+                                reviewItem.MODEL_MINOR = manageModelList
+                                    .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                                //经营模式主类 传过来的经营模式上上级
+                                var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
+                                reviewItem.MODEL_MAJOR = manageModelList
+                                    .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                                reviewItem.ISVERIFY = true;
+                            }
+                            resultModel.IsSuccess = true;
+                            resultModel.Status = "1";
                         }
-                        else
+                        if (resultModel.IsSuccess.TryToBoolean())
                         {
-                            resultModel.IsSuccess = false;
-                            resultModel.Status = "2";
-                            resultModel.ResultInfo = "数据存在不一致";
-                            break;
+                            db.Updateable<Business_AssetReview>(reviewList).IgnoreColumns(it => new { it.ISVERIFY, it.START_VEHICLE_DATE }).ExecuteCommand();
+                            //获取订单部门
+                            var fixedAssetId = reviewList.First().FIXED_ASSETS_ORDERID;
+                            var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs;
+                            var strArr = "";
+                            foreach (var departmentID in departmentIDsArr)
+                            {
+                                strArr = strArr + "'" + departmentID + "',";
+                            }
+                            strArr = strArr.Substring(0, strArr.Length - 1);
+                            var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
+                                                                                        FROM Business_SevenSection
+                                                                                        WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
+                                                                                              AND AccountModeCode = '1002'
+                                                                                              AND CompanyCode = '01'
+                                                                                              AND Status = '1'
+                                                                                              AND Code LIKE '10%'
+                                                                                              AND vguid IN (" + strArr + ")").ToList();
+                            var departmentStr = "";
+                            foreach (var ditem in departmentList)
+                            {
+                                departmentStr = departmentStr + ditem + ",";
+                            }
+                            departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
+                            //资产新增后写入Oracle中间表
+                            var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
+                            foreach (var item in reviewList)
+                            {
+                                var assetSwapModel = new AssetMaintenanceInfo_Swap();
+                                assetSwapModel.TRANSACTION_ID = item.VGUID;
+                                assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                                assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
+                                assetSwapModel.DESCRIPTION = item.DESCRIPTION;
+                                assetSwapModel.QUANTITY = item.QUANTITY;
+                                assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MAJOR;
+                                assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
+                                assetSwapModel.ASSET_CREATION_DATE = item.COMMISSIONING_DATE;
+                                assetSwapModel.ASSET_COST = item.ASSET_COST;
+                                assetSwapModel.AMORTIZATION_FLAG = item.AMORTIZATION_FLAG;
+                                assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
+                                assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
+                                assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
+                                assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
+                                //传入订单选择的部门
+                                assetSwapModel.FA_LOC_2 = departmentStr;
+                                assetSwapModel.FA_LOC_3 = "000000";
+                                assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
+                                assetSwapModel.CREATE_DATE = DateTime.Now;
+                                assetSwapModel.ASSET_ID = item.ASSET_ID;
+                                assetSwapModel.STATUS = "N";
+                                var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
+                                assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
+                                assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
+                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
+                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
+                                assetSwapList.Add(assetSwapModel);
+                            }
+                            db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                         }
-                        resultModel.IsSuccess = true;
-                        resultModel.Status = "1";
                     }
-                    if (resultModel.IsSuccess)
+                    else
                     {
-                        db.Updateable<Business_AssetReview>(reviewList).IgnoreColumns(it => new { it.ISVERIFY, it.START_VEHICLE_DATE }).ExecuteCommand();
-                        //资产新增后写入Oracle中间表
-                        var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
-                        foreach (var item in reviewList)
+                        //Code转名称
+                        foreach (var data in listc)
                         {
-                            var assetSwapModel = new AssetMaintenanceInfo_Swap();
-                            assetSwapModel.TRANSACTION_ID = item.VGUID;
-                            assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
-                            assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
-                            assetSwapModel.DESCRIPTION = item.DESCRIPTION;
-                            assetSwapModel.QUANTITY = item.QUANTITY;
-                            assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MAJOR;
-                            assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
-                            assetSwapModel.ASSET_CREATION_DATE = item.COMMISSIONING_DATE;
-                            assetSwapModel.ASSET_COST = item.ASSET_COST;
-                            assetSwapModel.AMORTIZATION_FLAG = item.AMORTIZATION_FLAG;
-                            assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
-                            assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
-                            //assetSwapModel.PERIOD = DateTime.Now;
-                            assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
-                            assetSwapModel.FA_LOC_2 = item.BELONGTO_COMPANY;
-                            assetSwapModel.FA_LOC_3 = "000000";
-                            assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
-                            assetSwapModel.CREATE_DATE = DateTime.Now;
-                            assetSwapModel.ASSET_ID = item.ASSET_ID;
-                            assetSwapModel.STATUS = "N";
-                            var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
-                            assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
-                            assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
-                            assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
-                            assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
-                            assetSwapList.Add(assetSwapModel);
+                            data.BELONGTO_COMPANY =
+                                ssList.Where(x => x.OrgID == data.BELONGTO_COMPANY).First().Descrption;
+                            data.MANAGEMENT_COMPANY =
+                                ssList.Where(x => x.OrgID == data.MANAGEMENT_COMPANY).First().Abbreviation;
                         }
-                        db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                        resultModel.ResultInfo = "数据对比不一致";
+                        resultModel.ResultInfo2 = listc;
                     }
                 }
                 else
                 {
+                    var listc = new List<AssetDifference>();
+                    listc = lista.Count > listb.Count ? lista.Except(listb).ToList() : listb.Except(lista).ToList();
+                    //Code转名称
+                    foreach (var data in listc)
+                    {
+                        data.BELONGTO_COMPANY =
+                            ssList.Where(x => x.OrgID == data.BELONGTO_COMPANY).First().Descrption;
+                        data.MANAGEMENT_COMPANY =
+                            ssList.Where(x => x.OrgID == data.MANAGEMENT_COMPANY).First().Abbreviation;
+                    }
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
-                    resultModel.ResultInfo = "数量不一致";
+                    resultModel.ResultInfo = reviewList.Count > resultApiModel.data.Count ? "审核数量大于获取数据" : "审核数量小于获取数据";
+                    resultModel.ResultInfo2 = listc;
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

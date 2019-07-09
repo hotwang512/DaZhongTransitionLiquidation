@@ -113,6 +113,10 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenPop, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_lib\OpenPop.dll</HintPath>
+    </Reference>
     <Reference Include="SqlSugar, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\SqlSugar.dll</HintPath>
@@ -321,6 +325,7 @@
     <Content Include="Areas\FinancialStatementsManagement\Views\web.config" />
     <Content Include="Areas\FinancialStatementsManagement\Views\SubjectBalanceStatement\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\ManageModel\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetModifyReview\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -331,6 +336,7 @@
     <Content Include="_lib\Autofac.Integration.Mvc.dll" />
     <Content Include="_lib\log4net.dll" />
     <Content Include="_lib\Newtonsoft.Json.dll" />
+    <Content Include="_lib\OpenPop.dll" />
     <Content Include="_lib\SqlSugar.dll" />
     <Content Include="_lib\SyntacticSugar.dll" />
     <Content Include="_theme\bootstrap-datepicker\bootstrap-datepicker.min.css" />
@@ -2295,6 +2301,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetAttachmentList.cs" />
@@ -2305,6 +2312,8 @@
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsLedger_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsRetirement_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />
@@ -2440,6 +2449,7 @@
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\DZLoginInfo.cs" />
+    <Compile Include="Controllers\AutoSyncEmailController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2539,6 +2549,7 @@
     <Folder Include="uploads\AssetAttachFile\" />
     <Folder Include="uploads\PurchaseAssign\" />
     <Folder Include="uploads\PurchaseContract\" />
+    <Folder Include="Views\Email\" />
     <Folder Include="Views\NewApi\" />
     <Folder Include="Views\PhotoUpload\" />
     <Folder Include="_theme\temp\file\" />

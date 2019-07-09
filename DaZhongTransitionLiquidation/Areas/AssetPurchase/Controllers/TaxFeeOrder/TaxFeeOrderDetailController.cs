@@ -313,16 +313,19 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             var cache = CacheManager<Sys_User>.GetInstance();
             var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
             var list = new List<Business_UserCompanySetDetail>();
-            DbBusinessDataService.Command(db =>
+            if (!PayItem.IsNullOrEmpty())
             {
-                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == PayItem).First().VGUID.ToString();
-                var data = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid).ToList();
-                if (data.Count > 0)
+                DbBusinessDataService.Command(db =>
                 {
-                    list = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid && x.AccountModeCode == AccountModeCode && x.Isable)
-                        .OrderBy(i => i.CompanyCode).ToList();
-                }
-            });
+                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == PayItem).First().VGUID.ToString();
+                    var data = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid).ToList();
+                    if (data.Count > 0)
+                    {
+                        list = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid && x.AccountModeCode == AccountModeCode && x.Isable)
+                            .OrderBy(i => i.CompanyCode).ToList();
+                    }
+                });
+            }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
     

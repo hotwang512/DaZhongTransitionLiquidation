@@ -1,4 +1,4 @@
-﻿//资产变更审核
+﻿//资产报废审核
 //所有元素选择器
 var selector = {
     $grid: function () { return $("#jqxTable") },
@@ -22,10 +22,7 @@ var $page = function () {
         });
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#VEHICLE_SHORTNAME").val("");
             $("#PLATE_NUMBER").val("");
-            $("#ENGINE_NUMBER").val("");
-            $("#CHASSIS_NUMBER").val("");
         });
         //提交
         $("#btnSubmit").on("click", function () {
@@ -63,8 +60,8 @@ var $page = function () {
     //提交
     function submit(selection) {
         $.ajax({
-            url: "/AssetManagement/AssetModifyReview/SubmitModifyReview",
-            data: { vguids: selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
+            url: "/AssetManagement/AssetsRetirementReview/SubmitRetirementVehicleReview",
+            data: { vguids: selection},
             //traditional: true,
             type: "post",
             success: function (msg) {
@@ -111,8 +108,8 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { PLATE_NUMBER: $("#PLATE_NUMBER").val(), VEHICLE_SHORTNAME: $("#VEHICLE_SHORTNAME").val(), ENGINE_NUMBER: $("#ENGINE_NUMBER").val(), CHASSIS_NUMBER: $("#CHASSIS_NUMBER").val(), "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
-                url: "/AssetManagement/AssetModifyReview/GetReviewAssetListDatas"   //获取数据源的路径
+                data: { PLATE_NUMBER: $("#PLATE_NUMBER").val() },
+                url: "/AssetManagement/AssetsRetirementReview/GetReviewAssetListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -133,7 +130,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '变更前', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer  },
+                    { text: '变更前', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车辆简称', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellsAlign: 'center' },
@@ -167,7 +164,7 @@ var $page = function () {
                 return '<span style="margin: 4px; margin-top:8px;">' + rowData.MODEL_MAJOR_M + "" + rowData.MODEL_MINOR_M + '</span>';
                 break;
             default:
-            return '<span style="margin: 4px; margin-top:8px;"></span>';
+                return '<span style="margin: 4px; margin-top:8px;"></span>';
         }
     }
     function cellsRendererFunc(row, column, value, rowData) {

@@ -39,14 +39,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public DateTime? BACK_CAR_DATE { get; set; }
+        public DateTime BACK_CAR_DATE { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public bool? ISVERIFY { get; set; }
+        public bool ISVERIFY { get; set; }
 
         /// <summary>
         /// Desc:
@@ -62,5 +62,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// </summary>           
         public string CREATE_USER { get; set; }
 
+    }
+
+    public class Business_ScrapVehicleModel: Business_ScrapVehicle
+    {
+        public string ASSET_ID { get; set; }
+        public string BELONGTO_COMPANY { get; set; }
+        public string MODEL_MAJOR { get; set; }
+        public string MODEL_MINOR { get; set; }
+        public string PERIOD { get; set; }
+        public string DESCRIPTION { get; set; }
+        public DateTime LISENSING_DATE { get; set; }
     }
 }

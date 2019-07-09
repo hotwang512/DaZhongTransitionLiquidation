@@ -28,25 +28,30 @@ namespace DaZhongTransitionLiquidation.Controllers
         }
         public static void DoSyncAssetsMaintenance()
         {
+            string syncTime = ConfigSugar.GetAppString("Email_SyncTime");
+            
             while (true)
             {
-                List<ModifyVehicleApiModel> assetModifyFlowList = new List<ModifyVehicleApiModel>();
-                List<ScrapVehicleApiModel> assetScrapFlowList = new List<ScrapVehicleApiModel>();
-                var success = 0;
-                try
+                if (LastDayOfMonth(DateTime.Now) == DateTime.Now)
                 {
-                    assetModifyFlowList = AssetMaintenanceAPI.GetModifyVehicleAsset();
-                    WirterSyncModifyAssetFlow(assetModifyFlowList);
-                    var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
-                    assetScrapFlowList = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
-                    WirterScrapSyncAssetFlow(assetScrapFlowList);
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog(string.Format("result:{0}", ex.ToString()));
+                    List<ModifyVehicleApiModel> assetModifyFlowList = new List<ModifyVehicleApiModel>();
+                    List<ScrapVehicleApiModel> assetScrapFlowList = new List<ScrapVehicleApiModel>();
+                    var success = 0;
+                    try
+                    {
+                        assetModifyFlowList = AssetMaintenanceAPI.GetModifyVehicleAsset();
+                        WirterSyncModifyAssetFlow(assetModifyFlowList);
+                        var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                        assetScrapFlowList = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
+                        WirterScrapSyncAssetFlow(assetScrapFlowList);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.WriteLog(string.Format("result:{0}", ex.ToString()));
+                    }
                 }
                 double timeSpan = ConfigSugar.GetAppString("TimeSpan").TryToInt();
-                Thread.Sleep((int)(timeSpan * 1000 * 60 * 60));
+                Thread.Sleep(1000);
             }
         }
 
@@ -102,7 +107,14 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //    MODIFY_TYPE = "营运状态";
                     //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     //}
-                    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
+                    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                    item.MODEL_MINOR = manageModelList
+                        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                    //经营模式主类 传过来的经营模式上上级
+                    var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                    var MODEL_MAJOR = manageModelList
+                        .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != MODEL_MAJOR)
                     {
                         //经营模式
                         MODIFY_TYPE = "BUSINESS_MODEL";
@@ -162,6 +174,10 @@ namespace DaZhongTransitionLiquidation.Controllers
             model.CREATE_DATE = DateTime.Now;
             model.CREATE_USER = "System";
             return model;
+        }
+        private static DateTime LastDayOfMonth(DateTime datetime)
+        {
+            return datetime.AddDays(1 - datetime.Day).AddMonths(1).AddDays(-1);
         }
     }
 }

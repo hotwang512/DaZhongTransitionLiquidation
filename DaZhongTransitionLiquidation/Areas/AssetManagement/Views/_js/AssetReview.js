@@ -30,6 +30,36 @@ var $page = function () {
         selector.$btnReset().on("click", function () {
             $("#YearMonth").val("");
         });
+        //获取当月数据
+        $("#btnGetData").on("click", function () {
+            if ($("#YearMonth").val() == "") {
+                jqxNotification("请选择您要提交的月份！", null, "error");
+            } else {
+                $.ajax({
+                    url: "/AssetManagement/ReviewAsset/GetReviewAssetByMoth",
+                    data: { YearMonth: $("#YearMonth").val() },
+                    //traditional: true,
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("获取失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("获取成功！", null, "success");
+                            initTable();
+                            break;
+                        case "2":
+                            jqxNotification(msg.ResultInfo, null, "success");
+                            $("#myModalLabel_title2").html(msg.ResultInfo);
+                            ViewReview(msg.ResultInfo2);
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        }
+                    }
+                });
+            }
+        });
         //提交
         $("#btnSubmit").on("click", function () {
             if ($("#YearMonth").val() == "") {

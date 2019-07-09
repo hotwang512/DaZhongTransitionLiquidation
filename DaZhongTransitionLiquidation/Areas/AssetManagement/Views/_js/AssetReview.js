@@ -38,6 +38,12 @@ var $page = function () {
                 WindowConfirmDialog(submit, "您确定要提交的" + $("#YearMonth").val() + "月份的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        //关闭
+        $("#AssetReviewDialog_CancelBtn").on("click",
+            function () {
+                $("#AssetReviewDialog").modal("hide");
+            }
+        );
     }; //addEvent end
 
     //提交
@@ -58,6 +64,8 @@ var $page = function () {
                         break;
                     case "2":
                         jqxNotification(msg.ResultInfo, null, "success");
+                        $("#myModalLabel_title2").html(msg.ResultInfo);
+                        ViewReview(msg.ResultInfo2);
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
                 }
@@ -267,7 +275,40 @@ var $page = function () {
         return true;
     }
 };
-
+function ViewReview(data) {
+    var source =
+    {
+        datatype: "json",
+        datafields:
+        [
+            { name: 'ENGINE_NUMBER', type: 'string' },
+            { name: 'CHASSIS_NUMBER', type: 'string' },
+            { name: 'MANAGEMENT_COMPANY', type: 'string' },
+            { name: 'BELONGTO_COMPANY', type: 'string' }
+        ],
+        localdata: data
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#gridAssetReview").jqxGrid(
+        {
+            width: "470",
+            autoheight: true,
+            source: dataAdapter,
+            statusbarheight: 25,
+            enabletooltips: true,
+            pageable: true,
+            columnsresize: true,
+            pagesize: 5,
+            selectionmode: 'singlerow',
+            columns: [
+                { text: '发动机号', datafield: 'ENGINE_NUMBER', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: '车架号', datafield: 'CHASSIS_NUMBER', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '资产管理公司', datafield: 'MANAGEMENT_COMPANY', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '资产归属公司', datafield: 'BELONGTO_COMPANY', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false }
+            ]
+        });
+    $("#AssetReviewDialog").modal("show");
+}
 $(function () {
     var page = new $page();
     page.init();

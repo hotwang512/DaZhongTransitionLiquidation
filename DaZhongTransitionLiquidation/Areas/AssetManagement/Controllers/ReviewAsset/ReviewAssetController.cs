@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -179,6 +180,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
+                                assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
@@ -190,9 +192,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         foreach (var data in listc)
                         {
                             data.BELONGTO_COMPANY =
-                                ssList.Where(x => x.OrgID == data.BELONGTO_COMPANY).First().Descrption;
+                                ssList.First(x => x.OrgID == data.BELONGTO_COMPANY).Descrption;
                             data.MANAGEMENT_COMPANY =
-                                ssList.Where(x => x.OrgID == data.MANAGEMENT_COMPANY).First().Abbreviation;
+                                ssList.First(x => x.OrgID == data.MANAGEMENT_COMPANY).Abbreviation;
                         }
                         resultModel.IsSuccess = false;
                         resultModel.Status = "2";
@@ -203,19 +205,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 else
                 {
                     var listc = new List<AssetDifference>();
-                    listc = lista.Count > listb.Count ? lista.Except(listb).ToList() : listb.Except(lista).ToList();
+                    var listd = new List<AssetDifference>();
+                    listc = lista.Except(listb).ToList();
+                    listd = listb.Except(lista).ToList();
+                    var liste = listc.Union(listd).ToList<AssetDifference>();
                     //Code转名称
-                    foreach (var data in listc)
+                    foreach (var data in liste)
                     {
                         data.BELONGTO_COMPANY =
-                            ssList.Where(x => x.OrgID == data.BELONGTO_COMPANY).First().Descrption;
+                            ssList.First(x => x.OrgID == data.BELONGTO_COMPANY).Descrption;
                         data.MANAGEMENT_COMPANY =
-                            ssList.Where(x => x.OrgID == data.MANAGEMENT_COMPANY).First().Abbreviation;
+                            ssList.First(x => x.OrgID == data.MANAGEMENT_COMPANY).Abbreviation;
                     }
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
-                    resultModel.ResultInfo = reviewList.Count > resultApiModel.data.Count ? "审核数量大于获取数据" : "审核数量小于获取数据";
-                    resultModel.ResultInfo2 = listc;
+                    resultModel.ResultInfo = "平台数量：" + lista.Count + "营收系统数量：" + listb.Count;
+                    resultModel.ResultInfo2 = liste;
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

@@ -187,6 +187,7 @@
   <ItemGroup>
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetModifyReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />

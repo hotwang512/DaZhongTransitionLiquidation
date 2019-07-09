@@ -69,55 +69,43 @@ namespace DaZhongTransitionLiquidation.Controllers
                     if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)
                     {
                         //车牌号变更
-                        MODIFY_TYPE = "车牌号变更";
+                        MODIFY_TYPE = "PLATE_NUMBER";
                         list.Add(getModel(manageModelList,item, MODIFY_TYPE));
                     }
-                    if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
-                    {
-                        //车辆简称变更
-                        MODIFY_TYPE = "车辆简称变更";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    }
+                    //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
+                    //{
+                    //    //车辆简称变更
+                    //    MODIFY_TYPE = "车辆简称变更";
+                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                    //}
                     if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
                     {
                         //管理公司
-                        MODIFY_TYPE = "管理公司";
+                        MODIFY_TYPE = "FA_LOC_1";
                         list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     }
-                    if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
-                    {
-                        //资产所属公司
-                        MODIFY_TYPE = "资产所属公司";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    }
-                    if (assetMaintenanceInfo.VEHICLE_STATE != item.VEHICLE_STATE)
-                    {
-                        //车辆状态
-                        MODIFY_TYPE = "车辆状态";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    }
-                    if (assetMaintenanceInfo.OPERATING_STATE != item.OPERATING_STATE)
-                    {
-                        //营运状态
-                        MODIFY_TYPE = "营运状态";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    }
-                    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR)
+                    //if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
+                    //{
+                    //    //资产所属公司
+                    //    MODIFY_TYPE = "资产所属公司";
+                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                    //}
+                    //if (assetMaintenanceInfo.VEHICLE_STATE != item.VEHICLE_STATE)
+                    //{
+                    //    //车辆状态
+                    //    MODIFY_TYPE = "车辆状态";
+                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                    //}
+                    //if (assetMaintenanceInfo.OPERATING_STATE != item.OPERATING_STATE)
+                    //{
+                    //    //营运状态
+                    //    MODIFY_TYPE = "营运状态";
+                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                    //}
+                    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
                     {
                         //经营模式
-                        MODIFY_TYPE = "经营模式";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    }
-                    if (assetMaintenanceInfo.ENGINE_NUMBER != item.ENGINE_NUMBER)
-                    {
-                        //发动机号
-                        MODIFY_TYPE = "发动机号";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    }
-                    if (assetMaintenanceInfo.CHASSIS_NUMBER != item.CHASSIS_NUMBER)
-                    {
-                        //车架号
-                        MODIFY_TYPE = "车架号";
+                        MODIFY_TYPE = "BUSINESS_MODEL";
                         list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     }
                 }

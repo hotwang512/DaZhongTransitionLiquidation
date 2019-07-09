@@ -48,7 +48,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>("@SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.LISENSING_DATE,mi.START_VEHICLE_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
+                    var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>("@SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.ASSET_COST,mi.LISENSING_DATE,mi.START_VEHICLE_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
                     //获取所有的经营模式
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                     foreach (var item in modifyVehicleList)
@@ -65,8 +65,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.ASSET_ID = item.ASSET_ID;
                         assetSwapModel.STATUS = "N";
                         assetSwapModel.RETIRE_DATE = item.BACK_CAR_DATE;
-                        assetSwapModel.RETIRE_FLAG = "N";
+                        assetSwapModel.RETIRE_FLAG = "Y";
                         assetSwapModel.RETIRE_QUANTITY = 1;
+                        assetSwapModel.RETIRE_COST = item.ASSET_COST;
+                        //报废成本
+
                         var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
                             x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
                         assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;

@@ -72,6 +72,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string MODEL_MINOR { get; set; }
         public string PERIOD { get; set; }
         public string DESCRIPTION { get; set; }
+        public decimal ASSET_COST { get; set; }
         public DateTime LISENSING_DATE { get; set; }
     }
 }

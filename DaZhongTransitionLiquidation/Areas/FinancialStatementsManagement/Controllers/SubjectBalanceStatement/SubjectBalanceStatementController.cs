@@ -117,29 +117,41 @@ Group By COMBINATION", new { AccountModeName = accountModeName, CompanyCode = co
         }
         public JsonResult CheckSubjectBalance(string businessCode, string companyCode, string accountModeCode, string accountModeName, string month,string year, GridParams para)
         {
-            var jsonResult = new JsonResultModel<AssetsGeneralLedger_Swap>();
+            var jsonResult = new JsonResultModel<v_AssetsGeneralLedger_Swap>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                var data = new List<AssetsGeneralLedger_Swap>();
+                var data = new List<v_AssetsGeneralLedger_Swap>();
                 //从已审核凭证中提取数据
-                var AssetsData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,
-JE_HEADER_NAME,ACCOUNTING_DATE,cast(CASE ENTERED_DR WHEN '' THEN '0' else ENTERED_DR end as decimal(20,2)) as ENTERED_DR,cast(CASE ENTERED_CR WHEN '' THEN '0' else ENTERED_CR end as decimal(20,2)) as ENTERED_CR,STATUS,MESSAGE from AssetsGeneralLedger_Swap where Year(ACCOUNTING_DATE)=@Year and  MONTH(ACCOUNTING_DATE)=@Month and LEDGER_NAME=@AccountModeName 
-and SEGMENT1=@CompanyCode ", new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month, Year = year }).ToList();
+                var AssetsData = db.Ado.SqlQuery<v_AssetsGeneralLedger_Swap>(@"select (b.CompanySection+'.'+b.SubjectSection+'.'+b.AccountSection+'.'+b.CostCenterSection+'.'+b.SpareOneSection+'.'+b.SpareTwoSection+'.'+b.IntercourseSection) as SubjectCount,a.AccountModeName as LEDGER_NAME,a.BatchName as JE_BATCH_NAME,
+a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as TurnOut,b.LoanMoney as TurnIn from Business_VoucherList as a left join Business_VoucherDetail as b on a.VGUID = b.VoucherVGUID
+ where a.Status='3' and a.AccountModeName=@AccountModeName and a.CompanyCode=@CompanyCode and MONTH(a.VoucherDate)=@Month and Year(a.VoucherDate)=@Year", 
+ new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month, Year = year }).ToList();
                 AssetsData = AssetsData.Where(x => x.SubjectCount == businessCode).ToList();
+                data = AssetsData;
                 //从总账明细中提取数据
-                var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
+                var AssetsDetailData = db.Ado.SqlQuery<v_AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
 from AssetsGeneralLedgerDetail_Swap where LEDGER_NAME=@AccountModeName and substring(COMBINATION,0,3)=@CompanyCode and Year(ACCOUNTING_DATE)=@Year and MONTH(ACCOUNTING_DATE)=@Month and COMBINATION=@SubjectCount",
                 new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month, SubjectCount = businessCode, Year = year }).ToList();
                 foreach (var item in AssetsDetailData)
                 {
-                    item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;
-                    item.ENTERED_DR = item.ENTERED_DR == null ? "0.00" : item.ENTERED_DR;
-                    var isAny = AssetsData.Any(x => x.SubjectCount == item.SubjectCount && x.LEDGER_NAME == item.LEDGER_NAME && x.JE_HEADER_NAME == item.JE_HEADER_NAME && x.ENTERED_DR == item.ENTERED_DR && x.ENTERED_CR == item.ENTERED_CR);
+                    var ENTERED_CR = item.ENTERED_CR;
+                    var ENTERED_DR = item.ENTERED_DR;
+                    //var isA = item.JE_HEADER_NAME.Contains("201906210225");
+                    var headerName = item.JE_HEADER_NAME.Split(" ")[0];
+                    var isAny = AssetsData.Any(x => x.SubjectCount == item.SubjectCount && x.LEDGER_NAME == item.LEDGER_NAME && item.JE_HEADER_NAME.Contains(x.JE_HEADER_NAME) && x.TurnOut == ENTERED_DR && x.TurnIn == ENTERED_CR);
                     if (!isAny)
                     {
                         data.Add(item);
+                    }
+                    else
+                    {
+                        var removeData = AssetsData.Where(x => x.JE_HEADER_NAME == headerName && x.TurnOut == ENTERED_DR && x.TurnIn == ENTERED_CR).ToList();
+                        foreach (var it in removeData)
+                        {
+                            data.Remove(it);
+                        }
                     }
                 }
                 jsonResult.Rows = data;

@@ -538,9 +538,15 @@ function syncAssetsData() {
         success: function (msg) {
             if (msg.IsSuccess == true) {
                 jqxNotification("同步成功！", null, "success");
+                if (tableIndex == 2) {
+                    $("#jqxTable2").jqxDataTable('updateBoundData');
+                }
             }
             if (msg.Status == "1") {
                 jqxNotification("这批数据已经同步！", null, "success");
+            }
+            if (msg.Status == "2") {
+                jqxNotification("暂无差异数据！", null, "success");
             }
         }
     })

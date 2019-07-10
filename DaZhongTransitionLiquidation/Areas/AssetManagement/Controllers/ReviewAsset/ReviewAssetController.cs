@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.EnterpriseServices;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
@@ -55,8 +56,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 //调用车管系统接口
                 var apiReault = GetNewVehicleAsset(YearMonth);
-                var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_NewVehicleAsset>>();
-                var newVehicleList = resultApiModel.data;
+                var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string,string>>>();
+
+                var newVehicleList = new List<Api_NewVehicleAsset>();
+                var resultColumn = resultApiModel.data[0].COLUMNS;
+                var resultData = resultApiModel.data[0].DATA;
+                foreach (var item in resultData)
+                {
+                    var nv = new Api_NewVehicleAsset();
+                    var t = nv.GetType();
+                    var obj = Activator.CreateInstance(t);
+                    for (var k = 0; k < resultColumn.Count; k++)
+                    {
+                        var pi = t.GetProperty(resultColumn[k]);
+                        if (pi != null) pi.SetValue(obj, item[k], null);
+                    }
+                    newVehicleList.Add(nv);
+                }
                 var lista = reviewList.Select(x => new
                     AssetDifference
                 { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY_CODE, BELONGTO_COMPANY = x.BELONGTO_COMPANY_CODE }).ToList();
@@ -66,7 +82,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 //获取所有的公司
                 var ssList = db.Queryable<Business_SevenSection>().Where(x =>
                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                if (reviewList.Count() == resultApiModel.data.Count())
+                if (reviewList.Count() == resultApiModel.data[0].DATA.Count())
                 {
                     //获取所有的经营模式
                     var manageModelList = db.Queryable<Business_ManageModel>().ToList();
@@ -159,7 +175,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     }
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
-                    resultModel.ResultInfo = "平台数量：" + lista.Count + "营收系统数量：" + listb.Count;
+                    //resultModel.ResultInfo = "平台数量：" + lista.Count + "营收系统数量：" + listb.Count;
                     resultModel.ResultInfo2 = liste;
                 }
             });
@@ -348,15 +364,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         }
         public string GetNewVehicleAsset(string YearMonth)
         {
+            YearMonth = YearMonth.Replace("-","");
             var url = ConfigSugar.GetAppString("NewVehicleAssetUrl");
-            var data = "{"+ "\"YearMonth\":\"{YearMonth}\",".Replace("{YearMonth}", YearMonth) + "}";
+            var data = "{"+ "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) + "}";
             try
             {
                 WebClient wc = new WebClient();
                 wc.Headers.Clear();
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url), "GET", data);
+                var resultData = wc.UploadString(new Uri(url), "POST", data);
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
                 return resultData;
             }

@@ -25,4 +25,9 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity
         public string FUEL_TYPE { get; set; }
         public string DELIVERY_INFORMATION { get; set; }
     }
+    public class Api_VehicleAssetResult<T1, T2>
+    {
+        public List<T1> COLUMNS;
+        public List<List<T2>> DATA;
+    }
 }

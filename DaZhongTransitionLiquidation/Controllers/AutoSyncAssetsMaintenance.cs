@@ -13,6 +13,7 @@ using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 
 namespace DaZhongTransitionLiquidation.Controllers
 {
@@ -28,22 +29,58 @@ namespace DaZhongTransitionLiquidation.Controllers
         }
         public static void DoSyncAssetsMaintenance()
         {
-            string syncTime = ConfigSugar.GetAppString("Email_SyncTime");
-            
+            string getTime = ConfigSugar.GetAppString("Vehicle_GetTime");
             while (true)
             {
-                if (LastDayOfMonth(DateTime.Now) == DateTime.Now)
+                if (LastDayOfMonth(DateTime.Now) == DateTime.Now && DateTime.Now.ToString("HH:ss") == getTime)
                 {
-                    List<ModifyVehicleApiModel> assetModifyFlowList = new List<ModifyVehicleApiModel>();
-                    List<ScrapVehicleApiModel> assetScrapFlowList = new List<ScrapVehicleApiModel>();
+                    List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();      
+                    List<Api_ScrapVehicleAsset> assetScrapFlowList = new List<Api_ScrapVehicleAsset>();
                     var success = 0;
                     try
                     {
-                        assetModifyFlowList = AssetMaintenanceAPI.GetModifyVehicleAsset();
-                        WirterSyncModifyAssetFlow(assetModifyFlowList);
-                        var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
-                        assetScrapFlowList = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
-                        WirterScrapSyncAssetFlow(assetScrapFlowList);
+                        var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset();
+                        var resultApiModifyModel = apiReaultModify
+                            .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                        {
+                            var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                            var resultData = resultApiModifyModel.data[0].DATA;
+                            foreach (var item in resultData)
+                            {
+                                var nv = new Api_ModifyVehicleAsset();
+                                var t = nv.GetType();
+                                var obj = Activator.CreateInstance(t);
+                                for (var k = 0; k < resultColumn.Count; k++)
+                                {
+                                    var pi = t.GetProperty(resultColumn[k]);
+                                    if (pi != null) pi.SetValue(nv, item[k], null);
+                                }
+                                assetModifyFlowList.Add(nv);
+                            }
+                            WirterSyncModifyAssetFlow(assetModifyFlowList);
+                        }
+                        {
+                            var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                            var apiReaultScrap = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
+                            var resultApiScrapModel = apiReaultScrap
+                                .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                            var scrapVehicleList = new List<Api_ScrapVehicleAsset>();
+                            var resultColumn = resultApiScrapModel.data[0].COLUMNS;
+                            var resultData = resultApiScrapModel.data[0].DATA;
+                            foreach (var item in resultData)
+                            {
+                                var nv = new Api_ScrapVehicleAsset();
+                                var t = nv.GetType();
+                                var obj = Activator.CreateInstance(t);
+                                for (var k = 0; k < resultColumn.Count; k++)
+                                {
+                                    var pi = t.GetProperty(resultColumn[k]);
+                                    if (pi != null) pi.SetValue(nv, item[k], null);
+                                }
+                                scrapVehicleList.Add(nv);
+                            }
+                            WirterScrapSyncAssetFlow(assetScrapFlowList);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -55,7 +92,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
         }
 
-        public static int WirterSyncModifyAssetFlow(List<ModifyVehicleApiModel> assetFlowList)
+        public static int WirterSyncModifyAssetFlow(List<Api_ModifyVehicleAsset> assetFlowList)
         {
             var list = new List<Business_ModifyVehicle>();
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
@@ -77,18 +114,19 @@ namespace DaZhongTransitionLiquidation.Controllers
                         MODIFY_TYPE = "PLATE_NUMBER";
                         list.Add(getModel(manageModelList,item, MODIFY_TYPE));
                     }
-                    //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
-                    //{
-                    //    //车辆简称变更
-                    //    MODIFY_TYPE = "车辆简称变更";
-                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    //}
                     if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
                     {
                         //管理公司
                         MODIFY_TYPE = "FA_LOC_1";
                         list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     }
+                    #region 注释
+                    //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
+                    //{
+                    //    //车辆简称变更
+                    //    MODIFY_TYPE = "车辆简称变更";
+                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                    //}
                     //if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
                     //{
                     //    //资产所属公司
@@ -107,25 +145,29 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //    MODIFY_TYPE = "营运状态";
                     //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     //}
-                    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                    item.MODEL_MINOR = manageModelList
-                        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-                    //经营模式主类 传过来的经营模式上上级
-                    var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                    var MODEL_MAJOR = manageModelList
-                        .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
-                    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != MODEL_MAJOR)
+                    #endregion
+                    if (!item.MODEL_MINOR.IsNullOrEmpty())
                     {
-                        //经营模式
-                        MODIFY_TYPE = "BUSINESS_MODEL";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                        item.MODEL_MINOR = manageModelList
+                            .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                        //经营模式主类 传过来的经营模式上上级
+                        var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                        var MODEL_MAJOR = manageModelList
+                            .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                        if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != MODEL_MAJOR)
+                        {
+                            //经营模式
+                            MODIFY_TYPE = "BUSINESS_MODEL";
+                            list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        }
                     }
                 }
             }
             success = _db.Insertable<Business_ModifyVehicle>(list).ExecuteCommand();
             return success;
         }
-        public static int WirterScrapSyncAssetFlow(List<ScrapVehicleApiModel> assetFlowList)
+        public static int WirterScrapSyncAssetFlow(List<Api_ScrapVehicleAsset> assetFlowList)
         {
             var list = new List<Business_ScrapVehicle>();
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
@@ -136,7 +178,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 model.VGUID = Guid.NewGuid();
                 model.ORIGINALID = item.ORIGINALID;
                 model.PLATE_NUMBER = item.PLATE_NUMBER;
-                model.BACK_CAR_DATE = item.BACK_CAR_DATE;
+                model.BACK_CAR_DATE = item.BACK_CAR_DATE.TryToDate();
                 model.ISVERIFY = false;
                 model.CREATE_DATE = DateTime.Now;
                 model.CREATE_USER = "System";
@@ -145,7 +187,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             success = _db.Insertable<Business_ScrapVehicle>(list).ExecuteCommand();
             return success;
         }
-        public static Business_ModifyVehicle getModel(List<Business_ManageModel> manageModelList, ModifyVehicleApiModel item ,string MODIFY_TYPE)
+        public static Business_ModifyVehicle getModel(List<Business_ManageModel> manageModelList, Api_ModifyVehicleAsset item ,string MODIFY_TYPE)
         {
             var model = new Business_ModifyVehicle();
             model.VGUID = Guid.NewGuid();

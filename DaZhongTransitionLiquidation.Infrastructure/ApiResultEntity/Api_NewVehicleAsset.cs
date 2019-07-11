@@ -18,10 +18,10 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity
         public string MODEL_MINOR { get; set; }
         public string ENGINE_NUMBER { get; set; }
         public string CHASSIS_NUMBER { get; set; }
-        public DateTime? PRODUCTION_DATE { get; set; }
-        public DateTime? PURCHASE_DATE { get; set; }
-        public DateTime? LISENSING_DATE { get; set; }
-        public DateTime? COMMISSIONING_DATE { get; set; }
+        public string PRODUCTION_DATE { get; set; }
+        public string PURCHASE_DATE { get; set; }
+        public string LISENSING_DATE { get; set; }
+        public string COMMISSIONING_DATE { get; set; }
         public string FUEL_TYPE { get; set; }
         public string DELIVERY_INFORMATION { get; set; }
     }
@@ -29,5 +29,25 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity
     {
         public List<T1> COLUMNS;
         public List<List<T2>> DATA;
+    }
+    public class Api_ScrapVehicleAsset
+    {
+        public string ORIGINALID { get; set; }
+        public string PLATE_NUMBER { get; set; }
+        public string BACK_CAR_DATE { get; set; }
+    }
+    public class Api_ModifyVehicleAsset
+    {
+        public string ORIGINALID { set; get; }
+        public string PLATE_NUMBER { set; get; }
+        public string TAG_NUMBER { set; get; }
+        public string VEHICLE_SHORTNAME { set; get; }
+        public string MANAGEMENT_COMPANY { set; get; }
+        public string BELONGTO_COMPANY { set; get; }
+        public string VEHICLE_STATE { set; get; }
+        public string OPERATING_STATE { set; get; }
+        public string ENGINE_NUMBER { set; get; }
+        public string CHASSIS_NUMBER { set; get; }
+        public string MODEL_MINOR { set; get; }
     }
 }

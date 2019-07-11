@@ -5,15 +5,11 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SyntacticSugar;
 using SqlSugar;
 using System;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Collections.Generic;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Common;
 using AutoMapper;
-using System.Net;
-using System.Web.Script.Serialization;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsMaintenance

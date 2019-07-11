@@ -11,36 +11,12 @@ namespace DaZhongTransitionLiquidation.Common
     public class AssetMaintenanceAPI
     {
         //每月全量取营收系统、获取车辆固定资产
-        public static List<ModifyVehicleApiModel> GetModifyVehicleAsset()
+        public static string GetModifyVehicleAsset()
         {
-            List<ModifyVehicleApiModel> assetFlowList = new List<ModifyVehicleApiModel>();
+            var resultData = "";
             var url = ConfigSugar.GetAppString("ModifyVehicleAssetUrl");
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Clear();
-                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
-                wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url),"GET");
-                var modelData = resultData.JsonToModel<ModifyVehicleApiResult>();
-                if (modelData.success)
-                {
-                    assetFlowList = modelData.data;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "", ex.ToString()));
-            }
-            return assetFlowList;
-        }
-        //根据月份获取退车车辆固定资产
-        public static List<ScrapVehicleApiModel> GetScrapVehicleAsset(string YearMonth)
-        {
-            List<ScrapVehicleApiModel> assetFlowList = new List<ScrapVehicleApiModel>();
-            var url = ConfigSugar.GetAppString("ScrapVehicleAssetUrl");
             var data = "{" +
-                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "") +
+                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "201906") +
                        "}";
             try
             {
@@ -48,19 +24,36 @@ namespace DaZhongTransitionLiquidation.Common
                 wc.Headers.Clear();
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url), "GET", data);
-                var modelData = resultData.JsonToModel<ScrapVehicleApiResult>();
-                if (modelData.success)
-                {
-                    assetFlowList = modelData.data;
-                }
+                resultData = wc.UploadString(new Uri(url),"POST", data);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "", ex.ToString()));
+            }
+            return resultData;
+        }
+        //根据月份获取退车车辆固定资产
+        public static string GetScrapVehicleAsset(string YearMonth)
+        {
+            var resultData = "";
+            var url = ConfigSugar.GetAppString("ScrapVehicleAssetUrl");
+            var data = "{" +
+                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) +
+                       "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                resultData = wc.UploadString(new Uri(url), "GET", data);
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }
             catch (Exception ex)
             {
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
             }
-            return assetFlowList;
+            return resultData;
         }
         public static string GetASSET_CATEGORY_MINOR(string ORGANIZATION_NUM, string GROUP_ID, string ENGINE_NUMBER, string CHASSIS_NUMBER)
         {

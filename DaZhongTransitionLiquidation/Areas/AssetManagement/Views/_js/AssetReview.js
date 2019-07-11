@@ -65,7 +65,7 @@ var $page = function () {
             if ($("#YearMonth").val() == "") {
                 jqxNotification("请选择您要提交的月份！", null, "error");
             } else {
-                WindowConfirmDialog(submit, "您确定要提交的" + $("#YearMonth").val() + "月份的数据？", "确认框", "确定", "取消", selection);
+                WindowConfirmDialog(submit, "您确定要提交的" + $("#YearMonth").val() + "月份的数据？", "确认框", "确定", "取消");
             }
         });
         //关闭
@@ -77,7 +77,7 @@ var $page = function () {
     }; //addEvent end
 
     //提交
-    function submit(selection) {
+    function submit() {
         $.ajax({
             url: "/AssetManagement/ReviewAsset/SubmitReviewAsset",
             data: { YearMonth: $("#YearMonth").val() },

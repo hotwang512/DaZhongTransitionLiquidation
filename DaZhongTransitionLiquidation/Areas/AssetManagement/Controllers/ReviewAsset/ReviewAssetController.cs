@@ -69,7 +69,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     for (var k = 0; k < resultColumn.Count; k++)
                     {
                         var pi = t.GetProperty(resultColumn[k]);
-                        if (pi != null) pi.SetValue(obj, item[k], null);
+                        if (pi != null) pi.SetValue(nv, item[k], null);
                     }
                     newVehicleList.Add(nv);
                 }
@@ -109,11 +109,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
                                 reviewItem.ENGINE_NUMBER = newVehicle.ENGINE_NUMBER;
                                 reviewItem.CHASSIS_NUMBER = newVehicle.CHASSIS_NUMBER;
-                                reviewItem.PRODUCTION_DATE = newVehicle.PRODUCTION_DATE;
+                                reviewItem.PRODUCTION_DATE = newVehicle.PRODUCTION_DATE.TryToDate();
                                 reviewItem.ORIGINALID = newVehicle.ORIGINALID;
-                                reviewItem.PURCHASE_DATE = newVehicle.PURCHASE_DATE;
-                                reviewItem.LISENSING_DATE = newVehicle.LISENSING_DATE;
-                                reviewItem.COMMISSIONING_DATE = newVehicle.COMMISSIONING_DATE;
+                                reviewItem.PURCHASE_DATE = newVehicle.PURCHASE_DATE.TryToDate();
+                                reviewItem.LISENSING_DATE = newVehicle.LISENSING_DATE.TryToDate();
+                                reviewItem.COMMISSIONING_DATE = newVehicle.COMMISSIONING_DATE.TryToDate();
                                 reviewItem.FUEL_TYPE = newVehicle.FUEL_TYPE;
                                 reviewItem.DELIVERY_INFORMATION = newVehicle.DELIVERY_INFORMATION;
                                 reviewItem.ISVERIFY = true;
@@ -125,18 +125,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.YTD_DEPRECIATION = 0;
                                 reviewItem.ACCT_DEPRECIATION = 0;
                                 //经营模式子类 传过来的经营模式上级
-                                var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
-                                reviewItem.MODEL_MINOR = manageModelList
-                                    .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-                                //经营模式主类 传过来的经营模式上上级
-                                var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
-                                reviewItem.MODEL_MAJOR = manageModelList
-                                    .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                                //经营模式子类 传过来的经营模式上级
+                                if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
+                                {
+                                    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
+                                    reviewItem.MODEL_MINOR = manageModelList
+                                        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                                    //经营模式主类 传过来的经营模式上上级
+                                    var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
+                                    reviewItem.MODEL_MAJOR = manageModelList
+                                        .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                                }
                                 reviewItem.ISVERIFY = true;
                             }
-                            resultModel.IsSuccess = true;
-                            resultModel.Status = "1";
                         }
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
                         if (resultModel.IsSuccess.TryToBoolean())
                         {
                             db.Updateable<Business_AssetReview>(reviewList).IgnoreColumns(it => new { it.START_VEHICLE_DATE }).ExecuteCommand();
@@ -175,7 +179,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     }
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
-                    //resultModel.ResultInfo = "平台数量：" + lista.Count + "营收系统数量：" + listb.Count;
+                    resultModel.ResultInfo = "平台数量：" + lista.Count + "  营收系统数量：" + listb.Count;
                     resultModel.ResultInfo2 = liste;
                 }
             });
@@ -191,8 +195,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 //调用车管系统接口
                 var apiReault = GetNewVehicleAsset(YearMonth);
-                var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_NewVehicleAsset>>();
-                var newVehicleList = resultApiModel.data;
+                var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+
+                var newVehicleList = new List<Api_NewVehicleAsset>();
+                var resultColumn = resultApiModel.data[0].COLUMNS;
+                var resultData = resultApiModel.data[0].DATA;
+                foreach (var item in resultData)
+                {
+                    var nv = new Api_NewVehicleAsset();
+                    var t = nv.GetType();
+                    var obj = Activator.CreateInstance(t);
+                    for (var k = 0; k < resultColumn.Count; k++)
+                    {
+                        var pi = t.GetProperty(resultColumn[k]);
+                        if (pi != null) pi.SetValue(nv, item[k], null);
+                    }
+                    newVehicleList.Add(nv);
+                }
                 var lista = reviewList.Select(x => new
                     AssetDifference
                     { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER, MANAGEMENT_COMPANY = x.MANAGEMENT_COMPANY_CODE, BELONGTO_COMPANY = x.BELONGTO_COMPANY_CODE }).ToList();
@@ -202,7 +221,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 //获取所有的公司
                 var ssList = db.Queryable<Business_SevenSection>().Where(x =>
                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                if (reviewList.Count() == resultApiModel.data.Count())
+                if (reviewList.Count() == resultApiModel.data[0].DATA.Count())
                 {
                     //获取所有的经营模式
                     var manageModelList = db.Queryable<Business_ManageModel>().ToList();
@@ -213,11 +232,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     {
                         foreach (var reviewItem in reviewList)
                         {
-                            if (newVehicleList.Any(x => x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER
-                                                        && x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER
-                                                        && x.MANAGEMENT_COMPANY == reviewItem.MANAGEMENT_COMPANY
-                                                        && x.BELONGTO_COMPANY == reviewItem.BELONGTO_COMPANY))
-                            {
+                            //if (newVehicleList.Any(x => x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER
+                            //                            && x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER
+                            //                            && x.MANAGEMENT_COMPANY == reviewItem.MANAGEMENT_COMPANY
+                            //                            && x.BELONGTO_COMPANY == reviewItem.BELONGTO_COMPANY))
+                            //{
                                 var newVehicle = newVehicleList.First(x =>
                                     x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER &&
                                     x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER);
@@ -229,11 +248,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
                                 reviewItem.ENGINE_NUMBER = newVehicle.ENGINE_NUMBER;
                                 reviewItem.CHASSIS_NUMBER = newVehicle.CHASSIS_NUMBER;
-                                reviewItem.PRODUCTION_DATE = newVehicle.PRODUCTION_DATE;
+                                reviewItem.PRODUCTION_DATE = newVehicle.PRODUCTION_DATE.TryToDate();
                                 reviewItem.ORIGINALID = newVehicle.ORIGINALID;
-                                reviewItem.PURCHASE_DATE = newVehicle.PURCHASE_DATE;
-                                reviewItem.LISENSING_DATE = newVehicle.LISENSING_DATE;
-                                reviewItem.COMMISSIONING_DATE = newVehicle.COMMISSIONING_DATE;
+                                reviewItem.PURCHASE_DATE = newVehicle.PURCHASE_DATE.TryToDate();
+                                reviewItem.LISENSING_DATE = newVehicle.LISENSING_DATE.TryToDate();
+                                reviewItem.COMMISSIONING_DATE = newVehicle.COMMISSIONING_DATE.TryToDate();
                                 reviewItem.BOOK_TYPE_CODE = "营运公司2019";
                                 reviewItem.FUEL_TYPE = newVehicle.FUEL_TYPE;
                                 reviewItem.DELIVERY_INFORMATION = newVehicle.DELIVERY_INFORMATION;
@@ -246,18 +265,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.YTD_DEPRECIATION = 0;
                                 reviewItem.ACCT_DEPRECIATION = 0;
                                 //经营模式子类 传过来的经营模式上级
-                                var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
-                                reviewItem.MODEL_MINOR = manageModelList
-                                    .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-                                //经营模式主类 传过来的经营模式上上级
-                                var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
-                                reviewItem.MODEL_MAJOR = manageModelList
-                                    .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
-                                reviewItem.ISVERIFY = true;
-                            }
-                            resultModel.IsSuccess = true;
-                            resultModel.Status = "1";
+                                if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
+                                {
+                                    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
+                                    reviewItem.MODEL_MINOR = manageModelList
+                                        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                                    //经营模式主类 传过来的经营模式上上级
+                                    var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
+                                    reviewItem.MODEL_MAJOR = manageModelList
+                                        .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                                }
+                            reviewItem.ISVERIFY = true;
+                            //}
                         }
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
                         if (resultModel.IsSuccess.TryToBoolean())
                         {
                             db.Updateable<Business_AssetReview>(reviewList).IgnoreColumns(it => new { it.ISVERIFY, it.START_VEHICLE_DATE }).ExecuteCommand();
@@ -356,7 +378,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     }
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
-                    resultModel.ResultInfo = "平台数量：" + lista.Count + "营收系统数量：" + listb.Count;
+                    resultModel.ResultInfo = "平台数量：" + lista.Count + "  营收系统数量：" + listb.Count;
                     resultModel.ResultInfo2 = liste;
                 }
             });

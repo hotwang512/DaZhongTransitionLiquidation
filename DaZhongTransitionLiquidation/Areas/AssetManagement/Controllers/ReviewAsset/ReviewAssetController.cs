@@ -124,10 +124,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.VEHICLE_AGE = months;
                                 reviewItem.YTD_DEPRECIATION = 0;
                                 reviewItem.ACCT_DEPRECIATION = 0;
-                                //经营模式子类 传过来的经营模式上级
-                                //经营模式子类 传过来的经营模式上级
                                 if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
                                 {
+                                    //经营模式子类 传过来的经营模式上级
                                     var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
                                     reviewItem.MODEL_MINOR = manageModelList
                                         .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
@@ -232,11 +231,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     {
                         foreach (var reviewItem in reviewList)
                         {
-                            //if (newVehicleList.Any(x => x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER
-                            //                            && x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER
-                            //                            && x.MANAGEMENT_COMPANY == reviewItem.MANAGEMENT_COMPANY
-                            //                            && x.BELONGTO_COMPANY == reviewItem.BELONGTO_COMPANY))
-                            //{
+                            if (newVehicleList.Any(x => x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER
+                                                        && x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER
+                                                        && x.MANAGEMENT_COMPANY == reviewItem.MANAGEMENT_COMPANY
+                                                        && x.BELONGTO_COMPANY == reviewItem.BELONGTO_COMPANY))
+                            {
                                 var newVehicle = newVehicleList.First(x =>
                                     x.ENGINE_NUMBER == reviewItem.ENGINE_NUMBER &&
                                     x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER);
@@ -264,9 +263,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.VEHICLE_AGE = months;
                                 reviewItem.YTD_DEPRECIATION = 0;
                                 reviewItem.ACCT_DEPRECIATION = 0;
-                                //经营模式子类 传过来的经营模式上级
                                 if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
                                 {
+                                    //经营模式子类 传过来的经营模式上级
                                     var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
                                     reviewItem.MODEL_MINOR = manageModelList
                                         .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
@@ -275,9 +274,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                     reviewItem.MODEL_MAJOR = manageModelList
                                         .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
                                 }
-                            reviewItem.ISVERIFY = true;
-                            //}
+                                reviewItem.ISVERIFY = true;
                         }
+                    }
                         resultModel.IsSuccess = true;
                         resultModel.Status = "1";
                         if (resultModel.IsSuccess.TryToBoolean())

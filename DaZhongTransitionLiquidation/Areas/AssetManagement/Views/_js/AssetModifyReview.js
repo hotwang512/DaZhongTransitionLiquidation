@@ -43,6 +43,7 @@ var $page = function () {
         );
     }; //addEvent end
     $("#btnSubmit").on("click", function () {
+        debugger;
         var selection = [];
         var grid = $("#jqxTable");
         var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
@@ -62,9 +63,10 @@ var $page = function () {
     });
     //提交
     function submit(selection) {
+        debugger;
         $.ajax({
-            url: "/AssetManagement/AssetModifyReview/SubmitModifyReview",
-            data: { vguids: selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
+            url: "/AssetManagement/AssetModifyReview/SubmitModifyVehicleReview",
+            data: { guids: selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
             //traditional: true,
             type: "post",
             success: function (msg) {

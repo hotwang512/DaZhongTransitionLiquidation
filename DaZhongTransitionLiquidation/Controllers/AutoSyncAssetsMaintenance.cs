@@ -13,6 +13,7 @@ using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 
 namespace DaZhongTransitionLiquidation.Controllers
@@ -91,7 +92,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                 Thread.Sleep(1000);
             }
         }
-
         public static int WirterSyncModifyAssetFlow(List<Api_ModifyVehicleAsset> assetFlowList)
         {
             var list = new List<Business_ModifyVehicle>();
@@ -99,6 +99,9 @@ namespace DaZhongTransitionLiquidation.Controllers
 
             //获取所有的经营模式
             var manageModelList = _db.Queryable<Business_ManageModel>().ToList();
+            //获取所有的公司
+            var ssList = _db.Queryable<Business_SevenSection>().Where(x =>
+                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
             int success = 0;
             var MODIFY_TYPE = "";
             foreach (var item in assetFlowList)
@@ -107,6 +110,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                     .Where(x => x.ORIGINALID == item.ORIGINALID).First();
                 if (assetMaintenanceInfo != null)
                 {
+                    //Code转名称
+                    item.BELONGTO_COMPANY =
+                        ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
+                    item.MANAGEMENT_COMPANY =
+                        ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
                     //判断变更类型 MODIFY_TYPE
                     if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)
                     {
@@ -146,22 +154,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     //}
                     #endregion
-                    if (!item.MODEL_MINOR.IsNullOrEmpty())
-                    {
-                        var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                        item.MODEL_MINOR = manageModelList
-                            .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-                        //经营模式主类 传过来的经营模式上上级
-                        var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                        var MODEL_MAJOR = manageModelList
-                            .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
-                        if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != MODEL_MAJOR)
-                        {
-                            //经营模式
-                            MODIFY_TYPE = "BUSINESS_MODEL";
-                            list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                        }
-                    }
+                    //if (!item.MODEL_MINOR.IsNullOrEmpty())
+                    //{
+                    //    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                    //    item.MODEL_MINOR = manageModelList
+                    //        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                    //    //经营模式主类 传过来的经营模式上上级
+                    //    var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                    //    var MODEL_MAJOR = manageModelList
+                    //        .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                    //    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != MODEL_MAJOR)
+                    //    {
+                    //        //经营模式
+                    //        MODIFY_TYPE = "BUSINESS_MODEL";
+                    //        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                    //    }
+                    //}
                 }
             }
             success = _db.Insertable<Business_ModifyVehicle>(list).ExecuteCommand();
@@ -201,16 +209,17 @@ namespace DaZhongTransitionLiquidation.Controllers
             model.OPERATING_STATE = item.OPERATING_STATE;
             model.ENGINE_NUMBER = item.ENGINE_NUMBER;
             model.CHASSIS_NUMBER = item.CHASSIS_NUMBER;
+
             //model.MODEL_MAJOR = item.MODEL_MAJOR;
             //model.MODEL_MINOR = item.MODEL_MINOR;
-            //经营模式子类 传过来的经营模式上级
-            var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-            model.MODEL_MINOR = manageModelList
-                .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-            //经营模式主类 传过来的经营模式上上级
-            var major = manageModelList.FirstOrDefault(x => x.BusinessName == model.MODEL_MINOR);
-            model.MODEL_MAJOR = manageModelList
-                .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+            ////经营模式子类 传过来的经营模式上级
+            //var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+            //model.MODEL_MINOR = manageModelList
+            //    .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+            ////经营模式主类 传过来的经营模式上上级
+            //var major = manageModelList.FirstOrDefault(x => x.BusinessName == model.MODEL_MINOR);
+            //model.MODEL_MAJOR = manageModelList
+            //    .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
             model.MODIFY_TYPE = MODIFY_TYPE;
             model.ISVERIFY = false;
             model.CREATE_DATE = DateTime.Now;

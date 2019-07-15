@@ -21,22 +21,4 @@ namespace DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity
 
         public decimal SumRemitamount { get; set; }
     }
-    public class JsonResultFileModelApi<T>
-    {
-        public T[] data { get; set; }
-        public int code { get; set; }
-        public string message { get; set; }
-    }
-    public class JsonResultModelApi<T>
-    {
-        public T data { get; set; }
-        public bool success { get; set; }
-        public string message { get; set; }
-    }
-    public class JsonResultListApi<T>
-    {
-        public List<T> data { get; set; }
-        public bool success { get; set; }
-        public string message { get; set; }
-    }
 }

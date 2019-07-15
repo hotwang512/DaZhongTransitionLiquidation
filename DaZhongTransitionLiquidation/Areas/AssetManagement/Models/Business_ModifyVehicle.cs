@@ -138,4 +138,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string CREATE_USER { get; set; }
 
     }
+
+    public class Business_ModifyVehicleModel: Business_ModifyVehicle
+    {
+        public string PLATE_NUMBER_M { get; set; }
+        public string MODEL_MAJOR_M { get; set; }
+        public string MODEL_MINOR_M { get; set; }
+        public string MANAGEMENT_COMPANY_M { get; set; }
+        public string BELONGTO_COMPANY_M { get; set; }
+        public string ASSET_ID { get; set; }
+        public string PERIOD { get; set; }
+        public string DESCRIPTION { get; set; }
+    }
 }

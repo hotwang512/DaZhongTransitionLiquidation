@@ -37,7 +37,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();      
                     List<Api_ScrapVehicleAsset> assetScrapFlowList = new List<Api_ScrapVehicleAsset>();
-                    var success = 0;
                     try
                     {
                         var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset();

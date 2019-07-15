@@ -321,20 +321,22 @@ function ViewReview(data) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $("#gridAssetReview").jqxGrid(
         {
-            width: "470",
+            width: "630",
             autoheight: true,
             source: dataAdapter,
             statusbarheight: 25,
             enabletooltips: true,
+            theme: "office",
+            pageSize: 5,
+            pagerButtonsCount: 10,
             pageable: true,
             columnsresize: true,
-            pagesize: 5,
             selectionmode: 'singlerow',
             columns: [
-                { text: '发动机号', datafield: 'ENGINE_NUMBER', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: '发动机号', datafield: 'ENGINE_NUMBER', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', hidden: false, editable: false },
                 { text: '车架号', datafield: 'CHASSIS_NUMBER', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
                 { text: '资产管理公司', datafield: 'MANAGEMENT_COMPANY', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
-                { text: '资产归属公司', datafield: 'BELONGTO_COMPANY', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false }
+                { text: '资产归属公司', datafield: 'BELONGTO_COMPANY', columntype: 'textbox', width: 240, align: 'center', cellsAlign: 'center', editable: false }
             ]
         });
     $("#AssetReviewDialog").modal("show");

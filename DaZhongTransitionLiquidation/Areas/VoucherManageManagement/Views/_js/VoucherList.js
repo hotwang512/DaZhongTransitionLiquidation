@@ -21,7 +21,7 @@ var $page = function () {
     function addEvent() {
         var status = $.request.queryString().Status;
         if (status == "1") {
-            $("#buttonList").show();
+            //$("#buttonList").show();
         }
         if (status == "2") {
             $("#buttonList2").show();

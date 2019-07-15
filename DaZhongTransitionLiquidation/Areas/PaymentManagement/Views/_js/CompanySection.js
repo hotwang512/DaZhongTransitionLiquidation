@@ -1097,7 +1097,7 @@ var $page = function () {
     function detailFuncs(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "','" + "','" + rowData.OrgID + "','" + rowData.Abbreviation + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
         } else {
             container = "<span>" + rowData.Code + "</span>";
         }
@@ -1269,7 +1269,7 @@ function edit(guid, Code, Descrption, Remark, ParentCode, OrgID, Abbreviation) {
     selector.$txtDescrption().removeClass("input_Validate");
     selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddNewBankDataDialog().modal("show");
-    if (ParentCode == "null" || ParentCode == null || ParentCode == "") {
+    if (ParentCode == "null" || ParentCode == null || ParentCode == "" || ParentCode == "undefined") {
         $("#txtFirstSubjects").val("1");
         $("#txtParentCode").val("");
         $("#SubjectCode").hide();
@@ -1549,7 +1549,7 @@ function settingAccount(code) {
 function detailFunc(row, column, value, rowData) {
     var container = "";
     if (selector.$EditPermission().val() == "1") {
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
+        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "','" + rowData.OrgID + "','" + rowData.Abbreviation + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
     } else {
         container = "<span>" + rowData.Code + "</span>";
     }

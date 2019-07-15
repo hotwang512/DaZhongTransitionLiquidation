@@ -189,7 +189,7 @@ from AssetsGeneralLedgerDetail_Swap ").ToList();
                 }
                 if(data.Count > 0)
                 {
-                    #region 将与Oracle差异的数据同步至中间表
+                    #region 构造与Oracle差异的数据类
                     var voucherList = new List<Business_VoucherList>();
                     var voucherDetail = new List<Business_VoucherDetail>();
                     var sevenData1 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();

@@ -180,7 +180,7 @@
     @******************************************************资金结算中心******************************************************@
     @if (isadmin || hasPaymentPermission)
     {
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL CapitalFloC" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -289,8 +289,47 @@
                     </table>
                 }
             </div>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                    <td class="menue_text_header">往来管理</td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "往来申请" && i.Reads == 1))
+                {
+                    <table>
+                        <tr class="menue_item" id="ComeOnApplication_CapitalFloC" pageurl="/CapitalCenterManagement/ComeOnApplication/Index?Status=1">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">往来申请</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "待申请" && i.Reads == 1))
+                {
+                    <table>
+                        <tr class="menue_item" id="ComeOnApplicationCheck_CapitalFloC" pageurl="/CapitalCenterManagement/ComeOnApplication/Index?Status=2">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">待申请</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "已申请" && i.Reads == 1))
+                {
+                    <table>
+                        <tr class="menue_item" id="ComeOnApplicationFinish_CapitalFloC" pageurl="/CapitalCenterManagement/ComeOnApplication/Index?Status=3">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">已申请</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
+            </div>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL CapitalFloC" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -343,7 +382,7 @@
                     }*@
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL CapitalFloC" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -372,7 +411,7 @@
                 }
             </table>
         </div>
-        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL" style="display: none;">
+        <div class="menue_header CapitalFlow PaymentOrder AccountReport CapitalFloM CapitalFloL CapitalFloC" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>

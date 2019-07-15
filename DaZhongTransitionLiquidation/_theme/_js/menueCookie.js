@@ -67,7 +67,9 @@ var menueHelp = {
                 break;
             case "CapitalFloM": $("#homeModel").text("--资金结算中心")
                 break;
-            case "CapitalFlowL": $("#homeModel").text("--资金结算中心")
+            case "CapitalFloL": $("#homeModel").text("--资金结算中心")
+                break;
+            case "CapitalFloC": $("#homeModel").text("--资金结算中心")
                 break;
             case "PaymentOrder": $("#homeModel").text("--资金结算中心") //*************
                 break;

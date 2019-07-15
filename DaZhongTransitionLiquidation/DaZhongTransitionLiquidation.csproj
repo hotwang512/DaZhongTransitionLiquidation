@@ -212,6 +212,8 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CashManagerDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CashTransaction.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CashTransactionDetail.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\ComeOnApplication.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\ComeOnApplicationDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CustomerBankInfo.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\FundReconciliation.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\LoanApplication.js" />
@@ -328,6 +330,8 @@
     <Content Include="Areas\FinancialStatementsManagement\Views\SubjectBalanceStatement\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\ManageModel\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetModifyReview\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\ComeOnApplication\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\ComeOnApplicationDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetsRetirementReview\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
@@ -2347,6 +2351,8 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashManager\CashManagerController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashTransactionDetail\CashTransactionDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashTransaction\CashTransactionController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\ComeOnApplicationDetail\ComeOnApplicationDetailController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\ComeOnApplication\ComeOnApplicationController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\BankCategoryListData.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\Business_CustomerBankInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CustomerBankInfo\CustomerBankInfoController.cs" />
@@ -2369,6 +2375,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CapitalAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashManagerInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransaction.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_ComeOnAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CustomerBankSetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />

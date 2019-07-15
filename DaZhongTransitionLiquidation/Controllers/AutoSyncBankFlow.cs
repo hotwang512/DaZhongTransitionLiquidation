@@ -124,7 +124,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //按交易日期排序取最小值
                             bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
-                            //success = WirterSyncBankFlow(bankFlowList);
+                            success = WirterSyncBankFlow(bankFlowList);
                         }
                     }    
                 }
@@ -176,7 +176,19 @@ namespace DaZhongTransitionLiquidation.Controllers
                 List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
                 foreach (var item in bankFlowList)
                 {
-                    var companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
+                    var companyBankData = new Business_CompanyBankInfo();
+                    if(item.TradingBank == "上海银行")
+                    {
+                        companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
+                    }
+                    else
+                    {
+                        companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == item.BankAccount);
+                    }
+                    if(companyBankData == null)
+                    {
+                        continue;
+                    }
                     var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
                     var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                     if (isAny.Count > 0)

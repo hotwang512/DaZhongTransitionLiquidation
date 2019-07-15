@@ -120,13 +120,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         //车牌号变更
                         MODIFY_TYPE = "PLATE_NUMBER";
-                        list.Add(getModel(manageModelList,item, MODIFY_TYPE));
+                        list.Add(getModel(manageModelList,item, assetMaintenanceInfo, MODIFY_TYPE));
                     }
                     if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
                     {
                         //管理公司
                         MODIFY_TYPE = "FA_LOC_1";
-                        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
                     }
                     #region 注释
                     //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
@@ -154,22 +154,34 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                     //}
                     #endregion
-                    //if (!item.MODEL_MINOR.IsNullOrEmpty())
-                    //{
-                    //    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                    //    item.MODEL_MINOR = manageModelList
-                    //        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-                    //    //经营模式主类 传过来的经营模式上上级
-                    //    var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                    //    var MODEL_MAJOR = manageModelList
-                    //        .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
-                    //    if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != MODEL_MAJOR)
-                    //    {
-                    //        //经营模式
-                    //        MODIFY_TYPE = "BUSINESS_MODEL";
-                    //        list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    //    }
-                    //}
+                    if (!item.MODEL_MINOR.IsNullOrEmpty())
+                    {
+                        //经营模式子类 传过来的经营模式上级
+                        var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                        //如果经营模式子类有多个
+                        if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
+                        {
+                            //计算出车龄，并根据车龄判断经营模式子类
+                            //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
+                            var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
+                            item.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge <= months).OrderByDescending(x => x.VehicleAge).First().BusinessName;
+                        }
+                        else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
+                        {
+                            item.MODEL_MINOR = manageModelList
+                                .First(x => x.VGUID == minor.ParentVGUID).BusinessName;
+                        }
+                        //经营模式主类 传过来的经营模式上上级
+                        var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                        item.MODEL_MAJOR = manageModelList
+                            .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                        if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
+                        {
+                            //经营模式
+                            MODIFY_TYPE = "BUSINESS_MODEL";
+                            list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
+                        }
+                    }
                 }
             }
             success = _db.Insertable<Business_ModifyVehicle>(list).ExecuteCommand();
@@ -195,7 +207,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             success = _db.Insertable<Business_ScrapVehicle>(list).ExecuteCommand();
             return success;
         }
-        public static Business_ModifyVehicle getModel(List<Business_ManageModel> manageModelList, Api_ModifyVehicleAsset item ,string MODIFY_TYPE)
+        public static Business_ModifyVehicle getModel(List<Business_ManageModel> manageModelList, Api_ModifyVehicleAsset item, Business_AssetMaintenanceInfo info, string MODIFY_TYPE)
         {
             var model = new Business_ModifyVehicle();
             model.VGUID = Guid.NewGuid();
@@ -209,17 +221,16 @@ namespace DaZhongTransitionLiquidation.Controllers
             model.OPERATING_STATE = item.OPERATING_STATE;
             model.ENGINE_NUMBER = item.ENGINE_NUMBER;
             model.CHASSIS_NUMBER = item.CHASSIS_NUMBER;
-
-            //model.MODEL_MAJOR = item.MODEL_MAJOR;
-            //model.MODEL_MINOR = item.MODEL_MINOR;
-            ////经营模式子类 传过来的经营模式上级
-            //var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-            //model.MODEL_MINOR = manageModelList
-            //    .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-            ////经营模式主类 传过来的经营模式上上级
-            //var major = manageModelList.FirstOrDefault(x => x.BusinessName == model.MODEL_MINOR);
-            //model.MODEL_MAJOR = manageModelList
-            //    .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+            if (MODIFY_TYPE == "BUSINESS_MODEL")
+            {
+                model.MODEL_MAJOR = item.MODEL_MAJOR;
+                model.MODEL_MINOR = item.MODEL_MINOR;
+            }
+            else
+            {
+                model.MODEL_MAJOR = info.MODEL_MAJOR;
+                model.MODEL_MINOR = info.MODEL_MINOR;
+            }
             model.MODIFY_TYPE = MODIFY_TYPE;
             model.ISVERIFY = false;
             model.CREATE_DATE = DateTime.Now;

@@ -91,8 +91,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.TRANSACTION_ID = item.VGUID;
                                 assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
-                                //assetSwapModel.DESCRIPTION = item.DESCRIPTION;
-                                //assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                                 assetSwapModel.CREATE_DATE = DateTime.Now;

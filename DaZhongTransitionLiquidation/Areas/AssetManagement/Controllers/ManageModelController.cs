@@ -62,6 +62,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                     {
                         Delete(item.VGUID);
                     }
+                    db.Deleteable<Business_ManageModel>(x => x.VGUID == vguid).ExecuteCommand();
                 }
                 else
                 {
@@ -90,6 +91,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                         db.Updateable<Business_ManageModel>().UpdateColumns(it => new Business_ManageModel()
                         {
                             BusinessName = module.BusinessName,
+                            VehicleAge = module.VehicleAge,
                             ParentVGUID = parentVGUID,
                             CreateTime = DateTime.Now,
                             Founder = UserInfo.LoginName

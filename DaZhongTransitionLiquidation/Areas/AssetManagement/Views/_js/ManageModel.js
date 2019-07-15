@@ -26,13 +26,22 @@ var $page = function () {
     function addEvent() {
         //新增
         selector.$btnAdd().click(function () {
-            var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
+            var checkrow = selector.$grid().jqxTreeGrid('getSelection');
             if (checkrow.length != 1) {
                 jqxNotification("请选择一个节点！", null, "error");
                 return;
             } else {
+                debugger;
                 parentVguid = checkrow[0].VGUID;
                 hideParentMenu = checkrow[0].BusinessName;
+                var level = checkrow[0].level;
+                if (level == 1) {
+                    //显示车龄
+                    $("#VehicleAge").val("");
+                    $("#SubjectVehicleAge").show();
+                } else {
+                    $("#SubjectVehicleAge").hide();
+                }
                 var code = checkrow[0].Code;
                 if ($("#FirstMenu").val() == "1") {
                     $("#SubjectCode").hide();//父级菜单
@@ -69,7 +78,7 @@ var $page = function () {
         //删除
         selector.$btnDelete().click(function () {
             var selection = [];
-            var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
+            var checkrow = selector.$grid().jqxTreeGrid('getSelection');
             for (var i = 0; i < checkrow.length; i++) {
                 var rowdata = checkrow[i];
                 selection.push(rowdata.VGUID);
@@ -97,6 +106,7 @@ var $page = function () {
                     data: {
                         "Code": $("#ModuleCode").val(),
                         "BusinessName": $("#ModuleName").val(),
+                        "VehicleAge": $("#VehicleAge").val(),
                         "VGUID": vguid,
                         "ParentVGUID": $("#hideParentMenu").val()
                     },
@@ -174,6 +184,7 @@ function loadGridTree(modules) {
                 dataFields: [
                     { name: 'BusinessName', type: 'string' },
                     { name: 'ParentVGUID', type: 'string' },
+                    { name: 'VehicleAge', type: 'number' },
                     { name: 'VGUID', type: 'string' }
                 ],
                 hierarchy:
@@ -187,14 +198,15 @@ function loadGridTree(modules) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     selector.$grid().jqxTreeGrid({
         width: selector.$grid().width(),
-        showHeader: false,
+        showHeader: true,
         source: dataAdapter,
-        checkboxes: true,
+        //checkboxes: true,
         ready: function () {
             $("#moduletree").jqxTreeGrid('expandAll');
         },
         columns: [
-          { text: '业务名称', dataField: 'BusinessName', width: "100%", cellsRenderer: detailFuncs },
+          { text: '业务名称', dataField: 'BusinessName', width: "20%", cellsRenderer: detailFuncs },
+          { text: '车龄', dataField: 'VehicleAge', width: "80%"},
           { text: '', dataField: 'ParentVGUID', width: "100%", hidden: true },
           { text: '', dataField: 'VGUID', width: "100%", hidden: true }
         ]
@@ -203,17 +215,18 @@ function loadGridTree(modules) {
 function detailFuncs(row, column, value, rowData) {
     var container = "";
     if (rowData.parent == null) {
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BusinessName + "','" + rowData.ParentVGUID + "') style=\"text-decoration: underline;color: #333;\">"+ rowData.BusinessName + "</a>";
+        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.level + "','" + rowData.BusinessName + "','" + rowData.VehicleAge + "','" + rowData.ParentVGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessName + "</a>";
     } else {
         debugger;
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BusinessName + "','" + rowData.ParentVGUID + "','" + rowData.parent.BusinessName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessName + "</a>";
+        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.level + "','" + rowData.BusinessName + "','" + rowData.VehicleAge + "','" + rowData.ParentVGUID + "','" + rowData.parent.BusinessName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessName + "</a>";
     }
     return container;
 }
-function edit(guid, BusinessName, ParentVGUID, parentBusinessName) {
+function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessName) {
     isEdit = true;
     vguid = guid;
     $("#ModuleName").val(BusinessName);
+    $("#VehicleAge").val(VehicleAge);
     $("#myModalLabel_title").text("编辑数据");
     //$("#AddNewManageModelDialog table tr").eq(1).hide();
     $(".msg").remove();
@@ -231,6 +244,12 @@ function edit(guid, BusinessName, ParentVGUID, parentBusinessName) {
         $("#ParentMenu").val(parentBusinessName);
         $("#hideParentMenu").val(ParentVGUID);
         $("#SubjectCode").show();
+    }
+    if (level == 2) {
+        //显示车龄
+        $("#SubjectVehicleAge").show();
+    } else {
+        $("#SubjectVehicleAge").hide();
     }
 }
 

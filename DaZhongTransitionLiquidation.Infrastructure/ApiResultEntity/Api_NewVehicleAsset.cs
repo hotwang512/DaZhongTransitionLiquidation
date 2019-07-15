@@ -48,6 +48,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity
         public string OPERATING_STATE { set; get; }
         public string ENGINE_NUMBER { set; get; }
         public string CHASSIS_NUMBER { set; get; }
+        public string MODEL_MAJOR { set; get; }
         public string MODEL_MINOR { set; get; }
     }
 }

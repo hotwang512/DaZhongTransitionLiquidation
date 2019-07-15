@@ -36,6 +36,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string BusinessName { get; set; }
+        public int? VehicleAge { get; set; }
 
         /// <summary>
         /// Desc:

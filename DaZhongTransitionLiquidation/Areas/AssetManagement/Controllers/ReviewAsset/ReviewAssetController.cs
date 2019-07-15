@@ -126,10 +126,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.ACCT_DEPRECIATION = 0;
                                 if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
                                 {
-                                    //经营模式子类 传过来的经营模式上级
-                                    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == newVehicle.MODEL_MINOR);
-                                    reviewItem.MODEL_MINOR = manageModelList
-                                        .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
+                                    var minor = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
+                                    //如果经营模式子类有多个
+                                    if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
+                                    {
+                                        //计算出车龄，并根据车龄判断经营模式子类
+                                        reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge <= months).OrderByDescending(x => x.VehicleAge).First().BusinessName;
+                                    }
+                                    else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
+                                    {
+                                        reviewItem.MODEL_MINOR = manageModelList
+                                            .First(x => x.VGUID == minor.ParentVGUID).BusinessName;
+                                    }
                                     //经营模式主类 传过来的经营模式上上级
                                     var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
                                     reviewItem.MODEL_MAJOR = manageModelList

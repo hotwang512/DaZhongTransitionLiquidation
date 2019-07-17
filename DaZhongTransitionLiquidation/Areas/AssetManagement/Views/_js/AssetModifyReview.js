@@ -155,6 +155,7 @@ var $page = function () {
             });
     }
     function cellsrenderer(row, column, value, rowData) {
+        debugger;
         switch (rowData.MODIFY_TYPE) {
             case "PLATE_NUMBER":
                 return '<span style="margin: 4px; margin-top:8px;">' + rowData.PLATE_NUMBER_M + '</span>';

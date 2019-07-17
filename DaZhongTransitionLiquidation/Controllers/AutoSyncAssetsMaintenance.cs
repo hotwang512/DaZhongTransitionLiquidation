@@ -109,77 +109,88 @@ namespace DaZhongTransitionLiquidation.Controllers
                     .Where(x => x.ORIGINALID == item.ORIGINALID).First();
                 if (assetMaintenanceInfo != null)
                 {
-                    //Code转名称
-                    item.BELONGTO_COMPANY =
-                        ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
-                    item.MANAGEMENT_COMPANY =
-                        ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
-                    //判断变更类型 MODIFY_TYPE
-                    if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)
+                    try
                     {
-                        //车牌号变更
-                        MODIFY_TYPE = "PLATE_NUMBER";
-                        list.Add(getModel(manageModelList,item, assetMaintenanceInfo, MODIFY_TYPE));
-                    }
-                    if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
-                    {
-                        //管理公司
-                        MODIFY_TYPE = "FA_LOC_1";
-                        list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
-                    }
-                    #region 注释
-                    //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
-                    //{
-                    //    //车辆简称变更
-                    //    MODIFY_TYPE = "车辆简称变更";
-                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    //}
-                    //if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
-                    //{
-                    //    //资产所属公司
-                    //    MODIFY_TYPE = "资产所属公司";
-                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    //}
-                    //if (assetMaintenanceInfo.VEHICLE_STATE != item.VEHICLE_STATE)
-                    //{
-                    //    //车辆状态
-                    //    MODIFY_TYPE = "车辆状态";
-                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    //}
-                    //if (assetMaintenanceInfo.OPERATING_STATE != item.OPERATING_STATE)
-                    //{
-                    //    //营运状态
-                    //    MODIFY_TYPE = "营运状态";
-                    //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                    //}
-                    #endregion
-                    if (!item.MODEL_MINOR.IsNullOrEmpty())
-                    {
-                        //经营模式子类 传过来的经营模式上级
-                        var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                        //如果经营模式子类有多个
-                        if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
+                        //Code转名称
+                        item.BELONGTO_COMPANY =
+                            ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
+                        //存在197,480的情况
+                        if (item.MANAGEMENT_COMPANY.TryToInt() < 56)
                         {
-                            //计算出车龄，并根据车龄判断经营模式子类
-                            //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
-                            var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
-                            item.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge <= months).OrderByDescending(x => x.VehicleAge).First().BusinessName;
+                            item.MANAGEMENT_COMPANY =
+                                ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
                         }
-                        else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
+                        //判断变更类型 MODIFY_TYPE
+                        if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)
                         {
-                            item.MODEL_MINOR = manageModelList
-                                .First(x => x.VGUID == minor.ParentVGUID).BusinessName;
-                        }
-                        //经营模式主类 传过来的经营模式上上级
-                        var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                        item.MODEL_MAJOR = manageModelList
-                            .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
-                        if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
-                        {
-                            //经营模式
-                            MODIFY_TYPE = "BUSINESS_MODEL";
+                            //车牌号变更
+                            MODIFY_TYPE = "PLATE_NUMBER";
                             list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
                         }
+                        if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
+                        {
+                            //管理公司
+                            MODIFY_TYPE = "FA_LOC_1";
+                            list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
+                        }
+                        #region 注释
+                        //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
+                        //{
+                        //    //车辆简称变更
+                        //    MODIFY_TYPE = "车辆简称变更";
+                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        //}
+                        //if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
+                        //{
+                        //    //资产所属公司
+                        //    MODIFY_TYPE = "资产所属公司";
+                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        //}
+                        //if (assetMaintenanceInfo.VEHICLE_STATE != item.VEHICLE_STATE)
+                        //{
+                        //    //车辆状态
+                        //    MODIFY_TYPE = "车辆状态";
+                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        //}
+                        //if (assetMaintenanceInfo.OPERATING_STATE != item.OPERATING_STATE)
+                        //{
+                        //    //营运状态
+                        //    MODIFY_TYPE = "营运状态";
+                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        //}
+                        #endregion
+                        if (!item.MODEL_MINOR.IsNullOrEmpty())
+                        {
+                            //经营模式子类 传过来的经营模式上级
+                            var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                            //如果经营模式子类有多个
+                            if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
+                            {
+                                //计算出车龄，并根据车龄判断经营模式子类
+                                //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
+                                var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
+                                item.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge <= months).OrderByDescending(x => x.VehicleAge).First().BusinessName;
+                            }
+                            else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
+                            {
+                                item.MODEL_MINOR = manageModelList
+                                    .First(x => x.VGUID == minor.ParentVGUID).BusinessName;
+                            }
+                            //经营模式主类 传过来的经营模式上上级
+                            var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
+                            item.MODEL_MAJOR = manageModelList
+                                .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                            if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
+                            {
+                                //经营模式
+                                MODIFY_TYPE = "BUSINESS_MODEL";
+                                list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw;
                     }
                 }
             }

@@ -58,6 +58,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         var age = ((item.BACK_CAR_DATE.Year - item.LISENSING_DATE.Year) * 12) + item.BACK_CAR_DATE.Month - item.LISENSING_DATE.Month;
                         db.Updateable<Business_AssetMaintenanceInfo>()
                             .UpdateColumns(x => new Business_AssetMaintenanceInfo { BACK_CAR_DATE = item.BACK_CAR_DATE, VEHICLE_AGE = age }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                        db.Updateable<Business_ScrapVehicle>()
+                            .UpdateColumns(x => new Business_ScrapVehicle { ISVERIFY = true}).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                         var assetSwapModel = new AssetMaintenanceInfo_Swap();
                         assetSwapModel.TRANSACTION_ID = item.VGUID;
                         assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;

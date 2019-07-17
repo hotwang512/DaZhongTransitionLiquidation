@@ -17,12 +17,6 @@ var $page = function () {
     //所有事件
     function addEvent() {
         debugger;
-        //if (status == "1") {
-        //    $("#buttonList").show();
-        //}
-        //if (status == "2") {
-        //    $("#buttonList2").show();
-        //}
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -119,10 +113,12 @@ var $page = function () {
                     { name: 'BOOK_TYPE_CODE', type: 'string' },
                     { name: 'TAG_NUMBER', type: 'string' },
                     { name: 'DESCRIPTION', type: 'string' },
+                    { name: 'VEHICLE_SHORTNAME', type: 'string' },
                     { name: 'QUANTITY', type: 'number' },
                     { name: 'ASSET_CATEGORY_MAJOR', type: 'string' },
                     { name: 'ASSET_CATEGORY_MINOR', type: 'string' },
                     { name: 'ASSET_CREATION_DATE', type: 'date' },
+                    { name: 'LISENSING_DATE', type: 'date' },
                     { name: 'ASSET_COST', type: 'float' },
                     { name: 'SALVAGE_TYPE', type: 'string' },
                     { name: 'SALVAGE_PERCENT', type: 'float' },
@@ -188,18 +184,18 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: 'GroupID', datafield: 'GROUP_ID', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '组织编号', datafield: 'ORGANIZATION_NUM', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: 'GroupID', datafield: 'GROUP_ID', width: 100, align: 'center', cellsAlign: 'center', hidden:true },
+                    { text: '组织编号', datafield: 'ORGANIZATION_NUM', width: 100, align: 'center', cellsAlign: 'center',hidden:true },
                     { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产账簿', datafield: 'BOOK_TYPE_CODE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '说明', datafield: 'DESCRIPTION', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '说明', datafield: 'VEHICLE_SHORTNAME', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '数量', datafield: 'QUANTITY', width: 50, align: 'center', cellsAlign: 'center' },
                     { text: '资产主类', datafield: 'ASSET_CATEGORY_MAJOR', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产次类', datafield: 'ASSET_CATEGORY_MINOR', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '启用日期', datafield: 'ASSET_CREATION_DATE', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '启用日期', datafield: 'COMMISSIONING_DATE', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '当前成本', datafield: 'ASSET_COST', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '残值类型', datafield: 'SALVAGE_TYPE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '残值百分比', datafield: 'SALVAGE_PERCENT', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },

@@ -112,8 +112,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                     try
                     {
                         //Code转名称
-                        item.BELONGTO_COMPANY =
-                            ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
+                        if (item.BELONGTO_COMPANY.TryToInt() != 37)//先排除37
+                        {
+                            item.BELONGTO_COMPANY =
+                                ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
+                        }
                         //存在197,480的情况
                         if (item.MANAGEMENT_COMPANY.TryToInt() < 56)
                         {

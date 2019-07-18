@@ -116,6 +116,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 //先更新资产维护表，再写入Oracle 中间表
                                 db.Updateable<Business_AssetMaintenanceInfo>()
                                     .UpdateColumns(x => new Business_AssetMaintenanceInfo { MANAGEMENT_COMPANY = item.MANAGEMENT_COMPANY }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                db.Updateable<Business_ModifyVehicle>()
+                                    .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.TRANSACTION_ID = item.VGUID;
                                 assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
@@ -144,6 +146,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 //先更新资产维护表，再写入Oracle 中间表
                                 db.Updateable<Business_AssetMaintenanceInfo>()
                                     .UpdateColumns(x => new Business_AssetMaintenanceInfo { MODEL_MAJOR = item.MODEL_MAJOR, MODEL_MINOR = item.MODEL_MINOR }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                db.Updateable<Business_ModifyVehicle>()
+                                    .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
@@ -157,8 +161,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
                                 assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
-                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
-                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
+                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
+                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.PERIOD = item.PERIOD;
                                 assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
                                 assetSwapList.Add(assetSwapModel);

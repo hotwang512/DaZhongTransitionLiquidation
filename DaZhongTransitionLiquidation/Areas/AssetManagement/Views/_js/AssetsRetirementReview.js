@@ -61,7 +61,7 @@ var $page = function () {
     function submit(selection) {
         $.ajax({
             url: "/AssetManagement/AssetsRetirementReview/SubmitRetirementVehicleReview",
-            data: { vguids: selection},
+            data: { guids: selection },
             //traditional: true,
             type: "post",
             success: function (msg) {
@@ -98,11 +98,7 @@ var $page = function () {
                     { name: 'MODIFY_TYPE', type: 'string' },
                     { name: 'MODEL_MAJOR', type: 'string' },
                     { name: 'MODEL_MINOR', type: 'string' },
-                    { name: 'PLATE_NUMBER_M', type: 'string' },
-                    { name: 'MODEL_MAJOR_M', type: 'string' },
-                    { name: 'MODEL_MINOR_M', type: 'string' },
-                    { name: 'MODEL_MINOR_M', type: 'string' },
-                    { name: 'BELONGTO_COMPANY_M', type: 'string' },
+                    { name: 'BACK_CAR_DATE', type: 'date' },
                     { name: 'CREATE_DATE', type: 'date' },
                     { name: 'CREATE_USER', type: 'string' }
                 ],
@@ -130,7 +126,6 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '变更前', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车辆简称', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellsAlign: 'center' },
@@ -138,34 +133,17 @@ var $page = function () {
                     { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车辆状态', datafield: 'VEHICLE_STATE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '营运状态', datafield: 'OPERATING_STATE', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },
+                    //{ text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '经营模式主类', datafield: 'MODEL_MAJOR', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '模式子类', datafield: 'MODEL_MINOR', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '发车月份', datafield: 'START_VEHICLE_DATE', width: 100, align: 'center', cellsAlign: 'center' },
+                    //{ text: '发车月份', datafield: 'START_VEHICLE_DATE', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '退车日期', datafield: 'BACK_CAR_DATE', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建日期', datafield: 'CREATE_DATE', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });
-    }
-    function cellsrenderer(row, column, value, rowData) {
-        switch (rowData.MODIFY_TYPE) {
-            case "PLATE_NUMBER":
-                return '<span style="margin: 4px; margin-top:8px;">' + rowData.PLATE_NUMBER_M + '</span>';
-                break;
-            case "FA_LOC_1":
-                return '<span style="margin: 4px; margin-top:8px;">' + rowData.MANAGEMENT_COMPANY_M + '</span>';
-                break;
-            case "FA_LOC_3":
-                return '<span style="margin: 4px; margin-top:8px;">' + rowData.BELONGTO_COMPANY_M + '</span>';
-                break;
-            case "BUSINESS_MODEL":
-                return '<span style="margin: 4px; margin-top:8px;">' + rowData.MODEL_MAJOR_M + "" + rowData.MODEL_MINOR_M + '</span>';
-                break;
-            default:
-                return '<span style="margin: 4px; margin-top:8px;"></span>';
-        }
     }
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";

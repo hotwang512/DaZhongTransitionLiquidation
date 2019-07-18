@@ -455,7 +455,7 @@
     @******************************************************会计核算中心******************************************************@
     @if (isadmin || hasPaymentPermission1)
     {
-        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject SettlementStandards" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -580,7 +580,7 @@
                 </div>
             }
         </div>
-        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject" style="display: none;">
+        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject SettlementStandards" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -610,7 +610,7 @@
             </table>
         </div>
 
-                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject" style="display: none;">
+                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject SettlementStandards" style="display: none;">
                                     <table style="cursor: pointer;">
                                         <tr>
                                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -628,6 +628,48 @@
                                             <td class="menue_text">ORACLE凭证库</td>
                                             <td></td>
                                         </tr>
+                                        }
+                                    </table>
+                                </div>
+
+                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject SettlementStandards" style="display: none;">
+                                    <table style="cursor: pointer;">
+                                        <tr>
+                                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                                            <td class="menue_text_header">结算标准</td>
+                                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="menue_body" id="SettlementStandards" style="display: none;">
+                                    <table>
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算标准导入" && i.Reads == 1))
+                                        {
+                                            <tr class="menue_item" id="SettlementImport_SettlementStandards" pageurl="/VoucherManageManagement/SettlementImport/Index">
+                                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                                <td class="menue_text">结算标准导入</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </table>
+                                    <table>
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算项目" && i.Reads == 1))
+                                        {
+                                            <tr class="menue_item" id="SettlementSubject_SettlementStandards" pageurl="/VoucherManageManagement/SettlementSubject/Index">
+                                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                                <td class="menue_text">结算项目</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </table>
+                                    <table>
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "冲销托管税金" && i.Reads == 1))
+                                        {
+                                            <tr class="menue_item" id="EliminationTaxImport_SettlementStandards" pageurl="/VoucherManageManagement/EliminationTaxImport/Index">
+                                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                                <td class="menue_text">冲销托管税金</td>
+                                                <td></td>
+                                            </tr>
                                         }
                                     </table>
                                 </div>

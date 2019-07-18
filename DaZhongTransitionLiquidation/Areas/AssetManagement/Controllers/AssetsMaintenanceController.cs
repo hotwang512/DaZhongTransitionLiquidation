@@ -33,9 +33,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_AssetMaintenanceInfo>()
-                .WhereIF(searchParams.TAG_NUMBER != null, i => i.TAG_NUMBER == searchParams.TAG_NUMBER)
-                .WhereIF(searchParams.ASSET_CATEGORY_MAJOR != null, i => i.ASSET_CATEGORY_MAJOR == searchParams.ASSET_CATEGORY_MAJOR)
-                .WhereIF(searchParams.ASSET_CATEGORY_MINOR != null, i => i.ASSET_CATEGORY_MINOR == searchParams.ASSET_CATEGORY_MINOR)
+                .WhereIF(searchParams.TAG_NUMBER != null, i => i.TAG_NUMBER.Contains(searchParams.TAG_NUMBER))
+                .WhereIF(searchParams.ASSET_CATEGORY_MAJOR != null, i => i.ASSET_CATEGORY_MAJOR.Contains(searchParams.ASSET_CATEGORY_MAJOR))
+                .WhereIF(searchParams.ASSET_CATEGORY_MINOR != null, i => i.ASSET_CATEGORY_MINOR.Contains(searchParams.ASSET_CATEGORY_MINOR))
                 //.WhereIF(searchParams.STATUS != null, i => i.STATUS == searchParams.STATUS)
                 .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

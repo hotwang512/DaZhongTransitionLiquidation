@@ -75,4 +75,77 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public decimal ASSET_COST { get; set; }
         public DateTime LISENSING_DATE { get; set; }
     }
+    public class Business_ScrapVehicleShowModel : Business_ScrapVehicle
+    {
+        public string PLATE_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string TAG_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string VEHICLE_SHORTNAME { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string MANAGEMENT_COMPANY { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string BELONGTO_COMPANY { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string VEHICLE_STATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string OPERATING_STATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ENGINE_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string CHASSIS_NUMBER { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string MODEL_MAJOR { get; set; }
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string MODEL_MINOR { get; set; }
+    }
 }

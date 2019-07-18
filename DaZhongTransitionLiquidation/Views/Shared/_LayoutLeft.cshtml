@@ -1189,6 +1189,14 @@
                             <td></td>
                         </tr>
                     }
+                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产报废" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="AssetsRetirementReview_AssetChange" pageurl="/AssetManagement/AssetsRetirementReview">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">资产报废</td>
+                            <td></td>
+                        </tr>
+                    }
                 </table>
             </div>
             <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">

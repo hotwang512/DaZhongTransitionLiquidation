@@ -91,11 +91,14 @@ var $page = function () {
                     { name: 'VGUID', type: 'string' },
                     { name: 'ORIGINALID', type: 'string' },
                     { name: 'PLATE_NUMBER', type: 'string' },
+                    { name: 'PLATE_NUMBER_M', type: 'string' },
                     { name: 'TAG_NUMBER', type: 'string' },
                     { name: 'VEHICLE_SHORTNAME', type: 'string' },
                     { name: 'ORGANIZATION_NUM', type: 'string' },
                     { name: 'MANAGEMENT_COMPANY', type: 'string' },
+                    { name: 'MANAGEMENT_COMPANY_M', type: 'string' },
                     { name: 'BELONGTO_COMPANY', type: 'string' },
+                    { name: 'BELONGTO_COMPANY_M', type: 'string' },
                     { name: 'VEHICLE_STATE', type: 'string' },
                     { name: 'OPERATING_STATE', type: 'string' },
                     { name: 'ENGINE_NUMBER', type: 'string' },
@@ -103,11 +106,8 @@ var $page = function () {
                     { name: 'MODIFY_TYPE', type: 'string' },
                     { name: 'MODEL_MAJOR', type: 'string' },
                     { name: 'MODEL_MINOR', type: 'string' },
-                    { name: 'PLATE_NUMBER_M', type: 'string' },
                     { name: 'MODEL_MAJOR_M', type: 'string' },
                     { name: 'MODEL_MINOR_M', type: 'string' },
-                    { name: 'MODEL_MINOR_M', type: 'string' },
-                    { name: 'BELONGTO_COMPANY_M', type: 'string' },
                     { name: 'CREATE_DATE', type: 'date' },
                     { name: 'CREATE_USER', type: 'string' }
                 ],
@@ -155,6 +155,7 @@ var $page = function () {
             });
     }
     function cellsrenderer(row, column, value, rowData) {
+        debugger;
         switch (rowData.MODIFY_TYPE) {
             case "PLATE_NUMBER":
                 return '<span style="margin: 4px; margin-top:8px;">' + rowData.PLATE_NUMBER_M + '</span>';

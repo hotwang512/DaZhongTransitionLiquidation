@@ -338,104 +338,6 @@ var $page = function () {
         
     }; //addEvent end
 
-    function getAssetInfoListDetail() {
-        $.ajax({
-            url: "/AssetManagement/AssetMaintenanceInfoDetail/GetAssetInfoDetail",
-            data: {
-                "vguid": $("#VGUID").val(),
-            },
-            type: "post",
-            dataType: "json",
-            success: function (msg) {
-                //$("#Status").val(msg.Status);
-                //if ($("#Status").val() == "1") {
-                //    $("#hideButton").show();
-                //}
-                $("#VGUID").val(msg.VGUID);
-                $("#GROUP_ID").val(msg.GROUP_ID);
-                $("#ORGANIZATION_NUM").val(msg.ORGANIZATION_NUM);
-                $("#ENGINE_NUMBER").val(msg.ENGINE_NUMBER);
-                $("#CHASSIS_NUMBER").val(msg.CHASSIS_NUMBER);
-                $("#BOOK_TYPE_CODE").val(msg.BOOK_TYPE_CODE);
-                $("#TAG_NUMBER").val(msg.TAG_NUMBER);
-                $("#DESCRIPTION").val(msg.DESCRIPTION);
-                $("#QUANTITY").val(msg.QUANTITY);
-                $("#ASSET_CATEGORY_MAJOR").val(msg.ASSET_CATEGORY_MAJOR);
-                $("#ASSET_CATEGORY_MINOR").val(msg.ASSET_CATEGORY_MINOR);
-                if (msg.ASSET_CREATION_DATE != "" && msg.ASSET_CREATION_DATE != null) {
-                    $("#ASSET_CREATION_DATE").val(formatDate(msg.ASSET_CREATION_DATE));
-                }
-                $("#ASSET_COST").val(msg.ASSET_COST);
-                $("#SALVAGE_TYPE").val(msg.SALVAGE_TYPE);
-                msg.SALVAGE_PERCENT == null ? "" : $("#SALVAGE_PERCENT").val(msg.SALVAGE_PERCENT + "%");
-                $("#SALVAGE_VALUE").val(msg.SALVAGE_VALUE);
-                $("#YTD_DEPRECIATION").val(msg.YTD_DEPRECIATION);
-                $("#ACCT_DEPRECIATION").val(msg.ACCT_DEPRECIATION);
-                $("#METHOD").val(msg.METHOD);
-                $("#LIFE_MONTHS").val(msg.LIFE_MONTHS);
-                $("#AMORTIZATION_FLAG").val(msg.AMORTIZATION_FLAG);
-                $("#EXP_ACCOUNT_SEGMENT1").val(msg.EXP_ACCOUNT_SEGMENT1);
-                $("#EXP_ACCOUNT_SEGMENT2").val(msg.EXP_ACCOUNT_SEGMENT2);
-                $("#EXP_ACCOUNT_SEGMENT3").val(msg.EXP_ACCOUNT_SEGMENT3);
-                $("#EXP_ACCOUNT_SEGMENT4").val(msg.EXP_ACCOUNT_SEGMENT4);
-                $("#EXP_ACCOUNT_SEGMENT5").val(msg.EXP_ACCOUNT_SEGMENT5);
-                $("#EXP_ACCOUNT_SEGMENT6").val(msg.EXP_ACCOUNT_SEGMENT6);
-                $("#EXP_ACCOUNT_SEGMENT7").val(msg.EXP_ACCOUNT_SEGMENT7);
-                $("#FA_LOC_1").val(msg.FA_LOC_1);
-                $("#FA_LOC_2").val(msg.FA_LOC_2);
-                $("#FA_LOC_3").val(msg.FA_LOC_3);
-                $("#RETIRE_FLAG").val(msg.RETIRE_FLAG);
-                $("#RETIRE_QUANTITY").val(msg.RETIRE_QUANTITY);
-                $("#RETIRE_COST").val(msg.RETIRE_COST);
-                if (msg.RETIRE_DATE != "" && msg.RETIRE_DATE != null) {
-                    $("#RETIRE_DATE").val(formatDate(msg.RETIRE_DATE));
-                }
-                $("#TRANSACTION_ID").val(msg.TRANSACTION_ID);
-                if (msg.LAST_UPDATE_DATE != "" && msg.LAST_UPDATE_DATE != null) {
-                    $("#LAST_UPDATE_DATE").val(formatDate(msg.LAST_UPDATE_DATE));
-                }
-                debugger;
-                $("#LISENSING_FEE").val(msg.LISENSING_FEE);
-                $("#OUT_WAREHOUSE_FEE").val(msg.OUT_WAREHOUSE_FEE);
-                $("#DOME_LIGHT_FEE").val(msg.DOME_LIGHT_FEE);
-                $("#ANTI_ROBBERY_FEE").val(msg.ANTI_ROBBERY_FEE);
-                $("#LOADING_FEE").val(msg.LOADING_FEE);
-                $("#INNER_ROOF_FEE").val(msg.INNER_ROOF_FEE);
-                $("#TAXIMETER_FEE").val(msg.TAXIMETER_FEE);
-                $("#PURCHASE_TAX").val(msg.PURCHASE_TAX);
-                $("#OBD_FEE").val(msg.OBD_FEE);
-
-                $("#LISENSING_FEE_M").val(msg.LISENSING_FEE);
-                $("#OUT_WAREHOUSE_FEE_M").val(msg.OUT_WAREHOUSE_FEE);
-                $("#DOME_LIGHT_FEE_M").val(msg.DOME_LIGHT_FEE);
-                $("#ANTI_ROBBERY_FEE_M").val(msg.ANTI_ROBBERY_FEE);
-                $("#LOADING_FEE_M").val(msg.LOADING_FEE);
-                $("#INNER_ROOF_FEE_M").val(msg.INNER_ROOF_FEE);
-                $("#TAXIMETER_FEE_M").val(msg.TAXIMETER_FEE);
-                $("#PURCHASE_TAX_M").val(msg.PURCHASE_TAX);
-                $("#OBD_FEE_M").val(msg.OBD_FEE);
-
-                if (msg.CHANGE_DATE != "" && msg.CHANGE_DATE != null) {
-                    $("#CHANGE_DATE").val(formatDate(msg.CHANGE_DATE));
-                }
-                if (msg.CREATE_DATE != "" && msg.CREATE_DATE != null) {
-                    $("#CREATE_DATE").val(formatDate(msg.CREATE_DATE));
-                }
-                $("#CREATE_USER").val(msg.CREATE_USER);
-                $("#CHANGE_USER").val(msg.CHANGE_USER);
-                $("#PLATE_NUMBER").val(msg.PLATE_NUMBER);
-                $("#STATUS").val(msg.STATUS);
-                debugger;
-                if (msg.ACCEPTANCE_CERTIFICATE != "" && msg.ACCEPTANCE_CERTIFICATE != null) {
-                    $("#Attachment").show();
-                    $("#Attachment").attr("href", msg.ACCEPTANCE_CERTIFICATE);
-                    var fileName = msg.ACCEPTANCE_CERTIFICATE.substring(msg.ACCEPTANCE_CERTIFICATE.lastIndexOf("\\") + 1, msg.ACCEPTANCE_CERTIFICATE.length)
-                    $("#Attachment").html(fileName);
-                }
-                $("#btnAccept").show();
-            }
-        });
-    }
     //拍照
     function openSocket() {
         socket = new WebSocket(baseUrl);
@@ -520,6 +422,117 @@ var $page = function () {
         });
     }
 };
+
+function getAssetInfoListDetail() {
+    debugger;
+    $.ajax({
+        url: "/AssetManagement/AssetMaintenanceInfoDetail/GetAssetInfoDetail",
+        data: {
+            "vguid": $("#VGUID").val()
+        },
+        type: "post",
+        dataType: "json",
+        success: function (msg) {
+            //$("#Status").val(msg.Status);
+            //if ($("#Status").val() == "1") {
+            //    $("#hideButton").show();
+            //}
+            $("#VGUID").val(msg.VGUID);
+            $("#VEHICLE_STATE").val(msg.VEHICLE_STATE);
+            $("#OPERATING_STATE").val(msg.OPERATING_STATE);
+            if (msg.PRODUCTION_DATE != "" && msg.PRODUCTION_DATE != null) {
+                $("#PRODUCTION_DATE").val(formatDate(msg.PRODUCTION_DATE));
+            }
+            if (msg.PURCHASE_DATE != "" && msg.PURCHASE_DATE != null) {
+                $("#PURCHASE_DATE").val(formatDate(msg.PURCHASE_DATE));
+            }
+            if (msg.LISENSING_DATE != "" && msg.LISENSING_DATE != null) {
+                $("#LISENSING_DATE").val(formatDate(msg.LISENSING_DATE));
+            }
+            if (msg.COMMISSIONING_DATE != "" && msg.COMMISSIONING_DATE != null) {
+                debugger;
+                $("#COMMISSIONING_DATE").val(formatDate(msg.COMMISSIONING_DATE));
+            }
+            if (msg.BACK_CAR_DATE != "" && msg.BACK_CAR_DATE != null) {
+                $("#BACK_CAR_DATE").val(formatDate(msg.BACK_CAR_DATE));
+            }
+            $("#VEHICLE_AGE").val(msg.VEHICLE_AGE);
+            $("#GROUP_ID").val(msg.GROUP_ID);
+            $("#FUEL_TYPE").val(msg.FUEL_TYPE);
+            $("#DELIVERY_INFORMATION").val(msg.DELIVERY_INFORMATION);
+            $("#VGUID").val(msg.VGUID);
+            $("#GROUP_ID").val(msg.GROUP_ID);
+            $("#ORGANIZATION_NUM").val(msg.ORGANIZATION_NUM);
+            $("#ENGINE_NUMBER").val(msg.ENGINE_NUMBER);
+            $("#CHASSIS_NUMBER").val(msg.CHASSIS_NUMBER);
+            $("#BOOK_TYPE_CODE").val(msg.BOOK_TYPE_CODE);
+            $("#TAG_NUMBER").val(msg.TAG_NUMBER);
+            $("#DESCRIPTION").val(msg.VEHICLE_SHORTNAME);
+            $("#VEHICLE_SHORTNAME").val(msg.VEHICLE_SHORTNAME);
+            $("#ASSET_ID").val(msg.ASSET_ID);
+            $("#QUANTITY").val(msg.QUANTITY);
+            $("#ASSET_CATEGORY_MAJOR").val(msg.ASSET_CATEGORY_MAJOR);
+            $("#ASSET_CATEGORY_MINOR").val(msg.ASSET_CATEGORY_MINOR);
+            if (msg.ASSET_CREATION_DATE != "" && msg.ASSET_CREATION_DATE != null) {
+                $("#ASSET_CREATION_DATE").val(formatDate(msg.ASSET_CREATION_DATE));
+            }
+            $("#ASSET_COST").val(msg.ASSET_COST);
+            $("#SALVAGE_TYPE").val(msg.SALVAGE_TYPE);
+            msg.SALVAGE_PERCENT == null ? "" : $("#SALVAGE_PERCENT").val(msg.SALVAGE_PERCENT + "%");
+            $("#SALVAGE_VALUE").val(msg.SALVAGE_VALUE);
+            $("#YTD_DEPRECIATION").val(msg.YTD_DEPRECIATION);
+            $("#ACCT_DEPRECIATION").val(msg.ACCT_DEPRECIATION);
+            $("#METHOD").val(msg.METHOD);
+            $("#LIFE_MONTHS").val(msg.LIFE_MONTHS);
+            $("#AMORTIZATION_FLAG").val(msg.AMORTIZATION_FLAG);
+            $("#EXP_ACCOUNT_SEGMENT1").val(msg.EXP_ACCOUNT_SEGMENT1);
+            $("#EXP_ACCOUNT_SEGMENT2").val(msg.EXP_ACCOUNT_SEGMENT2);
+            $("#EXP_ACCOUNT_SEGMENT3").val(msg.EXP_ACCOUNT_SEGMENT3);
+            $("#EXP_ACCOUNT_SEGMENT4").val(msg.EXP_ACCOUNT_SEGMENT4);
+            $("#EXP_ACCOUNT_SEGMENT5").val(msg.EXP_ACCOUNT_SEGMENT5);
+            $("#EXP_ACCOUNT_SEGMENT6").val(msg.EXP_ACCOUNT_SEGMENT6);
+            $("#EXP_ACCOUNT_SEGMENT7").val(msg.EXP_ACCOUNT_SEGMENT7);
+            $("#FA_LOC_1").val(msg.FA_LOC_1);
+            $("#FA_LOC_2").val(msg.FA_LOC_2);
+            $("#FA_LOC_3").val(msg.FA_LOC_3);
+            $("#RETIRE_FLAG").val(msg.RETIRE_FLAG);
+            $("#RETIRE_QUANTITY").val(msg.RETIRE_QUANTITY);
+            $("#RETIRE_COST").val(msg.RETIRE_COST);
+            if (msg.RETIRE_DATE != "" && msg.RETIRE_DATE != null) {
+                $("#RETIRE_DATE").val(formatDate(msg.RETIRE_DATE));
+            }
+            $("#TRANSACTION_ID").val(msg.TRANSACTION_ID);
+            if (msg.LAST_UPDATE_DATE != "" && msg.LAST_UPDATE_DATE != null) {
+                $("#LAST_UPDATE_DATE").val(formatDate(msg.LAST_UPDATE_DATE));
+            }
+            $("#LISENSING_FEE").val(msg.LISENSING_FEE);
+            $("#OUT_WAREHOUSE_FEE").val(msg.OUT_WAREHOUSE_FEE);
+            $("#DOME_LIGHT_FEE").val(msg.DOME_LIGHT_FEE);
+            $("#ANTI_ROBBERY_FEE").val(msg.ANTI_ROBBERY_FEE);
+            $("#LOADING_FEE").val(msg.LOADING_FEE);
+            $("#INNER_ROOF_FEE").val(msg.INNER_ROOF_FEE);
+            $("#TAXIMETER_FEE").val(msg.TAXIMETER_FEE);
+            $("#PURCHASE_TAX").val(msg.PURCHASE_TAX);
+            $("#LISENSING_FEE_M").val(msg.LISENSING_FEE);
+            $("#OUT_WAREHOUSE_FEE_M").val(msg.OUT_WAREHOUSE_FEE);
+            $("#DOME_LIGHT_FEE_M").val(msg.DOME_LIGHT_FEE);
+            $("#ANTI_ROBBERY_FEE_M").val(msg.ANTI_ROBBERY_FEE);
+            $("#LOADING_FEE_M").val(msg.LOADING_FEE);
+            $("#INNER_ROOF_FEE_M").val(msg.INNER_ROOF_FEE);
+            $("#TAXIMETER_FEE_M").val(msg.TAXIMETER_FEE);
+            $("#PURCHASE_TAX_M").val(msg.PURCHASE_TAX);
+
+            $("#PLATE_NUMBER").val(msg.PLATE_NUMBER);
+            if (msg.ACCEPTANCE_CERTIFICATE != "" && msg.ACCEPTANCE_CERTIFICATE != null) {
+                $("#Attachment").show();
+                $("#Attachment").attr("href", msg.ACCEPTANCE_CERTIFICATE);
+                var fileName = msg.ACCEPTANCE_CERTIFICATE.substring(msg.ACCEPTANCE_CERTIFICATE.lastIndexOf("\\") + 1, msg.ACCEPTANCE_CERTIFICATE.length)
+                $("#Attachment").html(fileName);
+            }
+            $("#btnAccept").show();
+        }
+    });
+}
 function formatDate(NewDtime) {
     var dt = new Date(parseInt(NewDtime.slice(6, 19)));
     var year = dt.getFullYear();

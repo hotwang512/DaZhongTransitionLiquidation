@@ -50,6 +50,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .Where(i => i.MODIFY_TYPE == searchParams.MODIFY_TYPE)
                     .WhereIF(!searchParams.ENGINE_NUMBER.IsNullOrEmpty(), i => i.ENGINE_NUMBER.Contains(searchParams.ENGINE_NUMBER) )
                     .WhereIF(!searchParams.CHASSIS_NUMBER.IsNullOrEmpty(), i => i.CHASSIS_NUMBER.Contains(searchParams.CHASSIS_NUMBER))
+                    .WhereIF(!searchParams.VEHICLE_SHORTNAME.IsNullOrEmpty(), i => i.VEHICLE_SHORTNAME.Contains(searchParams.VEHICLE_SHORTNAME))
+                    .WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -75,8 +77,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     FROM Business_ModifyVehicle mv
                     LEFT JOIN Business_AssetMaintenanceInfo mi
                         ON mv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID) && x.MODIFY_TYPE == MODIFY_TYPE).ToList();
-                    //获取所有的经营模式
-                    var manageModelList = db.Queryable<Business_ManageModel>().ToList();
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                     switch (MODIFY_TYPE)
                     {
@@ -88,11 +88,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 item.TAG_NUMBER = item.PLATE_NUMBER + "-" + DateTime.Now.Year.ToString().Remove(0, 2) + "M";
                                 db.Updateable<Business_AssetMaintenanceInfo>()
                                     .UpdateColumns(x => new Business_AssetMaintenanceInfo { PLATE_NUMBER = item.PLATE_NUMBER, TAG_NUMBER = item.TAG_NUMBER }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                db.Updateable<Business_ModifyVehicle>()
+                                    .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.TRANSACTION_ID = item.VGUID;
                                 assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
-                                //assetSwapModel.DESCRIPTION = item.DESCRIPTION;
-                                //assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                                 assetSwapModel.CREATE_DATE = DateTime.Now;
@@ -114,9 +114,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             foreach (var item in modifyVehicleList)
                             {
                                 //先更新资产维护表，再写入Oracle 中间表
-
                                 db.Updateable<Business_AssetMaintenanceInfo>()
                                     .UpdateColumns(x => new Business_AssetMaintenanceInfo { MANAGEMENT_COMPANY = item.MANAGEMENT_COMPANY }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                db.Updateable<Business_ModifyVehicle>()
+                                    .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.TRANSACTION_ID = item.VGUID;
                                 assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
@@ -143,17 +144,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             foreach (var item in modifyVehicleList)
                             {
                                 //先更新资产维护表，再写入Oracle 中间表
-                                //经营模式子类 传过来的经营模式上级
-                                var minor = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                                item.MODEL_MINOR = manageModelList
-                                    .First(x => minor != null && x.VGUID == minor.ParentVGUID).BusinessName;
-                                //经营模式主类 传过来的经营模式上上级
-                                var major = manageModelList.FirstOrDefault(x => x.BusinessName == item.MODEL_MINOR);
-                                item.MODEL_MAJOR = manageModelList
-                                    .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
                                 db.Updateable<Business_AssetMaintenanceInfo>()
                                     .UpdateColumns(x => new Business_AssetMaintenanceInfo { MODEL_MAJOR = item.MODEL_MAJOR, MODEL_MINOR = item.MODEL_MINOR }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                db.Updateable<Business_ModifyVehicle>()
+                                    .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
+                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
+                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.TRANSACTION_ID = item.VGUID;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
@@ -164,8 +161,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
                                 assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
-                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
-                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
+                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
+                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.PERIOD = item.PERIOD;
                                 assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
                                 assetSwapList.Add(assetSwapModel);

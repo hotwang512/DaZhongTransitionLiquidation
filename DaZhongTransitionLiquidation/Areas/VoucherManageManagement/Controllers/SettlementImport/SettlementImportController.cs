@@ -63,6 +63,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var moneyIndex = new List<int>(); ;
                     var modelIndexList = new List<int>();//模式合并单元格数
                     var result = new List<string>();
+                    var settlementData = db.Queryable<Business_SettlementSubject>().ToList();
                     //构造所需数据(不包含金额)
                     GetSettlementData(worksheet, modelList, classList, carList, modelIndexList);
                     //构造所需数据(营业收入类型--父类,子类合并)
@@ -73,14 +74,43 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     GetDescartesData(modelList, carList, result, modelIndexList, classList, businessTypeList);
                     //构造实体类,插入表中
                     for (int i = 0; i < result.Count; i++)
-                    {                     
+                    {
+                        var businessVguid = "";
                         var resultList = result[i].Split(",").ToList();
+                        if(resultList[3].Split("-").Count() == 2)
+                        {
+                            var busin1 = resultList[3].Split("-")[0];//结算项目父类
+                            var busin2 = resultList[3].Split("-")[1];//结算项目子类
+                            var business = settlementData.Where(x => x.BusinessType == busin1).ToList();
+                            if (business.Count == 1)
+                            {
+                                var vguid = business[0].VGUID;
+                                var businessType = settlementData.Where(x => x.ParentVGUID == vguid && x.BusinessType == busin2).ToList();
+                                if (businessType.Count == 1)
+                                {
+                                    //结算项目标准匹配项目所对应配置
+                                    businessVguid = businessType[0].VGUID.TryToString();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var business = settlementData.Where(x => x.BusinessType == resultList[3]).ToList();
+                            if (business.Count == 1)
+                            {
+                                //结算项目标准匹配项目所对应配置
+                                var vguid = business[0].VGUID;                               
+                                businessVguid = vguid.TryToString();
+                            }
+                        }
+                       
                         Business_SettlementImport settlement = new Business_SettlementImport();
                         settlement.VGUID = Guid.NewGuid();
                         settlement.Model = resultList[0];
                         settlement.ClassType = resultList[1];
                         settlement.CarType = resultList[2];
                         settlement.BusinessType = resultList[3];
+                        settlement.Business = businessVguid;
                         settlement.Money = moneyList[i];
                         settlement.Founder = UserInfo.LoginName;
                         settlement.CreatTime = DateTime.Now;

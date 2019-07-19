@@ -215,7 +215,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID").Where(x =>
             {
                 var cache = CacheManager<Sys_User>.GetInstance();
                 var loginCompany = cache[PubGet.GetUserKey].CompanyCode;
-                result = db.Queryable<Business_CompanyBankInfo>().Where(x => x.CompanyCode == loginCompany && x.BankName == PayBank).First();
+                result = db.Queryable<Business_CompanyBankInfo>().Where(x =>x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == loginCompany && x.BankName == PayBank).First();
             });
             return Json(result, JsonRequestBehavior.AllowGet);
         }

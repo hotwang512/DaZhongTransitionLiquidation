@@ -113,13 +113,6 @@ var $page = function () {
                 }
             });
         })
-        //新增按钮
-        //$("#btnAdd").on("click", function () {
-        //    $("#AddBusinessType").modal("show");
-        //    $("#BusinessTypeName").val("");
-        //    $("#BusinessVGUID").val("");
-        //    initBusinessTypeName();
-        //})
         $('#CollectionCompany').on('select', function (event) {
             var args = event.args;
             var item = args.item;
@@ -133,32 +126,6 @@ var $page = function () {
         });
         //新增账套信息
         var vguids = [];
-        //$("#btnEditInfo").on("click", function () {
-        //    vguids = [];
-        //    var per = $(".permissions");
-        //    var j = 0;
-        //    for (var i = 0; i < per.length; i++) {
-        //        var ischeck = per[i].checked;
-        //        if (ischeck) {
-        //            var id = per[i].getAttribute('pageid');
-        //            vguids.push(id);
-        //            j = i;
-        //        }
-        //    }
-        //    if (vguids.length != 1) {
-        //        jqxNotification("请选择一条数据！", null, "error");
-        //    } else {
-        //        var companyCode = per[j].getAttribute('comvalue');
-        //        var accountModeCode = per[j].getAttribute('accvalue');
-        //        //加载借贷配置列表
-        //        initTable(companyCode, accountModeCode);
-        //        //绑定选中数据
-        //        setPayBankInfo(vguids, companyCode, accountModeCode);
-        //        selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
-        //        selector.$AddNewBankDataDialog().modal("show");
-        //    } 
-        //})
-        //弹出框中的取消按钮
         $("#btnAdd").on("click", function () {
             selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
             selector.$AddNewBankDataDialog().modal("show");
@@ -197,6 +164,7 @@ var $page = function () {
                     "PayBank": $("#PayBank").val(),
                     "PayAccount": $("#PayAccount").val(),
                     "PayBankAccountName": $("#PayBankAccountName").val(),
+                    "AccountType": $("#AccountType").val(),
                     "Borrow": val,
                     "Loan": val2,
                     "OrderVGUID": $("#VGUID").val(),
@@ -258,28 +226,13 @@ var $page = function () {
             $("#CollectionBankAccount").val("");
             $("#CollectionBankAccountName").val("");
         })
-    }; //addEvent end
 
-   
-    //绑定选中数据
-    function setPayBankInfo(vguids,companyCode, accountModeCode) {
-        for (var i = 0; i < $(".Borrow").length; i++) {
-            if ($(".Borrow")[i].getAttribute('for') == vguids[0]) {
-                var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + $(".Borrow").eq(i).text() + '</div>';
-                $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
-                var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + $(".Loan").eq(i).text() + '</div>';
-                $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
-                var val3 = $(".PayBank").eq(i).text();
-                //$("#PayBank").val(val3);
-                var val4 = $(".PayAccount").eq(i).text();
-                //$("#PayAccount").val(val4);
-                var val5 = $(".PayBankAccountName").eq(i).text();
-                //$("#PayBankAccountName").val(val5);
-                //付款银行信息（默认）
-                getPayBankInfo(companyCode, accountModeCode, val3, val4, val5);
-            }
-        }
-    }
+        $("#CompanyCode").on("change", function () {
+            var accountModeCode = $("#AccountModeCode").val();
+            var companyCode = $("#CompanyCode").val();
+            getPayBankInfo(companyCode, accountModeCode, '', '', '');
+        })
+    }; //addEvent end
 
     function getOrderListDetail() {
         $.ajax({
@@ -456,6 +409,7 @@ function payBankChange() {
         success: function (result) {
             $("#PayAccount").val(result.BankAccount);
             $("#PayBankAccountName").val(result.BankAccountName);
+            $("#AccountType").val(result.AccountType);
         }
     });
 }
@@ -629,16 +583,6 @@ function getBusinessText(parentItem) {
     return result;
 }
 
-//function getBusinessCodeText(parentItem) {
-//    if (parentItem.level != 0) {
-//        results = parentItem.value + "|" + results;
-//        getBusinessCodeText(parentItem.prevItem);
-//    } else {
-//        results = parentItem.value + "|" + results;
-//    }
-//    return results;
-//}
-
 function initTable(companyCode, accountModeCode) {
     var source ={
             datafields:
@@ -754,7 +698,6 @@ function initTable(companyCode, accountModeCode) {
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
     });
 }
-
 function checkboxOnclick(event) {
     for (var i = 0; i < $(".permissions").length; i++) {
         var id = $(".permissions")[i].getAttribute('pageid');
@@ -807,12 +750,12 @@ function getCompanyCode() {
         }
     });
     companyCode = $("#CompanyCode").val();
-    initTable(companyCode, accountMode);
-    getPayBankInfo(companyCode, accountMode, '', '', '');
+    //initTable(companyCode, accountMode);
+    getPayBankInfo(companyCode, accountMode, '', '', '','');
 }
 
 //付款银行信息（默认）
-function getPayBankInfo(companyCode, accountModeCode, val3, val4, val5) {
+function getPayBankInfo(companyCode, accountModeCode, val3, val4, val5, val6) {
     var url = "/CapitalCenterManagement/OrderListDetail/GetPayBankInfo";
     $.ajax({
         url: url,
@@ -829,9 +772,11 @@ function getPayBankInfo(companyCode, accountModeCode, val3, val4, val5) {
                     $("#PayBank").val(val3);
                     $("#PayAccount").val(val4);
                     $("#PayBankAccountName").val(val5);
+                    $("#AccountType").val(val6)
                 } else {
                     $("#PayAccount").val(result[0].BankAccount);
                     $("#PayBankAccountName").val(result[0].BankAccountName);
+                    $("#AccountType").val(result[0].AccountType);
                 }
             }
         }
@@ -850,6 +795,7 @@ function initSettingTable() {
             { name: 'PayBank', type: 'string' },
             { name: 'PayAccount', type: 'string' },
             { name: 'PayBankAccountName', type: 'string' },
+            { name: 'AccountType', type: 'string' },
             { name: 'Borrow', type: 'string' },
             { name: 'Loan', type: 'string' },
             { name: 'AccountModeCode', type: 'string' },
@@ -876,13 +822,14 @@ function initSettingTable() {
         editable: true,
         columns: [
             { text: '启用', datafield: 'Isable', width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
-            { text: '账套', datafield: 'AccountModeName', width: 180, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc},
-            { text: '公司', datafield: 'CompanyName', width: 300, align: 'center', cellsAlign: 'center', editable: false }, 
+            { text: '账套', datafield: 'AccountModeName', width: 180,pinned:true, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc},
+            { text: '公司', datafield: 'CompanyName', width: 400, pinned: true, align: 'center', cellsAlign: 'center', editable: false },
             { text: '开户行', datafield: 'PayBank', width: 180, align: 'center', cellsAlign: 'center', editable: false },
             { text: '账号', datafield: 'PayAccount', width: 180, align: 'center', cellsAlign: 'center', editable: false },
             { text: '户名', datafield: 'PayBankAccountName', width: 300, align: 'center', cellsAlign: 'center', editable: false },
+            { text: '账户类型', datafield: 'AccountType', width: 120, align: 'center', cellsAlign: 'center', editable: false },
             { text: '借', datafield: 'Borrow', align: 'center', width: 200, cellsAlign: 'center', editable: false },
-            { text: '贷', datafield: 'Loan', align: 'center', cellsAlign: 'center', editable: false },
+            { text: '贷', datafield: 'Loan', align: 'center', width: 200, cellsAlign: 'center', editable: false },
             { text: '', datafield: 'AccountModeCode', align: 'center', cellsAlign: 'center', hidden: true },
             { text: '', datafield: 'CompanyCode', align: 'center', cellsAlign: 'center', hidden: true },
             { text: '', datafield: 'VGUID', align: 'center', cellsAlign: 'center', hidden: true },
@@ -896,7 +843,7 @@ function initSettingTable() {
         var rowdata = args.row.bounddata;
         if (rowdata.level != 0) {
             editBank(rowdata.VGUID, rowdata.AccountModeCode, rowdata.CompanyCode, rowdata.PayBank, rowdata.PayAccount,
-                rowdata.PayBankAccountName,rowdata.Borrow, rowdata.Loan);
+                rowdata.PayBankAccountName, rowdata.AccountType, rowdata.Borrow, rowdata.Loan);
         }
     });
 }
@@ -906,11 +853,12 @@ function editBankFunc(row, columnfield, value, defaulthtml, columnproperties) {
     return container;
 }
 
-function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBankAccountName, borrow, loan) {
+function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBankAccountName, accountType,borrow, loan) {
     $("#PayBank").val("");
     $("#PayAccount").val("");
     $("#PayBankAccountName").val("");
     $("#AccountModeCode").val(accountModeCode);
+    $("#AccountType").val("");
     $("#CompanyCode").val(companyCode);
     $("#orderVguid").val(guid)
     isEdit = true;
@@ -924,6 +872,9 @@ function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBa
     if (payBankAccountName == null || payBankAccountName == "null") {
         payBankAccountName = "";
     }
+    if (AccountType == null || AccountType == "null") {
+        AccountType = "";
+    }
     if (borrow == null || borrow == "null") {
         borrow = "";
     }
@@ -933,6 +884,7 @@ function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBa
     $("#PayBank").val(payBank);
     $("#PayAccount").val(payAccount);
     $("#PayBankAccountName").val(payBankAccountName);
+    $("#AccountType").val(accountType);
     $("#myModalLabel_title").text("编辑数据");
     //$("#AddNewBankDataDialog table tr").eq(1).hide();
     $(".msg").remove();

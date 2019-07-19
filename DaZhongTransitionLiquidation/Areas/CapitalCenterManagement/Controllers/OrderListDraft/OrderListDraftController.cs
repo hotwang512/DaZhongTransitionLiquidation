@@ -38,10 +38,15 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
+                DateTime endDate = new DateTime();
+                if (searchParams.FillingDate != null)
+                {
+                    endDate = (searchParams.FillingDate.TryToString().Split(" ")[0] + " " + "23:59:59").TryToDate();
+                }
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_OrderListDraft>()
                 .Where(i => i.Status == searchParams.Status)
-                .WhereIF(searchParams.FillingDate != null, i => i.FillingDate == searchParams.FillingDate)
+                .WhereIF(searchParams.FillingDate != null, i => i.FillingDate > searchParams.FillingDate && i.FillingDate < endDate)
                 .OrderBy(i => i.CreateTime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

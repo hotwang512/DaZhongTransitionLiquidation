@@ -27,7 +27,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             string syncTime = ConfigSugar.GetAppString("Email_SyncTime");
             while (true)
             {
-                if (DateTime.Now.ToString("HH:ss") == syncTime)
+                if (DateTime.Now.ToString("HH:mm:ss") == syncTime)
                 {
                     ExceSyncEmail();
                 }

@@ -81,6 +81,8 @@ var menueHelp = {
                 break;
             case "QuerySubject": $("#homeModel").text("--会计核算中心")//*************
                 break;
+            case "SettlementStandards": $("#homeModel").text("--会计核算中心")//*************
+                break; 
             case "ROrderListManage": $("#homeModel").text("--费用报销中心")
                 break;
             case "ReportCenter": $("#homeModel").text("--报表管理中心")

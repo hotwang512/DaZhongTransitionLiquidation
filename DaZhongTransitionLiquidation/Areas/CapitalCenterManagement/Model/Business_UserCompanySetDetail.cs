@@ -12,6 +12,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public string PayBank { get; set; }
         public string PayAccount { get; set; }
         public string PayBankAccountName { get; set; }
+        public string AccountType { get; set; }
         public string Borrow { get; set; }
         public string Loan { get; set; }
         public string KeyData { get; set; }

@@ -20,17 +20,16 @@ var $page = function () {
     //所有事件
     function addEvent() {
         var guid = $.request.queryString().VGUID;
+        var paymentVoucherVguid = $.request.queryString().PaymentVoucherVguid;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
-            
-            $("#btnSave").parent().hide();
+            if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
+                $("#btnSave").parent().hide();
+                $("#tdPrint").show();
+            }
             getOrderDetail();
-            $("#tdPrint").show();
             getAttachment();
-        } else {
-            $("#VGUID").val(newguid());
-            $("#AssetsOrderVguid").val(newguid());
-        }
+        } 
         //取消
         $("#btnCancel").on("click",
             function () {
@@ -91,8 +90,11 @@ var $page = function () {
                                     break;
                                 case "1":
                                     jqxNotification("保存成功！", null, "success");
-                                    history.go(-1);
-                                    window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                                    $("#btnSave").parent().hide();
+                                    $("#tdPrint").show();
+                                    $("#btnPrint").trigger("click");
+                                    //history.go(-1);
+                                    //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                     break;
                             }
                         }

@@ -135,7 +135,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     {
                         sevenSection.ChangeDate = DateTime.Now;
                         sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_TaxFeeOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus, x.OrderNumber }).ExecuteCommand();
+                        
+                        db.Updateable<Business_TaxFeeOrder>(sevenSection).UpdateColumns(x => new { x.PurchaseDescription, x.PaymentInformationVguid, x.PaymentInformation,x.SupplierBankAccountName,x.SupplierBankAccount,x.SupplierBank,x.SupplierBankNo,x.PayType,x.PayCompanyVguid,x.PayCompany,x.CompanyBankName,x.CompanyBankAccount,x.CompanyBankAccountName,x.AccountType,x.ChangeDate,x.ChangeUser }).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

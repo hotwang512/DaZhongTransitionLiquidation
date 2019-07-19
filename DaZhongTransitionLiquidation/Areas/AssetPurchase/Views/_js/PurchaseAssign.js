@@ -179,13 +179,6 @@ var $page = function () {
                 ]
             });
     }
-    //function cellsSettingRenderer(row, column, value, rowData) {
-    //    var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
-    //    return '<div style="margin: 8px; margin-top:6px;">' +
-    //        '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>' +
-    //        '&nbsp<a style="cursor:pointer"  onclick="ViewBelongTo(\'' + FixedAssetsOrderVguid + '\')">查看</a>' +
-    //        '</div>';
-    //}
     //配置改为导入
     function cellsSettingRenderer(row, column, value, rowData) {
         var FixedAssetsOrderVguid = rowData.FixedAssetsOrderVguid;
@@ -198,11 +191,7 @@ var $page = function () {
                     FixedAssetsOrderVguid +
                     '\')" id="' +
                     FixedAssetsOrderVguid +
-                    '">导入</a>' +
-                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
-                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-                    FixedAssetsOrderVguid +
-                    '\')">提交</a>' +
+                    '">导入清册</a>' +
                     '</div>';
             } else {
                 return '<div style="margin: 8px; margin-top:6px;">' +
@@ -220,11 +209,7 @@ var $page = function () {
                     FixedAssetsOrderVguid +
                     '\')" id="' +
                     FixedAssetsOrderVguid +
-                    '">导入</a>' +
-                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
-                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-                    FixedAssetsOrderVguid +
-                    '\')">提交</a>' +
+                    '">导入清册</a>' +
                     '</div>';
             } else {
                 return '<div style="margin-top:6px;">' +

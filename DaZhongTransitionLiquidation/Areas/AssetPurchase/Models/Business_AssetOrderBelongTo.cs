@@ -40,4 +40,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string BelongToCompany { get; set; }
         
     }
+
+    public class Vehicle_Model
+    {
+        public string VehicleModel { get; set; }
+    }
 }

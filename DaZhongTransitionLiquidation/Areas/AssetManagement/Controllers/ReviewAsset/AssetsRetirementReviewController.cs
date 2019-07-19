@@ -72,14 +72,12 @@ FROM Business_ScrapVehicle mv
                         assetSwapModel.RETIRE_FLAG = "Y";
                         assetSwapModel.RETIRE_QUANTITY = 1;
                         assetSwapModel.RETIRE_COST = item.ASSET_COST;
-                        //报废成本
-
-                        var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                            x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
-                        assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
-                        assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
-                        assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
-                        assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
+                        //var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                        //    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
+                        //assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
+                        //assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
+                        //assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
+                        //assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                         assetSwapModel.PERIOD = item.PERIOD;
                         assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
                         assetSwapList.Add(assetSwapModel);

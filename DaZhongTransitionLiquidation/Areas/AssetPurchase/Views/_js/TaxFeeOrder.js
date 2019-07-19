@@ -63,28 +63,41 @@ var $page = function () {
                     selection.push(data.VGUID);
                 }
             });
-            if (selection.length > 1) {
-                jqxNotification("请选择一条数据！", null, "error");
-            } else {
-                $.ajax({
-                    url: "/AssetPurchase/TaxFeeOrder/SubmitTaxFeeOrder",
-                    data: { vguids: selection },
-                    type: "post",
-                    success: function (msg) {
-                        switch (msg.Status) {
-                            case "0":
-                                jqxNotification("提交失败！", null, "error");
-                                break;
-                            case "1":
-                                jqxNotification("提交成功！", null, "success");
-                                $("#jqxTable").jqxDataTable('updateBoundData');
-                                break;
-                        }
+            $.ajax({
+                url: "/AssetPurchase/TaxFeeOrder/CompareTaxFeeOrder",
+                data: { vguids: selection },
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("您选择的数据不可以合并支付！", null, "error");
+                        break;
+                        case "1":
+                        SubmitTaxFeeOrder(selection);
+                        break;
                     }
-                });
-            }
+                }
+            });
         });
     }; //addEvent end
+    function SubmitTaxFeeOrder(selection) {
+        $.ajax({
+            url: "/AssetPurchase/TaxFeeOrder/SubmitTaxFeeOrder",
+            data: { vguids: selection },
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                case "0":
+                    jqxNotification("提交失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("提交成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+                }
+            }
+        });
+    }
     //删除
     function dele(selection) {
         $.ajax({
@@ -164,6 +177,7 @@ var $page = function () {
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
                     { name: 'SubmitStatus', type: 'number' },
+                    { name: 'PaymentVoucherVguid', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },
@@ -208,6 +222,7 @@ var $page = function () {
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '修改人', datafield: 'ChangeUser', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '付款项目', datafield: 'PaymentVoucherVguid', width: 300, align: 'center',hidden:true, cellsAlign: 'center' },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });
@@ -217,7 +232,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID;
+            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + row.PaymentVoucherVguid;
         });
     }
 

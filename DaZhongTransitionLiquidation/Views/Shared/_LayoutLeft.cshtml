@@ -672,6 +672,16 @@
                                             </tr>
                                         }
                                     </table>
+                                    <table>
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "车辆经营模式天数" && i.Reads == 1))
+                                        {
+                                            <tr class="menue_item" id="VehicleBusiness_SettlementStandards" pageurl="/VoucherManageManagement/VehicleBusiness/Index">
+                                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                                <td class="menue_text">车辆经营模式天数</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </table>
                                 </div>
     }
     @******************************************************费用报销中心******************************************************@

@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement;
+﻿using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
@@ -255,6 +256,9 @@ namespace DaZhongTransitionLiquidation.Controllers
             var data = "{" +
                                   "\"OSNO\":\"{OSNO}\"".Replace("{OSNO}", item.OSNO) +
                                   "}";
+            var data1 = db.Queryable<Business_FixedAssetsOrder>().ToList();
+            var data2 = db.Queryable<Business_IntangibleAssetsOrder>().ToList();
+            var data3 = db.Queryable<Business_TaxFeeOrder>().ToList();
             try
             {
                 WebClient wc = new WebClient();
@@ -267,12 +271,41 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     if (item.BankStatus != modelData.data.RECO)
                     {
+                        //更新保险订单表
                         item.BankStatus = modelData.data.RECO;
                         item.BankStatusName = modelData.data.REMG;
                         item.BankTD = modelData.data.T24D;
                         item.BankTS = modelData.data.T24S;
                         db.Updateable<Business_OrderListDraft>(item).Where(it => it.VGUID == item.VGUID).ExecuteCommand();
                         changeOrderList.Add(item);
+                        //更新资产订单表
+                        var isAny1 = data1.Any(x => x.PaymentVoucherVguid == item.VGUID);
+                        if (isAny1)
+                        {
+                            var assets1 = data1.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
+                            var status = assets1.SubmitStatus + 1;
+                            assets1.SubmitStatus = status;
+                            assets1.OSNO = item.OSNO;
+                            db.Updateable(assets1).Where(it => it.VGUID == assets1.VGUID).ExecuteCommand();
+                        }
+                        var isAny2 = data2.Any(x => x.PaymentVoucherVguid == item.VGUID);
+                        if (isAny2)
+                        {
+                            var assets2 = data2.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
+                            var status = assets2.SubmitStatus + 1;
+                            assets2.SubmitStatus = status;
+                            assets2.OSNO = item.OSNO;
+                            db.Updateable(assets2).Where(it => it.VGUID == assets2.VGUID).ExecuteCommand();
+                        }
+                        var isAny3 = data3.Any(x => x.PaymentVoucherVguid == item.VGUID);
+                        if (isAny3)
+                        {
+                            var assets3 = data3.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
+                            var status = assets3.SubmitStatus + 1;
+                            assets3.SubmitStatus = status;
+                            assets3.OSNO = item.OSNO;
+                            db.Updateable(assets3).Where(it => it.VGUID == assets3.VGUID).ExecuteCommand();
+                        }
                     }
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));

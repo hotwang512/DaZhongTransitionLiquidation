@@ -28,12 +28,12 @@ namespace DaZhongTransitionLiquidation
             AutoMapper.Configuration.Configure();
             log4net.Config.XmlConfigurator.Configure();
 
-            AutoSyncBankFlow.AutoSyncSeavice();
-            AutoSyncBankFlow.AutoSyncYesterdaySeavice();
+            //AutoSyncBankFlow.AutoSyncSeavice();
+            //AutoSyncBankFlow.AutoSyncYesterdaySeavice();
             AutoSyncBankFlow.AutoBankTransferResult();
             AutoSyncBankFlow.AutoSyncBankSeavice();
             AutoSyncAssetsMaintenance.AutoSyncSeavice();
-            AutoSyncEmailController.AutoSyncEmailSeavice();
+            //AutoSyncEmailController.AutoSyncEmailSeavice();
         }
     }
 }

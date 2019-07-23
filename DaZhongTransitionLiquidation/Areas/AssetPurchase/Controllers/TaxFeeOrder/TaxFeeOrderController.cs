@@ -161,6 +161,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     if (pendingRedult.success)
                     {
                         db.Updateable<Business_TaxFeeOrder>().UpdateColumns(x => new Business_TaxFeeOrder() { PaymentVoucherUrl = pendingRedult.data.url, PaymentVoucherVguid = pendingRedult.data.vguid }).Where(it => vguids.Contains(it.VGUID)).ExecuteCommand();
+                        resultModel.ResultInfo = pendingRedult.data.url;
                     }
                     else
                     {
@@ -179,7 +180,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);

@@ -145,6 +145,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                             orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                             orderModel.PaymentVoucherUrl = pendingRedult.data.url;
                             db.Updateable<Business_IntangibleAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
+                            resultModel.ResultInfo = pendingRedult.data.url;
                         }
                         else
                         {
@@ -153,7 +154,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);

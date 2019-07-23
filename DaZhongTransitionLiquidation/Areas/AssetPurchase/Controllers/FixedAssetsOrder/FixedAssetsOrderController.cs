@@ -149,6 +149,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 purchaseAssignmodel.ContractAmount = model.ContractAmount;
                                 purchaseAssignmodel.AssetDescription = model.AssetDescription;
                                 db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
+                                resultModel.ResultInfo = pendingRedult.data.url;
                             }
                             else
                             {
@@ -158,7 +159,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);

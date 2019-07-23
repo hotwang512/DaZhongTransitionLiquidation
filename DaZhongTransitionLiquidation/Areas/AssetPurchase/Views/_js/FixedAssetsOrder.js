@@ -50,25 +50,6 @@ var $page = function () {
                 WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
-        //提交
-        //$("#btnSubmit").on("click", function () {
-        //    var selection = [];
-        //    var grid = $("#jqxTable");
-        //    var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-        //    checedBoxs.each(function () {
-        //        var th = $(this);
-        //        if (th.is(":checked")) {
-        //            var index = th.attr("index");
-        //            var data = grid.jqxDataTable('getRows')[index];
-        //            selection.push(data.VGUID);
-        //        }
-        //    });
-        //    if (selection.length < 1) {
-        //        jqxNotification("请选择您要提交的数据！", null, "error");
-        //    } else {
-        //        WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
-        //    }
-        //});
         //填写信息后提交，调用清算平台、待付款请求生成支付凭证接口
         //先调用接口，成功后再提交
         $("#btnSubmit").on("click", function () {
@@ -98,6 +79,8 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("提交成功！", null, "success");
+                            document.getElementById('ifrPrint').src = msg.ResultInfo;
+                            $("#CreditDialog").modal("show");
                             $("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                         }
@@ -219,9 +202,8 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '固定资产采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '付款信息关联ID', datafield: 'PaymentInformationVguid', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
@@ -240,11 +222,8 @@ var $page = function () {
                 ]
             });
         selector.$grid().on('rowDoubleClick', function (event) {
-            // event args.
             var args = event.args;
-            // row data.
             var row = args.row;
-            // row index.
             window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID;
         });
     }

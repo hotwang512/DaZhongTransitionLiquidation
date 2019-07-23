@@ -69,6 +69,11 @@ var $page = function () {
                 WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
     }; //addEvent end
     function initSelectPurchaseGoods() {
         //使用部门
@@ -122,6 +127,8 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("提交成功！", null, "success");
+                        document.getElementById('ifrPrint').src = msg.ResultInfo;
+                        $("#CreditDialog").modal("show");
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
                 }
@@ -180,7 +187,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '无形资产采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },

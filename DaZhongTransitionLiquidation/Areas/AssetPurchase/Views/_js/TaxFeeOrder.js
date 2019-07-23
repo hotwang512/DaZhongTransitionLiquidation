@@ -49,6 +49,11 @@ var $page = function () {
                 WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
         //填写信息后提交，调用清算平台、待付款请求生成支付凭证接口
         //先调用接口，成功后再提交
         $("#btnSubmit").on("click", function () {
@@ -96,6 +101,8 @@ var $page = function () {
                     break;
                 case "1":
                     jqxNotification("提交成功！", null, "success");
+                    document.getElementById('ifrPrint').src = msg.ResultInfo;
+                    $("#CreditDialog").modal("show");
                     $("#jqxTable").jqxDataTable('updateBoundData');
                     break;
                 }
@@ -212,7 +219,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '车辆附属采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款项目', datafield: 'PayItem', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '车型', datafield: 'VehicleModel', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },

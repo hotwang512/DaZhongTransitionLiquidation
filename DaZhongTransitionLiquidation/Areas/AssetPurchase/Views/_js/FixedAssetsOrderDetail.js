@@ -43,7 +43,6 @@ var $page = function () {
                 }
                 if (validateError <= 0) {
                     var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-
                     var DepartmentModelList = [];
                     for (var i = 0; i < checkedItems.length; i++) {
                         DepartmentModelList.push(checkedItems[i].value);

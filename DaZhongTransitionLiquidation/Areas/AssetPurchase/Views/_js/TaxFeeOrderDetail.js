@@ -115,6 +115,11 @@ var $page = function () {
             function () {
                 $("#OrderDetailsDialog").modal("hide");
             });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
         //打印
         $("#btnPrint").on("click",
             function () {

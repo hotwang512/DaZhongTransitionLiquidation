@@ -17,6 +17,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string PaymentInformation { set; get; }
         public decimal? SumPayment { set; get; }
         public decimal? FirstPayment { set; get; }
+        public decimal? InterimPayment { set; get; }
         public decimal? TailPayment { set; get; }
         public string ContractName { set; get; }
         public string ContractFilePath { set; get; }

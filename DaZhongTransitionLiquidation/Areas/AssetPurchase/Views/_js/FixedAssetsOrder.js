@@ -258,7 +258,7 @@ var $page = function () {
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">待发起支付</span>';
         } else if (value == 1) {
-            return '<span style="margin: 4px; margin-top:8px;">待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">支付中</span>';
         }
     }
     function rendererFunc() {

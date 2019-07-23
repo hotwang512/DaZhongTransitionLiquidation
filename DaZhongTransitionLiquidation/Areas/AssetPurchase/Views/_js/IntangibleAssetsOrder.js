@@ -63,9 +63,9 @@ var $page = function () {
                     selection.push(data.VGUID);
                 }
             });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要提交的数据！", null, "error");
-            } else {
+            if (selection.length != 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            }  else {
                 WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
@@ -210,16 +210,20 @@ var $page = function () {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
     function cellsRendererSubmit(row, column, value, rowData) {
-        if (value == 4) {
+        if (value == 6) {
             return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
         } else if (value == 1) {
-            return '<span style="margin: 4px; margin-top:8px;">首付款待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">首付款支付中</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">首付款待发起支付</span>';
         } else if (value == 2) {
-            return '<span style="margin: 4px; margin-top:8px;">尾款待发起支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">中期款待发起支付</span>';
         } else if (value == 3) {
-            return '<span style="margin: 4px; margin-top:8px;">尾款待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">中期款支付中</span>';
+        } else if (value == 4) {
+            return '<span style="margin: 4px; margin-top:8px;">尾款待发起支付</span>';
+        } else if (value == 5) {
+            return '<span style="margin: 4px; margin-top:8px;">尾款支付中</span>';
         }
     }
     function rendererFunc() {

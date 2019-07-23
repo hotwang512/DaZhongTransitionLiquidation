@@ -1062,7 +1062,7 @@
                             {
                                 <tr class="menue_item" id="FixedAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                    <td class="menue_text">固定资产</td>
+                                    <td class="menue_text">固定资产订单</td>
                                     <td></td>
                                 </tr>
                             }
@@ -1070,7 +1070,7 @@
                             {
                                 <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/IntangibleAssetsOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                    <td class="menue_text">无形资产</td>
+                                    <td class="menue_text">无形资产订单</td>
                                     <td></td>
                                 </tr>
                             }
@@ -1079,7 +1079,7 @@
                             {
                                 <tr class="menue_item" id="TaxFeeOrder_AssetPurchase" pageurl="/AssetPurchase/TaxFeeOrder/Index">
                                     <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                    <td class="menue_text">车辆税费</td>
+                                    <td class="menue_text">车辆附属订单</td>
                                     <td></td>
                                 </tr>
                             }
@@ -1218,14 +1218,14 @@
                             <td></td>
                         </tr>
                     }
-                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "外部调拨" && i.Reads == 1))
+                    @*@if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "外部调拨" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">外部调拨</td>
                             <td></td>
                         </tr>
-                    }
+                    }*@
                 </table>
             </div>
             

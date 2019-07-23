@@ -63,21 +63,25 @@ var $page = function () {
                     selection.push(data.VGUID);
                 }
             });
-            $.ajax({
-                url: "/AssetPurchase/TaxFeeOrder/CompareTaxFeeOrder",
-                data: { vguids: selection },
-                type: "post",
-                success: function (msg) {
-                    switch (msg.Status) {
-                    case "0":
-                        jqxNotification("您选择的数据不可以合并支付！", null, "error");
-                        break;
+            if (selection.length < 1) {
+                jqxNotification("请选择数据！", null, "error");
+            } else {
+                $.ajax({
+                    url: "/AssetPurchase/TaxFeeOrder/CompareTaxFeeOrder",
+                    data: { vguids: selection },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("您选择的数据不可以合并支付！", null, "error");
+                            break;
                         case "1":
-                        SubmitTaxFeeOrder(selection);
-                        break;
+                            SubmitTaxFeeOrder(selection);
+                            break;
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     }; //addEvent end
     function SubmitTaxFeeOrder(selection) {
@@ -241,7 +245,7 @@ var $page = function () {
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value == 1) {
-            return '<span style="margin: 4px; margin-top:8px;">待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">支付中</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">待发起支付</span>';
         } else if (value == 2) {

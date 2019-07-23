@@ -250,4 +250,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     {
         public string OrderNumData { get; set; }
     }
+
+    public class TaxFeeOrderCompare
+    {
+        public Guid? PaymentInformationVguid { get; set; }
+        public Guid? PayCompanyVguid { get; set; }
+        public string PayItemCode { get; set; }
+    }
 }

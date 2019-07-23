@@ -43,7 +43,6 @@ var $page = function () {
                 }
                 if (validateError <= 0) {
                     var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-
                     var DepartmentModelList = [];
                     for (var i = 0; i < checkedItems.length; i++) {
                         DepartmentModelList.push(checkedItems[i].value);
@@ -96,14 +95,6 @@ var $page = function () {
                     });
                 }
             });
-        //$("#OrderQuantity").on("click",
-        //    function () {
-        //        if ($("#PurchaseGoods").val() != "") {
-        //            initTable();
-        //        } else {
-        //            jqxNotification("请选择采购物品！", null, "error");
-        //        }
-        //    });
         $("#UploadContractFile").on("click",
             function() {
                 $("#ContractFileInput").click();
@@ -118,6 +109,11 @@ var $page = function () {
             function () {
                 $("#OrderDetailsDialog").modal("hide");
             });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
         //打印
         $("#btnPrint").on("click",
             function () {
@@ -253,17 +249,6 @@ var $page = function () {
                 initPaymentInformationComboBox();
                 $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
                 $("#PurchaseGoods").attr("disabled", true);
-                //付款信息根据 编码 （判断如果有的话） 带入设置的值
-                //$.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
-                //    debugger;
-                //    if (msg.PayBank != null) {
-                //        $("#PayCompanyDropdown").val(msg.VGUID);
-                //        $("#CompanyBankName").val(msg.PayBank);
-                //        $("#CompanyBankAccount").val(msg.PayAccount);
-                //        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
-                //        //$("#AccountType").val("");
-                //    }
-                //});
                 GetCompanyBankInfoDropdownByCode();
             });
         $("#PurchaseDepartment").on('checkChange', function (event) {
@@ -366,11 +351,11 @@ var $page = function () {
             $("#SupplierBank").val(msg.SupplierBank);
             $("#SupplierBankNo").val(msg.SupplierBankNo);
             $("#PayMode").val(msg.PayType);
+            debugger;
             $("#PayCompanyDropdown").val(msg.PayCompanyVguid);
             $("#CompanyBankName").val(msg.CompanyBankName);
             $("#CompanyBankAccount").val(msg.CompanyBankAccount);
             $("#CompanyBankAccountName").val(msg.CompanyBankAccountName);
-            $("#hidPayCompany").val(msg.PayCompany);
             $("#AccountType").val(msg.AccountType);
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);

@@ -94,10 +94,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public int OrderQuantity { get; set; }
         public string PayItemCode { get; set; }
         public Boolean IsChecked { get; set; }
-
-        public string OrderDesc
-        {
-            get { return "订单号" + OrderNumber + "数量"+ OrderQuantity; }
-        }
+        public string OrderDesc => OrderQuantity.ToString();
     }
 }

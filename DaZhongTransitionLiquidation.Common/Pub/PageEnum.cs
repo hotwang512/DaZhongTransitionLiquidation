@@ -58,7 +58,7 @@
         /// </summary>
         UnSubmit = 0,
         /// <summary>
-        /// 已提交待支付
+        /// 支付中
         /// </summary>
         UnPay = 1,
         /// <summary>
@@ -76,20 +76,28 @@
         /// </summary>
         FirstPaymentUnSubmit = 0,
         /// <summary>
-        /// 首付款待支付
+        /// 首付款支付中
         /// </summary>
         FirstPaymentUnPay = 1,
         /// <summary>
+        /// 中期款待发起支付
+        /// </summary>
+        InterimPaymentUnSubmit = 2,
+        /// <summary>
+        /// 中期款支付中
+        /// </summary>
+        InterimPaymentUnPay = 3,
+        /// <summary>
         /// 尾款待发起支付
         /// </summary>
-        TailPaymentUnSubmit = 2,
+        TailPaymentUnSubmit = 4,
         /// <summary>
-        /// 尾款待支付
+        /// 尾款支付中
         /// </summary>
-        TailPaymentUnPay = 3,
+        TailPaymentUnPay = 5,
         /// <summary>
         /// 已支付
         /// </summary>
-        Submited = 4
+        Submited = 6
     }
 }

@@ -15,4 +15,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string UseDepartment { get; set; }
         public string StartVehicleDate { get; set; }
     }
+
+    public class Excel_PurchaseAssignCompare
+    {
+        public string EngineNumber { get; set; }
+        public string ChassisNumber { get; set; }
+    }
 }

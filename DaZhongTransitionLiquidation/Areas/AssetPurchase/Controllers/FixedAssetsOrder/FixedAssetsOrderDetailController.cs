@@ -76,57 +76,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
                         sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
                         db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
-
-                        //请求清算平台、待付款请求生成支付凭证接口
-                        var pendingPaymentmodel = new PendingPaymentModel();
-                        //统计附件信息
-                        var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == sevenSection.VGUID).ToList();
-                        pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
-                        pendingPaymentmodel.InvoiceReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
-                        pendingPaymentmodel.ApprovalReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
-                        pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
-                        pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
-                        pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-                        var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
-                            .Where(x => x.VGUID == sevenSection.PurchaseGoodsVguid).First();
-                        var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
-                            .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
-
-                        pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
-                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|"
-                                                              + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
-                        //根据供应商账号找到供应商类别
-                        pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
-                            .Where(x => x.BankAccount == sevenSection.SupplierBankAccount).First().CompanyOrPerson; ;
-                        pendingPaymentmodel.CollectBankAccountName = sevenSection.SupplierBankAccountName;
-                        pendingPaymentmodel.CollectBankAccouont = sevenSection.SupplierBankAccount;
-                        pendingPaymentmodel.CollectBankName = sevenSection.SupplierBank;
-                        pendingPaymentmodel.CollectBankNo = sevenSection.SupplierBankNo;
-                        pendingPaymentmodel.PaymentMethod = sevenSection.PayType;
-
-                        pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
-                        pendingPaymentmodel.FunctionSiteId = "61";
-                        pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
-                        pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
-                        pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
-                        pendingPaymentmodel.Amount = sevenSection.ContractAmount.ToString();
-                        pendingPaymentmodel.Summary = sevenSection.AssetDescription;
-                        pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
-
-                        var apiReault = PendingPaymentApi(pendingPaymentmodel);
-                        var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
-                        if (pendingRedult.success)
-                        {
-                            var orderModel = db.Queryable<Business_FixedAssetsOrder>()
-                                .Where(x => x.VGUID == sevenSection.VGUID).First();
-                            orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
-                            orderModel.PaymentVoucherUrl = pendingRedult.data.url;
-                            db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl,x.PaymentVoucherVguid }).ExecuteCommand();
-                        }
-                        else
-                        {
-                            LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
-                        }
                     }
                     else
                     {
@@ -481,18 +430,6 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult GetCompanyBankInfo(Guid Vguid)
-        //{
-        //    var cache = CacheManager<Sys_User>.GetInstance();
-        //    var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
-        //    var model = new Business_CompanyBankInfo();
-        //    DbBusinessDataService.Command(db =>
-        //    {
-        //        var sevenSection = db.Queryable<Business_SevenSection>().Where(c => c.VGUID == Vguid).First();
-        //        model = db.Queryable<Business_CompanyBankInfo>().Where(c => c.CompanyCode == sevenSection.Code && c.AccountModeCode == AccountModeCode && c.BankStatus).First();
-        //    });
-        //    return Json(model, JsonRequestBehavior.AllowGet);
-        //}
         public JsonResult GetCompanyBankInfo(Guid Vguid)
         {
             var cache = CacheManager<Sys_User>.GetInstance();

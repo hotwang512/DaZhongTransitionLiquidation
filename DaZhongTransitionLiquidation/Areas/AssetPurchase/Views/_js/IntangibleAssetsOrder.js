@@ -63,12 +63,17 @@ var $page = function () {
                     selection.push(data.VGUID);
                 }
             });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要提交的数据！", null, "error");
-            } else {
+            if (selection.length != 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            }  else {
                 WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
     }; //addEvent end
     function initSelectPurchaseGoods() {
         //使用部门
@@ -122,6 +127,8 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("提交成功！", null, "success");
+                        document.getElementById('ifrPrint').src = msg.ResultInfo;
+                        $("#CreditDialog").modal("show");
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
                 }
@@ -180,7 +187,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '无形资产采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },
@@ -210,16 +217,20 @@ var $page = function () {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
     function cellsRendererSubmit(row, column, value, rowData) {
-        if (value == 4) {
+        if (value == 6) {
             return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
         } else if (value == 1) {
-            return '<span style="margin: 4px; margin-top:8px;">首付款待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">首付款支付中</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">首付款待发起支付</span>';
         } else if (value == 2) {
-            return '<span style="margin: 4px; margin-top:8px;">尾款待发起支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">中期款待发起支付</span>';
         } else if (value == 3) {
-            return '<span style="margin: 4px; margin-top:8px;">尾款待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">中期款支付中</span>';
+        } else if (value == 4) {
+            return '<span style="margin: 4px; margin-top:8px;">尾款待发起支付</span>';
+        } else if (value == 5) {
+            return '<span style="margin: 4px; margin-top:8px;">尾款支付中</span>';
         }
     }
     function rendererFunc() {

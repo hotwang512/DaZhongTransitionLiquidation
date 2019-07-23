@@ -49,6 +49,11 @@ var $page = function () {
                 WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
         //填写信息后提交，调用清算平台、待付款请求生成支付凭证接口
         //先调用接口，成功后再提交
         $("#btnSubmit").on("click", function () {
@@ -63,28 +68,47 @@ var $page = function () {
                     selection.push(data.VGUID);
                 }
             });
-            if (selection.length > 1) {
-                jqxNotification("请选择一条数据！", null, "error");
+            if (selection.length < 1) {
+                jqxNotification("请选择数据！", null, "error");
             } else {
                 $.ajax({
-                    url: "/AssetPurchase/TaxFeeOrder/SubmitTaxFeeOrder",
+                    url: "/AssetPurchase/TaxFeeOrder/CompareTaxFeeOrder",
                     data: { vguids: selection },
                     type: "post",
                     success: function (msg) {
                         switch (msg.Status) {
-                            case "0":
-                                jqxNotification("提交失败！", null, "error");
-                                break;
-                            case "1":
-                                jqxNotification("提交成功！", null, "success");
-                                $("#jqxTable").jqxDataTable('updateBoundData');
-                                break;
+                        case "0":
+                            jqxNotification("您选择的数据不可以合并支付！", null, "error");
+                            break;
+                        case "1":
+                            SubmitTaxFeeOrder(selection);
+                            break;
                         }
                     }
                 });
             }
         });
     }; //addEvent end
+    function SubmitTaxFeeOrder(selection) {
+        $.ajax({
+            url: "/AssetPurchase/TaxFeeOrder/SubmitTaxFeeOrder",
+            data: { vguids: selection },
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                case "0":
+                    jqxNotification("提交失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("提交成功！", null, "success");
+                    document.getElementById('ifrPrint').src = msg.ResultInfo;
+                    $("#CreditDialog").modal("show");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+                }
+            }
+        });
+    }
     //删除
     function dele(selection) {
         $.ajax({
@@ -164,6 +188,7 @@ var $page = function () {
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
                     { name: 'SubmitStatus', type: 'number' },
+                    { name: 'PaymentVoucherVguid', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },
@@ -194,7 +219,7 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '订单编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '车辆附属采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款项目', datafield: 'PayItem', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '车型', datafield: 'VehicleModel', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
@@ -208,6 +233,7 @@ var $page = function () {
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '修改人', datafield: 'ChangeUser', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '付款项目', datafield: 'PaymentVoucherVguid', width: 300, align: 'center',hidden:true, cellsAlign: 'center' },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });
@@ -217,7 +243,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID;
+            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + row.PaymentVoucherVguid;
         });
     }
 
@@ -226,7 +252,7 @@ var $page = function () {
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value == 1) {
-            return '<span style="margin: 4px; margin-top:8px;">待支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">支付中</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">待发起支付</span>';
         } else if (value == 2) {

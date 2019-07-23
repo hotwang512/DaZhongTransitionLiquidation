@@ -9,8 +9,8 @@ var $page = function () {
     this.init = function () {
         initSelect();
         initSelectPurchaseGoods();
-        initPayCompanyDropdown();
         initPaymentInformationComboBox();
+        initPayCompanyDropdown();
         initSelectPurchaseDepartment();
         addEvent();
         $("#PaymentInformation").find("input")[0].setAttribute("style", "box-sizing: border-box;margin: 0px;border: 0px;width: 100%;height: 33px;");
@@ -40,6 +40,10 @@ var $page = function () {
                 if (!Validate($("#PurchaseGoods"))) {
                     validateError++;
                 }
+                //尾款不能为0
+                if (!Validate($("#TailPayment")) && $("#TailPayment").val() != "0") {
+                    validateError++;
+                }
                 if (validateError <= 0) {
                     var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
                     var DepartmentModelList = [];
@@ -57,6 +61,7 @@ var $page = function () {
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
                             "PaymentInformation": $("#hiddenPaymentInformation").val(),
                             "SumPayment": $("#SumPayment").val(),
+                            "InterimPayment": $("#InterimPayment").val(),
                             "FirstPayment": $("#FirstPayment").val(),
                             "TailPayment": $("#TailPayment").val(),
                             "ContractAmount": $("#ContractAmount").val(),
@@ -175,6 +180,11 @@ var $page = function () {
                 }
                 $("#CreditDialog").modal("show");
             });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
         //提交
         $("#btnSubmit").on("click",
             function () {
@@ -222,7 +232,6 @@ var $page = function () {
         $('#PaymentInformation').on('select', function (event) {
             var args = event.args;
             if (args) {
-                debugger;
                 var item = args.item;
                 $("#hiddenPaymentInformationVguid").val(item.value);
                 $("#hiddenPaymentInformation").val(item.label);
@@ -241,7 +250,6 @@ var $page = function () {
                 for (var i = 0; i < checkedItems.length; i++) {
                     DepartmentModelList.push(checkedItems[i].value);
                 };
-                debugger;
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
@@ -259,50 +267,41 @@ var $page = function () {
                  initPaymentInformationComboBox();
                  $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
                  $("#PurchaseGoods").attr("disabled", true);
-                 //付款信息根据 编码 （判断如果有的话） 带入设置的值
-                 //$.post("/AssetPurchase/FixedAssetsOrderDetail/GetPaymentInformationByBusinessSubItem", { PurchaseGoodsVguid: $("#PurchaseGoods").val() }, function (msg) {
-                 //    debugger;
-                 //    if (msg.PayBank != null) {
-                 //        $("#PayCompanyDropdown").val(msg.VGUID);
-                 //        $("#CompanyBankName").val(msg.PayBank);
-                 //        $("#CompanyBankAccount").val(msg.PayAccount);
-                 //        $("#CompanyBankAccountName").val(msg.PayBankAccountName);
-                 //        //$("#AccountType").val("");
-                 //    }
-                 //});
-                 debugger;
-                 var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdownByCode";
-                 var source =
-                 {
-                     datatype: "json",
-                     datafields: [
-                         { name: 'VGUID' },
-                         { name: 'CompanyName' }
-                     ],
-                     url: url,
-                     data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
-                     async: false
-                 };
-                 var dataAdapter = new $.jqx.dataAdapter(source);
-                 debugger;
-                 $('#PayCompanyDropdown').jqxDropDownList({
-                     enableSelection: true,
-                     filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
-                         310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
-                     renderer: function (index, label, value) {
-                         var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
-                         return table;
-                     },
-                     selectionRenderer: function (element, index, label, value) {
-                         var text = label.replace(/\n/g, " ");
-                         return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
-                     }
-                 });
+                 getCompanyBankInfoDropdownByCode();
              });
     }; //addEvent end
-
+    function getCompanyBankInfoDropdownByCode() {
+        var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdownByCode";
+        var source =
+        {
+            datatype: "json",
+            datafields: [
+                { name: 'VGUID' },
+                { name: 'CompanyName' }
+            ],
+            url: url,
+            data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+            async: false
+        };
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        debugger;
+        $('#PayCompanyDropdown').jqxDropDownList({
+            enableSelection: true,
+            filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
+                310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
+            renderer: function (index, label, value) {
+                var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
+                return table;
+            },
+            selectionRenderer: function (element, index, label, value) {
+                var text = label.replace(/\n/g, " ");
+                return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
+            }
+        });
+    }
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+            debugger;
             var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
             for (var i = 0; i < PurchaseDepartment.length; i++) {
                 var item = $("#PurchaseDepartment").jqxDropDownList('getItemByValue', PurchaseDepartment[i]);
@@ -312,6 +311,7 @@ var $page = function () {
             $("#PurchaseGoods").attr("disabled", true);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             initPaymentInformationComboBox();
+            getCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
             $("#AssetDescription").val(msg.AssetDescription);
@@ -320,11 +320,9 @@ var $page = function () {
             $("#TailPayment").val(msg.TailPayment);
             $("#SupplierInformation").val(msg.SupplierInformation);
             $("#ContractName").val(msg.ContractName);
-            debugger;
             if (msg.ContractName != null && msg.ContractFilePath != null) {
                 $("#Attachment").show();
                 $("#Attachment").attr("href", msg.ContractFilePath);
-                debugger;
                 $("#Attachment").attr("title", msg.ContractName);
             }
             $("#SupplierBankAccountName").val(msg.SupplierBankAccountName);
@@ -332,9 +330,9 @@ var $page = function () {
             $("#SupplierBank").val(msg.SupplierBank);
             $("#SupplierBankNo").val(msg.SupplierBankNo);
             $("#PayMode").val(msg.PayType);
-            debugger;
             $("#PayCompanyDropdown").val(msg.PayCompanyVguid);
             $("#CompanyBankName").val(msg.CompanyBankName);
+            $("#InterimPayment").val(msg.InterimPayment);
             $("#CompanyBankAccount").val(msg.CompanyBankAccount);
             $("#CompanyBankAccountName").val(msg.CompanyBankAccountName);
             $("#hidPayCompany").val(msg.PayCompany);

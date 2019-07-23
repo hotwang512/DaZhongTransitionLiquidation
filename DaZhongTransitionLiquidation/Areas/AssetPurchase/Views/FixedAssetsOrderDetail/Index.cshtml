@@ -206,7 +206,7 @@
             <tr style="height: 50px">
                 <td style="text-align: right;">付款日期：</td>
                 <td style="text-align: left;">
-                    <input id="PaymentDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                    <input id="PaymentDate" type="text" onfocus="WdatePicker({minDate:'%y-%M-{%d+1}', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
                 </td>
             </tr>
         </table>
@@ -372,7 +372,7 @@
                 <iframe id="ifrPrint" width="100%" height="100%" src="" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe>
             </div>
             <div class="modal-footer">
-                <button id="CreditDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+                <button id="CreditDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">关闭</span></button>
             </div>
         </div>
     </div>

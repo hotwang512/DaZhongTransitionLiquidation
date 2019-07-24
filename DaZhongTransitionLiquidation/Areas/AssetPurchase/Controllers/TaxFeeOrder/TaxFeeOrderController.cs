@@ -32,7 +32,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetorderDatas(Business_TaxFeeOrder searchParams, GridParams para)
+        public JsonResult GetOrderListDatas(Business_TaxFeeOrder searchParams, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_TaxFeeOrder>();
             DbBusinessDataService.Command(db =>
@@ -42,6 +42,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                 jsonResult.Rows = db.Queryable<Business_TaxFeeOrder>()
                     .WhereIF(searchParams.VehicleModelCode != null, i => i.VehicleModelCode == searchParams.VehicleModelCode)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
+                    .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
+                    .WhereIF(searchParams.PayItemCode != "-1", i => i.PayItemCode == searchParams.PayItemCode)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -92,7 +94,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     else
                     {
                         resultModel.IsSuccess = false;
-                        resultModel.ResultInfo = "您选择的数据不可以合并支付!";
+                        resultModel.ResultInfo = "您选择的订单不可以合并支付!";
                         resultModel.Status ="0";
                     }
                 });
@@ -108,6 +110,31 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
             {
                 var result = db.Ado.UseTran(() =>
                 {
+                    var orderList = db.Queryable<Business_TaxFeeOrder>().Where(x => vguids.Contains(x.VGUID)).ToList();
+                    if (orderList.Any(x =>
+                        x.SubmitStatus == FixedAssetsSubmitStatusEnum.UnPay.TryToInt() ||
+                        x.SubmitStatus == FixedAssetsSubmitStatusEnum.Submited.TryToInt()))
+                    {
+                        resultModel.ResultInfo = "该支付状态不允许提交";
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                        return;
+                    }
+                    //if (orderList.Count > 2)
+                    //{
+                    //    //判断是否能合并支付
+                    //    var set = new HashSet<string>();
+                    //    orderList.ForEach(x => {
+                    //        set.Add(x.PayItemCode + x.PaymentInformationVguid.ToString() + x.PayCompanyVguid.ToString());//付款项目，供应商，付款公司ID
+                    //    });
+                    //    if (set.Count != 1)
+                    //    {
+                    //        resultModel.ResultInfo = "选择的订单不能合并支付";
+                    //        resultModel.IsSuccess = false;
+                    //        resultModel.Status = "0";
+                    //        return;
+                    //    }
+                    //}
                     //请求清算平台、待付款请求生成支付凭证接口
                     var pendingPaymentmodel = new PendingPaymentModel();
                     //统计附件信息
@@ -118,8 +145,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
                     pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                     pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-
-                    var orderList = db.Queryable<Business_TaxFeeOrder>().Where(x => vguids.Contains(x.VGUID)).ToList();
                     var order = orderList.First();
                     var orderData = db.Queryable<v_Business_BusinessTypeSet>()
                         .Where(x => x.BusinessSubItem1 == order.PayItemCode).First();
@@ -162,6 +187,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     {
                         db.Updateable<Business_TaxFeeOrder>().UpdateColumns(x => new Business_TaxFeeOrder() { PaymentVoucherUrl = pendingRedult.data.url, PaymentVoucherVguid = pendingRedult.data.vguid }).Where(it => vguids.Contains(it.VGUID)).ExecuteCommand();
                         resultModel.ResultInfo = pendingRedult.data.url;
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
                     }
                     else
                     {
@@ -172,15 +199,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                         var model = db.Queryable<Business_TaxFeeOrder>().Where(c => c.VGUID == vguid).First();
                         if (model.SubmitStatus == FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt())
                         {
-                            model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
+                            model.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
                             model.SubmitDate = DateTime.Now;
                             model.SubmitUser = cache[PubGet.GetUserKey].UserName;
                             db.Updateable<Business_TaxFeeOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                         }
                     }
                 });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
         }

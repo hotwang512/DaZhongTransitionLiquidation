@@ -21,11 +21,11 @@ var $page = function () {
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
-
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#PurchaseGoods").val("");
-            $("#SubmitStatus").val("");
+            $("#OSNO").val("");
+            $("#SubmitStatus").val("-1");
         });
         //新增
         $("#btnAdd").on("click", function () {
@@ -131,6 +131,9 @@ var $page = function () {
                         $("#CreditDialog").modal("show");
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo, null, "error");
+                        break;
                 }
             }
         });
@@ -155,6 +158,7 @@ var $page = function () {
                     { name: 'ContractFilePath', type: 'string' },
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
+                    { name: 'OSNO', type: 'string' },
                     { name: 'SubmitStatus', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
@@ -163,7 +167,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val() },
+                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val(), "OSNO": $("#OSNO").val() },
                 url: "/AssetPurchase/IntangibleAssetsOrder/GetIntangibleAssetsOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -188,6 +192,7 @@ var $page = function () {
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '无形资产采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '订单编号', datafield: 'OSNO', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },

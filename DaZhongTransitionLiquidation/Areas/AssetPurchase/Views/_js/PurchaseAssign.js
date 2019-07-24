@@ -38,16 +38,12 @@ var $page = function () {
                     success: function (msg) {
                         switch (msg.Status) {
                             case "0":
-                                jqxNotification("提交失败！", null, "error");
+                                jqxNotification(msg.ResultInfo, null, "error");
                                 break;
                             case "1":
                                 jqxNotification("提交成功！", null, "success");
                                 $("#OrderBelongToDialog").modal("hide");
                                 initTable();
-                                break;
-                            case "2":
-                                jqxNotification(msg.ResultInfo, null, "success");
-                                $("#OrderBelongToDialog").modal("hide");
                                 break;
                         }
                     }

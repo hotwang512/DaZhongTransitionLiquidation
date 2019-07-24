@@ -45,6 +45,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                 jsonResult.Rows = db.Queryable<Business_IntangibleAssetsOrder>()
                     .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
+                    .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -102,6 +103,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                             model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.TailPaymentUnPay.TryToInt();
                             pendingPaymentmodel.Amount = model.TailPayment.ToString();
                         }
+                        else
+                        {
+                            resultModel.ResultInfo = "该状态下不能发起支付";
+                            resultModel.IsSuccess = false;
+                            resultModel.Status = "2";
+                            return;
+                        }
                         //统计附件信息
                         var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == vguid).ToList();
                         pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
@@ -146,6 +154,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                             orderModel.PaymentVoucherUrl = pendingRedult.data.url;
                             db.Updateable<Business_IntangibleAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
                             resultModel.ResultInfo = pendingRedult.data.url;
+                            resultModel.IsSuccess = true;
+                            resultModel.Status = "1";
                         }
                         else
                         {
@@ -153,8 +163,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         }
                     }
                 });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
         }

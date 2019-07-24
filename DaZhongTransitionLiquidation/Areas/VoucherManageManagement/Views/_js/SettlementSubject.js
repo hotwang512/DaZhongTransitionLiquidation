@@ -162,7 +162,7 @@ var $page = function () {
             $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
             isEdit = false;
             guid = "";
-            $("#myModalLabel_title").text("新增数据");
+            $("#myModalLabel_title2").text("新增项目明细");
             selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
             selector.$AddBankChannelDialog().modal("show");
             initBorrowTable(companyCode, accountMode);
@@ -308,6 +308,9 @@ function loadGridTree(modules) {
         var row = args.row;
         initTable(row.VGUID);
         $("#VGUID").val(row.VGUID);
+        if ($(document).scrollTop() == 0) {
+            $("html,body").animate({ scrollTop: 0 }, 10);//置顶
+        }
     });
 }
 
@@ -373,7 +376,7 @@ function initTable(vguid) {
         $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
         var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Loan + '</div>';
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
-        $("#myModalLabel_title").text("编辑数据");
+        $("#myModalLabel_title2").text("编辑项目明细");
         selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
         selector.$AddBankChannelDialog().modal("show");
     });

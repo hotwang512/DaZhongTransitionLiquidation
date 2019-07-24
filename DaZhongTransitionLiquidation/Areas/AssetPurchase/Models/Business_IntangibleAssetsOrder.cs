@@ -41,5 +41,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string SubmitUser { set; get; }
         public Guid? PaymentVoucherVguid { set; get; }
         public string PaymentVoucherUrl { set; get; }
+        public string OSNO { get; set; }
     }
 }

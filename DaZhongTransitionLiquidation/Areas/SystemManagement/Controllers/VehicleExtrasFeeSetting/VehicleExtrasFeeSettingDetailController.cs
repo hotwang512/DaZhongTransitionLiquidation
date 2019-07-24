@@ -31,7 +31,10 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var result = db.Ado.UseTran(() =>
+                //同车型，业务项目启用必须唯一
+                var isAny = db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Status == 1 &&
+                    x.VehicleModelCode == saveModel.VehicleModelCode && x.BusinessSubItem == saveModel.BusinessSubItem && saveModel.Status == 1 && x.VGUID != saveModel.VGUID);
+                if (!isAny)
                 {
                     if (saveModel.VGUID == Guid.Empty)
                     {
@@ -47,10 +50,15 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
                         db.Updateable<Business_VehicleExtrasFeeSetting>(saveModel)
                             .IgnoreColumns(x => new { x.CreateDate, x.CreateUser }).ExecuteCommand();
                     }
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
-                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                    resultModel.IsSuccess = true;
+                    resultModel.ResultInfo = "保存成功";
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                else
+                {
+                    resultModel.ResultInfo = "同车型，业务项目启用必须唯一";
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
             });
             return Json(resultModel);
         }

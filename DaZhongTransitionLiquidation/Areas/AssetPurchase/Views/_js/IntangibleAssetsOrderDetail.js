@@ -208,6 +208,11 @@ var $page = function () {
                 debugger;
                 computeValue();
             });
+        $("#InterimPayment").on("blur",
+            function () {
+                debugger;
+                computeValue();
+            });
         $('#PayCompanyDropdown').on('select', function (event) {
             debugger;
             $("#CompanyBankName").val("");
@@ -428,9 +433,11 @@ var $page = function () {
     }
 };
 function computeValue() {
-    if ($("#SumPayment").val() != "" && $("#FirstPayment").val() != "") {
-        var value = $("#SumPayment").val() - $("#FirstPayment").val();
+    if ($("#SumPayment").val() != "" && $("#FirstPayment").val() != "" && $("#InterimPayment").val() != "") {
+        var value = $("#SumPayment").val() - $("#FirstPayment").val() - $("#InterimPayment").val();
         $("#TailPayment").val(value);
+    } else if ($("#SumPayment").val() != "" && $("#FirstPayment").val()) {
+        $("#TailPayment").val($("#SumPayment").val() - $("#FirstPayment").val());
     }
 }
 function PendingPaymentAttachmentUpload() {

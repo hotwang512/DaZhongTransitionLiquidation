@@ -70,6 +70,11 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             {
                 list = BusinessProject != "" ? db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101' and BusinessProject LIKE '%" + BusinessProject + "%'").ToList()
                     : db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet Where  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101'").ToList();
+                foreach (var item in list)
+                {
+                    item.BusinessProject = item.BusinessProject.Substring(item.BusinessProject.LastIndexOf("|") + 1,
+                        item.BusinessProject.Length - item.BusinessProject.LastIndexOf("|") - 1);
+                }
             });
 
             return Json(list, JsonRequestBehavior.AllowGet);

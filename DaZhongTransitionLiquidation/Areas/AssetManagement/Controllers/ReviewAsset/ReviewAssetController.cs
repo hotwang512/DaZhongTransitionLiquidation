@@ -55,7 +55,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .Where(i => i.START_VEHICLE_DATE == YearMonth && !i.ISVERIFY)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 //调用车管系统接口
-                var apiReault = GetNewVehicleAsset(YearMonth);
+                var CHASSIS_NUMBER = "";
+                var ENGINE_NUMBER = "";
+                foreach (var review in reviewList)
+                {
+                    CHASSIS_NUMBER += "'" + review.CHASSIS_NUMBER + "',";
+                    ENGINE_NUMBER += "'" + review.ENGINE_NUMBER + "',";
+                }
+                CHASSIS_NUMBER = CHASSIS_NUMBER.Substring(0, CHASSIS_NUMBER.Length - 1);
+                ENGINE_NUMBER = ENGINE_NUMBER.Substring(0, ENGINE_NUMBER.Length - 1);
+                var apiReault = GetNewVehicleAssetByEngineChassis(CHASSIS_NUMBER, ENGINE_NUMBER);
                 var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string,string>>>();
 
                 var newVehicleList = new List<Api_NewVehicleAsset>();
@@ -201,7 +210,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .Where(i => i.START_VEHICLE_DATE == YearMonth && !i.ISVERIFY)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 //调用车管系统接口
-                var apiReault = GetNewVehicleAsset(YearMonth);
+                var CHASSIS_NUMBER = "";
+                var ENGINE_NUMBER = "";
+                foreach (var review in reviewList)
+                {
+                    CHASSIS_NUMBER += "'" + review.CHASSIS_NUMBER + "',";
+                    ENGINE_NUMBER += "'" + review.ENGINE_NUMBER + "',";
+                }
+                CHASSIS_NUMBER = CHASSIS_NUMBER.Substring(0, CHASSIS_NUMBER.Length - 1);
+                ENGINE_NUMBER = ENGINE_NUMBER.Substring(0, ENGINE_NUMBER.Length - 1);
+                var apiReault = GetNewVehicleAssetByEngineChassis(CHASSIS_NUMBER, ENGINE_NUMBER);
                 var resultApiModel = apiReault.JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
 
                 var newVehicleList = new List<Api_NewVehicleAsset>();
@@ -404,6 +422,26 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             YearMonth = YearMonth.Replace("-","");
             var url = ConfigSugar.GetAppString("NewVehicleAssetUrl");
             var data = "{"+ "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) + "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), "POST", data);
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                return "";
+            }
+        }
+        public string GetNewVehicleAssetByEngineChassis(string CHASSIS_NUMBER,string ENGINE_NUMBER)
+        {
+            var url = ConfigSugar.GetAppString("NewVehicleAssetUrl");
+            var data = "{" + "\"CHASSIS_NUMBER\":\"{CHASSIS_NUMBER}\"".Replace("{CHASSIS_NUMBER}", CHASSIS_NUMBER) + ",\"ENGINE_NUMBER\":\"{ENGINE_NUMBER}\"".Replace("{ENGINE_NUMBER}", ENGINE_NUMBER) + "}";
             try
             {
                 WebClient wc = new WebClient();

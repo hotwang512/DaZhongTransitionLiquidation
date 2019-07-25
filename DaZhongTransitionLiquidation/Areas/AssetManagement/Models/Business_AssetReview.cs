@@ -435,7 +435,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public DateTime? CREATE_DATE { get; set; }
+        public DateTime CREATE_DATE { get; set; }
 
         /// <summary>
         /// Desc:

@@ -18,7 +18,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
 
     public class Excel_PurchaseAssignCompare
     {
-        public string EngineNumber { get; set; }
-        public string ChassisNumber { get; set; }
+        public string EngineNumber_ChassisNumber { get; set; }
     }
 }

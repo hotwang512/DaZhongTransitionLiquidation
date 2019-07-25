@@ -50,10 +50,14 @@ var $page = function () {
                             initTable();
                             break;
                         case "2":
-                            jqxNotification(msg.ResultInfo, null, "success");
+                            jqxNotification(msg.ResultInfo, null, "error");
                             $("#myModalLabel_title2").html(msg.ResultInfo);
                             ViewReview(msg.ResultInfo2);
                             $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        case "3":
+                            jqxNotification(msg.ResultInfo, null, "error");
+                            $("#myModalLabel_title2").html(msg.ResultInfo);
                             break;
                         }
                     }
@@ -166,6 +170,7 @@ var $page = function () {
                     { name: 'EXP_ACCOUNT_SEGMENT', type: 'string' },
                     { name: 'MODEL_MAJOR', type: 'string' },
                     { name: 'MODEL_MINOR', type: 'string' },
+                    { name: 'START_VEHICLE_DATE', type: 'string' },
                     { name: 'CREATE_DATE', type: 'date' },
                     { name: 'CHANGE_DATE', type: 'date' },
                     { name: 'CREATE_USER', type: 'string' },

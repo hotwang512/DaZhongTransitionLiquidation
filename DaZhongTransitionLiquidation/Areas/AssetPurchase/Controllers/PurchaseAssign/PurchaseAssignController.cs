@@ -230,16 +230,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             //判断是否有已经发起支付的数据，如果有不允许导入
                             var fixedAssetsOrder = db.Queryable<Business_FixedAssetsOrder>()
                                 .Where(c => c.VGUID == vguid).First();
-                            var taxFeeOrderList = db.Queryable<Business_PurchaseOrderNum, Business_TaxFeeOrder>((pon, tfo) => new object[] {
-                                    JoinType.Left,pon.FaxOrderVguid==tfo.VGUID}).Select((pon, tfo) => new { FixedAssetOrderVguid = pon.FixedAssetOrderVguid, FaxOrderVguid = pon.FaxOrderVguid, SubmitStatus = tfo.SubmitStatus })
-                                .Where(x => x.FixedAssetOrderVguid == vguid).ToList();
-                            if (fixedAssetsOrder.SubmitStatus >= 1 || taxFeeOrderList.Any(x => x.SubmitStatus >= 1))
+                            var taxFeeOrderList = db.Queryable<Business_PurchaseOrderNum, Business_TaxFeeOrder>(
+                                (pon, tfo) => new object[]
+                                {
+                                    JoinType.Left, pon.FaxOrderVguid == tfo.VGUID
+                                }).Select((pon, tfo) => new
+                            {
+                                FixedAssetOrderVguid = pon.FixedAssetOrderVguid, FaxOrderVguid = pon.FaxOrderVguid,
+                                SubmitStatus = tfo.SubmitStatus
+                            }).ToList();
+                                taxFeeOrderList = taxFeeOrderList.Where(x => x.FixedAssetOrderVguid == vguid).ToList();
+                            if (fixedAssetsOrder.SubmitStatus >= 2 || taxFeeOrderList.Any(x => x.SubmitStatus >= 2))
                             {
                                 consistent = false;
-                                resultModel.ResultInfo = "已经有数据发起支付，不能重新导入 ";
+                                resultModel.ResultInfo = "已经有数据支付，不能重新导入 ";
                                 return;
                             }
-                            
                             if (fixedAssetsOrder.OrderQuantity != list.Count)
                             {
                                 consistent = false;
@@ -250,19 +256,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             list.ForEach(x => {
                                 set.Add(x.ChassisNumber + x.EngineNumber);
                             });
-                            if (set.Count == list.Count)
+                            if (set.Count != list.Count)
                             {
                                 consistent = false;
                                 resultModel.ResultInfo = resultModel.ResultInfo + "Excel中有重复数据 ";
                             }
                             var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
                                 .Where(c => c.FixedAssetsOrderVguid == vguid).First();
-                                //判断判断车架号发动机号，系统中没有才可以导入
-                                var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
-                                .Select(x => new Excel_PurchaseAssignCompare { EngineNumber =  x.ENGINE_NUMBER, ChassisNumber = x.CHASSIS_NUMBER}).ToList();
-                            var listExcel = list.Select(x => new Excel_PurchaseAssignCompare
-                                {EngineNumber = x.EngineNumber, ChassisNumber = x.ChassisNumber}).ToList();
-                            if (listAssetInfo.Intersect(listExcel).Any())
+                            //判断判断车架号发动机号，系统中没有才可以导入
+                            var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
+                            .Select(x => new { EngineNumber_ChassisNumber =  x.ENGINE_NUMBER + x.CHASSIS_NUMBER }).ToList();
+                            var listExcel = list.Select(x => new
+                                { EngineNumber_ChassisNumber = x.EngineNumber+ x.ChassisNumber}).ToList();
+                            if (listAssetInfo.Union(listExcel).ToList().Count < listAssetInfo.Count + listExcel.Count)
                             {
                                 consistent = false;
                                 resultModel.ResultInfo += "导入的数据系统中已存在 ";
@@ -307,13 +313,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
                                             .Where(x => x.VehicleModel == vehicleModel.VehicleModel && x.Status == 1 && x.Fee != 0).ToList();
                                         //采购数量
-                                        var orderNum = vehicleModelList.Count(x => x.VehicleModel == vehicleModel.VehicleModel);
+                                        var orderNum = sevenSectionList.Where(x => x.VehicleModel == vehicleModel.VehicleModel).Sum(x => x.AssetNum);
                                         //出库费
                                         foreach (var itemFee in feeList)
                                         {
                                             var feeOrder = new Business_TaxFeeOrder();
                                             feeOrder.PurchaseDepartmentIDs = "a8b4f808-33f3-454a-9a19-0b90d40aabea";//默认营运部
-                                            feeOrder.PayItem = itemFee.BusinessSubItem.Split("|")[itemFee.BusinessSubItem.Split("|").Length - 1];
+                                            feeOrder.PayItem = itemFee.BusinessProject.Split("|")[itemFee.BusinessProject.Split("|").Length - 1];
                                             feeOrder.PayItemCode = itemFee.BusinessSubItem;
                                             feeOrder.VehicleModel = vehicleModel.VehicleModel;
                                             feeOrder.VehicleModelCode = itemFee.VehicleModelCode;
@@ -375,6 +381,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     var assetReviewList = new List<Business_AssetReview>();
                                     foreach (var item in belongToList)
                                     {
+                                        //根据车型获取各项费用的单价
+                                        var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
+                                            .Where(x => x.VehicleModel == item.VehicleModel && x.Status == 1).ToList();
                                         maxOrderNumRightAsset++;
                                         var assetReview = new Business_AssetReview();
                                         assetReview.VGUID = Guid.NewGuid();
@@ -387,14 +396,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         assetReview.QUANTITY = 1;
                                         assetReview.NUDE_CAR_FEE = fixedAssetsOrderInfo.PurchasePrices;
                                         //车辆税费 根据车型取税费订单中对应的费用
-                                        assetReview.PURCHASE_TAX = 0;
-                                        assetReview.LISENSING_FEE = 0;
-                                        assetReview.OUT_WAREHOUSE_FEE = 0;
-                                        assetReview.DOME_LIGHT_FEE = 0;
-                                        assetReview.ANTI_ROBBERY_FEE = 0;
-                                        assetReview.LOADING_FEE = 0;
-                                        assetReview.INNER_ROOF_FEE = 0;
-                                        assetReview.TAXIMETER_FEE = 0;
+                                        assetReview.PURCHASE_TAX = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030102").Fee;
+                                        assetReview.LISENSING_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030103").Fee;
+                                        assetReview.OUT_WAREHOUSE_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030104").Fee;
+                                        assetReview.DOME_LIGHT_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030105").Fee;
+                                        assetReview.ANTI_ROBBERY_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030106").Fee;
+                                        assetReview.LOADING_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030107").Fee;
+                                        assetReview.INNER_ROOF_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030108").Fee;
+                                        assetReview.TAXIMETER_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030109").Fee;
+                                        assetReview.ASSET_COST = assetReview.NUDE_CAR_FEE +
+                                                                 assetReview.PURCHASE_TAX +
+                                                                 assetReview.LISENSING_FEE +
+                                                                 assetReview.OUT_WAREHOUSE_FEE +
+                                                                 assetReview.DOME_LIGHT_FEE +
+                                                                 assetReview.ANTI_ROBBERY_FEE +
+                                                                 assetReview.LOADING_FEE +
+                                                                 assetReview.INNER_ROOF_FEE +
+                                                                 assetReview.TAXIMETER_FEE;
                                         //资产主类次类 根据采购物品获取
                                         assetReview.ASSET_CATEGORY_MAJOR = db.Queryable<Business_PurchaseOrderSetting>()
                                             .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
@@ -434,6 +452,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         assetReview.YTD_DEPRECIATION = 0;
                                         assetReview.ACCT_DEPRECIATION = 0;
                                         assetReview.FIXED_ASSETS_ORDERID = vguid;
+                                        //总账帐簿
+                                        if (!assetReview.BELONGTO_COMPANY_CODE.IsNullOrEmpty())
+                                        {
+                                            var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                                                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == assetReview.BELONGTO_COMPANY_CODE).First();
+                                            assetReview.EXP_ACCOUNT_SEGMENT = ssModel.Descrption;
+                                        }
                                         assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
                                         assetReview.CREATE_DATE = DateTime.Now;
                                         assetReviewList.Add(assetReview);

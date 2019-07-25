@@ -458,6 +458,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string CHANGE_USER { get; set; }
+        public string START_VEHICLE_DATE { get; set; }
 
     }
 }

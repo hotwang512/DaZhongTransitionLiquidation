@@ -30,9 +30,9 @@ namespace DaZhongTransitionLiquidation
 
             //AutoSyncBankFlow.AutoSyncSeavice();
             //AutoSyncBankFlow.AutoSyncYesterdaySeavice();
-            AutoSyncBankFlow.AutoBankTransferResult();
-            AutoSyncBankFlow.AutoSyncBankSeavice();
-            AutoSyncAssetsMaintenance.AutoSyncSeavice();
+            //AutoSyncBankFlow.AutoBankTransferResult();
+            //AutoSyncBankFlow.AutoSyncBankSeavice();
+            //AutoSyncAssetsMaintenance.AutoSyncSeavice();
             //AutoSyncEmailController.AutoSyncEmailSeavice();
         }
     }

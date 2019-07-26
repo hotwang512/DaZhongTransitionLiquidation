@@ -485,16 +485,9 @@ function getAssetInfoListDetail() {
             $("#METHOD").val(msg.METHOD);
             $("#LIFE_MONTHS").val(msg.LIFE_MONTHS);
             $("#AMORTIZATION_FLAG").val(msg.AMORTIZATION_FLAG);
-            $("#EXP_ACCOUNT_SEGMENT1").val(msg.EXP_ACCOUNT_SEGMENT1);
-            $("#EXP_ACCOUNT_SEGMENT2").val(msg.EXP_ACCOUNT_SEGMENT2);
-            $("#EXP_ACCOUNT_SEGMENT3").val(msg.EXP_ACCOUNT_SEGMENT3);
-            $("#EXP_ACCOUNT_SEGMENT4").val(msg.EXP_ACCOUNT_SEGMENT4);
-            $("#EXP_ACCOUNT_SEGMENT5").val(msg.EXP_ACCOUNT_SEGMENT5);
-            $("#EXP_ACCOUNT_SEGMENT6").val(msg.EXP_ACCOUNT_SEGMENT6);
-            $("#EXP_ACCOUNT_SEGMENT7").val(msg.EXP_ACCOUNT_SEGMENT7);
-            $("#FA_LOC_1").val(msg.FA_LOC_1);
-            $("#FA_LOC_2").val(msg.FA_LOC_2);
-            $("#FA_LOC_3").val(msg.FA_LOC_3);
+            $("#MANAGEMENT_COMPANY").val(msg.MANAGEMENT_COMPANY);
+            $("#BELONGTO_COMPANY").val(msg.BELONGTO_COMPANY);
+            $("#NUDE_CAR_FEE").val(msg.NUDE_CAR_FEE);
             $("#RETIRE_FLAG").val(msg.RETIRE_FLAG);
             $("#RETIRE_QUANTITY").val(msg.RETIRE_QUANTITY);
             $("#RETIRE_COST").val(msg.RETIRE_COST);
@@ -505,6 +498,7 @@ function getAssetInfoListDetail() {
             if (msg.LAST_UPDATE_DATE != "" && msg.LAST_UPDATE_DATE != null) {
                 $("#LAST_UPDATE_DATE").val(formatDate(msg.LAST_UPDATE_DATE));
             }
+            debugger;
             $("#LISENSING_FEE").val(msg.LISENSING_FEE);
             $("#OUT_WAREHOUSE_FEE").val(msg.OUT_WAREHOUSE_FEE);
             $("#DOME_LIGHT_FEE").val(msg.DOME_LIGHT_FEE);
@@ -522,7 +516,22 @@ function getAssetInfoListDetail() {
             $("#TAXIMETER_FEE_M").val(msg.TAXIMETER_FEE);
             $("#PURCHASE_TAX_M").val(msg.PURCHASE_TAX);
 
+            $("#EXP_ACCOUNT_SEGMENT5").val(msg.EXP_ACCOUNT_SEGMENT5);
             $("#PLATE_NUMBER").val(msg.PLATE_NUMBER);
+            $("#LIFE_YEARS").val(msg.LIFE_YEARS);
+            $("#LIFE_MONTHSSALVAGE_TYPE").val(msg.LIFE_MONTHS);
+            $("#ASSET_COST_ACCOUNT").val(msg.ASSET_COST_ACCOUNT);
+            $("#ASSET_SETTLEMENT_ACCOUNT").val(msg.ASSET_SETTLEMENT_ACCOUNT);
+            $("#DEPRECIATION_EXPENSE_SEGMENT").val(msg.DEPRECIATION_EXPENSE_SEGMENT);
+            $("#ACCT_DEPRECIATION_ACCOUNT").val(msg.ACCT_DEPRECIATION_ACCOUNT);
+            $("#MODEL_MAJOR").val(msg.MODEL_MAJOR);
+            $("#MODEL_MINOR").val(msg.MODEL_MINOR);
+            $("#ASSET_DISPOSITION_TYPE").val(msg.ASSET_DISPOSITION_TYPE);
+            $("#SCRAP_INFORMATION").val(msg.SCRAP_INFORMATION);
+            $("#DISPOSAL_AMOUNT").val(msg.DISPOSAL_AMOUNT);
+            $("#DISPOSAL_TAX").val(msg.DISPOSAL_TAX);
+            $("#DISPOSAL_PROFIT_LOSS").val(msg.DISPOSAL_PROFIT_LOSS);
+            $("#BAK_CAR_AGE").val(msg.BAK_CAR_AGE);
             if (msg.ACCEPTANCE_CERTIFICATE != "" && msg.ACCEPTANCE_CERTIFICATE != null) {
                 $("#Attachment").show();
                 $("#Attachment").attr("href", msg.ACCEPTANCE_CERTIFICATE);

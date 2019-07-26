@@ -436,6 +436,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
+        public string START_VEHICLE_DATE { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
         public DateTime? CREATE_DATE { get; set; }
 
         /// <summary>
@@ -458,7 +465,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string CHANGE_USER { get; set; }
-        public string START_VEHICLE_DATE { get; set; }
 
     }
 }

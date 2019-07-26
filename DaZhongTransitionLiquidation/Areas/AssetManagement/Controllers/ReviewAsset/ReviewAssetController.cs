@@ -121,6 +121,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             reviewItem.VEHICLE_AGE = months;
                             reviewItem.YTD_DEPRECIATION = 0;
                             reviewItem.ACCT_DEPRECIATION = 0;
+                            reviewItem.BOOK_TYPE_CODE = "";
                             if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
                             {
                                 var minor = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
@@ -145,6 +146,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
                                 reviewItem.BELONGTO_COMPANY =
                                     ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Descrption;
+                                var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == reviewItem.BELONGTO_COMPANY_CODE).First();
+                                var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
+                                    x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
+                                    x.Code == ssModel.AccountModeCode).First().Descrption;
+                                reviewItem.EXP_ACCOUNT_SEGMENT = accountMode;
                             }
                             if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
                             {
@@ -162,33 +169,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     }
                     else
                     {
-                        var lista = reviewList.Select(x => new
-                            AssetDifference
-                        { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER }).ToList();
-                        var listb = newVehicleList.Select(x => new
-                            AssetDifference
-                        { ENGINE_NUMBER = x.ENGINE_NUMBER, CHASSIS_NUMBER = x.CHASSIS_NUMBER }).ToList();
-                        var listc = lista.Except(listb).ToList();
-                        var listd = listb.Except(lista).ToList();
-                        var liste = listc.Union(listd).ToList<AssetDifference>();
-                        //Code转名称
-                        foreach (var data in liste)
-                        {
-                            if (!data.BELONGTO_COMPANY.IsNullOrEmpty())
-                            {
-                                data.BELONGTO_COMPANY =
-                                ssList.First(x => x.OrgID == data.BELONGTO_COMPANY).Descrption;
-                            }
-                            if (!data.MANAGEMENT_COMPANY.IsNullOrEmpty())
-                            {
-                                data.MANAGEMENT_COMPANY =
-                                ssList.First(x => x.OrgID == data.MANAGEMENT_COMPANY).Abbreviation;
-                            }
-                        }
                         resultModel.IsSuccess = false;
-                        resultModel.Status = "2";
-                        resultModel.ResultInfo = "平台数量：" + lista.Count + "  营收系统数量：" + listb.Count;
-                        resultModel.ResultInfo2 = liste;
+                        resultModel.Status = "3";
+                        resultModel.ResultInfo = "请求数量与获取到的数量不一致";
                     }
                 }
                 else

@@ -250,8 +250,9 @@ var $page = function () {
             var args = event.args;
             // row data.
             var row = args.row;
+            var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" :  row.PaymentVoucherVguid;
             // row index.
-            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + row.PaymentVoucherVguid;
+            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
         });
     }
 

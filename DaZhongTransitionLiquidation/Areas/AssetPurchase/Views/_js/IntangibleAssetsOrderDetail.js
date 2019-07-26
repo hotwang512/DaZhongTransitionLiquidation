@@ -18,9 +18,18 @@ var $page = function () {
     //所有事件
     function addEvent() {
         var guid = $.request.queryString().VGUID;
+        var paymentVoucherVguid = $.request.queryString().PaymentVoucherVguid;
         debugger;
         if (guid != "" && guid != null) {
             $("#VGUID").val(guid);
+            if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
+                debugger;
+                $("#btnPrint").parent().show();
+                $("#tdPrint").show();
+            } else {
+                $("#btnPrint").parent().hide();
+                $("#tdPrint").hide();
+            }
             $("#btnSave").parent().hide();
             getIntangibleAssetsOrderDetail();
             getAttachment();

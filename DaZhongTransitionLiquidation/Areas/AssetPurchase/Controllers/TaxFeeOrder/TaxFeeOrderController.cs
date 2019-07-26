@@ -172,7 +172,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                         pendingPaymentmodel.Summary = "合并支付:";
                         foreach (var item in orderList)
                         {
-                            pendingPaymentmodel.Summary += item + "|";
+                            pendingPaymentmodel.Summary += item.PurchaseDescription + "|";
                         }
                     }
                     else

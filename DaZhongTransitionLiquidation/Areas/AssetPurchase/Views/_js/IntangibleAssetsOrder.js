@@ -159,6 +159,7 @@ var $page = function () {
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
                     { name: 'OSNO', type: 'string' },
+                    { name: 'PaymentVoucherVguid', type: 'string' },
                     { name: 'SubmitStatus', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
@@ -214,7 +215,8 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/AssetPurchase/IntangibleAssetsOrderDetail/Index?VGUID=" + row.VGUID;
+            var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" : row.PaymentVoucherVguid;
+            window.location.href = "/AssetPurchase/IntangibleAssetsOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
         });
     }
 

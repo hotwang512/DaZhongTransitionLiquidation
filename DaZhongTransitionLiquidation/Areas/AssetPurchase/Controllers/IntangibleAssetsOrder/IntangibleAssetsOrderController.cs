@@ -141,7 +141,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
                         pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
-                        pendingPaymentmodel.Amount = model.SumPayment.ToString();
+                        //pendingPaymentmodel.Amount = model.SumPayment.ToString();
                         pendingPaymentmodel.Summary = model.AssetDescription;
 
                         var apiReault = PendingPaymentApi(pendingPaymentmodel);
@@ -152,7 +152,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                                 .Where(x => x.VGUID == model.VGUID).First();
                             orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                             orderModel.PaymentVoucherUrl = pendingRedult.data.url;
-                            db.Updateable<Business_IntangibleAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
+                            orderModel.SubmitStatus = model.SubmitStatus;
+                            db.Updateable<Business_IntangibleAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid,x.SubmitStatus }).ExecuteCommand();
                             resultModel.ResultInfo = pendingRedult.data.url;
                             resultModel.IsSuccess = true;
                             resultModel.Status = "1";

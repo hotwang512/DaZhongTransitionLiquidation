@@ -271,7 +271,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             if (listAssetInfo.Union(listExcel).ToList().Count < listAssetInfo.Count + listExcel.Count)
                             {
                                 consistent = false;
-                                resultModel.ResultInfo += "导入的数据系统中已存在 ";
+                                resultModel.ResultInfo += "导入的车架号和发动机号已存在 ";
                                 return;
                             }
                             if (consistent)
@@ -315,6 +315,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         //采购数量
                                         var orderNum = sevenSectionList.Where(x => x.VehicleModel == vehicleModel.VehicleModel).Sum(x => x.AssetNum);
                                         //出库费
+                                        var maxOrderNumRight = 0;
+                                        var orderNumberLeft = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+                                        //查出当前日期数据库中最大的订单号
+                                        var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
+                                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                                        var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
+                                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
+                                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
+                                        if (currentDayList.Any())
+                                        {
+                                            maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
+                                        }
                                         foreach (var itemFee in feeList)
                                         {
                                             var feeOrder = new Business_TaxFeeOrder();
@@ -327,23 +341,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                             feeOrder.UnitPrice = itemFee.Fee;
                                             feeOrder.SumPayment = orderNum * itemFee.Fee;
                                             feeOrder.SubmitStatus = 0;
+                                            feeOrder.PayType = "转账";
                                             feeOrder.VGUID = Guid.NewGuid();
                                             feeOrder.CreateDate = DateTime.Now;
                                             feeOrder.CreateUser = "System";
-                                            var orderNumberLeft = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                            //查出当前日期数据库中最大的订单号
-                                            var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
-                                                .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                            var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
-                                                .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                            var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
-                                                .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                            var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
-                                            var maxOrderNumRight = 0;
-                                            if (currentDayList.Any())
-                                            {
-                                                maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
-                                            }
                                             maxOrderNumRight = maxOrderNumRight + 1;
                                             feeOrder.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
                                             var purchaseOrderNum = new Business_PurchaseOrderNum();
@@ -452,13 +453,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         assetReview.YTD_DEPRECIATION = 0;
                                         assetReview.ACCT_DEPRECIATION = 0;
                                         assetReview.FIXED_ASSETS_ORDERID = vguid;
-                                        //总账帐簿
-                                        if (!assetReview.BELONGTO_COMPANY_CODE.IsNullOrEmpty())
-                                        {
-                                            var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                                                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == assetReview.BELONGTO_COMPANY_CODE).First();
-                                            assetReview.EXP_ACCOUNT_SEGMENT = ssModel.Descrption;
-                                        }
                                         assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
                                         assetReview.CREATE_DATE = DateTime.Now;
                                         assetReviewList.Add(assetReview);

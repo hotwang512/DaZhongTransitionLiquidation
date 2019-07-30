@@ -48,7 +48,7 @@ var $page = function () {
                         success: function (msg) {
                             switch (msg.Status) {
                                 case "0":
-                                    jqxNotification("保存失败！", null, "error");
+                                    jqxNotification(msg.ResultInfo, null, "error");
                                     break;
                                 case "1":
                                     jqxNotification("保存成功！", null, "success");

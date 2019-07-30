@@ -695,17 +695,21 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPurchaseOrderNumDetail(string PayItemCode)
+        public JsonResult GetPurchaseOrderNumDetail(string PayItemCode,Guid TaxFeeOrderVguid)
         {
             var list = new List<PurchaseOrderSelectNum>();
             DbBusinessDataService.Command(db =>
             {
+                var FaxOrderVguid = db.Queryable<Business_TaxFeeOrder>().Where(x => x.VGUID == TaxFeeOrderVguid).First().VGUID;
+                var FixedAssetsOrderVguid = db.Queryable<Business_PurchaseOrderNum>()
+                    .Where(x => x.FaxOrderVguid == FaxOrderVguid).First().FixedAssetOrderVguid;
+                    
                 var submitedList = db.Queryable<Business_FixedAssetsOrder>().Where(x =>
                     x.SubmitStatus == FixedAssetsSubmitStatusEnum.Submited.TryToInt()).ToList();
                 if (submitedList.Count > 0)
                 {
                     var sql =
-                        @"SELECT fao.VGUID AS FixedAssetsOrderVguid,fao.OrderQuantity,fao.OrderNumber, pon.PayItemCode,CASE	WHEN pon.PayItemCode IS NULL THEN 1 ELSE 0 END AS IsChecked FROM (SELECT * FROM dbo.Business_FixedAssetsOrder WHERE SubmitStatus = 2 ) fao LEFT JOIN (SELECT * FROM Business_PurchaseOrderNum WHERE PayItemCode = '" +
+                        @"SELECT fao.VGUID AS FixedAssetsOrderVguid,fao.OrderQuantity,fao.OrderNumber, pon.PayItemCode,CASE	WHEN pon.PayItemCode IS NULL THEN 1 ELSE 0 END AS IsChecked FROM (SELECT * FROM dbo.Business_FixedAssetsOrder where vguid = '"+ FixedAssetsOrderVguid  +"' ) fao LEFT JOIN (SELECT * FROM Business_PurchaseOrderNum WHERE PayItemCode = '" +
                         PayItemCode + "') AS  pon ON fao.VGUID = pon.FixedAssetOrderVguid";
                     list = db.SqlQueryable<PurchaseOrderSelectNum>(sql).Where(x => x.PayItemCode != null).ToList();
                 }

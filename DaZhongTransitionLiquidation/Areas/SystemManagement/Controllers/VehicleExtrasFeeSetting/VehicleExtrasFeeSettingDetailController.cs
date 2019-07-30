@@ -31,7 +31,10 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var result = db.Ado.UseTran(() =>
+                //同车型，业务项目启用必须唯一
+                var isAny = db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Status == 1 &&
+                    x.VehicleModelCode == saveModel.VehicleModelCode && x.BusinessSubItem == saveModel.BusinessSubItem && saveModel.Status == 1 && x.VGUID != saveModel.VGUID);
+                if (!isAny)
                 {
                     if (saveModel.VGUID == Guid.Empty)
                     {
@@ -47,10 +50,15 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
                         db.Updateable<Business_VehicleExtrasFeeSetting>(saveModel)
                             .IgnoreColumns(x => new { x.CreateDate, x.CreateUser }).ExecuteCommand();
                     }
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
-                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                    resultModel.IsSuccess = true;
+                    resultModel.ResultInfo = "保存成功";
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                else
+                {
+                    resultModel.ResultInfo = "同车型，业务项目启用必须唯一";
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
             });
             return Json(resultModel);
         }
@@ -62,6 +70,11 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             {
                 list = BusinessProject != "" ? db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet WHERE  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101' and BusinessProject LIKE '%" + BusinessProject + "%'").ToList()
                     : db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet Where  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101'").ToList();
+                foreach (var item in list)
+                {
+                    item.BusinessProject = item.BusinessProject.Substring(item.BusinessProject.LastIndexOf("|") + 1,
+                        item.BusinessProject.Length - item.BusinessProject.LastIndexOf("|") - 1);
+                }
             });
 
             return Json(list, JsonRequestBehavior.AllowGet);

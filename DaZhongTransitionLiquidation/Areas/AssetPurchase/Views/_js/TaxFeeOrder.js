@@ -11,6 +11,7 @@ var vguid = "";
 var $page = function () {
     this.init = function () {
         initSelectVehicleModel();
+        initSelectPayItem();
         addEvent();
     }
     //所有事件
@@ -24,7 +25,9 @@ var $page = function () {
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#PurchaseGoods").val("");
-            $("#SubmitStatus").val("");
+            $("#OSNO").val("");
+            $("#SubmitStatus").val("-1");
+            $("#PayItem").val("-1");
         });
         //新增
         $("#btnAdd").on("click", function () {
@@ -78,7 +81,7 @@ var $page = function () {
                     success: function (msg) {
                         switch (msg.Status) {
                         case "0":
-                            jqxNotification("您选择的数据不可以合并支付！", null, "error");
+                            jqxNotification(msg.ResultInfo, null, "error");
                             break;
                         case "1":
                             SubmitTaxFeeOrder(selection);
@@ -104,6 +107,9 @@ var $page = function () {
                     document.getElementById('ifrPrint').src = msg.ResultInfo;
                     $("#CreditDialog").modal("show");
                     $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+                case "2":
+                    jqxNotification(msg.ResultInfo, null, "error");
                     break;
                 }
             }
@@ -187,6 +193,7 @@ var $page = function () {
                     { name: 'ContractFilePath', type: 'string' },
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
+                    { name: 'OSNO', type: 'string' },
                     { name: 'SubmitStatus', type: 'number' },
                     { name: 'PaymentVoucherVguid', type: 'string' },
                     { name: 'CreateDate', type: 'date' },
@@ -196,7 +203,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "VehicleModelCode": $("#VehicleModel").val(), "SubmitStatus": $("#SubmitStatus").val() },
+                data: { "VehicleModelCode": $("#VehicleModel").val(), "SubmitStatus": $("#SubmitStatus").val(), "OSNO": $("#OSNO").val(), "PayItemCode": $("#PayItem").val() },
                 url: "/AssetPurchase/TaxFeeOrder/GetOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -220,6 +227,7 @@ var $page = function () {
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: '车辆附属采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '订单编号', datafield: 'OSNO', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款项目', datafield: 'PayItem', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '车型', datafield: 'VehicleModel', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
@@ -242,8 +250,9 @@ var $page = function () {
             var args = event.args;
             // row data.
             var row = args.row;
+            var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" :  row.PaymentVoucherVguid;
             // row index.
-            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + row.PaymentVoucherVguid;
+            window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
         });
     }
 
@@ -284,7 +293,18 @@ var $page = function () {
         return true;
     }
 };
-
+function initSelectPayItem() {
+    $.ajax({
+        url: "/AssetPurchase/TaxFeeOrderDetail/GetPayItem",
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#PayItem', msg, "BusinessSubItem1", "BusinessProject");
+            $("#PayItem").prepend("<option value=\"-1\" selected='true'>请选择</>");
+        }
+    });
+}
 $(function () {
     var page = new $page();
     page.init();

@@ -45,7 +45,7 @@
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
     </div>
     <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+        <table style="margin-top: 20px; width: 1050px; margin-left: 20px;">
             <tr style="height: 45px;">
                 <td class="td_span">采购物品：</td>
                 <td class="td_input">
@@ -54,13 +54,19 @@
                 <td class="td_span">支付状态：</td>
                 <td class="td_input">
                     <select id="SubmitStatus" class="input_text form-control" style="width: 200px">
-                        <option value="-1" selected="true">全部</option>
+                        <option value="-1" selected>全部</option>
                         <option value="0">首付款待发起支付</option>
                         <option value="1">首付款支付中</option>
-                        <option value="2">尾款待发起支付</option>
-                        <option value="3">尾款支付中</option>
-                        <option value="4">已支付</option>
+                        <option value="2">中期款待发起支付</option>
+                        <option value="3">中期款支付中</option>
+                        <option value="4">尾款待发起支付</option>
+                        <option value="5">尾款支付中</option>
+                        <option value="6">已支付</option>
                     </select>
+                </td>
+                <td class="td_span">订单编号：</td>
+                <td class="td_input">
+                    <select id="OSNO" class="input_text form-control" style="width: 200px"></select>
                 </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
@@ -69,7 +75,6 @@
                     <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
                 </td>
             </tr>
-            <tr>
         </table>
     </div>
 </div>

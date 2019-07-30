@@ -21,9 +21,11 @@ var $page = function () {
     function addEvent() {
         var guid = $.request.queryString().VGUID;
         var paymentVoucherVguid = $.request.queryString().PaymentVoucherVguid;
+        debugger;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
             if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
+                debugger;
                 $("#btnSave").parent().hide();
                 $("#tdPrint").show();
             }
@@ -53,6 +55,9 @@ var $page = function () {
                     for (var k = 0; k < checkedOrderNumItems.length; k++) {
                         OrderNumList.push(checkedOrderNumItems[k].value);
                     };
+                    var pvguid = $("#PaymentInformation").val();
+                    var paymentInformation = $("#PaymentInformation").jqxComboBox('getItemByValue', pvguid);
+                    debugger;
                     $.ajax({
                         url: "/AssetPurchase/TaxFeeOrderDetail/SaveTaxFeeOrder",
                         data: {
@@ -67,9 +72,9 @@ var $page = function () {
                             "UnitPrice": $("#PurchasePrices").val(),
                             "SumPayment": $("#ContractAmount").val(),
                             "PurchaseDescription": $("#AssetDescription").val(),
-                            "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
+                            "PaymentInformationVguid": $("#PaymentInformation").val(),
                             "PayCompanyVguid": $("#PayCompanyDropdown").val(),
-                            "PaymentInformation": $("#hiddenPaymentInformation").val(),
+                            "PaymentInformation": paymentInformation.label,
                             "PaymentDate": $("#PaymentDate").val(),
                             "PayCompany": $("#PayCompanyDropdown").text(),
                             "SupplierBankAccountName": $("#BankAccountName").val(),
@@ -90,11 +95,11 @@ var $page = function () {
                                     break;
                                 case "1":
                                     jqxNotification("保存成功！", null, "success");
-                                    $("#btnSave").parent().hide();
-                                    $("#tdPrint").show();
-                                    $("#btnPrint").trigger("click");
-                                    //history.go(-1);
-                                    //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                                    //$("#btnSave").parent().hide();
+                                    //$("#tdPrint").show();
+                                    //$("#btnPrint").trigger("click");
+                                    history.go(-1);
+                                    window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                     break;
                             }
                         }
@@ -291,12 +296,12 @@ var $page = function () {
                 { name: 'OrderDesc' },
                 { name: 'FixedAssetsOrderVguid' }
             ],
-            data: { PayItemCode: $("#PayItem").val() },
+            data: { PayItemCode: $("#PayItem").val(), TaxFeeOrderVguid: $("#VGUID").val() },
             url: "/AssetPurchase/TaxFeeOrderDetail/GetPurchaseOrderNumDetail",
             async: false
         };
         var dataAdapter = new $.jqx.dataAdapter(source);
-        $("#OrderQuantity").jqxDropDownList({ checkboxes: true, selectedIndex: 0, placeHolder: "请选择", source: dataAdapter, displayMember: "OrderDesc", valueMember: "FixedAssetsOrderVguid", width: 192, height: 33 });
+        $("#OrderQuantity").jqxDropDownList({ checkboxes: true, selectedIndex: 0, disabled: true, placeHolder: "请选择", source: dataAdapter, displayMember: "OrderDesc", valueMember: "FixedAssetsOrderVguid", width: 192, height: 33 });
         $("#OrderQuantity").jqxDropDownList({ itemHeight: 33 });
         $("#OrderQuantity").jqxDropDownList('checkAll');
     }

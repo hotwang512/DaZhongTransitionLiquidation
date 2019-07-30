@@ -50,10 +50,14 @@ var $page = function () {
                             initTable();
                             break;
                         case "2":
-                            jqxNotification(msg.ResultInfo, null, "success");
+                            jqxNotification(msg.ResultInfo, null, "error");
                             $("#myModalLabel_title2").html(msg.ResultInfo);
                             ViewReview(msg.ResultInfo2);
                             $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        case "3":
+                            jqxNotification(msg.ResultInfo, null, "error");
+                            $("#myModalLabel_title2").html(msg.ResultInfo);
                             break;
                         }
                     }
@@ -166,6 +170,7 @@ var $page = function () {
                     { name: 'EXP_ACCOUNT_SEGMENT', type: 'string' },
                     { name: 'MODEL_MAJOR', type: 'string' },
                     { name: 'MODEL_MINOR', type: 'string' },
+                    { name: 'START_VEHICLE_DATE', type: 'string' },
                     { name: 'CREATE_DATE', type: 'date' },
                     { name: 'CHANGE_DATE', type: 'date' },
                     { name: 'CREATE_USER', type: 'string' },
@@ -195,11 +200,11 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, hidden:true,align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: 'GroupID', datafield: 'GROUP_ID', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: 'GroupID', datafield: 'GROUP_ID', width: 100, hidden: true, align: 'center', cellsAlign: 'center' },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车辆简称', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '组织编号', datafield: 'ORGANIZATION_NUM', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '组织编号', datafield: 'ORGANIZATION_NUM', hidden: true, width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: 'Oracle资产编号', datafield: 'ASSET_ID', width: 100, align: 'center', cellsAlign: 'center' },

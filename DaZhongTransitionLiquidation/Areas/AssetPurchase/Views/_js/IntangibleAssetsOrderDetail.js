@@ -18,9 +18,18 @@ var $page = function () {
     //所有事件
     function addEvent() {
         var guid = $.request.queryString().VGUID;
+        var paymentVoucherVguid = $.request.queryString().PaymentVoucherVguid;
         debugger;
         if (guid != "" && guid != null) {
             $("#VGUID").val(guid);
+            if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
+                debugger;
+                $("#btnPrint").parent().show();
+                $("#tdPrint").show();
+            } else {
+                $("#btnPrint").parent().hide();
+                $("#tdPrint").hide();
+            }
             $("#btnSave").parent().hide();
             getIntangibleAssetsOrderDetail();
             getAttachment();
@@ -204,6 +213,11 @@ var $page = function () {
         );
         //计算金额
         $("#FirstPayment").on("blur",
+            function () {
+                debugger;
+                computeValue();
+            });
+        $("#InterimPayment").on("blur",
             function () {
                 debugger;
                 computeValue();
@@ -428,9 +442,11 @@ var $page = function () {
     }
 };
 function computeValue() {
-    if ($("#SumPayment").val() != "" && $("#FirstPayment").val() != "") {
-        var value = $("#SumPayment").val() - $("#FirstPayment").val();
+    if ($("#SumPayment").val() != "" && $("#FirstPayment").val() != "" && $("#InterimPayment").val() != "") {
+        var value = $("#SumPayment").val() - $("#FirstPayment").val() - $("#InterimPayment").val();
         $("#TailPayment").val(value);
+    } else if ($("#SumPayment").val() != "" && $("#FirstPayment").val()) {
+        $("#TailPayment").val($("#SumPayment").val() - $("#FirstPayment").val());
     }
 }
 function PendingPaymentAttachmentUpload() {

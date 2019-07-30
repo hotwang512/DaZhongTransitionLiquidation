@@ -46,6 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 jsonResult.Rows = db.Queryable<Business_FixedAssetsOrder>()
                     .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
+                    .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -122,7 +123,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             pendingPaymentmodel.Amount = model.ContractAmount.ToString();
                             pendingPaymentmodel.Summary = model.AssetDescription;
                             pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
-
                             var apiReault = PendingPaymentApi(pendingPaymentmodel);
                             var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
                             if (pendingRedult.success)
@@ -132,7 +132,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                                 orderModel.PaymentVoucherUrl = pendingRedult.data.url;
                                 db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
-                                model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
+                                model.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
                                 model.SubmitDate = DateTime.Now;
                                 model.SubmitUser = cache[PubGet.GetUserKey].UserName;
                                 db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
@@ -150,16 +150,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 purchaseAssignmodel.AssetDescription = model.AssetDescription;
                                 db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
                                 resultModel.ResultInfo = pendingRedult.data.url;
+                                resultModel.IsSuccess = true;
+                                resultModel.Status = "1";
                             }
                             else
                             {
                                 LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
                             }
                         }
+                        else
+                        {
+                            resultModel.ResultInfo = "该状态下不允许发起支付";
+                            resultModel.IsSuccess = false;
+                            resultModel.Status = "2";
+                        }
                     }
                 });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
         }

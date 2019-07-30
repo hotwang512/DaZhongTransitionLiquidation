@@ -643,11 +643,11 @@
                                 </div>
                                 <div class="menue_body" id="SettlementStandards" style="display: none;">
                                     <table>
-                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算标准导入" && i.Reads == 1))
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算项目标准" && i.Reads == 1))
                                         {
                                             <tr class="menue_item" id="SettlementImport_SettlementStandards" pageurl="/VoucherManageManagement/SettlementImport/Index">
                                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                                <td class="menue_text">结算标准导入</td>
+                                                <td class="menue_text">结算项目标准</td>
                                                 <td></td>
                                             </tr>
                                         }
@@ -678,6 +678,16 @@
                                             <tr class="menue_item" id="VehicleBusiness_SettlementStandards" pageurl="/VoucherManageManagement/VehicleBusiness/Index">
                                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                                 <td class="menue_text">车辆经营模式天数</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </table>
+                                    <table>
+                                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算项目汇总" && i.Reads == 1))
+                                        {
+                                            <tr class="menue_item" id="SettlementCount_SettlementStandards" pageurl="/VoucherManageManagement/SettlementCount/Index">
+                                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                                <td class="menue_text">结算项目汇总</td>
                                                 <td></td>
                                             </tr>
                                         }

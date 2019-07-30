@@ -42,5 +42,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public Guid? PaymentVoucherVguid { set; get; }
         public string PaymentVoucherUrl { set; get; }
         public string OSNO { get; set; }
+        public string BankStatus { get; set; }
     }
 }

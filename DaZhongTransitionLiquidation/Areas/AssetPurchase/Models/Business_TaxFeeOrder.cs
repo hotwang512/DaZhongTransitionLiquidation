@@ -244,6 +244,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         /// </summary>           
         public string PaymentVoucherUrl { get; set; }
         public string OSNO { get; set; }
+        public string BankStatus { get; set; }
     }
 
     public class SaveBusiness_TaxFeeOrderModel: Business_TaxFeeOrder

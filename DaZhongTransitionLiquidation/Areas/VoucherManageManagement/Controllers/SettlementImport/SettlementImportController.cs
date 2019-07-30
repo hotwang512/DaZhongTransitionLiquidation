@@ -60,7 +60,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var businessList = new List<string>();//暂时不用
                     var businessTypeList = new List<string>();//营业收入类型(父类,子类合并)
                     var moneyList = new List<decimal>();//金额
-                    var moneyIndex = new List<int>(); ;
+                    var moneyRow = new List<int>();//金额行
+                    var moneyColumns = new List<int>();//金额列
+                    var moneyIndex = new List<int>();
                     var modelIndexList = new List<int>();//模式合并单元格数
                     var result = new List<string>();
                     var settlementData = db.Queryable<Business_SettlementSubject>().ToList();
@@ -69,7 +71,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     //构造所需数据(营业收入类型--父类,子类合并)
                     GetSettlementBusinessType(worksheet, moneyIndex, businessTypeList);
                     //构造所需数据(金额--单独处理)
-                    GetSettlementMoney(worksheet,moneyIndex, moneyList, businessTypeList);
+                    GetSettlementMoney(worksheet,moneyIndex, moneyList, businessTypeList, moneyRow, moneyColumns);
                     //整理数据成表,构造新的数组
                     GetDescartesData(modelList, carList, result, modelIndexList, classList, businessTypeList);
                     //构造实体类,插入表中
@@ -112,6 +114,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         settlement.BusinessType = resultList[3];
                         settlement.Business = businessVguid;
                         settlement.Money = moneyList[i];
+                        settlement.MoneyRow = moneyRow[i];
+                        settlement.MoneyColumns = moneyColumns[i];
                         settlement.Founder = UserInfo.LoginName;
                         settlement.CreatTime = DateTime.Now;
                         settlementList.Add(settlement);
@@ -222,7 +226,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 
             }
         }
-        private void GetSettlementMoney(Worksheet worksheet, List<int> moneyIndex, List<decimal> moneyList, List<string> businessTypeList)
+        private void GetSettlementMoney(Worksheet worksheet, List<int> moneyIndex, List<decimal> moneyList, List<string> businessTypeList, List<int> moneyRow, List<int> moneyColumns)
         {
             decimal money = 0;
             for (int j = 2; j < worksheet.Cells.Columns.Count; j++)
@@ -245,6 +249,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             money = Convert.ToDecimal(value);
                         }
                         moneyList.Add(money);
+                        moneyRow.Add(i);
+                        moneyColumns.Add(j);
                     }
                 }
             }

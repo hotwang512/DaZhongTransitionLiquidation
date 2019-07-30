@@ -5,8 +5,10 @@ using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VehicleBusiness;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Models;
 using SqlSugar;
 using SyntacticSugar;
@@ -52,7 +54,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 success = WirterSyncBankFlow(bankFlowList);
                             }
                         }
-                    }    
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -126,8 +128,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                             //按交易日期排序取最小值
                             bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
                             success = WirterSyncBankFlow(bankFlowList);
+                            //同步银行流水到银行数据表
+                            BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                         }
-                    }    
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -135,6 +139,38 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 double timeSpan = ConfigSugar.GetAppString("TimeSpan").TryToInt();
                 Thread.Sleep((int)(timeSpan * 1000 * 60 * 60));
+            }
+        }
+        public static void AutoVehicleSeavice()
+        {
+            Thread LogThread = new Thread(new ThreadStart(DoVehicleBusiness));
+            //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+            LogThread.IsBackground = true;
+            LogThread.Start();//起线程  
+        }
+        public static void DoVehicleBusiness()
+        {
+            while (true)
+            {
+                var success = 0;
+                try
+                {
+                    using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
+                    {
+                        var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "0" };
+                        var beginTime = DateTime.Now.AddDays(1 - DateTime.Now.Day).ToLongDateString();
+                        var nowDate = DateTime.Now.ToLongDateString();
+                        if (nowDate == beginTime)
+                        {
+                            VehicleBusinessController.SyncVehicleBusiness(_db, resultModel, "admin");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
+                }
+                Thread.Sleep((int)(24 * 1000 * 60 * 60));//一天查一次
             }
         }
         private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData)
@@ -173,12 +209,12 @@ namespace DaZhongTransitionLiquidation.Controllers
         {
             int success = 0;
             using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
-            { 
+            {
                 List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
                 foreach (var item in bankFlowList)
                 {
                     var companyBankData = new Business_CompanyBankInfo();
-                    if(item.TradingBank == "上海银行")
+                    if (item.TradingBank == "上海银行")
                     {
                         companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
                     }
@@ -186,7 +222,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == item.BankAccount);
                     }
-                    if(companyBankData == null)
+                    if (companyBankData == null)
                     {
                         continue;
                     }
@@ -213,7 +249,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     //根据流水自动生成凭证
                     BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
                 }
-            }    
+            }
             BankDataPack.SyncBackFlowAndReconciliation();
             return success;
         }
@@ -244,7 +280,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                             }
                         }
                         //返回changeOrderList
-                    } 
+                    }
                 }
                 double timeSpan = ConfigSugar.GetAppString("TimeSpanMin").TryToInt();
                 Thread.Sleep((int)(timeSpan * 1000 * 60));
@@ -283,8 +319,17 @@ namespace DaZhongTransitionLiquidation.Controllers
                         if (isAny1)
                         {
                             var assets1 = data1.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
-                            var status = assets1.SubmitStatus + 1;
-                            assets1.SubmitStatus = status;
+                            if (modelData.data.RECO == "0000")
+                            {
+                                //订单支付成功
+                                assets1.SubmitStatus = 2;
+                            }
+                            else if (modelData.data.RECO == "0003" || modelData.data.RECO == "0005")
+                            {
+                                //订单支付失败
+                                assets1.SubmitStatus = 3;
+                            }
+                            assets1.BankStatus = modelData.data.REMG;
                             assets1.OSNO = item.OSNO;
                             db.Updateable(assets1).Where(it => it.VGUID == assets1.VGUID).ExecuteCommand();
                         }
@@ -292,8 +337,23 @@ namespace DaZhongTransitionLiquidation.Controllers
                         if (isAny2)
                         {
                             var assets2 = data2.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
-                            var status = assets2.SubmitStatus + 1;
-                            assets2.SubmitStatus = status;
+                            //var status = assets2.SubmitStatus + 1;
+                            //if (assets2.InterimPayment == null)
+                            //{
+                            //    //没有中间价
+                            //    status = assets2.SubmitStatus + 3;
+                            //}
+                            if (modelData.data.RECO == "0000")
+                            {
+                                //订单支付成功
+                                assets2.SubmitStatus = 2;
+                            }
+                            else if (modelData.data.RECO == "0003" || modelData.data.RECO == "0005")
+                            {
+                                //订单支付失败
+                                assets2.SubmitStatus = 3;
+                            }
+                            assets2.BankStatus = modelData.data.REMG;
                             assets2.OSNO = item.OSNO;
                             db.Updateable(assets2).Where(it => it.VGUID == assets2.VGUID).ExecuteCommand();
                         }
@@ -301,8 +361,17 @@ namespace DaZhongTransitionLiquidation.Controllers
                         if (isAny3)
                         {
                             var assets3 = data3.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
-                            var status = assets3.SubmitStatus + 1;
-                            assets3.SubmitStatus = status;
+                            if (modelData.data.RECO == "0000")
+                            {
+                                //订单支付成功
+                                assets3.SubmitStatus = 2;
+                            }
+                            else if (modelData.data.RECO == "0003" || modelData.data.RECO == "0005")
+                            {
+                                //订单支付失败
+                                assets3.SubmitStatus = 3;
+                            }
+                            assets3.BankStatus = modelData.data.REMG;
                             assets3.OSNO = item.OSNO;
                             db.Updateable(assets3).Where(it => it.VGUID == assets3.VGUID).ExecuteCommand();
                         }

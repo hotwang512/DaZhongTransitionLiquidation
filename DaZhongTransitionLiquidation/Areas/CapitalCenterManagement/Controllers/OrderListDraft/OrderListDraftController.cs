@@ -88,7 +88,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     Regex rgx = new Regex(@"[\w|\W]{2,4}银行");
                     var rgsOrderBankName = rgx.Match(orderInfo.OrderBankName).Value;
                     var rgsCollectBankName = rgx.Match(orderInfo.CollectBankName).Value;
-                    var collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
+                    var collectBankAccountName = "";
+                    var isAnyBank = db.Queryable<Business_CustomerBankInfo>().Any(x => x.BankAccountName == orderInfo.CollectBankAccountName);
+                    if (isAnyBank)
+                    {
+                        collectBankAccountName = orderInfo.CollectBankAccountName;
+                    }
+                    else
+                    {
+                        collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
+                    }
                     if (rgsOrderBankName == rgsCollectBankName)
                     {
                         #region 同行

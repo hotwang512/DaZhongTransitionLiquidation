@@ -168,7 +168,7 @@ var $page = function () {
                     { name: 'PurchasePrices', type: 'float' },
                     { name: 'ContractAmount', type: 'float' },
                     { name: 'AssetDescription', type: 'string' },
-                    { name: 'AssetDescription', type: 'string' },
+                    { name: 'BankStatus', type: 'string' },
                     { name: 'AcceptanceDate', type: 'date' },
                     { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
@@ -239,11 +239,13 @@ var $page = function () {
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value == 2) {
-            return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">支付成功</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">待发起支付</span>';
         } else if (value == 1) {
             return '<span style="margin: 4px; margin-top:8px;">支付中</span>';
+        } else if (value == 3) {
+            return '<span style="margin: 4px; margin-top:8px;">支付失败-' + rowData.BankStatus + '</span>';
         }
     }
     function rendererFunc() {

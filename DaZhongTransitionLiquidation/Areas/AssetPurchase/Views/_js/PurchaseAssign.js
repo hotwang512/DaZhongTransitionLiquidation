@@ -199,24 +199,16 @@ var $page = function () {
                     '</div>';
             }
         } else {
-            if (rowData.PurchaseGoods == "出租车") {
-                return '<div style="margin: 8px; margin-top:6px;">' +
-                    '<a style="cursor:pointer"  onclick="Import(\'' +
-                    FixedAssetsOrderVguid +
-                    '\')" id="' +
-                    FixedAssetsOrderVguid +
-                    '">导入清册</a>' +
-                    '</div>';
-            } else {
+            if (rowData.PurchaseGoods != "出租车") {
                 return '<div style="margin-top:6px;">' +
                     '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
                     FixedAssetsOrderVguid +
                     '\')">查看</a>' +
                     '</div>';
+            } else {
+                return '';
             }
-
         }
-        
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value === 1) {

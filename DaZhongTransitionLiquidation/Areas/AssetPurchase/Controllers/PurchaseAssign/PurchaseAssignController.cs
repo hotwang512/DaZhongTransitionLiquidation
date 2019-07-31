@@ -38,7 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.SqlQueryable<Business_PurchaseAssign>("SELECT pa.* FROM Business_PurchaseAssign pa LEFT JOIN Business_FixedAssetsOrder fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
+                jsonResult.Rows = db.SqlQueryable<Business_PurchaseAssign>("SELECT pa.* FROM Business_PurchaseAssign pa INNER JOIN (select * from Business_FixedAssetsOrder where SubmitStatus = 2) fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
                     .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -269,6 +269,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             var listExcel = list.Select(x => new
                                 { EngineNumber_ChassisNumber = x.EngineNumber+ x.ChassisNumber}).ToList();
                             if (listAssetInfo.Union(listExcel).ToList().Count < listAssetInfo.Count + listExcel.Count)
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo += "导入的车架号和发动机号已存在 ";
+                                return;
+                            }
+                            //判断已导入未审核的车架号发动机号，没有才可以导入
+                            var listReviewInfo = db.Queryable<Business_AssetReview>()
+                                .Select(x => new { EngineNumber_ChassisNumber = x.ENGINE_NUMBER + x.CHASSIS_NUMBER }).ToList();
+                            if (listReviewInfo.Union(listExcel).ToList().Count < listReviewInfo.Count + listExcel.Count)
                             {
                                 consistent = false;
                                 resultModel.ResultInfo += "导入的车架号和发动机号已存在 ";

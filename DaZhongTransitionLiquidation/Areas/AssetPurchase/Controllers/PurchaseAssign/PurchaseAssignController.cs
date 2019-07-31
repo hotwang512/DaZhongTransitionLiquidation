@@ -240,7 +240,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 SubmitStatus = tfo.SubmitStatus
                             }).ToList();
                                 taxFeeOrderList = taxFeeOrderList.Where(x => x.FixedAssetOrderVguid == vguid).ToList();
-                            if (fixedAssetsOrder.SubmitStatus >= 2 || taxFeeOrderList.Any(x => x.SubmitStatus >= 2))
+                            if (taxFeeOrderList.Any(x => x.SubmitStatus >= 2))
                             {
                                 consistent = false;
                                 resultModel.ResultInfo = "已经有数据支付，不能重新导入 ";

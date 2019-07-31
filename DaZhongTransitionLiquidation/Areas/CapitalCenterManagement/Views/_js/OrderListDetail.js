@@ -750,7 +750,7 @@ function getCompanyCode() {
         }
     });
     companyCode = $("#CompanyCode").val();
-    //initTable(companyCode, accountMode);
+    initTable(companyCode, accountMode);
     getPayBankInfo(companyCode, accountMode, '', '', '','');
 }
 

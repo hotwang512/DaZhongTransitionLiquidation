@@ -10,10 +10,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using Business_AssetOrderDetails = DaZhongTransitionLiquidation.Areas.AssetPurchase.Models.Business_AssetOrderDetails;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseAssign
@@ -203,6 +205,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
         {
             var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
+            var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
             if (File != null)
             {
                 var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
@@ -338,6 +341,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         {
                                             maxOrderNumRight = currentDayList.OrderBy(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
                                         }
+                                        //供应商信息
+                                        var bankInfoList = db.SqlQueryable<v_Business_CustomerBankInfo>(
+                                                @"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
+                                                left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
+                                                left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isable = '1'")
+                                            .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                                        //付款信息
+                                        var companylist = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.AccountModeCode == AccountModeCode && x.Isable)
+                                            .OrderBy(i => i.CompanyCode).ToList();
                                         foreach (var itemFee in feeList)
                                         {
                                             var feeOrder = new Business_TaxFeeOrder();
@@ -365,6 +377,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                             purchaseOrderNum.FixedAssetOrderVguid = vguid;
                                             purchaseOrderNum.CreateDate = DateTime.Now;
                                             purchaseOrderNum.CreateUser = "System";
+                                            //根据付款项目填充供应商信息和付款信息
+                                            var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == itemFee.BusinessSubItem).First().VGUID.ToString();
+                                            if (bankInfoList.Any(x => x.OrderVGUID == OrderVguid) && bankInfoList.Count(x => x.OrderVGUID == OrderVguid) == 1)
+                                            {
+                                                var bankInfo = bankInfoList.First(x => x.OrderVGUID == OrderVguid);
+                                                feeOrder.PaymentInformationVguid = bankInfo.VGUID;
+                                                feeOrder.PaymentInformation = bankInfo.BankAccountName;
+                                                feeOrder.SupplierBankAccountName = bankInfo.BankAccountName;
+                                                feeOrder.SupplierBankAccount = bankInfo.BankAccount;
+                                                feeOrder.SupplierBankNo = bankInfo.BankNo;
+                                            }
+                                            if (companylist.Any(x => x.OrderVGUID == OrderVguid) && companylist.Count(x => x.OrderVGUID == OrderVguid) == 1)
+                                            {
+                                                var companyInfo = companylist.First(x => x.OrderVGUID == OrderVguid);
+                                                feeOrder.PayCompanyVguid = companyInfo.VGUID;
+                                                feeOrder.PayCompany = companyInfo.PayBankAccountName;
+                                                feeOrder.CompanyBankName = companyInfo.PayBank;
+                                                feeOrder.CompanyBankAccountName = companyInfo.PayBankAccountName;
+                                            }
                                             db.Insertable<Business_TaxFeeOrder>(feeOrder).ExecuteCommand();
                                             db.Insertable<Business_PurchaseOrderNum>(purchaseOrderNum).ExecuteCommand();
                                         }

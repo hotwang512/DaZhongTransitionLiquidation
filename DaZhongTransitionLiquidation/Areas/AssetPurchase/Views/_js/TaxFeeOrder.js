@@ -35,9 +35,10 @@ var $page = function () {
         });
         //删除
         $("#btnDelete").on("click", function () {
+            debugger;
             var selection = [];
             var grid = $("#jqxTable");
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            var checedBoxs = grid.find("#tablejqxTable .jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
                 if (th.is(":checked")) {

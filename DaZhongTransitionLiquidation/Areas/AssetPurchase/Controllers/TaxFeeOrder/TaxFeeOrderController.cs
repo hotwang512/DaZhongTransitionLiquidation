@@ -84,18 +84,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                 {
                     //查看付款项目，供应商信息，付款信息是否一致
                     var feeOrderList = db.Queryable<Business_TaxFeeOrder>().Where(x => vguids.Contains(x.VGUID)).Select(x => new TaxFeeOrderCompare { PaymentInformationVguid = x.PaymentInformationVguid, PayCompanyVguid = x.PayCompanyVguid, PayItemCode = x.PayItemCode }).ToList();
-                    var count = feeOrderList.GroupBy(x => new { x.PaymentInformationVguid, x.PayItemCode, x.PayCompanyVguid }).Count();
-                    if (count == 1)
+                    if (!feeOrderList.Any(x => x.PaymentInformationVguid == null || x.PayCompanyVguid == null))
                     {
-                        resultModel.IsSuccess = true;
-                        resultModel.ResultInfo = "匹配一致";
-                        resultModel.Status = "1";
+                        var count = feeOrderList.GroupBy(x => new { x.PaymentInformationVguid, x.PayItemCode, x.PayCompanyVguid }).Count();
+                        if (count == 1)
+                        {
+                            resultModel.IsSuccess = true;
+                            resultModel.ResultInfo = "匹配一致";
+                            resultModel.Status = "1";
+                        }
+                        else
+                        {
+                            resultModel.ResultInfo = "您选择的订单不可以合并支付!";
+                        }
                     }
                     else
                     {
-                        resultModel.IsSuccess = false;
-                        resultModel.ResultInfo = "您选择的订单不可以合并支付!";
-                        resultModel.Status ="0";
+                        resultModel.ResultInfo = "您选择的订单信息不完整!";
                     }
                 });
             });

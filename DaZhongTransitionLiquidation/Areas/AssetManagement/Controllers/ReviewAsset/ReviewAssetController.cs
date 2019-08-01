@@ -32,7 +32,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetReviewAssetListDatas(string YearMonth, GridParams para)
+        public JsonResult GetReviewAssetListDatas(string YearMonth, string Company, string VehicleModel)
         {
             var jsonResult = new JsonResultModel<Business_AssetReview>();
 
@@ -41,15 +41,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var startDate = YearMonth.TryToDate();
                 var endDate = startDate.AddMonths(1);
                 int pageCount = 0;
-                para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_AssetReview>()
                     .Where(i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate && !i.ISVERIFY)
-                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    .WhereIF(!Company.IsNullOrEmpty(),i => i.BELONGTO_COMPANY == Company)
+                    .WhereIF(!VehicleModel.IsNullOrEmpty(),i => i.VEHICLE_SHORTNAME == VehicleModel)
+                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetReviewAssetByMoth(string YearMonth)
+        public JsonResult GetReviewAsset()
         {
             var resultModel = new ResultModel<string, List<AssetDifference>>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -183,45 +184,53 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SubmitReviewAsset(string YearMonth)
+
+        public JsonResult GetCompany()
+        {
+            var jsonResult = new JsonResultModel<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+                {
+                    jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x =>
+                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").ToList();
+                });
+            return Json(jsonResult.Rows, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SubmitReviewAsset(List<Guid> vguids)
         {
             var resultModel = new ResultModel<string, List<AssetDifference>>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var startDate = YearMonth.TryToDate();
-                var endDate = YearMonth.TryToDate().AddMonths(1);
                 var reviewList = db.Queryable<Business_AssetReview>()
-                    .Where(i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate && !i.ISVERIFY)
+                    .Where(i => vguids.Contains(i.VGUID) && !i.ISVERIFY)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 //先进中间表再进资产表
                 //获取订单部门
-                var fixedAssetId = reviewList.First().FIXED_ASSETS_ORDERID;
-                var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
-                var strArr = "";
-                foreach (var departmentID in departmentIDsArr)
-                {
-                    strArr = strArr + "'" + departmentID + "',";
-                }
-                strArr = strArr.Substring(0, strArr.Length - 1);
                 var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
                                                                                         FROM Business_SevenSection
                                                                                         WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
                                                                                               AND AccountModeCode = '1002'
                                                                                               AND CompanyCode = '01'
                                                                                               AND Status = '1'
-                                                                                              AND Code LIKE '10%'
-                                                                                              AND vguid IN (" + strArr + ")").ToList();
-                var departmentStr = "";
-                foreach (var ditem in departmentList)
-                {
-                    departmentStr = departmentStr + ditem.Descrption + ",";
-                }
-                departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
+                                                                                              AND Code LIKE '10%'").ToList();
                 //资产新增后写入Oracle中间表
                 var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                 foreach (var item in reviewList)
                 {
+                    var fixedAssetId = item.FIXED_ASSETS_ORDERID;
+                    var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
+                    var strList = new List<Guid>();
+                    foreach (var departmentID in departmentIDsArr)
+                    {
+                        strList.Add(departmentID.TryToGuid());
+                    }
+                    var departments = departmentList.Where(x => strList.Contains(x.VGUID));
+                    var departmentStr = "";
+                    foreach (var ditem in departments)
+                    {
+                        departmentStr = departmentStr + ditem.Descrption + ",";
+                    }
+                    departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                     var assetSwapModel = new AssetMaintenanceInfo_Swap();
                     assetSwapModel.TRANSACTION_ID = item.VGUID;
                     assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;

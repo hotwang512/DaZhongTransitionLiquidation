@@ -173,6 +173,7 @@ var $page = function () {
                     { name: 'PaymentDate', type: 'date' },
                     { name: 'ContractName', type: 'string' },
                     { name: 'ContractFilePath', type: 'string' },
+                    { name: 'PaymentVoucherVguid', type: 'string' },
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
                     { name: 'OSNO', type: 'string' },
@@ -230,7 +231,8 @@ var $page = function () {
         selector.$grid().on('rowDoubleClick', function (event) {
             var args = event.args;
             var row = args.row;
-            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID;
+            var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" : row.PaymentVoucherVguid;
+            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
         });
     }
 

@@ -312,6 +312,7 @@ var $page = function () {
                 return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
             }
         });
+        $("#PayCompanyDropdown").jqxDropDownList('selectIndex', 0);
     }
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {

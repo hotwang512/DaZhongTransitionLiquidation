@@ -18,12 +18,19 @@ var $page = function () {
     //所有事件
     function addEvent() {
         var guid = $.request.queryString().VGUID;
+        var paymentVoucherVguid = $.request.queryString().PaymentVoucherVguid;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
-            debugger;
-            $("#btnSave").parent().hide();
+            if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
+                debugger;
+                $("#btnSave").parent().hide();
+                $("#btnPrint").parent().show();
+                $("#tdPrint").show();
+            } else {
+                $("#btnPrint").parent().hide();
+                $("#tdPrint").hide();
+            }
             getFixedAssetsOrderDetail();
-            $("#tdPrint").show();
             getAttachment();
         } else {
             $("#VGUID").val(newguid());
@@ -291,7 +298,7 @@ var $page = function () {
         debugger;
         $('#PayCompanyDropdown').jqxDropDownList({
             enableSelection: true,
-            filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
+            filterable: true,  source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
                 310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
             renderer: function (index, label, value) {
                 var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
@@ -302,6 +309,7 @@ var $page = function () {
                 return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
             }
         });
+        $("#PayCompanyDropdown").jqxDropDownList('selectIndex', 0);
     }
     function checkFileExt(ext) {
         if (!ext.match(/.jpg|.png|.jpeg|.doc|.docx|.xls|.xlsx|.pdf|.bmp/i)) {

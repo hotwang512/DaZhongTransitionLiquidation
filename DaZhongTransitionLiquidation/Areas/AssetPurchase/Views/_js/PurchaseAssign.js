@@ -108,7 +108,7 @@ var $page = function () {
                             case "1":
                                 jqxNotification("导入成功！", null, "success");
                                 $('#LocalFileInput').val('');
-                                getAttachment();
+                                initTable();
                                 break;
                             }
                         }

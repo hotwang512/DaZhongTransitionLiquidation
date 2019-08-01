@@ -238,11 +238,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 {
                                     JoinType.Left, pon.FaxOrderVguid == tfo.VGUID
                                 }).Select((pon, tfo) => new
-                            {
-                                FixedAssetOrderVguid = pon.FixedAssetOrderVguid, FaxOrderVguid = pon.FaxOrderVguid,
-                                SubmitStatus = tfo.SubmitStatus
-                            }).ToList();
-                                taxFeeOrderList = taxFeeOrderList.Where(x => x.FixedAssetOrderVguid == vguid).ToList();
+                                {
+                                    FixedAssetOrderVguid = pon.FixedAssetOrderVguid,
+                                    FaxOrderVguid = pon.FaxOrderVguid,
+                                    SubmitStatus = tfo.SubmitStatus
+                                }).ToList();
+                            taxFeeOrderList = taxFeeOrderList.Where(x => x.FixedAssetOrderVguid == vguid).ToList();
                             if (taxFeeOrderList.Any(x => x.SubmitStatus >= 2))
                             {
                                 consistent = false;
@@ -387,6 +388,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                                 feeOrder.SupplierBankAccountName = bankInfo.BankAccountName;
                                                 feeOrder.SupplierBankAccount = bankInfo.BankAccount;
                                                 feeOrder.SupplierBankNo = bankInfo.BankNo;
+                                                feeOrder.SupplierBank = bankInfo.Bank;
                                             }
                                             if (companylist.Any(x => x.OrderVGUID == OrderVguid) && companylist.Count(x => x.OrderVGUID == OrderVguid) == 1)
                                             {
@@ -395,6 +397,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                                 feeOrder.PayCompany = companyInfo.PayBankAccountName;
                                                 feeOrder.CompanyBankName = companyInfo.PayBank;
                                                 feeOrder.CompanyBankAccountName = companyInfo.PayBankAccountName;
+                                                feeOrder.CompanyBankAccount = companyInfo.PayAccount;
+                                                feeOrder.AccountType = companyInfo.AccountType;
                                             }
                                             db.Insertable<Business_TaxFeeOrder>(feeOrder).ExecuteCommand();
                                             db.Insertable<Business_PurchaseOrderNum>(purchaseOrderNum).ExecuteCommand();

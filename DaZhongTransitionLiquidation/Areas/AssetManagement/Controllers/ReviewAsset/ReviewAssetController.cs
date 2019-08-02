@@ -94,6 +94,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     {
                         //获取所有的经营模式
                         var manageModelList = db.Queryable<Business_ManageModel>().ToList();
+                        //获取所有的资产主类次类
+                        var assetsCategoryList = db.Queryable<Business_AssetsCategory>().ToList();
                         foreach (var reviewItem in reviewList)
                         {
                             var newVehicle = newVehicleList.First(x =>
@@ -123,6 +125,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             reviewItem.YTD_DEPRECIATION = 0;
                             reviewItem.ACCT_DEPRECIATION = 0;
                             reviewItem.BOOK_TYPE_CODE = "";
+                            if (assetsCategoryList.Any(x => x.ASSET_CATEGORY_MAJOR == reviewItem.ASSET_CATEGORY_MAJOR &&
+                                                              x.ASSET_CATEGORY_MINOR == reviewItem.ASSET_CATEGORY_MINOR))
+                            {
+                                var category = assetsCategoryList.First(x => x.ASSET_CATEGORY_MAJOR == reviewItem.ASSET_CATEGORY_MAJOR &&
+                                                                             x.ASSET_CATEGORY_MINOR == reviewItem.ASSET_CATEGORY_MINOR);
+                                reviewItem.BOOK_TYPE_CODE = category.BOOK_TYPE_CODE;
+                            }
                             if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
                             {
                                 var minor = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);

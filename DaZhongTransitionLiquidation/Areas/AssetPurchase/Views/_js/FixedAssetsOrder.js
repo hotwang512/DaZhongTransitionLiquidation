@@ -21,7 +21,6 @@ var $page = function () {
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
-
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#PurchaseGoods").val("");
@@ -92,6 +91,11 @@ var $page = function () {
                 });
             }
         });
+        $("#CreditDialog_OKBtn").on("click",
+            function () {
+                $("#CreditDialog").modal("hide");
+            }
+        );
     }; //addEvent end
 
     //删除

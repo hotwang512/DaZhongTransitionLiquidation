@@ -18,6 +18,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string DAYS { get; set; }
         public decimal? Money { get; set; }
         public decimal? Account { get; set; }
+        public int MoneyRow { get; set; }
+        public int MoneyColumns { get; set; }
         public string Founder { get; set; }
         public DateTime? CreatTime { get; set; }
     }

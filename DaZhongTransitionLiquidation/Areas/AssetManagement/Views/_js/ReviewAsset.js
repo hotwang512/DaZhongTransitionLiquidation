@@ -212,7 +212,7 @@ var $page = function () {
                     { text: '组织编号', datafield: 'ORGANIZATION_NUM', hidden: true, width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 180, align: 'center', cellsAlign: 'center' },
-                    { text: 'Oracle资产编号', datafield: 'ASSET_ID', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: 'Oracle资产编号', datafield: 'ASSET_ID', width: 120, align: 'center', cellsAlign: 'center' },
                     { text: '车辆状态', datafield: 'VEHICLE_STATE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '营运状态', datafield: 'OPERATING_STATE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },

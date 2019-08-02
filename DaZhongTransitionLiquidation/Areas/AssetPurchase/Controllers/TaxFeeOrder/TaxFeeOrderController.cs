@@ -165,7 +165,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                     pendingPaymentmodel.CollectBankName = order.SupplierBank;
                     pendingPaymentmodel.CollectBankNo = order.SupplierBankNo;
                     pendingPaymentmodel.PaymentMethod = order.PayType;
-
                     pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
                     pendingPaymentmodel.FunctionSiteId = "61";
                     pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
@@ -177,7 +176,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                         pendingPaymentmodel.Summary = "合并支付:";
                         foreach (var item in orderList)
                         {
-                            pendingPaymentmodel.Summary += item.PurchaseDescription + "|";
+                            if (!item.PurchaseDescription.IsNullOrEmpty())
+                            {
+                                pendingPaymentmodel.Summary += item.PurchaseDescription + ";";
+                            }
                         }
                     }
                     else

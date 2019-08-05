@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
+﻿using Aspose.Cells;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -6,6 +7,7 @@ using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -56,6 +58,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 }
                 jsonResult.Rows = dataList;
                 jsonResult.TotalRows = jsonResult.Rows.Count;
+                string uniqueKey = PubGet.GetUserKey + "SettlementCount";
+                CacheManager<List<Business_SettlementCount>>.GetInstance().Add(uniqueKey, data);
             });
             return Json(jsonResult.Rows, JsonRequestBehavior.AllowGet);
         }
@@ -86,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 try
                 {
-                    var data = db.Ado.SqlQuery<Business_SettlementCount>(@"select c.Model,c.ClassType, c.CarType,c.BusinessType ,a.YearMonth,a.MODEL_DAYS as DAYS,c.Money,(a.MODEL_DAYS*c.Money) as Account from Business_VehicleList as a
+                    var data = db.Ado.SqlQuery<Business_SettlementCount>(@"select c.Model,c.ClassType, c.CarType,c.BusinessType ,a.YearMonth,a.MODEL_DAYS as DAYS,c.Money,(a.MODEL_DAYS*c.Money) as Account,c.MoneyRow,c.MoneyColumns from Business_VehicleList as a
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER
                             left join Business_SettlementImport as c on c.Model=b.MODEL_MAJOR and c.ClassType=b.MODEL_MINOR and
                             c.CarType = b.DESCRIPTION where b.OPERATING_STATE='在运' and c.Model is not null  and a.YearMonth=@YearMonth
@@ -118,6 +122,68 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     Result.ResultInfo = ex.Message;
                     Result.Status = "3";
                 }
+            });
+            return Json(Result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult ExportSettlementData()
+        {
+            ResultModel<string> Result = new ResultModel<string> { IsSuccess = true, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                string uniqueKey = PubGet.GetUserKey + "SettlementCount";
+                var data = CacheManager<List<Business_SettlementCount>>.GetInstance()[uniqueKey];
+                if (data.Count > 0)
+                {
+                    Workbook workbook = new Workbook(Path.Combine(Server.MapPath("/Template"), "SettlementCount.xlsx"));
+                    Worksheet worksheet = workbook.Worksheets[0];
+                    Cells cells = worksheet.Cells;
+                    foreach (var item in data)
+                    {
+                        cells[item.MoneyRow, item.MoneyColumns].PutValue(item.Account);
+                    }
+                    worksheet.AutoFitColumns();
+                    string dir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    
+                    //workbook.Save(System.Web.HttpContext.Current.Response, "SettlementCount", ContentDisposition.Attachment, new OoxmlSaveOptions());
+                    MemoryStream excel = workbook.SaveToStream();
+                    Response.Clear();
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.ContentType = "application/vnd.ms-excel";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode("各种车型各种模式结算标准汇总") + DateTime.Now.ToString("yyyy-MM-dd").Trim() + ".xls"));
+
+                    excel.WriteTo(Response.OutputStream);
+                    Response.End();
+
+                    //workbook.Save(Path.Combine(dir, "SettlementCount.pdf"), SaveFormat.Pdf);
+                }
+
+                //var data1 = db.Queryable<Business_SettlementCount>().ToList();
+                //var data2 = db.Queryable<Business_SettlementImport>().ToList();
+                //foreach (var item in data2)
+                //{
+                //    if(item.BusinessType != "" && item.BusinessType != null)
+                //    {
+                //        if(item.BusinessType == "经济补偿金")
+                //        {
+                //            db.Updateable<Business_SettlementCount>(new { MoneyRow = item.MoneyRow, MoneyColumns = item.MoneyColumns }).Where(x => x.Model == item.Model && x.ClassType == item.ClassType && x.CarType == item.CarType
+                //                               && x.BusinessKey == null && x.BusinessType == "经济补偿金").ExecuteCommand();
+                //        }
+                //        else
+                //        {
+                //            var businessKey = item.BusinessType.Split("-")[0];
+                //            var businessType = item.BusinessType.Split("-")[1];
+                //            var isAny = data1.Any(x => x.Model == item.Model && x.ClassType == item.ClassType && x.CarType == item.CarType
+                //                                && x.BusinessKey == businessKey && x.BusinessType == businessType);
+                //            if (isAny)
+                //            {
+                //                db.Updateable<Business_SettlementCount>(new { MoneyRow = item.MoneyRow, MoneyColumns = item.MoneyColumns }).Where(x => x.Model == item.Model && x.ClassType == item.ClassType && x.CarType == item.CarType
+                //                                && x.BusinessKey == businessKey && x.BusinessType == businessType).ExecuteCommand();
+                //            }
+                //        }
+                       
+                //    }                   
+                //}
             });
             return Json(Result, JsonRequestBehavior.AllowGet);
         }

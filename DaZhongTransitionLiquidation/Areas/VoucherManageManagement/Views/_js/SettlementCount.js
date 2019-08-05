@@ -84,28 +84,16 @@ var $page = function () {
             }
         });
         //导出
-        selector.$btnExport().on("click", function () {
-            var pivotColumns = $('#datatable').jqxPivotGrid('getPivotColumns').visibleLeafItems;
-            var companyName = "";
-            for (i = 0; i < pivotColumns.length; i++) {
-                if (i == pivotColumns.length) {
-                    continue;
-                }
-                if (i % 3 == 0) {
-                    companyName += pivotColumns[i].parentItem.text + ",";
-                }
-            }
+        selector.$btnExport().on("click", function () { 
+            $.ajax({
+                url: "/VoucherManageManagement/SettlementCount/ExportSettlementData",
+                data: { },
+                datatype: "json",
+                type: "post",
+                success: function (result) {
 
-            location.href = "/ReportManagement/AmountReport/GetAmountReportDataOut?month=" + selector.$txtMonth().val() + "&companyName=" + companyName + "&channel=" + selector.$txtChannel().val() + "";
-            //$.ajax({
-            //    url: "/ReportManagement/AmountReport/GetAmountReportDataOut",
-            //    data: { "month": selector.$txtMonth().val(),"companyName":companyName,"channel": selector.$txtChannel().val() },
-            //    datatype: "json",
-            //    type: "post",
-            //    success: function (result) {
-
-            //    }
-            //});
+                }
+            });
         })
         //计算
         $("#btnCount").on("click", function () {

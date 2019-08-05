@@ -30,8 +30,7 @@ var $page = function () {
 
         //重置
         selector.$btnReset().on("click", function () {
-            $("#Model").val("");
-            $("#ClassType").val("");
+            $("#YearMonth").val("");
         });
 
         //导入

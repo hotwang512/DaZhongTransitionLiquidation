@@ -415,13 +415,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     var belongToList = db.Queryable<Business_AssetOrderBelongTo>()
                                         .Where(x => x.AssetsOrderVguid == vguid).ToList();
                                     var orderNumberLeftAsset = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                    //查出当前日期数据库中最大的订单号
-                                    var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
-                                        .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
+                                        //查出当前日期数据库中最大的订单号
+                                        var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
+                                            .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
                                     var maxOrderNumRightAsset = 0;
                                     if (currentDayAssetReviewList.Any())
                                     {
-                                        maxOrderNumRightAsset = currentDayAssetReviewList.OrderBy(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
+                                        maxOrderNumRightAsset = currentDayAssetReviewList.OrderByDescending(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
                                     }
                                     var assetReviewList = new List<Business_AssetReview>();
                                     foreach (var item in belongToList)

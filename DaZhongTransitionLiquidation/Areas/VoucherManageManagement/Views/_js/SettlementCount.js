@@ -84,16 +84,17 @@ var $page = function () {
             }
         });
         //导出
-        selector.$btnExport().on("click", function () { 
-            $.ajax({
-                url: "/VoucherManageManagement/SettlementCount/ExportSettlementData",
-                data: { },
-                datatype: "json",
-                type: "post",
-                success: function (result) {
+        selector.$btnExport().on("click", function () {
+            location.href = "/VoucherManageManagement/SettlementCount/ExportSettlementData"
+            //$.ajax({
+            //    url: "/VoucherManageManagement/SettlementCount/ExportSettlementData",
+            //    data: { },
+            //    datatype: "json",
+            //    type: "post",
+            //    success: function (result) {
 
-                }
-            });
+            //    }
+            //});
         })
         //计算
         $("#btnCount").on("click", function () {

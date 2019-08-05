@@ -1,5 +1,6 @@
 ﻿using Aspose.Cells;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
+using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Spire.Xls;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.SettlementCount
 {
@@ -125,17 +127,16 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(Result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult ExportSettlementData()
+        public void ExportSettlementDatas()
         {
-            ResultModel<string> Result = new ResultModel<string> { IsSuccess = true, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 string uniqueKey = PubGet.GetUserKey + "SettlementCount";
                 var data = CacheManager<List<Business_SettlementCount>>.GetInstance()[uniqueKey];
                 if (data.Count > 0)
                 {
-                    Workbook workbook = new Workbook(Path.Combine(Server.MapPath("/Template"), "SettlementCount.xlsx"));
-                    Worksheet worksheet = workbook.Worksheets[0];
+                    Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook(Path.Combine(Server.MapPath("/Template"), "SettlementCount.xlsx"));
+                    Aspose.Cells.Worksheet worksheet = workbook.Worksheets[0];
                     Cells cells = worksheet.Cells;
                     foreach (var item in data)
                     {
@@ -146,18 +147,23 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     
                     //workbook.Save(System.Web.HttpContext.Current.Response, "SettlementCount", ContentDisposition.Attachment, new OoxmlSaveOptions());
                     MemoryStream excel = workbook.SaveToStream();
-                    Response.Clear();
-                    Response.ClearContent();
-                    Response.ClearHeaders();
-                    Response.ContentType = "application/vnd.ms-excel";
-                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode("各种车型各种模式结算标准汇总") + DateTime.Now.ToString("yyyy-MM-dd").Trim() + ".xls"));
+                    //Response.Clear();
+                    //Response.ClearContent();
+                    //Response.ClearHeaders();
+                    //Response.ContentType = "application/vnd.ms-excel";
+                    //Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode("各种车型各种模式结算标准汇总") + DateTime.Now.ToString("yyyy-MM-dd").Trim() + ".xls"));
 
-                    excel.WriteTo(Response.OutputStream);
-                    Response.End();
+                    //excel.WriteTo(Response.OutputStream);
+                    //Response.End();
+
+
+                    //var ms = ExcelHelper.OutModelFileToStream(dt, "/Template/AssetsRetiremen.xlsx", "资产报废");
+                    byte[] fileContents = excel.ToArray();
+                    File(fileContents, "application/ms-excel", "各种车型各种模式结算标准汇总" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+
 
                     //workbook.Save(Path.Combine(dir, "SettlementCount.pdf"), SaveFormat.Pdf);
                 }
-
                 //var data1 = db.Queryable<Business_SettlementCount>().ToList();
                 //var data2 = db.Queryable<Business_SettlementImport>().ToList();
                 //foreach (var item in data2)
@@ -181,11 +187,42 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //                                && x.BusinessKey == businessKey && x.BusinessType == businessType).ExecuteCommand();
                 //            }
                 //        }
-                       
+
                 //    }                   
                 //}
             });
-            return Json(Result, JsonRequestBehavior.AllowGet);
+            //return Json(Result, JsonRequestBehavior.AllowGet);
+        }
+
+        public void ExportSettlementData()
+        {
+            DbBusinessDataService.Command(db =>
+            {
+                string uniqueKey = PubGet.GetUserKey + "SettlementCount";
+                var data = CacheManager<List<Business_SettlementCount>>.GetInstance()[uniqueKey];
+                if (data.Count > 0)
+                {
+                    Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook(Path.Combine(Server.MapPath("/Template"), "SettlementCount.xlsx"));
+                    Aspose.Cells.Worksheet worksheet = workbook.Worksheets[0];
+                    Cells cells = worksheet.Cells;
+                    foreach (var item in data)
+                    {
+                        cells[item.MoneyRow, item.MoneyColumns].PutValue(item.Account);
+                    }
+                    worksheet.AutoFitColumns();
+                    string dir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    //workbook.Save(System.Web.HttpContext.Current.Response, "SettlementCount", ContentDisposition.Attachment, new OoxmlSaveOptions());
+                    workbook.Save(Path.Combine(dir, "SettlementCount.pdf"), SaveFormat.Pdf);
+
+                    MemoryStream excel = workbook.SaveToStream();
+                    Response.Clear();
+                    Response.ContentType = "application/vnd.ms-excel";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode("车辆经营汇总") + DateTime.Now.ToString("yyyy-MM-dd").Trim() + ".xls"));
+
+                    excel.WriteTo(Response.OutputStream);
+                    Response.End();
+                }
+            });
         }
     }
 }

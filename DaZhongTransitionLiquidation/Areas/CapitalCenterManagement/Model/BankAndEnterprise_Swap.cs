@@ -19,9 +19,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public int BANK_ACCOUNT_ID { get; set; }
         public string BANK_ACCOUNT_NAME { get; set; }
         public string CURRENCY_CODE { get; set; }
-        public int ENTER_DR { get; set; }
-        public int ENTER_CR { get; set; }
-        public int BALANCE_AMOUNT { get; set; }
+        public decimal? ENTER_DR { get; set; }
+        public decimal? ENTER_CR { get; set; }
+        public decimal? BALANCE_AMOUNT { get; set; }
         public string TRX_ACCOUNT_NUM { get; set; }
         public string TRX_ACCOUNT_NAME { get; set; }
         public string ABSTRACT { get; set; }

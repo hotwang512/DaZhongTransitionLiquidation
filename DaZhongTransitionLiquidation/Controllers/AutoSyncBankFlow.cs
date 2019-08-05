@@ -191,8 +191,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.PayeeAccount = details.ATTRIBUTE3;//我方
                 bankFlow.ReceivingUnit = details.TRX_ACCOUNT_NAME;//对方
                 bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
-                bankFlow.TurnIn = details.ENTER_CR.TryToDecimal();
-                bankFlow.TurnOut = details.ENTER_DR.TryToDecimal();
+                bankFlow.TurnIn = details.ENTER_DR.TryToDecimal(); 
+                bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
                 bankFlow.VGUID = Guid.NewGuid();
                 bankFlow.TransactionDate = details.TRX_DATE.TryToDate();
                 bankFlow.PaymentUnitInstitution = "";
@@ -250,7 +250,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
                 }
             }
-            BankDataPack.SyncBackFlowAndReconciliation();
+            //BankDataPack.SyncBackFlowAndReconciliation();
             return success;
         }
         public static void AutoBankTransferResult()

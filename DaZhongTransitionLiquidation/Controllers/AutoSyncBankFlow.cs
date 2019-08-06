@@ -120,7 +120,9 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行").ToList();
+                        var year = DateTime.Now.Year;
+                        var month = DateTime.Now.Month;
+                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE.Year == year && (month - x.LAST_UPDATE_DATE.Month) == 2).ToList();
                         var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();
                         bankFlowList = GetBankData(_db, bankData, bankFlowList, bankFlowData);
                         if (bankFlowList.Count > 0)
@@ -182,6 +184,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     continue;
                 }
+                var isAny2 = bankFlowList.Any(x => x.Batch == details.TRX_SEQUENCE_ID.TryToString() && x.TradingBank == details.ATTRIBUTE4);
+                if (isAny2)
+                {
+                    continue;
+                }
                 Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                 bankFlow.BankAccount = details.ATTRIBUTE3;
                 bankFlow.Currency = "人民币";
@@ -193,6 +200,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
                 bankFlow.TurnIn = details.ENTER_DR.TryToDecimal(); 
                 bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
+                bankFlow.Balance = details.BALANCE_AMOUNT.TryToDecimal();
                 bankFlow.VGUID = Guid.NewGuid();
                 bankFlow.TransactionDate = details.TRX_DATE.TryToDate();
                 bankFlow.PaymentUnitInstitution = "";
@@ -250,7 +258,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
                 }
             }
-            //BankDataPack.SyncBackFlowAndReconciliation();
+            BankDataPack.SyncBackFlowAndReconciliation();
             return success;
         }
         public static void AutoBankTransferResult()

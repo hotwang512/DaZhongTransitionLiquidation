@@ -4,6 +4,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using DaZhongTransitionLiquidation.Controllers;
+using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation
 {
@@ -27,14 +28,18 @@ namespace DaZhongTransitionLiquidation
             #endregion
             AutoMapper.Configuration.Configure();
             log4net.Config.XmlConfigurator.Configure();
-
-            //AutoSyncBankFlow.AutoSyncSeavice();
-            //AutoSyncBankFlow.AutoSyncYesterdaySeavice();
-            AutoSyncBankFlow.AutoBankTransferResult();
-            //AutoSyncBankFlow.AutoSyncBankSeavice();
-            //AutoSyncAssetsMaintenance.AutoSyncSeavice();
-            //AutoSyncBankFlow.AutoVehicleSeavice();
-            //AutoSyncEmailController.AutoSyncEmailSeavice();
+            //是否执行自动服务
+            var ExecutionOrNot = ConfigSugar.GetAppString("Execution").TryToBoolean();
+            if (ExecutionOrNot)
+            {
+                AutoSyncBankFlow.AutoSyncSeavice();
+                AutoSyncBankFlow.AutoSyncYesterdaySeavice();
+                AutoSyncBankFlow.AutoBankTransferResult();
+                AutoSyncBankFlow.AutoSyncBankSeavice();
+                AutoSyncAssetsMaintenance.AutoSyncSeavice();
+                AutoSyncBankFlow.AutoVehicleSeavice();
+                AutoSyncEmailController.AutoSyncEmailSeavice();
+            }
         }
     }
 }

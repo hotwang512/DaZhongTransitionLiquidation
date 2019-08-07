@@ -32,7 +32,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         initTable();
-
+        getChannelInfos();
         //查询
         selector.$btnSearch().on("click", function () {
             initTable();
@@ -40,8 +40,8 @@ var $page = function () {
 
         //重置
         selector.$btnReset().on("click", function () {
-            selector.$txtName().val("");
-            selector.$txtJobNumber().val("");
+            $("#txtChannel").val("");
+            $("#txtChannel2").val("");
             selector.$txtUserIDNo().val("");
             selector.$selPaymentStatus().val("1");
             selector.$txtTransactionId().val("");
@@ -148,8 +148,8 @@ var $page = function () {
                     datatype: "json",
                     id: "VGUID",//主键
                     data: {
-                        "Name": selector.$txtName().val(),
-                        "JobNumber": selector.$txtJobNumber().val(),
+                        "Channel_Id": $("#txtChannel").val(),
+                        "SubjectId": $("#txtChannel2").val(),
                         "IDNumber": selector.$txtUserIDNo().val(),
                         "TransactionID": transactionId,
                         "PayDateFrom": selector.$txtPaymentForm().val(),
@@ -301,3 +301,34 @@ $(function () {
     page.init();
 
 });
+
+function getChannelInfos() {
+    $.ajax({
+        url: "/PaymentManagement/NextDayData/GetChannelInfor",
+        type: "post",
+        dataType: "json",
+        success: function (msg) {
+            var option = "<option value=''></option>";
+            for (var i = 0; i < msg.length; i++) {
+                option += "<option value=" + msg[i].Id + ">" + msg[i].Name + "</option>";
+            }
+            $("#txtChannel").append(option);
+        }
+
+    });
+}
+
+function changeChannel() {
+    var channel = $("#txtChannel").val();
+    $.ajax({
+        url: "/PaymentManagement/NextDayData/GetSubject",
+        type: "post",
+        dataType: "json",
+        data: { "Channel": channel },
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#txtChannel2', msg, "SubjectId", "SubjectNmae");
+            $("#txtChannel2").prepend("<option value=\"\" selected='true'></>");
+        }
+
+    });
+}

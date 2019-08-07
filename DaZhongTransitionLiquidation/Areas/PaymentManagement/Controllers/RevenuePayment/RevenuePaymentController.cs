@@ -41,8 +41,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Reven
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 List<V_Revenuepayment_Information> revenuepayments = db.Queryable<V_Revenuepayment_Information>()
-               .WhereIF(!string.IsNullOrEmpty(searchParas.Name), i => i.Name.Contains(searchParas.Name))
-               .WhereIF(!string.IsNullOrEmpty(searchParas.JobNumber), i => i.JobNumber.Contains(searchParas.JobNumber))
+               .WhereIF(!string.IsNullOrEmpty(searchParas.Channel_Id), i => i.Channel_Id.Contains(searchParas.Channel_Id))
+               .WhereIF(!string.IsNullOrEmpty(searchParas.SubjectId), i => i.SubjectId.Contains(searchParas.SubjectId))
                .WhereIF(!string.IsNullOrEmpty(searchParas.TransactionID), i => i.TransactionID.Contains(searchParas.TransactionID))
                .Where(i => SqlFunc.Between(i.PayDate, start, end))
                .OrderBy(i => i.PayDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);

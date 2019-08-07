@@ -45,7 +45,16 @@ var $page = function () {
         $("#btnSave").on("click",
             function() {
                 var validateError = 0; //未通过验证的数量
-                if (!Validate($("#PurchaseGoods"))) {
+                if (!Validate($("#ContractAmount"))) {
+                    validateError++;
+                }
+                if (!Validate($("#AssetDescription"))) {
+                    validateError++;
+                }
+                if (!Validate($("#OrderQuantity"))) {
+                    validateError++;
+                }
+                if (!Validate($("#PurchasePrices"))) {
                     validateError++;
                 }
                 if (validateError <= 0) {

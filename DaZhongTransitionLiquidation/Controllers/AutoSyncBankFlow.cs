@@ -120,11 +120,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        var year = DateTime.Now.Year;
-                        var month = DateTime.Now.Month;
-                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE.Year == year && (month - x.LAST_UPDATE_DATE.Month) == 2).ToList();
+                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-7)).ToList();
+                        //查询公司段中已启用的公司的银行信息
+                        var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select * from Business_CompanyBankInfo as a left join Business_SevenSection
+                                            as b on a.AccountModeCode = b.AccountModeCode and a.CompanyCode = b.Code  where b.Status='1' 
+                                            and b.SectionVGUID ='A63BD715-C27D-4C47-AB66-550309794D43'").ToList();
                         var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();
-                        bankFlowList = GetBankData(_db, bankData, bankFlowList, bankFlowData);
+                        bankFlowList = GetBankData(_db, bankData, bankFlowList, bankFlowData, bankAccount);
                         if (bankFlowList.Count > 0)
                         {
                             //按交易日期排序取最小值
@@ -175,7 +177,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 Thread.Sleep((int)(24 * 1000 * 60 * 60));//一天查一次
             }
         }
-        private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData)
+        private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData,List<Business_CompanyBankInfo> bankAccount)
         {
             foreach (var details in bankData)
             {
@@ -186,6 +188,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 var isAny2 = bankFlowList.Any(x => x.Batch == details.TRX_SEQUENCE_ID.TryToString() && x.TradingBank == details.ATTRIBUTE4);
                 if (isAny2)
+                {
+                    continue;
+                }
+                var isAny3 = bankAccount.Any(x => x.BankAccount == details.ATTRIBUTE3);
+                if (!isAny3)
                 {
                     continue;
                 }

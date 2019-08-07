@@ -31,5 +31,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity
         public string PayDateTo { get; set; }
 
         public string PaymentStatus { get; set; }
+        public string Channel_Id { get; set; }
+        public string SubjectId { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Spire.Xls;
+using System.Drawing.Printing;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.SettlementCount
 {
@@ -213,7 +214,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     string dir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                     //workbook.Save(System.Web.HttpContext.Current.Response, "SettlementCount", ContentDisposition.Attachment, new OoxmlSaveOptions());
                     workbook.Save(Path.Combine(dir, "SettlementCount.pdf"), SaveFormat.Pdf);
-
+                    //worksheet.PageSetup.PaperSize
                     MemoryStream excel = workbook.SaveToStream();
                     Response.Clear();
                     Response.ContentType = "application/vnd.ms-excel";

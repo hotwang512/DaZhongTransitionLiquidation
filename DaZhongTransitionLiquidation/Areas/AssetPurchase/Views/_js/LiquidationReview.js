@@ -95,7 +95,7 @@ var $page = function () {
         var nestedTables = new Array();
         var initRowDetails = function (id, row, element, rowinfo) {
             debugger;
-            element.append($("<div style='margin: 10px;margin-left:60px'></div>"));
+            element.append($("<div style='margin: 10px;'></div>"));
             var nestedDataTable = $(element.children()[0]);
             var ordersSource = {
                 dataFields: [
@@ -147,15 +147,21 @@ var $page = function () {
                         { text: '预计付款日期', datafield: 'PaymentDate', width: 150, align: 'center', cellsAlign: 'center', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                         { text: '采购合同', datafield: 'ContractName', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                         { text: '付款方式', datafield: 'PayType', width: 150, align: 'center', cellsAlign: 'center' },
-                        { text: '付款公司', datafield: 'PayCompany', width: 300, align: 'center', cellsAlign: 'center' },
-                        { text: '创建时间', datafield: 'CreateDate', width: 200, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                        { text: '付款公司', datafield: 'PayCompany', width: 320, align: 'center', cellsAlign: 'center' },
+                        { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                         { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
-                        { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                        { text: '修改时间', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                         { text: '修改人', datafield: 'ChangeUser', width: 100, align: 'center', cellsAlign: 'center' },
                         { text: 'VGUID', datafield: 'VGUID', hidden: true }
                     ]
                 });
                 nestedTables[id] = nestedDataTable;
+                $(nestedDataTable).on('rowDoubleClick', function (event) {
+                    var args = event.args;
+                    var row = args.row;
+                    var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" : row.PaymentVoucherVguid;
+                    window.location.href = "/AssetPurchase/FundClearingOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
+                });
             }
         }
         //创建卡信息列表（主表）
@@ -181,9 +187,9 @@ var $page = function () {
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '修改时间', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });

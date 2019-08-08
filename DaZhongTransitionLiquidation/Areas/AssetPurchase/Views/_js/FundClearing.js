@@ -146,7 +146,7 @@ var $page = function () {
         var nestedTables = new Array();
         var initRowDetails = function (id, row, element, rowinfo) {
             debugger;
-            element.append($("<div style='margin: 10px;margin-left:60px'></div>"));
+            element.append($("<div style='margin: 10px;'></div>"));
             var nestedDataTable = $(element.children()[0]);
             var ordersSource = {
                 dataFields: [
@@ -244,7 +244,7 @@ var $page = function () {
                     { text: '采购单价', datafield: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同金额', datafield: 'ContractAmount', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购说明', datafield: 'AssetDescription', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '创建时间', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }

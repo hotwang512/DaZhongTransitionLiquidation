@@ -215,6 +215,7 @@
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrderDetail.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FundClearing.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\FundClearingOrderDetail.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrderDetail.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\LiquidationReview.js" />
@@ -361,6 +362,7 @@
     <Content Include="Areas\VoucherManageManagement\Views\SettlementCount\Index.cshtml" />
     <Content Include="Areas\AssetPurchase\Views\FundClearing\Index.cshtml" />
     <Content Include="Areas\AssetPurchase\Views\LiquidationReview\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\FundClearingOrderDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2354,6 +2356,7 @@
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\LiquidationReviewController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />

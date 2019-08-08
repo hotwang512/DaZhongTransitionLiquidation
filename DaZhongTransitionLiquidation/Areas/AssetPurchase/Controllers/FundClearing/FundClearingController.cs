@@ -108,18 +108,77 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
         }
         public JsonResult SubmitAssign(Guid FundClearingVguid)
         {
-            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
                 var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
-                fundClearingModel.SubmitStatus = 1;
-                fundClearingModel.SubmitDate = DateTime.Now;
-                fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].UserName;
-                db.Updateable<Business_FundClearing>(fundClearingModel)
-                    .UpdateColumns(x => new {x.SubmitDate, x.SubmitStatus, x.SubmitUser}).ExecuteCommand();
-                resultModel.IsSuccess = true;
-                resultModel.Status = "1";
+                if (fundClearingModel.SubmitStatus == 0)
+                {
+                    //检查数量是否匹配
+                    var assetSum = db.Queryable<Business_LiquidationDistribution>()
+                        .Where(x => x.FundClearingVguid == FundClearingVguid).Sum(x => x.AssetNum);
+                    if (assetSum == fundClearingModel.OrderQuantity)
+                    {
+                        
+                        //生成支付订单
+                        var assets = db.Queryable<Business_LiquidationDistribution>()
+                            .Where(x => x.FundClearingVguid == FundClearingVguid).ToList();
+                        foreach (var asset in assets)
+                        {
+                            var assetOrder = db.Queryable<Business_FixedAssetsOrder>()
+                                .Where(x => x.VGUID == asset.AssetsOrderVguid).First();
+                            var fundClearingOrder = new Business_FundClearingOrder();
+                            fundClearingOrder.VGUID = Guid.NewGuid();
+                            fundClearingOrder.OrderNumber = assetOrder.OrderNumber;
+                            fundClearingOrder.FixedAssetsOrderVguid = assetOrder.VGUID;
+                            fundClearingOrder.PurchaseDepartmentIDs = assetOrder.PurchaseDepartmentIDs;
+                            fundClearingOrder.PurchaseGoods = assetOrder.PurchaseGoods;
+                            fundClearingOrder.PurchaseGoodsVguid = assetOrder.PurchaseGoodsVguid;
+                            fundClearingOrder.PaymentInformationVguid = assetOrder.PaymentInformationVguid;
+                            fundClearingOrder.PaymentInformation = assetOrder.PaymentInformation;
+                            fundClearingOrder.OrderQuantity = assetOrder.OrderQuantity;
+                            fundClearingOrder.PurchasePrices = assetOrder.PurchasePrices;
+                            fundClearingOrder.ContractAmount = assetOrder.ContractAmount;
+                            fundClearingOrder.AssetDescription = assetOrder.AssetDescription;
+                            fundClearingOrder.PaymentDate = assetOrder.PaymentDate;
+                            fundClearingOrder.ContractName = assetOrder.ContractName;
+                            fundClearingOrder.ContractFilePath = assetOrder.ContractFilePath;
+                            fundClearingOrder.SupplierBankAccountName = assetOrder.SupplierBankAccountName;
+                            fundClearingOrder.SupplierBankAccount = assetOrder.SupplierBankAccount;
+                            fundClearingOrder.SupplierBank = assetOrder.SupplierBank;
+                            fundClearingOrder.SupplierBankNo = assetOrder.SupplierBankNo;
+                            fundClearingOrder.PayType = assetOrder.PayType;
+                            fundClearingOrder.PayCompanyVguid = assetOrder.PayCompanyVguid;
+                            fundClearingOrder.PayCompany = assetOrder.PayCompany;
+                            fundClearingOrder.CompanyBankName = assetOrder.CompanyBankName;
+                            fundClearingOrder.CompanyBankAccount = assetOrder.CompanyBankAccount;
+                            fundClearingOrder.CompanyBankAccountName = assetOrder.CompanyBankAccountName;
+                            fundClearingOrder.AccountType = assetOrder.AccountType;
+                            fundClearingOrder.CreateDate = DateTime.Now;
+                            fundClearingOrder.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            fundClearingOrder.SubmitStatus = 0;
+                            db.Insertable<Business_FundClearingOrder>(fundClearingOrder).ExecuteCommand();
+                        }
+                        fundClearingModel.SubmitStatus = 1;
+                        fundClearingModel.SubmitDate = DateTime.Now;
+                        fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                        db.Updateable<Business_FundClearing>(fundClearingModel)
+                            .UpdateColumns(x => new { x.SubmitDate, x.SubmitStatus, x.SubmitUser }).ExecuteCommand();
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
+                    }
+                    else
+                    {
+                        resultModel.Status = "2";
+                        resultModel.ResultInfo = "数量不一致";
+                    }
+                }
+                else
+                {
+                    resultModel.Status = "2";
+                    resultModel.ResultInfo = "不能重复提交!";
+                }
             });
             return Json(resultModel);
         }

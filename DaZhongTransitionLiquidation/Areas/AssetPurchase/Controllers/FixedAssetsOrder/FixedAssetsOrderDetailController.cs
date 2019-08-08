@@ -313,7 +313,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     {
                         PurchaseDepartmentStr = PurchaseDepartmentStr + str + "','";
                     }
-
                     PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0,PurchaseDepartmentStr.Length - 3);
                     orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
                     Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid

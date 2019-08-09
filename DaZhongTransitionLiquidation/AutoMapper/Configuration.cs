@@ -13,6 +13,7 @@ namespace DaZhongTransitionLiquidation.AutoMapper
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<Profiles.AssetInfoProfile>();
+                cfg.AddProfile<Profiles.AssignProfile>();
             });
         }
     }

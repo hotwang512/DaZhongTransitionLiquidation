@@ -161,7 +161,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '配置资产', datafield: 'Setting', hidden: false, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingRenderer },
+                    { text: '资产分配', datafield: 'Setting', hidden: false, width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingRenderer },
                     { text: 'FixedAssetsOrderVguid', datafield: 'FixedAssetsOrderVguid', width: 150, align: 'center', cellsAlign: 'center', hidden:true },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },

@@ -22,7 +22,6 @@ var $page = function () {
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
             if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
-                debugger;
                 $("#btnSave").parent().hide();
                 $("#btnPrint").parent().show();
                 $("#tdPrint").show();
@@ -38,12 +37,12 @@ var $page = function () {
         }
         //取消
         $("#btnCancel").on("click",
-            function() {
+            function () {
                 history.go(-1);
             });
         //保存
         $("#btnSave").on("click",
-            function() {
+            function () {
                 var validateError = 0; //未通过验证的数量
                 if (!Validate($("#ContractAmount"))) {
                     validateError++;
@@ -65,7 +64,7 @@ var $page = function () {
                     };
                     debugger;
                     $.ajax({
-                        url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
+                        url: "/AssetPurchase/FundClearingOrderDetail/SaveFixedAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
@@ -96,23 +95,23 @@ var $page = function () {
                             "AccountType": $("#AccountType").val()
                         },
                         type: "post",
-                        success: function(msg) {
+                        success: function (msg) {
                             switch (msg.Status) {
-                            case "0":
-                                jqxNotification("保存失败！", null, "error");
-                                break;
-                            case "1":
-                                jqxNotification("保存成功！", null, "success");
-                                history.go(-1);
-                                window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
-                                break;
+                                case "0":
+                                    jqxNotification("保存失败！", null, "error");
+                                    break;
+                                case "1":
+                                    jqxNotification("保存成功！", null, "success");
+                                    history.go(-1);
+                                    window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                                    break;
                             }
                         }
                     });
                 }
             });
         $("#UploadContractFile").on("click",
-            function() {
+            function () {
                 $("#ContractFileInput").click();
             });
         //确定
@@ -156,9 +155,9 @@ var $page = function () {
                 $("#AttachmentType").val($(this).attr("AttachmentType"));
                 $("#LocalFileInput").click();
             });
-            
+
         $("#photographPri").on("click",
-            function() {
+            function () {
                 $("#Upload_OKBtn").show();
                 $("#photographPri").hide();
                 $("#devPhoto").show();
@@ -169,31 +168,31 @@ var $page = function () {
             if ($("#devPhoto").attr("src") != undefined) {
                 layer.load();
                 $.ajax({
-                    url: "/AssetPurchase/FixedAssetsOrderDetail/UploadToImageServer",
+                    url: "/AssetPurchase/FundClearingOrderDetail/UploadToImageServer",
                     data: {
                         "Vguid": $("#VGUID").val(),
                         "ImageBase64Str": $("#devPhoto").attr("src"),
                         "AttachmentType": $("#AttachmentType").val()
                     },
                     type: "post",
-                    success: function(msg) {
+                    success: function (msg) {
                         $('#jqxLoader').jqxLoader('close');
                         switch (msg.Status) {
-                        case "0":
-                            jqxNotification("上传失败！", null, "error");
-                            layer.closeAll('loading');
-                            break;
-                        case "1":
-                            jqxNotification("上传成功！", null, "success");
-                            //上传成功后调用清算平台、付款凭证附件上传接口
-                            var guid = $.request.queryString().VGUID;
-                            if (guid != "" && guid != null) {
-                                PendingPaymentAttachmentUpload();
-                            }
-                            layer.closeAll('loading');
-                            getAttachment();
-                            $("#UploadPictureDialog").modal("hide");
-                            break;
+                            case "0":
+                                jqxNotification("上传失败！", null, "error");
+                                layer.closeAll('loading');
+                                break;
+                            case "1":
+                                jqxNotification("上传成功！", null, "success");
+                                //上传成功后调用清算平台、付款凭证附件上传接口
+                                var guid = $.request.queryString().VGUID;
+                                if (guid != "" && guid != null) {
+                                    PendingPaymentAttachmentUpload();
+                                }
+                                layer.closeAll('loading');
+                                getAttachment();
+                                $("#UploadPictureDialog").modal("hide");
+                                break;
                         }
                     }
                 });
@@ -209,29 +208,13 @@ var $page = function () {
             function () {
                 computeValue();
             });
-        //提交
-        $("#btnSubmit").on("click",
-            function () {
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/SubmitFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-                    switch (msg.Status) {
-                    case "0":
-                        jqxNotification("提交失败！", null, "error");
-                        break;
-                    case "1":
-                        jqxNotification("提交成功！", null, "success");
-                        history.go(-1);
-                        window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
-                        break;
-                    }
-                });
-            });
         $('#PaymentInformation').on('select', function (event) {
             var args = event.args;
             if (args) {
                 var item = args.item;
                 $("#hiddenPaymentInformationVguid").val(item.value);
                 $("#hiddenPaymentInformation").val(item.label);
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: item.value }, function (msg) {
+                $.post("/AssetPurchase/FundClearingOrderDetail/GetCustomerBankInfo", { vguid: item.value }, function (msg) {
                     $("#BankAccountName").val(msg.BankAccountName);
                     $("#BankAccount").val(msg.BankAccount);
                     $("#Bank").val(msg.Bank);
@@ -249,7 +232,7 @@ var $page = function () {
             if (args && $("#PayMode").val() != "现金") {
                 var item = args.item;
                 $("#PayCompany").val(item.label);
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
+                $.post("/AssetPurchase/FundClearingOrderDetail/GetCompanyBankInfo",
                     { Vguid: $("#PayCompanyDropdown").val() },
                     function (msg) {
                         debugger;
@@ -274,7 +257,7 @@ var $page = function () {
                 for (var i = 0; i < checkedItems.length; i++) {
                     DepartmentModelList.push(checkedItems[i].value);
                 };
-                
+
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
@@ -291,7 +274,7 @@ var $page = function () {
     }; //addEvent end
     function GetCompanyBankInfoDropdownByCode() {
         debugger;
-        var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdownByCode";
+        var url = "/AssetPurchase/FundClearingOrderDetail/GetCompanyBankInfoDropdownByCode";
         var source =
         {
             datatype: "json",
@@ -307,7 +290,7 @@ var $page = function () {
         debugger;
         $('#PayCompanyDropdown').jqxDropDownList({
             enableSelection: true,
-            filterable: true,  source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
+            filterable: true, source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
                 310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
             renderer: function (index, label, value) {
                 var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
@@ -327,7 +310,7 @@ var $page = function () {
         return true;
     }
     function getFixedAssetsOrderDetail() {
-        $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+        $.post("/AssetPurchase/FundClearingOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             if (msg.PurchaseDepartmentIDs != null) {
                 var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
                 for (var i = 0; i < PurchaseDepartment.length; i++) {
@@ -348,7 +331,7 @@ var $page = function () {
             $("#ContractAmount").val(msg.ContractAmount);
             $("#AssetDescription").val(msg.AssetDescription);
             //$("#UseDepartment").val(msg.UseDepartmentVguid);
-            
+
             //if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
             //    $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
             //}
@@ -359,7 +342,7 @@ var $page = function () {
             if (msg.ContractName != null && msg.ContractFilePath != null) {
                 $("#Attachment").show();
                 $("#Attachment").attr("href", msg.ContractFilePath);
-                
+
                 $("#Attachment").attr("title", msg.ContractName);
             }
             $("#ContractFilePath").val(msg.ContractFilePath);
@@ -391,7 +374,7 @@ var $page = function () {
         } else {
             layer.load();
             $("#contractFormFile").ajaxSubmit({
-                url: "/AssetPurchase/FixedAssetsOrderDetail/UploadContractFile",
+                url: "/AssetPurchase/FundClearingOrderDetail/UploadContractFile",
                 type: "post",
                 data: {
                     'Vguid': $("#VGUID").val()
@@ -399,62 +382,26 @@ var $page = function () {
                 success: function (msg) {
                     layer.closeAll('loading');
                     switch (msg.Status) {
-                    case "0":
-                        jqxNotification("上传失败！", null, "error");
-                        $('#ContractFileInput').val('');
-                        break;
-                    case "1":
-                        jqxNotification("上传成功！", null, "success");
-                        $("#Attachment").show();
-                        $("#Attachment").attr("href", msg.ResultInfo);
-                        $("#Attachment").attr("title", msg.ResultInfo2);
-                        $('#ContractFileInput').val('');
-                        break;
+                        case "0":
+                            jqxNotification("上传失败！", null, "error");
+                            $('#ContractFileInput').val('');
+                            break;
+                        case "1":
+                            jqxNotification("上传成功！", null, "success");
+                            $("#Attachment").show();
+                            $("#Attachment").attr("href", msg.ResultInfo);
+                            $("#Attachment").attr("title", msg.ResultInfo2);
+                            $('#ContractFileInput').val('');
+                            break;
                     }
                 }
             });
         }
     })
-    //采购数量中OA审批单上传文件
-    $("#FileInput").on("change",
-        function () {
-            
-            var filePath = this.value;
-            var fileExt = filePath.substring(filePath.lastIndexOf("."))
-                .toLowerCase();
-            if (!checkFileExt(fileExt)) {
-                jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
-                this.value = "";
-                return;
-            } else {
-                layer.load();
-                $("#formFile").ajaxSubmit({
-                    url: "/AssetPurchase/FixedAssetsOrderDetail/UploadLocalFile",
-                    type: "post",
-                    data: {
-                        'VGUID': $("#FileInput").attr("cdata")
-                    },
-                    success: function (msg) {
-                        layer.closeAll('loading');
-                        switch (msg.Status) {
-                        case "0":
-                            jqxNotification("上传失败！", null, "error");
-                            $('#FileInput').val('');
-                            break;
-                        case "1":
-                            jqxNotification("上传成功！", null, "success");
-                            $('#FileInput').val('');
-                            initTable()
-                            break;
-                        }
-                    }
-                });
-            }
-        });
     //统一上传文件
     $("#LocalFileInput").on("change",
         function () {
-            
+
             var filePath = this.value;
             var fileExt = filePath.substring(filePath.lastIndexOf("."))
                 .toLowerCase();
@@ -465,7 +412,7 @@ var $page = function () {
             } else {
                 layer.load();
                 $("#localFormFile").ajaxSubmit({
-                    url: "/AssetPurchase/FixedAssetsOrderDetail/AllUploadLocalFile",
+                    url: "/AssetPurchase/FundClearingOrderDetail/AllUploadLocalFile",
                     type: "post",
                     data: {
                         'Vguid': $("#VGUID").val(),
@@ -474,20 +421,20 @@ var $page = function () {
                     success: function (msg) {
                         layer.closeAll('loading');
                         switch (msg.Status) {
-                        case "0":
-                            jqxNotification("上传失败！", null, "error");
-                            $('#LocalFileInput').val('');
-                            break;
-                        case "1":
-                            jqxNotification("上传成功！", null, "success");
-                            $('#LocalFileInput').val('');
-                            //上传成功后调用清算平台、付款凭证附件上传接口
-                            var guid = $.request.queryString().VGUID;
-                            if (guid != "" && guid != null) {
-                                PendingPaymentAttachmentUpload();
-                            }
-                            getAttachment();
-                            break;
+                            case "0":
+                                jqxNotification("上传失败！", null, "error");
+                                $('#LocalFileInput').val('');
+                                break;
+                            case "1":
+                                jqxNotification("上传成功！", null, "success");
+                                $('#LocalFileInput').val('');
+                                //上传成功后调用清算平台、付款凭证附件上传接口
+                                var guid = $.request.queryString().VGUID;
+                                if (guid != "" && guid != null) {
+                                    PendingPaymentAttachmentUpload();
+                                }
+                                getAttachment();
+                                break;
                         }
                     }
                 });
@@ -496,16 +443,16 @@ var $page = function () {
 };
 function PendingPaymentAttachmentUpload() {
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/PendingPaymentAttachmentUpload",
-        data: { "PaymentVoucherVguid": $("#PaymentVoucherVguid").val(),"Vguid": $("#VGUID").val() },
+        url: "/AssetPurchase/FundClearingOrderDetail/PendingPaymentAttachmentUpload",
+        data: { "PaymentVoucherVguid": $("#PaymentVoucherVguid").val(), "Vguid": $("#VGUID").val() },
         type: "POST",
         dataType: "json",
         async: false,
         success: function (msg) {
             switch (msg.Status) {
-            case "0":
-                jqxNotification("调用接口失败！", null, "error");
-                break;
+                case "0":
+                    jqxNotification("调用接口失败！", null, "error");
+                    break;
             }
         }
     });
@@ -518,7 +465,7 @@ function computeValue() {
 }
 //拍照
 function openSocket() {
-    
+
     socket = new WebSocket(baseUrl);
     socket.onclose = function () {
         console.error("web channel closed");
@@ -585,33 +532,19 @@ function initSelectPurchaseDepartment() {
         async: false
     };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
+    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, placeHolder: "请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
     $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
 }
-//function initSelect()
-//{
-//    $.ajax({
-//        url: "/AssetPurchase/FixedAssetsOrderDetail/GetUseDepartment",
-//        data: {},
-//        type: "POST",
-//        dataType: "json",
-//        async: false,
-//        success: function (msg) {
-//            uiEngineHelper.bindSelect('#UseDepartment', msg, "VGUID", "Descrption");
-//            $("#UseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
-//        }
-//    });
-//}
 function initPaymentInformationComboBox() {
     //付款单位及相关账户信息
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
+        url: "/AssetPurchase/FundClearingOrderDetail/GetCustomerBankInfoList",
         data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
         type: "POST",
         dataType: "json",
         async: false,
         success: function (data) {
-            
+
             var source = new Array();
             for (var i = 0; i < data.Rows.length; i++) {
                 var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
@@ -625,7 +558,7 @@ function initPaymentInformationComboBox() {
                 searchMode: 'contains',
                 width: 198, height: 33
             });
-            $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: $("#PaymentInformation").val() }, function (msg) {
+            $.post("/AssetPurchase/FundClearingOrderDetail/GetCustomerBankInfo", { vguid: $("#PaymentInformation").val() }, function (msg) {
                 $("#BankAccountName").val(msg.BankAccountName);
                 $("#BankAccount").val(msg.BankAccount);
                 $("#Bank").val(msg.Bank);
@@ -637,7 +570,7 @@ function initPaymentInformationComboBox() {
 function initSelectPurchaseGoods(PurchaseDepartment) {
     //使用部门
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
+        url: "/AssetPurchase/FundClearingOrderDetail/GetPurchaseGoods",
         data: { "OrderCategory": 0, "PurchaseDepartment": PurchaseDepartment },
         type: "POST",
         dataType: "json",
@@ -645,23 +578,24 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
         success: function (msg) {
             uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
             $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
-            
+
         }
     });
 }
 function initPayCompanyDropdown() {
-    $('#PayCompanyDropdown').jqxDropDownList({enableSelection:false,
+    $('#PayCompanyDropdown').jqxDropDownList({
+        enableSelection: false,
         filterable: true, selectedIndex: 2, source: null, displayMember: "Descrption", dropDownWidth:
-            310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200,searchMode:'contains',
+            310, filterHeight: 30, valueMember: "VGUID", itemHeight: 30, height: 33, width: 200, searchMode: 'contains',
         renderer: function (index, label, value) {
             var table = '<table style="min-width: 130px;height:30px"><tr><td>' + label + '</td></tr></table>';
-        return table;
-    },
-    selectionRenderer: function (element, index, label, value) {
-        var text = label.replace(/\n/g, " ");
-        return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
-    }
-});
+            return table;
+        },
+        selectionRenderer: function (element, index, label, value) {
+            var text = label.replace(/\n/g, " ");
+            return "<span style='left: 5px; top: 6px; position: relative;'>" + text + "</span>";
+        }
+    });
 }
 function initTable() {
     getDetailData();
@@ -671,7 +605,7 @@ function initTable() {
         datatype: "json",
         updaterow: function (rowid, rowdata, commit) {
             $.ajax({
-                url: "/AssetPurchase/FixedAssetsOrderDetail/UpdateAssetNum",
+                url: "/AssetPurchase/FundClearingOrderDetail/UpdateAssetNum",
                 data: { vguid: rowdata.VGUID, AssetNum: rowdata.AssetNum },
                 async: false,
                 type: "post",
@@ -703,7 +637,7 @@ function initTable() {
         showaggregates: true,
         selectionmode: 'multiplecellsadvanced',
         columns: [
-            { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true,editable:false },
+            { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
             { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
             { text: '资产管理公司', datafield: 'AssetManagementCompany', columntype: 'textbox', width: 340, align: 'center', cellsAlign: 'center', editable: false },
             {
@@ -730,7 +664,7 @@ function initTable() {
                     }
                 ]
             },
-            { text: '各单位OA审批单上传', datafield: 'ApprovalFormFilePath', columntype: 'textbox', width: 150,editable:false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center',hidden:true }
+            { text: '各单位OA审批单上传', datafield: 'ApprovalFormFilePath', columntype: 'textbox', width: 150, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center', hidden: true }
         ]
     });
     $("#OrderDetailsDialog").modal("show");
@@ -748,9 +682,9 @@ function cellsrenderer(row, column, value, rowData) {
 }
 function getDetailData() {
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetAssetOrderDetails",
+        url: "/AssetPurchase/FundClearingOrderDetail/GetAssetOrderDetails",
         data: { AssetsOrderVguid: $("#VGUID").val(), PurchaseOrderSettingVguid: $("#PurchaseGoods").val() },
-        async :false,
+        async: false,
         type: "get",
         success: function (result) {
             vehicleDefaultData = result;
@@ -769,20 +703,20 @@ function formatDate(NewDtime) {
     //return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
 }
 function deleteApprovalFile(vguid) {
-    
+
     //删除文件
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/DeleteApprovalFile",
+        url: "/AssetPurchase/FundClearingOrderDetail/DeleteApprovalFile",
         data: { vguid: vguid },
         async: false,
         type: "post",
         success: function (msg) {
             switch (msg.Status) {
-            case "0":
-                break;
+                case "0":
+                    break;
                 case "1":
-                initTable();
-                break;
+                    initTable();
+                    break;
             }
         }
     });
@@ -794,7 +728,7 @@ function uploadApprovalFormFile(vguid) {
 }
 function getAttachment() {
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetAttachmentInfo",
+        url: "/AssetPurchase/FundClearingOrderDetail/GetAttachmentInfo",
         data: {
             "VGUID": $("#VGUID").val()
         },
@@ -852,19 +786,19 @@ function getAttachment() {
 
 function delAttachment(delID) {
     $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/DeleteAttachment",
+        url: "/AssetPurchase/FundClearingOrderDetail/DeleteAttachment",
         data: { VGUID: delID },
         traditional: true,
         type: "post",
-        success: function(msg) {
+        success: function (msg) {
             switch (msg.Status) {
-            case "0":
-                jqxNotification("删除失败！", null, "error");
-                break;
-            case "1":
-                jqxNotification("删除成功！", null, "success");
-                getAttachment();
-                break;
+                case "0":
+                    jqxNotification("删除失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("删除成功！", null, "success");
+                    getAttachment();
+                    break;
             }
         }
     });

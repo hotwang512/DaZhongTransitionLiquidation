@@ -1,51 +1,41 @@
-﻿using DaZhongTransitionLiquidation.Common.Pub;
-using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
-using DaZhongTransitionLiquidation.Infrastructure.Dao;
-using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
-using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
-using SyntacticSugar;
-using SqlSugar;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
-using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
-using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
-using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
+using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
+using SqlSugar;
+using SyntacticSugar;
 using Business_AssetOrderDetails = DaZhongTransitionLiquidation.Areas.AssetPurchase.Models.Business_AssetOrderDetails;
 
-namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAssetsOrder
+namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClearing
 {
-
-    public class FixedAssetsOrderDetailController : BaseController
+    public class FundClearingOrderDetailController : BaseController
     {
-        // GET: AssetManagement/FixedAssetsOrderDetail
-        public FixedAssetsOrderDetailController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        // GET: AssetPurchase/FundClearingOrderDetail
+        public FundClearingOrderDetailController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
 
         }
         public ActionResult Index()
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
-            var vguid = Request["VGUID"].TryToGuid();
-            if (vguid != Guid.Empty)
-            {
-                ViewBag.SubmitStatus = GetSubmitStatus(Request["VGUID"].TryToGuid());
-            }
             return View();
         }
-        public JsonResult SaveFixedAssetsOrder(Business_FixedAssetsOrder sevenSection)
+        public JsonResult SaveFixedAssetsOrder(Business_FundClearingOrder sevenSection)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -53,45 +43,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == sevenSection.VGUID);
-                    if (model.Count() == 0)
-                    {
-                        var orderNumberLeft = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                        //查出当前日期数据库中最大的订单号
-                        var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
-                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
-                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
-                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
-                        var maxOrderNumRight = 0;
-                        if (currentDayList.Any())
-                        {
-                            maxOrderNumRight = currentDayList.OrderByDescending(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
-                        }
-                        maxOrderNumRight = maxOrderNumRight + 1;
-                        sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4,'0');
-                        sevenSection.CreateDate = DateTime.Now;
-                        sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
-                        db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
-                    }
-                    else
+                    var model = db.Queryable<Business_FundClearingOrder>().Where(c => c.VGUID == sevenSection.VGUID);
                     {
                         sevenSection.ChangeDate = DateTime.Now;
                         sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                        db.Updateable<Business_FixedAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus,x.OrderNumber }).ExecuteCommand();
+                        db.Updateable<Business_FundClearingOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus, x.OrderNumber,x.FixedAssetsOrderVguid }).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
-
             return Json(resultModel);
         }
-
         public string JoinStr(List<Business_AssetAttachmentList> list)
         {
             var strArr = "";
@@ -111,179 +75,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
         }
         public JsonResult GetFixedAssetsOrder(Guid vguid)
         {
-            Business_FixedAssetsOrder model = new Business_FixedAssetsOrder();
+            Business_FundClearingOrder model = new Business_FundClearingOrder();
             DbBusinessDataService.Command(db =>
             {
                 //主信息
-                model = db.Queryable<Business_FixedAssetsOrder>().Single(x => x.VGUID == vguid);
+                model = db.Queryable<Business_FundClearingOrder>().Single(x => x.VGUID == vguid);
             });
             return Json(model, JsonRequestBehavior.AllowGet); ;
-        }
-
-        public JsonResult GetAssetOrderDetails(Guid AssetsOrderVguid,Guid PurchaseOrderSettingVguid)
-        {
-            var listFixedAssetsOrder = new List<Business_AssetOrderDetails>();
-            DbBusinessDataService.Command(db =>
-            {
-                //主信息
-                if (db.Queryable<Business_AssetOrderDetails>().Any(x => x.AssetsOrderVguid == AssetsOrderVguid))
-                {
-                    listFixedAssetsOrder = db.Queryable<Business_AssetOrderDetails>().Where(x => x.AssetsOrderVguid == AssetsOrderVguid).OrderBy(c => c.AssetManagementCompany).ToList();
-                }
-            });
-            if (listFixedAssetsOrder.Count == 0)
-            {
-                listFixedAssetsOrder = GetDefaultAssetOrderDetails(AssetsOrderVguid, PurchaseOrderSettingVguid);
-            }
-            return Json(listFixedAssetsOrder, JsonRequestBehavior.AllowGet); ;
-        }
-
-        public List<Business_AssetOrderDetails> GetDefaultAssetOrderDetails(Guid AssetsOrderVguid,Guid PurchaseOrderSettingVguid)
-        {
-            var cache = CacheManager<Sys_User>.GetInstance();
-            var list = new List<Business_AssetOrderDetails>();
-            var listCompany = new List<string>();
-            //获取采购物品配置的资产管理公司
-            DbBusinessDataService.Command(db =>
-            {
-                var listManagementCompany = db.Queryable<Business_PurchaseManagementCompany>()
-                    .Where(c => c.PurchaseOrderSettingVguid == PurchaseOrderSettingVguid && c.IsCheck == true).ToList();
-                foreach (var item in listManagementCompany)
-                {
-                    if (!db.Queryable<Business_AssetOrderDetails>()
-                        .Any(c => c.AssetsOrderVguid == AssetsOrderVguid && c.AssetManagementCompany == item.ManagementCompany))
-                    {
-                        var model = new Business_AssetOrderDetails();
-                        model.VGUID = Guid.NewGuid();
-                        model.AssetsOrderVguid = AssetsOrderVguid;
-                        model.CreateDate = DateTime.Now;
-                        model.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        model.AssetManagementCompany = item.ManagementCompany;
-                        list.Add(model);
-                    }
-                }
-                if (list.Count > 0)
-                {
-                    db.Insertable<Business_AssetOrderDetails>(list).ExecuteCommand();
-                }
-            });
-            return list.OrderBy(c => c.AssetManagementCompany).ToList();
-        }
-
-        public JsonResult DeleteApprovalFile(Guid vguid)
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            DbBusinessDataService.Command(db =>
-            {
-                var result = db.Ado.UseTran(() =>
-                {
-                    var updateObj = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == vguid).First();
-                    updateObj.ApprovalFormFileName = "";
-                    updateObj.ApprovalFormFilePath = "";
-                    db.Updateable(updateObj).ExecuteCommand();
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-            });
-            return Json(resultModel);
-        }
-        public JsonResult UpdateAssetNum(Guid vguid, int AssetNum)
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            DbBusinessDataService.Command(db =>
-            {
-                var result = db.Ado.UseTran(() =>
-                {
-                    var updateObj = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == vguid).First();
-                    db.Updateable(updateObj).UpdateColumns(it => new { it.AssetNum }).ReSetValue(it => it.AssetNum == AssetNum).ExecuteCommand();
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-            });
-            return Json(resultModel);
-        }
-        public JsonResult UploadLocalFile(Guid Vguid, HttpPostedFileBase File)
-        {
-            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
-            var cache = CacheManager<Sys_User>.GetInstance();
-            if (File != null)
-            {
-                var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
-                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "ApprovalFormFile\\" + newFileName;
-                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
-                try
-                {
-                    File.SaveAs(filePath);
-                    DbBusinessDataService.Command(db =>
-                    {
-                        var result = db.Ado.UseTran(() =>
-                        {
-                            var sevenSection = db.Queryable<Business_AssetOrderDetails>().Where(c => c.VGUID == Vguid).First();
-                            sevenSection.ApprovalFormFilePath = uploadPath;
-                            sevenSection.ApprovalFormFileName = File.FileName;
-                            sevenSection.ChangeDate = DateTime.Now;
-                            sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                            db.Updateable(sevenSection).UpdateColumns(x => new {
-                                x.ChangeDate,
-                                x.ChangeUser,
-                                x.ApprovalFormFilePath,
-                                x.ApprovalFormFileName
-                            }).ExecuteCommand();
-                        });
-                        resultModel.IsSuccess = result.IsSuccess;
-                        resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-                    });
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
-                }
-            }
-            return Json(resultModel);
-        }
-        public JsonResult UploadContractFile(Guid Vguid, HttpPostedFileBase File)
-        {
-            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
-            var cache = CacheManager<Sys_User>.GetInstance();
-            if (File != null)
-            {
-                var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
-                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "PurchaseContract\\" + newFileName;
-                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
-                try
-                {
-                    File.SaveAs(filePath);
-                    DbBusinessDataService.Command(db =>
-                    {
-                        var result = db.Ado.UseTran(() =>
-                        {
-                            var sevenSection = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == Vguid).First();
-                            if (sevenSection != null)
-                            {
-                                sevenSection.ContractFilePath = uploadPath;
-                                sevenSection.ContractName = File.FileName;
-                                sevenSection.ChangeDate = DateTime.Now;
-                                sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                                db.Updateable(sevenSection).UpdateColumns(x => new {
-                                    x.ChangeDate,
-                                    x.ChangeUser,
-                                    x.ContractFilePath,
-                                    x.ContractName
-                                }).ExecuteCommand();
-                            }
-                        });
-                        resultModel.IsSuccess = result.IsSuccess;
-                        resultModel.ResultInfo = uploadPath;
-                        resultModel.ResultInfo2 = File.FileName;
-                        resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
-                    });
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
-                }
-            }
-            return Json(resultModel);
         }
         public JsonResult GetUseDepartment()
         {
@@ -296,10 +94,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPurchaseGoods(int OrderCategory,Guid[] PurchaseDepartment)
+        public JsonResult GetPurchaseGoods(int OrderCategory, Guid[] PurchaseDepartment)
         {
             var PurchaseDepartmentStr = "";
-            
             var orderTypeData = new List<Business_PurchaseOrderSetting>();
             DbBusinessDataService.Command(db =>
             {
@@ -313,43 +110,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     {
                         PurchaseDepartmentStr = PurchaseDepartmentStr + str + "','";
                     }
-                    PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0,PurchaseDepartmentStr.Length - 3);
+                    PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0, PurchaseDepartmentStr.Length - 3);
                     orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
                     Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
                     WHERE OrderCategory = '0' And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
                 }
             });
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);
-        }
-        
-        public JsonResult SubmitFixedAssetsOrder(Guid vguid)
-        {
-            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
-            var cache = CacheManager<Sys_User>.GetInstance();
-            DbBusinessDataService.Command(db =>
-            {
-                var result = db.Ado.UseTran(() =>
-                {
-                    var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
-                    model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
-                    model.SubmitDate = DateTime.Now;
-                    model.SubmitUser = cache[PubGet.GetUserKey].UserName;
-                    db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
-                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
-            });
-            return Json(resultModel);
-        }
-        public int GetSubmitStatus(Guid vguid)
-        {
-            var model = new Business_FixedAssetsOrder();
-            DbBusinessDataService.Command(db =>
-            {
-                model = db.Queryable<Business_FixedAssetsOrder>().Single(x => x.VGUID == vguid);
-            });
-            return model.SubmitStatus.TryToInt();
         }
         public JsonResult GetCustomerBankInfoList(string PurchaseOrderSetting)
         {
@@ -359,8 +126,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 var jsonResult = new JsonResultModel<v_Business_CustomerBankInfo>();
                 DbBusinessDataService.Command(db =>
                 {
-                    var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseOrderSettingGuid).First().BusinessSubItem;
-                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
+                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == "cz|03|0303").First().VGUID.ToString();//资金清算项
                     var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVguid && x.Isable).ToList();
                     if (data.Count > 0)
                     {
@@ -417,8 +183,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             var list = new List<Business_UserCompanySetDetail>();
             DbBusinessDataService.Command(db =>
             {
-                var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == PurchaseOrderSetting).First().BusinessSubItem;
-                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
+                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == "cz|03|0303").First().VGUID.ToString();
                 var data = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid && x.Isable).ToList();
                 if (data.Count > 0)
                 {
@@ -548,10 +313,10 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             var imageServerUrl = ConfigSugar.GetAppString("ImageServerUrl");
             List<Business_AssetAttachmentList> BAList = new List<Business_AssetAttachmentList>();
             DbBusinessDataService.Command(db =>
-                {
-                    BAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID)
-                        .ToList();
-                });
+            {
+                BAList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == VGUID)
+                    .ToList();
+            });
             BAList.ForEach(x => { x.Attachment = imageServerUrl + x.Attachment; });
             return Json(BAList, JsonRequestBehavior.AllowGet);
         }
@@ -592,10 +357,9 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(resultModel);
         }
-
         public JsonResult PendingPaymentAttachmentUpload(Guid PaymentVoucherVguid, Guid Vguid)
         {
-            var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
@@ -619,11 +383,10 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                     JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
                 pendingPaymentmodel.OtherReceipt =
                     JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-
                 var apiReault = PendingPaymentAttachmentApi(pendingPaymentmodel, PaymentVoucherVguid);
                 var pendingRedult = apiReault.JsonToModel<PendingResultModel>();
                 resultModel.IsSuccess = pendingRedult.success;
-                resultModel.Status = pendingRedult.success ? "1":"0";
+                resultModel.Status = pendingRedult.success ? "1" : "0";
                 resultModel.ResultInfo = pendingRedult.code;
                 resultModel.ResultInfo2 = pendingRedult.message;
                 if (!pendingRedult.success)
@@ -633,7 +396,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        public string PendingPaymentAttachmentApi(PendingPaymentModel model,Guid PaymentVoucherVguid)
+        public string PendingPaymentAttachmentApi(PendingPaymentModel model, Guid PaymentVoucherVguid)
         {
             var url = ConfigSugar.GetAppString("PendingPaymentAttachmentUrl");
             var data = "{" +
@@ -666,69 +429,6 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
             {
                 data += "\"OtherReceipt\":\"{OtherReceipt}\"".Replace("{OtherReceipt}", model.OtherReceipt);
             }
-            data = data.Substring(0, data.Length - 1);
-            data = data + "}";
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Clear();
-                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
-                wc.Encoding = System.Text.Encoding.UTF8;
-                var resultData = wc.UploadString(new Uri(url), "POST", data);
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
-                return resultData;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
-                return "";
-            }
-        }
-        public string PendingPaymentApi(PendingPaymentModel model)
-        {
-            var url = ConfigSugar.GetAppString("PendingPaymentUrl");
-            var data = "{" +
-                       "\"IdentityToken\":\"{IdentityToken}\",".Replace("{IdentityToken}", model.IdentityToken) +
-                       "\"FunctionSiteId\":\"{FunctionSiteId}\",".Replace("{FunctionSiteId}", "61") +
-                       "\"OperatorIP\":\"{OperatorIP}\",".Replace("{OperatorIP}", GetSystemInfo.GetClientLocalIPv4Address()) +
-                       "\"AccountSetCode\":\"{AccountSetCode}\",".Replace("{AccountSetCode}", model.AccountSetCode) +
-                       "\"ServiceCategory\":\"{ServiceCategory}\",".Replace("{ServiceCategory}", model.ServiceCategory) +
-                       "\"BusinessProject\":\"{BusinessProject}\",".Replace("{BusinessProject}", model.BusinessProject) +
-                       "\"PaymentCompany\":\"{PaymentCompany}\",".Replace("{PaymentCompany}", model.PaymentCompany) +
-                       "\"CollectBankAccountName\":\"{CollectBankAccountName}\",".Replace("{CollectBankAccountName}", model.CollectBankAccountName) +
-                       "\"CollectBankAccouont\":\"{CollectBankAccouont}\",".Replace("{CollectBankAccouont}", model.CollectBankAccouont) +
-                       "\"CollectBankName\":\"{CollectBankName}\",".Replace("{CollectBankName}", model.CollectBankName) +
-                       "\"CollectBankNo\":\"{CollectBankNo}\",".Replace("{CollectBankNo}", model.CollectBankNo) +
-                       "\"PaymentMethod\":\"{PaymentMethod}\",".Replace("{PaymentMethod}", model.PaymentMethod) +
-                       "\"invoiceNumber\":\"{invoiceNumber}\",".Replace("{invoiceNumber}", model.invoiceNumber) +
-                       "\"numberOfAttachments\":\"{numberOfAttachments}\",".Replace("{numberOfAttachments}", model.numberOfAttachments) +
-                       "\"Amount\":\"{Amount}\",".Replace("{Amount}", model.Amount) +
-                       "\"Summary\":\"{Summary}\",".Replace("{Summary}", model.Summary);
-            if (model.PaymentReceipt != "")
-            {
-                data += "\"PaymentReceipt\":\"{PaymentReceipt}\",".Replace("{PaymentReceipt}", model.PaymentReceipt);
-            }
-            if (model.InvoiceReceipt != "")
-            {
-                data += "\"InvoiceReceipt\":\"{InvoiceReceipt}\",".Replace("{InvoiceReceipt}", model.InvoiceReceipt);
-            }
-            if (model.ApprovalReceipt != "")
-            {
-                data += "\"ApprovalReceipt\":\"{ApprovalReceipt}\",".Replace("{ApprovalReceipt}", model.ApprovalReceipt);
-            }
-            if (model.Contract != "")
-            {
-                data += "\"Contract\":\"{Contract}\",".Replace("{Contract}", model.Contract);
-            }
-            if (model.DetailList != "")
-            {
-                data += "\"DetailList\":\"{DetailList}\",".Replace("{DetailList}", model.DetailList);
-            }
-            if (model.OtherReceipt != "")
-            {
-                data += "\"OtherReceipt\":\"{OtherReceipt}\"".Replace("{OtherReceipt}", model.OtherReceipt);
-            }
-
             data = data.Substring(0, data.Length - 1);
             data = data + "}";
             try

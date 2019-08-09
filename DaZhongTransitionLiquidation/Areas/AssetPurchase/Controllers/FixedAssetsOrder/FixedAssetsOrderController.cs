@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
@@ -149,6 +150,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 purchaseAssignmodel.ContractAmount = model.ContractAmount;
                                 purchaseAssignmodel.AssetDescription = model.AssetDescription;
                                 db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
+                                var fundClearingModel = Mapper.Map<Business_FundClearing>(purchaseAssignmodel);
+                                fundClearingModel.VGUID = Guid.NewGuid();
+                                db.Insertable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
                                 resultModel.ResultInfo = pendingRedult.data.url;
                                 resultModel.IsSuccess = true;
                                 resultModel.Status = "1";

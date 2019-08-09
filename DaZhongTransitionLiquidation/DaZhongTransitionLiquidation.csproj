@@ -214,8 +214,11 @@
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrderDetail.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\FundClearing.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\FundClearingOrderDetail.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\IntangibleAssetsOrderDetail.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\LiquidationReview.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\PurchaseAssign.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\TaxFeeOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\TaxFeeOrderDetail.js" />
@@ -357,6 +360,9 @@
     <Content Include="Areas\VoucherManageManagement\Views\SettlementSubject\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleBusiness\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\SettlementCount\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\FundClearing\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\LiquidationReview\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\FundClearingOrderDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2349,6 +2355,9 @@
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingOrderDetailController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\LiquidationReviewController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\PurchaseAssign\PurchaseAssignController.cs" />
@@ -2358,7 +2367,10 @@
     <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderBelongTo.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_AssetOrderDetails.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_FixedAssetsOrder.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_FundClearing.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_FundClearingOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_IntangibleAssetsOrder.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Business_LiquidationDistribution.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseAssign.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseOrderNum.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_TaxFeeOrder.cs" />
@@ -2492,6 +2504,7 @@
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
     <Compile Include="AutoMapper\Configuration.cs" />
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />
+    <Compile Include="AutoMapper\Profiles\AssignProfile.cs" />
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\DZLoginInfo.cs" />
@@ -2584,7 +2597,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
-    <Folder Include="Areas\AssetPurchase\Views\Shared\" />
     <Folder Include="Areas\FinancialStatementsManagement\Models\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />

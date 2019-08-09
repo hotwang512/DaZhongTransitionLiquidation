@@ -1117,16 +1117,36 @@
                         </tr>
                     }
                 </table>
-                <table style="cursor: pointer; margin-left:-8px" class="bodyTable">
-                    @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资金清算" && i.Reads == 1))
-                    {
-                        <tr class="menue_item" id="PaymentHistory_AssetPurchase" pageurl="/NoPage">
-                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">资金清算</td>
-                            <td></td>
-                        </tr>
-                    }
+                
+                <table style="cursor: pointer;" class="bodyTable">
+                    <tr>
+                        <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                        <td class="menue_text_header" style="font-weight: 600;font-size: 15px">资金清算</td>
+                        <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                    </tr>
                 </table>
+                <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                    <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
+                        <table>
+                            @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产分配" && i.Reads == 1))
+                            {
+                                <tr class="menue_item" id="FundClearing_AssetPurchase" pageurl="/AssetPurchase/FundClearing/Index">
+                                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                    <td class="menue_text">资产分配</td>
+                                    <td></td>
+                                </tr>
+                            }
+                            @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "清算审核" && i.Reads == 1))
+                            {
+                                <tr class="menue_item" id="LiquidationReview_AssetPurchase" pageurl="/AssetPurchase/LiquidationReview/Index">
+                                    <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                    <td class="menue_text">清算审核</td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                     <table style="cursor: pointer;">

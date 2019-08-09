@@ -293,7 +293,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var BusinessType = OrderListAPI.ServiceCategory;
                     var BusinessProject = OrderListAPI.BusinessProject;
                     var BusinessProject1 = BusinessProject.Split("|")[0];
-                    var BusinessProject2 = BusinessProject.Split("|")[1];
+                    var BusinessProject2 = "|" + BusinessProject.Split("|")[1];
                     //var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
                     //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
@@ -301,7 +301,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var datas = _db.SqlQueryable<Business_OrderList>(@"select a.BusinessSubItem1,a.BusinessProject,a.VGUID,b.BusinessType,b.Founder,b.Status,b.CollectionCompany,b.CollectionCompanyName,b.Number,b.PaymentMethod,b.AttachmentNumber,
 b.InvoiceNumber,b.CollectionAccount,b.CollectionBankAccount,b.CollectionBankAccountName,b.CollectionBank,b.CompanyCode,b.OrderDetailValue from v_Business_BusinessTypeSet as a
 left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
-                    var data = datas.Where(i => i.BusinessSubItem1.Contains(BusinessProject1) && i.BusinessSubItem1.Contains(BusinessProject2))
+                    var data = datas.Where(i => i.BusinessSubItem1.Contains(BusinessProject1) && i.BusinessSubItem1.EndsWith(BusinessProject2))
                         .ToList().FirstOrDefault();
                               
                                //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)

@@ -51,6 +51,7 @@ var $page = function () {
                 for (var j = 0; j < rows.length; j++) {
                     ManagementCompanyList.push({ "IsCheck": rows[j].IsCheck, "CompanyCode": rows[j].CompanyCode, "AccountModeCode": rows[j].AccountModeCode, "ManagementCompany": rows[j].ManagementCompany, "Descrption": rows[j].Descrption, "KeyData": rows[j].KeyData });
                 };
+                debugger;
                 if (validateError <= 0) {
                     debugger;
                     $.ajax({

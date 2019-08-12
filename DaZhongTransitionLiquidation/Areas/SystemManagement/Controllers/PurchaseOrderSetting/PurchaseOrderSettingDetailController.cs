@@ -225,7 +225,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                                 ON t1.Code = t2.AccountModeCode
                         WHERE t1.SectionVGUID = 'H63BD715-C27D-4C47-AB66-550309794D43'
                               AND t2.SectionVGUID = 'A63BD715-C27D-4C47-AB66-550309794D43'
-                        ").OrderBy("AccountModeCode asc,CompanyCode asc").ToList();
+                              ").OrderBy("AccountModeCode asc,CompanyCode asc").ToList();
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                                    AND pmc.CompanyCode = t2.Code
                         WHERE t1.SectionVGUID = 'H63BD715-C27D-4C47-AB66-550309794D43'
                               AND t2.SectionVGUID = 'A63BD715-C27D-4C47-AB66-550309794D43'
-                        ").OrderBy("AccountModeCode asc,CompanyCode asc").ToList();
+                              AND pmc.PurchaseOrderSettingVguid = '"+ VGUID + "'").OrderBy("AccountModeCode asc,CompanyCode asc").ToList();
                 }
 
             });

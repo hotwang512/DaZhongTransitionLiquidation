@@ -190,6 +190,7 @@ var $page = function () {
                     { name: 'SumPayment', type: 'float' },
                     { name: 'PurchaseDescription', type: 'string' },
                     { name: 'PaymentDate', type: 'date' },
+                    { name: 'BankStatus', type: 'string' },
                     { name: 'ContractName', type: 'string' },
                     { name: 'ContractFilePath', type: 'string' },
                     { name: 'PayType', type: 'string' },
@@ -267,6 +268,8 @@ var $page = function () {
             return '<span style="margin: 4px; margin-top:8px;">待发起支付</span>';
         } else if (value == 2) {
             return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
+        } else if (value == 3) {
+            return '<span style="margin: 4px; margin-top:8px;">支付失败-' + rowData.BankStatus + '</span>';
         }
     }
     function rendererFunc() {

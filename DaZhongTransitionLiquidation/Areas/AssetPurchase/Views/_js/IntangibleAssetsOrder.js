@@ -158,6 +158,7 @@ var $page = function () {
                     { name: 'ContractFilePath', type: 'string' },
                     { name: 'PayType', type: 'string' },
                     { name: 'PayCompany', type: 'string' },
+                    { name: 'BankStatus', type: 'string' },
                     { name: 'OSNO', type: 'string' },
                     { name: 'PaymentVoucherVguid', type: 'string' },
                     { name: 'SubmitStatus', type: 'string' },
@@ -225,7 +226,7 @@ var $page = function () {
     }
     function cellsRendererSubmit(row, column, value, rowData) {
         if (value == 6) {
-            return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
+            return '<span style="margin: 4px; margin-top:8px;">支付成功</span>';
         } else if (value == 1) {
             return '<span style="margin: 4px; margin-top:8px;">首付款支付中</span>';
         } else if (value == 0) {
@@ -238,6 +239,8 @@ var $page = function () {
             return '<span style="margin: 4px; margin-top:8px;">尾款待发起支付</span>';
         } else if (value == 5) {
             return '<span style="margin: 4px; margin-top:8px;">尾款支付中</span>';
+        } else if (value == 7) {
+            return '<span style="margin: 4px; margin-top:8px;">支付失败-' + rowData.BankStatus + '</span>';
         }
     }
     function rendererFunc() {

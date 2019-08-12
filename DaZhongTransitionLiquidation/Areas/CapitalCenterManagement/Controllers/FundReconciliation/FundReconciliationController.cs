@@ -34,7 +34,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_FundReconciliation>()
+                jsonResult.Rows = db.Queryable<Business_FundReconciliation>().Where(x=>x.CompanyName == UserInfo.CompanyName)
                 .OrderBy(i => i.BalanceDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

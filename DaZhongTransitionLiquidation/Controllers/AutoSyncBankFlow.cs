@@ -209,7 +209,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
                 bankFlow.Balance = details.BALANCE_AMOUNT.TryToDecimal();
                 bankFlow.VGUID = Guid.NewGuid();
-                bankFlow.TransactionDate = details.TRX_DATE.TryToDate();
+                bankFlow.TransactionDate = details.ATTRIBUTE5.TryToDate();
                 bankFlow.PaymentUnitInstitution = "";
                 bankFlow.Purpose = details.USE;
                 bankFlow.Remark = details.DESCRIPTION;
@@ -310,6 +310,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             var data1 = db.Queryable<Business_FixedAssetsOrder>().ToList();
             var data2 = db.Queryable<Business_IntangibleAssetsOrder>().ToList();
             var data3 = db.Queryable<Business_TaxFeeOrder>().ToList();
+            //var data4 = db.Queryable<Business_FundClearingOrder>().ToList(); 
             try
             {
                 WebClient wc = new WebClient();

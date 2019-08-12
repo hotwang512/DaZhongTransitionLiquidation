@@ -139,7 +139,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
                                 {
                                     //计算出车龄，并根据车龄判断经营模式子类
-                                    reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge <= months).OrderByDescending(x => x.VehicleAge).First().BusinessName;
+                                    reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
                                 }
                                 else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
                                 {

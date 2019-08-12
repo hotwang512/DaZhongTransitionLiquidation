@@ -172,7 +172,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 //计算出车龄，并根据车龄判断经营模式子类
                                 //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
                                 var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
-                                item.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge <= months).OrderByDescending(x => x.VehicleAge).First().BusinessName;
+                                item.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
                             }
                             else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
                             {

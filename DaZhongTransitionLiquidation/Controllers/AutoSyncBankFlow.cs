@@ -310,7 +310,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             var data1 = db.Queryable<Business_FixedAssetsOrder>().ToList();
             var data2 = db.Queryable<Business_IntangibleAssetsOrder>().ToList();
             var data3 = db.Queryable<Business_TaxFeeOrder>().ToList();
-            //var data4 = db.Queryable<Business_FundClearingOrder>().ToList(); 
+            var data4 = db.Queryable<Business_FundClearingOrder>().ToList(); 
             try
             {
                 WebClient wc = new WebClient();
@@ -390,6 +390,24 @@ namespace DaZhongTransitionLiquidation.Controllers
                             assets3.BankStatus = modelData.data.REMG;
                             assets3.OSNO = item.OSNO;
                             db.Updateable(assets3).Where(it => it.VGUID == assets3.VGUID).ExecuteCommand();
+                        }
+                        var isAny4 = data4.Any(x => x.PaymentVoucherVguid == item.VGUID);
+                        if (isAny4)
+                        {
+                            var assets4 = data4.SingleOrDefault(x => x.PaymentVoucherVguid == item.VGUID);
+                            if (modelData.data.RECO == "0000")
+                            {
+                                //订单支付成功
+                                assets4.SubmitStatus = 2;
+                            }
+                            else if (modelData.data.RECO == "0003" || modelData.data.RECO == "0005")
+                            {
+                                //订单支付失败
+                                assets4.SubmitStatus = 3;
+                            }
+                            assets4.BankStatus = modelData.data.REMG;
+                            assets4.OSNO = item.OSNO;
+                            db.Updateable(assets4).Where(it => it.VGUID == assets4.VGUID).ExecuteCommand();
                         }
                     }
                 }

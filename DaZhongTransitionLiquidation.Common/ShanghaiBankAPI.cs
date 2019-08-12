@@ -16,6 +16,7 @@ namespace DaZhongTransitionLiquidation.Common
             var data = "{" +
                             "\"CapitalAccount\":\"{CapitalAccount}\"".Replace("{CapitalAccount}", capitalAccount) +
                             "}";
+            var errmsgData = "";
             try
             {
                 WebClient wc = new WebClient();
@@ -23,6 +24,7 @@ namespace DaZhongTransitionLiquidation.Common
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
                 var resultData = wc.UploadString(new Uri(url), data);
+                errmsgData = resultData;
                 var modelData = resultData.JsonToModel<BankFlowResult>();
                 if (modelData.success)
                 {
@@ -32,7 +34,7 @@ namespace DaZhongTransitionLiquidation.Common
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, errmsgData));
             }
             return bankFlowList;
         }
@@ -42,8 +44,8 @@ namespace DaZhongTransitionLiquidation.Common
             var tradingStartDate = DateTime.Now.AddDays(-1);
             var tradingEndDate = DateTime.Now.AddDays(-1);
 
-            //var tradingStartDate = DateTime.Parse("2019-03-11");
-            //var tradingEndDate = DateTime.Parse("2019-03-31");
+            //var tradingStartDate = DateTime.Parse("2019-06-01");
+            //var tradingEndDate = DateTime.Parse("2019-06-30");
             bankFlowList = GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate, capitalAccount);
             return bankFlowList;
         }

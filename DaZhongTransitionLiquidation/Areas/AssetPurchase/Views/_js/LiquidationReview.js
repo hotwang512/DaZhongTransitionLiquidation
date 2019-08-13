@@ -177,6 +177,9 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 40,
                 rowDetails: true,
+                ready: function () {
+                    selector.$grid().jqxDataTable('showDetails', 0);
+                },
                 initRowDetails: initRowDetails,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true,align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },

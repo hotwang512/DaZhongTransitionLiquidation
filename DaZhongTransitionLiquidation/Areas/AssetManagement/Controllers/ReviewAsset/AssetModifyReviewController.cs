@@ -73,6 +73,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                        mi.BELONGTO_COMPANY AS BELONGTO_COMPANY_M,
                        mi.START_VEHICLE_DATE AS PERIOD,
                        mi.DESCRIPTION AS DESCRIPTION,
+					   mi.BOOK_TYPE_CODE,
                        mi.ASSET_ID AS ASSET_ID
                     FROM Business_ModifyVehicle mv
                     LEFT JOIN Business_AssetMaintenanceInfo mi
@@ -105,7 +106,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
                                 assetSwapModel.PERIOD = item.PERIOD;
-                                assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
+                                assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
@@ -133,7 +134,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
                                 assetSwapModel.PERIOD = item.PERIOD;
-                                assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
+                                assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
@@ -164,7 +165,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.PERIOD = item.PERIOD;
-                                assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
+                                assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();

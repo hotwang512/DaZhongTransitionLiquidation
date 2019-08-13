@@ -149,5 +149,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string ASSET_ID { get; set; }
         public string PERIOD { get; set; }
         public string DESCRIPTION { get; set; }
+        public string BOOK_TYPE_CODE { get; set; }
     }
 }

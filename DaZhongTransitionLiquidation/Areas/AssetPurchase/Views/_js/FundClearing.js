@@ -176,10 +176,16 @@ var $page = function () {
                         }
                         // appends buttons to the status bar.
                         var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
-                        var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
-                        var deleteButton = $(buttonTemplate);
+                        var buttonDelTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
+                        var buttonAddTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
+                        var addButton = $(buttonAddTemplate);
+                        var deleteButton = $(buttonDelTemplate);
+                        container.append(addButton);
                         container.append(deleteButton);
                         toolBar.append(container);
+                        addButton.jqxButton({ cursor: "pointer", enableDefault: false, height: 25, width: 25 });
+                        addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
+                        addButton.jqxTooltip({ position: 'bottom', content: "分配资产" });
                         deleteButton.jqxButton({ cursor: "pointer", disabled: false, enableDefault: false, height: 25, width: 25 });
                         deleteButton.find('div:first').addClass(toTheme('jqx-icon-delete'));
                         deleteButton.jqxTooltip({ position: 'bottom', content: "删除" });
@@ -188,8 +194,12 @@ var $page = function () {
                             var args = event.args;
                             rowIndex = args.index;
                         });
+                        addButton.click(function (event) {
+                            $("#AssignVguid").val(id);
+                            $("#AssetNum").val("");
+                            $("#AssignDialog").modal("show");
+                        });
                         deleteButton.click(function () {
-                            debugger;
                             var selection = $(nestedDataTable).jqxDataTable('getSelection');
                             $.ajax({
                                 url: "/AssetPurchase/FundClearing/DeleteAssignCompany",
@@ -235,6 +245,9 @@ var $page = function () {
                 columnsHeight: 40,
                 rowDetails: true,
                 initRowDetails: initRowDetails,
+                ready: function () {
+                    selector.$grid().jqxDataTable('showDetails', 0);
+                },
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },

@@ -42,10 +42,10 @@ namespace DaZhongTransitionLiquidation.Common
         {
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             var tradingStartDate = DateTime.Now.AddDays(-1);
-            var tradingEndDate = DateTime.Now.AddDays(-1);
+            var tradingEndDate = DateTime.Now.AddDays(-10);
 
-            //var tradingStartDate = DateTime.Parse("2019-06-01");
-            //var tradingEndDate = DateTime.Parse("2019-06-30");
+            //var tradingStartDate = DateTime.Parse("2019-07-01");
+            //var tradingEndDate = DateTime.Parse("2019-07-31");
             bankFlowList = GetShangHaiBankHistoryTradingFlow(tradingStartDate, tradingEndDate, capitalAccount);
             return bankFlowList;
         }

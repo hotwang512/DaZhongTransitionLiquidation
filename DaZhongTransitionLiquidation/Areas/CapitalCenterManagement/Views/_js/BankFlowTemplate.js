@@ -87,7 +87,7 @@ var $page = function () {
             $("#TradingBank").val("");
             $("#TransactionDate").val("");
             $("#TransactionDateEnd").val("");
-            $("#PaymentUnit").val("");
+            $("#ReceivingUnit").val("");
         });
         //导入建设银行
         $("#btnImportingCBC").on("click", function () {
@@ -206,7 +206,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "TradingBank": $("#TradingBank").val(), "TransactionDate": $("#TransactionDate").val(), "PaymentUnit": $("#PaymentUnit").val() },
+                data: { "TradingBank": $("#TradingBank").val(), "TransactionDate": $("#TransactionDate").val(), "ReceivingUnit": $("#ReceivingUnit").val() },
                 url: "/CapitalCenterManagement/BankFlowTemplate/GetBankFlowData?TransactionDateEnd=" + DateEnd   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

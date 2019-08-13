@@ -207,7 +207,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 jsonResult.Rows = db.Queryable<Business_BankFlowTemplate>()
                 .WhereIF(searchParams.TradingBank != null, i => i.BankAccount == searchParams.TradingBank)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
-                .WhereIF(searchParams.PaymentUnit != null, i => i.PaymentUnit == searchParams.PaymentUnit)
+                .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
+                .WhereIF(UserInfo.LoginName != "admin", x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy(i => i.TransactionDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

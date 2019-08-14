@@ -124,7 +124,7 @@ var $page = function () {
             width: "100%",
             height:"350px",
             source: dataAdapter,
-            selectionmode: 'singlecell',
+            selectionmode: 'singlerow',
             editable: true,
             editmode: 'selectedrow',
             ready: function () {

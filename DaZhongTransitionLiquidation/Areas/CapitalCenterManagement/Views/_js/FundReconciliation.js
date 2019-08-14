@@ -297,7 +297,7 @@ var $page = function () {
     function cellsDoneFunc(row, column, value, rowData) {
         var container = "";
         if (rowData.ReconciliantStatus == "对账失败") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BankBalance + "','" + rowData.BalanceDate.Format("yyyy-MM-dd") + "','" + rowData.ReconciliantDate.Format("yyyy-MM-dd") + "','" + rowData.Reconcilianter + "')>重新对账</a>";
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BankAccount + "','" + rowData.BankName + "','" + rowData.BankAccountName + "','" + rowData.BankBalance + "','" + rowData.BalanceDate.Format("yyyy-MM-dd") + "','" + rowData.ReconciliantDate.Format("yyyy-MM-dd") + "','" + rowData.Reconcilianter + "')>重新对账</a>";
         }
         return container;
     }
@@ -345,7 +345,7 @@ var $page = function () {
 
 };
 
-function edit(guid, bankBalance, balanceDate, reconciliantDate, reconcilianter) {
+function edit(guid, bankAccount, bankName, bankAccountName, bankBalance, balanceDate, reconciliantDate, reconcilianter) {
     isEdit = true;
     vguid = guid;
     if (bankBalance == null || bankBalance == "null") {
@@ -360,6 +360,9 @@ function edit(guid, bankBalance, balanceDate, reconciliantDate, reconcilianter) 
     if (reconcilianter == null || reconcilianter == "null") {
         reconcilianter = $("#LoginName").val();
     }
+    $("#BankAccount").val(bankAccount);
+    $("#BankName").val(bankName);
+    $("#BankAccountName").val(bankAccountName);
     $("#BankBalance").val(bankBalance);
     $("#BalanceDate").val(balanceDate);
     $("#ReconciliantDate").val(reconciliantDate);

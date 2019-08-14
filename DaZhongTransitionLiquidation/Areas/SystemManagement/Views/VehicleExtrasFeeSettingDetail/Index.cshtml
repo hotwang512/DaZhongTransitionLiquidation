@@ -50,43 +50,30 @@
         </td>
     </tr>
 </table>
-
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">主信息</span></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span" style="width: 40px">车型：</td>
+                <td class="td_input">
+                    <select id="VehicleModel" class="input_text form-control" style="width: 200px;"></select>
+                </td>
+            </tr>
+            <tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
     </div>
     <div class="body_mk" style="height: 440px;">
-        <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
-            <tr style="height:50px">
-                <td style="text-align: right;">车型：</td>
-                <td style="text-align: left;">
-                    <select id="VehicleModel" class="input_text form-control" style="width: 200px;">
-                    </select>
-                </td>
-                <td style="text-align: right;">费用：</td>
-                <td style="text-align: left;">
-                    <input id="Fee" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/>
-                </td>
-                <td style="text-align: right;">是否启用：</td>
-                <td style="text-align: left;">
-                    <select id="Status" class="input_text form-control" style="width: 200px;">
-                        <option selected value="1">是</option>
-                        <option value="0">否</option>
-                    </select>
-                </td>
-            </tr>
-            <tr style="height:50px">
-                <td style="text-align: right;">业务项目：</td>
-                <td style="text-align: left;">
-                    <div id="BusinessProject"></div>
-                </td>
-                <td style="text-align: right;">业务编码：</td>
-                <td style="text-align: left;" colspan="3">
-                    <span id="BusinessSubItem" style="padding-top: 3px;"></span>
-                </td>
-            </tr>
-        </table>
+        <div id="table"></div>
         <div style="display: none">
             <input id="VGUID" />
         </div>

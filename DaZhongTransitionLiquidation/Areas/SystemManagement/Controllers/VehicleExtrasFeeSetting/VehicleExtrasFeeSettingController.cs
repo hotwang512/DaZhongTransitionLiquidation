@@ -33,7 +33,8 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_VehicleExtrasFeeSetting>()
                     .WhereIF(!searchModel.VehicleModel.IsNullOrEmpty(), i => i.VehicleModelCode == searchModel.VehicleModel)
-                    .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    .OrderBy(i=> i.VehicleModelCode)
+                    .OrderBy(i => i.BusinessSubItem, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
 

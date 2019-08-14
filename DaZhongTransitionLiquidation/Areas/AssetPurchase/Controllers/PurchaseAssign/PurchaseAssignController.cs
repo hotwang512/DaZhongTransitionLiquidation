@@ -324,7 +324,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     {
                                         //根据车型获取各项费用的单价
                                         var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
-                                            .Where(x => x.VehicleModel == vehicleModel.VehicleModel && x.Status == 1 && x.Fee != 0).ToList();
+                                            .Where(x => x.VehicleModel == vehicleModel.VehicleModel && x.Status && x.Fee != 0).ToList();
                                         //采购数量
                                         var orderNum = sevenSectionList.Where(x => x.VehicleModel == vehicleModel.VehicleModel).Sum(x => x.AssetNum);
                                         //出库费
@@ -428,7 +428,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     {
                                         //根据车型获取各项费用的单价
                                         var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
-                                            .Where(x => x.VehicleModel == item.VehicleModel && x.Status == 1).ToList();
+                                            .Where(x => x.VehicleModel == item.VehicleModel && x.Status).ToList();
                                         maxOrderNumRightAsset++;
                                         var assetReview = new Business_AssetReview();
                                         assetReview.VGUID = Guid.NewGuid();
@@ -545,63 +545,63 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030104"))
                         {
                             //出库费  如果没有则需要根据车型到配置表中查看是否为0
-                            if(!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030104" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030103"))
-                        {
-                            //上牌费
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030103" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030107"))
-                        {
-                            //装车费
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030107" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030108"))
-                        {
-                            //内顶费
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030108" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030109"))
-                        {
-                            //计价器
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030109" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030106"))
-                        {
-                            //防劫板
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030106" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030105"))
-                        {
-                            //顶灯费
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030105" && x.Status == 1))
-                            {
-                                isSubmit = false;
-                            }
-                        }
-                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030102"))
-                        {
-                            //购置税
-                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030102" && x.Status == 1))
+                            if(!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030104" && x.Status))
+                            {                                                                                                                                                                                 
+                                isSubmit = false;                                                                                                                                                             
+                            }                                                                                                                                                                                 
+                        }                                                                                                                                                                                     
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030103"))                                                                                                                     
+                        {                                                                                                                                                                                     
+                            //上牌费                                                                                                                                                                          
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030103" && x.Status))
+                            {                                                                                                                                                                                 
+                                isSubmit = false;                                                                                                                                                             
+                            }                                                                                                                                                                                 
+                        }                                                                                                                                                                                     
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030107"))                                                                                                                     
+                        {                                                                                                                                                                                     
+                            //装车费                                                                                                                                                                          
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030107" && x.Status))
+                            {                                                                                                                                                                                 
+                                isSubmit = false;                                                                                                                                                             
+                            }                                                                                                                                                                                 
+                        }                                                                                                                                                                                     
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030108"))                                                                                                                     
+                        {                                                                                                                                                                                     
+                            //内顶费                                                                                                                                                                          
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030108" && x.Status))
+                            {                                                                                                                                                                                  
+                                isSubmit = false;                                                                                                                                                              
+                            }                                                                                                                                                                                  
+                        }                                                                                                                                                                                      
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030109"))                                                                                                                      
+                        {                                                                                                                                                                                      
+                            //计价器                                                                                                                                                                           
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030109" && x.Status))
+                            {                                                                                                                                                                                 
+                                isSubmit = false;                                                                                                                                                             
+                            }                                                                                                                                                                                 
+                        }                                                                                                                                                                                     
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030106"))                                                                                                                     
+                        {                                                                                                                                                                                     
+                            //防劫板                                                                                                                                                                          
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030106" && x.Status))
+                            {                                                                                                                                                                                  
+                                isSubmit = false;                                                                                                                                                              
+                            }                                                                                                                                                                                  
+                        }                                                                                                                                                                                      
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030105"))                                                                                                                      
+                        {                                                                                                                                                                                      
+                            //顶灯费                                                                                                                                                                           
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030105" && x.Status))
+                            {                                                                                                                                                                                  
+                                isSubmit = false;                                                                                                                                                              
+                            }                                                                                                                                                                                  
+                        }                                                                                                                                                                                      
+                        if (!orderNumList.Any(x => x.PayItemCode == "cz|03|0301|030102"))                                                                                                                      
+                        {                                                                                                                                                                                      
+                            //购置税                                                                                                                                                                           
+                            if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x => x.Fee == 0 && x.VehicleModelCode == vehicleModelCode && x.BusinessSubItem == "cz|03|0301|030102" && x.Status))
                             {
                                 isSubmit = false;
                             }

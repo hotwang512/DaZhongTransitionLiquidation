@@ -855,204 +855,269 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 var sevenData = db.Queryable<Business_SevenSection>().ToList();
                 if (comData.Count > 0)
                 {
+
                     #region 公司段
-                    foreach (var item in comData)
-                    { 
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        Business_SevenSection section = new Business_SevenSection();
-                        section.VGUID = Guid.NewGuid();
-                        section.Code = item.CODE;
-                        section.Descrption = item.DESCRIPTION;
-                        section.SectionVGUID = "A63BD715-C27D-4C47-AB66-550309794D43";
-                        section.VCRTUSER = UserInfo.LoginName;
-                        section.VCRTTIME = item.CREATE_DATE;
-                        section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                        section.AccountModeCode = accountModeCode;
-                        section.Remark = "Oracle同步数据";
-                        sectionList.Add(section);
-                        item.CheckStatus = "2";
+                    try
+                    {
+                        foreach (var item in comData)
+                        {
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            Business_SevenSection section = new Business_SevenSection();
+                            section.VGUID = Guid.NewGuid();
+                            section.Code = item.CODE;
+                            section.Descrption = item.DESCRIPTION;
+                            section.SectionVGUID = "A63BD715-C27D-4C47-AB66-550309794D43";
+                            section.VCRTUSER = UserInfo.LoginName;
+                            section.VCRTTIME = item.CREATE_DATE;
+                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                            section.AccountModeCode = accountModeCode;
+                            section.Remark = "Oracle同步数据";
+                            sectionList.Add(section);
+                            item.CheckStatus = "2";
+                        }
+                        LedgerAccount.AddRange(comData);
                     }
-                    LedgerAccount.AddRange(comData);
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
                     #endregion
                 }
                 if (accData.Count > 0)
                 {
                     #region 科目段
-                    foreach (var item in accData)
+                    try
                     {
-                        var isAnyCode = code.Contains(item.CODE);
-                        if (isAnyCode)
+                        foreach (var item in accData)
                         {
-                            continue;
-                        }
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
-                        var parentCode = tableData.Where(x => x.CODE == item.CODE && x.BOOK == item.BOOK).FirstOrDefault().ParentCode;
-                        foreach (var com in companyList)
-                        {
-                            Business_SevenSection section = new Business_SevenSection();
-                            section.VGUID = Guid.NewGuid();
-                            section.Code = item.CODE;
-                            section.Descrption = item.DESCRIPTION;
-                            section.SectionVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
-                            section.VCRTUSER = UserInfo.LoginName;
-                            section.VCRTTIME = item.CREATE_DATE;
-                            section.ParentCode = parentCode == null ? item.CODE.Substring(0, item.CODE.Length - 2) : parentCode;
-                            if(item.CODE.Length <= 4)
+                            if(code != null)
                             {
-                                section.ParentCode = null;
+                                var isAnyCode = code.Contains(item.CODE);
+                                if (isAnyCode)
+                                {
+                                    continue;
+                                }
                             }
-                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                            section.AccountModeCode = accountModeCode;
-                            section.CompanyCode = com.Code;
-                            section.Remark = "Oracle同步数据";
-                            sectionList.Add(section);
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                            var parentCode = tableData.Where(x => x.CODE == item.CODE && x.BOOK == item.BOOK).FirstOrDefault().ParentCode;
+                            foreach (var com in companyList)
+                            {
+                                Business_SevenSection section = new Business_SevenSection();
+                                section.VGUID = Guid.NewGuid();
+                                section.Code = item.CODE;
+                                section.Descrption = item.DESCRIPTION;
+                                section.SectionVGUID = "B63BD715-C27D-4C47-AB66-550309794D43";
+                                section.VCRTUSER = UserInfo.LoginName;
+                                section.VCRTTIME = item.CREATE_DATE;
+                                section.ParentCode = parentCode == null ? item.CODE.Substring(0, item.CODE.Length - 2) : parentCode;
+                                if (item.CODE.Length <= 4)
+                                {
+                                    section.ParentCode = null;
+                                }
+                                section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                                section.AccountModeCode = accountModeCode;
+                                section.CompanyCode = com.Code;
+                                section.Remark = "Oracle同步数据";
+                                sectionList.Add(section);
+                            }
+                            item.CheckStatus = "2";
                         }
-                        item.CheckStatus = "2";
+                        LedgerAccount.AddRange(accData);
                     }
-                    LedgerAccount.AddRange(accData);
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                   
                     #endregion
                 }
                 if (hsData.Count > 0)
                 {
                     #region 核算段
-                    foreach (var item in hsData)
+                    try
                     {
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "C63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
-                        foreach (var com in companyList)
+                        foreach (var item in hsData)
                         {
-                            Business_SevenSection section = new Business_SevenSection();
-                            section.VGUID = Guid.NewGuid();
-                            section.Code = item.CODE;
-                            section.Descrption = item.DESCRIPTION;
-                            section.SectionVGUID = "C63BD715-C27D-4C47-AB66-550309794D43";
-                            section.VCRTUSER = UserInfo.LoginName;
-                            section.VCRTTIME = item.CREATE_DATE;
-                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                            section.AccountModeCode = accountModeCode;
-                            section.CompanyCode = com.Code;
-                            section.Remark = "Oracle同步数据";
-                            sectionList.Add(section);  
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "C63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                            foreach (var com in companyList)
+                            {
+                                Business_SevenSection section = new Business_SevenSection();
+                                section.VGUID = Guid.NewGuid();
+                                section.Code = item.CODE;
+                                section.Descrption = item.DESCRIPTION;
+                                section.SectionVGUID = "C63BD715-C27D-4C47-AB66-550309794D43";
+                                section.VCRTUSER = UserInfo.LoginName;
+                                section.VCRTTIME = item.CREATE_DATE;
+                                section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                                section.AccountModeCode = accountModeCode;
+                                section.CompanyCode = com.Code;
+                                section.Remark = "Oracle同步数据";
+                                sectionList.Add(section);
+                            }
+                            item.CheckStatus = "2";
                         }
-                        item.CheckStatus = "2";
+                        LedgerAccount.AddRange(hsData);
                     }
-                    LedgerAccount.AddRange(hsData);
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    
                     #endregion
                 }
                 if (ccData.Count > 0)
                 {
                     #region 成本中心段
-                    foreach (var item in ccData)
-                    {                
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
-                        foreach (var com in companyList)
+                    try
+                    {
+                        foreach (var item in ccData)
                         {
-                            Business_SevenSection section = new Business_SevenSection();
-                            section.VGUID = Guid.NewGuid();
-                            section.Code = item.CODE;
-                            section.Descrption = item.DESCRIPTION;
-                            section.SectionVGUID = "D63BD715-C27D-4C47-AB66-550309794D43";
-                            section.VCRTUSER = UserInfo.LoginName;
-                            section.VCRTTIME = item.CREATE_DATE;
-                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                            section.AccountModeCode = accountModeCode;
-                            section.CompanyCode = com.Code;
-                            section.Remark = "Oracle同步数据";
-                            sectionList.Add(section);
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "D63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                            foreach (var com in companyList)
+                            {
+                                Business_SevenSection section = new Business_SevenSection();
+                                section.VGUID = Guid.NewGuid();
+                                section.Code = item.CODE;
+                                section.Descrption = item.DESCRIPTION;
+                                section.SectionVGUID = "D63BD715-C27D-4C47-AB66-550309794D43";
+                                section.VCRTUSER = UserInfo.LoginName;
+                                section.VCRTTIME = item.CREATE_DATE;
+                                section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                                section.AccountModeCode = accountModeCode;
+                                section.CompanyCode = com.Code;
+                                section.Remark = "Oracle同步数据";
+                                sectionList.Add(section);
+                            }
+                            item.CheckStatus = "2";
                         }
-                        item.CheckStatus = "2";
+                        LedgerAccount.AddRange(ccData);
                     }
-                    LedgerAccount.AddRange(ccData);
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    
                     #endregion
                 }
                 if (by1Data.Count > 0)
                 {
                     #region 备用1
-                    foreach (var item in by1Data)
-                    {              
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
-                        foreach (var com in companyList)
+                    try
+                    {
+                        foreach (var item in by1Data)
                         {
-                            Business_SevenSection section = new Business_SevenSection();
-                            section.VGUID = Guid.NewGuid();
-                            section.Code = item.CODE;
-                            section.Descrption = item.DESCRIPTION;
-                            section.SectionVGUID = "E63BD715-C27D-4C47-AB66-550309794D43";
-                            section.VCRTUSER = UserInfo.LoginName;
-                            section.VCRTTIME = item.CREATE_DATE;
-                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                            section.AccountModeCode = accountModeCode;
-                            section.CompanyCode = com.Code;
-                            section.Remark = "Oracle同步数据";
-                            sectionList.Add(section);
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "E63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                            foreach (var com in companyList)
+                            {
+                                Business_SevenSection section = new Business_SevenSection();
+                                section.VGUID = Guid.NewGuid();
+                                section.Code = item.CODE;
+                                section.Descrption = item.DESCRIPTION;
+                                section.SectionVGUID = "E63BD715-C27D-4C47-AB66-550309794D43";
+                                section.VCRTUSER = UserInfo.LoginName;
+                                section.VCRTTIME = item.CREATE_DATE;
+                                section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                                section.AccountModeCode = accountModeCode;
+                                section.CompanyCode = com.Code;
+                                section.Remark = "Oracle同步数据";
+                                sectionList.Add(section);
+                            }
+                            item.CheckStatus = "2";
                         }
-                        item.CheckStatus = "2";
+                        LedgerAccount.AddRange(by1Data);
                     }
-                    LedgerAccount.AddRange(by1Data);
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                   
                     #endregion
                 }
                 if (by2Data.Count > 0)
                 {
                     #region 备用2
-                    foreach (var item in by2Data)
-                    {                       
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "F63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
-                        foreach (var com in companyList)
+                    try
+                    {
+                        foreach (var item in by2Data)
                         {
-                            Business_SevenSection section = new Business_SevenSection();
-                            section.VGUID = Guid.NewGuid();
-                            section.Code = item.CODE;
-                            section.Descrption = item.DESCRIPTION;
-                            section.SectionVGUID = "F63BD715-C27D-4C47-AB66-550309794D43";
-                            section.VCRTUSER = UserInfo.LoginName;
-                            section.VCRTTIME = item.CREATE_DATE;
-                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                            section.AccountModeCode = accountModeCode;
-                            section.CompanyCode = com.Code;
-                            section.Remark = "Oracle同步数据";
-                            sectionList.Add(section);
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "F63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                            foreach (var com in companyList)
+                            {
+                                Business_SevenSection section = new Business_SevenSection();
+                                section.VGUID = Guid.NewGuid();
+                                section.Code = item.CODE;
+                                section.Descrption = item.DESCRIPTION;
+                                section.SectionVGUID = "F63BD715-C27D-4C47-AB66-550309794D43";
+                                section.VCRTUSER = UserInfo.LoginName;
+                                section.VCRTTIME = item.CREATE_DATE;
+                                section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                                section.AccountModeCode = accountModeCode;
+                                section.CompanyCode = com.Code;
+                                section.Remark = "Oracle同步数据";
+                                sectionList.Add(section);
+                            }
+                            item.CheckStatus = "2";
                         }
-                        item.CheckStatus = "2";
+                        LedgerAccount.AddRange(by2Data);
                     }
-                    LedgerAccount.AddRange(by2Data);
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    
                     #endregion
                 }
                 if (wlData.Count > 0)
                 {
                     #region 往来段
-                    foreach (var item in wlData)
-                    {                       
-                        var accountModeCode = item.VALUE_SET.Split("_")[1];
-                        db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "G63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
-                        var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
-                        foreach (var com in companyList)
+                    try
+                    {
+                        foreach (var item in wlData)
                         {
-                            Business_SevenSection section = new Business_SevenSection();
-                            section.VGUID = Guid.NewGuid();
-                            section.Code = item.CODE;
-                            section.Descrption = item.DESCRIPTION;
-                            section.SectionVGUID = "G63BD715-C27D-4C47-AB66-550309794D43";
-                            section.VCRTUSER = UserInfo.LoginName;
-                            section.VCRTTIME = item.CREATE_DATE;
-                            section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
-                            section.AccountModeCode = accountModeCode;
-                            section.CompanyCode = com.Code;
-                            section.Remark = "Oracle同步数据";
-                            sectionList.Add(section);
+                            var accountModeCode = item.VALUE_SET.Split("_")[1];
+                            db.Deleteable<Business_SevenSection>().Where(x => x.Code == item.CODE && x.SectionVGUID == "G63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ExecuteCommand();
+                            var companyList = sevenData.Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == accountModeCode).ToList();
+                            foreach (var com in companyList)
+                            {
+                                Business_SevenSection section = new Business_SevenSection();
+                                section.VGUID = Guid.NewGuid();
+                                section.Code = item.CODE;
+                                section.Descrption = item.DESCRIPTION;
+                                section.SectionVGUID = "G63BD715-C27D-4C47-AB66-550309794D43";
+                                section.VCRTUSER = UserInfo.LoginName;
+                                section.VCRTTIME = item.CREATE_DATE;
+                                section.Status = item.ACTIVE_FLAG == "Y" ? "1" : "0";
+                                section.AccountModeCode = accountModeCode;
+                                section.CompanyCode = com.Code;
+                                section.Remark = "Oracle同步数据";
+                                sectionList.Add(section);
+                            }
+                            item.CheckStatus = "2";
                         }
-                        item.CheckStatus = "2";
+                        LedgerAccount.AddRange(wlData);
                     }
-                    LedgerAccount.AddRange(wlData);
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                   
                     #endregion
                 }
                 if (sectionList.Count > 0)

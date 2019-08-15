@@ -34,7 +34,7 @@ var $page = function () {
         $("#btnDelete").on("click", function () {
             var selection = [];
             var grid = $("#jqxTable");
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            var checedBoxs = grid.find("#jqxTable .jqx_datatable_checkbox:checked");//grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
                 if (th.is(":checked")) {
@@ -77,6 +77,7 @@ var $page = function () {
             {
                 datafields:
                 [
+                    { name: 'VehicleModelCode', type: 'string' },
                     { name: 'VehicleModel', type: 'string' },
                     { name: 'BusinessProject', type: 'string' },
                     { name: 'Fee', type: 'float' },
@@ -129,7 +130,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/Systemmanagement/VehicleExtrasFeeSettingDetail/Index?VGUID=" + row.VGUID;
+            window.location.href = "/Systemmanagement/VehicleExtrasFeeSettingDetail/Index?VGUID=" + row.VGUID + "&Code=" + row.VehicleModelCode;
         });
     }
     function statusFunc(row, column, value, rowData) {

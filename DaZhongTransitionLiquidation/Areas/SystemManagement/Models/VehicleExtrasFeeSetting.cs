@@ -49,7 +49,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public int? Status { get; set; }
+        public Boolean Status { get; set; }
 
         /// <summary>
         /// Desc:
@@ -79,5 +79,10 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         /// </summary>           
         public string ChangeUser { get; set; }
 
+    }
+
+    public class SaveFeeSettingModel
+    {
+        public List<Business_VehicleExtrasFeeSetting> FeeSettingList { get; set; }
     }
 }

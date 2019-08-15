@@ -927,12 +927,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         }
                         LedgerAccount.AddRange(accData);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
                         throw;
                     }
-                   
                     #endregion
                 }
                 if (hsData.Count > 0)
@@ -964,12 +962,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         }
                         LedgerAccount.AddRange(hsData);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
                         throw;
                     }
-                    
                     #endregion
                 }
                 if (ccData.Count > 0)
@@ -1001,12 +997,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         }
                         LedgerAccount.AddRange(ccData);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
                         throw;
                     }
-                    
                     #endregion
                 }
                 if (by1Data.Count > 0)
@@ -1038,12 +1032,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         }
                         LedgerAccount.AddRange(by1Data);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
                         throw;
                     }
-                   
                     #endregion
                 }
                 if (by2Data.Count > 0)
@@ -1075,12 +1067,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         }
                         LedgerAccount.AddRange(by2Data);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
                         throw;
                     }
-                    
                     #endregion
                 }
                 if (wlData.Count > 0)
@@ -1112,12 +1102,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         }
                         LedgerAccount.AddRange(wlData);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
                         throw;
                     }
-                   
                     #endregion
                 }
                 if (sectionList.Count > 0)

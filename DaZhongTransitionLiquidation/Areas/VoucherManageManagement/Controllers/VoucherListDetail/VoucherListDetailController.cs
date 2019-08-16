@@ -75,7 +75,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var date = DateTime.Now;
                     //var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
                     //              order by BatchName desc", new { @NowDate = date });
-                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
+                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic != '3'
                                   order by VoucherNo desc", new { @NowDate = date });
                     var batchName = voucher.BatchName; //GetBatchName(voucherType, flowNo);
                     var voucherName = GetVoucherName(voucherNo);

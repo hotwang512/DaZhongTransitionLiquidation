@@ -60,3 +60,6 @@ function closeLoading() {
     $("#loadingDialog").modal('hide');
 }
 
+$(function() {
+    $(".input_text").attr("autocomplete", "off");
+});

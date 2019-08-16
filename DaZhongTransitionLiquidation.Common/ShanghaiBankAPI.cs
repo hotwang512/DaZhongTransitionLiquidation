@@ -112,6 +112,7 @@ namespace DaZhongTransitionLiquidation.Common
                 dateString = dateString.Replace("日", "");
                 bankFlow.TransactionDate = dateString.TryToDate();
                 bankFlow.PaymentUnitInstitution = "";
+                bankFlow.Balance = details.YUER.TryToDecimal();
                 bankFlow.Purpose = details.YOTU;
                 bankFlow.Remark = details.BEZH;
                 bankFlow.Batch = details.T24F;

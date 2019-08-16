@@ -122,7 +122,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-7)).ToList();
                         //查询公司段中已启用的公司的银行信息
-                        var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select * from Business_CompanyBankInfo as a left join Business_SevenSection
+                        var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
                                             as b on a.AccountModeCode = b.AccountModeCode and a.CompanyCode = b.Code  where b.Status='1' 
                                             and b.SectionVGUID ='A63BD715-C27D-4C47-AB66-550309794D43'").ToList();
                         var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();

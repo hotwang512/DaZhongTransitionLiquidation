@@ -64,22 +64,31 @@ var $page = function () {
         //提交
         $("#btnSubmit").on("click", function () {
             var selection = [];
-            var grid = $("#jqxTable");
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-            checedBoxs.each(function () {
-                var th = $(this);
-                if (th.is(":checked")) {
-                    var index = th.attr("index");
-                    var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.VGUID);
+            //var grid = $("#jqxTable");
+            //var checedBoxs = grid.find("#tablejqxTable .jqx_datatable_checkbox:checked");
+            //checedBoxs.each(function () {
+            //    var th = $(this);
+            //    if (th.is(":checked")) {
+            //        var index = th.attr("index");
+            //        var data = grid.jqxDataTable('getRows')[index];
+            //        selection.push(data.VGUID);
+            //    }
+            //});
+            var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+            var pars = [];
+            $(array).each(function (i, v) {
+                try {
+                    var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID");
+                    pars.push(value.value);
+                } catch (e) {
                 }
             });
-            if (selection.length < 1) {
+            if (array.length < 1) {
                 jqxNotification("请选择一条数据！", null, "error");
             } else {
                 $.ajax({
                     url: "/AssetManagement/ReviewAsset/SubmitReviewAsset",
-                    data: { vguids: selection },
+                    data: { vguids: pars },
                     //traditional: true,
                     type: "post",
                     success: function (msg) {
@@ -89,13 +98,15 @@ var $page = function () {
                             break;
                         case "1":
                             jqxNotification("审核成功！", null, "success");
-                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            $("#jqxTable").jqxGrid('updateBoundData');
+                            $('#jqxTable').jqxGrid('clearselection');
                             break;
                         case "2":
                             jqxNotification(msg.ResultInfo, null, "success");
                             $("#myModalLabel_title2").html(msg.ResultInfo);
                             ViewReview(msg.ResultInfo2);
-                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            $("#jqxTable").jqxGrid('updateBoundData');
+                            $('#jqxTable').jqxGrid('clearselection');
                             break;
                         }
                     }
@@ -192,7 +203,7 @@ var $page = function () {
             }
         });
         //创建卡信息列表（主表）
-        selector.$grid().jqxDataTable(
+        selector.$grid().jqxGrid(
             {
                 pageable: false,
                 width: "100%",
@@ -201,10 +212,12 @@ var $page = function () {
                 //serverProcessing: true,
                 //pagerButtonsCount: 10,
                 source: typeAdapter,
+                selectionmode: 'checkbox',
+                altrows: true,
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: true, hidden:false,align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden:false,align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'GroupID', datafield: 'GROUP_ID', width: 100, hidden: true, align: 'center', cellsAlign: 'center' },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
@@ -248,7 +261,7 @@ var $page = function () {
                     { text: '使用年限(年)', datafield: 'LIFE_YEARS', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '使用年限(月)', datafield: 'LIFE_MONTHS', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '残值类型', datafield: 'SALVAGE_TYPE', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '残值百分比', datafield: 'SALVAGE_PERCENT', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
+                    { text: '残值百分比', datafield: 'SALVAGE_PERCENT', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '残值金额', datafield: 'SALVAGE_VALUE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '摊销标记', datafield: 'AMORTIZATION_FLAG', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '折旧方法', datafield: 'METHOD', width: 100, align: 'center', cellsAlign: 'center' },
@@ -291,13 +304,13 @@ var $page = function () {
             }
         });
     }
-    function cellsrenderer(row, column, value, rowData) {
-        if (value != "") {
-            return '<span style="margin: 4px; margin-top:8px;">' + value + '%</span>';
-        } else {
-            return '';
-        }
-    }
+    //function cellsrenderer(row, column, value, rowData) {
+    //    if (value != "") {
+    //        return '<span style="margin: 4px; margin-top:8px;">' + value + '%</span>';
+    //    } else {
+    //        return '';
+    //    }
+    //}
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
@@ -309,19 +322,21 @@ var $page = function () {
     }
 
     function renderedFunc(element) {
+        debugger;
         var grid = selector.$grid();
         element.jqxCheckBox();
         element.on('change', function (event) {
+            debugger;
             var checked = element.jqxCheckBox('checked');
             if (checked) {
                 var rows = grid.jqxDataTable('getRows');
                 for (var i = 0; i < rows.length; i++) {
                     grid.jqxDataTable('selectRow', i);
-                    grid.find(".jqx_datatable_checkbox").attr("checked", "checked")
+                    grid.find("#tablejqxTable .jqx_datatable_checkbox").attr("checked", "checked")
                 }
             } else {
                 grid.jqxDataTable('clearSelection');
-                grid.find(".jqx_datatable_checkbox").removeAttr("checked", "checked")
+                grid.find("#tablejqxTable .jqx_datatable_checkbox").removeAttr("checked", "checked")
             }
         });
         return true;

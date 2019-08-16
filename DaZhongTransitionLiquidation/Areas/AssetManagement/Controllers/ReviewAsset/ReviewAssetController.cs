@@ -41,8 +41,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var startDate = YearMonth.TryToDate();
                 var endDate = startDate.AddMonths(1);
                 int pageCount = 0;
-                jsonResult.Rows = db.Queryable<Business_AssetReview>()
-                    .WhereIF(!YearMonth.IsNullOrEmpty(),i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate && !i.ISVERIFY)
+                jsonResult.Rows = db.Queryable<Business_AssetReview>().Where(i => !i.ISVERIFY)
+                    .WhereIF(!YearMonth.IsNullOrEmpty(),i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate)
                     .WhereIF(!Company.IsNullOrEmpty(),i => i.BELONGTO_COMPANY == Company)
                     .WhereIF(!VehicleModel.IsNullOrEmpty(),i => i.VEHICLE_SHORTNAME == VehicleModel)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();

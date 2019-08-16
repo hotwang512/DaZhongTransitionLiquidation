@@ -284,6 +284,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
+                        var paymentUnitInstitution = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;
@@ -333,6 +335,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
+                        var paymentUnitInstitution = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;

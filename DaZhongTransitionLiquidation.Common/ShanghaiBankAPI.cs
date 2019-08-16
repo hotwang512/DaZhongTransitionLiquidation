@@ -93,7 +93,6 @@ namespace DaZhongTransitionLiquidation.Common
                 bankFlow.TradingBank = "上海银行";
                 bankFlow.PaymentUnit = modelData.HUMI;//我方
                 bankFlow.PayeeAccount = modelData.ACNO;//我方
-                //bankFlow.PaymentUnitInstitution = 
                 bankFlow.ReceivingUnit = details.DFHM;//对方
                 bankFlow.ReceivableAccount = details.DFZH;//对方
                 if (details.CDFG == "1")//在系统中做转换处理

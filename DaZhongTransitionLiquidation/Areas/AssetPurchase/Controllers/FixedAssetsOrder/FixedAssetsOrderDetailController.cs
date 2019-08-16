@@ -747,5 +747,22 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                 return "";
             }
         }
+        /// <summary>
+        /// 获取物品类型
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetGoodsModelDropDown(string Goods)
+        {
+            var list = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (Goods == "出租车")
+                {
+                    list = db.SqlQueryable<Business_SevenSection>(@"SELECT * FROM Business_SevenSection WHERE SectionVGUID = 'F63BD715-C27D-4C47-AB66-550309794D43'
+AND AccountModeCode = '1002' AND status = 1 AND CompanyCode = '01' AND code LIKE '10%'").ToList();
+                }
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -214,16 +214,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                 try
                 {
                     File.SaveAs(filePath);
-                    var list = new List<Excel_PurchaseAssignModel>();
-                    var dt = ExcelHelper.ExportToDataTable(filePath,true);
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                    {
-                        var assign = new Excel_PurchaseAssignModel();
-                        assign.VehicleModel = dt.Rows[i][0].ToString();
-                        assign.ChassisNumber = dt.Rows[i][1].ToString();
-                        assign.EngineNumber = dt.Rows[i][2].ToString();
-                        list.Add(assign);
-                    }
                     //校验总数是否一致，校验管理公司是否一致
                     DbBusinessDataService.Command(db =>
                     {
@@ -233,6 +223,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             //判断是否有已经发起支付的数据，如果有不允许导入
                             var fixedAssetsOrder = db.Queryable<Business_FixedAssetsOrder>()
                                 .Where(c => c.VGUID == vguid).First();
+                            var list = new List<Excel_PurchaseAssignModel>();
+                            var dt = ExcelHelper.ExportToDataTable(filePath, true);
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                var assign = new Excel_PurchaseAssignModel();
+                                assign.VehicleModel = fixedAssetsOrder.GoodsModel;
+                                assign.ChassisNumber = dt.Rows[i][0].ToString();
+                                assign.EngineNumber = dt.Rows[i][1].ToString();
+                                list.Add(assign);
+                            }
                             var taxFeeOrderList = db.Queryable<Business_PurchaseOrderNum, Business_TaxFeeOrder>(
                                 (pon, tfo) => new object[]
                                 {

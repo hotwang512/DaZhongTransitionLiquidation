@@ -56,6 +56,9 @@
     .delAttachment {
         cursor: pointer;
     }
+    .GoodsModel {
+        display: none;
+    }
 </style>
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
@@ -91,6 +94,11 @@
                 <td style="text-align: right">采购物品：</td>
                 <td style="text-align: left;">
                     <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;"></select>
+                </td>
+                <td style="text-align:right" class="GoodsModel">物品型号：</td>
+                <td style="text-align: left;" class="GoodsModel">
+                    <select id="GoodsModel" class="input_text form-control" style="width: 200px;">
+                    </select>
                 </td>
             </tr>
             <tr style="height: 50px">

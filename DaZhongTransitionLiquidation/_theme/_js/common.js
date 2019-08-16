@@ -61,5 +61,5 @@ function closeLoading() {
 }
 
 $(function() {
-    $(".input_text").attr("autocomplete", "off");
+   $(".input_text").attr("autocomplete", "off");
 });

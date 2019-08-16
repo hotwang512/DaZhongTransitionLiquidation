@@ -69,6 +69,8 @@ var $page = function () {
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
+                            "GoodsModel": $("#GoodsModel option:selected").text(),
+                            "GoodsModelCode": $("#GoodsModelCode").val(),
                             "PurchaseDepartmentIDs": DepartmentModelList.join(","),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
@@ -266,6 +268,7 @@ var $page = function () {
                 $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
                 $("#PurchaseGoods").attr("disabled", true);
                 GetCompanyBankInfoDropdownByCode();
+                initSelectGoodsModel($("#PurchaseGoods option:selected").text());
             });
         $("#PurchaseDepartment").on('checkChange', function (event) {
             if (event.args) {
@@ -274,7 +277,6 @@ var $page = function () {
                 for (var i = 0; i < checkedItems.length; i++) {
                     DepartmentModelList.push(checkedItems[i].value);
                 };
-                
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
@@ -338,6 +340,8 @@ var $page = function () {
             $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             initSelectPurchaseGoods();
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
+            $("#PurchaseGoods").trigger("change");
+            $("#GoodsModel").val(msg.GoodsModelCode);
             $("#PurchaseGoods").attr("disabled", true);
             initPaymentInformationComboBox();
             GetCompanyBankInfoDropdownByCode();
@@ -645,7 +649,24 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
         success: function (msg) {
             uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
             $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
-            
+        }
+    });
+}
+function initSelectGoodsModel(Goods) {
+    //物品类型
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetGoodsModelDropDown",
+        data: { "Goods": Goods },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            if (msg.length > 0) {
+                uiEngineHelper.bindSelect('#GoodsModel', msg, "Code", "Descrption");
+                $("#GoodsModel").prepend("<option value=\"\" selected='true'>请选择</>");
+            }
+            $(".GoodsModel").show();
         }
     });
 }

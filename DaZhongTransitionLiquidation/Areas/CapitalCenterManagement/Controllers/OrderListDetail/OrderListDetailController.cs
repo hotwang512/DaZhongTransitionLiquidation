@@ -420,5 +420,21 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
             });
             return Json(resultModel);
         }
+        public JsonResult DeleteAccountMode(List<Guid> VGUID)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                foreach (var item in VGUID)
+                {
+                    int saveChanges = 1;
+                    //删除主表信息
+                    saveChanges = db.Deleteable<Business_UserCompanySetDetail>(x => x.VGUID == item).ExecuteCommand();
+                    resultModel.IsSuccess = saveChanges == 1;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel);
+        }
     }
 }

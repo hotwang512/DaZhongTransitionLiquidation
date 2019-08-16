@@ -218,6 +218,44 @@ var $page = function () {
                 }
             });
         });
+        //删除账套公司
+        $("#btnDelete").on("click", function () {
+            var array = $("#jqxSettingTable").jqxGrid('getselectedrowindexes');
+            var pars = [];
+            $(array).each(function (i, v) {
+                try {
+                    var value = $("#jqxSettingTable").jqxGrid('getcell', v, "VGUID");
+                    pars.push(value.value);
+                } catch (e) {
+
+                }
+
+            });
+            if (pars.length <= 0) {
+                jqxNotification("请选择一条数据！", null, "error"); return;
+            }
+            if (pars.length > 0) {
+                $.ajax({
+                    url: "/CapitalCenterManagement/OrderListDetail/DeleteAccountMode",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        VGUID: pars
+                    },
+                    async: false,
+                    success: function (msg) {
+                        if (msg.Status == "1") {
+                            jqxNotification("删除成功！", null, "success");
+                            $("#jqxSettingTable").jqxGrid('updateBoundData');
+                        }
+                        else {
+                            jqxNotification("删除失败！", null, "error");
+                        }
+                    }
+                });
+
+            }
+        });
         //清空
         $("#btnClear").on("click", function () {
             $("#CollectionCompany").jqxDropDownList('clearSelection');
@@ -818,6 +856,7 @@ function initSettingTable() {
         source: typeAdapter,
         theme: "office",
         //pagermode: 'checkbox',
+        selectionmode: "checkbox",
         columnsHeight: 30,
         editable: true,
         columns: [

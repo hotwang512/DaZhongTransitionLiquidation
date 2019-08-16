@@ -787,6 +787,9 @@ var $page = function () {
             theme: "energyblue",
             columnsHeight: 40,
             checkboxes: true,
+            ready:function(){
+                $("#jqxTable2").jqxTreeGrid('expandAll');
+            },
             //hierarchicalCheckboxes: true,
             columns: [
                 //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
@@ -807,7 +810,7 @@ var $page = function () {
                 { text: 'VGUID', datafield: 'VGUID', hidden: true },
             ]
         });
-
+        
     }
     //核算段
     function initTable3() {

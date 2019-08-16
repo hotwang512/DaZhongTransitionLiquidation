@@ -228,7 +228,7 @@ var $page = function () {
                 columnsHeight: 30,
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '账套', datafield: 'AccountModeName', pinned: true, width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '账套', datafield: 'AccountModeName', pinned: true, width: 200, align: 'center', cellsAlign: 'center', },
                     { text: '公司', datafield: 'PaymentUnit', pinned: true, width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '币种', datafield: 'Currency',  hidden: true, align: 'center', cellsAlign: 'center' },
                     { text: '我方银行', datafield: 'TradingBank', width: 100, align: 'center', cellsAlign: 'center' },
@@ -247,8 +247,8 @@ var $page = function () {
                     { text: '写入日期', datafield: 'CreateTime', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '写入人', datafield: 'CreatePerson', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '凭证科目Code', hidden: true,datafield: 'VoucherSubject', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '凭证科目', datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: '凭证摘要', datafield: 'VoucherSummary', width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: '备注', datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证摘要', hidden: true, datafield: 'VoucherSummary', width: 300, align: 'center', cellsAlign: 'center' },
                     
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]

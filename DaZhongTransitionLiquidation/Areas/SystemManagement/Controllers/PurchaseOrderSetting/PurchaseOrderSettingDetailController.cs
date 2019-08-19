@@ -57,6 +57,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                         {
                             var managementCompanyModal = new Business_PurchaseManagementCompany();
                             managementCompanyModal.VGUID = Guid.NewGuid();
+                            managementCompanyModal.ManagementCompanyVguid = managementCompany.ManagementCompanyVguid;
                             managementCompanyModal.PurchaseOrderSettingVguid = saveModel.VGUID;
                             managementCompanyModal.AccountModeCode = managementCompany.AccountModeCode;
                             managementCompanyModal.CompanyCode = managementCompany.CompanyCode;
@@ -93,6 +94,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                         {
                             var managementCompanyModal = new Business_PurchaseManagementCompany();
                             managementCompanyModal.VGUID = Guid.NewGuid();
+                            managementCompanyModal.ManagementCompanyVguid = managementCompany.ManagementCompanyVguid;
                             managementCompanyModal.PurchaseOrderSettingVguid = saveModel.VGUID;
                             managementCompanyModal.AccountModeCode = managementCompany.AccountModeCode;
                             managementCompanyModal.CompanyCode = managementCompany.CompanyCode;
@@ -215,6 +217,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                 if (!isExits)
                 {
                     response = db.SqlQueryable<Business_PurchaseManagementCompany>(@"SELECT 
+                        t2.VGUID as ManagementCompanyVguid,
                         t1.Code AS AccountModeCode,
                                t1.Descrption,
                                t2.Code AS CompanyCode,
@@ -229,7 +232,9 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                 }
                 else
                 {
-                    response = db.SqlQueryable<Business_PurchaseManagementCompany>(@"SELECT t1.Code AS AccountModeCode,
+                    response = db.SqlQueryable<Business_PurchaseManagementCompany>(@"SELECT
+                               t2.VGUID as ManagementCompanyVguid, 
+                               t1.Code AS AccountModeCode,
                                t1.Descrption,
                                t2.Code AS CompanyCode,
                                t2.Descrption AS ManagementCompany,
@@ -243,7 +248,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                                    AND pmc.CompanyCode = t2.Code
                         WHERE t1.SectionVGUID = 'H63BD715-C27D-4C47-AB66-550309794D43'
                               AND t2.SectionVGUID = 'A63BD715-C27D-4C47-AB66-550309794D43'
-                              AND pmc.PurchaseOrderSettingVguid = '"+ VGUID + "'").OrderBy("AccountModeCode asc,CompanyCode asc").ToList();
+                              AND pmc.PurchaseOrderSettingVguid = '" + VGUID + "'").OrderBy("AccountModeCode asc,CompanyCode asc").ToList();
                 }
 
             });

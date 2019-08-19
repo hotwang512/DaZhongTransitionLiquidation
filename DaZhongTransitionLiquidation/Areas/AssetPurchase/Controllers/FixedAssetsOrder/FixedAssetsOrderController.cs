@@ -154,6 +154,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 var fundClearingModel = Mapper.Map<Business_FundClearing>(purchaseAssignmodel);
                                 fundClearingModel.VGUID = Guid.NewGuid();
                                 db.Insertable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
+                                var companys = db.Queryable<Business_PurchaseManagementCompany>()
+                                    .Where(x => x.PurchaseOrderSettingVguid == orderModel.VGUID && x.IsCheck).ToList();
+                                var liquidationDistributionList = new List<Business_LiquidationDistribution>();
+                                foreach (var company in companys)
+                                {
+                                    var liquidationDistribution = new Business_LiquidationDistribution();
+                                    liquidationDistribution.VGUID = Guid.NewGuid();
+                                    liquidationDistribution.FundClearingVguid = fundClearingModel.VGUID;
+                                    liquidationDistribution.AssetsOrderVguid = fundClearingModel.FixedAssetsOrderVguid;
+                                    liquidationDistribution.CompanyVguid = company.ManagementCompanyVguid;
+                                    liquidationDistribution.Company = company.ManagementCompany;
+                                    liquidationDistribution.PurchasePrices = fundClearingModel.PurchasePrices;
+                                    liquidationDistribution.AssetNum = 0;
+                                    liquidationDistribution.ContractAmount = 0;
+                                    liquidationDistribution.CreateDate = DateTime.Now;
+                                    liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].UserName;
+                                    liquidationDistributionList.Add(liquidationDistribution);
+                                }
+                                db.Insertable<Business_LiquidationDistribution>(liquidationDistributionList).ExecuteCommand();
                                 resultModel.ResultInfo = pendingRedult.data.url;
                                 resultModel.IsSuccess = true;
                                 resultModel.Status = "1";
@@ -254,6 +273,5 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 return "";
             }
         }
-        
     }
 }

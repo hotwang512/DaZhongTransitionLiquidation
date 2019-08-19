@@ -225,6 +225,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             int success = 0;
             using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
             {
+                var bankData = _db.Queryable<Business_CompanyBankInfo>().ToList();
                 List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
                 foreach (var item in bankFlowList)
                 {
@@ -241,6 +242,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         continue;
                     }
+                    var paymentUnitInstitution = bankData.Where(x => x.BankAccount == item.BankAccount).First().BankName;
+                    item.PaymentUnitInstitution = paymentUnitInstitution;
                     var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
                     var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                     if (isAny.Count > 0)
@@ -262,7 +265,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     success = _db.Insertable(bankFlowLists).ExecuteCommand();
                     //根据流水自动生成凭证
-                    BankFlowTemplateController.GenerateVoucherList(bankFlowLists, "admin");
+                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin");
                 }
             }
             BankDataPack.SyncBackFlowAndReconciliation();

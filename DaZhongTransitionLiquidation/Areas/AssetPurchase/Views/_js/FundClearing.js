@@ -160,13 +160,34 @@ var $page = function () {
                 datatype: "json",
                 id: 'VGUID',
                 data: { "Vguid": id },
-                url: "/AssetPurchase/FundClearing/GetAssignCompany"
+                url: "/AssetPurchase/FundClearing/GetAssignCompany",
+                updateRow: function (rowID, rowData, commit) {
+                    rowData.ContractAmount = rowData.PurchasePrices * rowData.AssetNum;
+                    $.ajax({
+                        url: "/AssetPurchase/FundClearing/UpdateAssignCompany",
+                        data: { Vguid: rowID, AssetNum: rowData.AssetNum },
+                        traditional: true,
+                        type: "post",
+                        success: function (msg) {
+                            switch (msg.Status) {
+                            case "0":
+                                break;
+                            case "1":
+                                commit(true);
+                                break;
+                            }
+                        }
+                    });
+                },
             }
             if (nestedDataTable != null) {
                 var nestedDataTableAdapter = new $.jqx.dataAdapter(ordersSource);
                 nestedDataTable.jqxDataTable({
                     source: nestedDataTableAdapter,
-                    width: 710, height: 180,
+                    editable: true,
+                    altRows: true,
+                    editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
+                    width: 770, height: 180,
                     pageable: false,
                     showToolbar: true,
                     renderToolbar: function (toolBar) {
@@ -174,7 +195,6 @@ var $page = function () {
                             if (theme == "") return className;
                             return className + " " + className + "-" + theme;
                         }
-                        // appends buttons to the status bar.
                         var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
                         var buttonDelTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
                         var buttonAddTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
@@ -221,11 +241,11 @@ var $page = function () {
                         });
                     },
                     columns: [
-                      { text: '公司', dataField: 'Company', width: 260, align: 'center', cellsAlign: 'center' },
-                      { text: '单价', dataField: 'PurchasePrices', width: 150, align: 'center', cellsAlign: 'center'  },
-                      { text: '数量', dataField: 'AssetNum', width: 150, align: 'center', cellsAlign: 'center' },
-                      { text: '金额', dataField: 'ContractAmount',  width: 150, align: 'center', cellsAlign: 'center' },
-                      { text: '删除', dataField: 'VGUID', hidden:true, width: 100, align: 'center', cellsAlign: 'center' }
+                      { text: '公司', dataField: 'Company', editable:false, width: '45%', align: 'center', cellsAlign: 'center' },
+                      { text: '单价', dataField: 'PurchasePrices', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
+                      { text: '数量', dataField: 'AssetNum', width: '15%', align: 'center', cellsAlign: 'center' },
+                      { text: '金额', dataField: 'ContractAmount', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
+                      { text: '删除', dataField: 'VGUID', hidden:true, align: 'center', cellsAlign: 'center' }
                     ]
                 });
                 nestedTables[id] = nestedDataTable;

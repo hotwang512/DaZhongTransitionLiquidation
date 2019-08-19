@@ -49,7 +49,7 @@ var $page = function () {
                 var rows = $('#jqxManagementCompanyTable').jqxGrid('getboundrows');
                 debugger;
                 for (var j = 0; j < rows.length; j++) {
-                    ManagementCompanyList.push({ "IsCheck": rows[j].IsCheck, "CompanyCode": rows[j].CompanyCode, "AccountModeCode": rows[j].AccountModeCode, "ManagementCompany": rows[j].ManagementCompany, "Descrption": rows[j].Descrption, "KeyData": rows[j].KeyData });
+                    ManagementCompanyList.push({ "IsCheck": rows[j].IsCheck, "CompanyCode": rows[j].CompanyCode, "AccountModeCode": rows[j].AccountModeCode, "ManagementCompany": rows[j].ManagementCompany, "Descrption": rows[j].Descrption, "KeyData": rows[j].KeyData, "ManagementCompanyVguid": rows[j].ManagementCompanyVguid });
                 };
                 debugger;
                 if (validateError <= 0) {
@@ -313,6 +313,7 @@ function GetManagementCompanyData() {
             datafields:
             [
                 { name: 'AccountModeCode', type: 'string' },
+                { name: 'ManagementCompanyVguid', type: 'string' },
                 { name: 'Descrption', type: 'string' },
                 { name: 'CompanyCode', type: 'string' },
                 { name: 'ManagementCompany', type: 'string' },
@@ -352,6 +353,7 @@ function GetManagementCompanyData() {
                 { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false ,hidden:true},
                 { text: '公司编码', datafield: 'CompanyCode', width: 150, align: 'center', cellsAlign: 'center', editable: false },
                 { text: '公司描述', datafield: 'ManagementCompany', width: 463, align: 'center', cellsAlign: 'center', editable: false },
+                { text: 'ManagementCompanyVguid', datafield: 'ManagementCompanyVguid', width: 463, hidden: true },
                 { text: 'KeyData', datafield: 'KeyData', hidden: true }
             ]
         });

@@ -666,7 +666,9 @@ function initSelectGoodsModel(Goods) {
                 uiEngineHelper.bindSelect('#GoodsModel', msg, "Code", "Descrption");
                 $("#GoodsModel").prepend("<option value=\"\" selected='true'>请选择</>");
             }
-            $(".GoodsModel").show();
+            if ($("#PurchaseGoods option:selected").text() == "出租车") {
+                $(".GoodsModel").show();
+            }
         }
     });
 }

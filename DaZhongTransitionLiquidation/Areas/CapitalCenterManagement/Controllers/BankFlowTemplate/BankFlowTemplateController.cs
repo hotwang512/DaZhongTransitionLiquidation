@@ -284,6 +284,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
+                        var paymentUnitInstitution = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;
@@ -333,6 +335,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
+                        var paymentUnitInstitution = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;
@@ -614,7 +618,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             var date = DateTime.Now;
-            var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类'
+            var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic!='3'
                               order by VoucherNo desc", new { @NowDate = date });
             var batchNo = 0;
             if (voucherNo.IsValuable() && voucherNo.Length > 4)

@@ -41,6 +41,9 @@
     <Reference Include="log4net">
       <HintPath>..\DaZhongTransitionLiquidation\_lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="SqlSugar">
+      <HintPath>..\DaZhongTransitionLiquidation\_lib\SqlSugar.dll</HintPath>
+    </Reference>
     <Reference Include="SyntacticSugar">
       <HintPath>..\DaZhongTransitionLiquidation\_lib\SyntacticSugar.dll</HintPath>
     </Reference>

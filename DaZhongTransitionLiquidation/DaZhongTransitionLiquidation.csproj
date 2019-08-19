@@ -2562,7 +2562,6 @@
     <Content Include="Views\Shared\_LayoutDetail.cshtml" />
     <Content Include="Template\AssetsLedger.xlsx" />
     <Content Include="Template\AssetsRetiremen.xlsx" />
-    <Content Include="Template\PurchaseAssign.xlsx" />
     <Content Include="Views\Error\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

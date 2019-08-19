@@ -1,4 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
@@ -69,7 +70,8 @@ namespace DaZhongTransitionLiquidation.Common
                 var modelData = resultData.JsonToModel<BankFlowResult>();
                 if (modelData.success)
                 {
-                    bankFlowList = SaveBankFlow(modelData.data, capitalAccount);
+                    //using (SqlSugarClient db = DbBusinessDataConfig.GetInstance())
+                        bankFlowList = SaveBankFlow(modelData.data, capitalAccount);
                 }
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }

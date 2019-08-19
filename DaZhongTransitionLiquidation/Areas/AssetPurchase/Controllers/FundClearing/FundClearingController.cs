@@ -143,10 +143,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                                 left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
                                                 left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isable = '1'")
                             .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
-                        //付款信息
-                        var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
-                        var companylist = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.AccountModeCode == AccountModeCode && x.Isable)
-                            .OrderBy(i => i.CompanyCode).ToList();
                         //生成支付订单
                         var assets = db.Queryable<Business_LiquidationDistribution>()
                             .Where(x => x.FundClearingVguid == FundClearingVguid).ToList();
@@ -154,7 +150,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                         {
                             var assetOrder = db.Queryable<Business_FixedAssetsOrder>()
                                 .Where(x => x.VGUID == asset.AssetsOrderVguid).First();
-                            if (assetOrder.PayCompanyVguid != asset.CompanyVguid)
+                            if (assetOrder.PayCompany != asset.Company)
                             {
                                 var fundClearingOrder = new Business_FundClearingOrder();
                                 fundClearingOrder.VGUID = Guid.NewGuid();
@@ -172,7 +168,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                 fundClearingOrder.ContractFilePath = assetOrder.ContractFilePath;
                                 fundClearingOrder.PayType = assetOrder.PayType;
                                 //根据付款项目填充供应商信息和付款信息
-                                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == "cz|03|0303").First().VGUID.ToString();
+                                var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == assetOrder.PurchaseGoodsVguid).First().BusinessSubItem;
+                                var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
                                 if (bankInfoList.Any(x => x.OrderVGUID == OrderVguid) && bankInfoList.Count(x => x.OrderVGUID == OrderVguid) == 1)
                                 {
                                     var bankInfo = bankInfoList.First(x => x.OrderVGUID == OrderVguid);
@@ -183,9 +180,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                     fundClearingOrder.SupplierBankNo = bankInfo.BankNo;
                                     fundClearingOrder.SupplierBank = bankInfo.Bank;
                                 }
-                                if (companylist.Any(x => x.OrderVGUID == OrderVguid) && companylist.Count(x => x.OrderVGUID == OrderVguid) == 1)
+                                //付款信息
+                                //var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
+                                var companylist = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid && x.Isable)
+                                    .OrderBy(i => i.CompanyCode).ToList();
+                                if (companylist.Any(x => x.OrderVGUID == OrderVguid))
                                 {
-                                    var companyInfo = companylist.First(x => x.OrderVGUID == OrderVguid);
+                                    var companyInfo = companylist.First(x => x.OrderVGUID == OrderVguid && x.CompanyName == asset.Company);
                                     fundClearingOrder.PayCompanyVguid = companyInfo.VGUID;
                                     fundClearingOrder.PayCompany = companyInfo.PayBankAccountName;
                                     fundClearingOrder.CompanyBankName = companyInfo.PayBank;

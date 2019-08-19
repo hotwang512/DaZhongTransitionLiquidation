@@ -155,7 +155,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 fundClearingModel.VGUID = Guid.NewGuid();
                                 db.Insertable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
                                 var companys = db.Queryable<Business_PurchaseManagementCompany>()
-                                    .Where(x => x.PurchaseOrderSettingVguid == orderModel.VGUID && x.IsCheck).ToList();
+                                    .Where(x => x.PurchaseOrderSettingVguid == orderModel.PurchaseGoodsVguid && x.IsCheck).ToList();
                                 var liquidationDistributionList = new List<Business_LiquidationDistribution>();
                                 foreach (var company in companys)
                                 {

@@ -241,11 +241,11 @@ var $page = function () {
                         });
                     },
                     columns: [
-                      { text: '公司', dataField: 'Company', editable:false, width: 320, align: 'center', cellsAlign: 'center' },
-                      { text: '单价', dataField: 'PurchasePrices', editable: false, width: 150, align: 'center', cellsAlign: 'center' },
-                      { text: '数量', dataField: 'AssetNum', width: 150, align: 'center', cellsAlign: 'center' },
-                      { text: '金额', dataField: 'ContractAmount', editable: false, width: 150, align: 'center', cellsAlign: 'center' },
-                      { text: '删除', dataField: 'VGUID', hidden:true, width: 100, align: 'center', cellsAlign: 'center' }
+                      { text: '公司', dataField: 'Company', editable:false, width: '45%', align: 'center', cellsAlign: 'center' },
+                      { text: '单价', dataField: 'PurchasePrices', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
+                      { text: '数量', dataField: 'AssetNum', width: '15%', align: 'center', cellsAlign: 'center' },
+                      { text: '金额', dataField: 'ContractAmount', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
+                      { text: '删除', dataField: 'VGUID', hidden:true, align: 'center', cellsAlign: 'center' }
                     ]
                 });
                 nestedTables[id] = nestedDataTable;

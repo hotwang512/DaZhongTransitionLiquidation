@@ -98,7 +98,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(bankFlowList, UserInfo.LoginName);
+                        GenerateVoucherList(db,bankFlowList, UserInfo.LoginName);
                         //同步银行流水到银行数据表
                         BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
@@ -182,7 +182,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(bankFlowList, UserInfo.LoginName);
+                        GenerateVoucherList(db,bankFlowList, UserInfo.LoginName);
                         //同步银行流水到银行数据表
                         BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
@@ -259,6 +259,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             {
                 resultModel = new ResultModel<string>() { IsSuccess = true, Status = "1" };
                 var companyBankData = db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                var bankData = db.Queryable<Business_CompanyBankInfo>().ToList();
                 foreach (var item in companyBankData)
                 {
                     List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
@@ -270,6 +271,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     foreach (var items in bankFlowList)
                     {
                         items.BankAccount = item.BankAccount;
+                        var paymentUnitInstitution = bankData.Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         var accountModeName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == item.AccountModeCode).Descrption;
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ToList();
                         if (isAny.Count == 1)
@@ -284,8 +287,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
-                        var paymentUnitInstitution = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankAccount == items.BankAccount).First().BankName;
-                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;
@@ -298,7 +299,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(newBankFlowList, UserInfo.LoginName);
+                        GenerateVoucherList(db,newBankFlowList, UserInfo.LoginName);
                     }
                     
                 }
@@ -312,6 +313,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             {
                 resultModel = new ResultModel<string>() { IsSuccess = true, Status = "1" };
                 var companyBankData = db.Queryable<Business_CompanyBankInfo>().Where(x => x.OpeningDirectBank == true).ToList();
+                var bankData = db.Queryable<Business_CompanyBankInfo>().ToList();
                 foreach (var item in companyBankData)
                 {
                     List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
@@ -335,7 +337,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
-                        var paymentUnitInstitution = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        var paymentUnitInstitution = bankData.Where(x => x.BankAccount == items.BankAccount).First().BankName;
                         items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
@@ -350,7 +352,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(newBankFlowList, UserInfo.LoginName);
+                        GenerateVoucherList(db,newBankFlowList, UserInfo.LoginName);
                     }                }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
@@ -364,9 +366,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
         }
-        public static void GenerateVoucherList(List<Business_BankFlowTemplate> newBankFlowList, string loginName)
+        public static void GenerateVoucherList(SqlSugarClient db,List<Business_BankFlowTemplate> newBankFlowList, string loginName)
         {
-            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
             List<AssetsGeneralLedger_Swap> assetList = new List<AssetsGeneralLedger_Swap>();//凭证中间表List
@@ -446,7 +447,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 BVDetailList.Add(BVDetail);
                 //GetAssetsGeneralLedger(BVDetail, assetList, voucher, guid, 0);//将借贷数据同步中间表
                 //GetOtherSubject(BVDetailList, newBankFlowList, guid, item);//通过银行渠道找流水
-                GetOtherSubject2(BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
+                GetOtherSubject2(db,BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
             }
             #endregion
             if (VoucherList.Count > 0 && BVDetailList.Count > 0)
@@ -509,10 +510,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 }
             }
         }
-        public static void GetOtherSubject2(List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher
+        public static void GetOtherSubject2(SqlSugarClient db,List<Business_VoucherDetail> BVDetailList, Guid guid, Business_BankFlowTemplate item, List<AssetsGeneralLedger_Swap> assetList, Business_VoucherList voucher
             ,List<Business_OrderListDraft> orderListDraft, List<Business_OrderList> orderList, List<Business_UserCompanySetDetail> userCompanySet)
         {
-            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
             var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => (x.IsUnable == "启用" || x.IsUnable == null) && x.BankAccount == item.ReceivableAccount).ToList();
             if (bankChannel.Count > 0)
@@ -629,9 +629,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         }
         public static Business_CompanyBankInfo GetSevenSubject(string bankAccount)
         {
-            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
-            var result = db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == bankAccount);
-            return result;
+            using(SqlSugarClient db = DbBusinessDataConfig.GetInstance())
+            {
+                var result = db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == bankAccount);
+                return result;
+            } 
         }
         public static string GetSevenSubjectName(string subject, string acountModeCode, string companyCode)
         {

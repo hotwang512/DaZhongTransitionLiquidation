@@ -1220,27 +1220,19 @@
                             <td></td>
                         </tr>
                     }
-                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "OBD绑定车牌号变更" && i.Reads == 1))
+                    @*@if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "OBD绑定车牌号变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">OBD绑定车牌号变更</td>
                             <td></td>
                         </tr>
-                    }
+                    }*@
                     @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产原值变更" && i.Reads == 1))
                     {
                         <tr class="menue_item" id="AssetChange_AssetChange" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                             <td class="menue_text">资产原值变更</td>
-                            <td></td>
-                        </tr>
-                    }
-                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产报废" && i.Reads == 1))
-                    {
-                        <tr class="menue_item" id="AssetsRetirementReview_AssetChange" pageurl="/AssetManagement/AssetsRetirementReview">
-                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">资产报废</td>
                             <td></td>
                         </tr>
                     }
@@ -1250,29 +1242,21 @@
                 <table style="cursor: pointer;">
                     <tr>
                         <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                        <td class="menue_text_header">资产调拨</td>
+                        <td class="menue_text_header">资产报废申请</td>
                         <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                     </tr>
                 </table>
             </div>
             <div class="menue_body" id="AssetAllocation" style="display: none;">
                 <table>
-                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "内部调拨" && i.Reads == 1))
+                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产报废" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="/NoPage">
+                        <tr class="menue_item" id="AssetsRetirementReview_AssetChange" pageurl="/AssetManagement/AssetsRetirementReview">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">内部调拨</td>
+                            <td class="menue_text">资产报废</td>
                             <td></td>
                         </tr>
                     }
-                    @*@if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "外部调拨" && i.Reads == 1))
-                    {
-                        <tr class="menue_item" id="AssetAllocation_AssetAllocation" pageurl="/NoPage">
-                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">外部调拨</td>
-                            <td></td>
-                        </tr>
-                    }*@
                 </table>
             </div>
             
@@ -1289,25 +1273,33 @@
                 <table>
                     @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "退车清册" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="/NoPage">
+                        <tr class="menue_item" id="DisposeIncome_AssetDisposal" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">退车清册导入</td>
+                            <td class="menue_text">处置收入</td>
                             <td></td>
                         </tr>
                     }
                     @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="/NoPage">
+                        <tr class="menue_item" id="DisposeTax_AssetDisposal" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">处置清册导入</td>
+                            <td class="menue_text">处置税金</td>
                             <td></td>
                         </tr>
                     }
                     @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
                     {
-                        <tr class="menue_item" id="AssetDisposal_AssetDisposal" pageurl="/NoPage">
+                        <tr class="menue_item" id="DisposenetValue_AssetDisposal" pageurl="/NoPage">
                             <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                            <td class="menue_text">确认损益</td>
+                            <td class="menue_text">处置净值</td>
+                            <td></td>
+                        </tr>
+                    }
+                    @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
+                    {
+                        <tr class="menue_item" id="DisposeProfitLoss_AssetDisposal" pageurl="/NoPage">
+                            <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                            <td class="menue_text">处置损益</td>
                             <td></td>
                         </tr>
                     }

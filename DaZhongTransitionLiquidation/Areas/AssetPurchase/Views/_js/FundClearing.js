@@ -184,7 +184,7 @@ var $page = function () {
                 var nestedDataTableAdapter = new $.jqx.dataAdapter(ordersSource);
                 nestedDataTable.jqxDataTable({
                     source: nestedDataTableAdapter,
-                    editable: true,
+                    editable: rowinfo.row.SubmitStatus == 1 ? false : true,
                     altRows: true,
                     editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
                     width: 770, height: 180,
@@ -315,6 +315,8 @@ var $page = function () {
             return '<span style="margin: 4px; margin-top:8px;">已提交</span>';
         } else if (value == 0) {
             return '<span style="margin: 4px; margin-top:8px;">待提交</span>';
+        } else if (value == 2) {
+            return '<span style="margin: 4px; margin-top:8px;">退回待提交</span>';
         }
     }
     function initSelectPurchaseGoods() {

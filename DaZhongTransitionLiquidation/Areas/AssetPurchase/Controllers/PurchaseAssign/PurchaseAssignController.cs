@@ -433,9 +433,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         var assetReview = new Business_AssetReview();
                                         assetReview.VGUID = Guid.NewGuid();
                                         assetReview.ASSET_ID = orderNumberLeftAsset + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
-                                        assetReview.DESCRIPTION = item.VehicleModel;
+                                        assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;//item.VehicleModel;
                                         assetReview.ENGINE_NUMBER = item.EngineNumber;
                                         assetReview.CHASSIS_NUMBER = item.ChassisNumber;
+                                        assetReview.VEHICLE_SHORTNAME = fixedAssetsOrder.GoodsModel;
+                                        assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;
                                         //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
                                         assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
                                         assetReview.QUANTITY = 1;

@@ -138,6 +138,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             });
             return Json(resultModel);
         }
+        public JsonResult RejectLiquidation(Guid FundClearingVguid)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
+                fundClearingModel.SubmitStatus = 2;//驳回
+                db.Updateable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
+                var orderList = db.Queryable<Business_FundClearingOrder>()
+                    .Where(x => x.FixedAssetsOrderVguid == fundClearingModel.FixedAssetsOrderVguid).ToList();
+                db.Deleteable<Business_FundClearingOrder>(orderList).ExecuteCommand();
+                resultModel.IsSuccess = true;
+                resultModel.Status = "1";
+            });
+            return Json(resultModel);
+        }
         public string JoinStr(List<Business_AssetAttachmentList> list)
         {
             var strArr = "";

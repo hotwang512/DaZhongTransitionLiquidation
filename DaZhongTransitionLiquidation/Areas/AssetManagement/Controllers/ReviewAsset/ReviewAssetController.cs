@@ -103,7 +103,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER);
                             reviewItem.ORIGINALID = newVehicle.ORIGINALID;
                             reviewItem.PLATE_NUMBER = newVehicle.PLATE_NUMBER;
-                            reviewItem.VEHICLE_SHORTNAME = newVehicle.VEHICLE_SHORTNAME;
+                            //车辆简称不使用车管系统接口中传过来的，取固定资产保存的车型
+                            //reviewItem.VEHICLE_SHORTNAME = newVehicle.VEHICLE_SHORTNAME; 
                             reviewItem.VEHICLE_STATE = newVehicle.VEHICLE_STATE;
                             reviewItem.OPERATING_STATE = newVehicle.OPERATING_STATE;
                             reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
@@ -254,9 +255,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
                     assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
                     assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
-                    assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
+                    //assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
+                    ////传入订单选择的部门
+                    //assetSwapModel.FA_LOC_2 = departmentStr;
+                    //管理公司和所属司调换    
+                    assetSwapModel.FA_LOC_1 = departmentStr;
                     //传入订单选择的部门
-                    assetSwapModel.FA_LOC_2 = departmentStr;
+                    assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY;
                     assetSwapModel.FA_LOC_3 = "000000";
                     assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                     assetSwapModel.CREATE_DATE = DateTime.Now;

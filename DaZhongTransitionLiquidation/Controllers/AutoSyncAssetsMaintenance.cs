@@ -42,6 +42,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset();
                         var resultApiModifyModel = apiReaultModify
                             .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                        //全量获取车辆信息
                         {
                             var resultColumn = resultApiModifyModel.data[0].COLUMNS;
                             var resultData = resultApiModifyModel.data[0].DATA;
@@ -49,7 +50,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 var nv = new Api_ModifyVehicleAsset();
                                 var t = nv.GetType();
-                                var obj = Activator.CreateInstance(t);
                                 for (var k = 0; k < resultColumn.Count; k++)
                                 {
                                     var pi = t.GetProperty(resultColumn[k]);
@@ -59,6 +59,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                             }
                             WirterSyncModifyAssetFlow(assetModifyFlowList);
                         }
+                        //退车
                         {
                             var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
                             var apiReaultScrap = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
@@ -71,7 +72,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 var nv = new Api_ScrapVehicleAsset();
                                 var t = nv.GetType();
-                                var obj = Activator.CreateInstance(t);
                                 for (var k = 0; k < resultColumn.Count; k++)
                                 {
                                     var pi = t.GetProperty(resultColumn[k]);
@@ -114,14 +114,14 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //Code转名称
                         if (item.BELONGTO_COMPANY.TryToInt() != 37)//先排除37
                         {
-                            item.BELONGTO_COMPANY =
-                                ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
+                            item.MANAGEMENT_COMPANY =
+                                ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
                         }
                         //存在197,480的情况
                         if (item.MANAGEMENT_COMPANY.TryToInt() < 56)
                         {
-                            item.MANAGEMENT_COMPANY =
-                                ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
+                            item.BELONGTO_COMPANY =
+                                ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Descrption;
                         }
                         //判断变更类型 MODIFY_TYPE
                         if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)

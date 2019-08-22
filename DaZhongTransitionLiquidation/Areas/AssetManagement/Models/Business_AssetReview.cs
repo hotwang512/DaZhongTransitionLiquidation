@@ -49,7 +49,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string VEHICLE_SHORTNAME { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:多余的字段，暂作为页面显示部门使用
         /// Default:
         /// Nullable:True
         /// </summary>           
@@ -469,4 +469,5 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string MANAGEMENT_COMPANY { get; set; }
         public string BELONGTO_COMPANY { get; set; }
     }
+
 }

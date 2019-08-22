@@ -32,9 +32,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"SELECT mi.TAG_NUMBER, mi.VEHICLE_SHORTNAME, mi.MANAGEMENT_COMPANY, mi.BELONGTO_COMPANY, mi.VEHICLE_STATE, mi.OPERATING_STATE, mi.ENGINE_NUMBER, mi.CHASSIS_NUMBER, mi.MODEL_MAJOR, mi.MODEL_MINOR, mv.*
-FROM Business_ScrapVehicle mv
-     LEFT JOIN Business_AssetMaintenanceInfo mi ON mv.ORIGINALID=mi.ORIGINALID")
+                jsonResult.Rows = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
+                         , mi.VEHICLE_SHORTNAME
+                         , mi.MANAGEMENT_COMPANY
+                         , mi.BELONGTO_COMPANY
+                         , mi.VEHICLE_STATE
+                         , mi.OPERATING_STATE
+                         , mi.ENGINE_NUMBER
+                         , mi.CHASSIS_NUMBER
+                         , mi.MODEL_MAJOR
+                         , mi.MODEL_MINOR
+                         , mv.*
+	                     , mi.EXP_ACCOUNT_SEGMENT
+	                     , mi.COMMISSIONING_DATE as PERIOD
+	                     , mi.QUANTITY
+	                     , mi.ASSET_COST
+	                     , mi.ASSET_ID
+                    from Business_ScrapVehicle mv
+                        left join Business_AssetMaintenanceInfo mi
+                            on mv.ORIGINALID = mi.ORIGINALID")
                     .Where(i => !i.ISVERIFY)
                     .WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -50,7 +66,7 @@ FROM Business_ScrapVehicle mv
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>(@"SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.ASSET_COST,mi.LISENSING_DATE,mi.START_VEHICLE_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
+                    var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>(@"SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.ASSET_COST,mi.LISENSING_DATE,mi.COMMISSIONING_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
                     //获取所有的经营模式
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                     foreach (var item in modifyVehicleList)

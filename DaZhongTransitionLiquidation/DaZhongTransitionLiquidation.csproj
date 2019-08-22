@@ -363,6 +363,10 @@
     <Content Include="Areas\AssetPurchase\Views\FundClearing\Index.cshtml" />
     <Content Include="Areas\AssetPurchase\Views\LiquidationReview\Index.cshtml" />
     <Content Include="Areas\AssetPurchase\Views\FundClearingOrderDetail\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\DisposeIncome\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\DisposeNetValue\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\DisposeProfitLoss\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\DisposeTax\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2333,6 +2337,10 @@
     <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceDetailController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeIncomeController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeNetValueController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeProfitLossController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeTaxController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetMaintenanceInfoDetailController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsLedger\AssetsLedgerController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
@@ -2349,6 +2357,10 @@
     <Compile Include="Areas\AssetManagement\Models\Business_AssetReview.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsLedger_Swap.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetsRetirement_Swap.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_DisposeIncome.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_DisposeNetValue.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_DisposeProfitLoss.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_DisposeTax.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />

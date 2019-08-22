@@ -1,17 +1,22 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using SqlSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
 {
     ///<summary>
-    ///车辆类资产退车审核表
+    ///处置税金
     ///</summary>
-    [SugarTable("Business_ScrapVehicle")]
-    public class Business_ScrapVehicle
+    [SugarTable("Business_DisposeTax")]
+    public partial class Business_DisposeTax
     {
+        public Business_DisposeTax()
+        {
+
+
+        }
         /// <summary>
         /// Desc:
         /// Default:
@@ -25,132 +30,112 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string ORIGINALID { get; set; }
+        public string VehicleOwner { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string PLATE_NUMBER { get; set; }
+        public string DepartmentVehiclePlateNumber { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public DateTime BACK_CAR_DATE { get; set; }
+        public string OraclePlateNumber { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public bool ISVERIFY { get; set; }
+        public decimal? Income { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public DateTime? CREATE_DATE { get; set; }
+        public decimal? AddedValueTax { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string CREATE_USER { get; set; }
-
-    }
-
-    public class Business_ScrapVehicleModel: Business_ScrapVehicle
-    {
-        public string ASSET_ID { get; set; }
-        public string BELONGTO_COMPANY { get; set; }
-        public string MODEL_MAJOR { get; set; }
-        public string MODEL_MINOR { get; set; }
-        public string PERIOD { get; set; }
-        public string DESCRIPTION { get; set; }
-        public decimal ASSET_COST { get; set; }
-        public DateTime LISENSING_DATE { get; set; }
-    }
-    public class Business_ScrapVehicleShowModel : Business_ScrapVehicle
-    {
-        public string PLATE_NUMBER { get; set; }
+        public decimal? ConstructionTax { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string TAG_NUMBER { get; set; }
+        public decimal? AdditionalEducationTax { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string VEHICLE_SHORTNAME { get; set; }
+        public decimal? LocalAdditionalEducationTax { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string MANAGEMENT_COMPANY { get; set; }
+        public decimal? ServiceFee { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string BELONGTO_COMPANY { get; set; }
+        public decimal? ConsignFee { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string VEHICLE_STATE { get; set; }
+        public decimal? TaxFreeIncome { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string OPERATING_STATE { get; set; }
+        public decimal? Taxes { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string ENGINE_NUMBER { get; set; }
+        public DateTime? CreateDate { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string CHASSIS_NUMBER { get; set; }
+        public DateTime? ChangeDate { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string MODEL_MAJOR { get; set; }
+        public string CreateUser { get; set; }
+
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string MODEL_MINOR { get; set; }
-        public string EXP_ACCOUNT_SEGMENT { get; set; }
-        public string PERIOD { get; set; }
-        public int QUANTITY { get; set; }
-        public decimal ASSET_COST { get; set; }
-        public string ASSET_ID { get; set; }
+        public string ChangeUser { get; set; }
+
     }
 }

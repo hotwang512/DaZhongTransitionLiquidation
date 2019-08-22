@@ -322,7 +322,7 @@ function ViewBelongTo(vguid) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $("#gridOrderBelong").jqxGrid(
         {
-            width: "470",
+            width: "640",
             autoheight: true,
             source: dataAdapter,
             statusbarheight: 25,
@@ -331,12 +331,12 @@ function ViewBelongTo(vguid) {
             columns: [
                 { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
                 { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
-                { text: '资产归属公司', datafield: 'BelongToCompany', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '资产归属公司', datafield: 'BelongToCompany', columntype: 'textbox', width: 320, align: 'center', cellsAlign: 'center', editable: false },
                 {
                     text: '数量', datafield: 'AssetNum', width: 100, align: 'center', cellsalign: 'center'
                 },
-                { text: '单价', datafield: 'PurchasePrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false },
-                { text: '总价', datafield: 'PurchaseCountPrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false }
+                { text: '单价', datafield: 'PurchasePrices', columntype: 'textbox', width: 110, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '总价', datafield: 'PurchaseCountPrices', columntype: 'textbox', width: 110, align: 'center', cellsAlign: 'center', editable: false }
             ]
         });
     $("#OrderBelongToDialog").modal("show");
@@ -365,7 +365,7 @@ function ViewAssign(vguid) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $("#gridOrderBelong").jqxGrid(
         {
-            width: "470",
+            width: "640",
             autoheight: true,
             source: dataAdapter,
             statusbarheight: 25,
@@ -375,14 +375,14 @@ function ViewAssign(vguid) {
             pagesize: 5,
             selectionmode: 'singlerow',
             columns: [
-                { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
+                { text: 'VGUID', datafield: 'VGUID', columntype: 'textbox', width: 390, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
                 { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
-                { text: '资产归属公司', datafield: 'BelongToCompany', columntype: 'textbox', width: 130, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '资产归属公司', datafield: 'BelongToCompany', columntype: 'textbox', width:320, align: 'center', cellsAlign: 'center', editable: false },
                 {
                     text: '数量', datafield: 'AssetNum', width: 100, align: 'center', cellsalign: 'center'
                 },
-                { text: '单价', datafield: 'PurchasePrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false },
-                { text: '总价', datafield: 'PurchaseCountPrices', columntype: 'textbox', width: 120, align: 'center', cellsAlign: 'center', editable: false }
+                { text: '单价', datafield: 'PurchasePrices', columntype: 'textbox', width: 110, align: 'center', cellsAlign: 'center', editable: false },
+                { text: '总价', datafield: 'PurchaseCountPrices', columntype: 'textbox', width: 110, align: 'center', cellsAlign: 'center', editable: false }
             ]
         });
     $("#OrderBelongToDialog").modal("show");
@@ -456,7 +456,7 @@ function settingBelongTo(AssetOrderDetailsVguid) {
     }
     $("#table").jqxDataTable(
     {
-        width: 500,filterHeight: 40,
+        width: 650,filterHeight: 40,
         source: dataAdapter,
         height:"330px",
         pageable: true,
@@ -590,7 +590,7 @@ function settingBelongTo(AssetOrderDetailsVguid) {
             { text: 'AssetsOrderVguid', editable: false, dataField: 'AssetsOrderVguid', width: 200, hidden: true },
             { text: 'AssetOrderDetailsVguid', editable: false, dataField: 'AssetOrderDetailsVguid', width: 200, hidden: true },
             {
-                text: '资产归属公司', columntype: 'template', dataField: 'BelongToCompany', cellsAlign: 'center', align: 'center', width: 240,
+                text: '资产归属公司', columntype: 'template', dataField: 'BelongToCompany', cellsAlign: 'center', align: 'center', width: 400,
                 createEditor: function (row, cellvalue, editor, cellText, width, height) {
                     editor.jqxDropDownList({
                         source: getEditorDataAdapter('BelongToCompany'), displayMember: 'BelongToCompany', valueMember: 'BelongToCompany', width: width, height: height
@@ -605,7 +605,7 @@ function settingBelongTo(AssetOrderDetailsVguid) {
                 }
             },
             {
-                text: '数量', dataField: 'AssetNum', cellsAlign: 'center', align: 'center', width: 260,
+                text: '数量', dataField: 'AssetNum', cellsAlign: 'center', align: 'center', width: 250,
                 columnType: 'custom',
                 createEditor: function (row, cellValue, editor, width, height) {
                     var textBox = $("<input style='padding-left: 4px; box-sizing: border-box; -moz-box-sizing: border-box; border: none;' type='number'/>").appendTo(editor);;

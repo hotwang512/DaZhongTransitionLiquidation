@@ -99,17 +99,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     temp = item.BELONGTO_COMPANY;
                     item.BELONGTO_COMPANY = item.MANAGEMENT_COMPANY;
                     item.MANAGEMENT_COMPANY = temp;
+                    //存在197,480的情况
                     if (item.BELONGTO_COMPANY.TryToInt() < 56)
                     {
                         item.BELONGTO_COMPANY =
                             ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
                     }
-                    //存在197,480的情况
-                    if (item.MANAGEMENT_COMPANY.TryToInt() != 37)//先排除37
-                    {
-                        item.MANAGEMENT_COMPANY =
-                            ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Descrption;
-                    }
+                    item.MANAGEMENT_COMPANY =
+                        ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Descrption;
                     var PurchaseGoodsInfo = db.Queryable<Business_PurchaseOrderSetting>()
                         .Where(x => x.PurchaseGoods == "出租车").First();
                     var AssetsCategory = db.Queryable<Business_AssetsCategory>()

@@ -103,6 +103,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
             int success = 0;
             var MODIFY_TYPE = "";
+            var data = assetFlowList.Where(x => x.ORIGINALID == "102271").First();
             foreach (var item in assetFlowList)
             {
                 var assetMaintenanceInfo = _db.Queryable<Business_AssetMaintenanceInfo>()
@@ -111,22 +112,21 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     try
                     {
+                        //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
+                        var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
                         var temp = "";
                         temp = item.BELONGTO_COMPANY;
                         item.BELONGTO_COMPANY = item.MANAGEMENT_COMPANY;
                         item.MANAGEMENT_COMPANY = temp;
                         //Code转名称
                         //存在197,480的情况
-                        if (item.BELONGTO_COMPANY.TryToInt() < 56)
+                        if (item.MANAGEMENT_COMPANY.TryToInt() < 56)
                         {
                             item.MANAGEMENT_COMPANY =
-                                ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
+                                ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
                         }
-                        if (item.MANAGEMENT_COMPANY.TryToInt() != 37)//先排除37
-                        {
-                            item.BELONGTO_COMPANY =
-                                ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Descrption;
-                        }
+                        item.BELONGTO_COMPANY =
+                            ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Descrption;
                         //判断变更类型 MODIFY_TYPE
                         if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)
                         {
@@ -166,6 +166,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                         //}
                         #endregion
+
+                       
                         if (!item.MODEL_MINOR.IsNullOrEmpty())
                         {
                             //经营模式子类 传过来的经营模式上级
@@ -173,9 +175,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                             //如果经营模式子类有多个
                             if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
                             {
-                                //计算出车龄，并根据车龄判断经营模式子类
-                                //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
-                                var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
+                                //根据车龄判断经营模式子类
                                 item.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
                             }
                             else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)

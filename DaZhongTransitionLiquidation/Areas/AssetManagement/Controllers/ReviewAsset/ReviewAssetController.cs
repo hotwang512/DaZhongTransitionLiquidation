@@ -103,7 +103,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 x.CHASSIS_NUMBER == reviewItem.CHASSIS_NUMBER);
                             reviewItem.ORIGINALID = newVehicle.ORIGINALID;
                             reviewItem.PLATE_NUMBER = newVehicle.PLATE_NUMBER;
-                            reviewItem.VEHICLE_SHORTNAME = newVehicle.VEHICLE_SHORTNAME;
+                            //车辆简称不使用车管系统接口中传过来的，取固定资产保存的车型
+                            //reviewItem.VEHICLE_SHORTNAME = newVehicle.VEHICLE_SHORTNAME; 
                             reviewItem.VEHICLE_STATE = newVehicle.VEHICLE_STATE;
                             reviewItem.OPERATING_STATE = newVehicle.OPERATING_STATE;
                             reviewItem.MODEL_MINOR = newVehicle.MODEL_MINOR;
@@ -151,23 +152,41 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.MODEL_MAJOR = manageModelList
                                     .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
                             }
+                            //if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
+                            //{
+                            //    reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
+                            //    reviewItem.BELONGTO_COMPANY =
+                            //        ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Descrption;
+                            //    var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                            //        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == reviewItem.BELONGTO_COMPANY_CODE).First();
+                            //    var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
+                            //        x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
+                            //        x.Code == ssModel.AccountModeCode).First().Descrption;
+                            //    reviewItem.EXP_ACCOUNT_SEGMENT = accountMode;
+                            //}
+                            //if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
+                            //{
+                            //    reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
+                            //    reviewItem.MANAGEMENT_COMPANY =
+                            //        ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Abbreviation;
+                            //}
+                            //资产管理公司和资产所属公司调换
                             if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
                             {
-                                reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
+                                reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
+                                reviewItem.MANAGEMENT_COMPANY = ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Abbreviation;
+                            }
+                            if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
+                            {
+                                reviewItem.BELONGTO_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
                                 reviewItem.BELONGTO_COMPANY =
-                                    ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Descrption;
+                                    ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Descrption;
                                 var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
                                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == reviewItem.BELONGTO_COMPANY_CODE).First();
                                 var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
                                     x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
                                     x.Code == ssModel.AccountModeCode).First().Descrption;
                                 reviewItem.EXP_ACCOUNT_SEGMENT = accountMode;
-                            }
-                            if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
-                            {
-                                reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
-                                reviewItem.MANAGEMENT_COMPANY =
-                                    ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Abbreviation;
                             }
                         }
                         resultModel.IsSuccess = true;

@@ -70,7 +70,7 @@ var $page = function () {
                             "VGUID": $("#VGUID").val(),
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
                             "GoodsModel": $("#GoodsModel option:selected").text(),
-                            "GoodsModelCode": $("#GoodsModelCode").val(),
+                            "GoodsModelCode": $("#GoodsModel").val(),
                             "PurchaseDepartmentIDs": DepartmentModelList.join(","),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
@@ -341,8 +341,8 @@ var $page = function () {
             initSelectPurchaseGoods();
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").trigger("change");
-            $("#GoodsModel").val(msg.GoodsModelCode);
             $("#PurchaseGoods").attr("disabled", true);
+
             initPaymentInformationComboBox();
             GetCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
@@ -352,7 +352,6 @@ var $page = function () {
             $("#ContractAmount").val(msg.ContractAmount);
             $("#AssetDescription").val(msg.AssetDescription);
             //$("#UseDepartment").val(msg.UseDepartmentVguid);
-            
             //if (msg.AcceptanceDate != null && msg.AcceptanceDate != "") {
             //    $("#AcceptanceDate").val(formatDate(msg.AcceptanceDate));
             //}
@@ -381,6 +380,8 @@ var $page = function () {
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
             $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
+            debugger;
+            $("#GoodsModel").val(msg.GoodsModelCode);
         });
     }
     //采购合同上传文件

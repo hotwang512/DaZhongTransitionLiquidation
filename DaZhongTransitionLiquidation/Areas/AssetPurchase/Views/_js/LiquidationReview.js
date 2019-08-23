@@ -3,6 +3,7 @@ var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnSubmit: function () { return $("#btnSubmit") },
+    $btnReject: function () { return $("#btnReject") },
     $btnReset: function () { return $("#btnReset") },
     $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
@@ -45,13 +46,49 @@ var $page = function () {
                     url: "/AssetPurchase/LiquidationReview/SubmitLiquidation",
                     data: { FundClearingVguid: selection[0] },
                     type: "post",
-                    success: function(msg) {
+                    success: function (msg) {
                         switch (msg.Status) {
                         case "0":
                             jqxNotification("提交失败！", null, "error");
                             break;
                         case "1":
                             jqxNotification("提交成功！", null, "success");
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        case "2":
+                            jqxNotification(msg.ResultInfo, null, "error");
+                            break;
+                        }
+                    }
+                });
+            }
+        });
+        selector.$btnReject().on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length != 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            } else {
+                $.ajax({
+                    url: "/AssetPurchase/LiquidationReview/RejectLiquidation",
+                    data: { FundClearingVguid: selection[0] },
+                    type: "post",
+                    success: function(msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("退回失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("退回成功！", null, "success");
                             $("#jqxTable").jqxDataTable('updateBoundData');
                             break;
                         case "2":

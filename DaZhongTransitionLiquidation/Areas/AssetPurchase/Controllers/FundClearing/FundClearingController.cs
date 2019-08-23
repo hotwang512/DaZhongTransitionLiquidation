@@ -130,7 +130,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             DbBusinessDataService.Command(db =>
             {
                 var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
-                if (fundClearingModel.SubmitStatus == 0)
+                if (fundClearingModel.SubmitStatus == 0 || fundClearingModel.SubmitStatus == 2)
                 {
                     //检查数量是否匹配
                     var assetSum = db.Queryable<Business_LiquidationDistribution>()

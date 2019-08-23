@@ -51,6 +51,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string Founder { get; set; }
-
+        public string CategoryMajor { get; set; }
+        public string CategoryMinor { get; set; }
+        public Guid AssetsCategoryVGUID { get; set; }
     }
 }

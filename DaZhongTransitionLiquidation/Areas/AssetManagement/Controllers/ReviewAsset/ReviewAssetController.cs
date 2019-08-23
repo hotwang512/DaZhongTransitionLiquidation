@@ -133,6 +133,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                                                              x.ASSET_CATEGORY_MINOR == reviewItem.ASSET_CATEGORY_MINOR);
                                 reviewItem.BOOK_TYPE_CODE = category.BOOK_TYPE_CODE;
                             }
+                            var minorModel = new Business_ManageModel();
                             if (!newVehicle.MODEL_MINOR.IsNullOrEmpty())
                             {
                                 var minor = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
@@ -140,18 +141,37 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) > 1)
                                 {
                                     //计算出车龄，并根据车龄判断经营模式子类
-                                    reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
+                                    //reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
+                                    minorModel = manageModelList
+                                        .Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months)
+                                        .OrderBy(x => x.VehicleAge).First();
+                                    reviewItem.MODEL_MINOR = minorModel.BusinessName;
                                 }
                                 else if (minor != null && manageModelList.Count(x => x.VGUID == minor.ParentVGUID) == 1)
                                 {
-                                    reviewItem.MODEL_MINOR = manageModelList
-                                        .First(x => x.VGUID == minor.ParentVGUID).BusinessName;
+                                    minorModel = manageModelList
+                                        .First(x => x.VGUID == minor.ParentVGUID);
+                                    reviewItem.MODEL_MINOR = minorModel.BusinessName;
                                 }
                                 //经营模式主类 传过来的经营模式上上级
                                 var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
                                 reviewItem.MODEL_MAJOR = manageModelList
                                     .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
                             }
+                            //根据经营模式获取到资产主类子类，通过主类子类取到折旧方法维护中的财务信息
+                            var assetCategory = db.Queryable<Business_AssetsCategory>()
+                                .Where(x => x.VGUID == minorModel.AssetsCategoryVGUID).First();
+                            reviewItem.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                            reviewItem.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
+                            reviewItem.LIFE_YEARS = assetCategory.LIFE_YEARS;
+                            reviewItem.LIFE_MONTHS = assetCategory.LIFE_MONTHS;
+                            reviewItem.SALVAGE_PERCENT = assetCategory.SALVAGE_PERCENT;
+                            reviewItem.METHOD = assetCategory.METHOD;
+                            reviewItem.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
+                            reviewItem.ASSET_COST_ACCOUNT = assetCategory.ASSET_COST_ACCOUNT;
+                            reviewItem.ASSET_SETTLEMENT_ACCOUNT = assetCategory.ASSET_SETTLEMENT_ACCOUNT;
+                            reviewItem.DEPRECIATION_EXPENSE_SEGMENT = assetCategory.DEPRECIATION_EXPENSE_SEGMENT;
+                            reviewItem.ACCT_DEPRECIATION_ACCOUNT = assetCategory.ACCT_DEPRECIATION_ACCOUNT;
                             //if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
                             //{
                             //    reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
@@ -342,6 +362,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     asset.SALVAGE_VALUE = reviewItem.SALVAGE_VALUE;
                     asset.AMORTIZATION_FLAG = reviewItem.AMORTIZATION_FLAG;
                     asset.METHOD = reviewItem.METHOD;
+                    asset.LIFE_YEARS = reviewItem.LIFE_YEARS;
+                    asset.LIFE_MONTHS = reviewItem.LIFE_MONTHS;
                     asset.BOOK_TYPE_CODE = reviewItem.BOOK_TYPE_CODE;
                     asset.ASSET_COST_ACCOUNT = reviewItem.ASSET_COST_ACCOUNT;
                     asset.ASSET_SETTLEMENT_ACCOUNT = reviewItem.ASSET_SETTLEMENT_ACCOUNT;

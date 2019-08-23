@@ -197,10 +197,10 @@ var $page = function () {
                     { text: '资产编号', datafield: 'ASSET_ID', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '车辆简称', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '车辆简称', datafield: 'VEHICLE_SHORTNAME', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '组织编号', datafield: 'ORGANIZATION_NUM', hidden: true, width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 180, align: 'center', cellsAlign: 'center' },
+                    { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 180, align: 'center', cellsAlign: 'center' },
+                    { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 320, align: 'center', cellsAlign: 'center' },
                     { text: '车辆状态', datafield: 'VEHICLE_STATE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '营运状态', datafield: 'OPERATING_STATE', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },
@@ -303,7 +303,24 @@ var $page = function () {
         return true;
     }
 };
-
+function getBusinessModel() {
+    $.ajax({
+        url: "/AssetManagement/AssetsMaintenance/GetBusinessModel",
+        //traditional: true,
+        type: "post",
+        success: function (msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("获取失败！", null, "error");
+                break;
+            case "1":
+                jqxNotification("获取成功！", null, "success");
+                $("#jqxTable").jqxDataTable('updateBoundData');
+                break;
+            }
+        }
+    });
+}
 $(function () {
     var page = new $page();
     page.init();

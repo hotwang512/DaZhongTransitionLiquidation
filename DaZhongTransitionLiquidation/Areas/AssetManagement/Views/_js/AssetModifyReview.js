@@ -117,6 +117,7 @@ var $page = function () {
         } else if (mtype == "FA_LOC_1") {
             columns = [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: '变更前存放地点', width: 150, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
                     { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '变更前', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
@@ -130,7 +131,7 @@ var $page = function () {
         } else if (mtype == "FA_LOC_3") {
             columns = [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '变更前', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
+                    { text: '变更前存放地点', width: 100, align: 'center', cellsAlign: 'center', cellsrenderer: cellsrenderer },
                     { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },

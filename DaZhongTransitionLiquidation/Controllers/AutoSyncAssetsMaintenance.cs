@@ -111,14 +111,18 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     try
                     {
+                        var temp = "";
+                        temp = item.BELONGTO_COMPANY;
+                        item.BELONGTO_COMPANY = item.MANAGEMENT_COMPANY;
+                        item.MANAGEMENT_COMPANY = temp;
                         //Code转名称
-                        if (item.BELONGTO_COMPANY.TryToInt() != 37)//先排除37
+                        //存在197,480的情况
+                        if (item.BELONGTO_COMPANY.TryToInt() < 56)
                         {
                             item.MANAGEMENT_COMPANY =
                                 ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
                         }
-                        //存在197,480的情况
-                        if (item.MANAGEMENT_COMPANY.TryToInt() < 56)
+                        if (item.MANAGEMENT_COMPANY.TryToInt() != 37)//先排除37
                         {
                             item.BELONGTO_COMPANY =
                                 ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Descrption;
@@ -128,13 +132,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //车牌号变更
                             MODIFY_TYPE = "PLATE_NUMBER";
-                            list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
+                            list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
                         }
                         if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
                         {
                             //管理公司
                             MODIFY_TYPE = "FA_LOC_1";
-                            list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
+                            list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
                         }
                         #region 注释
                         //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
@@ -187,7 +191,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 //经营模式
                                 MODIFY_TYPE = "BUSINESS_MODEL";
-                                list.Add(getModel(manageModelList, item, assetMaintenanceInfo, MODIFY_TYPE));
+                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
                             }
                         }
                     }
@@ -220,7 +224,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             success = _db.Insertable<Business_ScrapVehicle>(list).ExecuteCommand();
             return success;
         }
-        public static Business_ModifyVehicle getModel(List<Business_ManageModel> manageModelList, Api_ModifyVehicleAsset item, Business_AssetMaintenanceInfo info, string MODIFY_TYPE)
+        public static Business_ModifyVehicle getModel(Api_ModifyVehicleAsset item, Business_AssetMaintenanceInfo info, string MODIFY_TYPE)
         {
             var model = new Business_ModifyVehicle();
             model.VGUID = Guid.NewGuid();

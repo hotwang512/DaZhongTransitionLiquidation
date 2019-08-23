@@ -108,5 +108,29 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             });
             return Json(resultModel);
         }
+        public JsonResult SaveAssetsModel(Business_ManageModel module)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    var guid = module.VGUID;
+                    var parentVGUID = module.ParentVGUID;
+                   
+                        db.Updateable<Business_ManageModel>().UpdateColumns(it => new Business_ManageModel()
+                        {
+                            CategoryMajor = module.CategoryMajor,
+                            AssetsCategoryVGUID = module.AssetsCategoryVGUID,
+                            CategoryMinor = module.CategoryMinor
+                        }).Where(it => it.VGUID == guid).ExecuteCommand();
+                   
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
     }
 }

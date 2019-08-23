@@ -5,7 +5,10 @@ var selector = {
     $btnDelete: function () { return $("#btnDelete") },
     $AddNewManageModelDialog: function () { return $("#AddNewManageModelDialog") },
     $AddManageModelData_OKButton: function () { return $("#AddManageModelData_OKButton") },
-    $AddManageModelData_CancelBtn: function () { return $("#AddManageModelData_CancelBtn") }
+    $AddManageModelData_CancelBtn: function () { return $("#AddManageModelData_CancelBtn") },
+    $AddAssetsModel_OKButton: function () { return $("#AddAssetsModel_OKButton") },
+    $AddAssetsModel_CancelBtn: function () { return $("#AddAssetsModel_CancelBtn") },
+    $AddAssetsModelDialog: function () { return $("#AddAssetsModelDialog") }
 }
 
 var parentVguid = "";
@@ -21,6 +24,7 @@ var $page = function () {
         getModules(function (modules) {
             loadGridTree(modules);
         });
+        initSelectAssetMajor();
     }
     //所有事件
     function addEvent() {
@@ -74,6 +78,10 @@ var $page = function () {
         //弹出框中的取消按钮
         selector.$AddManageModelData_CancelBtn().on("click", function () {
             selector.$AddNewManageModelDialog().modal("hide");
+        });
+        //弹出框中的取消按钮
+        selector.$AddAssetsModel_CancelBtn().on("click", function () {
+            selector.$AddAssetsModelDialog().modal("hide");
         });
         //删除
         selector.$btnDelete().click(function () {
@@ -141,6 +149,37 @@ var $page = function () {
                     $("#ParentMenu").val(hideParentMenu);
                 }
             });
+        $("#CategoryMajor").on('select', function (event) {
+            if (event.args) {
+                initSelectMinor();
+            }
+        });
+        selector.$AddAssetsModel_OKButton().on("click", function () {
+            var url = "/AssetManagement/ManageModel/SaveAssetsModel";
+            $.ajax({
+                url: url,
+                data: {
+                    "CategoryMajor": $("#CategoryMajor").val(),
+                    "AssetsCategoryVGUID": $("#CategoryMinor").val(),
+                    "CategoryMinor": $("#CategoryMinor").text(),
+                    "VGUID": $("#AddAssetsModel_OKButton").attr("VGUID")
+                },
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("保存失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("保存成功！", null, "success");
+                        pageload();
+                        selector.$AddAssetsModelDialog().modal("hide");
+                        break;
+                    }
+                }
+            });
+        });
     }
 
     //删除
@@ -185,6 +224,9 @@ function loadGridTree(modules) {
                     { name: 'BusinessName', type: 'string' },
                     { name: 'ParentVGUID', type: 'string' },
                     { name: 'VehicleAge', type: 'number' },
+                    { name: 'CategoryMajor', type: 'string' },
+                    { name: 'CategoryMinor', type: 'string' },
+                    { name: 'AssetsCategoryVGUID', type: 'string' },
                     { name: 'VGUID', type: 'string' }
                 ],
                 hierarchy:
@@ -202,15 +244,17 @@ function loadGridTree(modules) {
         source: dataAdapter,
         //checkboxes: true,
         ready: function () {
-            $("#moduletree").jqxTreeGrid('expandAll');
+            selector.$grid().jqxTreeGrid('expandAll');
         },
         columns: [
           { text: '业务名称', dataField: 'BusinessName', width: "20%", cellsRenderer: detailFuncs },
-          { text: '车龄', dataField: 'VehicleAge', width: "80%"},
-          { text: '', dataField: 'ParentVGUID', width: "100%", hidden: true },
+          { text: '车龄', dataField: 'VehicleAge', width: "40%" },
+          { text: '资产类别', width: "40%", cellsRenderer: detailsCategoryFuncs },
+          { text: '', dataField: 'ParentVGUID', width: "40%", hidden: true },
           { text: '', dataField: 'VGUID', width: "100%", hidden: true }
         ]
     });
+    selector.$grid().jqxTreeGrid('expandAll');
 }
 function detailFuncs(row, column, value, rowData) {
     var container = "";
@@ -220,6 +264,13 @@ function detailFuncs(row, column, value, rowData) {
         debugger;
         container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.level + "','" + rowData.BusinessName + "','" + rowData.VehicleAge + "','" + rowData.ParentVGUID + "','" + rowData.parent.BusinessName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessName + "</a>";
     }
+    return container;
+}
+function detailsCategoryFuncs(row, column, value, rowData) {
+    var container = "";
+    if (rowData.level == 1) {
+        container = "<a href='#' onclick=editAsstsModel('" + rowData.VGUID + "','" + rowData.CategoryMajor + "','" + rowData.AssetsCategoryVGUID + "') style=\"text-decoration: underline;color: #333;\">配置</a>";
+    } 
     return container;
 }
 function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessName) {
@@ -253,7 +304,53 @@ function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessNa
     }
 }
 
-
+function editAsstsModel(VGUID, CategoryMajor, AssetsCategoryVGUID) {
+    debugger;
+    $("#AddAssetsModel_OKButton").attr("VGUID", VGUID);
+    if (CategoryMajor != "null") {
+        $("#CategoryMajor").val(CategoryMajor);
+        $("#CategoryMinor").val(AssetsCategoryVGUID);
+    } else {
+        initSelectAssetMajor();
+    }
+    $("#AddAssetsModelDialog").modal("show");
+}
+function initSelectAssetMajor() {
+    $.ajax({
+        url: "/AssetManagement/AssetBasicInfoMaintenance/GetMajorListDatas",
+        type: "post",
+        async: false,
+        success: function (data) {
+            var arr = [];
+            for (var i = 0; i < data.length; i++) {
+                arr.push(data[i].AssetMajor);
+            }
+            var dataAdapter = new $.jqx.dataAdapter(arr);
+            $("#CategoryMajor").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, width: 198, height: 33 });
+            $("#CategoryMajor").jqxDropDownList({ itemHeight: 33 });
+            initSelectMinor();
+        }
+    });
+}
+function initSelectMinor() {
+    var source =
+    {
+        data: {
+            "MAJOR": $("#CategoryMajor").val()
+        },
+        datatype: "json",
+        type: "post",
+        datafields: [
+            { name: 'AssetMinor' },
+            { name: 'AssetMinorVguid' }
+        ],
+        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetMinorListDatas",
+        async: false
+    };
+    var dataAdapter = new $.jqx.dataAdapter(source);
+    $("#CategoryMinor").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "AssetMinor", valueMember: "AssetMinorVguid", width: 198, height: 33 });
+    $("#CategoryMinor").jqxDropDownList({ itemHeight: 33 });
+}
 $(function () {
     var page = new $page();
     page.init();

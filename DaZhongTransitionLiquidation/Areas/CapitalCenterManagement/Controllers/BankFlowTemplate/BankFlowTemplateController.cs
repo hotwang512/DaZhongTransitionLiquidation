@@ -429,7 +429,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     var bankChannelOne = bankChannel.Where(it => it.BankAccount == item.ReceivableAccount).ToList().FirstOrDefault();
                     //对方账号下借贷配置信息
                     var borrowLoadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
-                    if (borrowLoadData.Count == 1)
+                    if (borrowLoadData.Count == 1 || borrowLoadData.Count == 0)
                     {
                         //一借一贷,借贷相平
                         BVDetail.LoanMoney = item.TurnOut;

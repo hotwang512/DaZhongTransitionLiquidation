@@ -79,7 +79,7 @@ var $page = function () {
             //}
             var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
             var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
-            var channelName = $("#Channel  option:selected").text();
+            var channelName = $("#txtChannelName  option:selected").text();
             if (validateError <= 0) {
                 $.ajax({
                     url: "/CapitalCenterManagement/PaySettingDetail/SavePaySettingDetail?isEdit=" + isEdit,
@@ -87,7 +87,7 @@ var $page = function () {
                         TransferCompany: $("#TransferCompany").val(),
                         TransferType: $("#TransferType").val(),
                         Month: $("#Month").val(),
-                        Channel: $("#Channel").val(),
+                        Channel: $("#txtChannelName").val(),
                         ChannelName: channelName,
                         CompanyCode: $("#CompanyCode").val(),
                         Borrow: borrow,
@@ -219,12 +219,12 @@ var $page = function () {
                 columnsHeight: 30,
                 columns: [
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '借', datafield: "Borrow", width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncB },
-                    { text: '贷', datafield: "Loan", width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncL },
-                    { text: '转账公司', width: 250, datafield: 'TransferCompany', align: 'center', cellsAlign: 'center', },
-                    { text: '转账类型', width: 250, datafield: 'TransferType', align: 'center', cellsAlign: 'center', },
-                    { text: '营收月份', width: 250, datafield: 'Month', align: 'center', cellsAlign: 'center', hidden: true },
-                    { text: '渠道名称', datafield: 'ChannelName', align: 'center', cellsAlign: 'center', },
+                    { text: '借', datafield: "Borrow", width: 350, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncB },
+                    { text: '贷', datafield: "Loan", width: 350, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncL },
+                    { text: '转账公司',  datafield: 'TransferCompany', align: 'center', cellsAlign: 'center', },
+                    { text: '转账类型',  datafield: 'TransferType', align: 'center', cellsAlign: 'center', },
+                    { text: '营收月份', datafield: 'Month', align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '渠道名称', datafield: 'ChannelName', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 120, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '是否禁用', datafield: "IsUnable", align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '渠道编码', datafield: 'Channel', hidden: true },
@@ -323,13 +323,13 @@ var $page = function () {
 function add(type) {
     if (type == "B") {
         $("#BorrowTr").show();
-        $("#LoanTr").hide();
-        $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+        $("#LoanTr").hide();       
     } else {
         $("#BorrowTr").hide();
         $("#LoanTr").show();
-        $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     }
+    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     $("#TransferCompany").val("");
     $("#TransferType").val("");
     $("#Channel").val("");
@@ -356,6 +356,13 @@ function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, L
     $("#Month").val(Month);
     $("#CompanyCode").val(CompanyCode);
     initBorrowTable(CompanyCode, accountMode);
+    if (Borrow != null && Borrow != "") {
+        $("#BorrowTr").show();
+        $("#LoanTr").hide();
+    } else {
+        $("#BorrowTr").hide();
+        $("#LoanTr").show();
+    }
     var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + Borrow + '</div>';
     $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
     var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + Loan + '</div>';
@@ -438,7 +445,7 @@ function initBorrowTable(companyCode, accountMode) {
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
             { text: '编码', datafield: 'BusinessCode', width: 250, pinned: true, align: 'center', cellsAlign: 'center', },
-            { text: '科目段', datafield: 'Company', width: 200, pinned: false, align: 'center', cellsAlign: 'center' },
+            { text: '科目段', datafield: 'Company', width: 300, pinned: false, align: 'center', cellsAlign: 'center' },
             { text: '核算段', datafield: 'Accounting', width: 200, align: 'center', cellsAlign: 'center', },
             { text: '成本中心段', datafield: 'CostCenter', width: 200, align: 'center', cellsAlign: 'center', },
             { text: '备用1', datafield: 'SpareOne', width: 200, align: 'center', cellsAlign: 'center', },

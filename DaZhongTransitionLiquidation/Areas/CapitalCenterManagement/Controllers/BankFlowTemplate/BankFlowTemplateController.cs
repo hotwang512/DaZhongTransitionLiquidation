@@ -431,7 +431,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     var borrowLoadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
                     if (borrowLoadData.Count == 1)
                     {
-                        //暂一借一贷,借贷相平
+                        //一借一贷,借贷相平
                         BVDetail.LoanMoney = item.TurnOut;
                         BVDetail.LoanMoneyCount = item.TurnOut;
                     }
@@ -606,19 +606,22 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             //BVDetail.SubjectSectionName = item.SubjectSectionName;
                             BVDetail2.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
                         }
-                        //从金额报表中按配置获取金额
-                        var amountReport = bankFlowList.Where(x => x.OrganizationName == it.TransferCompany && x.Channel_Id == it.Channel && x.RevenueDate == DateTime.Now.ToString("yyyy-MM-dd")).ToList();
-                        if (amountReport.Count > 0)
+                        if (loanData.Count > 1)
                         {
-                            switch (it.TransferType)
+                            //从金额报表中按配置获取金额
+                            var amountReport = bankFlowList.Where(x => x.OrganizationName == it.TransferCompany && x.Channel_Id == it.Channel && x.RevenueDate == DateTime.Now.ToString("yyyy-MM-dd")).ToList();
+                            if (amountReport.Count > 0)
                             {
-                                case "银行收款": BVDetail2.LoanMoney = amountReport[0].ActualAmountTotal; break;
-                                case "营收缴款": BVDetail2.LoanMoney = amountReport[0].PaymentAmountTotal; break;
-                                case "手续费": BVDetail2.LoanMoney = amountReport[0].CompanyBearsFeesTotal; break;
-                                default:
-                                    break;
+                                switch (it.TransferType)
+                                {
+                                    case "银行收款": BVDetail2.LoanMoney = amountReport[0].ActualAmountTotal; break;
+                                    case "营收缴款": BVDetail2.LoanMoney = amountReport[0].PaymentAmountTotal; break;
+                                    case "手续费": BVDetail2.LoanMoney = amountReport[0].CompanyBearsFeesTotal; break;
+                                    default:
+                                        break;
+                                }
+                                //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                             }
-                            //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                         }
                         BVDetail2.VGUID = Guid.NewGuid();
                         BVDetail2.VoucherVGUID = guid;

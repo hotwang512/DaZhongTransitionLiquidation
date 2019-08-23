@@ -193,7 +193,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel);
         }
-
         private string GetBatchName(string voucherType, string flowNo)
         {
             var batchNo = 0;
@@ -220,7 +219,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //主信息
                 var voucher = db.Queryable<Business_VoucherList>().Single(x => x.VGUID == vguid);
                 //明细信息
-                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("JE_LINE_NUMBER asc").ToList();
+                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("BorrowMoney desc").ToList();
                 //附件信息
                 //var voucherAttach = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguid).ToList();
                 voucherList.AccountingPeriod = voucher.AccountingPeriod.TryToDate();

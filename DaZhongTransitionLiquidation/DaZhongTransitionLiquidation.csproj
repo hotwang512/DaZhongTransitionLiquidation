@@ -242,6 +242,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraft.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\OrderListDraftPrint.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\PaySettingDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\PaySettingList.js" />
     <Content Include="Areas\FinancialStatementsManagement\Views\_js\SubjectBalanceStatement.js" />
     <Content Include="Areas\HomePage\Views\_js\CompanyHomePage.js" />
@@ -268,6 +269,7 @@
     <Content Include="Areas\SystemManagement\Views\_js\PurchaseOrderSetting.js" />
     <Content Include="Areas\SystemManagement\Views\_js\PurchaseOrderSettingDetail.js" />
     <Content Include="Areas\SystemManagement\Views\_js\Subject.js" />
+    <Content Include="Areas\SystemManagement\Views\_js\TransferSettingList.js" />
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSetting.js" />
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSettingDetail.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementCount.js" />
@@ -363,6 +365,8 @@
     <Content Include="Areas\AssetPurchase\Views\FundClearing\Index.cshtml" />
     <Content Include="Areas\AssetPurchase\Views\LiquidationReview\Index.cshtml" />
     <Content Include="Areas\AssetPurchase\Views\FundClearingOrderDetail\Index.cshtml" />
+    <Content Include="Areas\SystemManagement\Views\TransferSettingList\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\PaySettingDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\DisposeIncome\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\DisposeNetValue\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\DisposeProfitLoss\Index.cshtml" />
@@ -2415,6 +2419,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderListDraft\OrderListDraftController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\Business_OrderList.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\OrderList\OrderListController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\PaySettingDetail\PaySettingDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\PaySettingList\PaySettingListController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\AttachmentResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\BankAndEnterprise_Swap.cs" />
@@ -2426,6 +2431,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_ComeOnAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CustomerBankSetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_PaySettingDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_GeneralLedgerBalance_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LedgerSubject_Swap.cs" />
@@ -2481,6 +2487,7 @@
     <Compile Include="Areas\SystemManagement\Controllers\PurchaseOrderSetting\PurchaseOrderSettingDetailController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementPack.cs" />
+    <Compile Include="Areas\SystemManagement\Controllers\TransferSettingList\TransferSettingListController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementPack.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\VehicleExtrasFeeSetting\VehicleExtrasFeeSettingController.cs" />
@@ -2489,6 +2496,7 @@
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseManagementCompany.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseOrderSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseSupplier.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_TransferSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
     <Compile Include="Areas\SystemManagement\Models\PurchaseDepartmentModel.cs" />
     <Compile Include="Areas\SystemManagement\Models\VehicleExtrasFeeSetting.cs" />

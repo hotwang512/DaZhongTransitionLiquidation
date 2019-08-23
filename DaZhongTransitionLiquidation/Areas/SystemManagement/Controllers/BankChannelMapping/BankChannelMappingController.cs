@@ -40,6 +40,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.BankCh
                 jsonResult.Rows = db.Queryable<V_BankChannelMapping>()
                 .WhereIF(!string.IsNullOrEmpty(BankAccount), i => i.BankAccount.Contains(BankAccount))
                 .WhereIF(!string.IsNullOrEmpty(Channel), i => i.ChannelName.Contains(Channel))
+                .Where(i=>i.IsShow != "1" || i.IsShow == null)
                 .OrderBy(i => i.BankAccountName, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

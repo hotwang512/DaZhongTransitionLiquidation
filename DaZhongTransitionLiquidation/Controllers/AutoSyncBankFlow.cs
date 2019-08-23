@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VehicleBusiness;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Models;
 using SqlSugar;
@@ -175,6 +176,43 @@ namespace DaZhongTransitionLiquidation.Controllers
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
                 }
                 Thread.Sleep((int)(24 * 1000 * 60 * 60));//一天查一次
+            }
+        }
+        public static void AutoTransferVoucherSeavice()
+        {
+            Thread LogThread = new Thread(new ThreadStart(DoTransferVoucher));
+            //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+            LogThread.IsBackground = true;
+            LogThread.Start();//起线程  
+        }
+        public static void DoTransferVoucher()
+        {
+            while (true)
+            {
+                List<usp_RevenueAmountReport> bankFlowList = new List<usp_RevenueAmountReport>();
+                var success = 0;
+                try
+                {
+                    using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
+                    {
+                        //每天查一次,生成前一天的转账凭证
+                        var month = DateTime.Now.ToString("yyyy-MM");
+                        var day = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                        bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
+                        var bankData = bankFlowList.Where(x => x.RevenueDate == day).ToList();
+                        if (bankData.Count > 0)
+                        {
+                            //根据金额报表数据自动生成凭证
+                            BankFlowTemplateController.TransferVoucherList(_db, bankData, "admin");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
+                }
+                //double timeSpan = ConfigSugar.GetAppString("TimeSpan").TryToInt();
+                Thread.Sleep((int)(24 * 1000 * 60 * 60));
             }
         }
         private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData,List<Business_CompanyBankInfo> bankAccount)

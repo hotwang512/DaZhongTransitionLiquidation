@@ -35,10 +35,12 @@ var $page = function () {
         if (type == null) {
             type = "";
         } else {
-            if (type == 0 || type == "0") {
-                type = "现金类";
-            } else {
-                type = "银行类";
+            switch (type) {
+                case "0": type = "现金类"; break;
+                case "1": type = "银行类"; break;
+                case "2": type = "转账类"; break;
+                default:
+
             }
         }
         //加载列表数据
@@ -59,8 +61,10 @@ var $page = function () {
         $("#btnAdd").on("click", function () {
             if (type == "现金类") {
                 window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=0";
-            } else {
+            }else if (type == "银行类") {
                 window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=1";
+            } else if (type == "转账类") {
+                window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=2";
             }
            
             //window.open("/VoucherManageManagement/VoucherListDetail/Index");

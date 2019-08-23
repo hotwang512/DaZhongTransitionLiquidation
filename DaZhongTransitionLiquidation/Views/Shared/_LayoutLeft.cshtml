@@ -455,7 +455,7 @@
     @******************************************************会计核算中心******************************************************@
     @if (isadmin || hasPaymentPermission1)
     {
-        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject SettlementStandards" style="display: none;">
+        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject SettlementStandards VoucherManageTransfer" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -533,10 +533,10 @@
             }
             @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "转账类凭证" && i.Reads == 1))
             {
-                <table style="cursor: pointer;" class="bodyTable">
-                    <tr>
+                <table style="cursor: pointer;">
+                    <tr class="menue_item" id="VoucherList_VoucherManageTransfer" pageurl="/VoucherManageManagement/VoucherList/Index?Status=1&Type=2">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text_header">转账类凭证</td>
+                        <td class="menue_text" style="font-size: 18px;font-weight: 100;">转账类凭证</td>
                         <td></td>
                     </tr>
                 </table>
@@ -580,7 +580,7 @@
                 </div>
             }
         </div>
-        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject SettlementStandards" style="display: none;">
+        <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck QuerySubject SettlementStandards VoucherManageTransfer" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -610,7 +610,7 @@
             </table>
         </div>
 
-                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject SettlementStandards" style="display: none;">
+                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject SettlementStandards VoucherManageTransfer" style="display: none;">
                                     <table style="cursor: pointer;">
                                         <tr>
                                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -632,7 +632,7 @@
                                     </table>
                                 </div>
 
-                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject SettlementStandards" style="display: none;">
+                                <div class="menue_header VoucherManage VoucherManageBank VoucherM VoucherCheck  QuerySubject SettlementStandards VoucherManageTransfer" style="display: none;">
                                     <table style="cursor: pointer;">
                                         <tr>
                                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1658,7 +1658,7 @@
     @******************************************************系统管理******************************************************@
     @if (hasSystemManagementPermission || isadmin)
             {
-        <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting" style="display: none;">
+        <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
             <table style="cursor: pointer;">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1695,7 +1695,7 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting" style="display: none;">
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1732,7 +1732,7 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting" style="display: none;">
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1761,7 +1761,7 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting" style="display: none;">
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
@@ -1782,7 +1782,28 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting" style="display: none;">
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">转账业务配置</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="PaySetting" style="display: none;">
+                    <table>
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "转账业务配置维护" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="OrderList_TransferSetting" pageurl="/Systemmanagement/TransferSettingList/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">转账业务配置维护</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
                             <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>

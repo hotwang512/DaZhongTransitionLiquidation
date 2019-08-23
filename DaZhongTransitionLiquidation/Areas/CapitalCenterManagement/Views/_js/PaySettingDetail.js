@@ -24,6 +24,7 @@ var isEdit = false;
 var vguid = "";
 var companyCode = "";
 var accountMode = "";
+var payVGUID = $.request.queryString().VGUID;
 var $page = function () {
 
     this.init = function () {
@@ -36,17 +37,25 @@ var $page = function () {
         //加载列表数据
         initTable();
         getCompanyCode();
+        getPaySettingList();
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
-
+        //取消
+        $("#btnCancel").on("click",
+            function () {
+                history.go(-1);
+            });
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             selector.$txtChannelName().val("");
             selector.$txtBankName().val("");
         });
-        selector.$btnAdd().on("click", function () {
-            add();
+        $("#btnAddBorrow").on("click", function () {
+            add("B");
+        });
+        $("#btnAddLoan").on("click", function () {
+            add("L");
         });
 
         //弹出框中的取消按钮
@@ -56,27 +65,35 @@ var $page = function () {
         //弹出框中的保存按钮
         selector.$AddBankChannel_OKButton().on("click", function () {
             var validateError = 0;//未通过验证的数量
-            if (!Validate(selector.$txtBankAccount_Dialog())) {
-                validateError++;
-            }
-            if (!Validate(selector.$txtBankAccountName_Dialog())) {
-                validateError++;
-            }
-            if (!Validate(selector.$txtBank_Dialog())) {
-                validateError++;
-            }
-            if (!Validate(selector.$txtChannel_Dialog())) {
-                validateError++;
-            }
+            //if (!Validate(selector.$txtBankAccount_Dialog())) {
+            //    validateError++;
+            //}
+            //if (!Validate(selector.$txtBankAccountName_Dialog())) {
+            //    validateError++;
+            //}
+            //if (!Validate(selector.$txtBank_Dialog())) {
+            //    validateError++;
+            //}
+            //if (!Validate(selector.$txtChannel_Dialog())) {
+            //    validateError++;
+            //}
+            var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
+            var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
+            var channelName = $("#Channel  option:selected").text();
             if (validateError <= 0) {
                 $.ajax({
-                    url: "/SystemManagement/BankChannelMapping/SaveBankChannelInfo?isEdit=" + isEdit,
+                    url: "/CapitalCenterManagement/PaySettingDetail/SavePaySettingDetail?isEdit=" + isEdit,
                     data: {
-                        BankAccount: selector.$txtBankAccount_Dialog().val(),
-                        BankAccountName: selector.$txtBankAccountName_Dialog().val(),
-                        Bank: selector.$txtBank_Dialog().val(),
-                        Channel: selector.$txtChannel_Dialog().val(),
+                        TransferCompany: $("#TransferCompany").val(),
+                        TransferType: $("#TransferType").val(),
+                        Month: $("#Month").val(),
+                        Channel: $("#Channel").val(),
+                        ChannelName: channelName,
+                        CompanyCode: $("#CompanyCode").val(),
+                        Borrow: borrow,
+                        Loan: loan,
                         VGUID: vguid,
+                        PayVGUID: payVGUID
                     },
                     type: "post",
                     dataType: "json",
@@ -91,7 +108,7 @@ var $page = function () {
                                 selector.$AddBankChannelDialog().modal("hide");
                                 break;
                             case "2":
-                                jqxNotification("渠道名称已经存在！", null, "error");
+                                jqxNotification("当前月份该配置已经存在！", null, "error");
                                 break;
                         }
 
@@ -99,6 +116,37 @@ var $page = function () {
                 });
             }
         });
+        //保存
+        $("#btnSave").on("click", function () {
+            $.ajax({
+                url: "/CapitalCenterManagement/PaySettingList/SaveBankChannelInfo?isEdit=true",
+                data: {
+                    BankAccount: $("#txtBankName").val(),
+                    BankAccountName: $("#txtBankAccountName").val(),
+                    Bank: $("#txtBank").val(),
+                    Channel: $("#txtChannelName").val(),
+                    VGUID: payVGUID,
+                    IsShow: "1"
+                },
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("保存失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("保存成功！", null, "success");
+                            history.go(-1);
+                            break;
+                        case "2":
+                            jqxNotification("渠道名称已经存在！", null, "error");
+                            break;
+                    }
+
+                }
+            });
+        })
         //删除
         selector.$btnDelete().on("click", function () {
             var selection = [];
@@ -115,50 +163,16 @@ var $page = function () {
             if (selection.length < 1) {
                 jqxNotification("请选择您要删除的数据！", null, "error");
             } else {
-                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消",selection);
+                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
-        //编辑是否启用
-        $("#EditIsableTrue").on('click', function (event) {
-            isUnable = "";
-            var selection = [];
-            var grid = selector.$grid();
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-            checedBoxs.each(function () {
-                var th = $(this);
-                if (th.is(":checked")) {
-                    var index = th.attr("index");
-                    var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.VGUID);
-                }
-            });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要启用的数据！", null, "error");
-            } else {
-                WindowConfirmDialog(updateIsUnable, "您确定要启用选中的数据？", "确认框", "确定", "取消", selection);
-            }
-        });
-        //编辑是否禁用
-        $("#EditIsableFalse").on('click', function (event) {
-            isUnable = "禁用";
-            var selection = [];
-            var grid = selector.$grid();
-            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-            checedBoxs.each(function () {
-                var th = $(this);
-                if (th.is(":checked")) {
-                    var index = th.attr("index");
-                    var data = grid.jqxDataTable('getRows')[index];
-                    selection.push(data.VGUID);
-                }
-            });
-            if (selection.length < 1) {
-                jqxNotification("请选择您要禁用的数据！", null, "error");
-            } else {
-                WindowConfirmDialog(updateIsUnable, "您确定要禁用选中的数据？", "确认框", "确定", "取消", selection);
-            }
-        });
-
+        //清除借贷信息
+        $("#Remove1").on("click", function () {
+            $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+        })
+        $("#Remove2").on("click", function () {
+            $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+        })
     }; //addEvent end
 
 
@@ -168,9 +182,9 @@ var $page = function () {
                 datafields:
                 [
                     { name: "checkbox", type: null },
-                    { name: 'BankAccountName', type: 'string' },
-                    { name: 'Bank', type: 'string' },
-                    { name: 'BankAccount', type: 'string' },
+                    { name: 'TransferCompany', type: 'string' },
+                    { name: 'TransferType', type: 'string' },
+                    { name: 'Month', type: 'string' },
                     { name: 'Channel', type: 'string' },
                     { name: 'ChannelName', type: 'string' },
                     { name: 'VGUID', type: 'string' },
@@ -178,11 +192,13 @@ var $page = function () {
                     { name: 'Borrow', type: 'string' },
                     { name: 'Loan', type: 'string' },
                     { name: 'CompanyCode', type: 'string' },
+                    { name: 'Money', type: 'number' },
+                    { name: 'PayVGUID', type: 'string' },
                 ],
                 datatype: "json",
-                id: "Vguid",
-                data: { "BankAccount": selector.$txtBankName().val(), "Channel": selector.$txtChannelName().val() },
-                url: "/Systemmanagement/BankChannelMapping/GetBankChannelMappingInfos"   //获取数据源的路径
+                id: "VGUID",
+                data: { "PayVGUID": payVGUID },
+                url: "/CapitalCenterManagement/PaySettingDetail/GetPaySettingDetail"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -200,16 +216,17 @@ var $page = function () {
                 pagerButtonsCount: 10,
                 source: typeAdapter,
                 theme: "office",
-                columnsHeight: 40,
+                columnsHeight: 30,
                 columns: [
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '账号', width: 250, datafield: 'BankAccount', align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
-                    { text: '户名', width: 350, datafield: 'BankAccountName', align: 'center', cellsAlign: 'center', },
-                    { text: '开户行', width: 450, datafield: 'Bank', align: 'center', cellsAlign: 'center', },
+                    { text: '借', datafield: "Borrow", width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncB },
+                    { text: '贷', datafield: "Loan", width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncL },
+                    { text: '转账公司', width: 250, datafield: 'TransferCompany', align: 'center', cellsAlign: 'center', },
+                    { text: '转账类型', width: 250, datafield: 'TransferType', align: 'center', cellsAlign: 'center', },
+                    { text: '营收月份', width: 250, datafield: 'Month', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '渠道名称', datafield: 'ChannelName', align: 'center', cellsAlign: 'center', },
-                    { text: '借', datafield: "Borrow",  width: '180px',hidden: true, align: 'center', cellsAlign: 'center' },
-                    { text: '贷', datafield: "Loan", width: '180px', hidden: true,align: 'center',cellsAlign: 'center' },
-                    { text: '是否禁用', datafield: "IsUnable", align: 'center', cellsAlign: 'center', },
+                    { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 120, align: 'center', cellsAlign: 'center', hidden: true },
+                    { text: '是否禁用', datafield: "IsUnable", align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '渠道编码', datafield: 'Channel', hidden: true },
                     { text: '公司', datafield: 'CompanyCode', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
@@ -218,17 +235,37 @@ var $page = function () {
 
     }
 
-    function channelDetailFunc(row, column, value, rowData) {
+    function channelDetailFuncB(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
+        var borrow = "";
+        var loan = "";
+        if (rowData.Borrow != null) {
+            borrow = rowData.Borrow.split(/[\s\n]/)[0];
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','"
-                + rowData.BankAccount + "','"
-                + rowData.BankAccountName + "','"
-                + rowData.Bank + "','"
-                
-                + rowData.Channel + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BankAccount + "</a>";
-        } else {
-            container = "<span>" + rowData.BankAccount + "</span>";
+                + rowData.TransferCompany + "','"
+                + rowData.TransferType + "','"
+                + rowData.Month + "','"
+                + rowData.CompanyCode + "','"
+                + borrow + "','"
+                + loan + "','"
+                + rowData.Channel + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Borrow + "</a>";
+        }
+        return container;
+    }
+    function channelDetailFuncL(row, column, value, rowData) {
+        var container = "";
+        var borrow = "";
+        var loan = "";
+        if (rowData.Loan != null) {
+            loan = rowData.Loan.split(/[\s\n]/)[0];
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','"
+                + rowData.TransferCompany + "','"
+                + rowData.TransferType + "','"
+                + rowData.Month + "','"
+                + rowData.CompanyCode + "','"
+                + borrow + "','"
+                + loan + "','"
+                + rowData.Channel + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Loan + "</a>";
         }
         return container;
     }
@@ -267,7 +304,7 @@ var $page = function () {
     //删除
     function dele(selection) {
         $.ajax({
-            url: "/Systemmanagement/BankChannelMapping/DeleteBankChannelInfo",
+            url: "/CapitalCenterManagement/PaySettingDetail/DeletePaySettingDetail",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -281,68 +318,54 @@ var $page = function () {
             }
         });
     }
-    var isUnable = "";
-    function updateIsUnable(selection) {
-        $.ajax({
-            url: "/SystemManagement/BankChannelMapping/UpdateIsUnable",
-            data: { vguids: selection, isUnable: isUnable },
-            //traditional: true,
-            type: "post",
-            success: function (msg) {
-                if (msg.IsSuccess) {
-                    if (isUnable == "") {
-                        jqxNotification("启用成功！", null, "success");
-                    } else {
-                        jqxNotification("禁用成功！", null, "success");
-                    }
-                    selector.$grid().jqxDataTable('updateBoundData');
-                } else {
-                    if (isUnable == "") {
-                        jqxNotification("启用失败！", null, "success");
-                    } else {
-                        jqxNotification("禁用失败！", null, "error");
-                    }
-                    
-                }
-            }
-        });
-    }
 };
 
-function add() {
-    selector.$txtBankAccount_Dialog().val("");
-    selector.$txtBankAccountName_Dialog().val("");
-    selector.$txtBank_Dialog().val("");
-    selector.$txtChannel_Dialog().val("");
+function add(type) {
+    if (type == "B") {
+        $("#BorrowTr").show();
+        $("#LoanTr").hide();
+        $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+    } else {
+        $("#BorrowTr").hide();
+        $("#LoanTr").show();
+        $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+    }
+    $("#TransferCompany").val("");
+    $("#TransferType").val("");
+    $("#Channel").val("");
+    $("#Month").val("");
     isEdit = false;
     vguid = "";
-    $("#myModalLabel_title").text("新增银行渠道映射");
+    $("#myModalLabel_title").text("新增借/贷方信息");
     selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddBankChannelDialog().modal("show");
-    //initBorrowTable(companyCode, accountMode);
+    initBorrowTable(companyCode, accountMode);
 }
 
-function edit(guid, BankAccount, BankAccountName, Bank,  Channel) {
-    selector.$txtBankAccount_Dialog().val("");
-    selector.$txtBankAccountName_Dialog().val("");
-    selector.$txtBank_Dialog().val("");
-    selector.$txtChannel_Dialog().val("");
+function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, Loan, Channel) {
+    $("#TransferCompany").val("");
+    $("#TransferType").val("");
+    $("#Channel").val("");
+    $("#Month").val("");
     isEdit = true;
     vguid = guid;
-    $("#myModalLabel_title").text("编辑银行渠道映射");
-    selector.$txtBankAccount_Dialog().val(BankAccount);
-    selector.$txtBankAccountName_Dialog().val(BankAccountName);
-    selector.$txtBank_Dialog().val(Bank);
-    selector.$txtChannel_Dialog().val(Channel);
-    
-    //initBorrowTable(CompanyCode, accountMode);
-   
+    $("#myModalLabel_title").text("编辑借/贷方信息");
+    $("#TransferCompany").val(TransferCompany);
+    $("#TransferType").val(TransferType);
+    $("#Channel").val(Channel);
+    $("#Month").val(Month);
+    $("#CompanyCode").val(CompanyCode);
+    initBorrowTable(CompanyCode, accountMode);
+    var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + Borrow + '</div>';
+    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
+    var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + Loan + '</div>';
+    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
 
     $(".msg").remove();
-    selector.$txtBankAccount_Dialog().removeClass("input_Validate");
-    selector.$txtBankAccountName_Dialog().removeClass("input_Validate");
-    selector.$txtBank_Dialog().removeClass("input_Validate");
-    selector.$txtChannel_Dialog().removeClass("input_Validate");
+    //selector.$txtBankAccount_Dialog().removeClass("input_Validate");
+    //selector.$txtBankAccountName_Dialog().removeClass("input_Validate");
+    //selector.$txtBank_Dialog().removeClass("input_Validate");
+    //selector.$txtChannel_Dialog().removeClass("input_Validate");
 
     selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddBankChannelDialog().modal("show");
@@ -453,6 +476,7 @@ function initBorrowTable(companyCode, accountMode) {
         pagerButtonsCount: 10,
         source: typeAdapter,
         theme: "office",
+        pagermode: 'simple',
         columnsHeight: 40,
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
@@ -485,9 +509,23 @@ function initBorrowTable(companyCode, accountMode) {
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
     });
 }
-//function companyChange() {
-//    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
-//    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
-//    companyCode = $("#CompanyCode").val();
-//    initBorrowTable(companyCode, accountMode);
-//}
+function companyChange() {
+    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+    companyCode = $("#CompanyCode").val();
+    initBorrowTable(companyCode, accountMode);
+}
+function getPaySettingList() {
+    $.ajax({
+        url: "/CapitalCenterManagement/PaySettingDetail/GetPaySettingList",
+        data: { PayVGUID: payVGUID },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            $("#txtBankName").val(msg.Rows[0].BankAccount);
+            $("#txtBankAccountName").val(msg.Rows[0].BankAccountName);
+            $("#txtBank").val(msg.Rows[0].Bank);
+            $("#txtChannelName").val(msg.Rows[0].Channel);
+        }
+    });
+}

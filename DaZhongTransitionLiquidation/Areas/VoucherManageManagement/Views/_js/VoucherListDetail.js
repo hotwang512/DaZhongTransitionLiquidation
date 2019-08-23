@@ -33,8 +33,11 @@ var $page = function () {
         var type = $.request.queryString().Type;
         if (type == 0 || type == "0") {
             voucherType = "现金类";
-        } else {
+        } else if (type == "1") {
             voucherType = "银行类";
+            $("#VoucherType").val(voucherType);
+        } else if (type == "2") {
+            voucherType = "转账类";
             $("#VoucherType").val(voucherType);
         }
         $("#BatchName").val(voucherType + date);
@@ -561,6 +564,7 @@ var $page = function () {
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
                 $("#AccountModeName").val(msg.AccountModeName);
+                $("#VoucherType").val(msg.VoucherType);
                 var datas = msg.Detail;
                 //setVoucherDetail(datas);
                 createTable(datas);
@@ -684,9 +688,20 @@ var $page = function () {
                 loanMoney = datas[i].LoanMoney;
                 if (loanMoney != null) {
                     loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
-                    $("#Loan" + i).val(loanMoney);
-                    $("#Borrow" + i).val("");
-                    $("#Borrow" + i).attr("readonly", "readonly");
+                    if (datas.length == 1) {
+                        //保持借在第一行,贷在下面
+                        $("#Remark" + i).val("");
+                        $("#SubjectName" + i).val("");
+                        $("#Loan1").val(loanMoney);
+                        $("#Borrow1").val("");
+                        $("#Borrow1").attr("readonly", "readonly");
+                        $("#Remark1").val(datas[i].Abstract);
+                        $("#SubjectName1").val(datas[i].SevenSubjectName);
+                    } else {
+                        $("#Loan" + i).val(loanMoney);
+                        $("#Borrow" + i).val("");
+                        $("#Borrow" + i).attr("readonly", "readonly");
+                    }
                 }
             } else {
                 borrowMoney = datas[i].BorrowMoney;

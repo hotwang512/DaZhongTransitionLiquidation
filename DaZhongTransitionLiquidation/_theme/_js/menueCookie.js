@@ -77,9 +77,11 @@ var menueHelp = {
                 break;
             case "VoucherManageBank": $("#homeModel").text("--会计核算中心")
                 break;
+            case "VoucherManageTransfer": $("#homeModel").text("--会计核算中心")
+                break; 
             case "VoucherCheck": $("#homeModel").text("--会计核算中心")
                 break;
-            case "QuerySubject": $("#homeModel").text("--会计核算中心")//*************
+            case "QuerySubject": $("#homeModel").text("--会计核算中心")
                 break;
             case "SettlementStandards": $("#homeModel").text("--会计核算中心")//*************
                 break; 

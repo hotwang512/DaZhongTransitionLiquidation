@@ -29,6 +29,6 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public string Borrow { get; set; }
         public string Loan { get; set; }
         public string CompanyCode { get; set; }
-        
+        public string IsShow { get; set; } 
     }
 }

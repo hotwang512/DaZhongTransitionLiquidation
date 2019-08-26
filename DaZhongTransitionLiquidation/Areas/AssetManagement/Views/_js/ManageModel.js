@@ -8,23 +8,28 @@ var selector = {
     $AddManageModelData_CancelBtn: function () { return $("#AddManageModelData_CancelBtn") },
     $AddAssetsModel_OKButton: function () { return $("#AddAssetsModel_OKButton") },
     $AddAssetsModel_CancelBtn: function () { return $("#AddAssetsModel_CancelBtn") },
-    $AddAssetsModelDialog: function () { return $("#AddAssetsModelDialog") }
+    $AddAssetsModelDialog: function () { return $("#AddAssetsModelDialog") },
+    $AddAssetsModelButton: function () { return $("#AddAssetsModelButton") },
+    $AddAssetsModelTable_CancelBtn: function () { return $("#AddAssetsModelTable_CancelBtn") },
+    $AddAssetsModelTableDialog: function () { return $("#AddAssetsModelTableDialog") },
+    $AssetsCategoryTable: function () { return $("#AssetsCategoryTable") }
 }
 
 var parentVguid = "";
 var hideParentMenu = "";
 var vguid = "";
-
+var isEditAssetsCategory = 0;
 var $page = function () {
     this.init = function () {
         pageload();
+        initSelectAssetMajor();
+        initSelectGoodsModel();
         addEvent();
     }
     function pageload() {
         getModules(function (modules) {
             loadGridTree(modules);
         });
-        initSelectAssetMajor();
     }
     //所有事件
     function addEvent() {
@@ -81,7 +86,12 @@ var $page = function () {
         });
         //弹出框中的取消按钮
         selector.$AddAssetsModel_CancelBtn().on("click", function () {
-            selector.$AddAssetsModelDialog().modal("hide");
+            //selector.AddAssetsModelDialog().modal("hide");
+            $("#AddAssetsModelDialog").modal("hide");
+        });
+        //弹出框中的取消按钮
+        selector.$AddAssetsModelTable_CancelBtn().on("click", function () {
+            selector.$AddAssetsModelTableDialog().modal("hide");
         });
         //删除
         selector.$btnDelete().click(function () {
@@ -159,10 +169,13 @@ var $page = function () {
             $.ajax({
                 url: url,
                 data: {
+                    "GoodsModelCode": $("#GoodsModel").val(),
+                    "GoodsModel": $("#GoodsModel option:selected").text(),
                     "CategoryMajor": $("#CategoryMajor").val(),
                     "AssetsCategoryVGUID": $("#CategoryMinor").val(),
                     "CategoryMinor": $("#CategoryMinor").text(),
-                    "VGUID": $("#AddAssetsModel_OKButton").attr("VGUID")
+                    "ManageModelVGUID": $("#AddAssetsModel_OKButton").attr("VGUID"),
+                    "isEditAssetsCategory": isEditAssetsCategory
                 },
                 type: "post",
                 dataType: "json",
@@ -171,14 +184,24 @@ var $page = function () {
                     case "0":
                         jqxNotification("保存失败！", null, "error");
                         break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo, null, "error");
+                        break;
                     case "1":
                         jqxNotification("保存成功！", null, "success");
-                        pageload();
+                        initAssetsCategoryTable($("#AddAssetsModel_OKButton").attr("VGUID"));
                         selector.$AddAssetsModelDialog().modal("hide");
                         break;
                     }
                 }
             });
+        });
+        selector.$AddAssetsModelButton().on("click", function () {
+            isEditAssetsCategory = 0;
+            $("#GoodsModel").attr("disabled",false);
+            $("#GoodsModel").val("");
+            initSelectAssetMajor();
+            selector.$AddAssetsModelDialog().modal("show");
         });
     }
 
@@ -273,6 +296,16 @@ function detailsCategoryFuncs(row, column, value, rowData) {
     } 
     return container;
 }
+function detailsEditCategoryFuncs(row, column, value, rowData) {
+    var container = "";
+    container = "<a href='#' onclick=editCategory('" + rowData.VGUID + "','" + rowData.CategoryMajor + "','" + rowData.AssetsCategoryVGUID + "','" + rowData.GoodsModelCode + "') style=\"text-decoration: underline;color: #333;\">编辑</a>";
+    return container;
+}
+function delCategoryFuncs(row, column, value, rowData) {
+    var container = "";
+    container = "<a href='#' onclick=delCategory('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">删除</a>";
+    return container;
+}
 function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessName) {
     isEdit = true;
     vguid = guid;
@@ -303,17 +336,94 @@ function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessNa
         $("#SubjectVehicleAge").hide();
     }
 }
-
+function initAssetsCategoryTable(VGUID) {
+    var source =
+        {
+            dataFields: [
+                { name: 'ManageModelVGUID', type: 'string'},
+                { name: 'GoodsModelCode', type: 'string'},
+                { name: 'GoodsModel', type: 'number' },
+                { name: 'AssetsCategoryVGUID', type: 'string'},
+                { name: 'CategoryMajor', type: 'string' },
+                { name: 'CategoryMinor', type: 'string' },
+                { name: 'VGUID', type: 'string' }
+            ],
+            datatype: "json",
+            id: "VGUID",
+            data: { "ManageModelVGUID": VGUID },
+            url: "/AssetManagement/ManageModel/GetAssetsCategoryList"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    //创建卡信息列表（主表）
+    selector.$AssetsCategoryTable().jqxDataTable(
+        {
+            pageable: true,
+            width: "100%",
+            height: 400,
+            pageSize: 10,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 40,
+            columns: [
+                { text: '车型', datafield: 'GoodsModel', width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '资产主类', datafield: 'CategoryMajor', width: 170, align: 'center', cellsAlign: 'center' },
+                { text: '资产子类', datafield: 'CategoryMinor', width: 170, align: 'center', cellsAlign: 'center' },
+                { text: '编辑', width: 150, align: 'center',cellsRenderer: detailsEditCategoryFuncs, cellsAlign: 'center' },
+                { text: '删除', width: 150, align: 'center', cellsRenderer: delCategoryFuncs, cellsAlign: 'center' }
+                //{ text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" }
+            ]
+        });
+}
 function editAsstsModel(VGUID, CategoryMajor, AssetsCategoryVGUID) {
-    debugger;
+    //debugger;
     $("#AddAssetsModel_OKButton").attr("VGUID", VGUID);
+    //if (CategoryMajor != "null") {
+    //    $("#CategoryMajor").val(CategoryMajor);
+    //    $("#CategoryMinor").val(AssetsCategoryVGUID);
+    //} else {
+    //    initSelectAssetMajor();
+    //}
+    initAssetsCategoryTable($("#AddAssetsModel_OKButton").attr("VGUID"));
+    $("#AddAssetsModelTableDialog").modal("show");
+}
+function editCategory(VGUID, CategoryMajor, AssetsCategoryVGUID, GoodsModelCode) {
+    debugger;
     if (CategoryMajor != "null") {
         $("#CategoryMajor").val(CategoryMajor);
         $("#CategoryMinor").val(AssetsCategoryVGUID);
+        $("#GoodsModel").val(GoodsModelCode);
     } else {
         initSelectAssetMajor();
     }
+    $("#GoodsModel").attr("disabled", true);
+    isEditAssetsCategory = 1;
     $("#AddAssetsModelDialog").modal("show");
+}
+function delCategory(VGUID) {
+    debugger;
+    $.ajax({
+        url: "/AssetManagement/ManageModel/DelAssetsCategory",
+        type: "post",
+        async: false,
+        data: {"Vguid" :VGUID},
+        success: function (msg) {
+            switch (msg.Status) {
+            case "0":
+                jqxNotification("删除失败！", null, "error");
+                break;
+            case "1":
+                jqxNotification("删除成功！", null, "success");
+                initAssetsCategoryTable($("#AddAssetsModel_OKButton").attr("VGUID"));
+                break;
+            }
+        }
+    });
 }
 function initSelectAssetMajor() {
     $.ajax({
@@ -350,6 +460,23 @@ function initSelectMinor() {
     var dataAdapter = new $.jqx.dataAdapter(source);
     $("#CategoryMinor").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "AssetMinor", valueMember: "AssetMinorVguid", width: 198, height: 33 });
     $("#CategoryMinor").jqxDropDownList({ itemHeight: 33 });
+}
+function initSelectGoodsModel() {
+    //物品类型
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetGoodsModelDropDown",
+        data: { "Goods": "出租车" },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            if (msg.length > 0) {
+                uiEngineHelper.bindSelect('#GoodsModel', msg, "Code", "Descrption");
+                $("#GoodsModel").prepend("<option value=\"\" selected='true'>请选择</>");
+            }
+        }
+    });
 }
 $(function () {
     var page = new $page();

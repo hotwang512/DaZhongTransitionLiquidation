@@ -7,7 +7,9 @@ using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
 {
@@ -32,6 +34,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 Business_ManageModels = db.Queryable<Business_ManageModel>().OrderBy(c => c.BusinessName).ToList();
             });
             jsonResult.Rows = Business_ManageModels;
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetAssetsCategoryList(Guid ManageModelVGUID)
+        {
+            var jsonResult = new JsonResultModel<Business_ManageModel_AssetsCategory>();
+            List<Business_ManageModel_AssetsCategory> assetsCategorys = new List<Business_ManageModel_AssetsCategory>();
+            DbBusinessDataService.Command(db =>
+            {
+                assetsCategorys = db.Queryable<Business_ManageModel_AssetsCategory>().Where(x => x.ManageModelVGUID == ManageModelVGUID).OrderBy(c => c.GoodsModel).OrderBy(x => x.CreateTime).ToList();
+            });
+            jsonResult.Rows = assetsCategorys;
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
         public JsonResult DeleteBusiness(List<Guid> vguids)//Guid[] vguids
@@ -108,26 +121,54 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult SaveAssetsModel(Business_ManageModel module)
+        public JsonResult SaveAssetsModel(Business_ManageModel_AssetsCategory module, int isEditAssetsCategory)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var result = db.Ado.UseTran(() =>
+                if (isEditAssetsCategory == 1)
                 {
-                    var guid = module.VGUID;
-                    var parentVGUID = module.ParentVGUID;
-                   
-                        db.Updateable<Business_ManageModel>().UpdateColumns(it => new Business_ManageModel()
-                        {
-                            CategoryMajor = module.CategoryMajor,
-                            AssetsCategoryVGUID = module.AssetsCategoryVGUID,
-                            CategoryMinor = module.CategoryMinor
-                        }).Where(it => it.VGUID == guid).ExecuteCommand();
-                   
-                });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
+                    //编辑
+                    module.CreateUser = cache[PubGet.GetUserKey].UserName;
+                    module.CreateTime = DateTime.Now;
+                    db.Updateable<Business_ManageModel_AssetsCategory>().UpdateColumns(x => new
+                            {x.CategoryMajor, x.CategoryMinor, x.GoodsModel, x.GoodsModelCode, x.AssetsCategoryVGUID})
+                        .ExecuteCommand();
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                else
+                {
+                    //新增
+                    if (db.Queryable<Business_ManageModel_AssetsCategory>().Any(x =>
+                        x.ManageModelVGUID == module.ManageModelVGUID && x.GoodsModelCode == module.GoodsModelCode))
+                    {
+                        resultModel.IsSuccess = false;
+                        resultModel.ResultInfo = "车型已存在";
+                        resultModel.Status = "2";
+                    }
+                    else
+                    {
+                        module.VGUID = Guid.NewGuid();
+                        module.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        module.CreateTime = DateTime.Now;
+                        db.Insertable<Business_ManageModel_AssetsCategory>(module).ExecuteCommand();
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                    }
+                }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult DelAssetsCategory(Guid Vguid)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                db.Deleteable<Business_ManageModel_AssetsCategory>().Where(x => x.VGUID == Vguid).ExecuteCommand();
+                resultModel.IsSuccess = true;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);

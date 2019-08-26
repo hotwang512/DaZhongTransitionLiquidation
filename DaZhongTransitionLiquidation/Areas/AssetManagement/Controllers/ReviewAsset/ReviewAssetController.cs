@@ -158,9 +158,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.MODEL_MAJOR = manageModelList
                                     .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
                             }
-                            //根据经营模式获取到资产主类子类，通过主类子类取到折旧方法维护中的财务信息
+                            //根据经营模式和车型获取到资产主类子类，通过主类子类取到折旧方法维护中的财务信息
+                            var modelCategory = db.Queryable<Business_ManageModel_AssetsCategory>()
+                                .Where(x => x.GoodsModel == reviewItem.VEHICLE_SHORTNAME && x.ManageModelVGUID == minorModel.VGUID).First();
                             var assetCategory = db.Queryable<Business_AssetsCategory>()
-                                .Where(x => x.VGUID == minorModel.AssetsCategoryVGUID).First();
+                                .Where(x => x.VGUID == modelCategory.AssetsCategoryVGUID).First();
                             reviewItem.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
                             reviewItem.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
                             reviewItem.LIFE_YEARS = assetCategory.LIFE_YEARS;

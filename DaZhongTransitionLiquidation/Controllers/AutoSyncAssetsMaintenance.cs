@@ -167,7 +167,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //}
                         #endregion
 
-                       
+                        if (item.ORIGINALID == "102271")
+                        {
+                            item.ORIGINALID = "102271";
+                        }
                         if (!item.MODEL_MINOR.IsNullOrEmpty())
                         {
                             //经营模式子类 传过来的经营模式上级

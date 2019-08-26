@@ -2366,6 +2366,7 @@
     <Compile Include="Areas\AssetManagement\Models\Business_DisposeProfitLoss.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_DisposeTax.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ManageModel_AssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />

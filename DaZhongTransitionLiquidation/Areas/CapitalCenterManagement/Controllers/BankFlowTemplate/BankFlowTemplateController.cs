@@ -428,12 +428,50 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     subject = sevenSubject.Borrow;
                     var bankChannelOne = bankChannel.Where(it => it.BankAccount == item.ReceivableAccount).ToList().FirstOrDefault();
                     //对方账号下借贷配置信息
-                    var borrowLoadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
-                    if (borrowLoadData.Count == 1 || borrowLoadData.Count == 0)
+                    var loadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
+                    var borrowData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();
+                    if(borrowData.Count > 1)
                     {
-                        //一借一贷,借贷相平
-                        BVDetail.LoanMoney = item.TurnOut;
-                        BVDetail.LoanMoneyCount = item.TurnOut;
+                        var index = 0;
+                        foreach (var borrow in borrowData)
+                        {
+                            index++;
+                            Business_VoucherDetail BVDetail3 = new Business_VoucherDetail();
+                            subject = borrow.Borrow;
+                            if (subject != "" && subject != null)
+                            {
+                                if (subject.Contains("\n"))
+                                {
+                                    subject = subject.Substring(0, subject.Length - 1);
+                                }
+                                var seven = subject.Split(".");
+                                BVDetail3.CompanySection = seven[0];
+                                BVDetail3.SubjectSection = seven[1];
+                                BVDetail3.AccountSection = seven[2];
+                                BVDetail3.CostCenterSection = seven[3];
+                                BVDetail3.SpareOneSection = seven[4];
+                                BVDetail3.SpareTwoSection = seven[5];
+                                BVDetail3.IntercourseSection = seven[6];
+                                //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                BVDetail3.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                            }
+                            BVDetail3.BorrowMoney = 0;
+                            BVDetail3.BorrowMoneyCount = 0;
+                            if (index == 1)
+                            {
+                                BVDetail3.BorrowMoney = item.TurnOut;
+                                BVDetail3.BorrowMoneyCount = item.TurnOut;
+                            }
+                            BVDetail3.VGUID = Guid.NewGuid();
+                            BVDetail3.VoucherVGUID = guid;
+                            BVDetailList.Add(BVDetail3);
+                        }
+                        GetOtherSubject2(db, BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
+                        continue;
+                    }
+                    else//if ((loadData.Count == 1 || loadData.Count == 0) && borrowData.Count == 1)
+                    {
+                        
                     }
                 }
                 if (subject != "" && subject != null)
@@ -623,6 +661,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                                 //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                             }
                         }
+                        else
+                        {
+                            //一借一贷,借贷相平
+                            BVDetail.LoanMoney = item.TurnOut;
+                            BVDetail.LoanMoneyCount = item.TurnOut;
+                        }
+                        BVDetail2.ReceivableAccount = item.ReceivableAccount;//对方账号,用于轮循贷方明细找到对应金额
                         BVDetail2.VGUID = Guid.NewGuid();
                         BVDetail2.VoucherVGUID = guid;
                         BVDetailList.Add(BVDetail2);

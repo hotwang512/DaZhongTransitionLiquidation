@@ -24,5 +24,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public decimal? BorrowMoneyCount { get; set; }
         public decimal? LoanMoneyCount { get; set; }
         public int JE_LINE_NUMBER { get; set; }
+        public string ReceivableAccount { get; set; }
     }
 }

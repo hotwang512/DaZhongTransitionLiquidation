@@ -6,10 +6,13 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VehicleBusiness;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using DaZhongTransitionLiquidation.Models;
 using SqlSugar;
 using SyntacticSugar;
@@ -176,6 +179,125 @@ namespace DaZhongTransitionLiquidation.Controllers
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
                 }
                 Thread.Sleep((int)(24 * 1000 * 60 * 60));//一天查一次
+            }
+        }
+        public static void AutoGetVoucherMoneySeavice()
+        {
+            Thread LogThread = new Thread(new ThreadStart(DoGetVoucherMoney));
+            //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
+            LogThread.IsBackground = true;
+            LogThread.Start();//起线程  
+        }
+        public static void DoGetVoucherMoney()
+        {
+            while (true)
+            {
+                var success = 0;
+                try
+                {
+                    using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
+                    {
+                        //一小时查一次,获取当天每笔凭证的贷方金额
+                        var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
+                        //测试 day = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd").TryToDate();
+                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate == day).ToList();
+                        var voucherDetails = _db.Queryable<Business_VoucherDetail>().OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
+                        var accountInfo = _db.Queryable<V_BankChannelMapping>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1").ToList();
+                        var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
+                        var month = DateTime.Now.ToString("yyyy-MM");
+                        var bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
+                        foreach (var item in voucherData)
+                        {
+                            var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x=>x.ReceivableAccount).ToList();
+                            if(voucherDetail.Count == 0)
+                            {
+                                continue;
+                            }
+                            if(voucherDetail.Count == 2)
+                            {
+                                //一借一贷
+                                var borrowMoney = voucherDetail[0].BorrowMoney;
+                                var loanMoney = voucherDetail[0].LoanMoney;
+                                if((borrowMoney != 0 && loanMoney == null) || (borrowMoney != 0 && loanMoney == 0))
+                                {
+                                    voucherDetail[1].LoanMoney = borrowMoney;
+                                    voucherDetail[1].LoanMoneyCount = borrowMoney;
+                                    _db.Updateable(voucherDetail[1]).ExecuteCommand();
+                                }
+                                else
+                                {
+                                    voucherDetail[1].BorrowMoney = loanMoney;
+                                    voucherDetail[1].BorrowMoneyCount = loanMoney;
+                                    _db.Updateable(voucherDetail[1]).ExecuteCommand();
+                                }
+                            }
+                            else
+                            {
+                                //多借多贷
+                                foreach (var it in voucherDetail)
+                                {
+                                    var receivableAccount = "";
+                                    if (it.ReceivableAccount != "" && it.ReceivableAccount != null)
+                                    {
+                                        if(it.LoanMoney != 0 && it.LoanMoney != null)
+                                        {
+                                            continue;
+                                        }
+                                        //贷配置明细
+                                        receivableAccount = it.ReceivableAccount;
+                                        var subject = it.CompanySection+"."+it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
+                                        var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
+                                        var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject).FirstOrDefault();
+                                        //从金额报表中按配置获取金额
+                                        var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == day.ToString("yyyy-MM-dd")).ToList();
+                                        if (amountReport.Count > 0)
+                                        {
+                                            switch (paySetting.TransferType)
+                                            {
+                                                case "银行收款": it.LoanMoney = amountReport[0].ActualAmountTotal; break;
+                                                case "营收缴款": it.LoanMoney = amountReport[0].PaymentAmountTotal; break;
+                                                case "手续费": it.LoanMoney = amountReport[0].CompanyBearsFeesTotal; break;
+                                                default:
+                                                    break;
+                                            }
+                                            //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
+                                        }
+                                        _db.Updateable(it).ExecuteCommand();
+                                    }
+                                    else
+                                    {
+                                        //借配置明细
+                                        if(it.BorrowMoney == null || it.BorrowMoney == 0)
+                                        {
+                                            var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
+                                            var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
+                                            var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject).FirstOrDefault();
+                                            //从金额报表中按配置获取金额
+                                            var amountReport = bankFlowList.Where(x => x.Channel_Id == paySetting.Channel && x.RevenueDate == day.ToString("yyyy-MM-dd")).ToList();
+                                            if (amountReport.Count > 0)
+                                            {
+                                                switch (paySetting.TransferType)
+                                                {
+                                                    case "银行收款": it.BorrowMoney = amountReport.Sum(x => x.ActualAmountTotal); break;
+                                                    case "营收缴款": it.BorrowMoney = amountReport.Sum(x => x.PaymentAmountTotal); break;
+                                                    case "手续费": it.BorrowMoney = amountReport.Sum(x => x.CompanyBearsFeesTotal); break;
+                                                    default:
+                                                        break;
+                                                }
+                                                _db.Updateable(it).ExecuteCommand();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
+                }
+                Thread.Sleep((int)(1 * 1000 * 60 * 60));
             }
         }
         public static void AutoTransferVoucherSeavice()

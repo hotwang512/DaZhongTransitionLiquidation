@@ -95,7 +95,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         {
             var list = new List<Business_ModifyVehicle>();
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
-
+            var assetMaintenanceInfoList = _db.Queryable<Business_AssetMaintenanceInfo>().ToList();
             //获取所有的经营模式
             var manageModelList = _db.Queryable<Business_ManageModel>().ToList();
             //获取所有的公司
@@ -103,15 +103,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                 x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
             int success = 0;
             var MODIFY_TYPE = "";
-            var data = assetFlowList.Where(x => x.ORIGINALID == "102271").First();
             foreach (var item in assetFlowList)
             {
-                var assetMaintenanceInfo = _db.Queryable<Business_AssetMaintenanceInfo>()
-                    .Where(x => x.ORIGINALID == item.ORIGINALID).First();
-                if (assetMaintenanceInfo != null)
+                if (assetMaintenanceInfoList.Any(x => x.ORIGINALID == item.ORIGINALID))
                 {
                     try
                     {
+                        var assetMaintenanceInfo = assetMaintenanceInfoList.Where(x => x.ORIGINALID == item.ORIGINALID).First();
                         //车龄 月末时间减去上牌时间（计算两个时间的月数，可能有小数点，保留整位）
                         var months = ((DateTime.Now.Year - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Year) * 12) + (DateTime.Now.Month - assetMaintenanceInfo.LISENSING_DATE.TryToDate().Month);
                         var temp = "";
@@ -166,11 +164,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
                         //}
                         #endregion
-
-                        if (item.ORIGINALID == "102271")
-                        {
-                            item.ORIGINALID = "102271";
-                        }
                         if (!item.MODEL_MINOR.IsNullOrEmpty())
                         {
                             //经营模式子类 传过来的经营模式上级

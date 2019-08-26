@@ -132,8 +132,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                     //编辑
                     module.CreateUser = cache[PubGet.GetUserKey].UserName;
                     module.CreateTime = DateTime.Now;
-                    db.Updateable<Business_ManageModel_AssetsCategory>().UpdateColumns(x => new
-                            {x.CategoryMajor, x.CategoryMinor, x.GoodsModel, x.GoodsModelCode, x.AssetsCategoryVGUID})
+                    db.Updateable<Business_ManageModel_AssetsCategory>(module).UpdateColumns(x => new
+                            {x.CategoryMajor, x.CategoryMinor, x.GoodsModel, x.GoodsModelCode, x.AssetsCategoryVGUID}).Where(x => x.ManageModelVGUID == module.ManageModelVGUID)
                         .ExecuteCommand();
                     resultModel.IsSuccess = true;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";

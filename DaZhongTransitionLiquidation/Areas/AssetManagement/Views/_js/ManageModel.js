@@ -362,7 +362,7 @@ function initAssetsCategoryTable(VGUID) {
     selector.$AssetsCategoryTable().jqxDataTable(
         {
             pageable: true,
-            width: "100%",
+            width: 790,
             height: 400,
             pageSize: 10,
             serverProcessing: true,

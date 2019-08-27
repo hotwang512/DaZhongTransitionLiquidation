@@ -81,7 +81,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 {
                     if (isEdit)
                     {
-                        db.Updateable(bankChannel).ExecuteCommand();
+                        db.Updateable(bankChannel).IgnoreColumns(x=>x == "IsShow").ExecuteCommand();
                     }
                     else
                     {

@@ -427,47 +427,50 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     BVDetail.LoanMoneyCount = 0;
                     subject = sevenSubject.Borrow;
                     var bankChannelOne = bankChannel.Where(it => it.BankAccount == item.ReceivableAccount).ToList().FirstOrDefault();
-                    //对方账号下借贷配置信息
-                    var loadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
-                    var borrowData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();
-                    if(borrowData.Count > 1)
+                    if(bankChannelOne != null)
                     {
-                        var index = 0;
-                        foreach (var borrow in borrowData)
+                        //对方账号下借贷配置信息
+                        var loadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
+                        var borrowData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();
+                        if (borrowData.Count > 1)
                         {
-                            index++;
-                            Business_VoucherDetail BVDetail3 = new Business_VoucherDetail();
-                            subject = borrow.Borrow;
-                            if (subject != "" && subject != null)
+                            var index = 0;
+                            foreach (var borrow in borrowData)
                             {
-                                if (subject.Contains("\n"))
+                                index++;
+                                Business_VoucherDetail BVDetail3 = new Business_VoucherDetail();
+                                subject = borrow.Borrow;
+                                if (subject != "" && subject != null)
                                 {
-                                    subject = subject.Substring(0, subject.Length - 1);
+                                    if (subject.Contains("\n"))
+                                    {
+                                        subject = subject.Substring(0, subject.Length - 1);
+                                    }
+                                    var seven = subject.Split(".");
+                                    BVDetail3.CompanySection = seven[0];
+                                    BVDetail3.SubjectSection = seven[1];
+                                    BVDetail3.AccountSection = seven[2];
+                                    BVDetail3.CostCenterSection = seven[3];
+                                    BVDetail3.SpareOneSection = seven[4];
+                                    BVDetail3.SpareTwoSection = seven[5];
+                                    BVDetail3.IntercourseSection = seven[6];
+                                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                    BVDetail3.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
                                 }
-                                var seven = subject.Split(".");
-                                BVDetail3.CompanySection = seven[0];
-                                BVDetail3.SubjectSection = seven[1];
-                                BVDetail3.AccountSection = seven[2];
-                                BVDetail3.CostCenterSection = seven[3];
-                                BVDetail3.SpareOneSection = seven[4];
-                                BVDetail3.SpareTwoSection = seven[5];
-                                BVDetail3.IntercourseSection = seven[6];
-                                //BVDetail.SubjectSectionName = item.SubjectSectionName;
-                                BVDetail3.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                                BVDetail3.BorrowMoney = 0;
+                                BVDetail3.BorrowMoneyCount = 0;
+                                if (index == 1)
+                                {
+                                    BVDetail3.BorrowMoney = item.TurnOut;
+                                    BVDetail3.BorrowMoneyCount = item.TurnOut;
+                                }
+                                BVDetail3.VGUID = Guid.NewGuid();
+                                BVDetail3.VoucherVGUID = guid;
+                                BVDetailList.Add(BVDetail3);
                             }
-                            BVDetail3.BorrowMoney = 0;
-                            BVDetail3.BorrowMoneyCount = 0;
-                            if (index == 1)
-                            {
-                                BVDetail3.BorrowMoney = item.TurnOut;
-                                BVDetail3.BorrowMoneyCount = item.TurnOut;
-                            }
-                            BVDetail3.VGUID = Guid.NewGuid();
-                            BVDetail3.VoucherVGUID = guid;
-                            BVDetailList.Add(BVDetail3);
+                            GetOtherSubject2(db, BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
+                            continue;
                         }
-                        GetOtherSubject2(db, BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
-                        continue;
                     }
                     else//if ((loadData.Count == 1 || loadData.Count == 0) && borrowData.Count == 1)
                     {

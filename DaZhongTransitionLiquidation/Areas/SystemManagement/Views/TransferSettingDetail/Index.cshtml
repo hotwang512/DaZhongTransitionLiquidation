@@ -1,12 +1,12 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 
 @{
-    ViewBag.Title = "收款业务配置/业务配置明细";
+    ViewBag.Title = "收款业务配置/转账业务配置明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     //var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
-    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/PaySettingDetail.js")"></script>
+    <script src="@Url.CusContent("~/Areas/SystemManagement/Views/_js/TransferSettingDetail.js")"></script>
 }
 
 @section css{
@@ -31,21 +31,17 @@
     <div class="body_mk" style="height: 60px;">
         <table style="margin-top: 20px; width: 1500px; margin-left: 20px;">
             <tr style="height: 45px;">
-                <td style="text-align: left"><span class="spanText">银行账号</span></td>
+                <td style="text-align: left"><span class="spanText">业务编码</span></td>
                 <td style="">
-                    <input id="txtBankName" type="text" class="input_text form-control" />
+                    <input id="txtTransferCompany" type="text" class="input_text form-control" />
                 </td>
-                <td style="text-align: left"><span class="spanText">银行户名</span></td>
+                <td style="text-align: left"><span class="spanText">业务名称</span></td>
                 <td style="">
-                    <input id="txtBankAccountName" type="text" class="input_text form-control" validatetype="required" />
-                </td>
-                <td style="text-align: left"><span class="spanText">开户行</span></td>
-                <td style="">
-                    <input id="txtBank" type="text" class="input_text form-control" validatetype="required" />
+                    <input id="txtTransferType" type="text" class="input_text form-control" validatetype="required" />
                 </td>
                 <td style="text-align: left"><span class="spanText">渠道名称</span></td>
                 <td class="">
-                    <select id="txtChannelName" class="input_text form-control" validatetype="required">
+                    <select id="txtChannel" class="input_text form-control" validatetype="required">
                         <option></option>
                         @{
                             foreach (var item in ViewBag.Channel)

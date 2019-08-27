@@ -200,7 +200,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd").TryToDate();
-                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate == day).ToList();
+                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate > day.AddDays(-3)).ToList();
                         var voucherDetails = _db.Queryable<Business_VoucherDetail>().OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
                         var accountInfo = _db.Queryable<V_BankChannelMapping>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1").ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
@@ -249,9 +249,15 @@ namespace DaZhongTransitionLiquidation.Controllers
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
                                         var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject).FirstOrDefault();
                                         //从金额报表中按配置获取金额
-                                        var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == day.ToString("yyyy-MM-dd")).ToList();
+                                        if(paySetting.Channel == "898319841215600")
+                                        {
+                                            //自助发票机另外处理
+                                            continue;
+                                        }
+                                        var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == day.AddDays(-1).ToString("yyyy-MM-dd")).ToList();
                                         if (amountReport.Count > 0)
                                         {
+                                            it.LoanMoney = 0;
                                             switch (paySetting.TransferType)
                                             {
                                                 case "银行收款": it.LoanMoney = amountReport[0].ActualAmountTotal; break;
@@ -260,9 +266,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                 default:
                                                     break;
                                             }
+                                            _db.Updateable(it).ExecuteCommand();
                                             //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                                         }
-                                        _db.Updateable(it).ExecuteCommand();
+                                       
                                     }
                                     else
                                     {
@@ -272,8 +279,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                             var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
                                             var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject).FirstOrDefault();
+                                            if (paySetting.Channel == "898319841215600")
+                                            {
+                                                //自助发票机另外处理
+                                                continue;
+                                            }
                                             //从金额报表中按配置获取金额
-                                            var amountReport = bankFlowList.Where(x => x.Channel_Id == paySetting.Channel && x.RevenueDate == day.ToString("yyyy-MM-dd")).ToList();
+                                            var amountReport = bankFlowList.Where(x => x.Channel_Id == paySetting.Channel && x.RevenueDate == day.AddDays(-1).ToString("yyyy-MM-dd")).ToList();
                                             if (amountReport.Count > 0)
                                             {
                                                 switch (paySetting.TransferType)

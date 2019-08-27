@@ -115,6 +115,8 @@ var menueHelp = {
                 break;
             case "PaySetting": $("#homeModel").text("--系统管理")
                 break;
+            case "TransferSetting": $("#homeModel").text("--系统管理")
+                break;
             default:
         }
     }

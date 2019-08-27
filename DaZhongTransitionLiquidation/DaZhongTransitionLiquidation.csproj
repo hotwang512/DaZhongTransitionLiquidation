@@ -269,6 +269,7 @@
     <Content Include="Areas\SystemManagement\Views\_js\PurchaseOrderSetting.js" />
     <Content Include="Areas\SystemManagement\Views\_js\PurchaseOrderSettingDetail.js" />
     <Content Include="Areas\SystemManagement\Views\_js\Subject.js" />
+    <Content Include="Areas\SystemManagement\Views\_js\TransferSettingDetail.js" />
     <Content Include="Areas\SystemManagement\Views\_js\TransferSettingList.js" />
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSetting.js" />
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSettingDetail.js" />
@@ -371,6 +372,7 @@
     <Content Include="Areas\AssetManagement\Views\DisposeNetValue\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\DisposeProfitLoss\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\DisposeTax\Index.cshtml" />
+    <Content Include="Areas\SystemManagement\Views\TransferSettingDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2488,6 +2490,7 @@
     <Compile Include="Areas\SystemManagement\Controllers\PurchaseOrderSetting\PurchaseOrderSettingDetailController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\SubjectManagement\SubjectManagementPack.cs" />
+    <Compile Include="Areas\SystemManagement\Controllers\TransferSettingDetail\TransferSettingDetailController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\TransferSettingList\TransferSettingListController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementController.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\UserManagement\UserManagementPack.cs" />
@@ -2498,6 +2501,7 @@
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseOrderSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_PurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_TransferSetting.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_TransferSettingDetail.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
     <Compile Include="Areas\SystemManagement\Models\PurchaseDepartmentModel.cs" />
     <Compile Include="Areas\SystemManagement\Models\VehicleExtrasFeeSetting.cs" />

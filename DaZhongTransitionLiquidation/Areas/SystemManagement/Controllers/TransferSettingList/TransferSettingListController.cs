@@ -106,11 +106,33 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Transf
                     }
                     else
                     {
-                        db.Insertable(bankChannel).ExecuteCommand();
+                        var isAny = db.Queryable<Business_TransferSetting>().Any(x => x.TransferCompany == bankChannel.TransferCompany);
+                        if (isAny)
+                        {
+                            resultModel.Status = "2";
+                        }
+                        else
+                        {
+                            db.Insertable(bankChannel).ExecuteCommand();
+                        } 
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
+                if(resultModel.Status != "2")
+                {
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteTransferSetting(List<Guid> vguids)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                int saveChanges = db.Deleteable<Business_TransferSetting>(vguids).ExecuteCommand();
+                resultModel.IsSuccess = saveChanges == vguids.Count;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

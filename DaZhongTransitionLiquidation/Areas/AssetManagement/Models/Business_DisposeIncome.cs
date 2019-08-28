@@ -31,6 +31,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string DepartmentVehiclePlateNumber { get; set; }
+        public string ImportPlateNumber { get; set; }
 
         /// <summary>
         /// Desc:

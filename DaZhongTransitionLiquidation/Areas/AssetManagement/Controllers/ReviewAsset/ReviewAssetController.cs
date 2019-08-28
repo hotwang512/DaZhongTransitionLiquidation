@@ -32,7 +32,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetReviewAssetListDatas(string YearMonth, string Company, string VehicleModel)
+        public JsonResult GetReviewAssetListDatas(string YearMonth, string Company, string VehicleModel, bool ISVerify)
         {
             var jsonResult = new JsonResultModel<Business_AssetReview>();
 
@@ -42,10 +42,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var endDate = startDate.AddMonths(1);
                 int pageCount = 0;
                 jsonResult.Rows = db.Queryable<Business_AssetReview>().Where(i => !i.ISVERIFY)
-                    .WhereIF(!YearMonth.IsNullOrEmpty(),i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate)
-                    .WhereIF(!Company.IsNullOrEmpty(),i => i.BELONGTO_COMPANY == Company)
-                    .WhereIF(!VehicleModel.IsNullOrEmpty(),i => i.VEHICLE_SHORTNAME == VehicleModel)
+                    .WhereIF(!YearMonth.IsNullOrEmpty(), i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate)
+                    .WhereIF(!Company.IsNullOrEmpty(), i => i.BELONGTO_COMPANY == Company)
+                    .WhereIF(!VehicleModel.IsNullOrEmpty(), i => i.VEHICLE_SHORTNAME == VehicleModel)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
+                if (ISVerify)
+                {
+                    //校验数据
+                    foreach (var item in jsonResult.Rows)
+                    {
+                        if (item.ORIGINALID.IsNullOrEmpty() || item.PLATE_NUMBER.IsNullOrEmpty() ||
+                            item.TAG_NUMBER.IsNullOrEmpty() || item.MANAGEMENT_COMPANY.IsNullOrEmpty() ||
+                            item.BELONGTO_COMPANY.IsNullOrEmpty() || item.ASSET_ID.IsNullOrEmpty() || item.DESCRIPTION.IsNullOrEmpty() || item.ASSET_COST.IsNullOrEmpty() || 
+                            item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() || item.BOOK_TYPE_CODE.IsNullOrEmpty() || item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty()||
+                            item.MODEL_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
+                        {
+                            item.GROUP_ID = "1";
+                        }
+                    }
+                }
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -157,23 +172,24 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 var major = manageModelList.FirstOrDefault(x => x.BusinessName == reviewItem.MODEL_MINOR);
                                 reviewItem.MODEL_MAJOR = manageModelList
                                     .First(x => major != null && x.VGUID == major.ParentVGUID).BusinessName;
+                                //根据经营模式和车型获取到资产主类子类，通过主类子类取到折旧方法维护中的财务信息
+                                var modelCategory = db.Queryable<Business_ManageModel_AssetsCategory>()
+                                    .Where(x => x.GoodsModel == reviewItem.VEHICLE_SHORTNAME && x.ManageModelVGUID == minorModel.VGUID).First();
+                                var assetCategory = db.Queryable<Business_AssetsCategory>()
+                                    .Where(x => x.VGUID == modelCategory.AssetsCategoryVGUID).First();
+                                reviewItem.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                                reviewItem.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
+                                reviewItem.LIFE_YEARS = assetCategory.LIFE_YEARS;
+                                reviewItem.LIFE_MONTHS = assetCategory.LIFE_MONTHS;
+                                reviewItem.SALVAGE_PERCENT = assetCategory.SALVAGE_PERCENT;
+                                reviewItem.METHOD = assetCategory.METHOD;
+                                reviewItem.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
+                                reviewItem.ASSET_COST_ACCOUNT = assetCategory.ASSET_COST_ACCOUNT;
+                                reviewItem.ASSET_SETTLEMENT_ACCOUNT = assetCategory.ASSET_SETTLEMENT_ACCOUNT;
+                                reviewItem.DEPRECIATION_EXPENSE_SEGMENT = assetCategory.DEPRECIATION_EXPENSE_SEGMENT;
+                                reviewItem.ACCT_DEPRECIATION_ACCOUNT = assetCategory.ACCT_DEPRECIATION_ACCOUNT;
                             }
-                            //根据经营模式和车型获取到资产主类子类，通过主类子类取到折旧方法维护中的财务信息
-                            var modelCategory = db.Queryable<Business_ManageModel_AssetsCategory>()
-                                .Where(x => x.GoodsModel == reviewItem.VEHICLE_SHORTNAME && x.ManageModelVGUID == minorModel.VGUID).First();
-                            var assetCategory = db.Queryable<Business_AssetsCategory>()
-                                .Where(x => x.VGUID == modelCategory.AssetsCategoryVGUID).First();
-                            reviewItem.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
-                            reviewItem.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
-                            reviewItem.LIFE_YEARS = assetCategory.LIFE_YEARS;
-                            reviewItem.LIFE_MONTHS = assetCategory.LIFE_MONTHS;
-                            reviewItem.SALVAGE_PERCENT = assetCategory.SALVAGE_PERCENT;
-                            reviewItem.METHOD = assetCategory.METHOD;
-                            reviewItem.BOOK_TYPE_CODE = assetCategory.BOOK_TYPE_CODE;
-                            reviewItem.ASSET_COST_ACCOUNT = assetCategory.ASSET_COST_ACCOUNT;
-                            reviewItem.ASSET_SETTLEMENT_ACCOUNT = assetCategory.ASSET_SETTLEMENT_ACCOUNT;
-                            reviewItem.DEPRECIATION_EXPENSE_SEGMENT = assetCategory.DEPRECIATION_EXPENSE_SEGMENT;
-                            reviewItem.ACCT_DEPRECIATION_ACCOUNT = assetCategory.ACCT_DEPRECIATION_ACCOUNT;
+                            reviewItem.MODEL_MINOR = reviewItem.MODEL_MINOR == "" ? null : reviewItem.MODEL_MINOR;
                             //if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
                             //{
                             //    reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;

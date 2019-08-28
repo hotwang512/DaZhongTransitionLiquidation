@@ -248,6 +248,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 resultModel.ResultInfo = "已经有数据支付，不能重新导入 ";
                                 return;
                             }
+                            if (list.Any(x => x.ChassisNumber.Length != 17))
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo = resultModel.ResultInfo + "车架号不正确 ";
+                            }
                             if (fixedAssetsOrder.OrderQuantity != list.Count)
                             {
                                 consistent = false;
@@ -263,6 +268,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 consistent = false;
                                 resultModel.ResultInfo = resultModel.ResultInfo + "Excel中有重复数据 ";
                             }
+                            
                             var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
                                 .Where(c => c.FixedAssetsOrderVguid == vguid).First();
                             //判断判断车架号发动机号，系统中没有才可以导入

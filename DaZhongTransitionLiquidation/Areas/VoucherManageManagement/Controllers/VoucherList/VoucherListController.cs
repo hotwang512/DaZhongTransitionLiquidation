@@ -34,11 +34,18 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
+                DateTime? firstDay = null;
+                DateTime? lastDay = null;
+                if (searchParams.AccountingPeriod != null)
+                {
+                    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
+                    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
+                }
                 jsonResult.Rows = db.Queryable<Business_VoucherList>()
                 .Where(i => i.Status == searchParams.Status)
                 .Where(i => i.Automatic == searchParams.Automatic)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
-                .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod == searchParams.AccountingPeriod)
+                .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod >= firstDay && i.AccountingPeriod <= lastDay)
                 .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -170,13 +177,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 var data = new List<AssetsGeneralLedger_Swap>();
+                var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Automatic == "3" && x.Status == "2").OrderBy("VoucherDate desc").ToList();
+                var voucherDate = voucherData[0].VoucherDate;
                 //从已审核凭证中提取数据
                 var AssetsData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (b.CompanySection+'.'+b.SubjectSection+'.'+b.AccountSection+'.'+b.CostCenterSection+'.'+b.SpareOneSection+'.'+b.SpareTwoSection+'.'+b.IntercourseSection) as SubjectCount,a.AccountModeName as LEDGER_NAME,a.BatchName as JE_BATCH_NAME,
 a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as ENTERED_DR,b.LoanMoney as ENTERED_CR from Business_VoucherList as a left join Business_VoucherDetail as b on a.VGUID = b.VoucherVGUID
  where a.Status='3' ").ToList();
                 //从总账明细中提取数据
                 var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
-from AssetsGeneralLedgerDetail_Swap ").ToList();
+from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { VoucherData = voucherData[0].VoucherDate }).ToList();
                 foreach (var item in AssetsDetailData)
                 {
                     //item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;
@@ -195,74 +204,88 @@ from AssetsGeneralLedgerDetail_Swap ").ToList();
                     var sevenData1 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                     var sevenData2 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
                     var sevenData3 = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                    var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Automatic == "3" && x.Status == "2").ToList();
-                    var assetsData = db.Queryable<AssetsGeneralLedgerDetail_Swap>().ToList();
+                    var assetsData = db.Queryable<AssetsGeneralLedgerDetail_Swap>().Where(x => x.ACCOUNTING_DATE > voucherDate).ToList();
                     //var tableData = jsonData.JsonToModel<List<AssetsGeneralLedger_Swap>>();
                     foreach (var item in data)
                     {
-                        //var isAny = voucherList.Any(x => x.VoucherNo == item.JE_HEADER_NAME.Split(" ")[0]);
-                        //var isAny2 = voucherData.Any(x => x.VoucherNo == item.JE_HEADER_NAME.Split(" ")[0]);
-                        var isAny = voucherList.Any(x => item.JE_HEADER_NAME.Contains(x.VoucherNo));
-                        var isAny2 = voucherData.Any(x => item.JE_HEADER_NAME.Contains(x.VoucherNo));
-                        if (isAny || isAny2)
+                        try
                         {
-                            continue;
-                        }
-                        var account = sevenData2.SingleOrDefault(x => x.Descrption == item.LEDGER_NAME).Code;
-                        var company = sevenData1.SingleOrDefault(x => x.AccountModeCode == account && x.Code == item.SubjectCount.Split(".")[0]).Descrption;
-                        var credit = item.ENTERED_CR == null ? item.ENTERED_DR : item.ENTERED_CR;
-                        var debit = item.ENTERED_DR == null ? item.ENTERED_CR : item.ENTERED_DR;
-                        Business_VoucherList voucher = new Business_VoucherList();
-                        voucher.AccountingPeriod = item.ACCOUNTING_DATE;
-                        voucher.AccountModeName = item.LEDGER_NAME;
-                        voucher.Auditor = "";
-                        voucher.Bookkeeping = "";
-                        voucher.Cashier = "";
-                        voucher.CompanyCode = item.SubjectCount.Split(".")[0];
-                        voucher.CompanyName = company;
-                        voucher.Currency = "";
-                        voucher.DocumentMaker = "";
-                        voucher.FinanceDirector = "";
-                        voucher.Status = "2";
-                        voucher.VoucherDate = item.ACCOUNTING_DATE;
-                        voucher.VoucherType = item.JE_CATEGORY_NAME.Split(".")[1] + "类";
-                        voucher.CreditAmountTotal = credit.TryToDecimal();
-                        voucher.DebitAmountTotal = debit.TryToDecimal();
-                        voucher.CreateTime = DateTime.Now;
-                        var guid = Guid.NewGuid();
-                        voucher.BatchName = item.JE_BATCH_NAME.Split(" ")[0];
-                        voucher.VoucherNo = item.JE_HEADER_NAME.Split(" ")[0];
-                        voucher.VGUID = guid;
-                        voucher.Automatic = "3";//Oracle同步
-                        voucherList.Add(voucher);
-                        //凭证明细表
-                        var assetsDataList = assetsData.Where(x => x.LEDGER_NAME == item.LEDGER_NAME && x.JE_HEADER_NAME == item.JE_HEADER_NAME && x.ACCOUNTING_DATE == item.ACCOUNTING_DATE).ToList();
-                        if (assetsDataList.Count > 0)
-                        {
-                            foreach (var ass in assetsDataList)
+                            //var isAny = voucherList.Any(x => x.VoucherNo == item.JE_HEADER_NAME.Split(" ")[0]);
+                            //var isAny2 = voucherData.Any(x => x.VoucherNo == item.JE_HEADER_NAME.Split(" ")[0]);
+                            var isAny = voucherList.Any(x => x.VoucherNo == item.JE_HEADER_NAME && x.BatchName == item.JE_BATCH_NAME && x.VoucherDate == item.ACCOUNTING_DATE);
+                            var isAny2 = voucherData.Any(x => x.VoucherNo == item.JE_HEADER_NAME && x.BatchName == item.JE_BATCH_NAME && x.VoucherDate == item.ACCOUNTING_DATE);
+                            if (isAny || isAny2)
                             {
-                                var subject = sevenData3.Where(x => x.Code == ass.COMBINATION.Split(".")[1]).FirstOrDefault().Descrption;
-                                Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-                                BVDetail.Abstract = "Oracle同步数据";
-                                BVDetail.CompanySection = ass.COMBINATION.Split(".")[0];
-                                BVDetail.SubjectSection = ass.COMBINATION.Split(".")[1];
-                                BVDetail.SubjectSectionName = subject;
-                                BVDetail.AccountSection = ass.COMBINATION.Split(".")[2];
-                                BVDetail.CostCenterSection = ass.COMBINATION.Split(".")[3];
-                                BVDetail.SpareOneSection = ass.COMBINATION.Split(".")[4];
-                                BVDetail.SpareTwoSection = ass.COMBINATION.Split(".")[5];
-                                BVDetail.IntercourseSection = ass.COMBINATION.Split(".")[6];
-                                BVDetail.SevenSubjectName = ass.COMBINATION + ass.COMBINATION_DESCRIPTION;
-                                BVDetail.BorrowMoney = ass.ENTERED_DR;
-                                BVDetail.LoanMoney = ass.ENTERED_CR;
-                                BVDetail.BorrowMoneyCount = ass.ENTERED_DR;
-                                BVDetail.LoanMoneyCount = ass.ENTERED_CR;
-                                BVDetail.JE_LINE_NUMBER = 0;
-                                BVDetail.VGUID = Guid.NewGuid();
-                                BVDetail.VoucherVGUID = guid;
-                                voucherDetail.Add(BVDetail);
+                                continue;
+                            }
+                            var account = sevenData2.SingleOrDefault(x => x.Descrption == item.LEDGER_NAME).Code;
+                            var company = sevenData1.SingleOrDefault(x => x.AccountModeCode == account && x.Code == item.SubjectCount.Split(".")[0]).Descrption;
+                            var credit = item.ENTERED_CR == null ? item.ENTERED_DR : item.ENTERED_CR;
+                            var debit = item.ENTERED_DR == null ? item.ENTERED_CR : item.ENTERED_DR;
+                            Business_VoucherList voucher = new Business_VoucherList();
+                            voucher.AccountingPeriod = item.ACCOUNTING_DATE;
+                            voucher.AccountModeName = item.LEDGER_NAME;
+                            voucher.Auditor = "";
+                            voucher.Bookkeeping = "";
+                            voucher.Cashier = "";
+                            voucher.CompanyCode = item.SubjectCount.Split(".")[0];
+                            voucher.CompanyName = company;
+                            voucher.Currency = "";
+                            voucher.DocumentMaker = "";
+                            voucher.FinanceDirector = "";
+                            voucher.Status = "2";
+                            voucher.VoucherDate = item.ACCOUNTING_DATE;
+                            if(item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行" && item.JE_CATEGORY_NAME != "z.转账")
+                            {
+                                voucher.VoucherType = "转账类";
+                            }
+                            else
+                            {
+                                voucher.VoucherType = item.JE_CATEGORY_NAME.Split(".")[1] + "类";
+                            }
+                            voucher.CreditAmountTotal = credit.TryToDecimal();
+                            voucher.DebitAmountTotal = debit.TryToDecimal();
+                            voucher.CreateTime = DateTime.Now;
+                            var guid = Guid.NewGuid();
+                            voucher.BatchName = item.JE_BATCH_NAME.Split(" ")[0];
+                            voucher.VoucherNo = item.JE_HEADER_NAME.Split(" ")[0];
+                            voucher.VGUID = guid;
+                            voucher.Automatic = "3";//Oracle同步
+                            voucherList.Add(voucher);
+                            //凭证明细表
+                            var assetsDataList = assetsData.Where(x => x.LEDGER_NAME == item.LEDGER_NAME && x.JE_HEADER_NAME == item.JE_HEADER_NAME && x.ACCOUNTING_DATE == item.ACCOUNTING_DATE).ToList();
+                            if (assetsDataList.Count > 0)
+                            {
+                                foreach (var ass in assetsDataList)
+                                {
+                                    var subject = sevenData3.Where(x => x.Code == ass.COMBINATION.Split(".")[1]).FirstOrDefault().Descrption;
+                                    Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                                    BVDetail.Abstract = "Oracle同步数据";
+                                    BVDetail.CompanySection = ass.COMBINATION.Split(".")[0];
+                                    BVDetail.SubjectSection = ass.COMBINATION.Split(".")[1];
+                                    BVDetail.SubjectSectionName = subject;
+                                    BVDetail.AccountSection = ass.COMBINATION.Split(".")[2];
+                                    BVDetail.CostCenterSection = ass.COMBINATION.Split(".")[3];
+                                    BVDetail.SpareOneSection = ass.COMBINATION.Split(".")[4];
+                                    BVDetail.SpareTwoSection = ass.COMBINATION.Split(".")[5];
+                                    BVDetail.IntercourseSection = ass.COMBINATION.Split(".")[6];
+                                    BVDetail.SevenSubjectName = ass.COMBINATION + ass.COMBINATION_DESCRIPTION;
+                                    BVDetail.BorrowMoney = ass.ENTERED_DR;
+                                    BVDetail.LoanMoney = ass.ENTERED_CR;
+                                    BVDetail.BorrowMoneyCount = ass.ENTERED_DR;
+                                    BVDetail.LoanMoneyCount = ass.ENTERED_CR;
+                                    BVDetail.JE_LINE_NUMBER = 0;
+                                    BVDetail.VGUID = Guid.NewGuid();
+                                    BVDetail.VoucherVGUID = guid;
+                                    voucherDetail.Add(BVDetail);
+                                }
                             }
                         }
+                        catch (Exception ex)
+                        {
+                            var info = item;
+                            throw ex;
+                        } 
                     }
                     #endregion
                     if (voucherList.Count > 0 && voucherDetail.Count > 0)

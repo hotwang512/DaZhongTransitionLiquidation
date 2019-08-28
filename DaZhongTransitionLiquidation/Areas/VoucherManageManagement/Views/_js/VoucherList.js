@@ -46,7 +46,14 @@ var $page = function () {
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
-            initTable();
+            switch (tableIndex) {
+                case 0: initTable(); break;
+                case 1: initTable1(); break;
+                case 2: initTable2(); break;
+                default:
+
+            }
+            
         });
 
         //重置按钮事件
@@ -534,12 +541,14 @@ $(function () {
 
 function syncAssetsData() {
     //var tableData = $('#jqxSubjectTable').jqxGrid('getboundrows')
+    layer.load();
     $.ajax({
         url: "/VoucherManageManagement/VoucherList/SyncAssetsData",
         data: { },
         type: "POST",
         dataType: "json",
         success: function (msg) {
+            layer.closeAll('loading');
             if (msg.IsSuccess == true) {
                 jqxNotification("同步成功！", null, "success");
                 if (tableIndex == 2) {

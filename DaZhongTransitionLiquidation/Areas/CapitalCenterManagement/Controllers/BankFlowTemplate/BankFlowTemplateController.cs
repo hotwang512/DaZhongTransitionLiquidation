@@ -286,7 +286,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             items.AccountModeCode = item.AccountModeCode;
                             items.AccountModeName = accountModeName;
                             items.CompanyCode = item.CompanyCode;
-                            db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                            db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
                         items.BankAccount = item.BankAccount;
@@ -299,7 +299,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     if (newBankFlowList.Count > 0)
                     {
-                        db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
+                        db.Insertable(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
                         GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName);
                     }
@@ -429,6 +429,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     var bankChannelOne = bankChannel.Where(it => it.BankAccount == item.ReceivableAccount).ToList().FirstOrDefault();
                     if(bankChannelOne != null)
                     {
+                        VoucherList.Add(voucher);
                         //对方账号下借贷配置信息
                         var loadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
                         var borrowData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();

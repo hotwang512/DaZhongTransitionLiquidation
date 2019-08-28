@@ -46,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SaveSubjectBalance(decimal Balance,string Code,string Year,string Month)
+        public JsonResult SaveSubjectBalance(decimal Balance,string Code,string Year,string Month,string AccountModeCode,string CompanyCode)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -55,13 +55,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                 {
                     if(Code != "")
                     {
-                        db.Deleteable<Business_SubjectBalance>(x => x.Code == Code).ExecuteCommand();
+                        db.Deleteable<Business_SubjectBalance>(x => x.Code == Code && x.Year == Year && x.Month == Month && x.AccountModeCode == AccountModeCode && x.CompanyCode == CompanyCode).ExecuteCommand();
                         Business_SubjectBalance balance = new Business_SubjectBalance();
                         balance.VGUID = Guid.NewGuid();
                         balance.Code = Code;
                         balance.Balance = Balance;
                         balance.Year = Year;
                         balance.Month = Month;
+                        balance.AccountModeCode = AccountModeCode;
+                        balance.CompanyCode = CompanyCode;
                         db.Insertable(balance).ExecuteCommand();
                     }
                 });

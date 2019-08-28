@@ -70,6 +70,8 @@ var $page = function () {
                     Code: $("#AllCode").val(),
                     Year: $("#Year").val(),
                     Month: $("#Month").val(),
+                    AccountModeCode: accountModeCode,
+                    CompanyCode: companyCode
                 },
                 type: "post",
                 dataType: "json",

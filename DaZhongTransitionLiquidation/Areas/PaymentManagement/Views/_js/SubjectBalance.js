@@ -68,6 +68,8 @@ var $page = function () {
                 data: {
                     Balance: $("#Balance").val(),
                     Code: $("#AllCode").val(),
+                    Year: $("#Year").val(),
+                    Month: $("#Month").val(),
                 },
                 type: "post",
                 dataType: "json",
@@ -135,7 +137,7 @@ function initTable() {
             //cache: false,
             async: false,
             id: "VGUID",
-            data: { companyCode: companyCode, accountModeCode: accountModeCode },
+            data: { companyCode: companyCode, accountModeCode: accountModeCode, year: $("#Year").val(), month: $("#Month").val() },
             url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径
         };
     var typeAdapter = new $.jqx.dataAdapter(source, {

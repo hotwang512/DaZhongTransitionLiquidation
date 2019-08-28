@@ -128,8 +128,10 @@ var $page = function () {
             var grid = "";
             if (tableIndex == 1) {
                 grid = $("#jqxTable1");
-            } else {
+            } else if (tableIndex == 0) {
                 grid = $("#jqxTable");
+            } else {
+                grid = $("#jqxTable2");
             }
             var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
@@ -210,7 +212,7 @@ var $page = function () {
     function check(selection) {
         $.ajax({
             url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
-            data: { vguids: selection, status: "3" },
+            data: { vguids: selection, status: "3", index: tableIndex },
             traditional: true,
             type: "post",
             success: function (msg) {
@@ -222,8 +224,10 @@ var $page = function () {
                         jqxNotification("提交成功！", null, "success");
                         if (tableIndex == 1) {
                             $("#jqxTable1").jqxDataTable('updateBoundData');
-                        } else {
+                        } else if(tableIndex == 0)  {
                             $("#jqxTable").jqxDataTable('updateBoundData');
+                        }else{
+                            $("#jqxTable2").jqxDataTable('updateBoundData');
                         }
                         break;
                 }
@@ -515,7 +519,14 @@ var $page = function () {
     }
 
     function renderedFunc(element) {
-        var grid = selector.$grid();
+        var grid = "";
+        if (tableIndex == 1) {
+            grid = $("#jqxTable1");
+        } else if (tableIndex == 0) {
+            grid = $("#jqxTable");
+        } else {
+            grid = $("#jqxTable2");
+        }
         element.jqxCheckBox();
         element.on('change', function (event) {
             var checked = element.jqxCheckBox('checked');

@@ -73,7 +73,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status)//Guid[] vguids
+        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status,string index)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -96,7 +96,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         //审核成功写入中间表
                         if(status == "3")
                         {
-                            InsertAssetsGeneralLedger(item, db);
+                            if(index != "2")
+                            {
+                                InsertAssetsGeneralLedger(item, db);
+                            }
                         } 
                     }
                     else

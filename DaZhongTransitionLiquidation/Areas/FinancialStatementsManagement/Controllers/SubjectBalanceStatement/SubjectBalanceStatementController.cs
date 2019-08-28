@@ -53,11 +53,16 @@ namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Contr
                     return;
                 }
                 //查询期初7个段组合编码,期初余额
-                var SubjectBalance = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode", new { AccountModeCode = accountModeCode, CompanyCode = companyCode }).ToList();
+                var SubjectBalance = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode,@Year,@Month",
+                    new { AccountModeCode = accountModeCode, CompanyCode = companyCode, Year = year, Month = month }).ToList();
                 //查询账期下的借贷额
-                var Assets = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount ,Sum(cast(CASE ENTERED_DR WHEN '' THEN '0' else ENTERED_DR end as decimal(20,2))) as ENTERED_DR
-,Sum(cast(CASE ENTERED_CR WHEN '' THEN '0' else ENTERED_CR end as decimal(20,2))) as ENTERED_CR from AssetsGeneralLedger_Swap where LEDGER_NAME=@AccountModeName and SEGMENT1=@CompanyCode and Year(ACCOUNTING_DATE)=@Year and MONTH(ACCOUNTING_DATE)=@Month
-Group By (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7)", new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month,Year = year }).ToList();
+                //                var Assets = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7) as SubjectCount ,Sum(cast(CASE ENTERED_DR WHEN '' THEN '0' else ENTERED_DR end as decimal(20,2))) as ENTERED_DR
+                //,Sum(cast(CASE ENTERED_CR WHEN '' THEN '0' else ENTERED_CR end as decimal(20,2))) as ENTERED_CR from AssetsGeneralLedger_Swap where LEDGER_NAME=@AccountModeName and SEGMENT1=@CompanyCode and Year(ACCOUNTING_DATE)=@Year and MONTH(ACCOUNTING_DATE)=@Month
+                //Group By (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGMENT6+'.'+SEGMENT7)", new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month,Year = year }).ToList();
+                var Assets = db.Ado.SqlQuery<v_AssetsGeneralLedger_Swap>(@"select (b.CompanySection+'.'+b.SubjectSection+'.'+b.AccountSection+'.'+b.CostCenterSection+'.'+b.SpareOneSection+'.'+b.SpareTwoSection+'.'+b.IntercourseSection) as SubjectCount,a.AccountModeName as LEDGER_NAME,a.BatchName as JE_BATCH_NAME,
+a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as TurnOut,b.LoanMoney as TurnIn from Business_VoucherList as a left join Business_VoucherDetail as b on a.VGUID = b.VoucherVGUID
+ where a.Status='3' and a.AccountModeName=@AccountModeName and a.CompanyCode=@CompanyCode and MONTH(a.VoucherDate)=@Month and Year(a.VoucherDate)=@Year",
+ new { AccountModeName = accountModeName, CompanyCode = companyCode, Month = month, Year = year }).ToList();
                 foreach (var item in SubjectBalance)
                 {
                     item.Company = item.Company + "." + item.Accounting + "." + item.CostCenter + "." + item.SpareOne + "." + item.SpareTwo + "." + item.Intercourse;
@@ -67,8 +72,8 @@ Group By (SEGMENT1+'.'+SEGMENT2+'.'+SEGMENT3+'.'+SEGMENT4+'.'+SEGMENT5+'.'+SEGME
                         try
                         {
                             item.Balance = item.Balance == null ? 0 : item.Balance;//期初余额
-                            item.ENTERED_DR = Convert.ToDecimal(drcr.ENTERED_DR);//本期借方
-                            item.ENTERED_CR = Convert.ToDecimal(drcr.ENTERED_CR);//本期贷方
+                            item.ENTERED_DR = Convert.ToDecimal(drcr.TurnOut);//本期借方
+                            item.ENTERED_CR = Convert.ToDecimal(drcr.TurnIn);//本期贷方
                             item.END_BALANCE = item.Balance + item.ENTERED_DR - item.ENTERED_CR;//期末余额
                         }
                         catch (Exception)

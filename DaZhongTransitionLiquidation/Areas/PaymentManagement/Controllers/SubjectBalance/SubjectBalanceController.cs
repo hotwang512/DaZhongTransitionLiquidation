@@ -33,20 +33,20 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             });
             return result;
         }
-        public JsonResult GetSubjectBalance(string companyCode,string accountModeCode, GridParams para)
+        public JsonResult GetSubjectBalance(string companyCode,string accountModeCode, string year , string month, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_Business_SubjectSettingInfo>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode",new { AccountModeCode = accountModeCode, CompanyCode = companyCode })
-                               .ToList();
+                jsonResult.Rows = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode,@Year,@Month",
+                    new { AccountModeCode = accountModeCode, CompanyCode = companyCode, Year = year, Month = month }).ToList();
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SaveSubjectBalance(decimal Balance,string Code)
+        public JsonResult SaveSubjectBalance(decimal Balance,string Code,string Year,string Month)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -60,6 +60,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         balance.VGUID = Guid.NewGuid();
                         balance.Code = Code;
                         balance.Balance = Balance;
+                        balance.Year = Year;
+                        balance.Month = Month;
                         db.Insertable(balance).ExecuteCommand();
                     }
                 });

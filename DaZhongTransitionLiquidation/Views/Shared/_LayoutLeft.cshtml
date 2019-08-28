@@ -1698,27 +1698,27 @@
                 </div>
                 <div class="menue_body" id="OracleButt" style="display: none;">
                     <table>
-                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "科目维护(8个段)" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "值集维护(8个段)" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="SubjectMaintenance_OracleButt" pageurl="/PaymentManagement/CompanySection/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">科目维护(8个段)</td>
+                                <td class="menue_text">值集维护(8个段)</td>
                                 <td></td>
                             </tr>
                         }
                         @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "对接状态" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="ButtStatus_OracleButt" pageurl="/OracleButtManagement/ButtStatus/Index">
+                            @*<tr class="menue_item" id="ButtStatus_OracleButt" pageurl="/OracleButtManagement/ButtStatus/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">对接状态</td>
                                 <td></td>
-                            </tr>
+                            </tr>*@
                         }
-                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额维护" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "科目余额初始化" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="SubjectBalance_OracleButt" pageurl="/PaymentManagement/SubjectBalance/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">科目余额维护</td>
+                                <td class="menue_text">科目余额初始化</td>
                                 <td></td>
                             </tr>
                         }

@@ -124,7 +124,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-7)).ToList();
+                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-2)).ToList();
                         //查询公司段中已启用的公司的银行信息
                         var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
                                             as b on a.AccountModeCode = b.AccountModeCode and a.CompanyCode = b.Code  where b.Status='1' 
@@ -199,7 +199,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     {
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
-                        //测试 day = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd").TryToDate();
+                        //测试 day = "2019-08-26".TryToDate();
                         var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate > day.AddDays(-3)).ToList();
                         var voucherDetails = _db.Queryable<Business_VoucherDetail>().OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
                         var accountInfo = _db.Queryable<V_BankChannelMapping>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1").ToList();
@@ -209,7 +209,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         foreach (var item in voucherData)
                         {
                             var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x=>x.ReceivableAccount).ToList();
-                            if(voucherDetail.Count == 0)
+                            if(voucherDetail.Count < 2)
                             {
                                 continue;
                             }
@@ -248,21 +248,25 @@ namespace DaZhongTransitionLiquidation.Controllers
                                         var subject = it.CompanySection+"."+it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
                                         var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject).FirstOrDefault();
+                                        if(paySetting == null)
+                                        {
+                                            continue;
+                                        }
                                         //从金额报表中按配置获取金额
                                         if(paySetting.Channel == "898319841215600")
                                         {
                                             //自助发票机另外处理
                                             continue;
                                         }
-                                        var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == day.AddDays(-1).ToString("yyyy-MM-dd")).ToList();
+                                        var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM-dd")).ToList();
                                         if (amountReport.Count > 0)
                                         {
                                             it.LoanMoney = 0;
                                             switch (paySetting.TransferType)
                                             {
-                                                case "银行收款": it.LoanMoney = amountReport[0].ActualAmountTotal; break;
-                                                case "营收缴款": it.LoanMoney = amountReport[0].PaymentAmountTotal; break;
-                                                case "手续费": it.LoanMoney = amountReport[0].CompanyBearsFeesTotal; break;
+                                                case "银行收款": it.LoanMoney = amountReport.Sum(x=>x.ActualAmountTotal); break;
+                                                case "营收缴款": it.LoanMoney = amountReport.Sum(x => x.PaymentAmountTotal); break;
+                                                case "手续费": it.LoanMoney = amountReport.Sum(x => x.CompanyBearsFeesTotal); break;
                                                 default:
                                                     break;
                                             }

@@ -685,7 +685,7 @@ var $page = function () {
             var borrowMoney = "";
             var loanMoney = "";
             if (datas[i].BorrowMoney == "" || datas[i].BorrowMoney == null) {
-                loanMoney = datas[i].LoanMoney;
+                loanMoney = datas[i].LoanMoney == null ? 0 : datas[i].LoanMoney;
                 if (loanMoney != null) {
                     loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
                     if (datas.length == 1) {
@@ -704,7 +704,7 @@ var $page = function () {
                     }
                 }
             } else {
-                borrowMoney = datas[i].BorrowMoney;
+                borrowMoney = datas[i].BorrowMoney == null ? 0 : datas[i].BorrowMoney;;
                 if (borrowMoney != null) {
                     borrowMoney = parseFloat(borrowMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
                     $("#Borrow" + i).val(borrowMoney);
@@ -1066,6 +1066,7 @@ function tdClick() {
         $("#ShowSevenSubject").modal("show");
         $("#hidbtnIndex").val(trIndexs);
     })
+    countMoney();
 }
 function countMoney() {
     var borrowCount = 0;

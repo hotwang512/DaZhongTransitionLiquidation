@@ -10,5 +10,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public Guid VGUID { get; set; }
         public decimal? Balance { get; set; }
         public string Code { get; set; }
+        public string Year { get; set; }
+        public string Month { get; set; }
     }
 }

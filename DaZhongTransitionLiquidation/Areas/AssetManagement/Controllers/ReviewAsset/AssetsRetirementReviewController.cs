@@ -7,6 +7,7 @@ using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SyntacticSugar;
 using SqlSugar;
@@ -66,9 +67,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             {
                 var result = db.Ado.UseTran(() =>
                 {
+                    var cache = CacheManager<Sys_User>.GetInstance();
                     var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>(@"SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.ASSET_COST,mi.LISENSING_DATE,mi.COMMISSIONING_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
                     //获取所有的经营模式
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
+                    var assetdisposeIncomeList = new List<Business_DisposeIncome>();
                     foreach (var item in modifyVehicleList)
                     {
                         //先更新资产维护表，再写入Oracle 中间表
@@ -97,8 +100,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.PERIOD = item.PERIOD;
                         assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
                         assetSwapList.Add(assetSwapModel);
+                        //提交到处置收入
+                        var assetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
+                            .Where(x => x.ORIGINALID == item.ORIGINALID).First();
+                        var disposeIncome = new Business_DisposeIncome();
+                        disposeIncome.VGUID = Guid.NewGuid();
+                        disposeIncome.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
+                        //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
+                        disposeIncome.VehicleModel = assetInfo.VEHICLE_SHORTNAME;
+                        disposeIncome.CommissioningDate = assetInfo.COMMISSIONING_DATE;
+                        disposeIncome.BackCarDate = assetInfo.BACK_CAR_DATE;
+                        disposeIncome.CreateDate = DateTime.Now;
+                        disposeIncome.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        assetdisposeIncomeList.Add(disposeIncome);
                     }
                     db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
+                    db.Insertable<Business_DisposeIncome>(assetdisposeIncomeList).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

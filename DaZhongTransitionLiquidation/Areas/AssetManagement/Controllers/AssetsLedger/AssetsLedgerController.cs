@@ -29,7 +29,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetAssetsLedgerListDatas(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor, GridParams para)
+        public JsonResult GetAssetsDisposeIncomeListDatas(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor, GridParams para)
         {
             var jsonResult = new JsonResultModel<AssetsLedger_Swap>();
 
@@ -47,23 +47,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             });
 
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
-        }
-        public FileResult ExportExcel(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor)
-        {
-            DataTable dt = new DataTable();
-                DbBusinessDataService.Command(db =>
-                {
-                    dt = db.Queryable<AssetsLedger_Swap>()
-                        .WhereIF(PERIOD != null, i => i.PERIOD_CODE.Contains(PERIOD))
-                        .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
-                        .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
-                        .WhereIF(CategoryMinor != null, i => i.ASSET_CATEGORY_MINOR.Contains(CategoryMinor))
-                        .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToDataTable();
-                });
-                dt.TableName = "AssetsLedger_Swap";
-                var ms = ExcelHelper.OutModelFileToStream(dt, "/Template/AssetsLedger.xlsx", "资产台账");
-                byte[] fileContents = ms.ToArray();
-                return File(fileContents, "application/ms-excel", "资产台账" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
         }
     }
 }

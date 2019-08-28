@@ -29,11 +29,66 @@ var $page = function () {
         });
         selector.$btnImportAuction().on("click",
             function () {
-                
+                $("#ImportType").val("Auction");
+                $("#LocalFileInput").click();
             }
         );
+        selector.$btnImportSale().on("click",
+            function () {
+                $("#ImportType").val("Sale");
+                $("#LocalFileInput").click();
+            }
+        );
+        selector.$btnImportScrap().on("click",
+            function () {
+                $("#ImportType").val("Scrap");
+                $("#LocalFileInput").click();
+            }
+        );
+        //统一上传文件
+        $("#LocalFileInput").on("change",
+            function () {
+                debugger;
+                var filePath = this.value;
+                var fileExt = filePath.substring(filePath.lastIndexOf("."))
+                    .toLowerCase();
+                if (!checkFileExt(fileExt)) {
+                    jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+                    this.value = "";
+                    return;
+                } else {
+                    layer.load();
+                    $("#localFormFile").ajaxSubmit({
+                        url: "/AssetManagement/DisposeIncome/ImportDisposeIncomeFile",
+                        type: "post",
+                        data: { "ImportType": $("#ImportType").val() },
+                        success: function (msg) {
+                            layer.closeAll('loading');
+                            switch (msg.Status) {
+                            case "0":
+                                if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
+                                    jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
+                                } else {
+                                    jqxNotification("导入失败", null, "error");
+                                }
+                                $('#LocalFileInput').val('');
+                                break;
+                            case "1":
+                                jqxNotification("导入成功！", null, "success");
+                                $('#LocalFileInput').val('');
+                                initTable();
+                                break;
+                            case "2":
+                                jqxNotification(msg.ResultInfo, null, "error");
+                                $('#LocalFileInput').val('');
+                                initTable();
+                                break;
+                            }
+                        }
+                    });
+                }
+            });
     }; //addEvent end
-
     function initTable() {
         var source =
             {
@@ -112,8 +167,8 @@ var $page = function () {
                     { text: '车主', datafield: 'VehicleOwner', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '服务费单价', datafield: 'ServiceUnitFee', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '创建日期', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '修改日期', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss"  },
                     { text: '创建人', datafield: 'CreateUser', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '修改日期', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '修改人', datafield: 'ChangeUser', width: 150, align: 'center', cellsAlign: 'center' }
                 ]
             });
@@ -124,3 +179,9 @@ $(function () {
     var page = new $page();
     page.init();
 });
+function checkFileExt(ext) {
+    if (!ext.match(/.xls|.xlsx/i)) {
+        return false;
+    }
+    return true;
+}

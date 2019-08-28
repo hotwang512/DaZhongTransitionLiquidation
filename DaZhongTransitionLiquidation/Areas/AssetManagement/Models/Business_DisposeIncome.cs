@@ -150,7 +150,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string VehicleMode { get; set; }
+        public string BusinessModel { get; set; }
 
         /// <summary>
         /// Desc:

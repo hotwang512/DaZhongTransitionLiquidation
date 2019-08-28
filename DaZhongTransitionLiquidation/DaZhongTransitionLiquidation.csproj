@@ -2372,6 +2372,8 @@
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel_AssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeAuction.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeSale.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />

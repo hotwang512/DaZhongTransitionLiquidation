@@ -189,6 +189,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 reviewItem.DEPRECIATION_EXPENSE_SEGMENT = assetCategory.DEPRECIATION_EXPENSE_SEGMENT;
                                 reviewItem.ACCT_DEPRECIATION_ACCOUNT = assetCategory.ACCT_DEPRECIATION_ACCOUNT;
                             }
+                            else
+                            {
+                                if (reviewItem.OPERATING_STATE == "停运")
+                                {
+                                    reviewItem.MODEL_MAJOR = "停运模式";
+                                    reviewItem.MODEL_MINOR = "旧车停运";
+                                }
+                                else if (reviewItem.OPERATING_STATE == "")
+                                {
+                                    reviewItem.MODEL_MAJOR = "停运模式";
+                                    reviewItem.MODEL_MINOR = "新车停运";
+                                }
+                            }
                             reviewItem.MODEL_MINOR = reviewItem.MODEL_MINOR == "" ? null : reviewItem.MODEL_MINOR;
                             //if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
                             //{

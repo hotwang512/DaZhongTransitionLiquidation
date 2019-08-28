@@ -6,6 +6,7 @@ using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -207,8 +208,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
             if (File != null)
             {
                 var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
-                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "PurchaseAssign\\" + newFileName;
-                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath;
+                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "PurchaseAssign\\";
+                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath + newFileName;
+                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + uploadPath))
+                {
+                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + uploadPath);
+                }
                 try
                 {
                     File.SaveAs(filePath);

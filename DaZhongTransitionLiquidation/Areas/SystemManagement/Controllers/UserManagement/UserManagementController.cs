@@ -174,11 +174,11 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                     uGuid = userInfo.Vguid.TryToString();
                     userInfo.ChangeDate = DateTime.Now;
                     userInfo.ChangeUser = userInfo.LoginName;
-                    resultModel.IsSuccess = db.Updateable(userInfo).IgnoreColumns(i => new { i.CreatedDate, i.CreatedUser, i.Password }).ExecuteCommand() > 0;
+                    resultModel.IsSuccess = db.Updateable(userInfo).IgnoreColumns(i => new { i.CreatedDate, i.CreatedUser }).ExecuteCommand() > 0;
                 }
                 else
                 {
-                    userInfo.Password = "123456";
+                    userInfo.Password = userInfo.Password;
                     userInfo.Vguid = guid;
                     userInfo.CreatedDate = DateTime.Now;
                     userInfo.CreatedUser = userInfo.LoginName;
@@ -304,9 +304,10 @@ where t1.SectionVGUID='H63BD715-C27D-4C47-AB66-550309794D43' and t2.SectionVGUID
                 var data = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserVGUID && x.Block == "2").Count();
                 if (data == 0)
                 {
-                    response = db.SqlQueryable<Business_UserCompanySet>(@"select a.Code as BusinessCode,a.BusinessName,b.UserVGUID from Business_BusinessTypeSet as a
-                                left join Business_UserCompanySet as b on b.BusinessCode=a.Code
-                                where a.ParentVGUID is null ").OrderBy("BusinessCode asc").ToList();
+                    //response = db.SqlQueryable<Business_UserCompanySet>(@"select a.Code as BusinessCode,a.BusinessName,b.UserVGUID from Business_BusinessTypeSet as a
+                    //            left join Business_UserCompanySet as b on b.BusinessCode=a.Code
+                    //            where a.ParentVGUID is null ").OrderBy("BusinessCode asc").ToList();
+                    response = db.SqlQueryable<Business_UserCompanySet>(@"select Code as BusinessCode,BusinessName from Business_BusinessTypeSet where ParentVGUID is null").ToList();
                 }
                 else
                 {

@@ -32,6 +32,10 @@
                     <td class="td_input">
                         <input id="loginName_Input" name="LoginName" type="text" class="input_text form-control" validatetype="required" style="text-align: left;" value="" />
                     </td>
+                    <td class="td_span">密码：</td>
+                    <td class="td_input">
+                        <input id="Password" name="Password" type="text" class="input_text form-control" validatetype="required" style="text-align: left;" value="" />
+                    </td>
                     @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
                     <td class="td_span">是否启用：</td>
                     <td class="td_input">
@@ -41,11 +45,7 @@
                         </select>
                     </td>
                     @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
-                    <td class="td_span">邮箱：</td>
-                    <td class="td_input">
-                        <input id="email_Input" name="Email" type="text" maxlength="145" class="input_text form-control" style="text-align: left" value="" />
-                    </td>
-                    <td align="center" style="width: 10px;"></td>
+                    
                 </tr>
                 <tr style="height: 50px;">
                     <td style="text-align: right">手机号：</td>
@@ -62,10 +62,11 @@
                         @Html.DropDownList("Role", ViewData["Role"] as SelectList, "===请选择===", new { id = "role_Input", name = "Role", @class = "input_text form-control", validatetype = "required" })
                     </td>
                     @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
-                    <td style="text-align: right"></td>
-                    <td>
-                        
+                    <td class="td_span">邮箱：</td>
+                    <td class="td_input">
+                        <input id="email_Input" name="Email" type="text" maxlength="145" class="input_text form-control" style="text-align: left" value="" />
                     </td>
+                    <td align="center" style="width: 10px;"></td>
 
                     @*<td align="center" style="width: 10px;"><span style="color: red; margin-left: 5px;">*</span></td>*@
 

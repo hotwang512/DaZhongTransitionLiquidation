@@ -9,7 +9,7 @@ namespace DaZhongTransitionLiquidation.Models
     {
         public string PaymentCompany { get; set; }
         public string CollectBankAccountName { get; set; }
-        public string CollectBankAccouont { get; set; }
+        public string CollectBankAccount { get; set; }
         public string CollectBankName { get; set; }
         public string CollectBankNo { get; set; }
         public string PaymentMethod { get; set; }

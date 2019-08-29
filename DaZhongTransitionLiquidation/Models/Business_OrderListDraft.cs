@@ -45,7 +45,7 @@ namespace DaZhongTransitionLiquidation.Models
         /// </summary> 
         public string BusinessSubItem3 { get; set; }
         /// <summary>
-        /// Desc:付款公司
+        /// Desc:付款公司(供应商类别)
         /// Default:
         /// Nullable:True
         /// </summary> 
@@ -198,13 +198,13 @@ namespace DaZhongTransitionLiquidation.Models
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string OrderBankAccouont { get; set; }
+        public string OrderBankAccount { get; set; }
         /// <summary>
         /// Desc:付款账号户名
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string OrderBankAccouontName { get; set; }
+        public string OrderBankAccountName { get; set; }
         /// <summary>
         /// Desc:付款账号开户行
         /// Default:
@@ -216,7 +216,7 @@ namespace DaZhongTransitionLiquidation.Models
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public string CollectBankAccouont { get; set; }
+        public string CollectBankAccount { get; set; }
         /// <summary>
         /// Desc:收款账号户名
         /// Default:

@@ -221,35 +221,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 }
                             }
                             reviewItem.MODEL_MINOR = reviewItem.MODEL_MINOR == "" ? null : reviewItem.MODEL_MINOR;
-                            //if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
-                            //{
-                            //    reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
-                            //    reviewItem.BELONGTO_COMPANY =
-                            //        ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Descrption;
-                            //    var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                            //        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == reviewItem.BELONGTO_COMPANY_CODE).First();
-                            //    var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
-                            //        x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
-                            //        x.Code == ssModel.AccountModeCode).First().Descrption;
-                            //    reviewItem.EXP_ACCOUNT_SEGMENT = accountMode;
-                            //}
-                            //if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
-                            //{
-                            //    reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
-                            //    reviewItem.MANAGEMENT_COMPANY =
-                            //        ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Abbreviation;
-                            //}
-                            //资产管理公司和资产所属公司调换
                             if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
                             {
-                                reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
-                                reviewItem.MANAGEMENT_COMPANY = ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Abbreviation;
-                            }
-                            if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
-                            {
-                                reviewItem.BELONGTO_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
+                                reviewItem.BELONGTO_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
                                 reviewItem.BELONGTO_COMPANY =
-                                    ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Descrption;
+                                    ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Descrption;
                                 var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
                                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == reviewItem.BELONGTO_COMPANY_CODE).First();
                                 var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
@@ -257,6 +233,30 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                     x.Code == ssModel.AccountModeCode).First().Descrption;
                                 reviewItem.EXP_ACCOUNT_SEGMENT = accountMode;
                             }
+                            if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
+                            {
+                                reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
+                                reviewItem.MANAGEMENT_COMPANY =
+                                    ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Abbreviation;
+                            }
+                            //资产管理公司和资产所属公司调换
+                            //if (!newVehicle.BELONGTO_COMPANY.IsNullOrEmpty())
+                            //{
+                            //    reviewItem.MANAGEMENT_COMPANY_CODE = newVehicle.BELONGTO_COMPANY;
+                            //    reviewItem.MANAGEMENT_COMPANY = ssList.First(x => x.OrgID == newVehicle.BELONGTO_COMPANY).Abbreviation;
+                            //}
+                            //if (!newVehicle.MANAGEMENT_COMPANY.IsNullOrEmpty())
+                            //{
+                            //    reviewItem.BELONGTO_COMPANY_CODE = newVehicle.MANAGEMENT_COMPANY;
+                            //    reviewItem.BELONGTO_COMPANY =
+                            //        ssList.First(x => x.OrgID == newVehicle.MANAGEMENT_COMPANY).Descrption;
+                            //    var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                            //        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == reviewItem.BELONGTO_COMPANY_CODE).First();
+                            //    var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
+                            //        x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
+                            //        x.Code == ssModel.AccountModeCode).First().Descrption;
+                            //    reviewItem.EXP_ACCOUNT_SEGMENT = accountMode;
+                            //}
                         }
                         resultModel.IsSuccess = true;
                         resultModel.Status = "1";
@@ -336,16 +336,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     assetSwapModel.QUANTITY = item.QUANTITY;
                     assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MAJOR;
                     assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
-                    assetSwapModel.ASSET_CREATION_DATE = item.COMMISSIONING_DATE;
+                    assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
                     assetSwapModel.ASSET_COST = item.ASSET_COST;
                     assetSwapModel.AMORTIZATION_FLAG = item.AMORTIZATION_FLAG;
                     assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
                     assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
                     assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
-                    assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
+                    assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
                     //传入订单选择的部门
-                    assetSwapModel.FA_LOC_2 = departmentStr;
-                    assetSwapModel.FA_LOC_3 = "000000";
+                    assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY;
+                    assetSwapModel.FA_LOC_3 = departmentStr;
                     assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                     assetSwapModel.CREATE_DATE = DateTime.Now;
                     assetSwapModel.ASSET_ID = item.ASSET_ID;

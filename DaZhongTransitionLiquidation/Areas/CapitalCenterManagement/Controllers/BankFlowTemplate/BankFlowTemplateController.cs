@@ -465,6 +465,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                                     BVDetail3.BorrowMoney = item.TurnOut;
                                     BVDetail3.BorrowMoneyCount = item.TurnOut;
                                 }
+                                BVDetail3.Abstract = borrow.Remark;
                                 BVDetail3.VGUID = Guid.NewGuid();
                                 BVDetail3.VoucherVGUID = guid;
                                 BVDetailList.Add(BVDetail3);
@@ -672,6 +673,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             BVDetail.LoanMoneyCount = item.TurnOut;
                         }
                         BVDetail2.ReceivableAccount = item.ReceivableAccount;//对方账号,用于轮循贷方明细找到对应金额
+                        BVDetail2.Abstract = it.Remark;
                         BVDetail2.VGUID = Guid.NewGuid();
                         BVDetail2.VoucherVGUID = guid;
                         BVDetailList.Add(BVDetail2);

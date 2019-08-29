@@ -200,12 +200,12 @@ var $page = function () {
                 $("#Payee").text(msg.Payee);
                 $("#PaymentContents").val(msg.PaymentContents);
 
-                $("#CollectionAccount").val(msg.CollectBankAccouont);
+                $("#CollectionAccount").val(msg.CollectBankAccount);
                 $("#CollectionBankAccountName").val(msg.CollectBankAccountName);
                 $("#CollectionBank").val(msg.CollectBankName);
 
-                $("#PayAccount").val(msg.OrderBankAccouont);
-                $("#PayBankAccountName").val(msg.OrderBankAccouontName);
+                $("#PayAccount").val(msg.OrderBankAccount);
+                $("#PayBankAccountName").val(msg.OrderBankAccountName);
                 $("#PayBank").val(msg.OrderBankName);
                 //$("#CapitalizationMoney").attr("title", $("#CapitalizationMoney").val())
                 //loadAttachments(msg.Attachment);

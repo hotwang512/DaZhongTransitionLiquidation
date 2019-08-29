@@ -315,8 +315,8 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                         var CustomerData = _db.SqlQueryable<Business_CustomerBankInfo>(@"select * from Business_CustomerBankInfo 
                                     where VGUID in (select CustomerID from Business_CustomerBankSetting  where OrderVGUID='" + data.VGUID.TryToString() + @"' 
                                     and Isable='1')").ToList();
-                        //待支付订单生成若只提供编码必须供应商信息唯一，不唯一或空返回错误
-                        if (CustomerData.Count != 1 && OrderListAPI.PaymentCompany == null)
+                        //待支付订单生成若只提供编码必须供应商信息唯一,不唯一或空返回错误
+                        if (CustomerData.Count != 1 && OrderListAPI.CollectBankAccount == null)
                         {
                             errmsg = "只提供编码必须供应商信息唯一";
                             return Json(new
@@ -333,16 +333,16 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                         if (orderDetail.Count() > 0)
                         {
                             orderListDraft.OrderBankName = orderDetail[0].PayBank;//我方账号开户行
-                            orderListDraft.OrderBankAccouont = orderDetail[0].PayAccount;//我方账号ACON
-                            orderListDraft.OrderBankAccouontName = orderDetail[0].PayBankAccountName;//我方账号户名
+                            orderListDraft.OrderBankAccount = orderDetail[0].PayAccount;//我方账号ACON
+                            orderListDraft.OrderBankAccountName = orderDetail[0].PayBankAccountName;//我方账号户名
                         }
                         orderListDraft.BusinessProject = data.BusinessProject;//业务项目
                         orderListDraft.BusinessSubItem1 = data.BusinessSubItem1;//业务编码
 
                         orderListDraft.CollectBankName = data.CollectionBank == null ? OrderListAPI.CollectBankName : data.CollectionBank;//对方账号开户行
-                        orderListDraft.CollectBankAccouont = data.CollectionAccount == null ? OrderListAPI.CollectBankNo : data.CollectionAccount;//对方账号OPAC
+                        orderListDraft.CollectBankAccount = data.CollectionAccount == null ? OrderListAPI.CollectBankAccount : data.CollectionAccount;//对方账号OPAC
                         orderListDraft.CollectBankAccountName = data.CollectionBankAccountName == null ? OrderListAPI.CollectBankAccountName : data.CollectionBankAccountName;//对方账号户名
-                        orderListDraft.CollectBankNo = data.CollectionBankAccount == null ? OrderListAPI.CollectBankAccouont : data.CollectionBankAccount;//对方银行行号
+                        orderListDraft.CollectBankNo = data.CollectionBankAccount == null ? OrderListAPI.CollectBankNo : data.CollectionBankAccount;//对方银行行号
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod == null ? OrderListAPI.PaymentMethod : data.PaymentMethod;

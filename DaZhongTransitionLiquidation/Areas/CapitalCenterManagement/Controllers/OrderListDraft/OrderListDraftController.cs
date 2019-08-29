@@ -82,8 +82,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     //更新主表信息 
                     var orderInfo = db.Queryable<Business_OrderListDraft>().Single(x => x.VGUID == item);
                     orderInfo.OrderBankName = PayBank;
-                    orderInfo.OrderBankAccouont = PayAccount;
-                    orderInfo.OrderBankAccouontName = PayBankAccountName;
+                    orderInfo.OrderBankAccount = PayAccount;
+                    orderInfo.OrderBankAccountName = PayBankAccountName;
                     db.Updateable<Business_OrderListDraft>(orderInfo).Where(x => x.VGUID == item).ExecuteCommand();
                     Regex rgx = new Regex(@"[\w|\W]{2,4}银行");
                     var rgsOrderBankName = rgx.Match(orderInfo.OrderBankName).Value;
@@ -96,7 +96,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                     else
                     {
-                        collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
+                        if(orderInfo.CollectBankAccountName.TryToGuid() == Guid.Empty)
+                        {
+                            collectBankAccountName = orderInfo.CollectBankAccountName;
+                        }
+                        else
+                        {
+                            collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
+                        }
                     }
                     if (rgsOrderBankName == rgsCollectBankName)
                     {
@@ -104,8 +111,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         Guid vguid = item.TryToGuid();
                         var url = ConfigSugar.GetAppString("BankPreAuthURL");
                         var data = "{" +
-                                        "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
-                                        "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
+                                        "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccount) +
+                                        "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccount) +
                                         "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", collectBankAccountName) +
                                         "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +
                                         "\"USAG\":\"{USAG}\",".Replace("{USAG}", "") +
@@ -155,8 +162,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         Guid vguid = item.TryToGuid();
                         var url = ConfigSugar.GetAppString("CrossBankPreAuthURL");
                         var data = "{" +
-                                        "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccouont) +
-                                        "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccouont) +
+                                        "\"ACON\":\"{ACON}\",".Replace("{ACON}", orderInfo.OrderBankAccount) +
+                                        "\"OPAC\":\"{OPAC}\",".Replace("{OPAC}", orderInfo.CollectBankAccount) +
                                         "\"OPACName\":\"{OPACName}\",".Replace("{OPACName}", collectBankAccountName) +
                                         "\"OPACPBNO\":\"{OPACPBNO}\",".Replace("{OPACPBNO}", orderInfo.CollectBankNo) +
                                         "\"OPACTRAM\":\"{OPACTRAM}\",".Replace("{OPACTRAM}", orderInfo.Money.TryToString()) +

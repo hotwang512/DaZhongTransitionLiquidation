@@ -75,6 +75,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             CompanyCode = bankChannel.CompanyCode,
                             AccountModeCode = UserInfo.AccountModeCode,
                             PayVGUID = bankChannel.PayVGUID,
+                            Remark = bankChannel.Remark,
                             VMDFTIME = DateTime.Now,
                             VMDFUSER = UserInfo.LoginName,
                         }).Where(it => it.VGUID == bankChannel.VGUID).ExecuteCommand();

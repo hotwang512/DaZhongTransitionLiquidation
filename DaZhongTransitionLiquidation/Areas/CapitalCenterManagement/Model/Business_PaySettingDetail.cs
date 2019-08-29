@@ -24,5 +24,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public DateTime? VCRTTIME { get; set; }
         public string VCRTUSER { get; set; }
         public decimal? Money { get; set; }
+        public string Remark { get; set; }
     }
 }

@@ -340,9 +340,9 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                         orderListDraft.BusinessSubItem1 = data.BusinessSubItem1;//业务编码
 
                         orderListDraft.CollectBankName = data.CollectionBank == null ? OrderListAPI.CollectBankName : data.CollectionBank;//对方账号开户行
-                        orderListDraft.CollectBankAccount = data.CollectionAccount == null ? OrderListAPI.CollectBankNo : data.CollectionAccount;//对方账号OPAC
+                        orderListDraft.CollectBankAccount = data.CollectionAccount == null ? OrderListAPI.CollectBankAccount : data.CollectionAccount;//对方账号OPAC
                         orderListDraft.CollectBankAccountName = data.CollectionBankAccountName == null ? OrderListAPI.CollectBankAccountName : data.CollectionBankAccountName;//对方账号户名
-                        orderListDraft.CollectBankNo = data.CollectionBankAccount == null ? OrderListAPI.CollectBankAccount : data.CollectionBankAccount;//对方银行行号
+                        orderListDraft.CollectBankNo = data.CollectionBankAccount == null ? OrderListAPI.CollectBankNo : data.CollectionBankAccount;//对方银行行号
 
                         orderListDraft.OrderCompany = orderCompany;//订单抬头
                         orderListDraft.PaymentMethod = data.PaymentMethod == null ? OrderListAPI.PaymentMethod : data.PaymentMethod;

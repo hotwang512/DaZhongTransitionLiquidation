@@ -96,7 +96,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                     else
                     {
-                        collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
+                        if(orderInfo.CollectBankAccountName.TryToGuid() == Guid.Empty)
+                        {
+                            collectBankAccountName = orderInfo.CollectBankAccountName;
+                        }
+                        else
+                        {
+                            collectBankAccountName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == orderInfo.CollectBankAccountName.TryToGuid()).BankAccountName;
+                        }
                     }
                     if (rgsOrderBankName == rgsCollectBankName)
                     {

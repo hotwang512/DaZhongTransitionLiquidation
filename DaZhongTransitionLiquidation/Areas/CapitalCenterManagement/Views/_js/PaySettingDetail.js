@@ -93,7 +93,8 @@ var $page = function () {
                         Borrow: borrow,
                         Loan: loan,
                         VGUID: vguid,
-                        PayVGUID: payVGUID
+                        PayVGUID: payVGUID,
+                        Remark: $("#Remark").val(),
                     },
                     type: "post",
                     dataType: "json",
@@ -194,6 +195,7 @@ var $page = function () {
                     { name: 'CompanyCode', type: 'string' },
                     { name: 'Money', type: 'number' },
                     { name: 'PayVGUID', type: 'string' },
+                    { name: 'Remark', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -219,10 +221,11 @@ var $page = function () {
                 columnsHeight: 30,
                 columns: [
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '借', datafield: "Borrow", width: 350, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncB },
-                    { text: '贷', datafield: "Loan", width: 350, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncL },
-                    { text: '归属公司', datafield: 'TransferCompany', align: 'center', cellsAlign: 'center', },
-                    { text: '取值名称', datafield: 'TransferType', align: 'center', cellsAlign: 'center', },
+                    { text: '借', datafield: "Borrow", width: 300, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncB },
+                    { text: '贷', datafield: "Loan", width: 300, align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFuncL },
+                    { text: '归属公司', datafield: 'TransferCompany', width: 300, align: 'center', cellsAlign: 'center', },
+                    { text: '取值名称', datafield: 'TransferType', width: 300, align: 'center', cellsAlign: 'center', },
+                    { text: '摘要', datafield: 'Remark', align: 'center', cellsAlign: 'center', },
                     { text: '营收月份', datafield: 'Month', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '渠道名称', datafield: 'ChannelName', align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '金额', datafield: 'Money', cellsFormat: "d2", width: 120, align: 'center', cellsAlign: 'center', hidden: true },
@@ -248,6 +251,7 @@ var $page = function () {
                 + rowData.CompanyCode + "','"
                 + borrow + "','"
                 + loan + "','"
+                + rowData.Remark + "','"
                 + rowData.Channel + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Borrow + "</a>";
         }
         return container;
@@ -265,6 +269,7 @@ var $page = function () {
                 + rowData.CompanyCode + "','"
                 + borrow + "','"
                 + loan + "','"
+                + rowData.Remark + "','"
                 + rowData.Channel + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Loan + "</a>";
         }
         return container;
@@ -342,11 +347,12 @@ function add(type) {
     initBorrowTable(companyCode, accountMode);
 }
 
-function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, Loan, Channel) {
+function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, Loan,Remark, Channel) {
     $("#TransferCompany").val("");
     $("#TransferType").val("");
     $("#Channel").val("");
     $("#Month").val("");
+    $("#Remark").val("");
     isEdit = true;
     vguid = guid;
     $("#myModalLabel_title").text("编辑借/贷方信息");
@@ -354,8 +360,12 @@ function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, L
     $("#TransferType").val(TransferType);
     $("#Channel").val(Channel);
     $("#Month").val(Month);
+    $("#Remark").val(Remark);
     $("#CompanyCode").val(CompanyCode);
     initBorrowTable(CompanyCode, accountMode);
+    if (Remark == null) {
+        $("#Remark").val("");
+    }
     if (Borrow != null && Borrow != "") {
         $("#BorrowTr").show();
         $("#LoanTr").hide();

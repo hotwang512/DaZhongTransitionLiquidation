@@ -189,9 +189,73 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                             }
                             else if (ImportType == "Scrap")
                             {
-
+                                var disposeScrapImportList = new List<Excel_DisposeIncomeScrap>();
+                                var dt = ExcelHelper.ExportToDataTable(filePath, true);
+                                for (int i = 0; i < dt.Rows.Count; i++)
+                                {
+                                    var dispose = new Excel_DisposeIncomeScrap();
+                                    dispose.ImportPlateNumber = dt.Rows[i][1].ToString();
+                                    dispose.VehicleOwner = dt.Rows[i][2].ToString();
+                                    dispose.VehicleModel = dt.Rows[i][3].ToString();
+                                    dispose.VehicleType = dt.Rows[i][4].ToString();
+                                    dispose.CurbWeight = dt.Rows[i][5].ToString();
+                                    dispose.DeductTonnage = dt.Rows[i][6].ToString();
+                                    dispose.ActualTonnage = dt.Rows[i][7].ToString();
+                                    dispose.SalvageUnitPrice = dt.Rows[i][8].ToString();
+                                    dispose.SalvageValue = dt.Rows[i][9].ToString();
+                                    dispose.ServiceUnitFee = dt.Rows[i][10].ToString();
+                                    dispose.ServiceFee = dt.Rows[i][11].ToString();
+                                    dispose.TowageFee = dt.Rows[i][12].ToString();
+                                    dispose.SettlementPrice = dt.Rows[i][13].ToString();
+                                    dispose.UseDepartment = dt.Rows[i][14].ToString();
+                                    dispose.BusinessModel = dt.Rows[i][15].ToString();
+                                    disposeScrapImportList.Add(dispose);
+                                }
+                                foreach (var item in disposeScrapImportList)
+                                {
+                                    if (disposeIncomeList.Any(x =>
+                                            x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber)) ||
+                                        disposeIncomeList.Any(x => x.OraclePlateNumber.Contains(item.ImportPlateNumber)))
+                                    {
+                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber) ||
+                                                                                       x.OraclePlateNumber.Contains(item.ImportPlateNumber));
+                                        updateModel.ImportPlateNumber = item.ImportPlateNumber;
+                                        updateModel.VehicleOwner = item.VehicleOwner;
+                                        updateModel.VehicleModel = item.VehicleModel;
+                                        updateModel.VehicleType = item.VehicleType;
+                                        updateModel.CurbWeight = item.CurbWeight.ObjToDecimal();
+                                        updateModel.DeductTonnage = item.DeductTonnage.ObjToDecimal();
+                                        updateModel.ActualTonnage = item.ActualTonnage.ObjToDecimal();
+                                        updateModel.SalvageUnitPrice = item.SalvageUnitPrice.ObjToDecimal();
+                                        updateModel.SalvageValue = item.SalvageValue.ObjToDecimal();
+                                        updateModel.ServiceUnitFee = item.ServiceUnitFee.ObjToDecimal();
+                                        updateModel.ServiceFee = item.ServiceFee.ObjToDecimal();
+                                        updateModel.TowageFee = item.TowageFee.ObjToDecimal();
+                                        updateModel.SettlementPrice = updateModel.TransactionPrice - updateModel.ProcedureFee;
+                                        updateModel.UseDepartment = item.UseDepartment;
+                                        updateModel.BusinessModel = item.BusinessModel;
+                                        updateModel.TransactionPrice = item.TransactionPrice.ObjToDecimal();
+                                        updateModel.ProcedureFee = item.ProcedureFee.ObjToDecimal();
+                                        updateModel.VehicleOwner = item.VehicleOwner;
+                                        updateModel.BackCarDate = item.BackCarDate.TryToDate();
+                                        updateModel.Remark = item.VehicleModel;
+                                        updateModel.ChangeDate = DateTime.Now;
+                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                        updateDisposeIncomeList.Add(updateModel);
+                                    }
+                                }
+                                if (updateDisposeIncomeList.Count > 0)
+                                {
+                                    db.Updateable<Business_DisposeIncome>(updateDisposeIncomeList).ExecuteCommand();
+                                    resultModel.IsSuccess = true;
+                                    resultModel.Status = "1";
+                                }
+                                else
+                                {
+                                    resultModel.Status = "2";
+                                    resultModel.ResultInfo = "没有匹配到车牌号";
+                                }
                             }
-                            
                         });
                     });
                 }

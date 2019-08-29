@@ -200,6 +200,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string ChangeUser { get; set; }
-
+        public string VehicleType { get; set; }
+        public decimal? ActualTonnage { get; set; }
     }
 }

@@ -71,7 +71,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>(@"SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.ASSET_COST,mi.LISENSING_DATE,mi.COMMISSIONING_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
                     //获取所有的经营模式
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
-                    var assetdisposeIncomeList = new List<Business_DisposeIncome>();
+                    var assetDisposeIncomeList = new List<Business_DisposeIncome>();
+                    var assetDisposeNetValueList = new List<Business_DisposeNetValue>();
+                    var assetDisposeTaxList = new List<Business_DisposeTax>();
+                    var assetDisposeProfitLossList = new List<Business_DisposeProfitLoss>();
                     foreach (var item in modifyVehicleList)
                     {
                         //先更新资产维护表，再写入Oracle 中间表
@@ -112,10 +115,36 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         disposeIncome.BackCarDate = assetInfo.BACK_CAR_DATE;
                         disposeIncome.CreateDate = DateTime.Now;
                         disposeIncome.CreateUser = cache[PubGet.GetUserKey].UserName;
-                        assetdisposeIncomeList.Add(disposeIncome);
+                        assetDisposeIncomeList.Add(disposeIncome);
+                        //提交到处置税金
+                        var disposeTax = new Business_DisposeTax();
+                        disposeTax.VGUID = Guid.NewGuid();
+                        disposeTax.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
+                        //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
+                        disposeTax.CreateDate = DateTime.Now;
+                        disposeTax.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        assetDisposeTaxList.Add(disposeTax);
+                        //提交到处置净值
+                        var disposeNetValue = new Business_DisposeNetValue();
+                        disposeNetValue.VGUID = Guid.NewGuid();
+                        disposeNetValue.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
+                        //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
+                        disposeNetValue.CreateDate = DateTime.Now;
+                        disposeNetValue.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        assetDisposeNetValueList.Add(disposeNetValue);
+                        //提交到处置损益
+
+                        var disposeProfitLoss = new Business_DisposeProfitLoss();
+                        disposeProfitLoss.VGUID = Guid.NewGuid();
+                        disposeProfitLoss.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
+                        //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
+                        disposeProfitLoss.CreateDate = DateTime.Now;
+                        disposeProfitLoss.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        assetDisposeProfitLossList.Add(disposeProfitLoss);
+
                     }
                     db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
-                    db.Insertable<Business_DisposeIncome>(assetdisposeIncomeList).ExecuteCommand();
+                    db.Insertable<Business_DisposeIncome>(assetDisposeIncomeList).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

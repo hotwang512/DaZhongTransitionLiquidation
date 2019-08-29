@@ -4,6 +4,7 @@ using System.EnterpriseServices;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
@@ -63,7 +64,24 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 }
                 jsonResult.TotalRows = pageCount;
             });
-            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            return Json(
+                jsonResult,
+                "application/json",
+                Encoding.UTF8,
+                JsonRequestBehavior.AllowGet
+            );
+            //return Json(jsonResult, MaxLengthAttributeAdapter);
+        }
+        protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = Int32.MaxValue
+            };
         }
         public JsonResult GetReviewAsset()
         {

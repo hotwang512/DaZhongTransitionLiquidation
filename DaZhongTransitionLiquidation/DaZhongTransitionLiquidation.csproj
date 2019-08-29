@@ -205,6 +205,8 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetModifyReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeIncome.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\DisposenetValue.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\DisposeTax.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewAsset.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
@@ -2374,6 +2376,7 @@
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeAuction.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeSale.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeScrap.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />

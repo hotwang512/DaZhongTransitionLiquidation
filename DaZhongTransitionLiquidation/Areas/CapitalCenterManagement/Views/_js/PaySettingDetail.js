@@ -363,7 +363,7 @@ function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, L
     $("#Remark").val(Remark);
     $("#CompanyCode").val(CompanyCode);
     initBorrowTable(CompanyCode, accountMode);
-    if (Remark == null) {
+    if (Remark == null || Remark == "null") {
         $("#Remark").val("");
     }
     if (Borrow != null && Borrow != "") {

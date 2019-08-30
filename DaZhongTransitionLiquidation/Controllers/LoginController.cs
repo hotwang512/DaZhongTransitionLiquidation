@@ -10,6 +10,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Net.Sockets;
+using Newtonsoft.Json.Linq;
 
 namespace DaZhongTransitionLiquidation.Controllers
 {
@@ -65,7 +66,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 "\"versionLabel\":\"{versionLabel}\",".Replace("{versionLabel}", "Alpha") +
                                 "\"FunctionSiteId\":\"{FunctionSiteId}\"".Replace("{FunctionSiteId}", "61") +
                                 "}";
-
+                var messageDate = "";
                 try
                 {
                     WebClient wc = new WebClient();
@@ -73,6 +74,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                     wc.Encoding = System.Text.Encoding.UTF8;
                     var resultData = wc.UploadString(new Uri(url), data);
+                    messageDate = resultData;
                     var modelData = resultData.JsonToModel<DZLoginInfo>();
                     if (modelData.success)
                     {
@@ -96,9 +98,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 catch (Exception ex)
                 {
+                    JObject Json = JObject.Parse(messageDate);
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
-                    resultModel.ResultInfo = ex.ToString().Split("。")[0];
-                    //return;
+                    resultModel.ResultInfo = Json["message"].ToString();
+                    resultModel.Status = "0";
+                    return;
                 }
                 CacheManager<Sys_User>.GetInstance().Add(PubGet.GetUserKey, userInfo, 8 * 60 * 60);
                 resultModel.IsSuccess = true;

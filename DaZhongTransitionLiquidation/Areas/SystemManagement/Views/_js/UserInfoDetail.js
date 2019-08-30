@@ -70,6 +70,7 @@ var $page = function () {
                 if (department != "") {
                     selector.$pushTree().jqxTree('selectItem', $("#" + department)[0]);
                 }
+                $("#Password").val(msg.Password);
             }
         });
     }
@@ -150,6 +151,9 @@ var $page = function () {
             validateError++;
         }
         if (!Validate(selector.$role_Input())) {
+            validateError++;
+        }
+        if (!Validate($("#Password"))) {
             validateError++;
         }
         if (validateError == 0) {

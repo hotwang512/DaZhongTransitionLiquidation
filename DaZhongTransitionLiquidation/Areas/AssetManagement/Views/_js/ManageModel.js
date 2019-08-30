@@ -19,6 +19,8 @@ var parentVguid = "";
 var hideParentMenu = "";
 var vguid = "";
 var isEditAssetsCategory = 0;
+var isEdit;
+var currentlevel;
 var $page = function () {
     this.init = function () {
         pageload();
@@ -36,6 +38,7 @@ var $page = function () {
         //新增
         selector.$btnAdd().click(function () {
             var checkrow = selector.$grid().jqxTreeGrid('getSelection');
+            debugger;
             if (checkrow.length != 1) {
                 jqxNotification("请选择一个节点！", null, "error");
                 return;
@@ -43,6 +46,7 @@ var $page = function () {
                 debugger;
                 parentVguid = checkrow[0].VGUID;
                 hideParentMenu = checkrow[0].BusinessName;
+                currentlevel = checkrow[0].level;
                 var level = checkrow[0].level;
                 if (level == 1) {
                     //显示车龄
@@ -126,6 +130,7 @@ var $page = function () {
                         "BusinessName": $("#ModuleName").val(),
                         "VehicleAge": $("#VehicleAge").val(),
                         "VGUID": vguid,
+                        "LevelNum": currentlevel,
                         "ParentVGUID": $("#hideParentMenu").val()
                     },
                     type: "post",
@@ -308,6 +313,7 @@ function delCategoryFuncs(row, column, value, rowData) {
 }
 function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessName) {
     isEdit = true;
+    currentlevel = level;
     vguid = guid;
     $("#ModuleName").val(BusinessName);
     $("#VehicleAge").val(VehicleAge);

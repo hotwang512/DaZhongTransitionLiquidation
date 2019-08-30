@@ -107,6 +107,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                             VehicleAge = module.VehicleAge,
                             ParentVGUID = parentVGUID,
                             CreateTime = DateTime.Now,
+                            LevelNum = module.LevelNum,
                             Founder = UserInfo.LoginName
                         }).Where(it => it.VGUID == guid).ExecuteCommand();
                     }

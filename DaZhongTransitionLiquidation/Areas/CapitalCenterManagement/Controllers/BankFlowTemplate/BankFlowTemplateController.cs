@@ -37,7 +37,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         // GET: CapitalCenterManagement/BankFlowTemplate
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("2665ED30-972B-4A72-8049-1FD479502088");
             return View();
         }
         public ActionResult ImportDataCBC(string fileName)
@@ -211,6 +211,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
                 .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
                 .WhereIF(UserInfo.LoginName != "admin", x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
+                .Where(x=>x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy(i => i.TransactionDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

@@ -24,7 +24,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/VoucherList
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.OrderListVguid);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("395599E8-F05B-4FAD-9347-0A17F0D4CEAA");
             return View();
         }
         public JsonResult GetVoucherListDatas(Business_VoucherList searchParams, GridParams para)
@@ -46,6 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .Where(i => i.Automatic == searchParams.Automatic)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
                 .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod >= firstDay && i.AccountingPeriod <= lastDay)
+                .Where(i=>i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

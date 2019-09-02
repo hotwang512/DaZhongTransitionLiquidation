@@ -52,11 +52,11 @@
                 <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
                 <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;width:1200px"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span></td>
                 @*<td style="color:white;">
-                    <div>@user.AccountModeName</div>
-                </td>
-                <td style="color:white;">
-                    <div>@user.CompanyName</div>
-                </td>*@
+                        <div>@user.AccountModeName</div>
+                    </td>
+                    <td style="color:white;">
+                        <div>@user.CompanyName</div>
+                    </td>*@
                 <td style="width:45px;">
                     <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
                 </td>
@@ -83,10 +83,29 @@
         </table>
     </div>
     <div id="moduleDIV" style="width: 100%;margin-top: 80px;">
-        <div style="height:200px">
-            <div id="jqxExpander" style="margin-left: 40px">
+        <div style="height:200px;display:none">
+            <div id="jqxExpander" style="margin-left: 40px;">
                 <div>
                     重要事项通知
+                </div>
+                <div>
+                    <ul>
+                        <li>1961 First packet-switching papers</li>
+                        <li>1966 Merit Network founded</li>
+                        <li>1966 ARPANET planning starts</li>
+                        <li>1969 ARPANET carries its first packets</li>
+                        <li>1970 Mark I network at NPL (UK)</li>
+                        <li>1970 Network Information Center (NIC)</li>
+                        <li>1971 Merit Network's packet-switched network operational</li>
+                        <li>1971 Tymnet packet-switched network</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="height:200px">
+            <div id="jqxExpander2" style="margin-left: 1420px;margin-top: -195px;display:none">
+                <div>
+                    相关法律政策学习
                 </div>
                 <div>
                     <ul>
@@ -115,72 +134,72 @@
                 }
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "50F3C129-5C30-4B2F-A942-6B309C6278C6" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="DriverCenterManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Driver1.png" />
-                    </div>
-                    <span class="writing">驾驶员结算中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="DriverCenterManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Driver1.png" />
+                            </div>
+                            <span class="writing">驾驶员结算中心</span>
+                        </div>
+                    </a>
                 }
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "185A294A-8BC7-4F9B-943A-B4F6F8791587" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="CapitalCenterManagement" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Capital.png" />
-                    </div>
-                    <span class="writing">资金管理中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="CapitalCenterManagement" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Capital.png" />
+                            </div>
+                            <span class="writing">资金管理中心</span>
+                        </div>
+                    </a>
                 }
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "2C708F01-9229-48B8-9CAB-63407D1945E0" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="AccountingCenterManagemnet" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Payment.png" />
-                    </div>
-                    <span class="writing">会计核算中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="AccountingCenterManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Payment.png" />
+                            </div>
+                            <span class="writing">会计核算中心</span>
+                        </div>
+                    </a>
                 }
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "368296C7-667C-4316-96BC-1370ED9C50BC" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="BigDataManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Accrual.png" />
-                    </div>
-                    @*<span class="writing">大数据管理中心</span>*@
-                    <span class="writing">资产管理中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="BigDataManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Accrual.png" />
+                            </div>
+                            @*<span class="writing">大数据管理中心</span>*@
+                            <span class="writing">资产管理中心</span>
+                        </div>
+                    </a>
                 }
 
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "B9B5E47C-C646-4D0B-877D-BA456968C346" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="ReimbursementCenterManagemnet" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Send Email.png" />
-                    </div>
-                    <span class="writing">报销管理中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="ReimbursementCenterManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Send Email.png" />
+                            </div>
+                            <span class="writing">报销管理中心</span>
+                        </div>
+                    </a>
                 }
 
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="FinancialManagemnet" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Finance.png" />
-                    </div>
-                    <span class="writing">@*报表管理中心*@财务管理中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="FinancialManagemnet" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Finance.png" />
+                            </div>
+                            <span class="writing">@*报表管理中心*@财务管理中心</span>
+                        </div>
+                    </a>
                 }
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "F1715105-E901-46E4-83A1-52B26BCAADF3" && currentModuleRolePermission[i].Reads == 1)
                 {
@@ -207,26 +226,26 @@
 
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "6BAA4F3E-BCEA-45C4-8D57-F2E9A96CE06C" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="BudgetManagemnet" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Report.png" />
-                    </div>
-                    <span class="writing">预算管理中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="BudgetManagemnet" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Report.png" />
+                            </div>
+                            <span class="writing">预算管理中心</span>
+                        </div>
+                    </a>
                 }
 
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="CountManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/Payment.png" />
-                    </div>
-                    <span class="writing">统计管理中心</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="CountManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/Payment.png" />
+                            </div>
+                            <span class="writing">统计管理中心</span>
+                        </div>
+                    </a>
                 }
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "9F0F218B-9AEA-4917-A322-66604E9C29CF" && currentModuleRolePermission[i].Reads == 1)
                 {
@@ -242,38 +261,20 @@
 
                 if (isadmin || currentModuleRolePermission[i].ModuleVGUID.ToString().ToUpper() == "23EF85FF-E6F1-46B7-8DBD-8FD99BEBB24A" && currentModuleRolePermission[i].Reads == 1)
                 {
-            <a url="" href="#" id="SystemManagement" class="moudle" data-coordinate="1">
-                <div class="home-message-modular">
-                    <div class="img_Parent_div">
-                        <img class="img-style" src="/_theme/images/System Management.png" />
-                    </div>
-                    <span class="writing">系统管理</span>
-                </div>
-            </a>
+                    <a url="" href="#" id="SystemManagement" class="moudle" data-coordinate="1">
+                        <div class="home-message-modular">
+                            <div class="img_Parent_div">
+                                <img class="img-style" src="/_theme/images/System Management.png" />
+                            </div>
+                            <span class="writing">系统管理</span>
+                        </div>
+                    </a>
                 }
 
             }
 
         </div>
-        <div style="height:200px">
-            <div id="jqxExpander2" style="margin-left: 1420px;margin-top: -710px;">
-                <div>
-                   相关法律政策学习
-                </div>
-                <div>
-                    <ul>
-                        <li>1961 First packet-switching papers</li>
-                        <li>1966 Merit Network founded</li>
-                        <li>1966 ARPANET planning starts</li>
-                        <li>1969 ARPANET carries its first packets</li>
-                        <li>1970 Mark I network at NPL (UK)</li>
-                        <li>1970 Network Information Center (NIC)</li>
-                        <li>1971 Merit Network's packet-switched network operational</li>
-                        <li>1971 Tymnet packet-switched network</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <!--确认弹出框-->

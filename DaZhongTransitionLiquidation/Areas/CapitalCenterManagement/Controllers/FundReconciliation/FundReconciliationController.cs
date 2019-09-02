@@ -23,7 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/FundReconciliation
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("03066773-A699-4E7C-92D7-05AF0A211FF3");
             ViewBag.CompanyCode = GetCompanyCode();
             return View();
         }

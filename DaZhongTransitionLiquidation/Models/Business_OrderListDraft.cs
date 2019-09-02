@@ -271,5 +271,7 @@ namespace DaZhongTransitionLiquidation.Models
         /// Nullable:True
         /// </summary> 
         public string AttachmentInfo { get; set; }
+        public string AccountModeCode { get; set; }
+        public string CompanyCode { get; set; }
     }
 }

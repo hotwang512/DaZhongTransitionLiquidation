@@ -9,7 +9,7 @@
     bool hasPaymentPermission = currentUserRoleModules.Any(i => i.PageName == "资金结算中心" && i.Reads == 1);
     bool hasPaymentPermission1 = currentUserRoleModules.Any(i => i.PageName == "会计核算中心" && i.Reads == 1);
     bool hasReportPermission = currentUserRoleModules.Any(i => i.PageName == "费用报销中心" && i.Reads == 1);
-    bool hasReportPermission2 = currentUserRoleModules.Any(i => i.PageName == "资产管理" && i.Reads == 1);
+    bool hasReportPermission2 = currentUserRoleModules.Any(i => i.PageName == "资产管理中心" && i.Reads == 1);
 }
 <html>
 <head>

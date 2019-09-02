@@ -46,6 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_OrderListDraft>()
                 .Where(i => i.Status == searchParams.Status)
+                .Where(i=>i.AccountModeCode == UserInfo.AccountModeCode && i.CompanyCode == UserInfo.CompanyCode)
                 .WhereIF(searchParams.FillingDate != null, i => i.FillingDate > searchParams.FillingDate && i.FillingDate < endDate)
                 .OrderBy(i => i.CreateTime, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

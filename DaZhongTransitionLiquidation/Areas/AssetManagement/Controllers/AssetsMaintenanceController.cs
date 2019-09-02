@@ -124,7 +124,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     item.ACCT_DEPRECIATION_ACCOUNT = AssetsCategory.ACCT_DEPRECIATION_ACCOUNT;
                     //item.DESCRIPTION = item.VEHICLE_SHORTNAME;
                     var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
+                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
                     var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
                         x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
                         x.Code == ssModel.AccountModeCode).First().Descrption;

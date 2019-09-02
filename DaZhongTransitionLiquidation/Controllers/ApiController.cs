@@ -292,8 +292,9 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var companyCode = accountSetCode.Split("|")[1];//公司
                     var BusinessType = OrderListAPI.ServiceCategory;
                     var BusinessProject = OrderListAPI.BusinessProject;
-                    var BusinessProject1 = BusinessProject.Split("|")[0];
-                    var BusinessProject2 = "|" + BusinessProject.Split("|")[1];
+                    var Project = BusinessProject.Split("|");
+                    var BusinessProject1 = Project[0];
+                    var BusinessProject2 = "|" + Project[1];
                     //var BusinessSubItem1 = OrderListAPI.BusinessSubItem1;
                     //var BusinessSubItem2 = OrderListAPI.BusinessSubItem2;
                     //var BusinessSubItem3 = OrderListAPI.BusinessSubItem3;
@@ -303,11 +304,17 @@ b.InvoiceNumber,b.CollectionAccount,b.CollectionBankAccount,b.CollectionBankAcco
 left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                     var data = datas.Where(i => i.BusinessSubItem1.Contains(BusinessProject1) && i.BusinessSubItem1.EndsWith(BusinessProject2))
                         .ToList().FirstOrDefault();
-                              
-                               //.WhereIF(BusinessSubItem1 != null, i => i.BusinessSubItem1 == BusinessSubItem1)
-                               //.WhereIF(BusinessSubItem2 != null, i => i.BusinessSubItem2 == BusinessSubItem2)
-                               //.WhereIF(BusinessSubItem3 != null, i => i.BusinessSubItem3 == BusinessSubItem3)
-                               //.ToList().FirstOrDefault();
+
+                    //foreach (var item in datas)
+                    //{
+                    //    var SubItem = item.BusinessSubItem1.Split("|");
+                    //    var index = SubItem.Length - 1;
+                    //    if(SubItem[index] == a[1])
+                    //    {
+                    //        data = item;
+                    //    }
+                    //}
+
                     //数据存入订单草稿表，生成订单
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)

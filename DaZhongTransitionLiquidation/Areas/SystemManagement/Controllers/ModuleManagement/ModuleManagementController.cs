@@ -30,6 +30,12 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Module
             DbService.Command(db =>
             {
                 sys_Modules = db.Queryable<Sys_Module>().OrderBy(c => c.Zorder).OrderBy(z=>z.CreatedDate).ToList();
+                //var data = sys_Modules.Where(x => x.ModuleVGUID == Guid.Empty).ToList();
+                //foreach (var item in data)
+                //{
+                //    item.ModuleVGUID = item.Vguid;
+                //    db.Updateable(item).ExecuteCommand();
+                //}
             });
             jsonResult.Rows = sys_Modules;
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -79,6 +85,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Module
                 module.CreatedUser = UserInfo.LoginName;
                 module.CreatedDate = DateTime.Now;
                 module.Vguid = Guid.NewGuid();
+                module.ModuleVGUID = module.Vguid;
             }
             DbService.Command(db =>
             {
@@ -106,6 +113,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Module
                         {
                             ModuleName = module.ModuleName,
                             Parent = module.Parent,
+                            ModuleVGUID = module.Vguid,
                             ChangeDate = DateTime.Now,
                             ChangeUser = UserInfo.LoginName
                         }).Where(it => it.Vguid == guid).ExecuteCommand();

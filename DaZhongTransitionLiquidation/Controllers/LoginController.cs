@@ -50,7 +50,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     resultModel.ResultInfo = "用户已被禁用！";
                     return;
                 }
-                var userInfo = db.Queryable<Sys_User>().Where(i => i.LoginName == userLoginInfo.LoginName && i.Password == userLoginInfo.Password).Single();
+               var userInfo = db.Queryable<Sys_User>().Where(i => i.LoginName == userLoginInfo.LoginName && i.Password == userLoginInfo.Password).Single();
                 //if (userInfo == null)
                 //{
                 //    resultModel.ResultInfo = "密码错误！";

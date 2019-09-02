@@ -95,7 +95,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.RETIRE_QUANTITY = 1;
                         assetSwapModel.RETIRE_COST = item.ASSET_COST;
                         //var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                        //    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.BELONGTO_COMPANY).First();
+                        //    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
                         //assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
                         //assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                         //assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;

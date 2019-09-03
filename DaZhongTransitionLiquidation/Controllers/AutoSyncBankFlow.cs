@@ -234,9 +234,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                             else
                             {
                                 //多借多贷
+                                var receivableAccount = "";
                                 foreach (var it in voucherDetail)
                                 {
-                                    var receivableAccount = "";
+                                    
                                     if (it.ReceivableAccount != "" && it.ReceivableAccount != null)
                                     {
                                         if(it.LoanMoney != 0 && it.LoanMoney != null)
@@ -289,7 +290,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                 continue;
                                             }
                                             //从金额报表中按配置获取金额
-                                            var amountReport = bankFlowList.Where(x => x.Channel_Id == paySetting.Channel && x.RevenueDate == day.AddDays(-1).ToString("yyyy-MM-dd")).ToList();
+                                            var amountReport = bankFlowList.Where(x => x.Channel_Id == paySetting.Channel && x.RevenueDate == item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM-dd")).ToList();
                                             if (amountReport.Count > 0)
                                             {
                                                 switch (paySetting.TransferType)

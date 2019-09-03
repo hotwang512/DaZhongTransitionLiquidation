@@ -29,10 +29,14 @@
                     <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
                 </td>
             }
-            <td style="width: 95px;">
-                <button id="btnUp" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
-            </td>
-</tr>
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnUp" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+                </td>
+            }
+
+        </tr>
     </table>
     <table style="margin-top: 10px;display:none;" id="buttonList2">
         <tr style="height: 50px;">
@@ -57,7 +61,7 @@
             <tr style="height: 45px;">
                 <td class="td_span">会计期：</td>
                 <td class="td_input">
-                    <input id="AccountingPeriod" type="text" style="width: 210px;" class="input_text form-control" onfocus="this.removeAttribute('readonly'); WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' });" autocomplete="new-password"/>
+                    <input id="AccountingPeriod" type="text" style="width: 210px;" class="input_text form-control" onfocus="this.removeAttribute('readonly'); WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' });" autocomplete="new-password" />
                 </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
@@ -90,7 +94,7 @@
                 </div>
             </li>
             <li id="Oracle" style="display:none;">
-                <div  style="height: 20px; margin-top: 12px;">
+                <div style="height: 20px; margin-top: 12px;">
                     Oracle录入
                 </div>
             </li>
@@ -105,7 +109,7 @@
             <div id="jqxTable2" class="jqxTable" style=""></div>
         </div>
     </div>
-    
+
 </div>
 <style>
     .input_text {

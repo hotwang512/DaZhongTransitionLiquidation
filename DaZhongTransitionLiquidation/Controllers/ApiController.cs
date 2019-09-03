@@ -315,7 +315,7 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                     //    }
                     //}
 
-                    //数据存入订单草稿表，生成订单
+                    //数据存入订单草稿表,生成订单
                     Business_OrderListDraft orderListDraft = new Business_OrderListDraft();
                     if (data != null)
                     {
@@ -345,7 +345,8 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").ToList();
                         }
                         orderListDraft.BusinessProject = data.BusinessProject;//业务项目
                         orderListDraft.BusinessSubItem1 = data.BusinessSubItem1;//业务编码
-
+                        orderListDraft.AccountModeCode = accountModeCode;
+                        orderListDraft.CompanyCode = companyCode;
                         orderListDraft.CollectBankName = data.CollectionBank == null ? OrderListAPI.CollectBankName : data.CollectionBank;//对方账号开户行
                         orderListDraft.CollectBankAccount = data.CollectionAccount == null ? OrderListAPI.CollectBankAccount : data.CollectionAccount;//对方账号OPAC
                         orderListDraft.CollectBankAccountName = data.CollectionBankAccountName == null ? OrderListAPI.CollectBankAccountName : data.CollectionBankAccountName;//对方账号户名

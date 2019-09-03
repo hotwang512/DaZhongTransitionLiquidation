@@ -209,7 +209,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
             }
-            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+            return DateTime.Now.ToString("yyyyMM") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
         public JsonResult GetVoucherDetail(Guid vguid)
         {
@@ -240,6 +240,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 voucherList.Detail = voucherDetail;
                 voucherList.Attachment = voucher.AttachmentDetail;
                 voucherList.VGUID = voucher.VGUID;
+                voucherList.Automatic = voucher.Automatic;
             });
             return Json(voucherList, JsonRequestBehavior.AllowGet); ;
         }

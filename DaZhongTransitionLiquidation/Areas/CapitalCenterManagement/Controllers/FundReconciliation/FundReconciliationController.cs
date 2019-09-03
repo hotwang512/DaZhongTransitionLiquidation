@@ -154,8 +154,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             var jsonResult = new List<Business_UserCompanySet>();
             DbBusinessDataService.Command(db =>
             {
-                jsonResult = db.Queryable<Business_UserCompanySet>().Where(x => x.Block == "1" && x.IsCheck == true 
+                var jsonResults = db.Queryable<Business_UserCompanySet>().Where(x => x.Block == "1" && x.IsCheck == true 
                                          && x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == UserInfo.AccountModeCode).OrderBy("CompanyCode asc").ToList();
+                var sevenData = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == UserInfo.AccountModeCode).ToList();
+                foreach (var item in jsonResults)
+                {
+                    var unable = sevenData.Any(x => x.Code == item.CompanyCode && x.Status == "0");
+                    if (!unable)
+                    {
+                        jsonResult.Add(item);
+                    }
+                }
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

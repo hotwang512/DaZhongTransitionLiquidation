@@ -34,6 +34,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
+                var starDate = "2019-09-01".TryToDate();
                 DateTime? firstDay = null;
                 DateTime? lastDay = null;
                 if (searchParams.AccountingPeriod != null)
@@ -44,11 +45,20 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 jsonResult.Rows = db.Queryable<Business_VoucherList>()
                 .Where(i => i.Status == searchParams.Status)
                 .Where(i => i.Automatic == searchParams.Automatic)
+                .Where(i => i.VoucherDate > starDate)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
                 .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod >= firstDay && i.AccountingPeriod <= lastDay)
-                .Where(i=>i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
+                .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
+
+                //var data = jsonResult.Rows;
+                //foreach (var item in data)
+                //{
+                //    var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
+                //    item.VoucherNo = no;
+                //    db.Updateable(item).ExecuteCommand();
+                //}
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
@@ -153,11 +163,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.ACCOUNTING_DATE = voucher.VoucherDate;
                 asset.CURRENCY_CODE = "RMB";//币种
                 asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空
-                asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
+                asset.CURRENCY_CONVERSION_DATE = null;
                 asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
                 asset.STATUS = "N";
                 asset.TRASACTION_ID = Guid.NewGuid().TryToString();
                 asset.JE_LINE_NUMBER = items.JE_LINE_NUMBER;
+                asset.JE_LINE_DESCRIPTION = items.Abstract;
                 asset.SEGMENT1 = items.CompanySection;
                 asset.SEGMENT2 = items.SubjectSection;
                 asset.SEGMENT3 = items.AccountSection;

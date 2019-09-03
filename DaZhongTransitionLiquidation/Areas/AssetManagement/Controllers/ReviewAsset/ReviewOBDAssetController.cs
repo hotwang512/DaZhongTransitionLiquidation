@@ -360,9 +360,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.CREATE_DATE = DateTime.Now;
                         assetSwapModel.ASSET_ID = item.ASSET_ID;
                         assetSwapModel.STATUS = "N";
-                        var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                            x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
-                        assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
+                        //var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                        //    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
+                        //assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
                         assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                         assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                         assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;

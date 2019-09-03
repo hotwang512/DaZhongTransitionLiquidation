@@ -16,7 +16,8 @@ namespace DaZhongTransitionLiquidation.Common
             var resultData = "";
             var url = ConfigSugar.GetAppString("ModifyVehicleAssetUrl");
             var data = "{" +
-                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "201906") +
+                       //"\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2,'0')) +
+                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "201908") +
                        "}";
             try
             {

@@ -53,6 +53,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .WhereIF(!searchParams.VEHICLE_SHORTNAME.IsNullOrEmpty(), i => i.VEHICLE_SHORTNAME.Contains(searchParams.VEHICLE_SHORTNAME))
                     .WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                //var list = jsonResult.Rows = db.SqlQueryable<Business_ModifyVehicleModel>
+                //(@"SELECT mv.*,
+                //       mi.PLATE_NUMBER AS PLATE_NUMBER_M,
+                //       mi.MODEL_MAJOR AS MODEL_MAJOR_M,
+                //       mi.MODEL_MINOR AS MODEL_MINOR_M,
+                //       mi.MANAGEMENT_COMPANY AS MANAGEMENT_COMPANY_M,
+                //       mi.BELONGTO_COMPANY AS BELONGTO_COMPANY_M
+                //    FROM Business_ModifyVehicle mv
+                //    LEFT JOIN Business_AssetMaintenanceInfo mi
+                //        ON mv.ORIGINALID = mi.ORIGINALID").OrderBy(x => x.MODEL_MAJOR).ToList();
+                //var table1 = list.TryToDataTable();;
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

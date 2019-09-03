@@ -22,9 +22,9 @@ using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewAsset
 {
-    public class ReviewAssetController : BaseController
+    public class ReviewOBDAssetController : BaseController
     {
-        public ReviewAssetController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        public ReviewOBDAssetController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
         }
         // GET: AssetManagement/ReviewAsset
@@ -42,7 +42,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var startDate = YearMonth.TryToDate();
                 var endDate = startDate.AddMonths(1);
                 int pageCount = 0;
-                jsonResult.Rows = db.Queryable<Business_AssetReview>().Where(i => !i.ISVERIFY && i.ORIGINALID == "出租车")
+                jsonResult.Rows = db.Queryable<Business_AssetReview>().Where(i => !i.ISVERIFY && i.ORIGINALID == "OBD")
                     .WhereIF(!YearMonth.IsNullOrEmpty(), i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate)
                     .WhereIF(!Company.IsNullOrEmpty(), i => i.BELONGTO_COMPANY == Company)
                     .WhereIF(!VehicleModel.IsNullOrEmpty(), i => i.VEHICLE_SHORTNAME == VehicleModel)
@@ -54,8 +54,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     {
                         if (item.ORIGINALID.IsNullOrEmpty() || item.PLATE_NUMBER.IsNullOrEmpty() ||
                             item.TAG_NUMBER.IsNullOrEmpty() || item.MANAGEMENT_COMPANY.IsNullOrEmpty() ||
-                            item.BELONGTO_COMPANY.IsNullOrEmpty() || item.ASSET_ID.IsNullOrEmpty() || item.DESCRIPTION.IsNullOrEmpty() || item.ASSET_COST.IsNullOrEmpty() || 
-                            item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() || item.BOOK_TYPE_CODE.IsNullOrEmpty() || item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty()||
+                            item.BELONGTO_COMPANY.IsNullOrEmpty() || item.ASSET_ID.IsNullOrEmpty() || item.DESCRIPTION.IsNullOrEmpty() || item.ASSET_COST.IsNullOrEmpty() ||
+                            item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() || item.BOOK_TYPE_CODE.IsNullOrEmpty() || item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() ||
                             item.MODEL_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
                         {
                             item.GROUP_ID = "1";
@@ -178,7 +178,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                     {
                                         //计算出车龄，并根据车龄判断经营模式子类
                                         //reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
-                                        var level3  = manageModelList
+                                        var level3 = manageModelList
                                             .Where(x => x.LevelNum == 2 && x.BusinessName == reviewItem.MODEL_MINOR && x.VehicleAge > months)
                                             .OrderBy(x => x.VehicleAge).First();
                                         minorModel = manageModelList.First(x => x.VGUID == level3.ParentVGUID);
@@ -282,11 +282,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         resultModel.ResultInfo = "没有待审核的车辆";
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw;
                 }
-                
+
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
@@ -295,10 +295,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         {
             var jsonResult = new JsonResultModel<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
-                {
-                    jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x =>
-                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").ToList();
-                });
+            {
+                jsonResult.Rows = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").ToList();
+            });
             return Json(jsonResult.Rows, JsonRequestBehavior.AllowGet);
         }
         public JsonResult SubmitReviewAsset(List<Guid> vguids)
@@ -325,138 +325,119 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 {
                     foreach (var item in reviewList)
                     {
-                        if (!item.ORIGINALID.IsNullOrEmpty() && !item.PLATE_NUMBER.IsNullOrEmpty() &&
-                            !item.TAG_NUMBER.IsNullOrEmpty() && !item.MANAGEMENT_COMPANY.IsNullOrEmpty() &&
-                            !item.BELONGTO_COMPANY.IsNullOrEmpty() && !item.ASSET_ID.IsNullOrEmpty() &&
-                            !item.DESCRIPTION.IsNullOrEmpty() && !item.ASSET_COST.IsNullOrEmpty() &&
-                            !item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() && !item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() &&
-                            !item.BOOK_TYPE_CODE.IsNullOrEmpty() && !item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() &&
-                            !item.MODEL_MAJOR.IsNullOrEmpty() && !item.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
+                        var fixedAssetId = item.FIXED_ASSETS_ORDERID;
+                        var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
+                        var strList = new List<Guid>();
+                        foreach (var departmentID in departmentIDsArr)
                         {
-                            var fixedAssetId = item.FIXED_ASSETS_ORDERID;
-                            var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
-                            var strList = new List<Guid>();
-                            foreach (var departmentID in departmentIDsArr)
-                            {
-                                strList.Add(departmentID.TryToGuid());
-                            }
-                            var departments = departmentList.Where(x => strList.Contains(x.VGUID));
-                            var departmentStr = "";
-                            foreach (var ditem in departments)
-                            {
-                                departmentStr = departmentStr + ditem.Descrption + ",";
-                            }
-                            departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
-                            var assetSwapModel = new AssetMaintenanceInfo_Swap();
-                            assetSwapModel.TRANSACTION_ID = item.VGUID;
-                            assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
-                            assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
-                            assetSwapModel.DESCRIPTION = item.DESCRIPTION;
-                            assetSwapModel.QUANTITY = item.QUANTITY;
-                            assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MAJOR;
-                            assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
-                            assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
-                            assetSwapModel.ASSET_COST = item.ASSET_COST;
-                            assetSwapModel.AMORTIZATION_FLAG = item.AMORTIZATION_FLAG;
-                            assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
-                            assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
-                            assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
-                            assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
-                            //传入订单选择的部门
-                            assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY;
-                            assetSwapModel.FA_LOC_3 = departmentStr;
-                            assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
-                            assetSwapModel.CREATE_DATE = DateTime.Now;
-                            assetSwapModel.ASSET_ID = item.ASSET_ID;
-                            assetSwapModel.STATUS = "N";
-                            var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
-                            assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
-                            assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
-                            assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
-                            assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
-                            assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
-                            assetSwapList.Add(assetSwapModel);
+                            strList.Add(departmentID.TryToGuid());
                         }
+                        var departments = departmentList.Where(x => strList.Contains(x.VGUID));
+                        var departmentStr = "";
+                        foreach (var ditem in departments)
+                        {
+                            departmentStr = departmentStr + ditem.Descrption + ",";
+                        }
+                        departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
+                        var assetSwapModel = new AssetMaintenanceInfo_Swap();
+                        assetSwapModel.TRANSACTION_ID = item.VGUID;
+                        assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                        assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
+                        assetSwapModel.DESCRIPTION = item.DESCRIPTION;
+                        assetSwapModel.QUANTITY = item.QUANTITY;
+                        assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MAJOR;
+                        assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
+                        assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
+                        assetSwapModel.ASSET_COST = item.ASSET_COST;
+                        assetSwapModel.AMORTIZATION_FLAG = item.AMORTIZATION_FLAG;
+                        assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
+                        assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
+                        assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
+                        assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY;
+                        //传入订单选择的部门
+                        assetSwapModel.FA_LOC_3 = departmentStr;
+                        assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
+                        assetSwapModel.CREATE_DATE = DateTime.Now;
+                        assetSwapModel.ASSET_ID = item.ASSET_ID;
+                        assetSwapModel.STATUS = "N";
+                        var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                            x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
+                        assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
+                        assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
+                        assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
+                        assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
+                        assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
+                        assetSwapList.Add(assetSwapModel);
                     }
                     db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                     var assetInfoList = new List<Business_AssetMaintenanceInfo>();
                     foreach (var reviewItem in reviewList)
                     {
-                        if (!reviewItem.ORIGINALID.IsNullOrEmpty() && !reviewItem.PLATE_NUMBER.IsNullOrEmpty() &&
-                            !reviewItem.TAG_NUMBER.IsNullOrEmpty() && !reviewItem.MANAGEMENT_COMPANY.IsNullOrEmpty() &&
-                            !reviewItem.BELONGTO_COMPANY.IsNullOrEmpty() && !reviewItem.ASSET_ID.IsNullOrEmpty() &&
-                            !reviewItem.DESCRIPTION.IsNullOrEmpty() && !reviewItem.ASSET_COST.IsNullOrEmpty() &&
-                            !reviewItem.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() && !reviewItem.ASSET_CATEGORY_MINOR.IsNullOrEmpty() &&
-                            !reviewItem.BOOK_TYPE_CODE.IsNullOrEmpty() && !reviewItem.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() &&
-                            !reviewItem.MODEL_MAJOR.IsNullOrEmpty() && !reviewItem.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
-                        {
-                            var asset = new Business_AssetMaintenanceInfo();
-                            asset.VGUID = reviewItem.VGUID;
-                            asset.ORIGINALID = reviewItem.ORIGINALID;
-                            asset.GROUP_ID = reviewItem.GROUP_ID;
-                            asset.PLATE_NUMBER = reviewItem.PLATE_NUMBER;
-                            asset.TAG_NUMBER = reviewItem.TAG_NUMBER;
-                            asset.VEHICLE_SHORTNAME = reviewItem.VEHICLE_SHORTNAME;
-                            asset.ORGANIZATION_NUM = reviewItem.ORGANIZATION_NUM;
-                            asset.MANAGEMENT_COMPANY = reviewItem.MANAGEMENT_COMPANY;
-                            asset.BELONGTO_COMPANY = reviewItem.BELONGTO_COMPANY;
-                            asset.ASSET_ID = reviewItem.ASSET_ID;
-                            asset.VEHICLE_STATE = reviewItem.VEHICLE_STATE;
-                            asset.OPERATING_STATE = reviewItem.OPERATING_STATE;
-                            asset.DESCRIPTION = reviewItem.DESCRIPTION;
-                            asset.ENGINE_NUMBER = reviewItem.ENGINE_NUMBER;
-                            asset.CHASSIS_NUMBER = reviewItem.CHASSIS_NUMBER;
-                            asset.PRODUCTION_DATE = reviewItem.PRODUCTION_DATE;
-                            asset.PURCHASE_DATE = reviewItem.PURCHASE_DATE;
-                            asset.LISENSING_DATE = reviewItem.LISENSING_DATE;
-                            asset.COMMISSIONING_DATE = reviewItem.COMMISSIONING_DATE;
-                            asset.VEHICLE_AGE = reviewItem.VEHICLE_AGE;
-                            asset.BACK_CAR_DATE = reviewItem.BACK_CAR_DATE;
-                            asset.FUEL_TYPE = reviewItem.FUEL_TYPE;
-                            asset.DELIVERY_INFORMATION = reviewItem.DELIVERY_INFORMATION;
-                            asset.QUANTITY = reviewItem.QUANTITY;
-                            asset.ASSET_COST = reviewItem.ASSET_COST;
-                            asset.NUDE_CAR_FEE = reviewItem.NUDE_CAR_FEE;
-                            asset.PURCHASE_TAX = reviewItem.PURCHASE_TAX;
-                            asset.LISENSING_FEE = reviewItem.LISENSING_FEE;
-                            asset.OUT_WAREHOUSE_FEE = reviewItem.OUT_WAREHOUSE_FEE;
-                            asset.DOME_LIGHT_FEE = reviewItem.DOME_LIGHT_FEE;
-                            asset.ANTI_ROBBERY_FEE = reviewItem.ANTI_ROBBERY_FEE;
-                            asset.LOADING_FEE = reviewItem.LOADING_FEE;
-                            asset.INNER_ROOF_FEE = reviewItem.INNER_ROOF_FEE;
-                            asset.TAXIMETER_FEE = reviewItem.TAXIMETER_FEE;
-                            asset.ASSET_DISPOSITION_TYPE = reviewItem.ASSET_DISPOSITION_TYPE;
-                            asset.SCRAP_INFORMATION = reviewItem.SCRAP_INFORMATION;
-                            asset.DISPOSAL_AMOUNT = reviewItem.DISPOSAL_AMOUNT;
-                            asset.DISPOSAL_TAX = reviewItem.DISPOSAL_TAX;
-                            asset.DISPOSAL_PROFIT_LOSS = reviewItem.DISPOSAL_PROFIT_LOSS;
-                            asset.BAK_CAR_AGE = reviewItem.BAK_CAR_AGE;
-                            asset.ASSET_CATEGORY_MAJOR = reviewItem.ASSET_CATEGORY_MAJOR;
-                            asset.ASSET_CATEGORY_MINOR = reviewItem.ASSET_CATEGORY_MINOR;
-                            asset.SALVAGE_TYPE = reviewItem.SALVAGE_TYPE;
-                            asset.SALVAGE_PERCENT = reviewItem.SALVAGE_PERCENT;
-                            asset.SALVAGE_VALUE = reviewItem.SALVAGE_VALUE;
-                            asset.AMORTIZATION_FLAG = reviewItem.AMORTIZATION_FLAG;
-                            asset.METHOD = reviewItem.METHOD;
-                            asset.LIFE_YEARS = reviewItem.LIFE_YEARS;
-                            asset.LIFE_MONTHS = reviewItem.LIFE_MONTHS;
-                            asset.BOOK_TYPE_CODE = reviewItem.BOOK_TYPE_CODE;
-                            asset.ASSET_COST_ACCOUNT = reviewItem.ASSET_COST_ACCOUNT;
-                            asset.ASSET_SETTLEMENT_ACCOUNT = reviewItem.ASSET_SETTLEMENT_ACCOUNT;
-                            asset.DEPRECIATION_EXPENSE_SEGMENT = reviewItem.DEPRECIATION_EXPENSE_SEGMENT;
-                            asset.ACCT_DEPRECIATION_ACCOUNT = reviewItem.ACCT_DEPRECIATION_ACCOUNT;
-                            asset.YTD_DEPRECIATION = reviewItem.YTD_DEPRECIATION;
-                            asset.ACCT_DEPRECIATION = reviewItem.ACCT_DEPRECIATION;
-                            asset.EXP_ACCOUNT_SEGMENT = reviewItem.EXP_ACCOUNT_SEGMENT;
-                            asset.MODEL_MAJOR = reviewItem.MODEL_MAJOR;
-                            asset.MODEL_MINOR = reviewItem.MODEL_MINOR;
-                            asset.START_VEHICLE_DATE = reviewItem.START_VEHICLE_DATE;
-                            asset.CREATE_DATE = DateTime.Now;
-                            asset.CREATE_USER = cache[PubGet.GetUserKey].UserName;
-                            reviewItem.ISVERIFY = true;
-                            assetInfoList.Add(asset);
-                        }
+                        var asset = new Business_AssetMaintenanceInfo();
+                        asset.VGUID = reviewItem.VGUID;
+                        asset.ORIGINALID = reviewItem.ORIGINALID;
+                        asset.GROUP_ID = reviewItem.GROUP_ID;
+                        asset.PLATE_NUMBER = reviewItem.PLATE_NUMBER;
+                        asset.TAG_NUMBER = reviewItem.TAG_NUMBER;
+                        asset.VEHICLE_SHORTNAME = reviewItem.VEHICLE_SHORTNAME;
+                        asset.ORGANIZATION_NUM = reviewItem.ORGANIZATION_NUM;
+                        asset.MANAGEMENT_COMPANY = reviewItem.MANAGEMENT_COMPANY;
+                        asset.BELONGTO_COMPANY = reviewItem.BELONGTO_COMPANY;
+                        asset.ASSET_ID = reviewItem.ASSET_ID;
+                        asset.VEHICLE_STATE = reviewItem.VEHICLE_STATE;
+                        asset.OPERATING_STATE = reviewItem.OPERATING_STATE;
+                        asset.DESCRIPTION = reviewItem.DESCRIPTION;
+                        asset.ENGINE_NUMBER = reviewItem.ENGINE_NUMBER;
+                        asset.CHASSIS_NUMBER = reviewItem.CHASSIS_NUMBER;
+                        asset.PRODUCTION_DATE = reviewItem.PRODUCTION_DATE;
+                        asset.PURCHASE_DATE = reviewItem.PURCHASE_DATE;
+                        asset.LISENSING_DATE = reviewItem.LISENSING_DATE;
+                        asset.COMMISSIONING_DATE = reviewItem.COMMISSIONING_DATE;
+                        asset.VEHICLE_AGE = reviewItem.VEHICLE_AGE;
+                        asset.BACK_CAR_DATE = reviewItem.BACK_CAR_DATE;
+                        asset.FUEL_TYPE = reviewItem.FUEL_TYPE;
+                        asset.DELIVERY_INFORMATION = reviewItem.DELIVERY_INFORMATION;
+                        asset.QUANTITY = reviewItem.QUANTITY;
+                        asset.ASSET_COST = reviewItem.ASSET_COST;
+                        asset.NUDE_CAR_FEE = reviewItem.NUDE_CAR_FEE;
+                        asset.PURCHASE_TAX = reviewItem.PURCHASE_TAX;
+                        asset.LISENSING_FEE = reviewItem.LISENSING_FEE;
+                        asset.OUT_WAREHOUSE_FEE = reviewItem.OUT_WAREHOUSE_FEE;
+                        asset.DOME_LIGHT_FEE = reviewItem.DOME_LIGHT_FEE;
+                        asset.ANTI_ROBBERY_FEE = reviewItem.ANTI_ROBBERY_FEE;
+                        asset.LOADING_FEE = reviewItem.LOADING_FEE;
+                        asset.INNER_ROOF_FEE = reviewItem.INNER_ROOF_FEE;
+                        asset.TAXIMETER_FEE = reviewItem.TAXIMETER_FEE;
+                        asset.ASSET_DISPOSITION_TYPE = reviewItem.ASSET_DISPOSITION_TYPE;
+                        asset.SCRAP_INFORMATION = reviewItem.SCRAP_INFORMATION;
+                        asset.DISPOSAL_AMOUNT = reviewItem.DISPOSAL_AMOUNT;
+                        asset.DISPOSAL_TAX = reviewItem.DISPOSAL_TAX;
+                        asset.DISPOSAL_PROFIT_LOSS = reviewItem.DISPOSAL_PROFIT_LOSS;
+                        asset.BAK_CAR_AGE = reviewItem.BAK_CAR_AGE;
+                        asset.ASSET_CATEGORY_MAJOR = reviewItem.ASSET_CATEGORY_MAJOR;
+                        asset.ASSET_CATEGORY_MINOR = reviewItem.ASSET_CATEGORY_MINOR;
+                        asset.SALVAGE_TYPE = reviewItem.SALVAGE_TYPE;
+                        asset.SALVAGE_PERCENT = reviewItem.SALVAGE_PERCENT;
+                        asset.SALVAGE_VALUE = reviewItem.SALVAGE_VALUE;
+                        asset.AMORTIZATION_FLAG = reviewItem.AMORTIZATION_FLAG;
+                        asset.METHOD = reviewItem.METHOD;
+                        asset.LIFE_YEARS = reviewItem.LIFE_YEARS;
+                        asset.LIFE_MONTHS = reviewItem.LIFE_MONTHS;
+                        asset.BOOK_TYPE_CODE = reviewItem.BOOK_TYPE_CODE;
+                        asset.ASSET_COST_ACCOUNT = reviewItem.ASSET_COST_ACCOUNT;
+                        asset.ASSET_SETTLEMENT_ACCOUNT = reviewItem.ASSET_SETTLEMENT_ACCOUNT;
+                        asset.DEPRECIATION_EXPENSE_SEGMENT = reviewItem.DEPRECIATION_EXPENSE_SEGMENT;
+                        asset.ACCT_DEPRECIATION_ACCOUNT = reviewItem.ACCT_DEPRECIATION_ACCOUNT;
+                        asset.YTD_DEPRECIATION = reviewItem.YTD_DEPRECIATION;
+                        asset.ACCT_DEPRECIATION = reviewItem.ACCT_DEPRECIATION;
+                        asset.EXP_ACCOUNT_SEGMENT = reviewItem.EXP_ACCOUNT_SEGMENT;
+                        asset.MODEL_MAJOR = reviewItem.MODEL_MAJOR;
+                        asset.MODEL_MINOR = reviewItem.MODEL_MINOR;
+                        asset.START_VEHICLE_DATE = reviewItem.START_VEHICLE_DATE;
+                        asset.CREATE_DATE = DateTime.Now;
+                        asset.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                        reviewItem.ISVERIFY = true;
+                        assetInfoList.Add(asset);
                     }
                     db.Insertable<Business_AssetMaintenanceInfo>(assetInfoList).ExecuteCommand();
                     db.Updateable<Business_AssetReview>(reviewList).UpdateColumns(it => new { it.ISVERIFY }).ExecuteCommand();
@@ -467,15 +448,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 {
                     throw;
                 }
-                
+
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
         public string GetNewVehicleAsset(string YearMonth)
         {
-            YearMonth = YearMonth.Replace("-","");
+            YearMonth = YearMonth.Replace("-", "");
             var url = ConfigSugar.GetAppString("NewVehicleAssetUrl");
-            var data = "{"+ "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) + "}";
+            var data = "{" + "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) + "}";
             try
             {
                 WebClient wc = new WebClient();
@@ -492,7 +473,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 return "";
             }
         }
-        public string GetNewVehicleAssetByEngineChassis(string CHASSIS_NUMBER,string ENGINE_NUMBER)
+        public string GetNewVehicleAssetByEngineChassis(string CHASSIS_NUMBER, string ENGINE_NUMBER)
         {
             var url = ConfigSugar.GetAppString("NewVehicleAssetUrl");
             var data = "{" + "\"CHASSIS_NUMBER\":\"{CHASSIS_NUMBER}\"".Replace("{CHASSIS_NUMBER}", CHASSIS_NUMBER) + ",\"ENGINE_NUMBER\":\"{ENGINE_NUMBER}\"".Replace("{ENGINE_NUMBER}", ENGINE_NUMBER) + "}";

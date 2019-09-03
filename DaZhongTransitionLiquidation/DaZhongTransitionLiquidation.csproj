@@ -215,6 +215,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetsRetirementReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ManageModel.js" />
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\ReviewOBDAsset.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrderDetail.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FundClearing.js" />
@@ -376,6 +377,7 @@
     <Content Include="Areas\AssetManagement\Views\DisposeProfitLoss\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\DisposeTax\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\TransferSettingDetail\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\ReviewOBDAsset\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2358,6 +2360,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetsRetirementReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewOBDAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetAttachmentList.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_AssetMaintenanceInfo.cs" />
@@ -2400,6 +2403,7 @@
     <Compile Include="Areas\AssetPurchase\Models\Business_PurchaseOrderNum.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Business_TaxFeeOrder.cs" />
     <Compile Include="Areas\AssetPurchase\Models\Excel_PurchaseAssignModel.cs" />
+    <Compile Include="Areas\AssetPurchase\Models\Excel_PurchaseOBDAssignModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\PendingPaymentModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\PendingResultModel.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />

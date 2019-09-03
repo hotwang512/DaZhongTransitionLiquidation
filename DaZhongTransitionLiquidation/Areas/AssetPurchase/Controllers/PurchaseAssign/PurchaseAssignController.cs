@@ -202,7 +202,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
         }
         public JsonResult ImportAssignFile(Guid vguid, HttpPostedFileBase File)
         {
-            var resultModel = new ResultModel<string,string>() { IsSuccess = false, Status = "0" };
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
             var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
             if (File != null)
@@ -273,14 +273,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 consistent = false;
                                 resultModel.ResultInfo = resultModel.ResultInfo + "Excel中有重复数据 ";
                             }
-                            
+
                             var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
                                 .Where(c => c.FixedAssetsOrderVguid == vguid).First();
                             //判断判断车架号发动机号，系统中没有才可以导入
                             var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
-                            .Select(x => new { EngineNumber_ChassisNumber =  x.ENGINE_NUMBER + x.CHASSIS_NUMBER }).ToList();
+                            .Select(x => new { EngineNumber_ChassisNumber = x.ENGINE_NUMBER + x.CHASSIS_NUMBER }).ToList();
                             var listExcel = list.Select(x => new
-                                { EngineNumber_ChassisNumber = x.EngineNumber+ x.ChassisNumber}).ToList();
+                            { EngineNumber_ChassisNumber = x.EngineNumber + x.ChassisNumber }).ToList();
                             if (listAssetInfo.Union(listExcel).ToList().Count < listAssetInfo.Count + listExcel.Count)
                             {
                                 consistent = false;
@@ -300,224 +300,225 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             {
                                 //写入数据库
                                 var sevenSectionList = new List<Business_AssetOrderBelongTo>();
-                                    foreach (var item in list)
+                                foreach (var item in list)
+                                {
+                                    var belongTo = new Business_AssetOrderBelongTo();
+                                    belongTo.VGUID = Guid.NewGuid();
+                                    belongTo.VehicleModel = item.VehicleModel;
+                                    belongTo.EngineNumber = item.EngineNumber;
+                                    belongTo.ChassisNumber = item.ChassisNumber;
+                                    belongTo.AssetNum = 1;
+                                    belongTo.AssetsOrderVguid = vguid;
+                                    belongTo.CreateDate = DateTime.Now;
+                                    belongTo.CreateUser = cache[PubGet.GetUserKey].UserName;
+                                    sevenSectionList.Add(belongTo);
+                                }
+                                db.Deleteable<Business_AssetOrderBelongTo>().Where(c => c.AssetsOrderVguid == vguid).ExecuteCommand();
+                                db.Insertable<Business_AssetOrderBelongTo>(sevenSectionList).ExecuteCommand();
+                                var orderNumData = db.Queryable<Business_PurchaseOrderNum>()
+                                    .Where(x => x.FixedAssetOrderVguid == vguid).ToList();
+                                if (orderNumData.Count > 0)
+                                {
+                                    foreach (var data in orderNumData)
                                     {
-                                        var belongTo = new Business_AssetOrderBelongTo();
-                                        belongTo.VGUID = Guid.NewGuid();
-                                        belongTo.VehicleModel = item.VehicleModel;
-                                        belongTo.EngineNumber = item.EngineNumber;
-                                        belongTo.ChassisNumber = item.ChassisNumber;
-                                        belongTo.AssetNum = 1;
-                                        belongTo.AssetsOrderVguid = vguid;
-                                        belongTo.CreateDate = DateTime.Now;
-                                        belongTo.CreateUser = cache[PubGet.GetUserKey].UserName;
-                                        sevenSectionList.Add(belongTo);
+                                        db.Deleteable<Business_TaxFeeOrder>().Where(c => c.VGUID == data.FaxOrderVguid).ExecuteCommand();
                                     }
-                                    db.Deleteable<Business_AssetOrderBelongTo>().Where(c => c.AssetsOrderVguid == vguid).ExecuteCommand();
-                                    db.Insertable<Business_AssetOrderBelongTo>(sevenSectionList).ExecuteCommand();
-                                    var orderNumData = db.Queryable<Business_PurchaseOrderNum>()
-                                        .Where(x => x.FixedAssetOrderVguid == vguid).ToList();
-                                    if (orderNumData.Count > 0)
+                                    db.Deleteable<Business_PurchaseOrderNum>().Where(c => c.FixedAssetOrderVguid == vguid).ExecuteCommand();
+                                }
+                                //车型
+                                var vehicleModelList = sevenSectionList.Select(x => new Vehicle_Model { VehicleModel = x.VehicleModel }).ToList();
+                                var vehicleModels = vehicleModelList.GroupBy(c => new { c.VehicleModel }).Select(c => c.Key).ToList();
+                                //根据车型获取各项费用单价并生成订单
+                                foreach (var vehicleModel in vehicleModels)
+                                {
+                                    //根据车型获取各项费用的单价
+                                    var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
+                                        .Where(x => x.VehicleModel == vehicleModel.VehicleModel && x.Status && x.Fee != 0).ToList();
+                                    //采购数量
+                                    var orderNum = sevenSectionList.Where(x => x.VehicleModel == vehicleModel.VehicleModel).Sum(x => x.AssetNum);
+                                    //出库费
+                                    var maxOrderNumRight = 0;
+                                    var orderNumberLeft = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+                                    //查出当前日期数据库中最大的订单号
+                                    var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
+                                        .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                                    var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
+                                        .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                                    var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
+                                        .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
+                                    var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
+                                    if (currentDayList.Any())
                                     {
-                                        foreach (var data in orderNumData)
-                                        {
-                                            db.Deleteable<Business_TaxFeeOrder>().Where(c => c.VGUID == data.FaxOrderVguid).ExecuteCommand();
-                                        }
-                                        db.Deleteable<Business_PurchaseOrderNum>().Where(c => c.FixedAssetOrderVguid == vguid).ExecuteCommand();
+                                        maxOrderNumRight = currentDayList.OrderByDescending(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
                                     }
-                                    //车型
-                                    var vehicleModelList = sevenSectionList.Select(x => new Vehicle_Model { VehicleModel = x.VehicleModel }).ToList();
-                                    var vehicleModels = vehicleModelList.GroupBy(c => new { c.VehicleModel }).Select(c => c.Key).ToList();
-                                    //根据车型获取各项费用单价并生成订单
-                                    foreach (var vehicleModel in vehicleModels)
-                                    {
-                                        //根据车型获取各项费用的单价
-                                        var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
-                                            .Where(x => x.VehicleModel == vehicleModel.VehicleModel && x.Status && x.Fee != 0).ToList();
-                                        //采购数量
-                                        var orderNum = sevenSectionList.Where(x => x.VehicleModel == vehicleModel.VehicleModel).Sum(x => x.AssetNum);
-                                        //出库费
-                                        var maxOrderNumRight = 0;
-                                        var orderNumberLeft = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                        //查出当前日期数据库中最大的订单号
-                                        var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
-                                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                        var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
-                                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
-                                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
-                                        if (currentDayList.Any())
-                                        {
-                                            maxOrderNumRight = currentDayList.OrderByDescending(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
-                                        }
-                                        //供应商信息
-                                        var bankInfoList = db.SqlQueryable<v_Business_CustomerBankInfo>(
-                                                @"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
+                                    //供应商信息
+                                    var bankInfoList = db.SqlQueryable<v_Business_CustomerBankInfo>(
+                                            @"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
                                                 left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
                                                 left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isable = '1'")
-                                            .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
-                                        //付款信息
-                                        var companylist = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.AccountModeCode == AccountModeCode && x.Isable)
-                                            .OrderBy(i => i.CompanyCode).ToList();
-                                        foreach (var itemFee in feeList)
+                                        .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                                    //付款信息
+                                    var companylist = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.AccountModeCode == AccountModeCode && x.Isable)
+                                        .OrderBy(i => i.CompanyCode).ToList();
+                                    foreach (var itemFee in feeList)
+                                    {
+                                        var feeOrder = new Business_TaxFeeOrder();
+                                        feeOrder.PurchaseDepartmentIDs = "a8b4f808-33f3-454a-9a19-0b90d40aabea";//默认营运部
+                                        feeOrder.PayItem = itemFee.BusinessProject.Split("|")[itemFee.BusinessProject.Split("|").Length - 1];
+                                        feeOrder.PayItemCode = itemFee.BusinessSubItem;
+                                        feeOrder.VehicleModel = vehicleModel.VehicleModel;
+                                        feeOrder.VehicleModelCode = itemFee.VehicleModelCode;
+                                        feeOrder.OrderQuantity = orderNum;
+                                        feeOrder.UnitPrice = itemFee.Fee;
+                                        feeOrder.SumPayment = orderNum * itemFee.Fee;
+                                        feeOrder.SubmitStatus = 0;
+                                        feeOrder.PayType = "转账";
+                                        feeOrder.VGUID = Guid.NewGuid();
+                                        feeOrder.CreateDate = DateTime.Now;
+                                        feeOrder.CreateUser = "System";
+                                        maxOrderNumRight = maxOrderNumRight + 1;
+                                        feeOrder.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
+                                        var purchaseOrderNum = new Business_PurchaseOrderNum();
+                                        purchaseOrderNum.VGUID = Guid.NewGuid();
+                                        purchaseOrderNum.PayItemCode = feeOrder.PayItemCode;
+                                        purchaseOrderNum.PayItem = feeOrder.PayItem;
+                                        purchaseOrderNum.OrderQuantity = feeOrder.OrderQuantity;
+                                        purchaseOrderNum.FaxOrderVguid = feeOrder.VGUID;
+                                        purchaseOrderNum.FixedAssetOrderVguid = vguid;
+                                        purchaseOrderNum.CreateDate = DateTime.Now;
+                                        purchaseOrderNum.CreateUser = "System";
+                                        //根据付款项目填充供应商信息和付款信息
+                                        var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == itemFee.BusinessSubItem).First().VGUID.ToString();
+                                        if (bankInfoList.Any(x => x.OrderVGUID == OrderVguid) && bankInfoList.Count(x => x.OrderVGUID == OrderVguid) == 1)
                                         {
-                                            var feeOrder = new Business_TaxFeeOrder();
-                                            feeOrder.PurchaseDepartmentIDs = "a8b4f808-33f3-454a-9a19-0b90d40aabea";//默认营运部
-                                            feeOrder.PayItem = itemFee.BusinessProject.Split("|")[itemFee.BusinessProject.Split("|").Length - 1];
-                                            feeOrder.PayItemCode = itemFee.BusinessSubItem;
-                                            feeOrder.VehicleModel = vehicleModel.VehicleModel;
-                                            feeOrder.VehicleModelCode = itemFee.VehicleModelCode;
-                                            feeOrder.OrderQuantity = orderNum;
-                                            feeOrder.UnitPrice = itemFee.Fee;
-                                            feeOrder.SumPayment = orderNum * itemFee.Fee;
-                                            feeOrder.SubmitStatus = 0;
-                                            feeOrder.PayType = "转账";
-                                            feeOrder.VGUID = Guid.NewGuid();
-                                            feeOrder.CreateDate = DateTime.Now;
-                                            feeOrder.CreateUser = "System";
-                                            maxOrderNumRight = maxOrderNumRight + 1;
-                                            feeOrder.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
-                                            var purchaseOrderNum = new Business_PurchaseOrderNum();
-                                            purchaseOrderNum.VGUID = Guid.NewGuid();
-                                            purchaseOrderNum.PayItemCode = feeOrder.PayItemCode;
-                                            purchaseOrderNum.PayItem = feeOrder.PayItem;
-                                            purchaseOrderNum.OrderQuantity = feeOrder.OrderQuantity;
-                                            purchaseOrderNum.FaxOrderVguid = feeOrder.VGUID;
-                                            purchaseOrderNum.FixedAssetOrderVguid = vguid;
-                                            purchaseOrderNum.CreateDate = DateTime.Now;
-                                            purchaseOrderNum.CreateUser = "System";
-                                            //根据付款项目填充供应商信息和付款信息
-                                            var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == itemFee.BusinessSubItem).First().VGUID.ToString();
-                                            if (bankInfoList.Any(x => x.OrderVGUID == OrderVguid) && bankInfoList.Count(x => x.OrderVGUID == OrderVguid) == 1)
-                                            {
-                                                var bankInfo = bankInfoList.First(x => x.OrderVGUID == OrderVguid);
-                                                feeOrder.PaymentInformationVguid = bankInfo.VGUID;
-                                                feeOrder.PaymentInformation = bankInfo.BankAccountName;
-                                                feeOrder.SupplierBankAccountName = bankInfo.BankAccountName;
-                                                feeOrder.SupplierBankAccount = bankInfo.BankAccount;
-                                                feeOrder.SupplierBankNo = bankInfo.BankNo;
-                                                feeOrder.SupplierBank = bankInfo.Bank;
-                                            }
-                                            if (companylist.Any(x => x.OrderVGUID == OrderVguid) && companylist.Count(x => x.OrderVGUID == OrderVguid) == 1)
-                                            {
-                                                var companyInfo = companylist.First(x => x.OrderVGUID == OrderVguid);
-                                                feeOrder.PayCompanyVguid = companyInfo.VGUID;
-                                                feeOrder.PayCompany = companyInfo.PayBankAccountName;
-                                                feeOrder.CompanyBankName = companyInfo.PayBank;
-                                                feeOrder.CompanyBankAccountName = companyInfo.PayBankAccountName;
-                                                feeOrder.CompanyBankAccount = companyInfo.PayAccount;
-                                                feeOrder.AccountType = companyInfo.AccountType;
-                                            }
-                                            db.Insertable<Business_TaxFeeOrder>(feeOrder).ExecuteCommand();
-                                            db.Insertable<Business_PurchaseOrderNum>(purchaseOrderNum).ExecuteCommand();
+                                            var bankInfo = bankInfoList.First(x => x.OrderVGUID == OrderVguid);
+                                            feeOrder.PaymentInformationVguid = bankInfo.VGUID;
+                                            feeOrder.PaymentInformation = bankInfo.BankAccountName;
+                                            feeOrder.SupplierBankAccountName = bankInfo.BankAccountName;
+                                            feeOrder.SupplierBankAccount = bankInfo.BankAccount;
+                                            feeOrder.SupplierBankNo = bankInfo.BankNo;
+                                            feeOrder.SupplierBank = bankInfo.Bank;
                                         }
+                                        if (companylist.Any(x => x.OrderVGUID == OrderVguid) && companylist.Count(x => x.OrderVGUID == OrderVguid) == 1)
+                                        {
+                                            var companyInfo = companylist.First(x => x.OrderVGUID == OrderVguid);
+                                            feeOrder.PayCompanyVguid = companyInfo.VGUID;
+                                            feeOrder.PayCompany = companyInfo.PayBankAccountName;
+                                            feeOrder.CompanyBankName = companyInfo.PayBank;
+                                            feeOrder.CompanyBankAccountName = companyInfo.PayBankAccountName;
+                                            feeOrder.CompanyBankAccount = companyInfo.PayAccount;
+                                            feeOrder.AccountType = companyInfo.AccountType;
+                                        }
+                                        db.Insertable<Business_TaxFeeOrder>(feeOrder).ExecuteCommand();
+                                        db.Insertable<Business_PurchaseOrderNum>(purchaseOrderNum).ExecuteCommand();
                                     }
-                                    //写入资产审核表
-                                    //获取固定资产信息
-                                    var fixedAssetsOrderInfo =
-                                        db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == vguid).First();
-                                    if (db.Queryable<Business_AssetReview>().Any(x => x.FIXED_ASSETS_ORDERID == vguid))
-                                    {
-                                        db.Deleteable<Business_AssetReview>().Where(c => c.FIXED_ASSETS_ORDERID == vguid).ExecuteCommand();
-                                    }
-                                    var belongToList = db.Queryable<Business_AssetOrderBelongTo>()
-                                        .Where(x => x.AssetsOrderVguid == vguid).ToList();
-                                    var orderNumberLeftAsset = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                        //查出当前日期数据库中最大的订单号
-                                        var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
-                                            .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
-                                    var maxOrderNumRightAsset = 0;
-                                    if (currentDayAssetReviewList.Any())
-                                    {
-                                        maxOrderNumRightAsset = currentDayAssetReviewList.OrderByDescending(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
-                                    }
-                                    //获取订单部门
-                                    var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
+                                }
+                                //写入资产审核表
+                                //获取固定资产信息
+                                var fixedAssetsOrderInfo =
+                                    db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == vguid).First();
+                                if (db.Queryable<Business_AssetReview>().Any(x => x.FIXED_ASSETS_ORDERID == vguid))
+                                {
+                                    db.Deleteable<Business_AssetReview>().Where(c => c.FIXED_ASSETS_ORDERID == vguid).ExecuteCommand();
+                                }
+                                var belongToList = db.Queryable<Business_AssetOrderBelongTo>()
+                                    .Where(x => x.AssetsOrderVguid == vguid).ToList();
+                                var orderNumberLeftAsset = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+                                //查出当前日期数据库中最大的订单号
+                                var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
+                                    .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
+                                var maxOrderNumRightAsset = 0;
+                                if (currentDayAssetReviewList.Any())
+                                {
+                                    maxOrderNumRightAsset = currentDayAssetReviewList.OrderByDescending(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
+                                }
+                                //获取订单部门
+                                var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
                                                                                         FROM Business_SevenSection
                                                                                         WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
                                                                                               AND AccountModeCode = '1002'
                                                                                               AND CompanyCode = '01'
                                                                                               AND Status = '1'
                                                                                               AND Code LIKE '10%'").ToList();
-                                    var assetReviewList = new List<Business_AssetReview>();
-                                    foreach (var item in belongToList)
-                                    {
-                                        //根据车型获取各项费用的单价
-                                        var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
-                                            .Where(x => x.VehicleModel == item.VehicleModel && x.Status).ToList();
-                                        maxOrderNumRightAsset++;
-                                        var assetReview = new Business_AssetReview();
-                                        assetReview.VGUID = Guid.NewGuid();
-                                        assetReview.ASSET_ID = orderNumberLeftAsset + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
-                                        assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;//item.VehicleModel;
-                                        assetReview.ENGINE_NUMBER = item.EngineNumber;
-                                        assetReview.CHASSIS_NUMBER = item.ChassisNumber;
-                                        assetReview.VEHICLE_SHORTNAME = fixedAssetsOrder.GoodsModel;
-                                        assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;
-                                        //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
-                                        assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
-                                        assetReview.QUANTITY = 1;
-                                        assetReview.NUDE_CAR_FEE = fixedAssetsOrderInfo.PurchasePrices;
-                                        //车辆税费 根据车型取税费订单中对应的费用
-                                        assetReview.PURCHASE_TAX = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030102").Fee;
-                                        assetReview.LISENSING_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030103").Fee;
-                                        assetReview.OUT_WAREHOUSE_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030104").Fee;
-                                        assetReview.DOME_LIGHT_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030105").Fee;
-                                        assetReview.ANTI_ROBBERY_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030106").Fee;
-                                        assetReview.LOADING_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030107").Fee;
-                                        assetReview.INNER_ROOF_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030108").Fee;
-                                        assetReview.TAXIMETER_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030109").Fee;
-                                        assetReview.ASSET_COST = assetReview.NUDE_CAR_FEE +
-                                                                 assetReview.PURCHASE_TAX +
-                                                                 assetReview.LISENSING_FEE +
-                                                                 assetReview.OUT_WAREHOUSE_FEE +
-                                                                 assetReview.DOME_LIGHT_FEE +
-                                                                 assetReview.ANTI_ROBBERY_FEE +
-                                                                 assetReview.LOADING_FEE +
-                                                                 assetReview.INNER_ROOF_FEE +
-                                                                 assetReview.TAXIMETER_FEE;
-                                        //资产主类次类 根据采购物品获取
-                                        assetReview.ASSET_CATEGORY_MAJOR = db.Queryable<Business_PurchaseOrderSetting>()
-                                            .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
-                                            .AssetCategoryMajor;
-                                        assetReview.ASSET_CATEGORY_MINOR = db.Queryable<Business_PurchaseOrderSetting>()
-                                            .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
-                                            .AssetCategoryMinor;
-                                        //根据主类子类从折旧方法表中获取
-                                        var assetsCategoryInfo = db.Queryable<Business_AssetsCategory>().Where(x =>
-                                            x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
-                                            x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR).First();
-                                        assetReview.LIFE_YEARS = assetsCategoryInfo.LIFE_YEARS;
-                                        assetReview.LIFE_MONTHS = assetsCategoryInfo.LIFE_MONTHS;
-                                        //残值类型 残值金额 摊销标记
-                                        //assetReview.SALVAGE_TYPE = assetsCategoryInfo.SALVAGE_TYPE;
-                                        //assetReview.SALVAGE_VALUE = assetsCategoryInfo.SALVAGE_VALUE;
-                                        //assetReview.SALVAGE_PERCENT = assetsCategoryInfo.SALVAGE_PERCENT;
-                                        assetReview.AMORTIZATION_FLAG = "N";
-                                        assetReview.METHOD = assetsCategoryInfo.METHOD;
-                                        assetReview.BOOK_TYPE_CODE = assetsCategoryInfo.BOOK_TYPE_CODE;
-                                        assetReview.ASSET_COST_ACCOUNT = assetsCategoryInfo.ASSET_COST_ACCOUNT;
-                                        assetReview.ASSET_SETTLEMENT_ACCOUNT = assetsCategoryInfo.ASSET_SETTLEMENT_ACCOUNT;
-                                        assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
-                                        assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
-                                        assetReview.ISVERIFY = false;
-                                        //var ssList = db.Queryable<Business_SevenSection>().Where(x =>
-                                        //     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                                        //assetReview.MANAGEMENT_COMPANY = item.AssetManagementCompany;
-                                        //assetReview.BELONGTO_COMPANY = item.BelongToCompany;
-                                        //assetReview.MANAGEMENT_COMPANY_CODE = ssList.First(x => x.Abbreviation == item.AssetManagementCompany).OrgID;
-                                        //assetReview.BELONGTO_COMPANY_CODE = ssList.First(x => x.Descrption == item.BelongToCompany).OrgID;
-                                        ////总账帐簿 根据主信息中的资产所属公司获得后通过映射表转换
-                                        //var accountModeCode = ssList.First(x => x.Descrption == assetReview.BELONGTO_COMPANY).AccountModeCode;
-                                        //var accountModel = db.Queryable<Business_SevenSection>().Where(x =>
-                                        //    x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == accountModeCode).First();
-                                        //assetReview.EXP_ACCOUNT_SEGMENT = accountModel.Descrption;
-                                        assetReview.YTD_DEPRECIATION = 0;
-                                        assetReview.ACCT_DEPRECIATION = 0;
-                                        assetReview.FIXED_ASSETS_ORDERID = vguid;
-                                        assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
-                                        assetReview.CREATE_DATE = DateTime.Now;
+                                var assetReviewList = new List<Business_AssetReview>();
+                                foreach (var item in belongToList)
+                                {
+                                    //根据车型获取各项费用的单价
+                                    var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
+                                        .Where(x => x.VehicleModel == item.VehicleModel && x.Status).ToList();
+                                    maxOrderNumRightAsset++;
+                                    var assetReview = new Business_AssetReview();
+                                    assetReview.VGUID = Guid.NewGuid();
+                                    assetReview.ASSET_ID = orderNumberLeftAsset + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
+                                    assetReview.GROUP_ID = fixedAssetsOrder.PurchaseGoods;
+                                    assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;//item.VehicleModel;
+                                    assetReview.ENGINE_NUMBER = item.EngineNumber;
+                                    assetReview.CHASSIS_NUMBER = item.ChassisNumber;
+                                    assetReview.VEHICLE_SHORTNAME = fixedAssetsOrder.GoodsModel;
+                                    assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;
+                                    //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
+                                    assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
+                                    assetReview.QUANTITY = 1;
+                                    assetReview.NUDE_CAR_FEE = fixedAssetsOrderInfo.PurchasePrices;
+                                    //车辆税费 根据车型取税费订单中对应的费用
+                                    assetReview.PURCHASE_TAX = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030102").Fee;
+                                    assetReview.LISENSING_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030103").Fee;
+                                    assetReview.OUT_WAREHOUSE_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030104").Fee;
+                                    assetReview.DOME_LIGHT_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030105").Fee;
+                                    assetReview.ANTI_ROBBERY_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030106").Fee;
+                                    assetReview.LOADING_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030107").Fee;
+                                    assetReview.INNER_ROOF_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030108").Fee;
+                                    assetReview.TAXIMETER_FEE = feeList.First(x => x.BusinessSubItem == "cz|03|0301|030109").Fee;
+                                    assetReview.ASSET_COST = assetReview.NUDE_CAR_FEE +
+                                                             assetReview.PURCHASE_TAX +
+                                                             assetReview.LISENSING_FEE +
+                                                             assetReview.OUT_WAREHOUSE_FEE +
+                                                             assetReview.DOME_LIGHT_FEE +
+                                                             assetReview.ANTI_ROBBERY_FEE +
+                                                             assetReview.LOADING_FEE +
+                                                             assetReview.INNER_ROOF_FEE +
+                                                             assetReview.TAXIMETER_FEE;
+                                    //资产主类次类 根据采购物品获取
+                                    assetReview.ASSET_CATEGORY_MAJOR = db.Queryable<Business_PurchaseOrderSetting>()
+                                        .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
+                                        .AssetCategoryMajor;
+                                    assetReview.ASSET_CATEGORY_MINOR = db.Queryable<Business_PurchaseOrderSetting>()
+                                        .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
+                                        .AssetCategoryMinor;
+                                    //根据主类子类从折旧方法表中获取
+                                    var assetsCategoryInfo = db.Queryable<Business_AssetsCategory>().Where(x =>
+                                        x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
+                                        x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR).First();
+                                    assetReview.LIFE_YEARS = assetsCategoryInfo.LIFE_YEARS;
+                                    assetReview.LIFE_MONTHS = assetsCategoryInfo.LIFE_MONTHS;
+                                    //残值类型 残值金额 摊销标记
+                                    //assetReview.SALVAGE_TYPE = assetsCategoryInfo.SALVAGE_TYPE;
+                                    //assetReview.SALVAGE_VALUE = assetsCategoryInfo.SALVAGE_VALUE;
+                                    //assetReview.SALVAGE_PERCENT = assetsCategoryInfo.SALVAGE_PERCENT;
+                                    assetReview.AMORTIZATION_FLAG = "N";
+                                    assetReview.METHOD = assetsCategoryInfo.METHOD;
+                                    assetReview.BOOK_TYPE_CODE = assetsCategoryInfo.BOOK_TYPE_CODE;
+                                    assetReview.ASSET_COST_ACCOUNT = assetsCategoryInfo.ASSET_COST_ACCOUNT;
+                                    assetReview.ASSET_SETTLEMENT_ACCOUNT = assetsCategoryInfo.ASSET_SETTLEMENT_ACCOUNT;
+                                    assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
+                                    assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
+                                    assetReview.ISVERIFY = false;
+                                    //var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                                    //     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                                    //assetReview.MANAGEMENT_COMPANY = item.AssetManagementCompany;
+                                    //assetReview.BELONGTO_COMPANY = item.BelongToCompany;
+                                    //assetReview.MANAGEMENT_COMPANY_CODE = ssList.First(x => x.Abbreviation == item.AssetManagementCompany).OrgID;
+                                    //assetReview.BELONGTO_COMPANY_CODE = ssList.First(x => x.Descrption == item.BelongToCompany).OrgID;
+                                    ////总账帐簿 根据主信息中的资产所属公司获得后通过映射表转换
+                                    //var accountModeCode = ssList.First(x => x.Descrption == assetReview.BELONGTO_COMPANY).AccountModeCode;
+                                    //var accountModel = db.Queryable<Business_SevenSection>().Where(x =>
+                                    //    x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == accountModeCode).First();
+                                    //assetReview.EXP_ACCOUNT_SEGMENT = accountModel.Descrption;
+                                    assetReview.YTD_DEPRECIATION = 0;
+                                    assetReview.ACCT_DEPRECIATION = 0;
+                                    assetReview.FIXED_ASSETS_ORDERID = vguid;
+                                    assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                                    assetReview.CREATE_DATE = DateTime.Now;
                                     var fixedAssetId = fixedAssetsOrderInfo.VGUID;
                                     var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
                                     var strList = new List<Guid>();
@@ -534,25 +535,208 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                                     assetReview.ORGANIZATION_NUM = departmentStr;
                                     assetReviewList.Add(assetReview);
-                                    }
-                                    db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
-                                    purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
-                                    purchaseAssign.ChangeDate = DateTime.Now;
-                                    purchaseAssign.SubmitStatus = 1;
-                                    db.Updateable(purchaseAssign)
-                                        .UpdateColumns(it => new { it.ChangeUser, it.ChangeDate, it.SubmitStatus }).ExecuteCommand();
+                                }
+                                db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
+                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                purchaseAssign.ChangeDate = DateTime.Now;
+                                purchaseAssign.SubmitStatus = 1;
+                                db.Updateable(purchaseAssign)
+                                    .UpdateColumns(it => new { it.ChangeUser, it.ChangeDate, it.SubmitStatus }).ExecuteCommand();
                                 resultModel.IsSuccess = true;
                                 resultModel.Status = "1";
                             }
-                            });
                         });
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
-                    }
+                    });
                 }
-                return Json(resultModel);
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
+                }
+            }
+            return Json(resultModel);
+        }
+        public JsonResult ImportOBDAssignFile(Guid vguid, HttpPostedFileBase File)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
+            if (File != null)
+            {
+                var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
+                var uploadPath = "\\" + ConfigSugar.GetAppString("UploadPath") + "\\" + "PurchaseOBDAssign\\";
+                var filePath = System.AppDomain.CurrentDomain.BaseDirectory + uploadPath + newFileName;
+                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + uploadPath))
+                {
+                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + uploadPath);
+                }
+                try
+                {
+                    File.SaveAs(filePath);
+                    //校验总数是否一致，校验管理公司是否一致
+                    DbBusinessDataService.Command(db =>
+                    {
+                        var consistent = true;
+                        var result = db.Ado.UseTran(() =>
+                        {
+                            var fixedAssetsOrder = db.Queryable<Business_FixedAssetsOrder>()
+                                .Where(c => c.VGUID == vguid).First();
+                            var list = new List<Excel_PurchaseOBDAssignModel>();
+                            var dt = ExcelHelper.ExportToDataTable(filePath, true);
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                var assign = new Excel_PurchaseOBDAssignModel();
+                                assign.PlateNumber = dt.Rows[i][0].ToString();
+                                assign.EquipmentNumber = dt.Rows[i][1].ToString();
+                                list.Add(assign);
+                            }
+                            if (list.Any(x => x.EquipmentNumber.Length != 15))
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo = resultModel.ResultInfo + "设备号不正确 ";
+                            }
+                            if (fixedAssetsOrder.OrderQuantity != list.Count)
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo += "订单总数不一致 ";
+                            }
+                            //判断导入数据是否重复
+                            var set = new HashSet<string>();
+                            list.ForEach(x => {
+                                set.Add(x.PlateNumber + x.EquipmentNumber);
+                            });
+                            if (set.Count != list.Count)
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo = resultModel.ResultInfo + "Excel中有重复数据 ";
+                            }
+
+                            var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
+                                .Where(c => c.FixedAssetsOrderVguid == vguid).First();
+                            //判断判断车架号发动机号，系统中没有才可以导入
+                            var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
+                            .Select(x => new { PlateNumber_EquipmentNumber = x.PLATE_NUMBER + x.CHASSIS_NUMBER }).ToList();
+                            var listExcel = list.Select(x => new
+                            { PlateNumber_EquipmentNumber = x.PlateNumber + x.EquipmentNumber }).ToList();
+                            if (listAssetInfo.Union(listExcel).ToList().Count < listAssetInfo.Count + listExcel.Count)
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo += "导入的车牌号和设备号已存在 ";
+                                return;
+                            }
+                            //判断已导入未审核的车架号发动机号，没有才可以导入
+                            var listReviewInfo = db.Queryable<Business_AssetReview>()
+                                .Select(x => new { PlateNumber_EquipmentNumber = x.PLATE_NUMBER + x.CHASSIS_NUMBER }).ToList();
+                            if (listReviewInfo.Union(listExcel).ToList().Count < listReviewInfo.Count + listExcel.Count)
+                            {
+                                consistent = false;
+                                resultModel.ResultInfo += "导入的车牌号和设备号已存在 ";
+                                return;
+                            }
+                            if (consistent)
+                            {
+                                //写入资产审核表
+                                //获取固定资产信息
+                                var fixedAssetsOrderInfo =
+                                    db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == vguid).First();
+                                if (db.Queryable<Business_AssetReview>().Any(x => x.FIXED_ASSETS_ORDERID == vguid))
+                                {
+                                    db.Deleteable<Business_AssetReview>().Where(c => c.FIXED_ASSETS_ORDERID == vguid).ExecuteCommand();
+                                }
+                                var orderNumberLeftAsset = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+                                //查出当前日期数据库中最大的订单号
+                                var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
+                                    .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
+                                var maxOrderNumRightAsset = 0;
+                                if (currentDayAssetReviewList.Any())
+                                {
+                                    maxOrderNumRightAsset = currentDayAssetReviewList.OrderByDescending(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
+                                }
+                                //获取订单部门
+                                var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
+                                                                                        FROM Business_SevenSection
+                                                                                        WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
+                                                                                              AND AccountModeCode = '1002'
+                                                                                              AND CompanyCode = '01'
+                                                                                              AND Status = '1'
+                                                                                              AND Code LIKE '10%'").ToList();
+                                var assetReviewList = new List<Business_AssetReview>();
+                                foreach (var item in list)
+                                {
+                                    maxOrderNumRightAsset++;
+                                    var assetReview = new Business_AssetReview();
+                                    assetReview.VGUID = Guid.NewGuid();
+                                    assetReview.ASSET_ID = orderNumberLeftAsset + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
+                                    assetReview.GROUP_ID = fixedAssetsOrder.PurchaseGoods;
+                                    assetReview.PLATE_NUMBER = item.PlateNumber;
+                                    assetReview.CHASSIS_NUMBER = item.EquipmentNumber;
+                                    assetReview.VEHICLE_SHORTNAME = "OBD";
+                                    assetReview.DESCRIPTION = item.PlateNumber;
+                                    assetReview.TAG_NUMBER = orderNumberLeftAsset.Replace("CZ","JK") + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
+                                    //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
+                                    assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
+                                    assetReview.QUANTITY = 1;
+                                    assetReview.ASSET_COST = fixedAssetsOrder.PurchasePrices;
+                                    //资产主类次类 根据采购物品获取
+                                    assetReview.ASSET_CATEGORY_MAJOR = db.Queryable<Business_PurchaseOrderSetting>()
+                                        .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
+                                        .AssetCategoryMajor;
+                                    assetReview.ASSET_CATEGORY_MINOR = db.Queryable<Business_PurchaseOrderSetting>()
+                                        .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
+                                        .AssetCategoryMinor;
+                                    //根据主类子类从折旧方法表中获取
+                                    var assetsCategoryInfo = db.Queryable<Business_AssetsCategory>().Where(x =>
+                                        x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
+                                        x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR).First();
+                                    assetReview.LIFE_YEARS = assetsCategoryInfo.LIFE_YEARS;
+                                    assetReview.LIFE_MONTHS = assetsCategoryInfo.LIFE_MONTHS;
+                                    assetReview.AMORTIZATION_FLAG = "N";
+                                    assetReview.METHOD = assetsCategoryInfo.METHOD;
+                                    assetReview.BOOK_TYPE_CODE = assetsCategoryInfo.BOOK_TYPE_CODE;
+                                    assetReview.ASSET_COST_ACCOUNT = assetsCategoryInfo.ASSET_COST_ACCOUNT;
+                                    assetReview.ASSET_SETTLEMENT_ACCOUNT = assetsCategoryInfo.ASSET_SETTLEMENT_ACCOUNT;
+                                    assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
+                                    assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
+                                    assetReview.ISVERIFY = false;
+                                    assetReview.YTD_DEPRECIATION = 0;
+                                    assetReview.ACCT_DEPRECIATION = 0;
+                                    assetReview.FIXED_ASSETS_ORDERID = vguid;
+                                    assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                                    assetReview.CREATE_DATE = DateTime.Now;
+                                    var fixedAssetId = fixedAssetsOrderInfo.VGUID;
+                                    var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
+                                    var strList = new List<Guid>();
+                                    foreach (var departmentID in departmentIDsArr)
+                                    {
+                                        strList.Add(departmentID.TryToGuid());
+                                    }
+                                    var departments = departmentList.Where(x => strList.Contains(x.VGUID));
+                                    var departmentStr = "";
+                                    foreach (var ditem in departments)
+                                    {
+                                        departmentStr = departmentStr + ditem.Descrption + ",";
+                                    }
+                                    departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
+                                    assetReview.ORGANIZATION_NUM = departmentStr;
+                                    assetReviewList.Add(assetReview);
+                                }
+                                db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
+                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                purchaseAssign.ChangeDate = DateTime.Now;
+                                purchaseAssign.SubmitStatus = 1;
+                                db.Updateable(purchaseAssign)
+                                    .UpdateColumns(it => new { it.ChangeUser, it.ChangeDate, it.SubmitStatus }).ExecuteCommand();
+                                resultModel.IsSuccess = true;
+                                resultModel.Status = "1";
+                            }
+                        });
+                    });
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", filePath, ex.ToString()));
+                }
+            }
+            return Json(resultModel);
         }
         public JsonResult SubmitAssign(Guid vguid)
         {

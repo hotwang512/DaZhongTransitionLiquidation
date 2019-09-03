@@ -76,7 +76,7 @@ var $page = function () {
                 $("#OrderBelongToDialog").modal("hide");
             }
         );
-        //统一上传文件
+        //出租车导入
         $("#LocalFileInput").on("change",
             function () {
                 var filePath = this.value;
@@ -97,12 +97,51 @@ var $page = function () {
                         success: function (msg) {
                             layer.closeAll('loading');
                             switch (msg.Status) {
-                                case "0":
-                                    if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
-                                        jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
-                                    } else {
-                                        jqxNotification("导入失败", null, "error");
-                                    }
+                            case "0":
+                                if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
+                                    jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
+                                } else {
+                                    jqxNotification("导入失败", null, "error");
+                                }
+                                $('#LocalFileInput').val('');
+                                break;
+                            case "1":
+                                jqxNotification("导入成功！", null, "success");
+                                $('#LocalFileInput').val('');
+                                initTable();
+                                break;
+                            }
+                        }
+                    });
+                }
+            });
+        //OBD导入
+        $("#LocalOBDFileInput").on("change",
+            function () {
+                var filePath = this.value;
+                var fileExt = filePath.substring(filePath.lastIndexOf("."))
+                    .toLowerCase();
+                if (!checkFileExt(fileExt)) {
+                    jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+                    this.value = "";
+                    return;
+                } else {
+                    layer.load();
+                    $("#localOBDFormFile").ajaxSubmit({
+                        url: "/AssetPurchase/PurchaseAssign/ImportOBDAssignFile",
+                        type: "post",
+                        data: {
+                            'vguid': $("#AssetsOrderVguid").val()
+                        },
+                        success: function (msg) {
+                            layer.closeAll('loading');
+                            switch (msg.Status) {
+                            case "0":
+                                if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
+                                    jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
+                                } else {
+                                    jqxNotification("导入失败", null, "error");
+                                }
                                 $('#LocalFileInput').val('');
                                 break;
                             case "1":
@@ -188,6 +227,14 @@ var $page = function () {
                     '\')" id="' +
                     FixedAssetsOrderVguid +
                     '">导入清册</a>' +
+                    '</div>';
+            }else if (rowData.PurchaseGoods == "OBD") {
+                return '<div style="margin: 8px; margin-top:6px;">' +
+                    '<a style="cursor:pointer"  onclick="ImportOBD(\'' +
+                    FixedAssetsOrderVguid +
+                    '\')" id="' +
+                    FixedAssetsOrderVguid +
+                    '">导入设备</a>' +
                     '</div>';
             } else {
                 return '<div style="margin: 8px; margin-top:6px;">' +
@@ -344,6 +391,10 @@ function ViewBelongTo(vguid) {
 function Import(vguid) {
     $("#AssetsOrderVguid").val(vguid);
     $("#LocalFileInput").click();
+}
+function ImportOBD(vguid) {
+    $("#AssetsOrderVguid").val(vguid);
+    $("#LocalOBDFileInput").click();
 }
 function ViewAssign(vguid) {
     $("#AssetsOrderVguid").val(vguid);

@@ -93,6 +93,9 @@ namespace DaZhongTransitionLiquidation.Controllers
         }
         public static int WirterSyncModifyAssetFlow(List<Api_ModifyVehicleAsset> assetFlowList)
         {
+            //var alist = assetFlowList.GroupBy(x => x.ORIGINALID).ToList();
+            //var vlist = assetFlowList.Where(x => x.MODEL_MINOR.IsNullOrEmpty()).ToList();
+            //var slist = assetFlowList.Where(x => x.CHASSIS_NUMBER == "LSVVL41T2J2010240").ToList();
             var list = new List<Business_ModifyVehicle>();
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             var assetMaintenanceInfoList = _db.Queryable<Business_AssetMaintenanceInfo>().ToList();
@@ -180,6 +183,25 @@ namespace DaZhongTransitionLiquidation.Controllers
                             //经营模式主类 传过来的经营模式上上级
                             var major = manageModelList.FirstOrDefault(x => x.VGUID == minorModel.ParentVGUID);
                             item.MODEL_MAJOR = major.BusinessName;
+                            if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
+                            {
+                                //经营模式
+                                MODIFY_TYPE = "BUSINESS_MODEL";
+                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
+                            }
+                        }
+                        else
+                        {
+                            if (item.OPERATING_STATE == "停运")
+                            {
+                                item.MODEL_MAJOR = "停运模式";
+                                item.MODEL_MINOR = "旧车停运";
+                            }
+                            else if (item.OPERATING_STATE == "")
+                            {
+                                item.MODEL_MAJOR = "停运模式";
+                                item.MODEL_MINOR = "新车停运";
+                            }
                             if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
                             {
                                 //经营模式

@@ -1170,19 +1170,23 @@
                         </tr>
                     </table>
                 </div>
-                <div class="menue_body" id="NewAssets" style="display: none;">
+                <div class="menue_body" id="ReviewAsset" style="display: none;">
                     <table>
                         @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="AssetsMaintenance_NewAssets" pageurl="/AssetManagement/ReviewAsset/Index">
+                            <tr class="menue_item" id="ReviewAsset_NewAssets" pageurl="/AssetManagement/ReviewAsset/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">审核资产</td>
+                                <td class="menue_text">审核车辆</td>
+                                <td></td>
+                            </tr>
+                            <tr class="menue_item" id="ReviewOBDAsset_NewAssets" pageurl="/AssetManagement/ReviewOBDAsset/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">审核OBD</td>
                                 <td></td>
                             </tr>
                         }
                     </table>
                 </div>
-
                 <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>

@@ -33,37 +33,6 @@ var $page = function () {
         selector.$btnReset().on("click", function () {
             $("#YearMonth").val("");
         });
-        //获取数据
-        $("#btnGetData").on("click", function () {
-            layer.load();
-            $.ajax({
-                url: "/AssetManagement/ReviewAsset/GetReviewAsset",
-                //traditional: true,
-                type: "post",
-                success: function (msg) {
-                    layer.closeAll('loading');
-                    switch (msg.Status) {
-                    case "0":
-                        jqxNotification("获取失败！", null, "error");
-                        break;
-                    case "1":
-                        jqxNotification("获取成功！", null, "success");
-                        initTable(false);
-                        break;
-                    case "2":
-                        jqxNotification(msg.ResultInfo, null, "error");
-                        $("#myModalLabel_title2").html(msg.ResultInfo);
-                        ViewReview(msg.ResultInfo2);
-                        $("#jqxTable").jqxDataTable('updateBoundData');
-                        break;
-                    case "3":
-                        jqxNotification(msg.ResultInfo, null, "error");
-                        $("#myModalLabel_title2").html(msg.ResultInfo);
-                        break;
-                    }
-                }
-            });
-        });
         //提交
         $("#btnSubmit").on("click", function () {
             var selection = [];
@@ -91,28 +60,28 @@ var $page = function () {
             } else {
                 layer.load();
                 $.ajax({
-                    url: "/AssetManagement/ReviewAsset/SubmitReviewAsset",
+                    url: "/AssetManagement/ReviewOBDAsset/SubmitReviewAsset",
                     data: { vguids: pars },
                     //traditional: true,
                     type: "post",
                     success: function (msg) {
                         layer.closeAll('loading');
                         switch (msg.Status) {
-                        case "0":
-                            jqxNotification("审核失败！", null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("审核成功！", null, "success");
-                            $("#jqxTable").jqxGrid('updateBoundData');
-                            $('#jqxTable').jqxGrid('clearselection');
-                            break;
-                        case "2":
-                            jqxNotification(msg.ResultInfo, null, "success");
-                            $("#myModalLabel_title2").html(msg.ResultInfo);
-                            ViewReview(msg.ResultInfo2);
-                            $("#jqxTable").jqxGrid('updateBoundData');
-                            $('#jqxTable').jqxGrid('clearselection');
-                            break;
+                            case "0":
+                                jqxNotification("审核失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("审核成功！", null, "success");
+                                $("#jqxTable").jqxGrid('updateBoundData');
+                                $('#jqxTable').jqxGrid('clearselection');
+                                break;
+                            case "2":
+                                jqxNotification(msg.ResultInfo, null, "success");
+                                $("#myModalLabel_title2").html(msg.ResultInfo);
+                                ViewReview(msg.ResultInfo2);
+                                $("#jqxTable").jqxGrid('updateBoundData');
+                                $('#jqxTable').jqxGrid('clearselection');
+                                break;
                         }
                     }
                 });
@@ -124,10 +93,10 @@ var $page = function () {
                 $("#AssetReviewDialog").modal("hide");
             }
         );
-        selector.$btnVerify().on("click",
-            function() {
-                initTable(true);
-            });
+        //selector.$btnVerify().on("click",
+        //    function () {
+        //        initTable(true);
+        //    });
     }; //addEvent end
 
     function initTable(isVerify) {
@@ -204,7 +173,7 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 data: { "YearMonth": $("#YearMonth").val(), Company: $("#Company").val(), VehicleModel: $("#VehicleModel").val(), ISVerify: isVerify },
-                url: "/AssetManagement/ReviewAsset/GetReviewAssetListDatas"   //获取数据源的路径
+                url: "/AssetManagement/ReviewOBDAsset/GetReviewAssetListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -225,7 +194,7 @@ var $page = function () {
                 selectionmode: 'checkbox',
                 theme: "office",
                 columnsHeight: 40,
-                enablehover:false,
+                enablehover: false,
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden:false,align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'GroupID', datafield: 'GROUP_ID', width: 100, hidden: true, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
@@ -237,18 +206,18 @@ var $page = function () {
                     { text: '数量', datafield: 'QUANTITY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '资产主类', datafield: 'ASSET_CATEGORY_MAJOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '资产次类', datafield: 'ASSET_CATEGORY_MINOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '车型', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '启用日期', datafield: 'LISENSING_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '期间', datafield: 'START_VEHICLE_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    //{ text: '车型', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    //{ text: '启用日期', datafield: 'LISENSING_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    //{ text: '期间', datafield: 'START_VEHICLE_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '资产原值', datafield: 'ASSET_COST', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '摊销标记', datafield: 'AMORTIZATION_FLAG', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '存放地点1', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '存放地点2', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '存放地点3', datafield: 'ORGANIZATION_NUM', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass },
-                    { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '经营模式主类', datafield: 'MODEL_MAJOR', width: 180, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '模式子类', datafield: 'MODEL_MINOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    //{ text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    //{ text: '车架号', datafield: 'CHASSIS_NUMBER', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    //{ text: '经营模式主类', datafield: 'MODEL_MAJOR', width: 180, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    //{ text: '模式子类', datafield: 'MODEL_MINOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '创建人', datafield: 'CREATE_USER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '修改人', datafield: 'CHANGE_USER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
@@ -256,14 +225,6 @@ var $page = function () {
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });
-        //selector.$grid().on('rowDoubleClick', function (event) {
-        //    // event args.
-        //    var args = event.args;
-        //    // row data.
-        //    var row = args.row;
-        //    // row index.
-        //    window.location.href = "/AssetManagement/AssetMaintenanceInfoDetail/Index?VGUID=" + row.VGUID;
-        //});
     }
     function cellclass(rowData, columnfield, value) {
         debugger;
@@ -275,7 +236,7 @@ var $page = function () {
     };
     function initiSelectCompany() {
         $.ajax({
-            url: "/AssetManagement/ReviewAsset/GetCompany",
+            url: "/AssetManagement/ReviewOBDAsset/GetCompany",
             type: "POST",
             dataType: "json",
             async: false,

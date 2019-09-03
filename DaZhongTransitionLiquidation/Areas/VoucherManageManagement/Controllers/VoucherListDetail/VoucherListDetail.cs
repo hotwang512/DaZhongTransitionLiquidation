@@ -105,6 +105,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         /// </summary> 
         public string Attachment { get; set; }
         public string Status { get; set; }
+        public string Automatic { get; set; }
         public List<Business_VoucherDetail> Detail { get; set; }
     }
 }

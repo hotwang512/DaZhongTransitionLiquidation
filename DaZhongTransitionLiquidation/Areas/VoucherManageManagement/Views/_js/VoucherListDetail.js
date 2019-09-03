@@ -362,7 +362,7 @@ var $page = function () {
             });
         });
         //选择7个段
-        $("#btnSaveSeven").on("click", function (){
+        $("#btnSaveSeven").on("click", function () {
             var trIndex1 = $("#hidbtnIndex").val();
             var companySection = $("#CompanySection").val();
             var companySectionName = $("#CompanySection  option:selected").text();
@@ -384,7 +384,32 @@ var $page = function () {
             $("#hideCompanyName").val(companySectionName);
             $("#ShowSevenSubject").modal({ backdrop: "static", keyboard: false });
             $("#ShowSevenSubject").modal("hide");
-        })
+        });
+        //提交
+        $("#btnUp").on("click", function () {
+            var vguid = $("#VGUID").val();
+            var tableIndex = $("#Automatic").val();
+            $.ajax({
+                url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
+                data: { vguids: vguid, status: "3", index: tableIndex },
+                traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("提交失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("提交成功！", null, "success");
+                            history.go(-1);
+                            break;
+                        case "2":
+                            jqxNotification(msg.ResultInfo + "条凭证借贷不相平,提交失败！", null, "error");
+                            break;
+                    }
+                }
+            });
+        });
     }; //addEvent end
 
     function addSectionDiv() {
@@ -547,8 +572,13 @@ var $page = function () {
                 $("#Status").val(msg.Status);
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();
+                    $("#btnUp").hide();
                 } else {
                     $("#btnSave").hide();
+                    $("#btnUp").hide();
+                }
+                if ($("#Status").val() == "2") {
+                    $("#btnUp").show();
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
@@ -565,6 +595,7 @@ var $page = function () {
                 $("#CompanyCode").val(msg.CompanyCode);
                 $("#AccountModeName").val(msg.AccountModeName);
                 $("#VoucherType").val(msg.VoucherType);
+                $("#Automatic").val(msg.Automatic);
                 var datas = msg.Detail;
                 //setVoucherDetail(datas);
                 createTable(datas);

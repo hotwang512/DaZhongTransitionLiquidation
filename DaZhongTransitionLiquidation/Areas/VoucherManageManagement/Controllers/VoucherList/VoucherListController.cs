@@ -51,6 +51,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
+
+                //var data = jsonResult.Rows;
+                //foreach (var item in data)
+                //{
+                //    var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
+                //    item.VoucherNo = no;
+                //    db.Updateable(item).ExecuteCommand();
+                //}
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
@@ -155,11 +163,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.ACCOUNTING_DATE = voucher.VoucherDate;
                 asset.CURRENCY_CODE = "RMB";//币种
                 asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空
-                asset.CURRENCY_CONVERSION_DATE = DateTime.Now;
+                asset.CURRENCY_CONVERSION_DATE = null;
                 asset.CURRENCY_CONVERSION_RATE = null;//币种是RMB时为空
                 asset.STATUS = "N";
                 asset.TRASACTION_ID = Guid.NewGuid().TryToString();
                 asset.JE_LINE_NUMBER = items.JE_LINE_NUMBER;
+                asset.JE_LINE_DESCRIPTION = items.Abstract;
                 asset.SEGMENT1 = items.CompanySection;
                 asset.SEGMENT2 = items.SubjectSection;
                 asset.SEGMENT3 = items.AccountSection;

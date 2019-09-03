@@ -198,15 +198,15 @@ var $page = function () {
                 pageable: true,
                 width: "100%",
                 height: 500,
-                pageSize: 10,
+                pageSize: 99999,
                 serverProcessing: true,
                 pagerButtonsCount: 10,
                 source: typeAdapter,
                 theme: "office",
                 columnsHeight: 30,
-                groups: ['CompanyName'],
+                groups: ['BankName'],
                 groupsRenderer: function (value, rowData, level) {
-                    return "公司名: " + value;
+                    return "开户行: " + value;
                 },
                 //selectionMode: "selectionMode",
                 columns: [
@@ -328,7 +328,6 @@ var $page = function () {
         element.jqxCheckBox();
         element.on('change', function (event) {
             var checked = element.jqxCheckBox('checked');
-
             if (checked) {
                 var rows = grid.jqxDataTable('getRows');
                 for (var i = 0; i < rows.length; i++) {

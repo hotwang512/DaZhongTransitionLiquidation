@@ -740,7 +740,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
                 }
-                return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+                return DateTime.Now.ToString("yyyyMM") + (batchNo + 1).TryToString().PadLeft(4, '0');
             }
         }
         public static string GetTransferVoucherName()
@@ -755,7 +755,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
                 }
-                return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+                return DateTime.Now.ToString("yyyyMM") + (batchNo + 1).TryToString().PadLeft(4, '0');
             }
         }
         public static Business_CompanyBankInfo GetSevenSubject(string bankAccount)

@@ -559,7 +559,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
-            var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
             if (File != null)
             {
                 var newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + File.FileName.Substring(File.FileName.LastIndexOf("."), File.FileName.Length - File.FileName.LastIndexOf("."));
@@ -585,8 +584,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
                                 var assign = new Excel_PurchaseOBDAssignModel();
-                                assign.PlateNumber = dt.Rows[i][0].ToString();
-                                assign.EquipmentNumber = dt.Rows[i][1].ToString();
+                                assign.EquipmentNumber = dt.Rows[i][0].ToString();
+                                assign.PlateNumber = dt.Rows[i][1].ToString();
                                 list.Add(assign);
                             }
                             if (list.Any(x => x.EquipmentNumber.Length != 15))

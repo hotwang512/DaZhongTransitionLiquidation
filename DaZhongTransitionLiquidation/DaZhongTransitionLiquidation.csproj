@@ -2598,6 +2598,9 @@
     <Content Include="Template\AssetsLedger.xlsx" />
     <Content Include="Template\AssetsRetiremen.xlsx" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Template\OBD资产清册导入.xlsx" />
+    <Content Include="Template\SettlementCount.xlsx" />
+    <Content Include="Template\固定资产清册导入.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

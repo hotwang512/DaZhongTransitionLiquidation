@@ -633,6 +633,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             }
                             if (consistent)
                             {
+                                var assetInfoList = db.Queryable<Business_AssetMaintenanceInfo>().ToList();
                                 //写入资产审核表
                                 //获取固定资产信息
                                 var fixedAssetsOrderInfo =
@@ -716,6 +717,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     }
                                     departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                                     assetReview.ORGANIZATION_NUM = departmentStr;
+                                    if (assetInfoList.Any(x => x.PLATE_NUMBER == item.PlateNumber))
+                                    {
+                                        var assetInfo = assetInfoList
+                                            .First(x => x.PLATE_NUMBER == item.PlateNumber);
+                                        assetReview.BELONGTO_COMPANY = assetInfo.BELONGTO_COMPANY;
+                                        assetReview.MANAGEMENT_COMPANY = assetInfo.MANAGEMENT_COMPANY;
+                                        assetReview.MODEL_MAJOR = assetInfo.MODEL_MAJOR;
+                                        assetReview.MODEL_MINOR = assetInfo.MODEL_MINOR;
+                                        assetReview.EXP_ACCOUNT_SEGMENT = assetInfo.EXP_ACCOUNT_SEGMENT;
+                                    }
                                     assetReviewList.Add(assetReview);
                                 }
                                 db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();

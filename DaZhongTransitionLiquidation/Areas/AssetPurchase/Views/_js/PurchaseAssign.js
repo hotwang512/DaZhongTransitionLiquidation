@@ -228,7 +228,7 @@ var $page = function () {
                     FixedAssetsOrderVguid +
                     '">导入清册</a>' +
                     '</div>';
-            }else if (rowData.PurchaseGoods == "OBD") {
+            }else if (rowData.PurchaseGoods == "OBD设备") {
                 return '<div style="margin: 8px; margin-top:6px;">' +
                     '<a style="cursor:pointer"  onclick="ImportOBD(\'' +
                     FixedAssetsOrderVguid +

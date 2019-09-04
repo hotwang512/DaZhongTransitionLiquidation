@@ -698,9 +698,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.ASSET_CATEGORY_MAJOR = orderSetting.AssetCategoryMajor;
                                     assetReview.ASSET_CATEGORY_MINOR = orderSetting.AssetCategoryMinor;
                                     //根据主类子类从折旧方法表中获取
-                                    var assetsCategoryInfo = assetsCategoryList.Where(x =>
-                                        x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
-                                        x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR).First();
+                                    var assetsCategoryInfo = assetsCategoryList.First(x => x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
+                                                                                           x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR);
                                     assetReview.LIFE_YEARS = assetsCategoryInfo.LIFE_YEARS;
                                     assetReview.LIFE_MONTHS = assetsCategoryInfo.LIFE_MONTHS;
                                     assetReview.AMORTIZATION_FLAG = "N";
@@ -710,6 +709,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.ASSET_SETTLEMENT_ACCOUNT = assetsCategoryInfo.ASSET_SETTLEMENT_ACCOUNT;
                                     assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
                                     assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
+                                    assetReview.SALVAGE_TYPE = "P";
+                                    assetReview.SALVAGE_PERCENT = assetsCategoryInfo.SALVAGE_PERCENT;
                                     assetReview.ISVERIFY = false;
                                     assetReview.YTD_DEPRECIATION = 0;
                                     assetReview.ACCT_DEPRECIATION = 0;
@@ -728,8 +729,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         assetReview.EXP_ACCOUNT_SEGMENT = assetInfo.EXP_ACCOUNT_SEGMENT;
                                         assetReview.VEHICLE_STATE = assetInfo.VEHICLE_STATE;
                                         assetReview.OPERATING_STATE = assetInfo.OPERATING_STATE;
-                                        assetReview.SALVAGE_TYPE = "P";
-                                        assetReview.SALVAGE_PERCENT = assetInfo.SALVAGE_PERCENT;
                                     }
                                     assetReviewList.Add(assetReview);
                                 }

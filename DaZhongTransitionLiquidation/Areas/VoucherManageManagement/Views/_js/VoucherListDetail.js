@@ -297,8 +297,30 @@ var $page = function () {
         })
         //取消
         $("#AddNewBankData_CancelBtn").on("click", function () {
-            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
-            $("#ShowDialog").modal("hide");
+            if ($("#Status").val() == "2") {
+                var vguid = $("#VGUID").val();
+                var tableIndex = $("#Automatic").val();
+                $.ajax({
+                    url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
+                    data: { vguids: vguid, status: "1", index: tableIndex },
+                    traditional: true,
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("退回失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("退回成功！", null, "success");
+                                history.go(-1);
+                                break;
+                        }
+                    }
+                });
+            } else {
+                $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
+                $("#ShowDialog").modal("hide");
+            }
         })
         //取消
         $("#SevenSubject_CancelBtn").on("click", function () {
@@ -389,9 +411,16 @@ var $page = function () {
         $("#btnUp").on("click", function () {
             var vguid = $("#VGUID").val();
             var tableIndex = $("#Automatic").val();
+            var status = "";
+            if ($("#Status").val() == "1") {
+                status = "2";
+            }
+            if ($("#Status").val() == "2") {
+                status = "3";
+            }
             $.ajax({
                 url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
-                data: { vguids: vguid, status: "3", index: tableIndex },
+                data: { vguids: vguid, status: status, index: tableIndex },
                 traditional: true,
                 type: "post",
                 success: function (msg) {
@@ -572,13 +601,15 @@ var $page = function () {
                 $("#Status").val(msg.Status);
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();
-                    $("#btnUp").hide();
+                    $("#btnUp").show();
                 } else {
                     $("#btnSave").hide();
                     $("#btnUp").hide();
                 }
                 if ($("#Status").val() == "2") {
                     $("#btnUp").show();
+                    $("#btnUp").text("审核");
+                    $("#AddNewBankData_CancelBtn").text("退回");
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
@@ -843,15 +874,16 @@ function initSubjectTable(companyCode, x, y) {
         pagerButtonsCount: 10,
         source: typeAdapter,
         //theme: "energyblue",
+        filterable: true,
         columnsHeight: 30,
         checkboxes: false,
         hierarchicalCheckboxes: false,
         columns: [
             { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left' },
             { text: '描述', datafield: 'Descrption', align: 'center', cellsAlign: 'center' },
-            { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
-            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
-            { text: 'VGUID', datafield: 'VGUID', hidden: true },
+            { text: 'ParentCode', datafield: 'ParentCode', hidden: true, filterable: false, },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true, filterable: false },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true, filterable: false },
         ]
     });
 }

@@ -50,7 +50,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             {
                 foreach (var item in saveModel.FeeSettingList)
                 {
-                    item.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                    item.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                     item.ChangeDate = DateTime.Now;
                     db.Updateable<Business_VehicleExtrasFeeSetting>(item).Where(x => x.VGUID == item.VGUID && (x.Fee != item.Fee || x.Status != item.Status))
                         .UpdateColumns(x => new { x.Fee, x.ChangeDate, x.ChangeUser, x.Status }).ExecuteCommand();
@@ -104,7 +104,7 @@ AND AccountModeCode = '1002' AND status = 1 AND CompanyCode = '01' AND code LIKE
                         vehicleExtrasFeeSettingModel.BusinessProject = item.BusinessProject;
                         vehicleExtrasFeeSettingModel.Status = true;
                         vehicleExtrasFeeSettingModel.CreateDate= DateTime.Now;
-                        vehicleExtrasFeeSettingModel.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        vehicleExtrasFeeSettingModel.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         feeSettingList.Add(vehicleExtrasFeeSettingModel);
                     }
                     db.Insertable<Business_VehicleExtrasFeeSetting>(feeSettingList).ExecuteCommand();

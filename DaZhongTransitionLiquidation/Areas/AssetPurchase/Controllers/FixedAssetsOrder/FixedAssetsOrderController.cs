@@ -136,13 +136,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 db.Updateable<Business_FixedAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
                                 model.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
                                 model.SubmitDate = DateTime.Now;
-                                model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                                model.SubmitUser = cache[PubGet.GetUserKey].LoginName;
                                 db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                                 //提交完后写入采购分配表
                                 var purchaseAssignmodel = new Business_PurchaseAssign();
                                 purchaseAssignmodel.VGUID = Guid.NewGuid();
                                 purchaseAssignmodel.CreateDate = DateTime.Now;
-                                purchaseAssignmodel.CreateUser = cache[PubGet.GetUserKey].UserName;
+                                purchaseAssignmodel.CreateUser = cache[PubGet.GetUserKey].LoginName;
                                 purchaseAssignmodel.FixedAssetsOrderVguid = model.VGUID;
                                 purchaseAssignmodel.PurchaseGoodsVguid = model.PurchaseGoodsVguid;
                                 purchaseAssignmodel.PurchaseGoods = model.PurchaseGoods;
@@ -169,7 +169,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                     liquidationDistribution.AssetNum = 0;
                                     liquidationDistribution.ContractAmount = 0;
                                     liquidationDistribution.CreateDate = DateTime.Now;
-                                    liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].UserName;
+                                    liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].LoginName;
                                     liquidationDistributionList.Add(liquidationDistribution);
                                 }
                                 db.Insertable<Business_LiquidationDistribution>(liquidationDistributionList).ExecuteCommand();

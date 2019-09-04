@@ -453,7 +453,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             asset.MODEL_MINOR = reviewItem.MODEL_MINOR;
                             asset.START_VEHICLE_DATE = reviewItem.START_VEHICLE_DATE;
                             asset.CREATE_DATE = DateTime.Now;
-                            asset.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                            asset.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                             reviewItem.ISVERIFY = true;
                             assetInfoList.Add(asset);
                         }

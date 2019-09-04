@@ -92,7 +92,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                 distribution.AssetNum = AssetNum;
                 distribution.ContractAmount = distribution.PurchasePrices * AssetNum;
                 distribution.ChangeDate = DateTime.Now;
-                distribution.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                distribution.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                 var saveChanges = db.Updateable<Business_LiquidationDistribution>(distribution).UpdateColumns(x => new {x.AssetNum,x.ContractAmount,x.ChangeDate,x.ChangeUser}).ExecuteCommand();
                 resultModel.IsSuccess = saveChanges == 1;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
@@ -116,7 +116,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                 liquidationDistribution.AssetNum = AssetNum;
                 liquidationDistribution.ContractAmount = FundClearingModel.PurchasePrices * AssetNum;
                 liquidationDistribution.CreateDate = DateTime.Now;
-                liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].UserName;
+                liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].LoginName;
                 db.Insertable<Business_LiquidationDistribution>(liquidationDistribution).ExecuteCommand();
                 resultModel.IsSuccess = true;
                 resultModel.Status = "1";
@@ -195,14 +195,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                     fundClearingOrder.AccountType = companyInfo.AccountType;
                                 }
                                 fundClearingOrder.CreateDate = DateTime.Now;
-                                fundClearingOrder.CreateUser = cache[PubGet.GetUserKey].UserName;
+                                fundClearingOrder.CreateUser = cache[PubGet.GetUserKey].LoginName;
                                 fundClearingOrder.SubmitStatus = 0;
                                 db.Insertable<Business_FundClearingOrder>(fundClearingOrder).ExecuteCommand();
                             }
                         }
                         fundClearingModel.SubmitStatus = 1;
                         fundClearingModel.SubmitDate = DateTime.Now;
-                        fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                        fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable<Business_FundClearing>(fundClearingModel)
                             .UpdateColumns(x => new { x.SubmitDate, x.SubmitStatus, x.SubmitUser }).ExecuteCommand();
                         resultModel.IsSuccess = true;

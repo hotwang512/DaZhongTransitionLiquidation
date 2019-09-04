@@ -117,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                             model.CustomerBankInfoCategory = CustomerBankInfoCategory;
                             model.CustomerBankInfoVguid = item;
                             model.CreateDate = DateTime.Now;
-                            model.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            model.CreateUser = cache[PubGet.GetUserKey].LoginName;
                             db.Insertable<Business_PurchaseSupplier>(model).ExecuteCommand();
                         }
                     }

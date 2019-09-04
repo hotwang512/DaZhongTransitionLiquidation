@@ -208,7 +208,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                         {
                             model.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
                             model.SubmitDate = DateTime.Now;
-                            model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                            model.SubmitUser = cache[PubGet.GetUserKey].LoginName;
                             db.Updateable<Business_TaxFeeOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                         }
                     }

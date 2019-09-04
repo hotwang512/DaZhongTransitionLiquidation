@@ -40,7 +40,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                         {
                             sevenSection.VGUID = Guid.NewGuid();
                             sevenSection.CREATE_DATE = DateTime.Now;
-                            sevenSection.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                            sevenSection.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                             //获取资产类别基础信息，填充Business_AssetMaintenanceInfo
                             var assetMintor = GetASSET_CATEGORY_MINOR(sevenSection.ORGANIZATION_NUM, sevenSection.GROUP_ID, sevenSection.ENGINE_NUMBER, sevenSection.CHASSIS_NUMBER);
                             if (!assetMintor.IsNullOrEmpty())
@@ -76,7 +76,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     else
                     {
                         sevenSection.CHANGE_DATE = DateTime.Now;
-                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].LoginName;
                         var assetMintor = GetASSET_CATEGORY_MINOR(sevenSection.ORGANIZATION_NUM, sevenSection.GROUP_ID, sevenSection.ENGINE_NUMBER, sevenSection.CHASSIS_NUMBER);
                         if (!assetMintor.IsNullOrEmpty() && assetMintor != sevenSection.ASSET_CATEGORY_MAJOR)
                         {
@@ -190,7 +190,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                         sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
                         //sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
                         sevenSection.CHANGE_DATE = DateTime.Now;
-                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable(sevenSection).UpdateColumns(x => new {
                             x.CHANGE_DATE,
                             x.CHANGE_USER,
@@ -227,7 +227,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                                 sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
                                 //sevenSection.ACCEPTANCE_CERTIFICATE = imageServerUrl + fileData.fileName;
                                 sevenSection.CHANGE_DATE = DateTime.Now;
-                                sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                                sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].LoginName;
                                 db.Updateable(sevenSection).UpdateColumns(x => new
                                 {
                                     x.CHANGE_DATE,
@@ -265,7 +265,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                             sevenSection = db.Queryable<Business_AssetMaintenanceInfo>().Where(c => c.VGUID == Vguid).First();
                             //sevenSection.ACCEPTANCE_CERTIFICATE = uploadPath;
                             sevenSection.CHANGE_DATE = DateTime.Now;
-                            sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                            sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].LoginName;
                             db.Updateable(sevenSection).UpdateColumns(x => new {
                                 x.CHANGE_DATE,
                                 x.CHANGE_USER,
@@ -333,7 +333,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 assetData.QUANITIY = sevenSection.QUANTITY;
                 //assetMaintenanceInfo.STATUS = AcceptStatus.Accepted;
                 assetMaintenanceInfo.CHANGE_DATE = DateTime.Now;
-                assetMaintenanceInfo.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                assetMaintenanceInfo.CHANGE_USER = cache[PubGet.GetUserKey].LoginName;
                 //db.Updateable<Business_AssetMaintenanceInfo>(assetMaintenanceInfo).UpdateColumns(x => new { x.STATUS, x.CHANGE_DATE}).ExecuteCommand();
                 resultModel.IsSuccess = AssetMaintenanceAPI.SendAssetInfo(assetData);
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";

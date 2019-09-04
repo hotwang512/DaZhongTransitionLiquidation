@@ -73,14 +73,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         maxOrderNumRight = maxOrderNumRight + 1;
                         sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4,'0');
                         sevenSection.CreateDate = DateTime.Now;
-                        sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
                         db.Insertable<Business_FixedAssetsOrder>(sevenSection).ExecuteCommand();
                     }
                     else
                     {
                         sevenSection.ChangeDate = DateTime.Now;
-                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable<Business_FixedAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus,x.OrderNumber }).ExecuteCommand();
                     }
                 });
@@ -157,7 +157,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         model.VGUID = Guid.NewGuid();
                         model.AssetsOrderVguid = AssetsOrderVguid;
                         model.CreateDate = DateTime.Now;
-                        model.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        model.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         model.AssetManagementCompany = item.ManagementCompany;
                         list.Add(model);
                     }
@@ -222,7 +222,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             sevenSection.ApprovalFormFilePath = uploadPath;
                             sevenSection.ApprovalFormFileName = File.FileName;
                             sevenSection.ChangeDate = DateTime.Now;
-                            sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                            sevenSection.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                             db.Updateable(sevenSection).UpdateColumns(x => new {
                                 x.ChangeDate,
                                 x.ChangeUser,
@@ -263,7 +263,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                 sevenSection.ContractFilePath = uploadPath;
                                 sevenSection.ContractName = File.FileName;
                                 sevenSection.ChangeDate = DateTime.Now;
-                                sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                sevenSection.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                 db.Updateable(sevenSection).UpdateColumns(x => new {
                                     x.ChangeDate,
                                     x.ChangeUser,
@@ -333,7 +333,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                     var model = db.Queryable<Business_FixedAssetsOrder>().Where(c => c.VGUID == vguid).First();
                     model.SubmitStatus = FixedAssetsSubmitStatusEnum.Submited.TryToInt();
                     model.SubmitDate = DateTime.Now;
-                    model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                    model.SubmitUser = cache[PubGet.GetUserKey].LoginName;
                     db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
@@ -463,7 +463,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                                 saveModel.VGUID = Guid.NewGuid();
                                 saveModel.Attachment = imageServerUrl + fileData.fileName;
                                 saveModel.AttachmentType = AttachmentType;
-                                saveModel.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                                saveModel.CreatePerson = cache[PubGet.GetUserKey].LoginName;
                                 saveModel.AssetOrderVGUID = Vguid;
                                 saveModel.CreateTime = DateTime.Now;
                                 db.Insertable<Business_AssetAttachmentList>(saveModel).ExecuteCommand();
@@ -526,7 +526,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                                         sevenSection.Attachment = fileData.fileId;//"\\" + uploadPath + fileName;
                                         sevenSection.AttachmentType = AttachmentType;
                                         sevenSection.CreateTime = DateTime.Now;
-                                        sevenSection.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                                        sevenSection.CreatePerson = cache[PubGet.GetUserKey].LoginName;
                                         db.Insertable<Business_AssetAttachmentList>(sevenSection).ExecuteCommand();
                                     });
                                     resultModel.IsSuccess = result.IsSuccess;

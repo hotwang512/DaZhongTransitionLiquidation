@@ -116,7 +116,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         updateModel.Remark = item.VehicleModel;
                                         updateModel.BusinessModel = item.BusinessModel;
                                         updateModel.ChangeDate = DateTime.Now;
-                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                         updateDisposeIncomeList.Add(updateModel);
                                     }
                                 }
@@ -171,7 +171,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         updateModel.Remark = item.VehicleModel;
                                         updateModel.BusinessModel = item.BusinessModel;
                                         updateModel.ChangeDate = DateTime.Now;
-                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                         updateDisposeIncomeList.Add(updateModel);
                                     }
                                 }
@@ -240,7 +240,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         updateModel.BackCarDate = item.BackCarDate.TryToDate();
                                         updateModel.Remark = item.VehicleModel;
                                         updateModel.ChangeDate = DateTime.Now;
-                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                        updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                         updateDisposeIncomeList.Add(updateModel);
                                     }
                                 }

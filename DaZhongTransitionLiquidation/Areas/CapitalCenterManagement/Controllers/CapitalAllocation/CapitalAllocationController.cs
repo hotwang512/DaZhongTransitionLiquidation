@@ -20,7 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/CapitalAllocation
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("40352c56-d1c5-491e-9a99-74f5eff649ef");
             return View();
         }
         public JsonResult GetCapitalAllocationData(Business_CapitalAllocationInfo searchParams, GridParams para)

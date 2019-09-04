@@ -130,6 +130,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     //凭证中间表List
                     List<AssetsGeneralLedger_Swap> assetList = new List<AssetsGeneralLedger_Swap>();
                     //删除现有明细数据
+                    var receivableAccount = "";
+                    var Account = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).OrderBy("ReceivableAccount desc").ToList();
+                    if (Account.Count > 0)
+                    {
+                        receivableAccount = Account[0].ReceivableAccount;
+                    }
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
                     
                     if (voucher.Detail != null)
@@ -155,8 +161,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.JE_LINE_NUMBER = i++;
                             BVDetail.VGUID = Guid.NewGuid();
                             BVDetail.VoucherVGUID = guid;
+                            if(item.LoanMoney != null && item.LoanMoney != 0)
+                            {
+                                BVDetail.ReceivableAccount = receivableAccount;
+                            }
                             voucherdetailList.Add(BVDetail);
-                           
                         }
                         db.Insertable(voucherdetailList).ExecuteCommand();
                     }

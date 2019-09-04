@@ -86,6 +86,10 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Module
                 module.CreatedDate = DateTime.Now;
                 module.Vguid = Guid.NewGuid();
                 module.ModuleVGUID = module.Vguid;
+                module.Reads = 1;
+                module.Adds = 1;
+                module.Edit = 1;
+                module.Deletes = 1;
             }
             DbService.Command(db =>
             {
@@ -111,6 +115,10 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Module
                     {
                         db.Updateable<Sys_Module>().UpdateColumns(it => new Sys_Module()
                         {
+                            Reads = 1,
+                            Adds = 1,
+                            Edit = 1,
+                            Deletes = 1,
                             ModuleName = module.ModuleName,
                             Parent = module.Parent,
                             ModuleVGUID = module.Vguid,

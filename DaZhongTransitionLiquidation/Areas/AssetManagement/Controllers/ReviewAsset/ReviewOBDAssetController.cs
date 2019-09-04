@@ -30,7 +30,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         // GET: AssetManagement/ReviewAsset
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("8F092486-CC43-4E74-BD49-230E9843E528");
             return View();
         }
         public JsonResult GetReviewAssetListDatas(string YearMonth, string Company, string VehicleModel, bool ISVerify)

@@ -29,7 +29,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
         // GET: AssetPurchase/TaxFeeOrder
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("fcc88c2d-5c65-424d-add8-540b2449c381");
             return View();
         }
         public JsonResult GetOrderListDatas(Business_TaxFeeOrder searchParams, GridParams para)

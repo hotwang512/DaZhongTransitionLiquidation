@@ -66,11 +66,12 @@ var $page = function () {
                 selector.$role_Input().val(msg.Role);
                 selector.$remark_Input().val(msg.Remark);
                 selector.$departmentVguid().val(msg.Department);
-                var department = selector.$departmentVguid().val();
-                if (department != "") {
-                    selector.$pushTree().jqxTree('selectItem', $("#" + department)[0]);
-                }
                 $("#Password").val(msg.Password);
+                var department = selector.$departmentVguid().val();
+                //if (department != "") {
+                //    selector.$pushTree().jqxTree('selectItem', $("#" + department)[0]);
+                //}
+                
             }
         });
     }

@@ -874,15 +874,16 @@ function initSubjectTable(companyCode, x, y) {
         pagerButtonsCount: 10,
         source: typeAdapter,
         //theme: "energyblue",
+        filterable: true,
         columnsHeight: 30,
         checkboxes: false,
         hierarchicalCheckboxes: false,
         columns: [
             { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left' },
             { text: '描述', datafield: 'Descrption', align: 'center', cellsAlign: 'center' },
-            { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
-            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
-            { text: 'VGUID', datafield: 'VGUID', hidden: true },
+            { text: 'ParentCode', datafield: 'ParentCode', hidden: true, filterable: false, },
+            { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true, filterable: false },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true, filterable: false },
         ]
     });
 }

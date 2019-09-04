@@ -373,10 +373,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                         assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
                         assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
-                        assetSwapModel.SALVAGE_TYPE = "P";
-                        assetSwapModel.SALVAGE_PERCENT = item.SALVAGE_PERCENT;
-                        assetSwapModel.METHOD = item.METHOD;
-                        assetSwapModel.METHOD = item.METHOD;
                         assetSwapList.Add(assetSwapModel);
                     }
                     db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();

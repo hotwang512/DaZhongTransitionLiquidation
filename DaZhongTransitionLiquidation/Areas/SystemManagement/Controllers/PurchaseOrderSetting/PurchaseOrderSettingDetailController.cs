@@ -40,7 +40,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                     {
                         saveModel.VGUID = Guid.NewGuid();
                         saveModel.CreateDate = DateTime.Now;
-                        saveModel.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        saveModel.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         db.Insertable<Business_PurchaseOrderSetting>(saveModel).ExecuteCommand();
                         foreach (var departmentModel in saveModel.DepartmentModelList)
                         {
@@ -49,7 +49,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                             depModal.PurchaseOrderSettingVguid = saveModel.VGUID;
                             depModal.DepartmentName = departmentModel.Descrption;
                             depModal.DepartmentVguid = departmentModel.VGUID;
-                            depModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            depModal.CreateUser = cache[PubGet.GetUserKey].LoginName;
                             depModal.CreateDate = DateTime.Now;
                             db.Insertable<Business_PurchaseDepartment>(depModal).ExecuteCommand();
                         }
@@ -65,7 +65,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                             managementCompanyModal.Descrption = managementCompany.Descrption;
                             managementCompanyModal.ManagementCompany = managementCompany.ManagementCompany;
                             managementCompanyModal.IsCheck = managementCompany.IsCheck;
-                            managementCompanyModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            managementCompanyModal.CreateUser = cache[PubGet.GetUserKey].LoginName;
                             managementCompanyModal.CreateDate = DateTime.Now;
                             db.Insertable<Business_PurchaseManagementCompany>(managementCompanyModal).ExecuteCommand();
                         }
@@ -73,7 +73,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                     else
                     {
                         saveModel.ChangeDate = DateTime.Now;
-                        saveModel.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        saveModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable<Business_PurchaseOrderSetting>(saveModel)
                             .IgnoreColumns(x => new {x.CreateDate, x.CreateUser }).ExecuteCommand();
                         db.Deleteable<Business_PurchaseDepartment>()
@@ -85,7 +85,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                             depModal.PurchaseOrderSettingVguid = saveModel.VGUID;
                             depModal.DepartmentName = departmentModel.Descrption;
                             depModal.DepartmentVguid = departmentModel.VGUID;
-                            depModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            depModal.CreateUser = cache[PubGet.GetUserKey].LoginName;
                             depModal.CreateDate = DateTime.Now;
                             db.Insertable<Business_PurchaseDepartment>(depModal).ExecuteCommand();
                         }
@@ -102,7 +102,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                             managementCompanyModal.Descrption = managementCompany.Descrption;
                             managementCompanyModal.ManagementCompany = managementCompany.ManagementCompany;
                             managementCompanyModal.IsCheck = managementCompany.IsCheck;
-                            managementCompanyModal.CreateUser = cache[PubGet.GetUserKey].UserName;
+                            managementCompanyModal.CreateUser = cache[PubGet.GetUserKey].LoginName;
                             managementCompanyModal.CreateDate = DateTime.Now;
                             db.Insertable<Business_PurchaseManagementCompany>(managementCompanyModal).ExecuteCommand();
                         }
@@ -134,7 +134,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
         //    {
         //        saveModel.VGUID = Guid.NewGuid();
         //        saveModel.CreateDate = DateTime.Now;
-        //        saveModel.CreateUser = cache[PubGet.GetUserKey].UserName;
+        //        saveModel.CreateUser = cache[PubGet.GetUserKey].LoginName;
         //        db.Insertable<Business_PurchaseManagementCompany>(saveModel).ExecuteCommand();
         //        resultModel.IsSuccess = true;
         //        resultModel.Status = "1";

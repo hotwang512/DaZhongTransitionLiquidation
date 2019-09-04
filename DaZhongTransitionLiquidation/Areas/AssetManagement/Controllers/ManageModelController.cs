@@ -131,7 +131,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                 if (isEditAssetsCategory == 1)
                 {
                     //编辑
-                    module.CreateUser = cache[PubGet.GetUserKey].UserName;
+                    module.CreateUser = cache[PubGet.GetUserKey].LoginName;
                     module.CreateTime = DateTime.Now;
                     db.Updateable<Business_ManageModel_AssetsCategory>(module).UpdateColumns(x => new
                             {x.CategoryMajor, x.CategoryMinor, x.GoodsModel, x.GoodsModelCode, x.AssetsCategoryVGUID}).Where(x => x.ManageModelVGUID == module.ManageModelVGUID)
@@ -152,7 +152,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                     else
                     {
                         module.VGUID = Guid.NewGuid();
-                        module.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        module.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         module.CreateTime = DateTime.Now;
                         db.Insertable<Business_ManageModel_AssetsCategory>(module).ExecuteCommand();
                         resultModel.IsSuccess = true;

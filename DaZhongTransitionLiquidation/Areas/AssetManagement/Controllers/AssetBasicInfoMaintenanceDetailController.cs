@@ -36,13 +36,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                     {
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.CREATE_TIME = DateTime.Now;
-                        sevenSection.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                         db.Insertable<Business_AssetsCategory>(sevenSection).ExecuteCommand();
                     }
                     else
                     {
                         sevenSection.CHANGE_TIME = DateTime.Now;
-                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.CHANGE_USER = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable<Business_AssetsCategory>(sevenSection).IgnoreColumns(x => new { x.CREATE_TIME, x.CREATE_USER }).ExecuteCommand();
                     }
                 });

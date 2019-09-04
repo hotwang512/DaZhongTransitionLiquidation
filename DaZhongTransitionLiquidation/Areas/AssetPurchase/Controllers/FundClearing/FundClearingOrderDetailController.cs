@@ -46,7 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                     var model = db.Queryable<Business_FundClearingOrder>().Where(c => c.VGUID == sevenSection.VGUID);
                     {
                         sevenSection.ChangeDate = DateTime.Now;
-                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable<Business_FundClearingOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus, x.OrderNumber,x.FixedAssetsOrderVguid }).ExecuteCommand();
                     }
                 });
@@ -229,7 +229,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                                 saveModel.VGUID = Guid.NewGuid();
                                 saveModel.Attachment = imageServerUrl + fileData.fileName;
                                 saveModel.AttachmentType = AttachmentType;
-                                saveModel.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                                saveModel.CreatePerson = cache[PubGet.GetUserKey].LoginName;
                                 saveModel.AssetOrderVGUID = Vguid;
                                 saveModel.CreateTime = DateTime.Now;
                                 db.Insertable<Business_AssetAttachmentList>(saveModel).ExecuteCommand();
@@ -292,7 +292,7 @@ left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isab
                                         sevenSection.Attachment = fileData.fileId;//"\\" + uploadPath + fileName;
                                         sevenSection.AttachmentType = AttachmentType;
                                         sevenSection.CreateTime = DateTime.Now;
-                                        sevenSection.CreatePerson = cache[PubGet.GetUserKey].UserName;
+                                        sevenSection.CreatePerson = cache[PubGet.GetUserKey].LoginName;
                                         db.Insertable<Business_AssetAttachmentList>(sevenSection).ExecuteCommand();
                                     });
                                     resultModel.IsSuccess = result.IsSuccess;

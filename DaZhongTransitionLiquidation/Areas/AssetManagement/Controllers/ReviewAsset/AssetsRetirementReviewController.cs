@@ -114,7 +114,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         disposeIncome.CommissioningDate = assetInfo.COMMISSIONING_DATE;
                         disposeIncome.BackCarDate = assetInfo.BACK_CAR_DATE;
                         disposeIncome.CreateDate = DateTime.Now;
-                        disposeIncome.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        disposeIncome.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeIncomeList.Add(disposeIncome);
                         //提交到处置税金
                         var disposeTax = new Business_DisposeTax();
@@ -122,7 +122,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         disposeTax.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
                         //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeTax.CreateDate = DateTime.Now;
-                        disposeTax.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        disposeTax.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeTaxList.Add(disposeTax);
                         //提交到处置净值
                         var disposeNetValue = new Business_DisposeNetValue();
@@ -130,7 +130,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         disposeNetValue.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
                         //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeNetValue.CreateDate = DateTime.Now;
-                        disposeNetValue.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        disposeNetValue.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeNetValueList.Add(disposeNetValue);
                         //提交到处置损益
 
@@ -139,7 +139,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         disposeProfitLoss.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
                         //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeProfitLoss.CreateDate = DateTime.Now;
-                        disposeProfitLoss.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        disposeProfitLoss.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeProfitLossList.Add(disposeProfitLoss);
 
                     }

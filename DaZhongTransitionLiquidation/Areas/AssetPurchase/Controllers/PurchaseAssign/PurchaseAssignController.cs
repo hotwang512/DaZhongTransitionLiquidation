@@ -90,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         model.VGUID = Guid.NewGuid();
                         model.AssetsOrderVguid = AssetsOrderVguid;
                         model.CreateDate = DateTime.Now;
-                        model.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        model.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         model.AssetManagementCompany = item.ManagementCompany;
                         list.Add(model);
                     }
@@ -155,7 +155,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                     {
                         var saveObj = db.Queryable<Business_AssetOrderBelongTo>().Where(c => c.VGUID == vguid).First();
                         saveObj.ChangeDate = DateTime.Now;
-                        saveObj.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        saveObj.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                         saveObj.AssetNum = AssetNum;
                         saveObj.BelongToCompany = BelongToCompany;
                         db.Updateable(saveObj).IgnoreColumns(it => new { it.CreateDate,it.CreateUser }).ExecuteCommand();
@@ -165,7 +165,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                         var saveObj = new Business_AssetOrderBelongTo();
                         saveObj.VGUID = Guid.NewGuid();
                         saveObj.CreateDate = DateTime.Now;
-                        saveObj.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        saveObj.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         saveObj.AssetNum = AssetNum;
                         saveObj.BelongToCompany = BelongToCompany;
                         saveObj.AssetOrderDetailsVguid = AssetOrderDetailsVguid;
@@ -310,7 +310,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     belongTo.AssetNum = 1;
                                     belongTo.AssetsOrderVguid = vguid;
                                     belongTo.CreateDate = DateTime.Now;
-                                    belongTo.CreateUser = cache[PubGet.GetUserKey].UserName;
+                                    belongTo.CreateUser = cache[PubGet.GetUserKey].LoginName;
                                     sevenSectionList.Add(belongTo);
                                 }
                                 db.Deleteable<Business_AssetOrderBelongTo>().Where(c => c.AssetsOrderVguid == vguid).ExecuteCommand();
@@ -457,7 +457,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.VEHICLE_SHORTNAME = fixedAssetsOrder.GoodsModel;
                                     assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;
                                     //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
-                                    assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
+                                    //assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
                                     assetReview.QUANTITY = 1;
                                     assetReview.NUDE_CAR_FEE = fixedAssetsOrderInfo.PurchasePrices;
                                     //车辆税费 根据车型取税费订单中对应的费用
@@ -517,7 +517,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.YTD_DEPRECIATION = 0;
                                     assetReview.ACCT_DEPRECIATION = 0;
                                     assetReview.FIXED_ASSETS_ORDERID = vguid;
-                                    assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                                    assetReview.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                                     assetReview.CREATE_DATE = DateTime.Now;
                                     var fixedAssetId = fixedAssetsOrderInfo.VGUID;
                                     var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
@@ -537,7 +537,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReviewList.Add(assetReview);
                                 }
                                 db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
-                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                 purchaseAssign.ChangeDate = DateTime.Now;
                                 purchaseAssign.SubmitStatus = 1;
                                 db.Updateable(purchaseAssign)
@@ -586,6 +586,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 var assign = new Excel_PurchaseOBDAssignModel();
                                 assign.EquipmentNumber = dt.Rows[i][0].ToString();
                                 assign.PlateNumber = dt.Rows[i][1].ToString();
+                                assign.LisensingDate = dt.Rows[i][2].TryToDate();
                                 list.Add(assign);
                             }
                             if (list.Any(x => x.EquipmentNumber.Length != 15))
@@ -660,6 +661,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                                                                               AND Status = '1'
                                                                                               AND Code LIKE '10%'").ToList();
                                 var assetReviewList = new List<Business_AssetReview>();
+                                var orderSetting = db.Queryable<Business_PurchaseOrderSetting>()
+                                    .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First();
+                                var assetsCategoryList = db.Queryable<Business_AssetsCategory>().ToList();
+                                var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetsOrderInfo.VGUID).First().PurchaseDepartmentIDs.Split(",");
+                                var strList = new List<Guid>();
+                                foreach (var departmentID in departmentIDsArr)
+                                {
+                                    strList.Add(departmentID.TryToGuid());
+                                }
+                                var departments = departmentList.Where(x => strList.Contains(x.VGUID));
+                                var departmentStr = "";
+                                foreach (var ditem in departments)
+                                {
+                                    departmentStr = departmentStr + ditem.Descrption + ",";
+                                }
+                                departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                                 foreach (var item in list)
                                 {
                                     maxOrderNumRightAsset++;
@@ -671,22 +688,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.CHASSIS_NUMBER = item.EquipmentNumber;
                                     assetReview.VEHICLE_SHORTNAME = "OBD";
                                     assetReview.DESCRIPTION = item.PlateNumber;
+                                    assetReview.LISENSING_DATE = item.LisensingDate;
                                     assetReview.TAG_NUMBER = orderNumberLeftAsset.Replace("CZ","JK") + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
                                     //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
-                                    assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
+                                    //assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
                                     assetReview.QUANTITY = 1;
                                     assetReview.ASSET_COST = fixedAssetsOrder.PurchasePrices;
                                     //资产主类次类 根据采购物品获取
-                                    assetReview.ASSET_CATEGORY_MAJOR = db.Queryable<Business_PurchaseOrderSetting>()
-                                        .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
-                                        .AssetCategoryMajor;
-                                    assetReview.ASSET_CATEGORY_MINOR = db.Queryable<Business_PurchaseOrderSetting>()
-                                        .Where(x => x.VGUID == fixedAssetsOrderInfo.PurchaseGoodsVguid).First()
-                                        .AssetCategoryMinor;
+                                    assetReview.ASSET_CATEGORY_MAJOR = orderSetting.AssetCategoryMajor;
+                                    assetReview.ASSET_CATEGORY_MINOR = orderSetting.AssetCategoryMinor;
                                     //根据主类子类从折旧方法表中获取
-                                    var assetsCategoryInfo = db.Queryable<Business_AssetsCategory>().Where(x =>
-                                        x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
-                                        x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR).First();
+                                    var assetsCategoryInfo = assetsCategoryList.First(x => x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
+                                                                                           x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR);
                                     assetReview.LIFE_YEARS = assetsCategoryInfo.LIFE_YEARS;
                                     assetReview.LIFE_MONTHS = assetsCategoryInfo.LIFE_MONTHS;
                                     assetReview.AMORTIZATION_FLAG = "N";
@@ -696,26 +709,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.ASSET_SETTLEMENT_ACCOUNT = assetsCategoryInfo.ASSET_SETTLEMENT_ACCOUNT;
                                     assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
                                     assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
+                                    assetReview.SALVAGE_TYPE = "P";
+                                    assetReview.SALVAGE_PERCENT = assetsCategoryInfo.SALVAGE_PERCENT;
                                     assetReview.ISVERIFY = false;
                                     assetReview.YTD_DEPRECIATION = 0;
                                     assetReview.ACCT_DEPRECIATION = 0;
                                     assetReview.FIXED_ASSETS_ORDERID = vguid;
-                                    assetReview.CREATE_USER = cache[PubGet.GetUserKey].UserName;
+                                    assetReview.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                                     assetReview.CREATE_DATE = DateTime.Now;
-                                    var fixedAssetId = fixedAssetsOrderInfo.VGUID;
-                                    var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
-                                    var strList = new List<Guid>();
-                                    foreach (var departmentID in departmentIDsArr)
-                                    {
-                                        strList.Add(departmentID.TryToGuid());
-                                    }
-                                    var departments = departmentList.Where(x => strList.Contains(x.VGUID));
-                                    var departmentStr = "";
-                                    foreach (var ditem in departments)
-                                    {
-                                        departmentStr = departmentStr + ditem.Descrption + ",";
-                                    }
-                                    departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                                     assetReview.ORGANIZATION_NUM = departmentStr;
                                     if (assetInfoList.Any(x => x.PLATE_NUMBER == item.PlateNumber))
                                     {
@@ -726,11 +727,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         assetReview.MODEL_MAJOR = assetInfo.MODEL_MAJOR;
                                         assetReview.MODEL_MINOR = assetInfo.MODEL_MINOR;
                                         assetReview.EXP_ACCOUNT_SEGMENT = assetInfo.EXP_ACCOUNT_SEGMENT;
+                                        assetReview.VEHICLE_STATE = assetInfo.VEHICLE_STATE;
+                                        assetReview.OPERATING_STATE = assetInfo.OPERATING_STATE;
                                     }
                                     assetReviewList.Add(assetReview);
                                 }
                                 db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
-                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                 purchaseAssign.ChangeDate = DateTime.Now;
                                 purchaseAssign.SubmitStatus = 1;
                                 db.Updateable(purchaseAssign)
@@ -759,7 +762,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                     var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
                         .Where(c => c.FixedAssetsOrderVguid == vguid).First();
                     //获取固定资产信息
-                    purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                    purchaseAssign.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                     purchaseAssign.ChangeDate = DateTime.Now;
                     purchaseAssign.SubmitStatus = 1;
                     db.Updateable(purchaseAssign)

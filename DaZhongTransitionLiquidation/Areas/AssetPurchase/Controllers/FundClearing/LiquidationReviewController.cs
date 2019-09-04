@@ -117,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                             db.Updateable<Business_FundClearingOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
                             order.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
                             order.SubmitDate = DateTime.Now;
-                            order.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                            order.SubmitUser = cache[PubGet.GetUserKey].LoginName;
                             db.Updateable<Business_FundClearingOrder>(order).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                             resultModel.ResultInfo = pendingRedult.data.url;
                             resultModel.IsSuccess = true;

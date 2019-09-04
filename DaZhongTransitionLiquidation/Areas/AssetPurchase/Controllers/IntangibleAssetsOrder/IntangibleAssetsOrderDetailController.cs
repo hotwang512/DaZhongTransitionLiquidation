@@ -68,14 +68,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         maxOrderNumRight = maxOrderNumRight + 1;
                         sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
                         sevenSection.CreateDate = DateTime.Now;
-                        sevenSection.CreateUser = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
                         db.Insertable<Business_IntangibleAssetsOrder>(sevenSection).ExecuteCommand();
                     }
                     else
                     {
                         sevenSection.ChangeDate = DateTime.Now;
-                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                        sevenSection.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                         db.Updateable<Business_IntangibleAssetsOrder>(sevenSection).IgnoreColumns(x => new { x.CreateDate, x.CreateUser, x.SubmitStatus,x.OrderNumber }).ExecuteCommand();
                     }
                 });
@@ -288,7 +288,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                                 sevenSection.ContractFilePath = uploadPath;
                                 sevenSection.ContractName = File.FileName;
                                 sevenSection.ChangeDate = DateTime.Now;
-                                sevenSection.ChangeUser = cache[PubGet.GetUserKey].UserName;
+                                sevenSection.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                 db.Updateable(sevenSection).UpdateColumns(x => new {
                                     x.ChangeDate,
                                     x.ChangeUser,
@@ -339,7 +339,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.Submited.TryToInt();
                     }
                     model.SubmitDate = DateTime.Now;
-                    model.SubmitUser = cache[PubGet.GetUserKey].UserName;
+                    model.SubmitUser = cache[PubGet.GetUserKey].LoginName;
                     db.Updateable<Business_IntangibleAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;

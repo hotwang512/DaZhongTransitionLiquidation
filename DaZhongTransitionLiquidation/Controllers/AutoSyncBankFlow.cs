@@ -213,6 +213,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 continue;
                             }
+                            if(item.CreditAmountTotal == item.DebitAmountTotal && item.CreditAmountTotal != 0 && item.DebitAmountTotal != 0)
+                            {
+                                continue;
+                            }
                             if(voucherDetail.Count == 2)
                             {
                                 //一借一贷
@@ -222,30 +226,39 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 {
                                     voucherDetail[1].LoanMoney = borrowMoney;
                                     voucherDetail[1].LoanMoneyCount = borrowMoney;
+                                    item.CreditAmountTotal = borrowMoney;
+                                    item.DebitAmountTotal = borrowMoney;
                                     _db.Updateable(voucherDetail[1]).ExecuteCommand();
+                                    _db.Updateable(item).ExecuteCommand();
                                 }
                                 else
                                 {
                                     voucherDetail[1].BorrowMoney = loanMoney;
                                     voucherDetail[1].BorrowMoneyCount = loanMoney;
+                                    item.CreditAmountTotal = loanMoney;
+                                    item.DebitAmountTotal = loanMoney;
                                     _db.Updateable(voucherDetail[1]).ExecuteCommand();
+                                    _db.Updateable(item).ExecuteCommand();
                                 }
                             }
                             else
                             {
                                 //多借多贷
                                 var receivableAccount = "";
+                                decimal? creditAmountTotal = 0;
+                                decimal? debitAmountTotal = 0;
                                 foreach (var it in voucherDetail)
                                 {
-                                    
+                                    #region 循环借贷明细
                                     if (it.ReceivableAccount != "" && it.ReceivableAccount != null)
                                     {
-                                        if(it.LoanMoney != 0 && it.LoanMoney != null)
+                                        receivableAccount = it.ReceivableAccount;
+                                        if (it.LoanMoney != 0 && it.LoanMoney != null)
                                         {
+                                            creditAmountTotal = creditAmountTotal + it.LoanMoney;
                                             continue;
                                         }
                                         //贷配置明细
-                                        receivableAccount = it.ReceivableAccount;
                                         var subject = it.CompanySection+"."+it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
                                         var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject).FirstOrDefault();
@@ -271,6 +284,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                 default:
                                                     break;
                                             }
+                                            creditAmountTotal = creditAmountTotal + it.LoanMoney;
                                             _db.Updateable(it).ExecuteCommand();
                                             //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                                         }
@@ -301,10 +315,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                     default:
                                                         break;
                                                 }
+                                                debitAmountTotal = debitAmountTotal + it.BorrowMoney;
                                                 _db.Updateable(it).ExecuteCommand();
                                             }
                                         }
+                                        else
+                                        {
+                                            debitAmountTotal = debitAmountTotal + it.BorrowMoney;
+                                        }
                                     }
+                                    #endregion
+                                }
+                                item.CreditAmountTotal = creditAmountTotal;
+                                item.DebitAmountTotal = debitAmountTotal;
+                                if(item.CreditAmountTotal == item.DebitAmountTotal)
+                                {
+                                    _db.Updateable(item).ExecuteCommand();
                                 }
                             }
                         }

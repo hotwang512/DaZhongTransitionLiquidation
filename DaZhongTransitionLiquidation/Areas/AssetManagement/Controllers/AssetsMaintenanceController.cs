@@ -23,7 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
         // GET: AssetManagement/AssetsMaintenance
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("caf1df9d-01a8-472d-91ff-9aa5caa5c6e2");
             return View();
         }
         public JsonResult GetAssetMaintenanceInfoListDatas(Business_AssetMaintenanceInfo searchParams, GridParams para)

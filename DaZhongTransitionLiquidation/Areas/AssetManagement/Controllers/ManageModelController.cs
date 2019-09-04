@@ -22,7 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
         }
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("f0904539-b953-4b0f-bddd-f7555f9a239f");
             return View();
         }
         public ActionResult GetBusiness()

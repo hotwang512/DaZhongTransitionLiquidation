@@ -24,7 +24,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
         // GET: AssetManagement/DisposeNetValue
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("fc52f562-f549-4bcd-b0a1-5eb2886e491d");
             return View();
         }
         public JsonResult GetAssetsDisposeNetValueListDatas(string PlateNumber, GridParams para)

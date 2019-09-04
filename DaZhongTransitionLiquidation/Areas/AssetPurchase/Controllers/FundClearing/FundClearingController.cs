@@ -30,7 +30,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
         // GET: AssetPurchase/PurchaseAssign
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("2dc09688-a87d-4ea8-8515-8e3548d30c7d");
             return View();
         }
         public JsonResult GetListDatas(Business_FundClearing searchParams, GridParams para)

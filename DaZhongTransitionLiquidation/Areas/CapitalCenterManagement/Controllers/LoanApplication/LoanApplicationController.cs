@@ -19,7 +19,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/LoanApplication
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("db4ac4f3-2f54-489d-8baa-c0957cda38f4");
             return View();
         }
         public JsonResult GetLoanApplicationData(Business_LoanApplication searchParams, GridParams para)

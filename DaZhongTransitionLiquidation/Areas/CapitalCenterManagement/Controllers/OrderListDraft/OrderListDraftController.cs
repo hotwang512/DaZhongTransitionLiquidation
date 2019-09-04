@@ -29,7 +29,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.GetAttachmentUrl = ConfigSugar.GetAppString("GetAttachmentUrl");
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("d046976c-8faf-4b54-b7ec-0ec1b9b71aa1");
             return View();
         }
         public JsonResult GetOrderListDatas(Business_OrderListDraft searchParams, GridParams para)

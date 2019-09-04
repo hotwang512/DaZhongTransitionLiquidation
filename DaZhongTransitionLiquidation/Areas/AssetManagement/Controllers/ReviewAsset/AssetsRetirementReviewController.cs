@@ -22,7 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         }
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("b7d38059-c04f-45fc-86ce-835dbd44315f");
             return View();
         }
         public JsonResult GetReviewAssetListDatas(Business_ScrapVehicle searchParams, GridParams para)

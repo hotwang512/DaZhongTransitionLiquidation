@@ -20,7 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/ComeOnApplication
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("93ce22ba-a4f8-41d9-bdcd-2adac74b6372");
             return View();
         }
         public JsonResult GetComeOnApplicationData(Business_ComeOnAllocationInfo searchParams, GridParams para)

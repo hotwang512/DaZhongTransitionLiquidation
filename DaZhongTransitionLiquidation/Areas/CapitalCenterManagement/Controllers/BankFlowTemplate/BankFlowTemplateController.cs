@@ -391,7 +391,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CompanyCode = item.CompanyCode;
                 voucher.CompanyName = item.PaymentUnit;
                 voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
-                var voucherName = GetVoucherName();
+                var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
                 x++;
                 var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
                 voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd") + (voucherNo + x).TryToString().PadLeft(4, '0');
@@ -728,13 +728,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             asset.ACCOUNTED_CR = BVDetail.LoanMoney.TryToString();
             assetList.Add(asset);
         }
-        public static string GetVoucherName()
+        public static string GetVoucherName(string accountModeName,string companyCode)
         {
             using (SqlSugarClient db = DbBusinessDataConfig.GetInstance())
             {
                 var date = DateTime.Now;
-                var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic!='3'
-                              order by VoucherNo desc", new { @NowDate = date });
+                var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic!='3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
+                              order by VoucherNo desc", new { @NowDate = date, @AccountModeName = accountModeName, @CompanyCode = companyCode });
                 var batchNo = 0;
                 if (voucherNo.IsValuable() && voucherNo.Length > 4)
                 {

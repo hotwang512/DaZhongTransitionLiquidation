@@ -19,7 +19,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/CashManager
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("aa345b36-259a-48f3-a5ec-5abc950b085d");
             return View();
         }
         public JsonResult GetCashManagerData(Business_CashManagerInfo searchParams, GridParams para)

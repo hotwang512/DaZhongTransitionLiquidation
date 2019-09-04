@@ -832,6 +832,10 @@ function searchSubject(event) {
     initSubjectTable(companyCode);
     $("#AddCompanyDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddCompanyDialog").modal("show");
+
+    $('#jqxSubjectSection').on('bindingComplete', function (event) {
+        $("#jqxSubjectSection").jqxTreeGrid('expandAll');
+    });
 }
 let z1 = "";
 let z2 = "";
@@ -878,6 +882,9 @@ function initSubjectTable(companyCode, x, y) {
         columnsHeight: 30,
         checkboxes: false,
         hierarchicalCheckboxes: false,
+        //ready: function () {
+        //    $("#jqxSubjectSection").jqxTreeGrid('expandAll');
+        //},
         columns: [
             { text: '编码', datafield: 'Code', width: 150, align: 'center', cellsAlign: 'left' },
             { text: '描述', datafield: 'Descrption', align: 'center', cellsAlign: 'center' },

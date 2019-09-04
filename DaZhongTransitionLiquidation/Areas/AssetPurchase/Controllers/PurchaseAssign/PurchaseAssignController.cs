@@ -457,7 +457,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.VEHICLE_SHORTNAME = fixedAssetsOrder.GoodsModel;
                                     assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;
                                     //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
-                                    assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
+                                    //assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
                                     assetReview.QUANTITY = 1;
                                     assetReview.NUDE_CAR_FEE = fixedAssetsOrderInfo.PurchasePrices;
                                     //车辆税费 根据车型取税费订单中对应的费用
@@ -586,6 +586,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 var assign = new Excel_PurchaseOBDAssignModel();
                                 assign.EquipmentNumber = dt.Rows[i][0].ToString();
                                 assign.PlateNumber = dt.Rows[i][1].ToString();
+                                assign.LisensingDate = dt.Rows[i][2].TryToDate();
                                 list.Add(assign);
                             }
                             if (list.Any(x => x.EquipmentNumber.Length != 15))
@@ -671,6 +672,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.CHASSIS_NUMBER = item.EquipmentNumber;
                                     assetReview.VEHICLE_SHORTNAME = "OBD";
                                     assetReview.DESCRIPTION = item.PlateNumber;
+                                    assetReview.LISENSING_DATE = item.LisensingDate;
                                     assetReview.TAG_NUMBER = orderNumberLeftAsset.Replace("CZ","JK") + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
                                     //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
                                     assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
@@ -726,6 +728,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         assetReview.MODEL_MAJOR = assetInfo.MODEL_MAJOR;
                                         assetReview.MODEL_MINOR = assetInfo.MODEL_MINOR;
                                         assetReview.EXP_ACCOUNT_SEGMENT = assetInfo.EXP_ACCOUNT_SEGMENT;
+                                        assetReview.VEHICLE_STATE = assetInfo.VEHICLE_STATE;
+                                        assetReview.OPERATING_STATE = assetInfo.OPERATING_STATE;
+                                        assetReview.SALVAGE_TYPE = "P";
+                                        assetReview.SALVAGE_PERCENT = assetInfo.SALVAGE_PERCENT;
                                     }
                                     assetReviewList.Add(assetReview);
                                 }

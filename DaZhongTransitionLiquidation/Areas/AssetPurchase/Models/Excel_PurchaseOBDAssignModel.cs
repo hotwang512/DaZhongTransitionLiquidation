@@ -9,6 +9,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     {
         public string PlateNumber { get; set; }
         public string EquipmentNumber { get; set; }
+        public DateTime? LisensingDate { get; set; }
     }
     public class Excel_PurchaseOBDAssignCompare
     {

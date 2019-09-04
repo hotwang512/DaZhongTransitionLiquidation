@@ -193,14 +193,18 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 var data = new List<AssetsGeneralLedger_Swap>();
                 var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Automatic == "3" && x.Status == "2").OrderBy("VoucherDate desc").ToList();
-                var voucherDate = voucherData[0].VoucherDate;
+                DateTime? voucherDate = null;
+                if (voucherData.Count > 0)
+                {
+                    voucherDate = voucherData[0].VoucherDate;
+                }
                 //从已审核凭证中提取数据
                 var AssetsData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select (b.CompanySection+'.'+b.SubjectSection+'.'+b.AccountSection+'.'+b.CostCenterSection+'.'+b.SpareOneSection+'.'+b.SpareTwoSection+'.'+b.IntercourseSection) as SubjectCount,a.AccountModeName as LEDGER_NAME,a.BatchName as JE_BATCH_NAME,
 a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as ENTERED_DR,b.LoanMoney as ENTERED_CR from Business_VoucherList as a left join Business_VoucherDetail as b on a.VGUID = b.VoucherVGUID
  where a.Status='3' ").ToList();
                 //从总账明细中提取数据
                 var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
-from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { VoucherData = voucherData[0].VoucherDate }).ToList();
+from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { VoucherData = voucherDate }).ToList();
                 foreach (var item in AssetsDetailData)
                 {
                     //item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;

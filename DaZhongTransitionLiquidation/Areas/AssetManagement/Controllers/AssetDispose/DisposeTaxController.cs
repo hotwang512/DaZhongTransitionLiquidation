@@ -23,7 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
         // GET: AssetManagement/DisposeTax
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("9946bcc7-59b3-4374-af71-f2c7048c3c9b");
             return View();
         }
         public JsonResult GetAssetsDisposeTaxListDatas(string PlateNumber, GridParams para)

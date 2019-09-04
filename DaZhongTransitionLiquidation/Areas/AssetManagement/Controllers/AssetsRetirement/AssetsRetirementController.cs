@@ -24,7 +24,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsR
         // GET: AssetManagement/AssetsLedger
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("6a44f9f0-5f21-4c3c-bcdc-d440922d9a69");
             return View();
         }
         public JsonResult GetAssetsRetirementListDatas(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor, GridParams para)

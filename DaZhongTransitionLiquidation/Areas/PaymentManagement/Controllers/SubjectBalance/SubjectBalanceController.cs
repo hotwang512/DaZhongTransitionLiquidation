@@ -19,7 +19,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
         // GET: PaymentManagement/SubjectBalance
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("dcb08053-9a75-45f0-b5a6-02332d6dc7e3");
             ViewBag.CompanyCode = GetCompanyCode();
             ViewBag.AccountMode = GetAccountMode();
             return View();

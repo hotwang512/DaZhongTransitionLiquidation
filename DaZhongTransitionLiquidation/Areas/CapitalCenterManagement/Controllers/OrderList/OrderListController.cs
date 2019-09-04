@@ -20,7 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/OrderList
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("63f132c3-b342-4642-a3a1-04f9f254e869");
             return View();
         }
         public JsonResult GetOrderListDatas(Business_OrderList searchParams, GridParams para)

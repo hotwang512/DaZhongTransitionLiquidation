@@ -50,12 +50,29 @@ var $page = function () {
                 });
             }
         );
-        //$("#OrderDetailsDialog_OKBtn").on("click",
-        //    function () {
-        //        $("#OrderDetailsDialog").modal("hide");
-        //        initTable();
-        //    }
-        //);
+        $("#OrderDetailsDialog_OKBtn").on("click",
+            function () {
+                $.ajax({
+                    url: "/AssetPurchase/PurchaseAssign/SubmitAssign",
+                    data: {
+                        "vguid": $("#AssetsOrderVguid").val()
+                    },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification(msg.ResultInfo, null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("提交成功！", null, "success");
+                            $("#OrderDetailsDialog").modal("hide");
+                            initTable();
+                            break;
+                        }
+                    }
+                });
+            }
+        );
         $("#OrderDetailsDialog_CancelBtn").on("click",
             function () {
                 $("#OrderDetailsDialog").modal("hide");
@@ -238,19 +255,12 @@ var $page = function () {
                     '</div>';
             } else {
                 return '<div style="margin: 8px; margin-top:6px;">' +
-                    '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>' +
-                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div style="display:inline-block;margin-top:-15px;margin-bottom:-18px;width: 1px;height:48px; background: darkgray;"></div>' +
-                    '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-                    FixedAssetsOrderVguid +
-                    '\')">提交</a>' +
-                    '</div>';
+                    '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\',\'' + rowData.SubmitStatus + '\')" id="' + FixedAssetsOrderVguid + '">配置</a>';
             }
         } else {
             if (rowData.PurchaseGoods != "出租车") {
                 return '<div style="margin-top:6px;">' +
-                    '<a style="cursor:pointer"  onclick="ViewAssign(\'' +
-                    FixedAssetsOrderVguid +
-                    '\')">查看</a>' +
+                    '<a style="cursor:pointer"  onclick="Setting(\'' + FixedAssetsOrderVguid + '\',\'' + rowData.SubmitStatus + '\')">查看</a>' +
                     '</div>';
             } else {
                 return '';
@@ -279,7 +289,15 @@ var $page = function () {
         });
     }
 };
-function Setting(vguid) {
+function Setting(vguid, SubmitStatus) {
+    var editable;
+    if (SubmitStatus == "0") {
+        editable = true;
+        $("#OrderDetailsDialog_OKBtn").show();
+    } else {
+        editable = false;
+        $("#OrderDetailsDialog_OKBtn").hide();
+    }
     $("#AssetsOrderVguid").val(vguid);
     var source =
     {
@@ -322,9 +340,8 @@ function Setting(vguid) {
             { text: '资产订单关联ID', datafield: 'AssetsOrderVguid', columntype: 'textbox', width: 190, align: 'center', cellsAlign: 'center', hidden: true, editable: false },
             { text: '资产管理公司', datafield: 'AssetManagementCompany',  width: 325, align: 'center', cellsAlign: 'center', editable: false },
             {
-                text: '数量', datafield: 'AssetNum', width: 120, align: 'center', cellsalign: 'center', columntype: 'textbox',
+                text: '数量', datafield: 'AssetNum', width: 220, align: 'center', cellsalign: 'center', columntype: 'textbox',editable:editable,
                 validation: function (cell, value) {
-                    debugger;
                     if (value == "")
                         return true;
                     if (!isNumber(value)) {
@@ -344,7 +361,7 @@ function Setting(vguid) {
                     }
                 ]
             },
-            { text: '资产归属配置',columntype: 'textbox', width: 100, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center' }
+            { text: '资产归属配置',columntype: 'textbox', width: 100, editable: false, cellsrenderer: cellsrenderer, align: 'center', cellsAlign: 'center',hidden:true }
         ]
     });
     $("#OrderDetailsDialog").modal("show");

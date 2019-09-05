@@ -533,7 +533,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         departmentStr = departmentStr + ditem.Descrption + ",";
                                     }
                                     departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
-                                    assetReview.ORGANIZATION_NUM = departmentStr;
+                                    assetReview.ORGANIZATION_NUM = "财务共享-" + departmentStr;
                                     assetReviewList.Add(assetReview);
                                 }
                                 db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
@@ -716,7 +716,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.FIXED_ASSETS_ORDERID = vguid;
                                     assetReview.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                                     assetReview.CREATE_DATE = DateTime.Now;
-                                    assetReview.ORGANIZATION_NUM = departmentStr;
+                                    assetReview.ORGANIZATION_NUM = "财务共享-" + departmentStr;
                                     if (assetInfoList.Any(x => x.PLATE_NUMBER == item.PlateNumber))
                                     {
                                         var assetInfo = assetInfoList

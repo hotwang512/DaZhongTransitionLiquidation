@@ -331,13 +331,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == items.BankAccount).ToList();
                         if (isAny.Count > 0)
                         {
-                            //isAny[0].BankAccount = item.BankAccount;
-                            //isAny[0].TurnIn = items.TurnIn;
-                            //isAny[0].TurnOut = items.TurnOut;
-                            items.AccountModeName = item.AccountModeCode;
+                            //if (items.Batch == "BEA192471053525717101")
+                            //{
+                            //    items.AccountModeCode = item.AccountModeCode;
+                            //    items.AccountModeName = accountModeName;
+                            //    newBankFlowList.Add(items);
+                            //}
+                            items.AccountModeCode = item.AccountModeCode;
                             items.AccountModeName = accountModeName;
                             items.CompanyCode = item.CompanyCode;
-                            db.Updateable<Business_BankFlowTemplate>(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                            db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
                         var paymentUnitInstitution = bankData.Where(x => x.BankAccount == items.BankAccount).First().BankName;
@@ -430,11 +433,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     var bankChannelOne = bankChannel.Where(it => it.BankAccount == item.ReceivableAccount).ToList().FirstOrDefault();
                     if(bankChannelOne != null)
                     {
-                        VoucherList.Add(voucher);
                         //对方账号下借贷配置信息
                         var loadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
                         var borrowData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();
-                        if (borrowData.Count > 1)
+                        if (borrowData.Count >= 1)
                         {
                             var index = 0;
                             foreach (var borrow in borrowData)
@@ -472,6 +474,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                                 BVDetailList.Add(BVDetail3);
                             }
                             GetOtherSubject2(db, BVDetailList, guid, item, assetList, voucher, orderListDraft, orderList, userCompanySet);//通过流水找银行渠道 
+                            VoucherList.Add(voucher);
                             continue;
                         }
                     }
@@ -670,8 +673,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         else
                         {
                             //一借一贷,借贷相平
-                            BVDetail.LoanMoney = item.TurnOut;
-                            BVDetail.LoanMoneyCount = item.TurnOut;
+                            BVDetail2.LoanMoney = item.TurnOut;
+                            BVDetail2.LoanMoneyCount = item.TurnOut;
+                            voucher.CreditAmountTotal = item.TurnOut;
+                            voucher.DebitAmountTotal = item.TurnOut;
                         }
                         BVDetail2.ReceivableAccount = item.ReceivableAccount;//对方账号,用于轮循贷方明细找到对应金额
                         BVDetail2.Abstract = it.Remark;

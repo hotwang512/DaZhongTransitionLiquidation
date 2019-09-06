@@ -311,14 +311,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .Where(i => vguids.Contains(i.VGUID) && !i.ISVERIFY)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 //先进中间表再进资产表
-                //获取订单部门
-                var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
-                                                                                        FROM Business_SevenSection
-                                                                                        WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
-                                                                                              AND AccountModeCode = '1002'
-                                                                                              AND CompanyCode = '01'
-                                                                                              AND Status = '1'
-                                                                                              AND Code LIKE '10%'").ToList();
                 //资产新增后写入Oracle中间表
                 var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                 try
@@ -333,20 +325,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             !item.BOOK_TYPE_CODE.IsNullOrEmpty() && !item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() &&
                             !item.MODEL_MAJOR.IsNullOrEmpty() && !item.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
                         {
-                            var fixedAssetId = item.FIXED_ASSETS_ORDERID;
-                            var departmentIDsArr = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fixedAssetId).First().PurchaseDepartmentIDs.Split(",");
-                            var strList = new List<Guid>();
-                            foreach (var departmentID in departmentIDsArr)
-                            {
-                                strList.Add(departmentID.TryToGuid());
-                            }
-                            var departments = departmentList.Where(x => strList.Contains(x.VGUID));
-                            var departmentStr = "";
-                            foreach (var ditem in departments)
-                            {
-                                departmentStr = departmentStr + ditem.Descrption + ",";
-                            }
-                            departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                             var assetSwapModel = new AssetMaintenanceInfo_Swap();
                             assetSwapModel.TRANSACTION_ID = item.VGUID;
                             assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
@@ -364,7 +342,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
                             //传入订单选择的部门
                             assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY;
-                            assetSwapModel.FA_LOC_3 = departmentStr;
+                            assetSwapModel.FA_LOC_3 = item.ORGANIZATION_NUM;
                             assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                             assetSwapModel.CREATE_DATE = DateTime.Now;
                             assetSwapModel.ASSET_ID = item.ASSET_ID;

@@ -10,6 +10,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public Guid VGUID { get; set; }
         public Guid AssetsOrderVguid { get; set; }
         public string AssetManagementCompany { get; set; }
+        public string KeyData { get; set; }
         public int? AssetNum { get; set; }
         public string ApprovalFormFileName { get; set; }
         public string ApprovalFormFilePath { get; set; }

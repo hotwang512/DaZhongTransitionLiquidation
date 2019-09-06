@@ -327,6 +327,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     foreach (var items in bankFlowList)
                     {
+                        items.BankAccount = item.BankAccount;
+                        var paymentUnitInstitution = bankData.Where(x => x.BankAccount == items.BankAccount).First().BankName;
+                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         var accountModeName = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == item.AccountModeCode).Descrption;
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == items.BankAccount).ToList();
                         if (isAny.Count > 0)
@@ -337,14 +340,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             //    items.AccountModeName = accountModeName;
                             //    newBankFlowList.Add(items);
                             //}
+                            items.BankAccount = item.BankAccount;
                             items.AccountModeCode = item.AccountModeCode;
                             items.AccountModeName = accountModeName;
                             items.CompanyCode = item.CompanyCode;
                             db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
-                        var paymentUnitInstitution = bankData.Where(x => x.BankAccount == items.BankAccount).First().BankName;
-                        items.PaymentUnitInstitution = paymentUnitInstitution;
                         items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;

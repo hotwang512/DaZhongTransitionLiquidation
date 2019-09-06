@@ -132,23 +132,29 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
             DbBusinessDataService.Command(db =>
             {
+                var bankData = db.Queryable<Business_CompanyBankInfo>().ToList();
+                var bankFlowData = db.Queryable<Business_BankFlowTemplate>().ToList();
+                var sevenData = db.Queryable<Business_SevenSection>().ToList();
                 if (worksheet.Cells.MaxDataRow > 0)
                 {
-                    for (int i = 0; i < worksheet.Cells.MaxDataRow - 1; i++)
+                    for (int i = 0; i < worksheet.Cells.MaxDataRow - 2; i++)
                     {
-                        var isAny = db.Queryable<Business_BankFlowTemplate>().Any(x => x.Batch == datatable.Rows[i]["核心流水号"].ToString() && x.TradingBank == "交通银行" && x.BankAccount == bankAccount.ObjToString());
-                        if (isAny)
+                        var isAny = bankFlowData.Where(x => x.Batch == datatable.Rows[i]["核心流水号"].ToString() && x.TradingBank == "交通银行" && x.BankAccount == bankAccount.ObjToString()).ToList();
+                        if (isAny.Count == 1)
                         {
+                            isAny[0].PaymentUnitInstitution = bankData.Where(x => x.BankAccount == bankAccount.ToString()).FirstOrDefault().BankName;
+                            db.Updateable(isAny[0]).ExecuteCommand();
                             continue;
                         }
-                        var companyBankData = db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == bankAccount.ObjToString());
-                        var accountMode = db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode);
+                        var companyBankData = bankData.Single(x => x.BankAccount == bankAccount.ObjToString());
+                        var accountMode = sevenData.Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode);
                         Business_BankFlowTemplate bankFlow = new Business_BankFlowTemplate();
                         bankFlow.TradingBank = "交通银行";
                         bankFlow.AccountModeCode = accountMode.Code;
                         bankFlow.CompanyCode = "01";
                         bankFlow.AccountModeName = accountMode.Descrption;
                         bankFlow.BankAccount = bankAccount.ToString();
+                        bankFlow.PaymentUnitInstitution = bankData.Where(x => x.BankAccount == bankAccount.ToString()).FirstOrDefault().BankName;
                         bankFlow.ReceivableAccount = datatable.Rows[i]["对方账号"].ToString();
                         bankFlow.ReceivingUnit = datatable.Rows[i]["对方户名"].ToString();
                         bankFlow.ReceivingUnitInstitution = datatable.Rows[i]["对方行名"].ToString();
@@ -304,7 +310,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         //根据流水自动生成凭证
                         GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName);
                     }
-
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

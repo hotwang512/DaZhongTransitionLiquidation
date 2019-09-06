@@ -124,7 +124,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-2)).ToList();
+                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-7)).ToList();
                         //查询公司段中已启用的公司的银行信息
                         var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
                                             as b on a.AccountModeCode = b.AccountModeCode and a.CompanyCode = b.Code  where b.Status='1' 
@@ -432,7 +432,6 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
             return bankFlowList;
         }
-
         public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
         {
             int success = 0;

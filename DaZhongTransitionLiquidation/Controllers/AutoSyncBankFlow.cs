@@ -408,8 +408,18 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.PayeeAccount = details.ATTRIBUTE3;//我方
                 bankFlow.ReceivingUnit = details.TRX_ACCOUNT_NAME;//对方
                 bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
-                bankFlow.TurnIn = details.ENTER_DR.TryToDecimal(); 
-                bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
+                if (details.CD_FLAG == "1")
+                {
+                    bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
+                    bankFlow.TurnIn = 0;
+                }
+                else
+                {
+                    bankFlow.TurnOut = 0;
+                    bankFlow.TurnIn = details.ENTER_CR.TryToDecimal();
+                }
+                //bankFlow.TurnIn = details.ENTER_DR.TryToDecimal(); 
+                //bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
                 bankFlow.Balance = details.BALANCE_AMOUNT.TryToDecimal();
                 bankFlow.VGUID = Guid.NewGuid();
                 bankFlow.TransactionDate = details.ATTRIBUTE5.TryToDate();

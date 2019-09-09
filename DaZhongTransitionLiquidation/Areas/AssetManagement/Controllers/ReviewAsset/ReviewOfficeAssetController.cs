@@ -416,6 +416,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult UpdateTagNumber(Business_AssetReview review)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                db.Updateable<Business_AssetReview>(review).UpdateColumns(x => new {x.TAG_NUMBER}).ExecuteCommand();
+                resultModel.IsSuccess = true;
+                resultModel.Status = "1";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
         public string GetNewVehicleAsset(string YearMonth)
         {
             YearMonth = YearMonth.Replace("-", "");

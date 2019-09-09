@@ -305,7 +305,7 @@ var $page = function () {
 };
 function getBusinessModel() {
     $.ajax({
-        url: "/AssetManagement/AssetsMaintenance/GetBusinessModel",
+        url: "/AssetManagement/AssetsMaintenance/GetDepreciationMethods",
         //traditional: true,
         type: "post",
         success: function (msg) {

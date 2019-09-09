@@ -133,7 +133,63 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsM
                 db.Updateable<Business_AssetMaintenanceInfo>(list)
                     .UpdateColumns(x => new
                     {
-                        x.MODEL_MINOR, x.MODEL_MAJOR,x.VEHICLE_AGE,x.BELONGTO_COMPANY,x.MANAGEMENT_COMPANY,
+                        x.MODEL_MINOR,
+                        x.MODEL_MAJOR,
+                        x.VEHICLE_AGE,
+                        x.BELONGTO_COMPANY,
+                        x.MANAGEMENT_COMPANY,
+                        x.ASSET_CATEGORY_MAJOR,
+                        x.ASSET_CATEGORY_MINOR,
+                        x.LIFE_YEARS,
+                        x.LIFE_MONTHS,
+                        x.SALVAGE_PERCENT,
+                        x.METHOD,
+                        x.BOOK_TYPE_CODE,
+                        x.ASSET_COST_ACCOUNT,
+                        x.ASSET_SETTLEMENT_ACCOUNT,
+                        x.DEPRECIATION_EXPENSE_SEGMENT,
+                        x.ACCT_DEPRECIATION_ACCOUNT
+                    }).ExecuteCommand();
+                resultModel.IsSuccess = true;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
+        public JsonResult GetDepreciationMethods()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var list = db.Queryable<Business_AssetMaintenanceInfo>().Where(x => x.ASSET_CATEGORY_MINOR == "办公用品" || x.ASSET_CATEGORY_MINOR == "公务车辆").ToList();
+                
+                foreach (var item in list)
+                {
+                    var AssetsCategory = db.Queryable<Business_AssetsCategory>()
+                        .Where(x => x.ASSET_CATEGORY_MINOR == item.ASSET_CATEGORY_MINOR).First();
+                    item.LIFE_YEARS = AssetsCategory.LIFE_YEARS;
+                    item.LIFE_MONTHS = AssetsCategory.LIFE_MONTHS;
+                    item.SALVAGE_PERCENT = AssetsCategory.SALVAGE_PERCENT;
+                    item.METHOD = AssetsCategory.METHOD;
+                    item.BOOK_TYPE_CODE = AssetsCategory.BOOK_TYPE_CODE;
+                    item.ASSET_COST_ACCOUNT = AssetsCategory.ASSET_COST_ACCOUNT;
+                    item.ASSET_SETTLEMENT_ACCOUNT = AssetsCategory.ASSET_SETTLEMENT_ACCOUNT;
+                    item.DEPRECIATION_EXPENSE_SEGMENT = AssetsCategory.DEPRECIATION_EXPENSE_SEGMENT;
+                    item.ACCT_DEPRECIATION_ACCOUNT = AssetsCategory.ACCT_DEPRECIATION_ACCOUNT;
+                    //var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                    //    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
+                    //var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
+                    //    x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
+                    //    x.Code == ssModel.AccountModeCode).First().Descrption;
+                    //item.EXP_ACCOUNT_SEGMENT = accountMode;
+                }
+                db.Updateable<Business_AssetMaintenanceInfo>(list)
+                    .UpdateColumns(x => new
+                    {
+                        x.MODEL_MINOR,
+                        x.MODEL_MAJOR,
+                        x.VEHICLE_AGE,
+                        x.BELONGTO_COMPANY,
+                        x.MANAGEMENT_COMPANY,
                         x.ASSET_CATEGORY_MAJOR,
                         x.ASSET_CATEGORY_MINOR,
                         x.LIFE_YEARS,

@@ -58,12 +58,14 @@ var $page = function () {
             });
         });
         $("#btnYesterdaySync").on("click", function () {
+            layer.load();
             $.ajax({
                 url: "/CapitalCenterManagement/BankFlowTemplate/SyncYesterdayBankData",
                 data: {},
                 type: "post",
                 dataType: "json",
                 success: function (msg) {
+                    layer.closeAll('loading');
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("同步失败！", null, "error");
@@ -243,11 +245,11 @@ var $page = function () {
                     { text: '对方账号', datafield: 'ReceivableAccount', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '对方开户机构', datafield: 'ReceivingUnitInstitution', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '用途', datafield: 'Purpose', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '备注', datafield: 'Remark', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '备注1', datafield: 'Remark', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '写入日期', datafield: 'CreateTime', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '写入人', datafield: 'CreatePerson', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '凭证科目Code', hidden: true,datafield: 'VoucherSubject', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '备注', datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
+                    { text: '备注2', datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '凭证摘要', hidden: true, datafield: 'VoucherSummary', width: 300, align: 'center', cellsAlign: 'center' },
                     
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },

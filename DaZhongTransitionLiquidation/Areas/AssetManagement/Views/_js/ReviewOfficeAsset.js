@@ -57,11 +57,7 @@ var $page = function () {
                                 $('#jqxTable').jqxGrid('clearselection');
                                 break;
                             case "2":
-                                jqxNotification(msg.ResultInfo, null, "success");
-                                $("#myModalLabel_title2").html(msg.ResultInfo);
-                                ViewReview(msg.ResultInfo2);
-                                $("#jqxTable").jqxGrid('updateBoundData');
-                                $('#jqxTable').jqxGrid('clearselection');
+                                jqxNotification(msg.ResultInfo, null, "error");
                                 break;
                         }
                     }

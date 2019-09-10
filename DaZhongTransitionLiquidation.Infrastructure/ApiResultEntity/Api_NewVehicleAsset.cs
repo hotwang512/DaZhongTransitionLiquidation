@@ -33,8 +33,11 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity
     public class Api_ScrapVehicleAsset
     {
         public string ORIGINALID { get; set; }
+        public string VEHICLE_STATE { get; set; }
+        public string OPERATING_STATE { get; set; }
         public string PLATE_NUMBER { get; set; }
         public string BACK_CAR_DATE { get; set; }
+        public string MODEL_MINOR { get; set; }
     }
     public class Api_ModifyVehicleAsset
     {

@@ -235,16 +235,62 @@ namespace DaZhongTransitionLiquidation.Controllers
             var list = new List<Business_ScrapVehicle>();
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             int success = 0;
+            var ids = assetFlowList.Select(x => x.ORIGINALID).ToList();
+            var assetList = _db.Queryable<Business_AssetMaintenanceInfo>().Where(x => ids.Contains(x.ORIGINALID)).ToList();
+            //获取所有的经营模式
+            var manageModelList = _db.Queryable<Business_ManageModel>().ToList();
             foreach (var item in assetFlowList)
             {
                 var model = new Business_ScrapVehicle();
                 model.VGUID = Guid.NewGuid();
                 model.ORIGINALID = item.ORIGINALID;
                 model.PLATE_NUMBER = item.PLATE_NUMBER;
+                model.OPERATING_STATE = item.OPERATING_STATE;
+                model.VEHICLE_STATE = item.VEHICLE_STATE;
                 model.BACK_CAR_DATE = item.BACK_CAR_DATE.TryToDate();
+                var lisensingDate = assetList.First(x => x.ORIGINALID == item.ORIGINALID).LISENSING_DATE.TryToDate();
+                model.VEHICLE_AGE = ((DateTime.Now.Year - lisensingDate.Year) * 12) + (DateTime.Now.Month - lisensingDate.Month);
                 model.ISVERIFY = false;
                 model.CREATE_DATE = DateTime.Now;
                 model.CREATE_USER = "System";
+                var minorModel = new Business_ManageModel();
+                if (!item.MODEL_MINOR.IsNullOrEmpty())
+                {
+                    var minor = manageModelList.Where(x => x.LevelNum == 2 && x.BusinessName == item.MODEL_MINOR).ToList();
+                    //如果经营模式第三级有多个
+                    if (minor.Count > 1)
+                    {
+                        //计算出车龄，并根据车龄判断经营模式子类
+                        //reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
+                        var level3 = manageModelList
+                            .Where(x => x.LevelNum == 2 && x.BusinessName == item.MODEL_MINOR && x.VehicleAge > model.VEHICLE_AGE)
+                            .OrderBy(x => x.VehicleAge).First();
+                        minorModel = manageModelList.First(x => x.VGUID == level3.ParentVGUID);
+                        item.MODEL_MINOR = minorModel.BusinessName;
+                    }
+                    else if (minor.Count == 1)
+                    {
+                        minorModel = manageModelList
+                            .First(x => x.VGUID == minor.First().ParentVGUID);
+                        item.MODEL_MINOR = minorModel.BusinessName;
+                    }
+                    //经营模式主类 传过来的经营模式上上级
+                    var major = manageModelList.FirstOrDefault(x => x.VGUID == minorModel.ParentVGUID);
+                    model.MODEL_MAJOR = major.BusinessName;
+                }
+                else
+                {
+                    if (item.OPERATING_STATE == "停运")
+                    {
+                        model.MODEL_MAJOR = "停运模式";
+                        model.MODEL_MINOR = "旧车停运";
+                    }
+                    else if (item.OPERATING_STATE == "")
+                    {
+                        model.MODEL_MAJOR = "停运模式";
+                        model.MODEL_MINOR = "新车停运";
+                    }
+                }
                 list.Add(model);
             }
             if (list.Count > 0)

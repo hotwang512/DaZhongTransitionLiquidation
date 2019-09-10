@@ -31,7 +31,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         public JsonResult GetReviewAssetListDatas(Business_ScrapVehicle searchParams, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_ScrapVehicleShowModel>();
-
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
@@ -40,18 +39,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                          , mi.VEHICLE_SHORTNAME
                          , mi.MANAGEMENT_COMPANY
                          , mi.BELONGTO_COMPANY
-                         , mi.VEHICLE_STATE
-                         , mi.OPERATING_STATE
                          , mi.ENGINE_NUMBER
-                         , mi.CHASSIS_NUMBER
-                         , mi.MODEL_MAJOR
-                         , mi.MODEL_MINOR
                          , mv.*
 	                     , mi.EXP_ACCOUNT_SEGMENT
 	                     , mi.COMMISSIONING_DATE as PERIOD
 	                     , mi.QUANTITY
 	                     , mi.ASSET_COST
 	                     , mi.ASSET_ID
+						 , mi.LISENSING_DATE
                     from Business_ScrapVehicle mv
                         left join Business_AssetMaintenanceInfo mi
                             on mv.ORIGINALID = mi.ORIGINALID")

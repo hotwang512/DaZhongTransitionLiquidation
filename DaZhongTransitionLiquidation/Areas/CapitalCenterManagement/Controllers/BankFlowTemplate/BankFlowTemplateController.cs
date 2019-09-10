@@ -391,6 +391,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var orderList = db.Queryable<Business_OrderList>().ToList();
             var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
             var bankChannel = db.Queryable<T_BankChannelMapping>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
+            var paySetting = db.Queryable<Business_PaySettingDetail>().ToList();
             #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
@@ -405,7 +406,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 x++;
                 var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
                 voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd") + (voucherNo + x).TryToString().PadLeft(4, '0');
-                voucher.DocumentMaker = loginName;
+                voucher.DocumentMaker = "";
                 voucher.Status = "1";
                 voucher.VoucherDate = item.TransactionDate;
                 voucher.VoucherType = "银行类";
@@ -441,8 +442,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     if(bankChannelOne != null)
                     {
                         //对方账号下借贷配置信息
-                        var loadData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
-                        var borrowData = db.Queryable<Business_PaySettingDetail>().Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();
+                        var loadData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null).ToList();
+                        var borrowData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null).ToList();
                         if (borrowData.Count >= 1)
                         {
                             var index = 0;
@@ -588,7 +589,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 //对方账号下借贷配置信息
                 var borrowLoadData = db.Queryable<Business_PaySettingDetail>().Where(x => x.PayVGUID == bankChannelOne.VGUID.ToString()).ToList();
                 //金额报表,数据源
-                var month = DateTime.Now.ToString("yyyy-MM");
+                var month = item.TransactionDate.TryToDate().ToString("yyyy-MM");
                 var bankFlowList = db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
                 var subject = "";
                 if (item.TurnOut == 0)
@@ -663,7 +664,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         if (loanData.Count > 1)
                         {
                             //从金额报表中按配置获取金额
-                            var amountReport = bankFlowList.Where(x => x.OrganizationName == it.TransferCompany && x.Channel_Id == it.Channel && x.RevenueDate == DateTime.Now.ToString("yyyy-MM-dd")).ToList();
+                            var amountReport = bankFlowList.Where(x => x.OrganizationName == it.TransferCompany && x.Channel_Id == it.Channel && x.RevenueDate == item.TransactionDate.TryToDate().ToString("yyyy-MM-dd")).ToList();
                             if (amountReport.Count > 0)
                             {
                                 switch (it.TransferType)

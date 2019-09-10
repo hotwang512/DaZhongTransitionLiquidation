@@ -49,14 +49,14 @@ var $page = function () {
         if (guid != "" && guid != null) {
             getVoucherDetail();
             addVoucherListTable();
-            $("#VoucherType").attr("disabled", "disableds"); 
+            $("#VoucherType").attr("disabled", "disableds");
         } else {
             //addSectionDiv();
             addVoucherListTable();
             $("#hideButton").show();
             $("#DocumentMaker").val($("#LoginName").val());
         }
-       
+        getPersonInfo();
         //控件ID后缀
         var str = "";
         //新增
@@ -66,7 +66,7 @@ var $page = function () {
             var trIndex = $("#VoucherTable tr").length - 2;
             if (trIndex > 2) {
                 var trId = $("#VoucherTable tr")[trIndex].id;
-                trIndex = parseInt(trId.substr(trId.length - 1, 1))+1;
+                trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
             }
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'></textarea></td>" +
@@ -75,8 +75,8 @@ var $page = function () {
                              "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                              "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
-                $("#countTr").before(trMore);
-                tdClick();
+            $("#countTr").before(trMore);
+            tdClick();
         });
         //取消
         $("#btnCancel").on("click", function () {
@@ -213,7 +213,7 @@ var $page = function () {
                                 break;
                             case "1":
                                 jqxNotification("保存成功！", null, "success");
-                                history.go(-1);
+                                //history.go(-1);
                                 //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                 break;
                         }
@@ -231,12 +231,9 @@ var $page = function () {
                 return;
             }
             if (documentMaker == "") {
-                jqxNotification("制单人不能为空！", null, "error");
-                return;
+                $("#DocumentMaker").val($("#LoginName").val());
             }
             $("#SubjectTable").remove();
-            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
-            $("#ShowDialog").modal("show");
             //var x = $(".nav-i")[0].id.split("_")[1];
             if ($("#SubjectName0").val() != null && $("#SubjectName0").val() != "") {
                 var subjectName = $("#SubjectName0").val().split(".");
@@ -245,7 +242,10 @@ var $page = function () {
                     companyName = subjectName[6].substring(1, subjectName[6].length);
                 }
                 $("#lblCompany").text(companyName);
-            }          
+            } else {
+                jqxNotification("借贷科目不完整！", null, "error");
+                return;
+            }
             $("#lblAccountingPeriods").text($("#AccountingPeriod").val());
             $("#lblBatchName").text($("#BatchName").val());
             $("#lblCurrency").text("人民币");
@@ -271,7 +271,7 @@ var $page = function () {
             //var lengths = $(".nav-i").length + $(".nav-i2").length;
             var htmls = "";
             var list1 = "";
-            
+
             for (var i = 0; i < $("#VoucherTable tr").length - 2; i++) {
                 var borrowMoney = 0;
                 var loanMoney = 0;
@@ -300,6 +300,8 @@ var $page = function () {
                        "</tr>"
             "</table>";
             $("#VoucherDetail").append(htmls);
+            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
+            $("#ShowDialog").modal("show");
         })
         //取消
         $("#AddNewBankData_CancelBtn").on("click", function () {
@@ -579,7 +581,7 @@ var $page = function () {
         $("#VoucherListTable").append(voucherHtmls);
         tdClick();
     }
-   
+
     function loadSelectFun(str) {
 
         var id1 = "#AccountSection";
@@ -746,6 +748,7 @@ var $page = function () {
         }
         console.log(selectIndex);
     }
+
     function createTable(datas) {
         for (var i = 0; i < datas.length; i++) {
             $("#Remark" + i).val(datas[i].Abstract);
@@ -786,20 +789,20 @@ var $page = function () {
                 $("#BorrowCount").val(parseFloat(bCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
             }
             //bCount = bCount.toString().replace(/,/g, '');
-            
+
             var lCount = "";
             if (datas[i].LoanMoneyCount != null) {
                 lCount = datas[i].LoanMoneyCount;
                 $("#LoanCount").val(parseFloat(lCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
             }
             //lCount = lCount.toString().replace(/,/g, '');
-            
+
             //多余2条,绑定额外的tr
             if (i > 1) {
                 var trMore = "";
                 trIndex = i;
                 trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
-                                 "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'>" + datas[i].Abstract+ "</textarea></td>" +
+                                 "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'>" + datas[i].Abstract + "</textarea></td>" +
                                  "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px; '>编辑</button></td>" +
                                  "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                                  "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
@@ -814,6 +817,32 @@ var $page = function () {
                 tdClick();
             }
         }
+    }
+
+    function getPersonInfo() {
+        $.ajax({
+            url: "/VoucherManageManagement/VoucherListDetail/GetPersonInfo",
+            data: {
+
+            },
+            traditional: true,
+            type: "post",
+            success: function (msg) {
+                //$("#FinanceDirector").val(msg.FinanceDirector);
+                //$("#Bookkeeping").val(msg.Bookkeeping);
+                //$("#Auditor").val(msg.Auditor);
+                //$("#Cashier").val(msg.Cashier);
+                for (var i = 0; i < msg.length; i++) {
+                    switch (msg[i].Role) {
+                        case "财务经理": $("#FinanceDirector").val(msg[i].LoginName); break;
+                        case "财务主管": $("#Bookkeeping").val(msg[i].LoginName); break;
+                        case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
+                        case "出纳": $("#Cashier").val(msg[i].LoginName); break;
+                        default: break;
+                    }
+                }
+            }
+        });
     }
 };
 
@@ -1109,7 +1138,7 @@ function tdClick() {
                 $("#Borrow" + trIndexs).attr("readonly", "readonly");
                 value = value.replace(/,/g, '');
                 $("#Loan" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-            } 
+            }
         } else {
             if (id.substr(0, id.length - 1) == "Borrow") {
                 if ($("#Loan" + trIndexs).val() != "") {
@@ -1151,7 +1180,7 @@ function countMoney() {
         if ($(".Borrow")[i].value != "") {
             var valB = $(".Borrow")[i].value.replace(/,/g, '');
             borrowCount += parseFloat(valB);
-        } 
+        }
     }
     for (var i = 0; i < $(".Loan").length; i++) {
         if ($(".Loan")[i].value != "") {

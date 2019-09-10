@@ -392,6 +392,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
             var bankChannel = db.Queryable<T_BankChannelMapping>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
             var paySetting = db.Queryable<Business_PaySettingDetail>().ToList();
+            var userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
             #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
@@ -414,6 +415,17 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CreateTime = DateTime.Now;
                 guid = Guid.NewGuid();
                 voucher.VGUID = guid;
+                foreach (var user in userData)
+                {
+                    switch (user.Role)
+                    {
+                        case "财务经理":voucher.FinanceDirector = user.LoginName;break;
+                        case "财务主管": voucher.Bookkeeping = user.LoginName; break;
+                        case "审核岗": voucher.Auditor = user.LoginName; break;
+                        case "出纳": voucher.Cashier = user.LoginName; break;
+                        default: break;
+                    }
+                }
                 //科目信息
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
                 BVDetail.Abstract = item.Purpose;

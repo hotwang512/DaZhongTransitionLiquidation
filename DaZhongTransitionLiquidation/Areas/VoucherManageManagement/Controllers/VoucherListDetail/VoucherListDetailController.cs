@@ -12,6 +12,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.Vou
 using SyntacticSugar;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -281,6 +282,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         {
             var result = UserInfo.AccountModeName;
             return result;
+        }
+        public JsonResult GetPersonInfo()
+        {
+            var result = new List<Sys_User>();
+            DbService.Command(db =>
+            {
+                result = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet); ;
         }
     }
 }

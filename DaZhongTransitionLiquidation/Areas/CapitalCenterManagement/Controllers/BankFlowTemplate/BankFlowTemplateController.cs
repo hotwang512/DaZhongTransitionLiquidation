@@ -415,7 +415,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.VGUID = guid;
                 //科目信息
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-                BVDetail.Abstract = item.Remark;
+                BVDetail.Abstract = item.Purpose;
                 var sevenSubject = GetSevenSubject(item.BankAccount);
                 var subject = "";
                 if (item.TurnOut == 0)

@@ -77,6 +77,24 @@ var $page = function () {
             }
         });
     }
+    $("#btnGetScrap").on("click", function () {
+        $.ajax({
+            url: "/AssetManagement/AssetsRetirementReview/GetScrapVehicleReview",
+            //traditional: true,
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                case "0":
+                    jqxNotification("获取失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("获取成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+                }
+            }
+        });
+    });
     function initTable() {
         var source =
             {

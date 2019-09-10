@@ -5,7 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Controllers;
+using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -153,5 +156,42 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetScrapVehicleReview()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    List<Api_ScrapVehicleAsset> assetScrapFlowList = new List<Api_ScrapVehicleAsset>();
+                    //退车
+                    {
+                        var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                        var apiReaultScrap = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
+                        var resultApiScrapModel = apiReaultScrap
+                            .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                        var scrapVehicleList = new List<Api_ScrapVehicleAsset>();
+                        var resultColumn = resultApiScrapModel.data[0].COLUMNS;
+                        var resultData = resultApiScrapModel.data[0].DATA;
+                        foreach (var item in resultData)
+                        {
+                            var nv = new Api_ScrapVehicleAsset();
+                            var t = nv.GetType();
+                            for (var k = 0; k < resultColumn.Count; k++)
+                            {
+                                var pi = t.GetProperty(resultColumn[k]);
+                                if (pi != null) pi.SetValue(nv, item[k], null);
+                            }
+                            scrapVehicleList.Add(nv);
+                        }
+                        AutoSyncAssetsMaintenance.WirterScrapSyncAssetFlow(assetScrapFlowList);
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
     }
 }

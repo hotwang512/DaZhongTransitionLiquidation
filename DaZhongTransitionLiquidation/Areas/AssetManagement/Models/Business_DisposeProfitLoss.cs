@@ -100,7 +100,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public decimal? Column_8 { get; set; }
+        public decimal? RealizedProfitLoss { get; set; }
 
         /// <summary>
         /// Desc:

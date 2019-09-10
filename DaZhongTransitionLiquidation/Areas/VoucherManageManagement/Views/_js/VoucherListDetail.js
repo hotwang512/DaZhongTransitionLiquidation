@@ -49,13 +49,14 @@ var $page = function () {
         if (guid != "" && guid != null) {
             getVoucherDetail();
             addVoucherListTable();
-            $("#VoucherType").attr("disabled", "disableds");
+            $("#VoucherType").attr("disabled", "disableds"); 
         } else {
             //addSectionDiv();
             addVoucherListTable();
             $("#hideButton").show();
+            $("#DocumentMaker").val($("#LoginName").val());
         }
-        $("#DocumentMaker").val($("#LoginName").val());
+       
         //控件ID后缀
         var str = "";
         //新增
@@ -224,15 +225,20 @@ var $page = function () {
         $("#Preview").on("click", function () {
             var borrowCount = $("#BorrowCount").val();
             var loanCount = $("#LoanCount").val();
+            var documentMaker = $("#DocumentMaker").val();
             if (borrowCount != loanCount) {
                 jqxNotification("借贷不相等！", null, "error");
+                return;
+            }
+            if (documentMaker == "") {
+                jqxNotification("制单人不能为空！", null, "error");
                 return;
             }
             $("#SubjectTable").remove();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("show");
             //var x = $(".nav-i")[0].id.split("_")[1];
-            if ($("#SubjectName0").val() != null || $("#SubjectName0").val() != "") {
+            if ($("#SubjectName0").val() != null && $("#SubjectName0").val() != "") {
                 var subjectName = $("#SubjectName0").val().split(".");
                 var companyName = subjectName[6].split(/[\s\n]/)[1];
                 if (subjectName[6].split(/[\s\n]/).length < 2) {

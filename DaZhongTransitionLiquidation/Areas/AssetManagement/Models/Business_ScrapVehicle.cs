@@ -33,6 +33,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string PLATE_NUMBER { get; set; }
+        public string VEHICLE_STATE { get; set; }
+        public string OPERATING_STATE { get; set; }
+        public int VEHICLE_AGE { get; set; }
 
         /// <summary>
         /// Desc:
@@ -61,6 +64,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string CREATE_USER { get; set; }
+        public string MODEL_MAJOR { get; set; }
+        public string MODEL_MINOR { get; set; }
 
     }
 
@@ -85,6 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string TAG_NUMBER { get; set; }
+        public DateTime LISENSING_DATE { get; set; }
 
         /// <summary>
         /// Desc:
@@ -106,51 +112,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string BELONGTO_COMPANY { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public string VEHICLE_STATE { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public string OPERATING_STATE { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public string ENGINE_NUMBER { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public string CHASSIS_NUMBER { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public string MODEL_MAJOR { get; set; }
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public string MODEL_MINOR { get; set; }
-        public string EXP_ACCOUNT_SEGMENT { get; set; }
-        public string PERIOD { get; set; }
-        public int QUANTITY { get; set; }
-        public decimal ASSET_COST { get; set; }
         public string ASSET_ID { get; set; }
     }
 }

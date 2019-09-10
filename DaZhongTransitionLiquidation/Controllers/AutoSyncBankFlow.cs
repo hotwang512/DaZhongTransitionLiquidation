@@ -410,13 +410,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
                 if (details.CD_FLAG == "1")
                 {
-                    bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
-                    bankFlow.TurnIn = 0;
+                    bankFlow.TurnOut = 0;
+                    bankFlow.TurnIn = details.ENTER_CR.TryToDecimal();
                 }
                 else
                 {
-                    bankFlow.TurnOut = 0;
-                    bankFlow.TurnIn = details.ENTER_CR.TryToDecimal();
+                    bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();
+                    bankFlow.TurnIn = 0;
                 }
                 //bankFlow.TurnIn = details.ENTER_DR.TryToDecimal(); 
                 //bankFlow.TurnOut = details.ENTER_CR.TryToDecimal();

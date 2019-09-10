@@ -47,7 +47,7 @@ namespace DaZhongTransitionLiquidation.Common
                 wc.Headers.Clear();
                 wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
                 wc.Encoding = System.Text.Encoding.UTF8;
-                resultData = wc.UploadString(new Uri(url), "GET", data);
+                resultData = wc.UploadString(new Uri(url), "POST", data);
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
             }
             catch (Exception ex)

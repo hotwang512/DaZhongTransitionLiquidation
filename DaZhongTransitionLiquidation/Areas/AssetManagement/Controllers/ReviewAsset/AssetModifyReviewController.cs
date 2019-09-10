@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -37,7 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.SqlQueryable<Business_ModifyVehicleModel>
-                    (@"SELECT mv.*,
+                    (@"SELECT mv.*,mi.DESCRIPTION,
                        mi.PLATE_NUMBER AS PLATE_NUMBER_M,
                        mi.MODEL_MAJOR AS MODEL_MAJOR_M,
                        mi.MODEL_MINOR AS MODEL_MINOR_M,
@@ -69,7 +70,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SubmitModifyVehicleReview(List<Guid> guids,string MODIFY_TYPE)
+        public JsonResult SubmitModifyVehicleReview(List<Guid> guids, string MODIFY_TYPE)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -189,6 +190,40 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        
+        public JsonResult GetModifyVehicleReview(string MODIFY_TYPE)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset();
+                    var resultApiModifyModel = apiReaultModify
+                        .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                    //全量获取车辆信息
+                    {
+                        var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                        var resultData = resultApiModifyModel.data[0].DATA;
+                        foreach (var item in resultData)
+                        {
+                            var nv = new Api_ModifyVehicleAsset();
+                            var t = nv.GetType();
+                            for (var k = 0; k < resultColumn.Count; k++)
+                            {
+                                var pi = t.GetProperty(resultColumn[k]);
+                                if (pi != null) pi.SetValue(nv, item[k], null);
+                            }
+                            assetModifyFlowList.Add(nv);
+                        }
+                        AutoSyncAssetsMaintenance.WirterSyncModifyAssetFlow(assetModifyFlowList);
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
     }
 }

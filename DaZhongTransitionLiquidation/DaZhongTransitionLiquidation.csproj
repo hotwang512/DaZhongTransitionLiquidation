@@ -206,6 +206,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetModifyReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeIncome.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposenetValue.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\DisposeProfitLoss.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeTax.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewAsset.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />

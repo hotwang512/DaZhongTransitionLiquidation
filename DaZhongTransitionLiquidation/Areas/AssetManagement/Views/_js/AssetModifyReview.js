@@ -62,6 +62,25 @@ var $page = function () {
             WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
         }
     });
+    $("#btnGetModify").on("click", function () {
+        $.ajax({
+            url: "/AssetManagement/AssetModifyReview/GetModifyVehicleReview",
+            data: { "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
+            //traditional: true,
+            type: "post",
+            success: function (msg) {
+                switch (msg.Status) {
+                case "0":
+                    jqxNotification("获取失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("获取成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+                }
+            }
+        });
+    });
     //提交
     function submit(selection) {
         debugger;
@@ -207,7 +226,7 @@ var $page = function () {
                 return '<span style="margin: 4px; margin-top:8px;">' + rowData.BELONGTO_COMPANY_M + '</span>';
                 break;
             case "BUSINESS_MODEL":
-                return '<span style="margin: 4px; margin-top:8px;">' + rowData.MODEL_MAJOR_M + "" + rowData.MODEL_MINOR_M + '</span>';
+                return '<span style="margin: 4px; margin-top:8px;">' + rowData.MODEL_MAJOR_M + "-" + rowData.MODEL_MINOR_M + '</span>';
                 break;
             default:
             return '<span style="margin: 4px; margin-top:8px;"></span>';

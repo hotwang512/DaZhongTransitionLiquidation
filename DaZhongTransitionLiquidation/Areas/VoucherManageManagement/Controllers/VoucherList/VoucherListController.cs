@@ -12,6 +12,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using SyntacticSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -145,12 +146,19 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 case "转账类": type = "z.转账"; break;
                 default: break;
             }
+            var result = new List<Sys_User>();
+            DbService.Command(_db =>
+            {
+                result = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            var documentMaker = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault().Email;//Oracle用户名
             //asset.VGUID = Guid.NewGuid();
             foreach (var items in voucherDetail)
             {
                 var four = voucher.VoucherNo.Substring(voucher.VoucherNo.Length - 4, 4);
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
+                asset.CREATE_USER = documentMaker;
                 //asset.SubjectVGUID = guid;
                 asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;

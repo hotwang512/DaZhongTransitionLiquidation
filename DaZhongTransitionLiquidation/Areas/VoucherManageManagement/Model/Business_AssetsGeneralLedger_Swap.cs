@@ -166,6 +166,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         /// </summary> 
         public DateTime? CREATE_DATE { get; set; }
         /// <summary>
+        /// Desc:创建人（制单人）
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public string CREATE_USER { get; set; }
+        /// <summary>
         /// Desc:处理状态
         /// Default:
         /// Nullable:True

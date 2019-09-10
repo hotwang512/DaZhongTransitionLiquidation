@@ -55,8 +55,8 @@ var $page = function () {
             addVoucherListTable();
             $("#hideButton").show();
             $("#DocumentMaker").val($("#LoginName").val());
+            getPersonInfo();
         }
-        getPersonInfo();
         //控件ID后缀
         var str = "";
         //新增

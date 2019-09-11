@@ -100,7 +100,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        DbService.Command(_db =>
+                        {
+                            userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        });
+                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
                         //同步银行流水到银行数据表
                         BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
@@ -190,7 +195,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        DbService.Command(_db =>
+                        {
+                            userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        });
+                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
                         //同步银行流水到银行数据表
                         BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
@@ -308,7 +318,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        DbService.Command(_db =>
+                        {
+                            userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        });
+                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName, userData);
                     }
                 }
             });
@@ -365,7 +380,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        DbService.Command(_db =>
+                        {
+                            userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        });
+                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName, userData);
                     }
                 }
             });
@@ -380,7 +400,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
         }
-        public static void GenerateVoucherList(SqlSugarClient db, List<Business_BankFlowTemplate> newBankFlowList, string loginName)
+        public static void GenerateVoucherList(SqlSugarClient db, List<Business_BankFlowTemplate> newBankFlowList, string loginName, List<Sys_User> userData)
         {
             List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
@@ -392,7 +412,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
             var bankChannel = db.Queryable<T_BankChannelMapping>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
             var paySetting = db.Queryable<Business_PaySettingDetail>().ToList();
-            var userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            
             #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
@@ -428,7 +448,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 }
                 //科目信息
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-                BVDetail.Abstract = item.Purpose;
+                BVDetail.Abstract = item.Remark;
                 var sevenSubject = GetSevenSubject(item.BankAccount);
                 var subject = "";
                 if (item.TurnOut == 0)

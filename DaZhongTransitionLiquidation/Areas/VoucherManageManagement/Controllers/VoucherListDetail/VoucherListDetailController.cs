@@ -228,6 +228,26 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 //主信息
                 var voucher = db.Queryable<Business_VoucherList>().Single(x => x.VGUID == vguid);
+                if(voucher.FinanceDirector == "" || voucher.FinanceDirector == null)
+                {
+                    var userData = new List<Sys_User>();
+                    DbService.Command(_db =>
+                    {
+                        userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                    });
+                    foreach (var user in userData)
+                    {
+                        switch (user.Role)
+                        {
+                            case "财务经理": voucher.FinanceDirector = user.LoginName; break;
+                            case "财务主管": voucher.Bookkeeping = user.LoginName; break;
+                            case "审核岗": voucher.Auditor = user.LoginName; break;
+                            case "出纳": voucher.Cashier = user.LoginName; break;
+                            default: break;
+                        }
+                    }
+                    db.Updateable(voucher).ExecuteCommand();
+                }
                 //明细信息
                 var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("BorrowMoney desc").ToList();
                 //附件信息

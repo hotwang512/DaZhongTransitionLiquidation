@@ -10,6 +10,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.Vou
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
@@ -473,11 +474,16 @@ namespace DaZhongTransitionLiquidation.Controllers
                     item.CreatePerson = "admin";
                     bankFlowLists.Add(item);
                 }
+                var userData = new List<Sys_User>();
+                using (SqlSugarClient db = DbConfig.GetInstance())
+                {
+                    userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                }
                 if (bankFlowLists.Count > 0)
                 {
                     success = _db.Insertable(bankFlowLists).ExecuteCommand();
                     //根据流水自动生成凭证
-                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin");
+                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin", userData);
                 }
             }
             BankDataPack.SyncBackFlowAndReconciliation();

@@ -42,12 +42,12 @@
         <tr style="height: 50px;">
             <td style="width: 95px;">
                 <button id="AddSubject_OKButton" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>
+                <button id="btnCheckStatus" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">校验</span></button>
                 @*<button id="AddSubject_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>*@
             </td>
             <td style="width: 95px;">
                 <button id="btnCheck" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
             </td>
-           
         </tr>
     </table>
 }
@@ -84,12 +84,12 @@
     </div>
     <div id='jqxTabs'>
         <ul>
-            <li style="margin-left: 30px;">
+            <li id="Oracle0" style="margin-left: 30px;">
                 <div style="height: 20px; margin-top: 5px;">
                     手工录入
                 </div>
             </li>
-            <li>
+            <li id="Oracle1">
                 <div style="height: 20px; margin-top: 5px;">
                     自动录入
                 </div>
@@ -97,6 +97,11 @@
             <li id="Oracle" style="display:none;">
                 <div style="height: 20px; margin-top: 12px;">
                     Oracle录入
+                </div>
+            </li>
+            <li id="OracleCheck" style="display:none;">
+                <div style="height: 20px; margin-top: 12px;">
+                    Oracle校验失败
                 </div>
             </li>
         </ul>
@@ -108,6 +113,9 @@
         </div>
         <div style="overflow: hidden;">
             <div id="jqxTable2" class="jqxTable" style=""></div>
+        </div>
+        <div style="overflow: hidden;">
+            <div id="jqxTable3" class="jqxTable" style=""></div>
         </div>
     </div>
 

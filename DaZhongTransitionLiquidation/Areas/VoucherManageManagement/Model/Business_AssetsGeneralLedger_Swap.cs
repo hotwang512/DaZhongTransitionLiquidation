@@ -198,5 +198,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string SOURCE { get; set; }
         public string SubjectCount { get; set; }
         public string MESSAGE { get; set; }
+        public string CheckStatus { get; set; }
     }
 }

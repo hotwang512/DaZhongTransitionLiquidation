@@ -619,6 +619,10 @@ var $page = function () {
                     $("#btnUp").text("审核");
                     $("#AddNewBankData_CancelBtn").text("退回");
                 }
+                if ($("#Status").val() == "4") {
+                    $("#hideButton").show();
+                    $("#btnUp").show();
+                }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
                 $("#VoucherDate").val($.convert.toDate(new Date(voucherDate), "yyyy-MM-dd"));
@@ -636,7 +640,7 @@ var $page = function () {
                 $("#VoucherType").val(msg.VoucherType);
                 $("#Automatic").val(msg.Automatic);
                 var datas = msg.Detail;
-                //setVoucherDetail(datas);
+                    //setVoucherDetail(datas);
                 createTable(datas);
                 loadAttachments(msg.Attachment);
             }

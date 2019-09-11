@@ -108,5 +108,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public DateTime? CreateTime { get; set; }
         public string AccountModeName { get; set; }
         public string Automatic { get; set; }
+        public string OracleStatus { get; set; }
+        public string OracleMessage { get; set; }
     }
 }

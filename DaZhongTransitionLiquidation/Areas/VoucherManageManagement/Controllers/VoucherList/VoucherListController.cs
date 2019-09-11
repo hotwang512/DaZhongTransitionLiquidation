@@ -130,11 +130,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel);
         }
-
         private void InsertAssetsGeneralLedger(Guid item, SqlSugarClient db)
         {
             //删除现有中间表数据
-            db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item.TryToString()).ExecuteCommand();
+            //db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item.TryToString()).ExecuteCommand();
             //凭证中间表
             var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
             var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item).ToList();
@@ -151,7 +150,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 result = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
             });
-            var documentMaker = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault().Email;//Oracle用户名
+            var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
+            var documentMaker = "";
+            if(documentMakerData != null)
+            {
+                documentMaker = documentMakerData.Email;
+            }
             //asset.VGUID = Guid.NewGuid();
             foreach (var items in voucherDetail)
             {
@@ -193,7 +197,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 db.Insertable(asset).IgnoreColumns(it => new { it.VGUID, it.SubjectVGUID }).ExecuteCommand();
             }
         }
-
         public JsonResult SyncAssetsData()
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
@@ -330,6 +333,41 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                 {
                     resultModel.Status = "2";
                 }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult CheckOracleData()//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var saveChanges = 0;
+                var vguidList = db.Ado.SqlQuery<string>(@"select distinct(LINE_ID) from AssetsGeneralLedger_Swap where STATUS = 'E' and CheckStatus != '1' ");
+                var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Status == "3").ToList();
+                var oracleDataList = db.Queryable<AssetsGeneralLedger_Swap>().Where(x => x.STATUS == "E" && x.CheckStatus != "1").ToList();
+                foreach (var item in vguidList)
+                {
+                    var oracleRemark = "";
+                    var oracle = oracleDataList.Where(x => x.LINE_ID == item).ToList();
+                    if (oracle.Count > 0)
+                    {
+                        foreach (var it in oracle)
+                        {
+                            oracleRemark += it.MESSAGE + ",";
+                        }
+                        var vguid = item.TryToGuid();
+                        var oracleData = voucherData.Where(x => x.VGUID == vguid).FirstOrDefault();
+                        oracleData.Status = "4";
+                        oracleData.Automatic = "4";
+                        oracleData.OracleMessage = oracleRemark;
+                        db.Updateable(oracleData).ExecuteCommand();
+                        db.Updateable<AssetsGeneralLedger_Swap>().UpdateColumns(it => new AssetsGeneralLedger_Swap() { CheckStatus = "1" })
+                                        .Where(it => it.LINE_ID == item).ExecuteCommand();
+                        saveChanges = 1;
+                    }
+                }
+                resultModel.IsSuccess = saveChanges == 1;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
         }

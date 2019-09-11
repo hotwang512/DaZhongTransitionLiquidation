@@ -75,6 +75,8 @@ var menueHelp = {
                 break;
             case "VoucherManage": $("#homeModel").text("--会计核算中心")
                 break;
+            case "VoucherAbnormal": $("#homeModel").text("--会计核算中心")
+                break; 
             case "VoucherManageBank": $("#homeModel").text("--会计核算中心")
                 break;
             case "VoucherManageTransfer": $("#homeModel").text("--会计核算中心")

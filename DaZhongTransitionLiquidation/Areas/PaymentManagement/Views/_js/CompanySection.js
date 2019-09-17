@@ -611,6 +611,7 @@ var $page = function () {
                 //$("#jqxTable2").remove();
                 //$("#jqxTreeTable2").append('<div id="jqxTable2" class="jqxTable"></div>');
                 initTable2();
+                $('#jqxTable2').on('bindingComplete', function (event) { $("#jqxTable2").jqxTreeGrid('expandAll'); });
                 break;
             case 3: initTable3();
                 break;

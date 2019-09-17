@@ -633,7 +633,11 @@ var $page = function () {
                 $("#FinanceDirector").val(msg.FinanceDirector);
                 $("#Bookkeeping").val(msg.Bookkeeping);
                 $("#Auditor").val(msg.Auditor);
-                $("#DocumentMaker").val(msg.DocumentMaker);
+                if (msg.DocumentMaker == "" || msg.DocumentMaker == null) {
+                    $("#DocumentMaker").val($("#LoginName").val());
+                } else {
+                    $("#DocumentMaker").val(msg.DocumentMaker);
+                }
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
                 $("#AccountModeName").val(msg.AccountModeName);

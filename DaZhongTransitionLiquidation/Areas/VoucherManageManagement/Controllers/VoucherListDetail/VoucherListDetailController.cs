@@ -246,6 +246,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             default: break;
                         }
                     }
+                    voucher.DocumentMaker = UserInfo.LoginName;
                     db.Updateable(voucher).ExecuteCommand();
                 }
                 //明细信息

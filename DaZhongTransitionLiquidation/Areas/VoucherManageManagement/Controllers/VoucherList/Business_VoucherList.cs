@@ -110,5 +110,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public string Automatic { get; set; }
         public string OracleStatus { get; set; }
         public string OracleMessage { get; set; }
+        public string TradingBank { get; set; }
+        public string ReceivingUnit { get; set; }
+        public DateTime? TransactionDate { get; set; }
+        public string Batch { get; set; }
     }
 }

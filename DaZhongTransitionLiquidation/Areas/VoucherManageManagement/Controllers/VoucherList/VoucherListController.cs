@@ -13,6 +13,7 @@ using SyntacticSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -49,16 +50,51 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .Where(i => i.VoucherDate > starDate)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
                 .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod >= firstDay && i.AccountingPeriod <= lastDay)
+                .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == searchParams.TradingBank)
+                .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate == searchParams.TransactionDate)
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
-                .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
 
                 //var data = jsonResult.Rows;
                 //foreach (var item in data)
                 //{
-                //    var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
-                //    item.VoucherNo = no;
-                //    db.Updateable(item).ExecuteCommand();
+                //    //var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
+                //    //item.VoucherNo = no;
+                //    if (item.TradingBank == "" || item.TradingBank == null)
+                //    {
+                //        var bankFlow1 = db.SqlQueryable<Business_BankFlowTemplate>(@"select * from Business_BankFlowTemplate where CONVERT(varchar(100), TransactionDate, 23)='" + item.VoucherDate.TryToDate().ToString("yyyy-MM-dd") + @"'").ToList();
+                //        var bankFlow = bankFlow1.Where(x => x.TurnIn == item.CreditAmountTotal || x.TurnOut == item.DebitAmountTotal)
+                //                        .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+
+                //        if (bankFlow.Count == 1)
+                //        {
+                //            item.TradingBank = bankFlow[0].TradingBank;
+                //            item.ReceivingUnit = bankFlow[0].ReceivingUnit;
+                //            item.TransactionDate = bankFlow[0].TransactionDate;
+                //            item.Batch = bankFlow[0].Batch;
+                //        }
+                //        else
+                //        {
+                //            var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item.VGUID).ToList();
+                //            foreach (var it in voucherDetail)
+                //            {
+                //                var bankFlow2 = bankFlow1
+                //                .Where(x => x.Remark == it.Abstract)
+                //                .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
+                //                .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                //                if(bankFlow2.Count == 1)
+                //                {
+                //                    item.TradingBank = bankFlow2[0].TradingBank;
+                //                    item.ReceivingUnit = bankFlow2[0].ReceivingUnit;
+                //                    item.TransactionDate = bankFlow2[0].TransactionDate;
+                //                    item.Batch = bankFlow2[0].Batch;
+                //                }
+                //            }
+                //            //var bankFlow2 = bankFlow1.
+                //        }
+                //        db.Updateable(item).ExecuteCommand();
+                //    }
                 //}
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -85,7 +121,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status,string index)//Guid[] vguids
+        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status, string index)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -94,11 +130,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int saveChanges = 1;
                 foreach (var item in vguids)
                 {
-                    
+
                     var voucher = db.Queryable<Business_VoucherDetail>().Where(it => it.VoucherVGUID == item).ToList();
                     var loanMoney = voucher == null ? null : voucher.Sum(x => x.LoanMoney);//贷方总金额
                     var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
-                    if(loanMoney == borrowMoney)
+                    if (loanMoney == borrowMoney)
                     {
                         //更新主表信息
                         saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
@@ -106,13 +142,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             Status = status,
                         }).Where(it => it.VGUID == item).ExecuteCommand();
                         //审核成功写入中间表
-                        if(status == "3")
+                        if (status == "3")
                         {
-                            if(index != "2")
+                            if (index != "2")
                             {
                                 InsertAssetsGeneralLedger(item, db);
                             }
-                        } 
+                        }
                     }
                     else
                     {
@@ -120,13 +156,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         resultModel.Status = "2";
                         resultModel.ResultInfo = j.ToString();
                         continue;
-                    } 
+                    }
                 }
-                if(resultModel.Status != "2")
+                if (resultModel.Status != "2")
                 {
                     resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-                }               
+                }
             });
             return Json(resultModel);
         }
@@ -152,7 +188,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
             var documentMaker = "";
-            if(documentMakerData != null)
+            if (documentMakerData != null)
             {
                 documentMaker = documentMakerData.Email;
             }
@@ -188,7 +224,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.SEGMENT5 = items.SpareOneSection;
                 asset.SEGMENT6 = items.SpareTwoSection;
                 asset.SEGMENT7 = items.IntercourseSection;
-                asset.ENTERED_CR = items.LoanMoney.TryToString() ;
+                asset.ENTERED_CR = items.LoanMoney.TryToString();
                 asset.ENTERED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_CR = items.LoanMoney.TryToString();
@@ -215,7 +251,7 @@ a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as 
  where a.Status='3' ").ToList();
                 //从总账明细中提取数据
                 var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
-from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { VoucherData = voucherDate }).ToList();
+from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new { VoucherData = voucherDate }).ToList();
                 foreach (var item in AssetsDetailData)
                 {
                     //item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;
@@ -226,7 +262,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                         data.Add(item);
                     }
                 }
-                if(data.Count > 0)
+                if (data.Count > 0)
                 {
                     #region 构造与Oracle差异的数据类
                     var voucherList = new List<Business_VoucherList>();
@@ -265,7 +301,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                             voucher.FinanceDirector = "";
                             voucher.Status = "2";
                             voucher.VoucherDate = item.ACCOUNTING_DATE;
-                            if(item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行" && item.JE_CATEGORY_NAME != "z.转账")
+                            if (item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行" && item.JE_CATEGORY_NAME != "z.转账")
                             {
                                 voucher.VoucherType = "转账类";
                             }
@@ -315,7 +351,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                         {
                             var info = item;
                             throw ex;
-                        } 
+                        }
                     }
                     #endregion
                     if (voucherList.Count > 0 && voucherDetail.Count > 0)

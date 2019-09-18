@@ -440,6 +440,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 var bankData = _db.Queryable<Business_CompanyBankInfo>().ToList();
                 List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
+                var sevenData = _db.Queryable<Business_SevenSection>().ToList();
                 foreach (var item in bankFlowList)
                 {
                     var companyBankData = new Business_CompanyBankInfo();
@@ -457,19 +458,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                     }
                     var paymentUnitInstitution = bankData.Where(x => x.BankAccount == item.BankAccount).First().BankName;
                     item.PaymentUnitInstitution = paymentUnitInstitution;
-                    var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
+                    var accountModeName = sevenData.Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
+                    var companyName = sevenData.Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.CompanyCode).Descrption;
                     var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                     if (isAny.Count > 0)
                     {
                         item.AccountModeCode = companyBankData.AccountModeCode;
                         item.AccountModeName = accountModeName;
                         item.CompanyCode = companyBankData.CompanyCode;
+                        item.CompanyName = companyName;
                         _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                         continue;
                     }
                     item.AccountModeCode = companyBankData.AccountModeCode;
                     item.AccountModeName = accountModeName;
                     item.CompanyCode = companyBankData.CompanyCode;
+                    item.CompanyName = companyName;
                     item.CreateTime = DateTime.Now;
                     item.CreatePerson = "admin";
                     bankFlowLists.Add(item);

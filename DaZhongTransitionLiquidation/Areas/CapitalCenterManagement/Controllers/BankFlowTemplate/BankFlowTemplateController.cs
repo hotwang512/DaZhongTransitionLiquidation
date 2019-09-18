@@ -421,17 +421,21 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.AccountingPeriod = item.TransactionDate;
                 voucher.AccountModeName = item.AccountModeName;
                 voucher.CompanyCode = item.CompanyCode;
-                voucher.CompanyName = item.PaymentUnit;
+                voucher.CompanyName = item.CompanyName;
                 voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
                 var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
                 x++;
                 var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
-                voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd") + (voucherNo + x).TryToString().PadLeft(4, '0');
+                voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMM") + (voucherNo + x).TryToString().PadLeft(4, '0');
                 voucher.DocumentMaker = "";
                 voucher.Status = "1";
                 voucher.VoucherDate = item.TransactionDate;
                 voucher.VoucherType = "银行类";
                 voucher.Automatic = "1";//自动
+                voucher.TradingBank = item.TradingBank;
+                voucher.ReceivingUnit = item.ReceivingUnit;
+                voucher.TransactionDate = item.TransactionDate;
+                voucher.Batch = item.Batch;
                 voucher.CreateTime = DateTime.Now;
                 guid = Guid.NewGuid();
                 voucher.VGUID = guid;

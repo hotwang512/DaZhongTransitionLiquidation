@@ -179,6 +179,7 @@ var $page = function () {
                     }
                 }
             }
+           
             $.ajax({
                 url: "/PaymentManagement/CompanySection/SaveSectionSetting",
                 //data: { vguids: selection },
@@ -195,6 +196,10 @@ var $page = function () {
                             $("#AddSectionDialog").modal("hide");
                             if (index == 2) {
                                 $("#jqxTable2").jqxTreeGrid('updateBoundData');
+                                //$("#jqxTable2").jqxTreeGrid('scrollOffset', top, left)
+                                $('#jqxTable2').on('bindingComplete', function (event) {
+                                    $("#jqxTable2").jqxTreeGrid('scrollOffset', topNum, leftNum)
+                                });
                             } else {
                                 $("#jqxTable" + index).jqxDataTable('updateBoundData');
                             }
@@ -1289,8 +1294,13 @@ function edit(guid, Code, Descrption, Remark, ParentCode, OrgID, Abbreviation) {
         $("#SubjectCode").show();
     }
 }
+var leftNum = 0;
+var topNum = 0;
 //设置弹出框，列表
 function settingSection(column, code) {
+    var scrollOffset = $("#jqxTable2").jqxTreeGrid('scrollOffset');
+    leftNum = scrollOffset.left;
+    topNum = scrollOffset.top;
     $("#hidSubjectCode").val(code);
     $("#AddSectionDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddSectionDialog").modal("show");
@@ -1361,7 +1371,6 @@ function settingSection(column, code) {
 
             ]
         });
-
     }
     else {
         $("#jqxTableSetting").show();

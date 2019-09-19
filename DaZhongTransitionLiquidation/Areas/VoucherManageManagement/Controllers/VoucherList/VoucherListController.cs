@@ -45,6 +45,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
                 //    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
                 //}
+                var transactionDate = (searchParams.TransactionDate.TryToDate().ToString("yyyy-MM-dd") + " 23:59:59").TryToDate();
                 var tradingBank = "";
                 if (searchParams.TradingBank != null)
                 {
@@ -58,7 +59,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
                 .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
                 .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
-                .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate == searchParams.TransactionDate)
+                .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDate)
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy("VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

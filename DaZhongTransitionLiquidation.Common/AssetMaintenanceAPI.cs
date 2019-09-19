@@ -11,13 +11,13 @@ namespace DaZhongTransitionLiquidation.Common
     public class AssetMaintenanceAPI
     {
         //每月全量取营收系统、获取车辆固定资产
-        public static string GetModifyVehicleAsset()
+        public static string GetModifyVehicleAsset(string YearMonth)
         {
             var resultData = "";
             var url = ConfigSugar.GetAppString("ModifyVehicleAssetUrl");
             var data = "{" +
-                       //"\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2,'0')) +
-                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "201908") +
+                       //"\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0')) +
+                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) +
                        "}";
             try
             {
@@ -33,13 +33,39 @@ namespace DaZhongTransitionLiquidation.Common
             }
             return resultData;
         }
+
         //根据月份获取退车车辆固定资产
-        public static string GetScrapVehicleAsset(string YearMonth)
+        //public static string GetScrapVehicleAsset(string YearMonth)
+        //{
+        //    var resultData = "";
+        //    var url = ConfigSugar.GetAppString("ScrapVehicleAssetUrl");
+        //    var data = "{" +
+        //               "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) +
+        //               //"\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "201906") +
+        //               "}";
+        //    try
+        //    {
+        //        WebClient wc = new WebClient();
+        //        wc.Headers.Clear();
+        //        wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+        //        wc.Encoding = System.Text.Encoding.UTF8;
+        //        resultData = wc.UploadString(new Uri(url), "POST", data);
+        //        LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, resultData));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
+        //    }
+        //    return resultData;
+        //}
+        //根据月份获取退车车辆固定资产
+        public static string GetScrapVehicleAsset(string ORIGINALID)
         {
             var resultData = "";
             var url = ConfigSugar.GetAppString("ScrapVehicleAssetUrl");
             var data = "{" +
-                       "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", YearMonth) +
+                       "\"ORIGINALID\":\"{ORIGINALID}\"".Replace("{ORIGINALID}", ORIGINALID) +
+                       //"\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", "201906") +
                        "}";
             try
             {

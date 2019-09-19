@@ -43,5 +43,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string PaymentVoucherUrl { set; get; }
         public string OSNO { get; set; }
         public string BankStatus { get; set; }
+        public bool ISVerify { get; set; }
     }
 }

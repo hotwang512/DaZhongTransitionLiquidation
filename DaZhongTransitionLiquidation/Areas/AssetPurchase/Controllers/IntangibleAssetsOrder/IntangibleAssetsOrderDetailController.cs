@@ -70,6 +70,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
+                        sevenSection.ISVerify = false;
                         db.Insertable<Business_IntangibleAssetsOrder>(sevenSection).ExecuteCommand();
                     }
                     else

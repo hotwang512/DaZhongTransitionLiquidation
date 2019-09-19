@@ -10,6 +10,12 @@ var isEdit = false;
 var vguid = "";
 var $page = function () {
     this.init = function () {
+        var date = new Date;
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        month = (month < 10 ? "0" + month : month);
+        var currentDate = (year.toString() + "-" + month.toString());
+        $("#YearMonth").val(currentDate);
         addEvent();
     }
     //var status = $.request.queryString().Status;
@@ -22,7 +28,7 @@ var $page = function () {
         });
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#PLATE_NUMBER").val("");
+            $("#YearMonth").val("");
         });
         //提交
         $("#btnSubmit").on("click", function () {
@@ -82,6 +88,7 @@ var $page = function () {
             url: "/AssetManagement/AssetsRetirementReview/GetScrapVehicleReview",
             //traditional: true,
             type: "post",
+            data: { YearMonth: $("#YearMonth").val() },
             success: function (msg) {
                 switch (msg.Status) {
                 case "0":
@@ -122,7 +129,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { PLATE_NUMBER: $("#PLATE_NUMBER").val() },
+                //data: { PLATE_NUMBER: $("#PLATE_NUMBER").val() },
                 url: "/AssetManagement/AssetsRetirementReview/GetReviewAssetListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

@@ -1,17 +1,24 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
-    ViewBag.Title = "资产变报废/资产报废审核列表";
+    ViewBag.Title = "资产报表/车辆核定表";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetsRetirementReview.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetReport.js")"></script>
 }
 
-@section css{
-
-}
+<style>
+    .red {
+        color: black\9;
+        background-color: #e83636\9;
+    }
+    .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+        color: black;
+        background-color: #e83636;
+    }
+</style>
 <input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
 @if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
 {
@@ -20,10 +27,10 @@
             @if (currentModuleRolePermission.Adds == 1)
             {
                 <td style="width: 95px;">
-                    <button id="btnSubmit" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+                    <button id="btnGetData" type="button" class="buttons" ><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px;float: left;">获取</span></button>
                 </td>
                 <td style="width: 95px;">
-                    <button id="btnGetScrap" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">获取</span></button>
+                    <button id="btnSubmit" type="button" class="buttons" style="margin-left: 20px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
                 </td>
             }
         </tr>

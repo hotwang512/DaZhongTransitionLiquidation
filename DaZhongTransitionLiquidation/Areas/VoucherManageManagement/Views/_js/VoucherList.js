@@ -45,20 +45,12 @@ var $page = function () {
             $("#btnCheckStatus").show();
             $('#jqxTabs').jqxTabs({ selectedItem: 0 })
         }
-        type = $.request.queryString().Type;
-        if (type == null) {
-            type = "";
-        } else {
-            switch (type) {
-                case "0": type = "现金类"; break;
-                case "1": type = "银行类"; break;
-                case "2": type = "转账类"; break;
-                default:
-
-            }
-        }
+        
         //加载列表数据
         selector.$btnSearch().unbind("click").on("click", function () {
+            if (type == "银行类") {
+                //initTable1();
+            }
             if (status == "4") {
                 initTable3();
             } else {
@@ -68,7 +60,7 @@ var $page = function () {
                     case 2: initTable2(); break;
                     default: break;
                 }
-            } 
+            }
         });
 
         //重置按钮事件
@@ -287,7 +279,8 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "0", "VoucherType": type },
+                type: "post",
+                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "0", "VoucherType": type, "TradingBank": $('#TradingBank option:selected').text(), "TransactionDate": $("#TransactionDate").val() },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -374,7 +367,8 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "1", "VoucherType": type, "TradingBank": $("#TradingBank").val(), "TransactionDate": $("#TransactionDate").val() },
+                type:"post",
+                data: { "Status": status, "ReceivingUnit": $("#ReceivingUnit").val(), "Automatic": "1", "VoucherType": type, "TradingBank": $('#TradingBank option:selected').text(), "TransactionDate": $("#TransactionDate").val() },
                 url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -398,17 +392,17 @@ var $page = function () {
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: '批名', datafield: 'BatchName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '交易银行', datafield: 'TradingBank', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '我方公司', datafield: 'CompanyName', width: 350, align: 'center', cellsAlign: 'center', },
+                    { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
+                    { text: '交易日期', datafield: 'TransactionDate', width: 120, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '对方公司', datafield: 'ReceivingUnit', width: 350, align: 'center', cellsAlign: 'center', },
-                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
-                    { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
-                    { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '交易日期', datafield: 'TransactionDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '我方公司', datafield: 'CompanyName', width: 350, align: 'center', cellsAlign: 'center', },
+                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
+                    { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
+                    { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },    
+                    { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },         
                     //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
@@ -607,6 +601,18 @@ var $page = function () {
         }
         $('#jqxTabs').jqxTabs({ width: "99%", height: 450, initTabContent: initWidgets });
     } else {
+        type = $.request.queryString().Type;
+        if (type == null) {
+            type = "";
+        } else {
+            switch (type) {
+                case "0": type = "现金类"; break;
+                case "1": type = "银行类"; break;
+                case "2": type = "转账类"; break;
+                default:
+
+            }
+        }
         var initWidgets1 = function (tab) {
             switch (tab) {
                 case 0:
@@ -621,6 +627,7 @@ var $page = function () {
             }
         }
         $('#jqxTabs').jqxTabs({ width: "99%", height: 450, initTabContent: initWidgets1, selectedItem: 1 });
+        tableIndex = 1;
     }
    
     function detailFunc(row, column, value, rowData) {

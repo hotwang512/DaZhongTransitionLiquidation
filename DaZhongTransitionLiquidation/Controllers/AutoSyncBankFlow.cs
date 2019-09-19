@@ -405,7 +405,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.Currency = "人民币";
                 bankFlow.ReceivingUnitInstitution = "";
                 bankFlow.TradingBank = details.ATTRIBUTE4;
-                bankFlow.PaymentUnit = "大众交通（集团）股份有限公司大众出租汽车分公司";//我方
+                bankFlow.PaymentUnit = "大众交通(集团)股份有限公司大众出租汽车分公司";//我方
                 bankFlow.PayeeAccount = details.ATTRIBUTE3;//我方
                 bankFlow.ReceivingUnit = details.TRX_ACCOUNT_NAME;//对方
                 bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
@@ -479,10 +479,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                     bankFlowLists.Add(item);
                 }
                 var userData = new List<Sys_User>();
-                using (SqlSugarClient db = DbConfig.GetInstance())
-                {
-                    userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
-                }
+                //using (SqlSugarClient db = DbConfig.GetInstance())
+                //{
+                //    userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                //}
                 if (bankFlowLists.Count > 0)
                 {
                     success = _db.Insertable(bankFlowLists).ExecuteCommand();

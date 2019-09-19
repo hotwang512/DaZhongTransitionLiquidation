@@ -354,6 +354,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                             assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                             assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
+                            assetSwapModel.PROCESS_TYPE = "NEW_ASSET";
                             assetSwapList.Add(assetSwapModel);
                         }
                     }

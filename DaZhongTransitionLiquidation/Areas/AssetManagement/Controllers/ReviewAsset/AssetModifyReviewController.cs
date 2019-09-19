@@ -119,6 +119,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
                                 assetSwapModel.PERIOD = item.PERIOD;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                                assetSwapModel.CHECK_STATE = false;
+                                assetSwapModel.PROCESS_TYPE = "PLATE_NUMBER";
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
@@ -147,6 +149,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
                                 assetSwapModel.PERIOD = item.PERIOD;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                                assetSwapModel.CHECK_STATE = false;
+                                assetSwapModel.PROCESS_TYPE = "FA_LOC_1";
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
@@ -178,6 +182,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.PERIOD = item.PERIOD;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                                assetSwapModel.CHECK_STATE = false;
+                                assetSwapModel.PROCESS_TYPE = "BUSINESS_MODEL";
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
@@ -198,7 +204,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var result = db.Ado.UseTran(() =>
                 {
                     List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
-                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset();
+                    var YearMonth = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
                     var resultApiModifyModel = apiReaultModify
                         .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
                     //全量获取车辆信息

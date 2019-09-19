@@ -51,7 +51,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         left join Business_AssetMaintenanceInfo mi
                             on mv.ORIGINALID = mi.ORIGINALID")
                     .Where(i => !i.ISVERIFY)
-                    .WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
+                    //.WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -66,7 +66,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var result = db.Ado.UseTran(() =>
                 {
                     var cache = CacheManager<Sys_User>.GetInstance();
-                    var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>(@"SELECT sv.*,mi.ASSET_ID,mi.BELONGTO_COMPANY,mi.MODEL_MAJOR,mi.MODEL_MINOR,mi.DESCRIPTION,mi.ASSET_COST,mi.LISENSING_DATE,mi.COMMISSIONING_DATE AS PERIOD    FROM Business_ScrapVehicle sv LEFT JOIN Business_AssetMaintenanceInfo mi ON sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
+                    var modifyVehicleList = db.SqlQueryable<Business_ScrapVehicleModel>(@"select sv.*
+                         , mi.ASSET_ID
+                         , mi.BELONGTO_COMPANY
+                         , mi.DESCRIPTION
+                         , mi.ASSET_COST
+                         , mi.LISENSING_DATE
+                         , mi.BOOK_TYPE_CODE
+                         , mi.COMMISSIONING_DATE as PERIOD
+                    from Business_ScrapVehicle                  sv
+                        left join Business_AssetMaintenanceInfo mi
+                            on sv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID)).ToList();
                     //获取所有的经营模式
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                     var assetDisposeIncomeList = new List<Business_DisposeIncome>();
@@ -98,8 +108,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         //assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                         //assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                         //assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
-                        assetSwapModel.PERIOD = item.PERIOD;
-                        assetSwapModel.BOOK_TYPE_CODE = "营运公司2019";
+                        assetSwapModel.PERIOD = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2,'0');
+                        assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                        assetSwapModel.PROCESS_TYPE = "RETIRE";
+                        assetSwapModel.CHECK_STATE = false;
                         assetSwapList.Add(assetSwapModel);
                         //提交到处置收入
                         var assetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
@@ -151,7 +163,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetScrapVehicleReview()
+        public JsonResult GetScrapVehicleReview(string YearMonth)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -161,11 +173,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     List<Api_ScrapVehicleAsset> assetScrapFlowList = new List<Api_ScrapVehicleAsset>();
                     //退车
                     {
-                        var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
-                        var apiReaultScrap = AssetMaintenanceAPI.GetScrapVehicleAsset(YearMonth);
+                        var startDate = YearMonth.TryToDate();
+                        var endDate  = startDate.AddMonths(1);
+                        //var YearMonth = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                        var ORIGINALIDList = db.Queryable<Business_AssetMaintenanceInfo>()
+                            .Where(x => x.BACK_CAR_DATE == null && x.GROUP_ID == "出租车").Select(x => new { x.ORIGINALID}).ToList();
+                        var ORIGINALIDs = "";
+                        foreach (var item in ORIGINALIDList)
+                        {
+                            ORIGINALIDs += item.ORIGINALID + ",";
+                        }
+                        ORIGINALIDs = ORIGINALIDs.Substring(0, ORIGINALIDs.Length - 1);
+                        var apiReaultScrap = AssetMaintenanceAPI.GetScrapVehicleAsset(ORIGINALIDs);
                         var resultApiScrapModel = apiReaultScrap
                             .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
-                        var scrapVehicleList = new List<Api_ScrapVehicleAsset>();
                         var resultColumn = resultApiScrapModel.data[0].COLUMNS;
                         var resultData = resultApiScrapModel.data[0].DATA;
                         foreach (var item in resultData)
@@ -177,8 +198,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 var pi = t.GetProperty(resultColumn[k]);
                                 if (pi != null) pi.SetValue(nv, item[k], null);
                             }
-                            scrapVehicleList.Add(nv);
+                            assetScrapFlowList.Add(nv);
                         }
+                        assetScrapFlowList =
+                            assetScrapFlowList.Where(x => x.BACK_CAR_DATE.Contains(YearMonth)).ToList();
+                        var dt =assetScrapFlowList.TryToDataTable();
                         AutoSyncAssetsMaintenance.WirterScrapSyncAssetFlow(assetScrapFlowList);
                     }
                 });

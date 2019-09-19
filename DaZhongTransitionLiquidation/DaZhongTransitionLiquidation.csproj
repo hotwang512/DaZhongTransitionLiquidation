@@ -203,11 +203,14 @@
   <ItemGroup>
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetException.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetModifyReview.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetReport.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeIncome.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposenetValue.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeProfitLoss.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeTax.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\OBDModifyReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewAsset.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
@@ -216,6 +219,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetsRetirementReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ManageModel.js" />
     <Content Include="Areas\AssetManagement\Views\_js\qwebchannel.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\ReviewIntangibleAssets.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewOBDAsset.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewOfficeAsset.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\FixedAssetsOrder.js" />
@@ -381,6 +385,10 @@
     <Content Include="Areas\SystemManagement\Views\TransferSettingDetail\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\ReviewOBDAsset\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\ReviewOfficeAsset\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\ReviewIntangibleAssets\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetException\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\OBDModifyReview\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetReport\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2355,14 +2363,18 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeNetValueController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeProfitLossController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetDispose\DisposeTaxController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetException\AssetExceptionController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetMaintenanceInfoDetailController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\AssetReport\AssetReportController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsLedger\AssetsLedgerController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetsRetirementReviewController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\OBDModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewIntangibleAssetsController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewOBDAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewOfficeAssetController.cs" />
     <Compile Include="Areas\AssetManagement\Models\BusinessAssetsCategory.cs" />
@@ -2379,11 +2391,14 @@
     <Compile Include="Areas\AssetManagement\Models\Business_DisposeTax.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel_AssetsCategory.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_ModifyOBD.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckReport.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeAuction.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeSale.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeScrap.cs" />
+    <Compile Include="Areas\AssetManagement\Models\OBDModifyModel.cs" />
     <Compile Include="Areas\AssetPurchase\AssetPurchaseAreaRegistration.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FixedAssetsOrder\FixedAssetsOrderDetailController.cs" />

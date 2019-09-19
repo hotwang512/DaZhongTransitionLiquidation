@@ -305,5 +305,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         [SugarColumn(IsPrimaryKey = true)]
         public Guid TRANSACTION_ID { get; set; }
 
+        public string PROCESS_TYPE { get; set; }
+        public bool CHECK_STATE { get; set; }
     }
 }

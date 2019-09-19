@@ -1,0 +1,50 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "资产变更/OBD变更审核列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/OBDModifyReview.js")"></script>
+}
+
+@section css{
+
+}
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+{
+    <table style="margin-top: 10px;display:block;" id="buttonList">
+        <tr style="height: 50px;">
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnImportModify" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">导入</span></button>
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSubmit" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<style>
+    .input_text {
+        width: 340px;
+    }
+</style>
+<!-- 底部表格 -->
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<form id="localOBDFormFile" hidden>
+    <input type="file" id="LocalOBDFileInput" name="file" accept=".xls,.xlsx" />
+</form>

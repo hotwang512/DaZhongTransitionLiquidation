@@ -1171,54 +1171,6 @@
                 </div>
             </div>
         </div>
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产新增</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="ReviewAsset" style="display: none;">
-            <table>
-                @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "流程管理" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="ReviewAsset_NewAssets" pageurl="/AssetManagement/ReviewAsset/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">审核车辆</td>
-                        <td></td>
-                    </tr>
-                    <table style="cursor: pointer;" class="bodyTable">
-                        <tr>
-                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header" style="font-weight: 600;font-size: 15px">资金清算</td>
-                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                        </tr>
-                    </table>
-                    <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
-                        <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
-                            <table>
-                                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产分配" && i.Reads == 1))
-                                {
-                                    <tr class="menue_item" id="FundClearing_AssetPurchase" pageurl="/AssetPurchase/FundClearing/Index">
-                                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                        <td class="menue_text">资产分配</td>
-                                        <td></td>
-                                    </tr>
-                                }
-                                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "清算审核" && i.Reads == 1))
-                                {
-                                    <tr class="menue_item" id="LiquidationReview_AssetPurchase" pageurl="/AssetPurchase/LiquidationReview/Index">
-                                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                        <td class="menue_text">清算审核</td>
-                                        <td></td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
                 <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder AssetException AssetReport" style="display: none;">
                     <table style="cursor: pointer;">
                         <tr>
@@ -1247,10 +1199,6 @@
                                 <td class="menue_text">审核其它</td>
                                 <td></td>
                             </tr>
-                }
-            </table>
-        </div>
-                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                             <tr class="menue_item" id="ReviewIntangibleAssets_NewAssets" pageurl="/AssetManagement/ReviewIntangibleAssets/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">审核无形资产</td>
@@ -1425,68 +1373,68 @@
                     </table>
                 </div>
                 <div class="menue_body" id="AssetManagement" style="display: none;">
-            <table>
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "Oracle资产清册" && i.Reads == 1))
+                    <table>
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "Oracle资产清册" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetsLedger/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">Oracle资产清册</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产清册" && i.Reads == 1))
+                            <tr class="menue_item" id="AssetInventory_AssetManagement" pageurl="/AssetManagement/AssetsLedger/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">Oracle资产清册</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产清册" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">固定资产清册</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产报废清册" && i.Reads == 1))
+                            <tr class="menue_item" id="AssetsMaintenance_AssetManagement" pageurl="/AssetManagement/AssetsMaintenance/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">固定资产清册</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产报废清册" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="AssetsRetirement_AssetManagement" pageurl="/AssetManagement/AssetsRetirement/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">Oracle资产报废清册</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "折旧方法维护" && i.Reads == 1))
+                            <tr class="menue_item" id="AssetsRetirement_AssetManagement" pageurl="/AssetManagement/AssetsRetirement/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">Oracle资产报废清册</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "折旧方法维护" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">折旧方法维护</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "经营模式维护" && i.Reads == 1))
+                            <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">折旧方法维护</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "经营模式维护" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="ManageModel_AssetManagement" pageurl="/AssetManagement/ManageModel/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">经营模式维护</td>
-                        <td></td>
-                    </tr>
-                }
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产管理报表" && i.Reads == 1))
+                            <tr class="menue_item" id="ManageModel_AssetManagement" pageurl="/AssetManagement/ManageModel/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">经营模式维护</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产管理报表" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">资产管理报表</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
+                            <tr class="menue_item" id="AssetReview_AssetManagement" pageurl="/AssetManagement/AssetInventory/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产管理报表</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
 
-        <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder AssetException AssetReport" style="display: none;">
-            <table style="cursor: pointer;">
-                <tr>
-                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header">资产报表</td>
-                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="menue_body" id="AssetReport" style="display: none;">
+                <div class="menue_header AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder AssetException AssetReport" style="display: none;">
+                    <table style="cursor: pointer;">
+                        <tr>
+                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                            <td class="menue_text_header">资产报表</td>
+                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="menue_body" id="AssetReport" style="display: none;">
                     <table>
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产管理报表" && i.Reads == 1))
                         {

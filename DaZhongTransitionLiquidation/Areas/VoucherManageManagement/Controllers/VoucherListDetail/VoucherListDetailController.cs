@@ -12,6 +12,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.Vou
 using SyntacticSugar;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -75,8 +76,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var date = DateTime.Now;
                     //var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
                     //              order by BatchName desc", new { @NowDate = date });
-                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic != '3'
-                                  order by VoucherNo desc", new { @NowDate = date });
+                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
+                                  order by VoucherNo desc", new { @NowDate = date, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
                     var batchName = voucher.BatchName; //GetBatchName(voucherType, flowNo);
                     var voucherName = GetVoucherName(voucherNo);
                     //凭证主表
@@ -227,6 +228,27 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 //主信息
                 var voucher = db.Queryable<Business_VoucherList>().Single(x => x.VGUID == vguid);
+                if(voucher.FinanceDirector == "" || voucher.FinanceDirector == null)
+                {
+                    var userData = new List<Sys_User>();
+                    DbService.Command(_db =>
+                    {
+                        userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                    });
+                    foreach (var user in userData)
+                    {
+                        switch (user.Role)
+                        {
+                            case "财务经理": voucher.FinanceDirector = user.LoginName; break;
+                            case "财务主管": voucher.Bookkeeping = user.LoginName; break;
+                            case "审核岗": voucher.Auditor = user.LoginName; break;
+                            case "出纳": voucher.Cashier = user.LoginName; break;
+                            default: break;
+                        }
+                    }
+                    //voucher.DocumentMaker = UserInfo.LoginName;
+                    db.Updateable(voucher).ExecuteCommand();
+                }
                 //明细信息
                 var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("BorrowMoney desc").ToList();
                 //附件信息
@@ -281,6 +303,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         {
             var result = UserInfo.AccountModeName;
             return result;
+        }
+        public JsonResult GetPersonInfo()
+        {
+            var result = new List<Sys_User>();
+            DbService.Command(db =>
+            {
+                result = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            return Json(result, JsonRequestBehavior.AllowGet); ;
         }
     }
 }

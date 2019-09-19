@@ -12,6 +12,9 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using SyntacticSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using System.Text.RegularExpressions;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -35,30 +38,74 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 var starDate = "2019-09-01".TryToDate();
-                DateTime? firstDay = null;
-                DateTime? lastDay = null;
-                if (searchParams.AccountingPeriod != null)
+                //DateTime? firstDay = null;
+                //DateTime? lastDay = null;
+                //if (searchParams.AccountingPeriod != null)
+                //{
+                //    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
+                //    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
+                //}
+                var tradingBank = "";
+                if (searchParams.TradingBank != null)
                 {
-                    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
-                    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
+                    Regex rgx = new Regex(@"[\w|\W]{2,2}银行");
+                    tradingBank = rgx.Match(searchParams.TradingBank).Value;
                 }
                 jsonResult.Rows = db.Queryable<Business_VoucherList>()
                 .Where(i => i.Status == searchParams.Status)
                 .Where(i => i.Automatic == searchParams.Automatic)
                 .Where(i => i.VoucherDate > starDate)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
-                .WhereIF(searchParams.AccountingPeriod != null, i => i.AccountingPeriod >= firstDay && i.AccountingPeriod <= lastDay)
+                .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
+                .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
+                .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate == searchParams.TransactionDate)
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
-                .OrderBy("VoucherDate desc,VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
 
-                //var data = jsonResult.Rows;
-                //foreach (var item in data)
-                //{
-                //    var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
-                //    item.VoucherNo = no;
-                //    db.Updateable(item).ExecuteCommand();
-                //}
+                var data = jsonResult.Rows;
+                foreach (var item in data)
+                {
+                    if (item.VoucherNo.Length > 10)
+                    {
+                        var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
+                        item.VoucherNo = no;
+                        db.Updateable(item).ExecuteCommand();
+                    }
+                    if (item.TradingBank == "" || item.TradingBank == null)
+                    {
+                        var bankFlow1 = db.SqlQueryable<Business_BankFlowTemplate>(@"select * from Business_BankFlowTemplate where CONVERT(varchar(100), TransactionDate, 23)='" + item.VoucherDate.TryToDate().ToString("yyyy-MM-dd") + @"'").ToList();
+                        var bankFlow = bankFlow1.Where(x => x.TurnIn == item.CreditAmountTotal || x.TurnOut == item.DebitAmountTotal)
+                                        .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                        if (bankFlow.Count == 1)
+                        {
+                            item.TradingBank = bankFlow[0].TradingBank;
+                            item.ReceivingUnit = bankFlow[0].ReceivingUnit;
+                            item.TransactionDate = bankFlow[0].TransactionDate;
+                            item.Batch = bankFlow[0].Batch;
+                        }
+                        else
+                        {
+                            var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item.VGUID).ToList();
+                            foreach (var it in voucherDetail)
+                            {
+                                var bankFlow2 = bankFlow1
+                                .Where(x => x.Remark == it.Abstract)
+                                .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
+                                .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                                if (bankFlow2.Count == 1)
+                                {
+                                    item.TradingBank = bankFlow2[0].TradingBank;
+                                    item.ReceivingUnit = bankFlow2[0].ReceivingUnit;
+                                    item.TransactionDate = bankFlow2[0].TransactionDate;
+                                    item.Batch = bankFlow2[0].Batch;
+                                }
+                            }
+                            //var bankFlow2 = bankFlow1.
+                        }
+                        db.Updateable(item).ExecuteCommand();
+                    }
+                }
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
@@ -84,7 +131,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status,string index)//Guid[] vguids
+        public JsonResult UpdataVoucherListInfo(List<Guid> vguids, string status, string index)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -93,11 +140,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int saveChanges = 1;
                 foreach (var item in vguids)
                 {
-                    
+
                     var voucher = db.Queryable<Business_VoucherDetail>().Where(it => it.VoucherVGUID == item).ToList();
                     var loanMoney = voucher == null ? null : voucher.Sum(x => x.LoanMoney);//贷方总金额
                     var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
-                    if(loanMoney == borrowMoney)
+                    if (loanMoney == borrowMoney)
                     {
                         //更新主表信息
                         saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
@@ -105,13 +152,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             Status = status,
                         }).Where(it => it.VGUID == item).ExecuteCommand();
                         //审核成功写入中间表
-                        if(status == "3")
+                        if (status == "3")
                         {
-                            if(index != "2")
+                            if (index != "2")
                             {
                                 InsertAssetsGeneralLedger(item, db);
                             }
-                        } 
+                        }
                     }
                     else
                     {
@@ -119,21 +166,20 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         resultModel.Status = "2";
                         resultModel.ResultInfo = j.ToString();
                         continue;
-                    } 
+                    }
                 }
-                if(resultModel.Status != "2")
+                if (resultModel.Status != "2")
                 {
                     resultModel.IsSuccess = saveChanges == 1;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-                }               
+                }
             });
             return Json(resultModel);
         }
-
         private void InsertAssetsGeneralLedger(Guid item, SqlSugarClient db)
         {
             //删除现有中间表数据
-            db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item.TryToString()).ExecuteCommand();
+            //db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item.TryToString()).ExecuteCommand();
             //凭证中间表
             var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
             var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item).ToList();
@@ -145,12 +191,24 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 case "转账类": type = "z.转账"; break;
                 default: break;
             }
+            var result = new List<Sys_User>();
+            DbService.Command(_db =>
+            {
+                result = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
+            var documentMaker = "";
+            if (documentMakerData != null)
+            {
+                documentMaker = documentMakerData.Email;
+            }
             //asset.VGUID = Guid.NewGuid();
             foreach (var items in voucherDetail)
             {
                 var four = voucher.VoucherNo.Substring(voucher.VoucherNo.Length - 4, 4);
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
+                asset.CREATE_USER = documentMaker;
                 //asset.SubjectVGUID = guid;
                 asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;
@@ -176,7 +234,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.SEGMENT5 = items.SpareOneSection;
                 asset.SEGMENT6 = items.SpareTwoSection;
                 asset.SEGMENT7 = items.IntercourseSection;
-                asset.ENTERED_CR = items.LoanMoney.TryToString() ;
+                asset.ENTERED_CR = items.LoanMoney.TryToString();
                 asset.ENTERED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_DR = items.BorrowMoney.TryToString();
                 asset.ACCOUNTED_CR = items.LoanMoney.TryToString();
@@ -185,7 +243,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 db.Insertable(asset).IgnoreColumns(it => new { it.VGUID, it.SubjectVGUID }).ExecuteCommand();
             }
         }
-
         public JsonResult SyncAssetsData()
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
@@ -204,7 +261,7 @@ a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as 
  where a.Status='3' ").ToList();
                 //从总账明细中提取数据
                 var AssetsDetailData = db.Ado.SqlQuery<AssetsGeneralLedger_Swap>(@"select COMBINATION as SubjectCount,LEDGER_NAME,JE_BATCH_NAME,JE_HEADER_NAME,JE_CATEGORY_NAME,ACCOUNTING_DATE,ENTERED_DR,ENTERED_CR
-from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { VoucherData = voucherDate }).ToList();
+from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new { VoucherData = voucherDate }).ToList();
                 foreach (var item in AssetsDetailData)
                 {
                     //item.ENTERED_CR = item.ENTERED_CR == null ? "0.00" : item.ENTERED_CR;
@@ -215,7 +272,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                         data.Add(item);
                     }
                 }
-                if(data.Count > 0)
+                if (data.Count > 0)
                 {
                     #region 构造与Oracle差异的数据类
                     var voucherList = new List<Business_VoucherList>();
@@ -254,7 +311,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                             voucher.FinanceDirector = "";
                             voucher.Status = "2";
                             voucher.VoucherDate = item.ACCOUNTING_DATE;
-                            if(item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行" && item.JE_CATEGORY_NAME != "z.转账")
+                            if (item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行" && item.JE_CATEGORY_NAME != "z.转账")
                             {
                                 voucher.VoucherType = "转账类";
                             }
@@ -304,7 +361,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                         {
                             var info = item;
                             throw ex;
-                        } 
+                        }
                     }
                     #endregion
                     if (voucherList.Count > 0 && voucherDetail.Count > 0)
@@ -322,6 +379,41 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData",new { 
                 {
                     resultModel.Status = "2";
                 }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult CheckOracleData()//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var saveChanges = 0;
+                var vguidList = db.Ado.SqlQuery<string>(@"select distinct(LINE_ID) from AssetsGeneralLedger_Swap where STATUS = 'E' and CheckStatus != '1' ");
+                var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Status == "3").ToList();
+                var oracleDataList = db.Queryable<AssetsGeneralLedger_Swap>().Where(x => x.STATUS == "E" && x.CheckStatus != "1").ToList();
+                foreach (var item in vguidList)
+                {
+                    var oracleRemark = "";
+                    var oracle = oracleDataList.Where(x => x.LINE_ID == item).ToList();
+                    if (oracle.Count > 0)
+                    {
+                        foreach (var it in oracle)
+                        {
+                            oracleRemark += it.MESSAGE + ",";
+                        }
+                        var vguid = item.TryToGuid();
+                        var oracleData = voucherData.Where(x => x.VGUID == vguid).FirstOrDefault();
+                        oracleData.Status = "4";
+                        oracleData.Automatic = "4";
+                        oracleData.OracleMessage = oracleRemark;
+                        db.Updateable(oracleData).ExecuteCommand();
+                        db.Updateable<AssetsGeneralLedger_Swap>().UpdateColumns(it => new AssetsGeneralLedger_Swap() { CheckStatus = "1" })
+                                        .Where(it => it.LINE_ID == item).ExecuteCommand();
+                        saveChanges = 1;
+                    }
+                }
+                resultModel.IsSuccess = saveChanges == 1;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
         }

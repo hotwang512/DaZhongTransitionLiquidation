@@ -42,12 +42,12 @@
         <tr style="height: 50px;">
             <td style="width: 95px;">
                 <button id="AddSubject_OKButton" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>
+                <button id="btnCheckStatus" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">校验</span></button>
                 @*<button id="AddSubject_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>*@
             </td>
             <td style="width: 95px;">
                 <button id="btnCheck" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
             </td>
-           
         </tr>
     </table>
 }
@@ -58,12 +58,21 @@
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
     </div>
     <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 550px; margin-left: 20px;">
+        <table style="margin-top: 20px; width: 100%; margin-left: 20px;">
             <tr style="height: 45px;">
-                <td class="td_span">会计期：</td>
+                <td class="td_span">对方公司：</td>
                 <td class="td_input">
-                    <input id="AccountingPeriod" type="text" style="width: 210px;" class="input_text form-control" onfocus="this.removeAttribute('readonly'); WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' });" autocomplete="new-password" />
+                    @*<input id="AccountingPeriod" type="text" style="width: 210px;" class="input_text form-control" onfocus="this.removeAttribute('readonly'); WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' });" autocomplete="new-password" />*@
+                    <input id="ReceivingUnit" type="text" style="width: 210px;" class="input_text form-control" />
                 </td>
+                <td class="td_span">交易银行：</td>
+                <td class="td_input">
+                    <select id="TradingBank" class="input_text form-control" style="width: 210px;"></select>
+                </td>
+                <td class="td_span">交易日期：</td>
+                <td class="td_input">
+                    <input id="TransactionDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td> 
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
                 </td>
@@ -84,12 +93,12 @@
     </div>
     <div id='jqxTabs'>
         <ul>
-            <li style="margin-left: 30px;">
+            <li id="Oracle0" style="margin-left: 30px;">
                 <div style="height: 20px; margin-top: 5px;">
                     手工录入
                 </div>
             </li>
-            <li>
+            <li id="Oracle1">
                 <div style="height: 20px; margin-top: 5px;">
                     自动录入
                 </div>
@@ -97,6 +106,11 @@
             <li id="Oracle" style="display:none;">
                 <div style="height: 20px; margin-top: 12px;">
                     Oracle录入
+                </div>
+            </li>
+            <li id="OracleCheck" style="display:none;">
+                <div style="height: 20px; margin-top: 12px;">
+                    Oracle校验失败
                 </div>
             </li>
         </ul>
@@ -108,6 +122,9 @@
         </div>
         <div style="overflow: hidden;">
             <div id="jqxTable2" class="jqxTable" style=""></div>
+        </div>
+        <div style="overflow: hidden;">
+            <div id="jqxTable3" class="jqxTable" style=""></div>
         </div>
     </div>
 

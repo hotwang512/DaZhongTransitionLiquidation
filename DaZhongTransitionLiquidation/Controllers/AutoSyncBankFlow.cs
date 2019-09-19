@@ -10,6 +10,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.Vou
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
@@ -404,7 +405,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 bankFlow.Currency = "人民币";
                 bankFlow.ReceivingUnitInstitution = "";
                 bankFlow.TradingBank = details.ATTRIBUTE4;
-                bankFlow.PaymentUnit = "大众交通（集团）股份有限公司大众出租汽车分公司";//我方
+                bankFlow.PaymentUnit = "大众交通(集团)股份有限公司大众出租汽车分公司";//我方
                 bankFlow.PayeeAccount = details.ATTRIBUTE3;//我方
                 bankFlow.ReceivingUnit = details.TRX_ACCOUNT_NAME;//对方
                 bankFlow.ReceivableAccount = details.BANK_ACCOUNT_NUM == "空信息" ? "" : details.BANK_ACCOUNT_NUM;//对方
@@ -439,6 +440,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 var bankData = _db.Queryable<Business_CompanyBankInfo>().ToList();
                 List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
+                var sevenData = _db.Queryable<Business_SevenSection>().ToList();
                 foreach (var item in bankFlowList)
                 {
                     var companyBankData = new Business_CompanyBankInfo();
@@ -456,28 +458,36 @@ namespace DaZhongTransitionLiquidation.Controllers
                     }
                     var paymentUnitInstitution = bankData.Where(x => x.BankAccount == item.BankAccount).First().BankName;
                     item.PaymentUnitInstitution = paymentUnitInstitution;
-                    var accountModeName = _db.Queryable<Business_SevenSection>().Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
+                    var accountModeName = sevenData.Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
+                    var companyName = sevenData.Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.CompanyCode).Descrption;
                     var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                     if (isAny.Count > 0)
                     {
                         item.AccountModeCode = companyBankData.AccountModeCode;
                         item.AccountModeName = accountModeName;
                         item.CompanyCode = companyBankData.CompanyCode;
+                        item.CompanyName = companyName;
                         _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                         continue;
                     }
                     item.AccountModeCode = companyBankData.AccountModeCode;
                     item.AccountModeName = accountModeName;
                     item.CompanyCode = companyBankData.CompanyCode;
+                    item.CompanyName = companyName;
                     item.CreateTime = DateTime.Now;
                     item.CreatePerson = "admin";
                     bankFlowLists.Add(item);
                 }
+                var userData = new List<Sys_User>();
+                //using (SqlSugarClient db = DbConfig.GetInstance())
+                //{
+                //    userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                //}
                 if (bankFlowLists.Count > 0)
                 {
                     success = _db.Insertable(bankFlowLists).ExecuteCommand();
                     //根据流水自动生成凭证
-                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin");
+                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin", userData);
                 }
             }
             BankDataPack.SyncBackFlowAndReconciliation();

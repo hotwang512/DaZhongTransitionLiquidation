@@ -270,7 +270,7 @@ var $page = function () {
                  // { text: '用户名称', datafield: 'UserName', width: '14%', align: 'center', cellsAlign: 'center' },
                   { text: '部门', datafield: 'TranslationDepartment', width: '12%', align: 'center', cellsAlign: 'center',hidden:true },
                   { text: '角色', datafield: 'TranslationRole', width: '12%', align: 'center', cellsAlign: 'center' },
-                  { text: '邮箱', datafield: 'Email', align: 'center', width: '12%', cellsAlign: 'center' },
+                  { text: 'Oracle用户名', datafield: 'Email', align: 'center', width: '12%', cellsAlign: 'center' },
                   { text: '手机号码', datafield: 'MobileNnumber', width: '12%', align: 'center', cellsAlign: 'center' },
                   { text: '是否启用', datafield: 'TranslationEnable', width: '12%', align: 'center', cellsAlign: 'center' },
                   { text: '创建人', datafield: 'CreatedUser', width: '12%', align: 'center', cellsAlign: 'center' },

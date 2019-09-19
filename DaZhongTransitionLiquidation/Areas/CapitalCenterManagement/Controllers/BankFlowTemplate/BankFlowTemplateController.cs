@@ -100,7 +100,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        DbService.Command(_db =>
+                        {
+                            userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        });
+                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
                         //同步银行流水到银行数据表
                         BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
@@ -190,7 +195,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(bankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        //DbService.Command(_db =>
+                        //{
+                        //    userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        //});
+                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
                         //同步银行流水到银行数据表
                         BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
@@ -308,7 +318,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        //DbService.Command(_db =>
+                        //{
+                        //    userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        //});
+                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName, userData);
                     }
                 }
             });
@@ -339,10 +354,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == items.BankAccount).ToList();
                         if (isAny.Count > 0)
                         {
-                            //if (items.Batch == "BEA192471053525717101")
+                            //if (items.Batch == "BEA192451138192612100" || items.Batch == "BEA192461040305243801"
+                            //|| items.Batch == "BEA192461040241398300" || items.Batch == "BEA192481045494703900" || items.Batch == "BEA192481047211231901")
                             //{
                             //    items.AccountModeCode = item.AccountModeCode;
                             //    items.AccountModeName = accountModeName;
+                            //    items.AccountModeName = accountModeName;
+                            //    items.CompanyCode = item.CompanyCode;
                             //    newBankFlowList.Add(items);
                             //}
                             items.BankAccount = item.BankAccount;
@@ -352,7 +370,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
-                        items.BankAccount = item.BankAccount;
                         items.AccountModeCode = item.AccountModeCode;
                         items.AccountModeName = accountModeName;
                         items.CompanyCode = item.CompanyCode;
@@ -365,7 +382,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         db.Insertable<Business_BankFlowTemplate>(newBankFlowList).ExecuteCommand();
                         //根据流水自动生成凭证
-                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName);
+                        var userData = new List<Sys_User>();
+                        //DbService.Command(_db =>
+                        //{
+                        //    userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                        //});
+                        GenerateVoucherList(db, newBankFlowList, UserInfo.LoginName, userData);
                     }
                 }
             });
@@ -380,7 +402,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
         }
-        public static void GenerateVoucherList(SqlSugarClient db, List<Business_BankFlowTemplate> newBankFlowList, string loginName)
+        public static void GenerateVoucherList(SqlSugarClient db, List<Business_BankFlowTemplate> newBankFlowList, string loginName, List<Sys_User> userData)
         {
             List<Business_VoucherList> VoucherList = new List<Business_VoucherList>();
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
@@ -392,6 +414,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
             var bankChannel = db.Queryable<T_BankChannelMapping>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
             var paySetting = db.Queryable<Business_PaySettingDetail>().ToList();
+            
             #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
@@ -400,23 +423,38 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.AccountingPeriod = item.TransactionDate;
                 voucher.AccountModeName = item.AccountModeName;
                 voucher.CompanyCode = item.CompanyCode;
-                voucher.CompanyName = item.PaymentUnit;
+                voucher.CompanyName = item.PaymentUnit.ToDBC();
                 voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
                 var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
                 x++;
                 var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
-                voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd") + (voucherNo + x).TryToString().PadLeft(4, '0');
+                voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMM") + (voucherNo + x).TryToString().PadLeft(4, '0');
                 voucher.DocumentMaker = "";
                 voucher.Status = "1";
                 voucher.VoucherDate = item.TransactionDate;
                 voucher.VoucherType = "银行类";
                 voucher.Automatic = "1";//自动
+                voucher.TradingBank = item.TradingBank;
+                voucher.ReceivingUnit = item.ReceivingUnit;
+                voucher.TransactionDate = item.TransactionDate;
+                voucher.Batch = item.Batch;
                 voucher.CreateTime = DateTime.Now;
                 guid = Guid.NewGuid();
                 voucher.VGUID = guid;
+                foreach (var user in userData)
+                {
+                    switch (user.Role)
+                    {
+                        case "财务经理":voucher.FinanceDirector = user.LoginName;break;
+                        case "财务主管": voucher.Bookkeeping = user.LoginName; break;
+                        case "审核岗": voucher.Auditor = user.LoginName; break;
+                        case "出纳": voucher.Cashier = user.LoginName; break;
+                        default: break;
+                    }
+                }
                 //科目信息
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-                BVDetail.Abstract = item.Purpose;
+                BVDetail.Abstract = item.Remark;
                 var sevenSubject = GetSevenSubject(item.BankAccount);
                 var subject = "";
                 if (item.TurnOut == 0)

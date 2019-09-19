@@ -604,7 +604,18 @@ function openSocket() {
             document.getElementById("setdeskew").onclick = function () {
                 dialog.get_actionType("setdeskew");
             };
-
+            //左转
+            document.getElementById("rotateLeft").onclick = function () {
+                dialog.get_actionType("rotateLeft");
+            };
+            //右转
+            document.getElementById("rotateRight").onclick = function () {
+                dialog.get_actionType("rotateRight");
+            };
+            //属性设置
+            document.getElementById("showProperty").onclick = function () {
+                dialog.get_actionType("showProperty");
+            };
             //服务器返回消息
             dialog.sendPrintInfo.connect(function (message) {
                 //设备分辨率

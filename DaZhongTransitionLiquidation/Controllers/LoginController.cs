@@ -7,9 +7,11 @@ using SyntacticSugar;
 using System.Net;
 using DaZhongTransitionLiquidation.Common;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Net.Sockets;
+using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using Newtonsoft.Json.Linq;
 
 namespace DaZhongTransitionLiquidation.Controllers
@@ -119,6 +121,8 @@ namespace DaZhongTransitionLiquidation.Controllers
             var cm = CacheManager<Sys_User>.GetInstance();
             cm.Remove(PubGet.GetUserKey);
             CookiesManager<string>.GetInstance().Remove(PubConst.CostCache);
+            var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
+            reportCache.Remove(PubGet.GetVehicleCheckReportKey);
         }
         /// <summary>
         /// 加密用户密码

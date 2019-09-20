@@ -32,13 +32,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         public JsonResult GetReviewAssetListDatas(Business_ModifyVehicle searchParams, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_ModifyVehicleModel>();
-
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.SqlQueryable<Business_ModifyVehicleModel>
                     (@"SELECT mv.*,mi.DESCRIPTION,
+					   mi.ASSET_CATEGORY_MAJOR as ASSET_CATEGORY_MAJOR_M,
+					   mi.ASSET_CATEGORY_MINOR as ASSET_CATEGORY_MINOR_M,
                        mi.PLATE_NUMBER AS PLATE_NUMBER_M,
                        mi.MODEL_MAJOR AS MODEL_MAJOR_M,
                        mi.MODEL_MINOR AS MODEL_MINOR_M,
@@ -130,6 +131,36 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             {
                                 //先更新资产维护表，再写入Oracle 中间表
                                 db.Updateable<Business_AssetMaintenanceInfo>()
+                                    .UpdateColumns(x => new Business_AssetMaintenanceInfo { BELONGTO_COMPANY = item.BELONGTO_COMPANY }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                db.Updateable<Business_ModifyVehicle>()
+                                    .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                var assetSwapModel = new AssetMaintenanceInfo_Swap();
+                                assetSwapModel.TRANSACTION_ID = item.VGUID;
+                                assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
+                                //传入订单选择的部门
+                                assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
+                                assetSwapModel.CREATE_DATE = DateTime.Now;
+                                assetSwapModel.ASSET_ID = item.ASSET_ID;
+                                assetSwapModel.STATUS = "N";
+                                var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == item.BELONGTO_COMPANY).First();
+                                assetSwapModel.ACCOUNTMODE_COMPANYCODE = ssModel.AccountModeCode + ssModel.Code;
+                                assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
+                                assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
+                                assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
+                                assetSwapModel.PERIOD = item.PERIOD;
+                                assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
+                                assetSwapModel.CHECK_STATE = false;
+                                assetSwapModel.PROCESS_TYPE = "FA_LOC_1";
+                                assetSwapList.Add(assetSwapModel);
+                            }
+                            db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
+                            break;
+                        case "FA_LOC_2":
+                            foreach (var item in modifyVehicleList)
+                            {
+                                //先更新资产维护表，再写入Oracle 中间表
+                                db.Updateable<Business_AssetMaintenanceInfo>()
                                     .UpdateColumns(x => new Business_AssetMaintenanceInfo { MANAGEMENT_COMPANY = item.MANAGEMENT_COMPANY }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
@@ -150,12 +181,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.PERIOD = item.PERIOD;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapModel.CHECK_STATE = false;
-                                assetSwapModel.PROCESS_TYPE = "FA_LOC_1";
+                                assetSwapModel.PROCESS_TYPE = "FA_LOC_2";
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
-                            break;
-                        case "FA_LOC_3":
                             break;
                         case "BUSINESS_MODEL":
                             foreach (var item in modifyVehicleList)

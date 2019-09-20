@@ -83,6 +83,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
     }
     public class Business_ScrapVehicleShowModel : Business_ScrapVehicle
     {
+        public string BOOK_TYPE_CODE { get; set; }
+        public string GROUP_ID { get; set; }
         public string PLATE_NUMBER { get; set; }
 
         /// <summary>
@@ -114,5 +116,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// </summary>           
         public string BELONGTO_COMPANY { get; set; }
         public string ASSET_ID { get; set; }
+        public decimal ASSET_COST { get; set; }
     }
 }

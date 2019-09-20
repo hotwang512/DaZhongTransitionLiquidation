@@ -111,6 +111,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             var modifyVehicleList = _db.Queryable<Business_ModifyVehicle>().Where(x => !x.ISVERIFY).ToList();
             int success = 0;
             var MODIFY_TYPE = "";
+            var OLDDATA = "";
             foreach (var item in assetFlowList)
             {
                 if (assetMaintenanceInfoList.Any(x => x.ORIGINALID == item.ORIGINALID))
@@ -136,44 +137,44 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //车牌号变更
                             MODIFY_TYPE = "PLATE_NUMBER";
+                            OLDDATA = assetMaintenanceInfo.PLATE_NUMBER;
                             if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
                             {
-                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
+                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE,OLDDATA));
+                            }
+                        }
+                        if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
+                        {
+                            //所属公司
+                            MODIFY_TYPE = "FA_LOC_1";
+                            OLDDATA = assetMaintenanceInfo.BELONGTO_COMPANY;
+                            if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
+                            {
+                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE, OLDDATA));
                             }
                         }
                         if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
                         {
                             //管理公司
-                            MODIFY_TYPE = "FA_LOC_1";
+                            MODIFY_TYPE = "FA_LOC_2";
+                            OLDDATA = assetMaintenanceInfo.PLATE_NUMBER;
                             if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
                             {
-                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
+                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE, OLDDATA));
                             }
                         }
                         #region 注释
-                        //if (assetMaintenanceInfo.VEHICLE_SHORTNAME != item.VEHICLE_SHORTNAME)
-                        //{
-                        //    //车辆简称变更
-                        //    MODIFY_TYPE = "车辆简称变更";
-                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                        //}
-                        //if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
-                        //{
-                        //    //资产所属公司
-                        //    MODIFY_TYPE = "资产所属公司";
-                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
-                        //}
                         //if (assetMaintenanceInfo.VEHICLE_STATE != item.VEHICLE_STATE)
                         //{
                         //    //车辆状态
                         //    MODIFY_TYPE = "车辆状态";
-                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE,OLDDATA));
                         //}
                         //if (assetMaintenanceInfo.OPERATING_STATE != item.OPERATING_STATE)
                         //{
                         //    //营运状态
                         //    MODIFY_TYPE = "营运状态";
-                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE));
+                        //    list.Add(getModel(manageModelList, item, MODIFY_TYPE,OLDDATA));
                         //}
                         #endregion
                         var minorModel = new Business_ManageModel();
@@ -200,6 +201,14 @@ namespace DaZhongTransitionLiquidation.Controllers
                             //经营模式主类 传过来的经营模式上上级
                             var major = manageModelList.FirstOrDefault(x => x.VGUID == minorModel.ParentVGUID);
                             item.MODEL_MAJOR = major.BusinessName;
+                            var a = assetMaintenanceInfo.VEHICLE_SHORTNAME;
+                            //根据经营模式和车型获取到资产主类子类，通过主类子类取到折旧方法维护中的财务信息
+                            var modelCategory = _db.Queryable<Business_ManageModel_AssetsCategory>()
+                                .Where(x => x.GoodsModel == assetMaintenanceInfo.VEHICLE_SHORTNAME && x.ManageModelVGUID == minorModel.VGUID).First();
+                            var assetCategory = _db.Queryable<Business_AssetsCategory>()
+                                .Where(x => x.VGUID == modelCategory.AssetsCategoryVGUID).First();
+                            assetMaintenanceInfo.ASSET_CATEGORY_MAJOR = assetCategory.ASSET_CATEGORY_MAJOR;
+                            assetMaintenanceInfo.ASSET_CATEGORY_MINOR = assetCategory.ASSET_CATEGORY_MINOR;
                         }
                         else
                         {
@@ -218,9 +227,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //经营模式
                             MODIFY_TYPE = "BUSINESS_MODEL";
+                            OLDDATA = assetMaintenanceInfo.MODEL_MAJOR + "-" + assetMaintenanceInfo.ASSET_CATEGORY_MINOR;
                             if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
                             {
-                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE));
+                                list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE,OLDDATA));
                             }
                         }
                     }
@@ -313,7 +323,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
             return success;
         }
-        public static Business_ModifyVehicle getModel(Api_ModifyVehicleAsset item, Business_AssetMaintenanceInfo info, string MODIFY_TYPE)
+        public static Business_ModifyVehicle getModel(Api_ModifyVehicleAsset item, Business_AssetMaintenanceInfo info, string MODIFY_TYPE, string OLDDATA)
         {
             var model = new Business_ModifyVehicle();
             model.VGUID = Guid.NewGuid();
@@ -331,6 +341,8 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 model.MODEL_MAJOR = item.MODEL_MAJOR;
                 model.MODEL_MINOR = item.MODEL_MINOR;
+                model.ASSET_CATEGORY_MAJOR = info.ASSET_CATEGORY_MAJOR;
+                model.ASSET_CATEGORY_MINOR = info.ASSET_CATEGORY_MINOR;
             }
             else
             {
@@ -338,6 +350,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 model.MODEL_MINOR = info.MODEL_MINOR;
             }
             model.MODIFY_TYPE = MODIFY_TYPE;
+            model.OLDDATA = OLDDATA;
             model.ISVERIFY = false;
             model.CREATE_DATE = DateTime.Now;
             model.CREATE_USER = "System";

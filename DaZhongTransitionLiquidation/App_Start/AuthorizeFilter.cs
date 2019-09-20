@@ -21,6 +21,10 @@ namespace DaZhongTransitionLiquidation
             {
                 cm.Add(PubConst.CostCache, Guid.NewGuid().ToString(), cm.Day * 365);
             }
+            if (!cm.ContainsKey(PubConst.VehicleCheckReportCostCache) || cm[PubConst.VehicleCheckReportCostCache].IsNullOrEmpty())
+            {
+                cm.Add(PubConst.VehicleCheckReportCostCache, Guid.NewGuid().ToString(), cm.Day * 365);
+            }
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToLower();
             var actionName = filterContext.ActionDescriptor.ActionName.ToLower();
             var noCheckControllers = new List<string>()  //无需验证的控制器

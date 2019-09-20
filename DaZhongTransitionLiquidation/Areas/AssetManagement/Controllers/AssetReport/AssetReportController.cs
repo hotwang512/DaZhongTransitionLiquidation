@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
@@ -29,174 +30,85 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
 
         public JsonResult GetAssetReportListDatas(string YearMonth,GridParams para)
         {
+            YearMonth = YearMonth.Replace("-", "");
+            var cache = CacheManager<Sys_User>.GetInstance();
             List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
             var reportList = new List<Business_VehicleCheckReport>();
             DbBusinessDataService.Command(db =>
             {
-                YearMonth = YearMonth.Replace("-", "");
-                 var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
-                var resultApiModifyModel = apiReaultModify
-                    .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
-                //全量获取车辆信息
-                var resultColumn = resultApiModifyModel.data[0].COLUMNS;
-                var resultData = resultApiModifyModel.data[0].DATA;
-                foreach (var item in resultData)
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth))
                 {
-                    var nv = new Api_ModifyVehicleAsset();
-                    var t = nv.GetType();
-                    for (var k = 0; k < resultColumn.Count; k++)
+                    YearMonth = YearMonth.Replace("-", "");
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+                    var resultApiModifyModel = apiReaultModify
+                        .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                    //全量获取车辆信息
+                    var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                    var resultData = resultApiModifyModel.data[0].DATA;
+                    foreach (var item in resultData)
                     {
-                        var pi = t.GetProperty(resultColumn[k]);
-                        if (pi != null) pi.SetValue(nv, item[k], null);
+                        var nv = new Api_ModifyVehicleAsset();
+                        var t = nv.GetType();
+                        for (var k = 0; k < resultColumn.Count; k++)
+                        {
+                            var pi = t.GetProperty(resultColumn[k]);
+                            if (pi != null) pi.SetValue(nv, item[k], null);
+                        }
+                        assetModifyFlowList.Add(nv);
                     }
-                    assetModifyFlowList.Add(nv);
+                    //获取所有的公司
+                    var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                    foreach (var item in assetModifyFlowList)
+                    {
+                        //Code转名称
+                        if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
+                        {
+                            item.MANAGEMENT_COMPANY =
+                                ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
+                        }
+                        var report = new Business_VehicleCheckReport();
+                        report.YearMonth = YearMonth;
+                        report.Orginalid = item.ORIGINALID;
+                        report.VGUID = Guid.NewGuid();
+                        report.VehicleModel = item.VEHICLE_SHORTNAME;
+                        report.ManageCompany = item.MANAGEMENT_COMPANY;
+                        report.Quantity = 1;
+                        report.CreateDate = DateTime.Now;
+                        report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                        reportList.Add(report);
+                    }
+                    var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
+                    reportCache.Remove(PubGet.GetVehicleCheckReportKey);
+                    reportCache.Add(PubGet.GetVehicleCheckReportKey, reportList, 8 * 60 * 60);
                 }
-                //获取所有的公司
-                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
-                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                foreach (var item in assetModifyFlowList)
+                else
                 {
-                    //Code转名称
-                    if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
-                    {
-                        item.MANAGEMENT_COMPANY =
-                            ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
-                    }
-                    var report = new Business_VehicleCheckReport();
-                    report.YearMonth = YearMonth;
-                    report.Orginalid = item.ORIGINALID;
-                    report.VGUID = Guid.NewGuid();
-                    report.VehicleModel = item.VEHICLE_SHORTNAME;
-                    report.ManageCompany = item.MANAGEMENT_COMPANY;
-                    report.Quantity = 1;
-                    reportList.Add(report);
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth)
+                        .ToList();
                 }
             });
-            return Json(reportList, JsonRequestBehavior.AllowGet);
+            return Json(reportList.OrderBy(x => x.VehicleModel).ToList(), JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SubmitExceptionAsset(List<Guid> vguids)
+        public JsonResult SubmitAssetReport(string YearMonth)
         {
+            YearMonth = YearMonth.Replace("-", "");
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            var cache = CacheManager<Sys_User>.GetInstance();
+            var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var exceptionList = db.Queryable<AssetMaintenanceInfo_Swap>()
-                    .Where(i => vguids.Contains(i.TRANSACTION_ID))
-                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
-                try
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth))
                 {
-                    foreach (var exceptionItem in exceptionList)
-                    {
-                        var assetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
-                            .Where(x => x.ASSET_ID == exceptionItem.ASSET_ID).First();
-                        //NEW_ASSET,PLATE_NUMBER,FA_LOC_1,FA_LOC_3
-                        if (exceptionItem.PROCESS_TYPE == "NEW_ASSET")
-                        {
-
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "PLATE_NUMBER")
-                        {
-                            assetInfo.PLATE_NUMBER = exceptionItem.TAG_NUMBER.Split("-")[0].ToString();
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "FA_LOC_1")
-                        {
-                            assetInfo.BELONGTO_COMPANY = exceptionItem.FA_LOC_1;
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "FA_LOC_3")
-                        {
-                            assetInfo.ORGANIZATION_NUM = exceptionItem.FA_LOC_3;
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "RETIRE")
-                        {
-                            assetInfo.BACK_CAR_DATE = exceptionItem.RETIRE_DATE;
-                        }
-                        assetInfo.ASSET_CATEGORY_MAJOR = exceptionItem.ASSET_CATEGORY_MAJOR;
-                        assetInfo.ASSET_CATEGORY_MINOR = exceptionItem.ASSET_CATEGORY_MINOR;
-                        assetInfo.ASSET_COST = exceptionItem.ASSET_COST;
-                        assetInfo.METHOD = exceptionItem.METHOD;
-                        assetInfo.BELONGTO_COMPANY = exceptionItem.FA_LOC_1;
-                        assetInfo.MANAGEMENT_COMPANY = exceptionItem.FA_LOC_2;
-                        assetInfo.ORGANIZATION_NUM = exceptionItem.FA_LOC_3;
-                        assetInfo.MODEL_MAJOR = exceptionItem.MODEL_MAJOR;
-                        assetInfo.MODEL_MINOR = exceptionItem.MODEL_MINOR;
-                        db.Updateable<Business_AssetMaintenanceInfo>().UpdateColumns(x => new
-                        {
-                            x.ASSET_CATEGORY_MAJOR,
-                            x.ASSET_CATEGORY_MINOR,
-                            x.ASSET_COST,
-                            x.METHOD,
-                            x.BELONGTO_COMPANY,
-                            x.MANAGEMENT_COMPANY,
-                            x.MODEL_MAJOR,
-                            x.MODEL_MINOR,
-                            x.ORGANIZATION_NUM
-                        }).ExecuteCommand();
-                        exceptionItem.TRANSACTION_ID = Guid.NewGuid();
-                        exceptionItem.CREATE_DATE = DateTime.Now;
-                        exceptionItem.LAST_UPDATE_DATE = DateTime.Now;
-                        exceptionItem.STATUS = "N";
-                        db.Insertable<AssetMaintenanceInfo_Swap>(exceptionItem).ExecuteCommand();
-                    }
+                    var list = reportCache[PubGet.GetVehicleCheckReportKey];
+                    db.Insertable<Business_VehicleCheckReport>(list).ExecuteCommand();
                     resultModel.IsSuccess = true;
                     resultModel.Status = "1";
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw;
+                    resultModel.IsSuccess = false;
+                    resultModel.Status = "2";
                 }
-
-            });
-            return Json(resultModel, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult UpdateAssetSwap(AssetMaintenanceInfo_Swap swap)
-        {
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            DbBusinessDataService.Command(db =>
-            {
-                if (swap.PROCESS_TYPE == "NEW_ASSET")
-                {
-                    db.Updateable<AssetMaintenanceInfo_Swap>().UpdateColumns(x => new
-                    {
-                        x.ASSET_CATEGORY_MAJOR,
-                        x.ASSET_CATEGORY_MINOR,
-                        x.ASSET_COST,
-                        x.METHOD,
-                        x.FA_LOC_1,
-                        x.FA_LOC_2,
-                        x.FA_LOC_3,
-                        x.DESCRIPTION
-                    }).ExecuteCommand();
-                }
-                else if (swap.PROCESS_TYPE == "PLATE_NUMBER")
-                {
-                    db.Updateable<AssetMaintenanceInfo_Swap>().UpdateColumns(x => new
-                    {
-                        x.TAG_NUMBER
-                    }).ExecuteCommand();
-                }
-                else if (swap.PROCESS_TYPE == "FA_LOC_1")
-                {
-                    db.Updateable<AssetMaintenanceInfo_Swap>().UpdateColumns(x => new
-                    {
-                        x.FA_LOC_1
-                    }).ExecuteCommand();
-                }
-                else if (swap.PROCESS_TYPE == "FA_LOC_3")
-                {
-                    db.Updateable<AssetMaintenanceInfo_Swap>().UpdateColumns(x => new
-                    {
-                        x.FA_LOC_3
-                    }).ExecuteCommand();
-                }
-                else if (swap.PROCESS_TYPE == "RETIRE")
-                {
-                    db.Updateable<AssetMaintenanceInfo_Swap>().UpdateColumns(x => new
-                    {
-                        x.RETIRE_DATE
-                    }).ExecuteCommand();
-                }
-                resultModel.IsSuccess = true;
-                resultModel.Status = "1";
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }

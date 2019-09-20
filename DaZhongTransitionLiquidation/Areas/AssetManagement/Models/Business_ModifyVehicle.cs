@@ -136,11 +136,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string CREATE_USER { get; set; }
+        public string OLDDATA { get; set; }
+        public string ASSET_CATEGORY_MAJOR { get; set; }
+        public string ASSET_CATEGORY_MINOR { get; set; }
 
     }
 
     public class Business_ModifyVehicleModel: Business_ModifyVehicle
     {
+
+        public string ASSET_CATEGORY_MAJOR_M { get; set; }
+        public string ASSET_CATEGORY_MINOR_M { get; set; }
+        public string ASSET_CATEGORY_MAJOR { get; set; }
+        public string ASSET_CATEGORY_MINOR { get; set; }
         public string PLATE_NUMBER_M { get; set; }
         public string MODEL_MAJOR_M { get; set; }
         public string MODEL_MINOR_M { get; set; }

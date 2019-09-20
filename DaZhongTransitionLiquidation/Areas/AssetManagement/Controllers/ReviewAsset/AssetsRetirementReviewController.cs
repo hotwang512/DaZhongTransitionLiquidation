@@ -28,7 +28,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("b7d38059-c04f-45fc-86ce-835dbd44315f");
             return View();
         }
-        public JsonResult GetReviewAssetListDatas(Business_ScrapVehicle searchParams, GridParams para)
+        public JsonResult GetReviewAssetListDatas(Boolean ISVerify, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_ScrapVehicleShowModel>();
             DbBusinessDataService.Command(db =>
@@ -46,6 +46,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
 	                     , mi.QUANTITY
 	                     , mi.ASSET_COST
 	                     , mi.ASSET_ID
+	                     , mi.GROUP_ID
+	                     , mi.BOOK_TYPE_CODE
 						 , mi.LISENSING_DATE
                     from Business_ScrapVehicle mv
                         left join Business_AssetMaintenanceInfo mi
@@ -53,6 +55,19 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .Where(i => !i.ISVERIFY)
                     //.WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                if (ISVerify)
+                {
+                    //校验数据
+                    foreach (var item in jsonResult.Rows)
+                    {
+                        if (item.BOOK_TYPE_CODE.IsNullOrEmpty() ||
+                            item.ASSET_COST.IsNullOrEmpty() || item.BACK_CAR_DATE.IsNullOrEmpty() ||
+                            item.ASSET_ID.IsNullOrEmpty())
+                        {
+                            item.GROUP_ID = "1";
+                        }
+                    }
+                }
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

@@ -28,7 +28,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
         {
             ViewData["level"] = GetMasterData(MasterVGUID.LevelVguid);
             ViewBag.UserSubDepartment = GetUserSubDepartment().ModelToJson();
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.ReconciliationReport);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("88B332E4-DFA2-4591-AF09-EE786C73864A");
             ViewBag.channels = GetChannelInfos();
             return View();
         }

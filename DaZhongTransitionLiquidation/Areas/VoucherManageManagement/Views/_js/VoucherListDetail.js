@@ -610,6 +610,7 @@ var $page = function () {
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();
                     $("#btnUp").show();
+                    $("#AttachmentHide").show();
                 } else {
                     $("#btnSave").hide();
                     $("#btnUp").hide();

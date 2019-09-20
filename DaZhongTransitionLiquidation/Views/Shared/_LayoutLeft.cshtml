@@ -902,7 +902,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "二级渠道管理" && i.Reads == 1) || isadmin)
                         {
                             <tr class="menue_item" id="SubjectManagement_Reconc" pageurl="/Systemmanagement/SubjectManagement/SubjectManagement">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -910,7 +910,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (currentUserRoleModules.Any(i => i.PageName == "渠道科目管理" && i.Reads == 1) || isadmin)
+                        @if (currentUserRoleModules.Any(i => i.PageName == "银行渠道映射" && i.Reads == 1) || isadmin)
                         {
                             <tr class="menue_item" id="BankChannelMapping_Reconc" pageurl="/Systemmanagement/BankChannelMapping/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
@@ -918,7 +918,7 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "金额对账报表" && i.Reads == 1))
+                        @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "对账清算" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="Reconciliation_Reconc" pageurl="/ReportManagement/ReconciliationReport/Reconciliation">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>

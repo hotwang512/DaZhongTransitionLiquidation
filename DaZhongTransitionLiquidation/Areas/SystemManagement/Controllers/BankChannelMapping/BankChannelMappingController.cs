@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Infrastructure.Dao;
+﻿using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
@@ -20,7 +21,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.BankCh
         // GET: SystemManagement/BankChannelMapping
         public ActionResult Index()
         {
-            //ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.ChannelManagement);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("66D28050-10DD-4BE2-A75A-0E8433B0BDBC");
             ViewBag.Channel = GetChannel();
             return View();
         }

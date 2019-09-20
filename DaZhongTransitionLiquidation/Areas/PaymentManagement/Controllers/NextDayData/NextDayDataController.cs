@@ -25,7 +25,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
 
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.NextDayData);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("68DEB284-908E-40AC-9DF6-777888F40D7B");
             ViewBag.Channel = GetChannel();
             ViewData["transactionId"] = Request["transactionId"] ?? "";
             return View();

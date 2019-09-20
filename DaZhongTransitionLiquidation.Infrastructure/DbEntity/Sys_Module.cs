@@ -72,5 +72,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public int Import { get; set; }
         public int Export { get; set; }
         public Guid ModuleVGUID { get; set; }
+        public string URL { get; set; }
+        public string CookieName { get; set; }
     }
 }

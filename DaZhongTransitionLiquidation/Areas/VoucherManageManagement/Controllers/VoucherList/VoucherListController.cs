@@ -38,33 +38,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 var starDate = "2019-09-01".TryToDate();
-                //DateTime? firstDay = null;
-                //DateTime? lastDay = null;
-                //if (searchParams.AccountingPeriod != null)
-                //{
-                //    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
-                //    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
-                //}
-                var tradingBank = "";
-                if (searchParams.TradingBank != null)
-                {
-                    Regex rgx = new Regex(@"[\w|\W]{2,2}银行");
-                    tradingBank = rgx.Match(searchParams.TradingBank).Value;
-                }
-                jsonResult.Rows = db.Queryable<Business_VoucherList>()
+                var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherDate > starDate)
                 .Where(i => i.Status == searchParams.Status)
                 .Where(i => i.Automatic == searchParams.Automatic)
-                .Where(i => i.VoucherDate > starDate)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
-                .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
-                .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
-                .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate == searchParams.TransactionDate)
-                .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
-                .OrderBy("VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
-                jsonResult.TotalRows = pageCount;
-
-                var data = jsonResult.Rows;
-                foreach (var item in data)
+                .Where(x => x.VoucherNo.Length > 10 || x.TradingBank == "" || x.TradingBank == null).ToList();
+                foreach (var item in voucherData)
                 {
                     if (item.VoucherNo.Length > 10)
                     {
@@ -100,12 +79,51 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                                     item.TransactionDate = bankFlow2[0].TransactionDate;
                                     item.Batch = bankFlow2[0].Batch;
                                 }
+                                else
+                                {
+                                    var bankFlow3 = bankFlow1
+                               .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
+                               .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                                    if (bankFlow3.Count == 1)
+                                    {
+                                        item.TradingBank = bankFlow3[0].TradingBank;
+                                        item.ReceivingUnit = bankFlow3[0].ReceivingUnit;
+                                        item.TransactionDate = bankFlow3[0].TransactionDate;
+                                        item.Batch = bankFlow3[0].Batch;
+                                    }
+                                }
                             }
                             //var bankFlow2 = bankFlow1.
                         }
                         db.Updateable(item).ExecuteCommand();
                     }
                 }
+                
+                //DateTime? firstDay = null;
+                //DateTime? lastDay = null;
+                //if (searchParams.AccountingPeriod != null)
+                //{
+                //    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
+                //    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
+                //}
+                var transactionDate = (searchParams.TransactionDate.TryToDate().ToString("yyyy-MM-dd") + " 23:59:59").TryToDate();
+                var tradingBank = "";
+                if (searchParams.TradingBank != null)
+                {
+                    Regex rgx = new Regex(@"[\w|\W]{2,2}银行");
+                    tradingBank = rgx.Match(searchParams.TradingBank).Value;
+                }
+                jsonResult.Rows = db.Queryable<Business_VoucherList>()
+                .Where(i => i.Status == searchParams.Status)
+                .Where(i => i.Automatic == searchParams.Automatic)
+                .Where(i => i.VoucherDate > starDate)
+                .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
+                .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
+                .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
+                .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDate)
+                .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
+                .OrderBy("VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

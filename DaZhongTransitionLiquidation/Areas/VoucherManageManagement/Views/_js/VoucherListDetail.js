@@ -55,6 +55,7 @@ var $page = function () {
             addVoucherListTable();
             $("#hideButton").show();
             $("#DocumentMaker").val($("#LoginName").val());
+            $("#AttachmentHide").show();
             getPersonInfo();
         }
         //控件ID后缀
@@ -66,7 +67,11 @@ var $page = function () {
             var trIndex = $("#VoucherTable tr").length - 2;
             if (trIndex > 2) {
                 var trId = $("#VoucherTable tr")[trIndex].id;
-                trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
+                if (trId.length == 9) {
+                    trIndex = parseInt(trId.substr(trId.length - 2, 2)) + 1;
+                } else {
+                    trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
+                }
             }
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'></textarea></td>" +
@@ -173,7 +178,8 @@ var $page = function () {
                         "IntercourseSection": IntercourseSection,
                         "BorrowMoney": borrowMoney,
                         "LoanMoney": loanMoney,
-                        "SevenSubjectName": subjectNames
+                        "SevenSubjectName": subjectNames,
+                        "JE_LINE_NUMBER":i
                     }
                     detailList.push(detail);
                 }
@@ -610,6 +616,7 @@ var $page = function () {
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();
                     $("#btnUp").show();
+                    $("#AttachmentHide").show();
                 } else {
                     $("#btnSave").hide();
                     $("#btnUp").hide();
@@ -1139,17 +1146,30 @@ function removeSubjectTr(obj) {
     WindowConfirmDialog(deleTr, "您确定要删除当前行？", "确认框", "确定", "取消", obj);
 }
 function deleTr(obj) {
-    var tr = obj.id.substr(obj.id.length - 1, 1);//获取下标;
-    $("#closeTr" + tr).remove();
+    var trIndexs = 0;
+    if (obj.id.length == 8) {
+        trIndexs = obj.id.substr(obj.id.length - 2, 2);//获取下标
+    } else {
+        trIndexs = obj.id.substr(obj.id.length - 1, 1);//获取下标
+    }
+    $("#closeTr" + trIndexs).remove();
     countMoney();
 }
 function tdClick() {
     $(".money").blur(function (event) {
         var id = event.target.id;
-        var trIndexs = id.substr(id.length - 1, 1);//获取下标
+        var trIndexs = 0;
+        var idNmae = "";
+        if (id.length == 8 || id.length == 6) {
+            trIndexs = id.substr(id.length - 2, 2);//获取下标
+            idNmae = id.substr(0, id.length - 2);
+        } else {
+            trIndexs = id.substr(id.length - 1, 1);//获取下标
+            idNmae = id.substr(0, id.length - 1);
+        }
         var value = $("#" + id).val();
         if (value != "") {
-            if (id.substr(0, id.length - 1) == "Borrow") {
+            if (idNmae == "Borrow") {
                 $("#Loan" + trIndexs).attr("readonly", "readonly");
                 value = value.replace(/,/g, '');
                 $("#Borrow" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
@@ -1159,7 +1179,7 @@ function tdClick() {
                 $("#Loan" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
             }
         } else {
-            if (id.substr(0, id.length - 1) == "Borrow") {
+            if (idNmae == "Borrow") {
                 if ($("#Loan" + trIndexs).val() != "") {
                     $("#Borrow" + trIndexs).attr("readonly", "readonly");
                     $("#Loan" + trIndexs).removeAttr("readonly");
@@ -1181,7 +1201,12 @@ function tdClick() {
     });
     $(".subjectbtn").click(function (event) {
         var id = event.target.id;
-        var trIndexs = id.substr(id.length - 1, 1);//获取下标
+        var trIndexs = 0;
+        if (id.length == 9) {
+            trIndexs = id.substr(id.length - 2, 2);//获取下标
+        } else {
+            trIndexs = id.substr(id.length - 1, 1);//获取下标
+        }
         var subjectVal = $("#SubjectName" + trIndexs).val();
         if (subjectVal != "") {
 

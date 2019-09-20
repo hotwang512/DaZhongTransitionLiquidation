@@ -354,8 +354,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == items.BankAccount).ToList();
                         if (isAny.Count > 0)
                         {
-                            //if (items.Batch == "BEA192451138192612100" || items.Batch == "BEA192461040305243801"
-                            //|| items.Batch == "BEA192461040241398300" || items.Batch == "BEA192481045494703900" || items.Batch == "BEA192481047211231901")
+                            //if (items.Batch == "BEA192470414233583300" || items.Batch == "BEA192450414366493500")
                             //{
                             //    items.AccountModeCode = item.AccountModeCode;
                             //    items.AccountModeName = accountModeName;

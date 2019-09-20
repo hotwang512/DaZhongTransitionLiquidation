@@ -22,7 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Subjec
 
         public ActionResult SubjectManagement()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.ChannelManagement);
+            ViewBag.CurrentModulePermission = GetRoleModuleInfo("25013924-3E19-467D-B299-09EF1621380F");
             ViewBag.Channel = GETChannel();
             return View();
         }

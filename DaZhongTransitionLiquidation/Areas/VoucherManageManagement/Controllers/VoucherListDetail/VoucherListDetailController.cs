@@ -76,7 +76,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var date = DateTime.Now;
                     //var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
                     //              order by BatchName desc", new { @NowDate = date });
-                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='银行类' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
+                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='"+ voucherType + @"' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
                                   order by VoucherNo desc", new { @NowDate = date, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
                     var batchName = voucher.BatchName; //GetBatchName(voucherType, flowNo);
                     var voucherName = GetVoucherName(voucherNo);
@@ -124,7 +124,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     else
                     {
                         voucherList.VGUID = voucher.VGUID;
-                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo ,it.Automatic}).ExecuteCommand();
+                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo ,it.Automatic,it.TradingBank ,it.ReceivingUnit ,it.TransactionDate ,it.Batch }).ExecuteCommand();
                     }
                     //科目信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
@@ -159,7 +159,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.SevenSubjectName = item.SevenSubjectName;
                             BVDetail.BorrowMoneyCount = borrowMoney;
                             BVDetail.LoanMoneyCount = loanMoney;
-                            BVDetail.JE_LINE_NUMBER = i++;
+                            BVDetail.JE_LINE_NUMBER = item.JE_LINE_NUMBER;
                             BVDetail.VGUID = Guid.NewGuid();
                             BVDetail.VoucherVGUID = guid;
                             if(item.LoanMoney != null && item.LoanMoney != 0)
@@ -250,7 +250,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     db.Updateable(voucher).ExecuteCommand();
                 }
                 //明细信息
-                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("BorrowMoney desc").ToList();
+                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguid).OrderBy("JE_LINE_NUMBER asc,BorrowMoney desc").ToList();
                 //附件信息
                 //var voucherAttach = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguid).ToList();
                 voucherList.AccountingPeriod = voucher.AccountingPeriod.TryToDate();

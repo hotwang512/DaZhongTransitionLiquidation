@@ -19,13 +19,25 @@ var $page = function () {
 
             //会计核算中心
             $("#AccountingCenterManagemnet").click(function () {
-                switch (GetHrefPageId("3")) {
-                    case "301": CookieHelper.SaveCookie("VoucherList_VoucherManage"); window.location.href = "/VoucherManageManagement/VoucherList/Index?Status=1&Type=0";
-                        break;
-                    //case "302": CookieHelper.SaveCookie("DepartmentalTrainingBudgetReport"); window.location.href = "/Report/DepartmentalTrainingBudgetReport/Index"; break;
-                    //case "303": CookieHelper.SaveCookie("PersonalTrainingBudgetReport"); window.location.href = "/Report/PersonalTrainingBudgetReport/Index"; break;
-                    default: jqxNotification("You are not authorized!", null, "error");
-                }
+                $.ajax({
+                    url: "/HomePage/HomePage/GetURLInfo",
+                    data: {},
+                    type: "POST",
+                    dataType: "json",
+                    async:false,
+                    success: function (msg) {
+                        if (msg.length > 0) {
+                            CookieHelper.SaveCookie(msg[0].CookieName); window.location.href = msg[0].URL;
+                        }
+                    }
+                });
+                //switch (GetHrefPageId("3")) {
+                //    case "301": CookieHelper.SaveCookie("VoucherList_VoucherManage"); window.location.href = "/VoucherManageManagement/VoucherList/Index?Status=1&Type=0";
+                //        break;
+                //    //case "302": CookieHelper.SaveCookie("DepartmentalTrainingBudgetReport"); window.location.href = "/Report/DepartmentalTrainingBudgetReport/Index"; break;
+                //    //case "303": CookieHelper.SaveCookie("PersonalTrainingBudgetReport"); window.location.href = "/Report/PersonalTrainingBudgetReport/Index"; break;
+                //    default: jqxNotification("You are not authorized!", null, "error");
+                //}
             });
 
             //费用报销中心

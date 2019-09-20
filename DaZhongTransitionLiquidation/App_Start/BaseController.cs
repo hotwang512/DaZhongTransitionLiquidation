@@ -93,7 +93,20 @@ namespace DaZhongTransitionLiquidation
             {
                 DbService.Command(db =>
                 {
-                    roleModuleInfo = db.Queryable<Sys_Role_Module>().Single(i => i.RoleVGUID == UserInfo.Role.TryToGuid() && i.ModuleVGUID == moduleVguid.TryToGuid());
+                    var roleModuleData = db.Queryable<Sys_Role_Module>().ToList();
+                    var roleModuleList = roleModuleData.Where(i => i.RoleVGUID == UserInfo.Role.TryToGuid() && i.ModuleVGUID == moduleVguid.TryToGuid()).ToList();
+                    if(roleModuleList.Count == 0)
+                    {
+                        var roleModule = roleModuleData.Where(i => i.RoleVGUID == UserInfo.Role.TryToGuid()).ToList();
+                        if (roleModule.Count > 0)
+                        {
+                            roleModuleInfo = roleModuleData.Single(i => i.RoleVGUID == UserInfo.Role.TryToGuid() && i.ModuleVGUID == roleModule[0].ModuleVGUID);
+                        }
+                    }
+                    else if(roleModuleList.Count == 1)
+                    {
+                        roleModuleInfo = roleModuleList.FirstOrDefault();
+                    }
                 });
             }
             return roleModuleInfo;

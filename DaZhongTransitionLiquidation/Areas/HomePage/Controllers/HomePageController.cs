@@ -84,13 +84,14 @@ select ModuleVGUID from Sys_Module where Parent is null)").ToList();
             });
             return result;
         }
-        public JsonResult GetURLInfo()//Guid[] vguids
+        public JsonResult GetURLInfo(string URLName)//Guid[] vguids
         {
             var response = new List<Sys_Module>();
             DbService.Command(db =>
             {
                 response = db.Ado.SqlQuery<Sys_Module>(@"select * from Sys_Module where Vguid in (select ModuleVGUID from Sys_Role_Module 
-                                where RoleVGUID=@RoleVGUID)",new { RoleVGUID = UserInfo.Role}).ToList();
+                        where RoleVGUID=@RoleVGUID) and URL is not null and URL != '' and URL like '%"+ URLName + "%' ",
+                        new { RoleVGUID = UserInfo.Role}).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }

@@ -490,9 +490,19 @@ namespace DaZhongTransitionLiquidation.Controllers
                 //}
                 if (bankFlowLists.Count > 0)
                 {
-                    success = _db.Insertable(bankFlowLists).ExecuteCommand();
-                    //根据流水自动生成凭证
-                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin", userData);
+                    try
+                    {
+                        _db.Ado.BeginTran();
+                        success = _db.Insertable(bankFlowLists).ExecuteCommand();
+                        //根据流水自动生成凭证
+                        BankFlowTemplateController.GenerateVoucherList(_db, bankFlowLists, "admin", userData);
+                        _db.Ado.CommitTran();
+                    }
+                    catch (Exception ex)
+                    {
+                        _db.Ado.RollbackTran();
+                        throw ex;
+                    }
                 }
             }
             BankDataPack.SyncBackFlowAndReconciliation();

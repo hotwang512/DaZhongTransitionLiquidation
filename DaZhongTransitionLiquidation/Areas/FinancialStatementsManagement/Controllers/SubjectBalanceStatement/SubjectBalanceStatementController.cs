@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using SqlSugar;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList;
+using System.Text;
 
 namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Controllers
 {
@@ -87,7 +88,23 @@ a.VoucherNo as JE_HEADER_NAME,a.VoucherDate as ACCOUNTING_DATE,b.BorrowMoney as 
                 jsonResult.Rows = SubjectBalance;
                 jsonResult.TotalRows = pageCount;
             });
-            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            return Json(
+                 jsonResult.Rows,
+                 "application/json",
+                 Encoding.UTF8,
+                 JsonRequestBehavior.AllowGet
+             );
+        }
+        protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = Int32.MaxValue
+            };
         }
         public List<v_Business_SubjectSettingInfo> CheckSubjectBalanceList(SqlSugarClient db, string companyCode, string accountModeCode, string accountModeName, string month, string year)
         {

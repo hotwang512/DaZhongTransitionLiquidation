@@ -5,6 +5,7 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -40,11 +41,32 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode,@Year,@Month",
+                var data = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode,@Year,@Month",
                     new { AccountModeCode = accountModeCode, CompanyCode = companyCode, Year = year, Month = month }).ToList();
+                //jsonResult.Rows = data.Skip((para.pagenum - 1) * para.pagesize).Take(para.pagesize).ToList();
+
+                //string sql = string.Format(@" exec usp_SubjectSettingInfo  '{0}','{1}','{2}','{3}' ", accountModeCode, companyCode, year, month);
+                //var data = db.SqlQueryable<v_Business_SubjectSettingInfo>(sql).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.Rows = data;
                 jsonResult.TotalRows = pageCount;
             });
-            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            return Json(
+                 jsonResult.Rows,
+                 "application/json",
+                 Encoding.UTF8,
+                 JsonRequestBehavior.AllowGet
+             );
+        }
+        protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = Int32.MaxValue
+            };
         }
         public JsonResult SaveSubjectBalance(decimal Balance,string Code,string Year,string Month,string AccountModeCode,string CompanyCode)
         {

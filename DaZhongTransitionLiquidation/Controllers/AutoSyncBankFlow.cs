@@ -126,6 +126,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
                         var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-7)).ToList();
+                        //var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE >= "2019-09-02".TryToDate() && x.LAST_UPDATE_DATE < "2019-09-04".TryToDate()).ToList();
                         //查询公司段中已启用的公司的银行信息
                         var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
                                             as b on a.AccountModeCode = b.AccountModeCode and a.CompanyCode = b.Code  where b.Status='1' 
@@ -459,7 +460,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var paymentUnitInstitution = bankData.Where(x => x.BankAccount == item.BankAccount).First().BankName;
                     item.PaymentUnitInstitution = paymentUnitInstitution;
                     var accountModeName = sevenData.Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
-                    var companyName = sevenData.Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.CompanyCode).Descrption;
+                    var companyName = sevenData.Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.CompanyCode && x.AccountModeCode == companyBankData.AccountModeCode).Descrption;
                     var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
                     if (isAny.Count > 0)
                     {
@@ -467,6 +468,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                         item.AccountModeName = accountModeName;
                         item.CompanyCode = companyBankData.CompanyCode;
                         item.CompanyName = companyName;
+                        //if(item.Batch == "278906" || item.Batch == "278978")
+                        //{
+                        //    bankFlowLists.Add(item);
+                        //}
                         _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                         continue;
                     }
@@ -485,9 +490,19 @@ namespace DaZhongTransitionLiquidation.Controllers
                 //}
                 if (bankFlowLists.Count > 0)
                 {
-                    success = _db.Insertable(bankFlowLists).ExecuteCommand();
-                    //根据流水自动生成凭证
-                    BankFlowTemplateController.GenerateVoucherList(_db,bankFlowLists, "admin", userData);
+                    try
+                    {
+                        _db.Ado.BeginTran();
+                        success = _db.Insertable(bankFlowLists).ExecuteCommand();
+                        //根据流水自动生成凭证
+                        BankFlowTemplateController.GenerateVoucherList(_db, bankFlowLists, "admin", userData);
+                        _db.Ado.CommitTran();
+                    }
+                    catch (Exception ex)
+                    {
+                        _db.Ado.RollbackTran();
+                        throw ex;
+                    }
                 }
             }
             BankDataPack.SyncBackFlowAndReconciliation();

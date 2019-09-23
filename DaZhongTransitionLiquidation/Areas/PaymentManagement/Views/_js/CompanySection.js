@@ -793,6 +793,7 @@ var $page = function () {
             theme: "energyblue",
             columnsHeight: 40,
             checkboxes: true,
+            filterable: true,
             ready:function(){
                 $("#jqxTable2").jqxTreeGrid('expandAll');
             },
@@ -1123,7 +1124,7 @@ var $page = function () {
 
     function settingFuncSubject(row, column, value, rowData) {
         var container = "";
-        if (rowData.records == null) {
+        if (rowData.records == null || rowData.Code == "640301" || rowData.Code == "640302") {
             //没有子节点
             container = "<a href='#' onclick=settingSection('" + column + "','" + rowData.Code + "') style=\"text-decoration: underline;color: #333;\">设置</a>";;
             if (value != "" && (value == "True" || value == true)) {

@@ -75,7 +75,7 @@ var $page = function () {
                dataAdapter,
                {
                    pivotValuesOnRows: false,
-                   totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true }},
+                   totals: { rows: { subtotals: false, grandtotals: true}, columns: { subtotals: false, grandtotals: true } },
                    rows: [{ dataField: 'ManageCompany', text: '管理公司', align: 'center' }],
                    columns: [{ dataField: 'VehicleModel', width: 500, align: 'center' }],
                    values: [
@@ -94,7 +94,7 @@ var $page = function () {
             selector.$grid().jqxPivotGrid(
                {
                    source: pivotDataSource,
-                   treeStyleRows: true,
+                   treeStyleRows: true, 
                    //autoResize: true,
                    selectionEnabled: true
                });
@@ -113,6 +113,8 @@ var $page = function () {
                 debugger;
                 tableValue = result;
                 callback(result);
+                $(".jqx-pivotgrid-item")[16].style['text-align'] = "center";
+                $(".jqx-pivotgrid-item")[5].style['text-align'] = "center";
             }
         });
     }
@@ -120,4 +122,5 @@ var $page = function () {
 $(function () {
     var page = new $page();
     page.init();
+    debugger;
 });

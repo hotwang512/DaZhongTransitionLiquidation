@@ -10,10 +10,16 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public Guid VGUID { get; set; }
         public string PlateNumber { get; set; }
         public string EquipmentNumber { get; set; }
+        public string OldData { get; set; }
         public Boolean ISVerify { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ChangeDate { get; set; }
         public string CreateUser { get; set; }
         public string ChangeUser { get; set; }
+    }
+
+    public class CompareOBD
+    {
+        public string EquipmentNumber_PlateNumber {get;set;}
     }
 }

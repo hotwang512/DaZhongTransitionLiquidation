@@ -73,7 +73,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 var assign = new OBDModifyModel();
                                 assign.EquipmentNumber = dt.Rows[i][0].ToString();
                                 assign.PlateNumber = dt.Rows[i][1].ToString();
-                                assign.LisensingDate = dt.Rows[i][2].TryToDate();
                                 list.Add(assign);
                             }
                             //判断导入数据是否重复
@@ -87,29 +86,34 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 resultModel.ResultInfo = resultModel.ResultInfo + "Excel中有重复数据 ";
                             }
                             //判断数据，系统中没有才可以导入
-                            var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
-                            .Select(x => new { PlateNumber_EquipmentNumber = x.PLATE_NUMBER + x.CHASSIS_NUMBER }).ToList();
-                            var listExcel = list.Select(x => new
-                            { PlateNumber_EquipmentNumber = x.PlateNumber + x.EquipmentNumber }).ToList();
-                            if (listAssetInfo.Union(listExcel).ToList().Count < listAssetInfo.Count + listExcel.Count)
+                            var listAssetMainInfo = db.Queryable<Business_AssetMaintenanceInfo>().Where(x => x.GROUP_ID == "OBD设备").ToList();
+                            var listAssetInfo = listAssetMainInfo.Select(x => new CompareOBD { EquipmentNumber_PlateNumber = x.CHASSIS_NUMBER + "_" + x.PLATE_NUMBER }).ToList();
+                            var listExcel = list
+                                .Select(x => new CompareOBD { EquipmentNumber_PlateNumber = x.EquipmentNumber + "_" + x.PlateNumber }).ToList();
+                            if (!listExcel.Except(listAssetInfo).Any())
                             {
                                 consistent = false;
-                                resultModel.ResultInfo += "导入的车牌号和设备号已存在 ";
+                                resultModel.ResultInfo += "导入的车牌号和设备号没有变更 ";
                                 return;
                             }
                             if (consistent)
                             {
                                 //写入OBD资产变更审核表
+                                var CompareOBDData = listExcel.Except(listAssetInfo).ToList();
+                                var EquipmentNumberList = CompareOBDData
+                                    .Select(x => x.EquipmentNumber_PlateNumber.Split("-")[1]).ToList();
                                 var obdReviewList = new List<Business_ModifyOBD>();
+                                list = list.Where(x => EquipmentNumberList.Contains(x.EquipmentNumber)).ToList();
                                 foreach (var item in list)
                                 {
                                     var obdReview = new Business_ModifyOBD();
                                     obdReview.VGUID = Guid.NewGuid();
                                     obdReview.PlateNumber = item.PlateNumber;
                                     obdReview.EquipmentNumber = item.EquipmentNumber;
+                                    obdReview.OldData = listAssetMainInfo.Where(x => x.CHASSIS_NUMBER == obdReview.EquipmentNumber).First().PLATE_NUMBER;
                                     obdReview.ISVerify = false;
                                     obdReview.CreateDate = DateTime.Now;
-                                    obdReview.CreateUser = "";
+                                    obdReview.CreateUser = cache[PubGet.GetUserKey].LoginName;
                                     obdReviewList.Add(obdReview);
                                 }
                                 db.Insertable<Business_ModifyOBD>(obdReviewList).ExecuteCommand();

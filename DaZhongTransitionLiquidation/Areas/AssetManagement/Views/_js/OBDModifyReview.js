@@ -115,8 +115,9 @@ var $page = function () {
     function initTable() {
         var columns = [
                 { text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                { text: '车牌号', datafield: 'PlateNumber', width: 100, align: 'center', cellsAlign: 'center' },
-                { text: '设备号', datafield: 'EquipmentNumber', width: 100, align: 'center', cellsAlign: 'center' },
+            { text: '设备号', datafield: 'EquipmentNumber', width: 100, align: 'center', cellsAlign: 'center' },
+                { text: '变更前车牌号', datafield: 'OldData', width: 100, align: 'center', cellsAlign: 'center' },
+                { text: '变更后车牌号', datafield: 'PlateNumber', width: 100, align: 'center', cellsAlign: 'center' },
                 { text: '创建日期', datafield: 'CreateDate', width: 100, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                 { text: '创建人', datafield: 'CreateUser', width: 100, align: 'center', cellsAlign: 'center' },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true }
@@ -127,6 +128,7 @@ var $page = function () {
                 [
                     { name: "checkbox", type: null },
                     { name: 'VGUID', type: 'string' },
+                    { name: 'OldData', type: 'string' },
                     { name: 'PlateNumber', type: 'string' },
                     { name: 'EquipmentNumber', type: 'string' },
                     { name: 'CreateDate', type: 'date' },

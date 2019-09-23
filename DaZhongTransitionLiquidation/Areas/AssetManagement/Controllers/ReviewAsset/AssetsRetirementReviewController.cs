@@ -170,6 +170,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     }
                     db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                     db.Insertable<Business_DisposeIncome>(assetDisposeIncomeList).ExecuteCommand();
+                    db.Insertable<Business_DisposeNetValue>(assetDisposeNetValueList).ExecuteCommand();
+                    db.Insertable<Business_DisposeTax>(assetDisposeTaxList).ExecuteCommand();
+                    db.Insertable<Business_DisposeProfitLoss>(assetDisposeProfitLossList).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

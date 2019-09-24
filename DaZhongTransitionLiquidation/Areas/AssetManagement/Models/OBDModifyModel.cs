@@ -15,9 +15,5 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         {
             get; set;
         }
-        public DateTime LisensingDate
-        {
-            get; set;
-        }
     }
 }

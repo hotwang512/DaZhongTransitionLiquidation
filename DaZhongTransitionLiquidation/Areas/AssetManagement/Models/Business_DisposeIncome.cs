@@ -6,6 +6,7 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
 {
+
     ///<summary>
     ///处置收入
     ///</summary>
@@ -26,152 +27,151 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public Guid VGUID { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:报废提交中获取	   
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string AssetID { get; set; }
+
+        /// <summary>
+        /// Desc:报废提交中获取
         /// Default:
         /// Nullable:True
         /// </summary>           
         public string DepartmentVehiclePlateNumber { get; set; }
-        public string ImportPlateNumber { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:弃用
         /// Default:
         /// Nullable:True
         /// </summary>           
         public string OraclePlateNumber { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:导入
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string ImportPlateNumber { get; set; }
+
+        /// <summary>
+        /// Desc:主表带
         /// Default:
         /// Nullable:True
         /// </summary>           
         public string VehicleModel { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:主表带
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public decimal? CurbWeight { get; set; }
+        public string BelongToCompany { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:主表带
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public decimal? DeductTonnage { get; set; }
+        public string ManageCompany { get; set; }
 
         /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? SalvageUnitPrice { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? SalvageValue { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? TransactionPrice { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? Commission { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? ProcedureFee { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? RealSales { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? ServiceFee { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? TowageFee { get; set; }
-
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:True
-        /// </summary>           
-        public decimal? SettlementPrice { get; set; }
-
-        /// <summary>
-        /// Desc:
+        /// Desc:主表带
         /// Default:
         /// Nullable:True
         /// </summary>           
         public DateTime? CommissioningDate { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:退车日期
         /// Default:
         /// Nullable:True
         /// </summary>           
         public DateTime? BackCarDate { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:计算
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string Remark { get; set; }
+        public int? BackCarAge { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:导入	   导入
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string SaleMonth { get; set; }
+
+        /// <summary>
+        /// Desc:根据导入的模板类型填充	   根据导入的模板类型填充	   根据导入的模板类型填充-拍卖、出售、报废
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string SaleType { get; set; }
+
+        /// <summary>
+        /// Desc:报废提交中获取
         /// Default:
         /// Nullable:True
         /// </summary>           
         public string BusinessModel { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:导入	   拍卖-成交总额	   出售-实售	   报废-残值金额	   
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string UseDepartment { get; set; }
+        public decimal? DisposeIncomeValue { get; set; }
+
+        /// <summary>
+        /// Desc:根据数据字典计算
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? AddedValueTax { get; set; }
+
+        /// <summary>
+        /// Desc:根据数据字典计算
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? ConstructionTax { get; set; }
+
+        /// <summary>
+        /// Desc:根据数据字典计算
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? AdditionalEducationTax { get; set; }
+
+        /// <summary>
+        /// Desc:根据数据字典计算
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? LocalAdditionalEducationTax { get; set; }
+
+        /// <summary>
+        /// Desc:模式主类-租赁模式且模式子类为长租车时计算、其它默认为0	   	   	   	   	   	   
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public decimal? ReturnToPilot { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string VehicleOwner { get; set; }
+        public decimal? NetIncomeValue { get; set; }
 
         /// <summary>
-        /// Desc:
+        /// Desc:导入	   报废-服务费金额	   拍卖、出售默认为0	   
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public decimal? ServiceUnitFee { get; set; }
+        public decimal? ServiceFee { get; set; }
 
         /// <summary>
         /// Desc:
@@ -200,7 +200,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string ChangeUser { get; set; }
-        public string VehicleType { get; set; }
-        public decimal? ActualTonnage { get; set; }
+
     }
 }

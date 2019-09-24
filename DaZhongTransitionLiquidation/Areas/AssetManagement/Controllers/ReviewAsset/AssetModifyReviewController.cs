@@ -195,6 +195,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
+                                var info = db.Queryable<Business_AssetMaintenanceInfo>()
+                                    .Where(x => x.ORIGINALID == item.ORIGINALID).First();
+                                if (info.ASSET_CATEGORY_MINOR != item.ASSET_CATEGORY_MINOR)
+                                {
+                                    assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MINOR;
+                                    assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
+                                }
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.TRANSACTION_ID = item.VGUID;

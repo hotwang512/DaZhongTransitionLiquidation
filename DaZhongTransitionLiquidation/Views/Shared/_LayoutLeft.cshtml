@@ -1258,19 +1258,19 @@
                                     <td></td>
                                 </tr>
                             }*@
-                        @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产原值变更" && i.Reads == 1))
-                        {
-                            <tr class="menue_item" id="AssetChange_AssetChange" pageurl="/NoPage">
-                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">资产原值变更</td>
-                                <td></td>
-                            </tr>
-                        }
                         @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "OBD变更" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="OBDModify_AssetChange" pageurl="/AssetManagement/OBDModifyReview">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">OBD变更</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "资产原值变更" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="AssetChange_AssetChange" pageurl="/NoPage">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产原值变更</td>
                                 <td></td>
                             </tr>
                         }
@@ -1337,14 +1337,14 @@
                                 <td></td>
                             </tr>
                         }
-                        @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
+                        @*@if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="DisposeTax_AssetDisposal" pageurl="/AssetManagement/DisposeTax">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">处置税金</td>
                                 <td></td>
                             </tr>
-                        }
+                        }*@
                         @if (true)//(isadmin)//|| currentUserRoleModules.Any(i => i.PageName == "处置清册" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="DisposenetValue_AssetDisposal" pageurl="/AssetManagement/DisposenetValue">

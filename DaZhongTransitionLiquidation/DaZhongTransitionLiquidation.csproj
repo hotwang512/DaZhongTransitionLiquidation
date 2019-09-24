@@ -2495,9 +2495,11 @@
     <Compile Include="Areas\PaymentManagement\Models\Business_AccountSettingInfo.cs" />
     <Compile Include="Areas\PaymentManagement\Models\Business_SevenSection.cs" />
     <Compile Include="Areas\PaymentManagement\Models\Business_SubjectBalance.cs" />
+    <Compile Include="Areas\PaymentManagement\Models\Business_TaxesInfo.cs" />
     <Compile Include="Areas\PaymentManagement\Models\V_AccountSetting.cs" />
     <Compile Include="Areas\PaymentManagement\Models\v_Business_SevenSection.cs" />
     <Compile Include="Areas\PaymentManagement\Models\v_Business_SubjectSettingInfo.cs" />
+    <Compile Include="Areas\PaymentManagement\Models\v_TaxesInfo.cs" />
     <Compile Include="Areas\PaymentManagement\PaymentManagementAreaRegistration.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftController.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftDetailController.cs" />

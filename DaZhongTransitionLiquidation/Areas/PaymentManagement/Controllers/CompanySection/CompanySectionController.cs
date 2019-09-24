@@ -61,6 +61,15 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         {
                             item.IsCompanyBank = false;
                         }
+                        var isAnyTaxes = db.Queryable<Business_TaxesInfo>().Any(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.Code);
+                        if (isAnyTaxes)
+                        {
+                            item.IsTaxes = true;
+                        }
+                        else
+                        {
+                            item.IsTaxes = false;
+                        }
                     }
                 }
                 jsonResult.TotalRows = pageCount;
@@ -609,6 +618,48 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code && x.AccountModeCode == accountModeCode).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetTaxesInfo(string companyCode, string accountModeCode,string year,string month)//Guid[] vguids
+        {
+            var response = new List<v_TaxesInfo>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (accountModeCode == null)
+                {
+                    accountModeCode = UserInfo.AccountModeCode;
+                }
+                response = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
+                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month
+                                    where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' and a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode
+                                    and a.Code like '%6403%' order by Code", new { Year = year, Month = month, AccountModeCode = accountModeCode, CompanyCode = companyCode }).ToList();
+            });
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveTaxesInfo(Business_TaxesInfo taxesInfo)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    if (taxesInfo.TaxRate != "")
+                    {
+                        if(taxesInfo.VGUID != Guid.Empty && taxesInfo.VGUID != null)
+                        {
+                            db.Deleteable<Business_TaxesInfo>(x => x.VGUID == taxesInfo.VGUID).ExecuteCommand();
+                        }
+                        else
+                        {
+                            taxesInfo.VGUID = Guid.NewGuid();
+                        }
+                        db.Insertable(taxesInfo).ExecuteCommand();
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
         }
         public JsonResult GetAccountCompanyInfo(string code)//Guid[] vguids
         {

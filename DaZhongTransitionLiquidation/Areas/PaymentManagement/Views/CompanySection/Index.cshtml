@@ -284,6 +284,49 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddTaxesDialog">
+        <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+            <div class="modal-content" style="width: 1000px; margin-left: auto; margin-right: auto;">
+                <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel_titles3" style="color: #555; font-family: Calibri;">配置银行信息</h4>
+                </div>
+                <div class="modal-head">
+                    <table style="margin-top: 10px;">
+                        <tr style="height: 45px;"> 
+                            <td class="td_span"><span id="">年：</span></td>
+                            <td class="td_input">
+                                <select id="Year" class="input_text form-control" style="width:150px">
+                                    @{
+                                        for (int i = 0; i < 10; i++)
+                                        {
+                                            int j = i + 2019;
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="td_span"><span id="">月：</span></td>
+                            <td class="td_input">
+                                <select id="Month" class="input_text form-control" style="width:150px">
+                                    @{
+                                        for (int i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-body" style="width: 100%;">
+                    <div id="jqxTaxesSetting" class="jqxTable" style="margin-top: -22px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddCompanyBankDataDialog">
         <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">

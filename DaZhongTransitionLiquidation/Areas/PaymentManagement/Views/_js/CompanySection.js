@@ -1529,8 +1529,7 @@ function settingTaxes(code, companyName, subjectGuid) {
     $("#AddTaxesDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddTaxesDialog").modal("show");
     $("#myModalLabel_titles3").text("配置税率-" + companyName);
-    $("#Year").val("2019");
-    $("#Month").val("1");
+    setYearMonth(code, accountModeCode);
     var subjectVGUID = subjectGuid;
     initTaxesTable(code);
     //$('#jqxCompanySetting').jqxGrid('expandallgroups');
@@ -1635,6 +1634,24 @@ function initTaxesTable(code) {
             { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
         ]
     });
+}
+function setYearMonth(code, accountModeCode) {
+    $.ajax({
+        url: "/PaymentManagement/CompanySection/GetTaxesYearMonth",
+        data: {        
+            accountModeCode: accountModeCode,
+            companyCode: code,
+        },
+        type: "post",
+        async: false,
+        dataType: "json",
+        success: function (msg) {
+            if (msg != null) {
+                $("#Year").val(msg[0].Year);
+                $("#Month").val(msg[0].Month);
+            }
+        }
+    })
 }
 //设置核算段银行账号
 function settingAccount(code) {

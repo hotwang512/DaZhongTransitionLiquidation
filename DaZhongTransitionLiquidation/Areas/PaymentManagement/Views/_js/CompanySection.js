@@ -607,12 +607,12 @@ var $page = function () {
         })
         //切换年份
         $('#Year').on('change', function (event) {
-            var companyCode = $("#CompanyCode").val();
+            var companyCode = $("#CompanyCodeTaxes").val();
             initTaxesTable(companyCode);
         })
         //切换月份
         $('#Month').on('change', function (event) {
-            var companyCode = $("#CompanyCode").val();
+            var companyCode = $("#CompanyCodeTaxes").val();
             initTaxesTable(companyCode);
         })
     }; //addEvent end
@@ -1525,7 +1525,7 @@ function settingCompany(code, companyName) {
 }
 //设置公司各税金,税率
 function settingTaxes(code, companyName, subjectGuid) {
-    $("#CompanyCode").val(code);
+    $("#CompanyCodeTaxes").val(code);
     $("#AddTaxesDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddTaxesDialog").modal("show");
     $("#myModalLabel_titles3").text("配置税金信息-" + companyName);
@@ -1579,6 +1579,8 @@ function initTaxesTable(code) {
                { name: 'TaxRate', type: 'string' },
                { name: "VGUID", type: 'string' },
                { name: "KeyVGUID", type: 'string' },
+               { name: 'AccountModeCode', type: 'string' },
+               { name: "CompanyCode", type: 'string' },
            ],
            hierarchy: {
                keyDataField: { name: 'Code' },
@@ -1614,7 +1616,7 @@ function initTaxesTable(code) {
             editOnDoubleClick: true,
             editOnF2: true
         },
-        selectionMode: 'singlecells',
+        //selectionMode: 'singlecells',
         ready: function () {
             $("#jqxTaxesSetting").jqxTreeGrid('expandAll');
         },
@@ -1628,6 +1630,8 @@ function initTaxesTable(code) {
             { text: 'VGUID', datafield: 'VGUID', hidden: true },
             { text: 'KeyVGUID', datafield: 'KeyVGUID', hidden: true },
             { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
+            { text: 'AccountModeCode', datafield: 'AccountModeCode', hidden: true },
+            { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
         ]
     });
 }

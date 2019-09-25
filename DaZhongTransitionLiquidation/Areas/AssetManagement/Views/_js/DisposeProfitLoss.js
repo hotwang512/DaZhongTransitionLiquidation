@@ -88,8 +88,8 @@ var $page = function () {
                     { name: 'DriverRentCarFee', type: 'string' },
                     { name: 'Taxes', type: 'float' },
                     { name: 'RealizedProfitLoss', type: 'float' },
-                    { name: 'CreateDate', type: 'datetime' },
-                    { name: 'ChangeDate', type: 'datetime' },
+                    { name: 'CreateDate', type: 'date' },
+                    { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },
                     { name: 'ChangeUser', type: 'string' }
                 ],

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
@@ -74,7 +75,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                     {
                         var result = db.Ado.UseTran(() =>
                         {
+                            var TaxesList = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
+                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month
+                                    where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43'
+                                    and a.Code like '%6403%' order by Code", new { Year = DateTime.Now.Year, Month = DateTime.Now.Month }).ToList();
                             var disposeIncomeList = db.Queryable<Business_DisposeIncome>().ToList();
+                            var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                             var updateDisposeIncomeList = new List<Business_DisposeIncome>();
                             if (ImportType == "Auction")
                             {
@@ -114,6 +121,36 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         updateModel.SaleMonth = DateTime.Now.Year.ToString() + DateTime.Now.Month;
                                         updateModel.ChangeDate = DateTime.Now;
                                         updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
+                                        //计算税金，收入
+                                        var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
+                                        var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                 x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.土地增值税");
+                                        var ConstructionTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.城建税");
+                                        var AdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.教育附加税");
+                                        var LocalAdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.地方教育附加税");
+                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() / decimal.Parse("1.03") * decimal.Parse(AddedValueTax.TaxRate) * decimal.Parse("0.5");
+                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate);
+                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate);
+                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate);
+                                        if (updateModel.BusinessModel == "租赁模式(轻资产轻人员)-长租车")
+                                        {
+                                            updateModel.ReturnToPilot =
+                                                updateModel.DisposeIncomeValue - updateModel.AddedValueTax -
+                                                updateModel.ConstructionTax - updateModel.AdditionalEducationTax -
+                                                updateModel.LocalAdditionalEducationTax;
+                                            updateModel.NetIncomeValue = 0;
+                                        }
+                                        else
+                                        {
+                                            updateModel.NetIncomeValue =
+                                                updateModel.DisposeIncomeValue - updateModel.AddedValueTax -
+                                                updateModel.ConstructionTax - updateModel.AdditionalEducationTax -
+                                                updateModel.LocalAdditionalEducationTax;
+                                            updateModel.ReturnToPilot = 0;
+                                        }
                                         updateDisposeIncomeList.Add(updateModel);
                                     }
                                 }
@@ -175,6 +212,36 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         //updateModel.BusinessModel = item.BusinessModel;
                                         updateModel.ChangeDate = DateTime.Now;
                                         updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
+                                        //计算税金，收入
+                                        var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
+                                        var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                 x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.土地增值税");
+                                        var ConstructionTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.城建税");
+                                        var AdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.教育附加税");
+                                        var LocalAdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.地方教育附加税");
+                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() / decimal.Parse("1.03") * decimal.Parse(AddedValueTax.TaxRate) * decimal.Parse("0.5");
+                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate);
+                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate);
+                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate);
+                                        if (updateModel.BusinessModel == "租赁模式(轻资产轻人员)-长租车")
+                                        {
+                                            updateModel.ReturnToPilot =
+                                                updateModel.DisposeIncomeValue - updateModel.AddedValueTax -
+                                                updateModel.ConstructionTax - updateModel.AdditionalEducationTax -
+                                                updateModel.LocalAdditionalEducationTax;
+                                            updateModel.NetIncomeValue = 0;
+                                        }
+                                        else
+                                        {
+                                            updateModel.NetIncomeValue =
+                                                updateModel.DisposeIncomeValue - updateModel.AddedValueTax -
+                                                updateModel.ConstructionTax - updateModel.AdditionalEducationTax -
+                                                updateModel.LocalAdditionalEducationTax;
+                                            updateModel.ReturnToPilot = 0;
+                                        }
                                         updateDisposeIncomeList.Add(updateModel);
                                     }
                                 }
@@ -249,6 +316,36 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         //updateModel.Remark = item.VehicleModel;
                                         updateModel.ChangeDate = DateTime.Now;
                                         updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
+                                        //计算税金，收入
+                                        var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
+                                        var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                 x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.土地增值税");
+                                        var ConstructionTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.城建税");
+                                        var AdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.教育附加税");
+                                        var LocalAdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
+                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.地方教育附加税");
+                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() / decimal.Parse("1.03") * decimal.Parse(AddedValueTax.TaxRate) * decimal.Parse("0.5");
+                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate);
+                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate);
+                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate);
+                                        if (updateModel.BusinessModel == "租赁模式(轻资产轻人员)-长租车")
+                                        {
+                                            updateModel.ReturnToPilot =
+                                                updateModel.DisposeIncomeValue - updateModel.AddedValueTax -
+                                                updateModel.ConstructionTax - updateModel.AdditionalEducationTax -
+                                                updateModel.LocalAdditionalEducationTax;
+                                            updateModel.NetIncomeValue = 0;
+                                        }
+                                        else
+                                        {
+                                            updateModel.NetIncomeValue =
+                                                updateModel.DisposeIncomeValue - updateModel.AddedValueTax -
+                                                updateModel.ConstructionTax - updateModel.AdditionalEducationTax -
+                                                updateModel.LocalAdditionalEducationTax;
+                                            updateModel.ReturnToPilot = 0;
+                                        }
                                         updateDisposeIncomeList.Add(updateModel);
                                     }
                                 }

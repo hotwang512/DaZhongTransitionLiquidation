@@ -12,6 +12,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string Descrption { get; set; }
         public string TaxesType { get; set; }
         public string TaxRate { get; set; }
+        public string AccountModeCode { get; set; }
+        public string CompanyCode { get; set; }
         public Guid VGUID { get; set; }
         public Guid KeyVGUID { get; set; }
     }

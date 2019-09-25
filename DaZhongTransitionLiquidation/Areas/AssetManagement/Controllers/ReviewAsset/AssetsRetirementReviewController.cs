@@ -35,6 +35,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
+                //var date = "2019-09-01".TryToDate();
                 jsonResult.Rows = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
                          , mi.VEHICLE_SHORTNAME
                          , mi.MANAGEMENT_COMPANY
@@ -53,8 +54,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         left join Business_AssetMaintenanceInfo mi
                             on mv.ORIGINALID = mi.ORIGINALID")
                     .Where(i => !i.ISVERIFY)
+                    //.Where(x => x.BACK_CAR_DATE <= date)
                     //.WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
-                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                 if (ISVerify)
                 {
                     //校验数据
@@ -171,9 +173,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         disposeProfitLoss.CreateDate = DateTime.Now;
                         disposeProfitLoss.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeProfitLossList.Add(disposeProfitLoss);
-
                     }
-                    db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
+                    //db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                     db.Insertable<Business_DisposeIncome>(assetDisposeIncomeList).ExecuteCommand();
                     db.Insertable<Business_DisposeNetValue>(assetDisposeNetValueList).ExecuteCommand();
                     //db.Insertable<Business_DisposeTax>(assetDisposeTaxList).ExecuteCommand();

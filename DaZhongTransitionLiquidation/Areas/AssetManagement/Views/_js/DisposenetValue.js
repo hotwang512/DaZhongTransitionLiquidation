@@ -9,7 +9,6 @@ var selector = {
 var isEdit = false;
 var vguid = "";
 var $page = function () {
-
     this.init = function () {
         addEvent();
     }
@@ -84,8 +83,8 @@ var $page = function () {
                     { name: 'OriginalValue', type: 'float' },
                     { name: 'AcctDepreciation', type: 'float' },
                     { name: 'NetValue', type: 'float' },
-                    { name: 'CreateDate', type: 'datetime' },
-                    { name: 'ChangeDate', type: 'datetime' },
+                    { name: 'CreateDate', type: 'date' },
+                    { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },
                     { name: 'ChangeUser', type: 'string' }
                 ],

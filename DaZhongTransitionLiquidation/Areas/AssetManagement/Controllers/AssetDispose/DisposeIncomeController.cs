@@ -76,10 +76,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                     {
                         var result = db.Ado.UseTran(() =>
                         {
+                            var maxTaxes =
+                                db.SqlQueryable<v_TaxesInfo>(
+                                        @"SELECT * FROM Business_TaxesInfo info order by convert(int,info.Year),convert(int,info.Month) desc")
+                                    .First();
                             var TaxesList = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
                                     left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month
                                     where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43'
-                                    and a.Code like '%6403%' order by Code", new { Year = DateTime.Now.Year, Month = DateTime.Now.Month }).ToList();
+                                    and a.Code like '%6403%' order by Code", new { Year = maxTaxes.Year, Month = maxTaxes.Month }).ToList();
                             var disposeIncomeList = db.Queryable<Business_DisposeIncome>().ToList();
                             var ssList = db.Queryable<Business_SevenSection>().Where(x =>
                                      x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
@@ -125,17 +129,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         //计算税金，收入
                                         var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
                                         var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                 x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.土地增值税");
+                                                                                 x.CompanyCode == companyInfo.Code && x.TaxesType.StartsWith("旧车处置增值税"));
                                         var ConstructionTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.城建税");
+                                                                                   x.CompanyCode == companyInfo.Code && x.TaxesType == "城建税");
                                         var AdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.教育附加税");
+                                                                                   x.CompanyCode == companyInfo.Code && x.TaxesType == "教育附加税");
                                         var LocalAdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.地方教育附加税");
-                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() / decimal.Parse("1.03") * decimal.Parse(AddedValueTax.TaxRate) * decimal.Parse("0.5");
-                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate);
-                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate);
-                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate);
+                                                                                   x.CompanyCode == companyInfo.Code && x.TaxesType == "地方教育附加税");
+                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() * decimal.Parse(AddedValueTax.TaxRate.Split("|")[0].Replace("%","")) / 100;
+                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate.Replace("%", "")) / 100;
+                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate.Replace("%", "")) / 100;
+                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate.Replace("%", "")) / 100;
                                         if (updateModel.BusinessModel == "租赁模式(轻资产轻人员)-长租车")
                                         {
                                             updateModel.ReturnToPilot =
@@ -216,17 +220,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         //计算税金，收入
                                         var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
                                         var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                 x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.土地增值税");
+                                                                                 x.CompanyCode == companyInfo.Code && x.TaxesType.StartsWith("旧车处置增值税"));
                                         var ConstructionTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.城建税");
+                                                                                   x.CompanyCode == companyInfo.Code && x.TaxesType == "城建税");
                                         var AdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.教育附加税");
+                                                                                          x.CompanyCode == companyInfo.Code && x.TaxesType == "教育附加税");
                                         var LocalAdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.地方教育附加税");
-                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() / decimal.Parse("1.03") * decimal.Parse(AddedValueTax.TaxRate) * decimal.Parse("0.5");
-                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate);
-                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate);
-                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate);
+                                                                                               x.CompanyCode == companyInfo.Code && x.TaxesType == "地方教育附加税");
+                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() * decimal.Parse(AddedValueTax.TaxRate.Split("|")[0].Replace("%", "")) / 100;
+                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate.Replace("%", "")) / 100;
+                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate.Replace("%", "")) / 100;
+                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate.Replace("%", "")) / 100;
                                         if (updateModel.BusinessModel == "租赁模式(轻资产轻人员)-长租车")
                                         {
                                             updateModel.ReturnToPilot =
@@ -320,17 +324,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         //计算税金，收入
                                         var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
                                         var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                 x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.土地增值税");
+                                                                                 x.CompanyCode == companyInfo.Code && x.TaxesType.StartsWith("旧车处置增值税"));
                                         var ConstructionTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.城建税");
+                                                                                   x.CompanyCode == companyInfo.Code && x.TaxesType == "城建税");
                                         var AdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.教育附加税");
+                                                                                          x.CompanyCode == companyInfo.Code && x.TaxesType == "教育附加税");
                                         var LocalAdditionalEducationTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
-                                                                                   x.CompanyCode == companyInfo.Code && x.Descrption == "税金及附加.主营业务.地方教育附加税");
-                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() / decimal.Parse("1.03") * decimal.Parse(AddedValueTax.TaxRate) * decimal.Parse("0.5");
-                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate);
-                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate);
-                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate);
+                                                                                               x.CompanyCode == companyInfo.Code && x.TaxesType == "地方教育附加税");
+                                        updateModel.AddedValueTax = updateModel.DisposeIncomeValue.TryToDecimal() * decimal.Parse(AddedValueTax.TaxRate.Split("|")[0].Replace("%", "")) / 100;
+                                        updateModel.ConstructionTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(ConstructionTax.TaxRate.Replace("%", "")) / 100;
+                                        updateModel.AdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(AdditionalEducationTax.TaxRate.Replace("%", "")) / 100;
+                                        updateModel.LocalAdditionalEducationTax = updateModel.AddedValueTax.TryToDecimal() * decimal.Parse(LocalAdditionalEducationTax.TaxRate.Replace("%", "")) / 100;
                                         if (updateModel.BusinessModel == "租赁模式(轻资产轻人员)-长租车")
                                         {
                                             updateModel.ReturnToPilot =
@@ -379,17 +383,28 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var DisposeNetValueList = new List<Business_DisposeNetValue>();
+                    var DisposeProfitLossList = new List<Business_DisposeProfitLoss>();
                     var IncomeList = db.Queryable<Business_DisposeIncome>().Where(x => x.SubmitStatus == 0 && guids.Contains(x.VGUID)).ToList();
                     foreach (var item in IncomeList)
                     {
-                        var netValue = db.Queryable<Business_DisposeNetValue>().First(x => x.AssetID == item.AssetID);
-                        netValue.OriginalValue = item.DisposeIncomeValue;
-                        netValue.NetValue = item.NetIncomeValue;
-                        DisposeNetValueList.Add(netValue);
+                        var DisposeProfitLoss = db.Queryable<Business_DisposeProfitLoss>().First(x => x.AssetID == item.AssetID);
+                        DisposeProfitLoss.ImportPlateNumber = item.ImportPlateNumber;
+                        DisposeProfitLoss.VehicleModel = item.VehicleModel;
+                        DisposeProfitLoss.Price = item.DisposeIncomeValue;
+                        DisposeProfitLoss.Taxes = item.AddedValueTax + item.ConstructionTax + item.AdditionalEducationTax + item.LocalAdditionalEducationTax;
+                        DisposeProfitLoss.DriverRentCarFee = item.ReturnToPilot;
+                        DisposeProfitLoss.RealizedProfitLoss = DisposeProfitLoss.Price - DisposeProfitLoss.Taxes - DisposeProfitLoss.DriverRentCarFee;
+                        DisposeProfitLoss.ManageCompany = item.ManageCompany;
+                        DisposeProfitLoss.BelongToCompany = item.BelongToCompany;
+                        DisposeProfitLoss.SaleMonth  = item.SaleMonth;
+                        DisposeProfitLoss.SaleType = item.SaleType;
+                        DisposeProfitLoss.BusinessModel = item.BusinessModel;
+                        DisposeProfitLoss.BackCarDate = item.BackCarDate;
+                        DisposeProfitLoss.BackCarAge = item.BackCarAge;
+                        DisposeProfitLossList.Add(DisposeProfitLoss);
                         item.SubmitStatus = 1;
                     }
-                    db.Updateable<Business_DisposeNetValue>(DisposeNetValueList).ExecuteCommand();
+                    db.Updateable<Business_DisposeProfitLoss>(DisposeProfitLossList).ExecuteCommand();
                     db.Updateable<Business_DisposeIncome>(IncomeList).UpdateColumns(x => x.SubmitStatus).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;

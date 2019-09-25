@@ -46,6 +46,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string OraclePlateNumber { get; set; }
+        public string ImportPlateNumber { get; set; }
 
         /// <summary>
         /// Desc:
@@ -87,7 +88,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string DriverRentCarFee { get; set; }
+        public decimal? DriverRentCarFee { get; set; }
 
         /// <summary>
         /// Desc:
@@ -130,6 +131,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string ChangeUser { get; set; }
-
+        public string ManageCompany { get; set; }
+        public string BelongToCompany { get; set; }
+        public string SaleMonth { get; set; }
+        public string SaleType { get; set; }
+        public string BusinessModel { get; set; }
+        public DateTime? BackCarDate { get; set; }
+        public int? BackCarAge { get; set; }
     }
 }

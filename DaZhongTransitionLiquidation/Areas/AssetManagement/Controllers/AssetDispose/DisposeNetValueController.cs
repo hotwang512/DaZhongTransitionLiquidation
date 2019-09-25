@@ -56,11 +56,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                     foreach (var item in NetValueList)
                     {
                         var retirement = RetirementList.First(x => x.ASSET_ID == item.AssetID);
-                        //原值
-                        //item.OriginalValue = 
-                        //净值
-                        item.NetValue = retirement.SALVAGE_VALUE;
+                        item.NetValue = Math.Abs(retirement.RETIRE_PL.TryToDecimal());
+                        item.OriginalValue = retirement.RETIRE_COST;
+                        item.OraclePlateNumber = retirement.TAG_NUMBER;
+                        item.AcctDepreciation = retirement.RETIRE_ACCT_DEPRECIATION.TryToDecimal();
                     }
+                    db.Updateable<Business_DisposeNetValue>(NetValueList).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
@@ -80,10 +81,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                     foreach (var item in NetValueList)
                     {
                         var retirement = db.Queryable<Business_DisposeProfitLoss>().First(x => x.AssetID == item.AssetID);
-                        retirement.OriginalValue = item.OriginalValue;
                         retirement.NetValue = item.NetValue;
-                        //retirement.Price = item.NetValue;
-                        retirement.AcctDepreciation = item.AcctDepreciation;
                         DisposeProfitLossList.Add(retirement);
                         item.SubmitStatus = 1;
                     }

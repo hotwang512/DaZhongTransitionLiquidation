@@ -184,7 +184,7 @@ var $page = function () {
                     { text: '资产编号', datafield: 'AssetID', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '车管车牌号', datafield: 'DepartmentVehiclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: 'Oracle车牌号', datafield: 'OraclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '处置车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '出售车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '车型', datafield: 'VehicleModel', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '资产所属公司', datafield: 'BelongToCompany', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '管理公司', datafield: 'ManageCompany', width: 150, align: 'center', cellsAlign: 'center' },

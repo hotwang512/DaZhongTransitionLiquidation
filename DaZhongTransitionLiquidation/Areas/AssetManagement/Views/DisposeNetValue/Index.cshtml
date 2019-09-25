@@ -17,15 +17,19 @@
         height: 40px;
     }
 </style>
+<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
 @if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
 {
     <table style="margin-top: 10px;display:block;" id="buttonList">
-        <tr style="height: 0px;">
+        <tr style="height: 50px;">
             @if (currentModuleRolePermission.Adds == 1)
             {
-                @*<td style="width: 110px;">
-                        <button id="btnImport" type="button" style="width:100px" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">导入拍卖</span></button>
-                    </td>*@
+                <td style="width: 95px;">
+                    <button id="btnGetData" style="width:110px" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">获取数据</span></button>
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSubmit" type="button" class="buttons" style="margin-left: 20px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+                </td>
             }
         </tr>
     </table>

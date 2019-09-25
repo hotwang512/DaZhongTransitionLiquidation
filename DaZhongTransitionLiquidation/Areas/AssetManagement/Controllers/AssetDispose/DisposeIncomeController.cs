@@ -41,8 +41,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<Business_DisposeIncome>()
+                    .Where(x => x.SubmitStatus == 0)
                     .WhereIF(PlateNumber != null, i => i.DepartmentVehiclePlateNumber.Contains(PlateNumber) || i.OraclePlateNumber.Contains(PlateNumber) || i.ImportPlateNumber.Contains(PlateNumber))
-                    .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    .OrderBy(i => i.CreateDate, OrderByType.Desc).ToList();
                 jsonResult.TotalRows = pageCount;
             });
 
@@ -370,6 +371,32 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                 }
             }
             return Json(resultModel);
+        }
+        public JsonResult SubmitDisposeIncome(List<Guid> guids)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    var DisposeNetValueList = new List<Business_DisposeNetValue>();
+                    var IncomeList = db.Queryable<Business_DisposeIncome>().Where(x => x.SubmitStatus == 0 && guids.Contains(x.VGUID)).ToList();
+                    foreach (var item in IncomeList)
+                    {
+                        var netValue = db.Queryable<Business_DisposeNetValue>().First(x => x.AssetID == item.AssetID);
+                        netValue.OriginalValue = item.DisposeIncomeValue;
+                        netValue.NetValue = item.NetIncomeValue;
+                        DisposeNetValueList.Add(netValue);
+                        item.SubmitStatus = 1;
+                    }
+                    db.Updateable<Business_DisposeNetValue>(DisposeNetValueList).ExecuteCommand();
+                    db.Updateable<Business_DisposeIncome>(IncomeList).UpdateColumns(x => x.SubmitStatus).ExecuteCommand();
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
     }
 }

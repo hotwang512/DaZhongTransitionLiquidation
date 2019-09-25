@@ -30,6 +30,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
+        public string AssetID { get; set; }
         public string VehicleOwner { get; set; }
 
         /// <summary>
@@ -95,5 +96,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// </summary>           
         public string ChangeUser { get; set; }
 
+        public int SubmitStatus { get; set; }
     }
 }

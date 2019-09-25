@@ -201,5 +201,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// </summary>           
         public string ChangeUser { get; set; }
 
+        public int SubmitStatus { get; set; }
     }
 }

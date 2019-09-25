@@ -607,11 +607,13 @@ var $page = function () {
         })
         //切换年份
         $('#Year').on('change', function (event) {
-            initTaxesTable();
+            var companyCode = $("#CompanyCode").val();
+            initTaxesTable(companyCode);
         })
         //切换月份
         $('#Month').on('change', function (event) {
-            initTaxesTable();
+            var companyCode = $("#CompanyCode").val();
+            initTaxesTable(companyCode);
         })
     }; //addEvent end
 
@@ -749,7 +751,7 @@ var $page = function () {
                 { text: '禁止同步', datafield: 'Sync', width: 100, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererClickFunc, autoRowHeight: false },
                 { text: '银行账号设置', datafield: 'IsCompanyBank', width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: setCompanyFunc },
                 { text: '科目段', datafield: 'IsSubjectCode', width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: settingFunc },
-                { text: '税金设置', datafield: 'IsTaxes', width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: setTaxesFunc },
+                { text: '税率设置', datafield: 'IsTaxes', width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: setTaxesFunc },
                 { text: '备注', datafield: 'Remark', align: 'center', cellsAlign: 'center' },
                 { text: 'SectionVGUID', datafield: 'SectionVGUID', hidden: true },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true },

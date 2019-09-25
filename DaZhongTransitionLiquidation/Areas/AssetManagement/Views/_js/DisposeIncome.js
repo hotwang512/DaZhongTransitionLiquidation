@@ -87,6 +87,43 @@ var $page = function () {
                     });
                 }
             });
+        //提交
+        $("#btnSubmit").on("click", function () {
+            var selection = [];
+            var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+            var pars = [];
+            $(array).each(function (i, v) {
+                try {
+                    var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID");
+                    pars.push(value.value);
+                } catch (e) {
+                }
+            });
+            if (array.length < 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            } else {
+                layer.load();
+                $.ajax({
+                    url: "/AssetManagement/DisposeIncome/SubmitDisposeIncome",
+                    data: { vguids: pars },
+                    //traditional: true,
+                    type: "post",
+                    success: function (msg) {
+                        layer.closeAll('loading');
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("提交失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("提交成功！", null, "success");
+                            $("#jqxTable").jqxGrid('updateBoundData');
+                            $('#jqxTable').jqxGrid('clearselection');
+                            break;
+                        }
+                    }
+                });
+            }
+        });
     }; //addEvent end
     function initTable() {
         var source =
@@ -130,15 +167,17 @@ var $page = function () {
             }
         });
         //创建卡信息列表（主表）
-        selector.$grid().jqxDataTable(
+        selector.$grid().jqxGrid(
             {
-                pageable: true,
+                pageable: false,
                 width: "100%",
                 height: 400,
-                pageSize: 10,
-                serverProcessing: true,
-                pagerButtonsCount: 10,
+                //pageSize: 5,
+                //serverProcessing: true,
+                //pagerButtonsCount: 10,
                 source: typeAdapter,
+                rowsheight: 40,
+                selectionmode: 'checkbox',
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
@@ -157,8 +196,6 @@ var $page = function () {
                     { text: '营运模式', datafield: 'BusinessModel', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置收入', datafield: 'DisposeIncomeValue', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置税金-增值税', datafield: 'AddedValueTax', width: 150, align: 'center', cellsAlign: 'center' },
-
-
                     { text: '处置税金-城建税', datafield: 'ConstructionTax', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置税金-教育费附加', datafield: 'AdditionalEducationTax', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置税金-地方教育费附加', datafield: 'LocalAdditionalEducationTax', width: 150, align: 'center', cellsAlign: 'center' },

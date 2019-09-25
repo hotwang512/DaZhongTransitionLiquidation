@@ -30,7 +30,8 @@ var $page = function () {
                         layer.closeAll('loading');
                         jqxNotification("同步成功！", null, "success");
                         initTable();
-                    }else{
+                    } else {
+                        layer.closeAll('loading');
                         jqxNotification("同步失败！", null, "error");
                     }
                 }

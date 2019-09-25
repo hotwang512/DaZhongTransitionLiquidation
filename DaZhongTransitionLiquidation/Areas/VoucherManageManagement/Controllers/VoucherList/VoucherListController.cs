@@ -158,17 +158,33 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int saveChanges = 1;
                 foreach (var item in vguids)
                 {
-
+                    var voucherOne = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
                     var voucher = db.Queryable<Business_VoucherDetail>().Where(it => it.VoucherVGUID == item).ToList();
                     var loanMoney = voucher == null ? null : voucher.Sum(x => x.LoanMoney);//贷方总金额
                     var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
                     if (loanMoney == borrowMoney)
                     {
-                        //更新主表信息
-                        saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                        var voucherName = "";
+                        if (status == "3")
                         {
-                            Status = status,
-                        }).Where(it => it.VGUID == item).ExecuteCommand();
+                            var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='" + voucherOne.VoucherType + @"' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
+                                  order by VoucherNo desc", new { @NowDate = DateTime.Now, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
+                            voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
+                            //更新主表信息
+                            saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                            {
+                                VoucherNo = voucherName,
+                                Status = status,
+                            }).Where(it => it.VGUID == item).ExecuteCommand();
+                        }
+                        else
+                        {
+                            //更新主表信息
+                            saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                            {
+                                Status = status,
+                            }).Where(it => it.VGUID == item).ExecuteCommand();
+                        }
                         //审核成功写入中间表
                         if (status == "3")
                         {

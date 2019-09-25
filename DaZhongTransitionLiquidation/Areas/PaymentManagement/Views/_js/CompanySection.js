@@ -356,7 +356,7 @@ var $page = function () {
                         "BankName": $("#BankName").val(),
                         "BankAccount": $("#BankAccount").val(),
                         "BankAccountName": $("#BankAccountName").val(),
-                        "CompanyCode": $("#CompanyCode").val(),
+                        "CompanyCode": $("#CompanyCodeBank").val(),
                         "AccountType": $("#AccountType").val(),
                         "InitialBalance": $("#InitialBalance").val(),
                         "AccountModeCode": $("#AccountModeCode").val(),
@@ -1448,7 +1448,7 @@ function settingSection(column, code) {
 }
 //设置公司下银行及银行账号
 function settingCompany(code, companyName) {
-    $("#CompanyCode").val(code);
+    $("#CompanyCodeBank").val(code);
     $("#AddCompanyDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddCompanyDialog").modal("show");
     $("#myModalLabel_titles2").text("配置银行信息-" + companyName);
@@ -1528,7 +1528,9 @@ function settingTaxes(code, companyName, subjectGuid) {
     $("#CompanyCodeTaxes").val(code);
     $("#AddTaxesDialog").modal({ backdrop: "static", keyboard: false });
     $("#AddTaxesDialog").modal("show");
-    $("#myModalLabel_titles3").text("配置税金信息-" + companyName);
+    $("#myModalLabel_titles3").text("配置税率-" + companyName);
+    $("#Year").val("2019");
+    $("#Month").val("1");
     var subjectVGUID = subjectGuid;
     initTaxesTable(code);
     //$('#jqxCompanySetting').jqxGrid('expandallgroups');
@@ -1542,9 +1544,8 @@ function settingTaxes(code, companyName, subjectGuid) {
         var columnDisplayField = args.displayField;
         var value = args.value;
         $.ajax({
-            url: "/PaymentManagement/CompanySection/SaveTaxesInfo",
+            url: "/PaymentManagement/CompanySection/SaveTaxesInfo?value=" + value + "&type=" + columnDataField,
             data: {
-                TaxRate: value,
                 Year: $("#Year").val(),
                 Month: $("#Month").val(),
                 AccountModeCode: accountModeCode,
@@ -1625,7 +1626,7 @@ function initTaxesTable(code) {
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
             { text: '编码', datafield: 'Code', width: 200, editable: false, align: 'center', cellsAlign: 'left', },
             { text: '描述', datafield: 'Descrption', width: 400, editable: false, align: 'center', cellsAlign: 'center' },
-            { text: '税目种类', datafield: 'TaxesType', width: 150, editable: true, align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '税种', datafield: 'TaxesType', width: 200, editable: true, align: 'center', cellsAlign: 'center' },
             { text: '税率', datafield: 'TaxRate', align: 'center', editable: true, cellsAlign: 'center', },
             { text: 'VGUID', datafield: 'VGUID', hidden: true },
             { text: 'KeyVGUID', datafield: 'KeyVGUID', hidden: true },
@@ -1782,7 +1783,7 @@ function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, acc
     $("#BankName").val("");
     $("#BankAccount").val("");
     $("#BankAccountName").val("");
-    $("#CompanyCode").val(companyCode)
+    $("#CompanyCodeBank").val(companyCode)
     isEdit = true;
     vguid = guid;
     if (bankName == null || bankName == "null") {

@@ -413,7 +413,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
             var bankChannel = db.Queryable<T_BankChannelMapping>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
             var paySetting = db.Queryable<Business_PaySettingDetail>().ToList();
-            
+            var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherType == "银行类" && i.Automatic != "3").ToList();
             #region 循环银行流水数组
             foreach (var item in newBankFlowList)
             {
@@ -428,6 +428,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 x++;
                 var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
                 voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMM") + (voucherNo + x).TryToString().PadLeft(4, '0');
+                voucherData = voucherData.Where(i => i.AccountModeName == item.AccountModeName && i.CompanyCode == item.CompanyCode).ToList();
+                var isAnyNo = voucherData.Any(i => i.VoucherNo == voucher.VoucherNo);
+                if (isAnyNo)
+                {
+                    //防止凭证号码重复
+                    voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMM") + (voucher.VoucherNo.Substring(voucherName.Length - 4, 4).TryToInt() + 1).TryToString();
+                    x = x + 2;
+                }
                 voucher.DocumentMaker = "";
                 voucher.Status = "1";
                 voucher.VoucherDate = item.TransactionDate;

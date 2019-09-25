@@ -76,10 +76,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var date = DateTime.Now;
                     //var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
                     //              order by BatchName desc", new { @NowDate = date });
-                    var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='"+ voucherType + @"' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
-                                  order by VoucherNo desc", new { @NowDate = date, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
+                    //var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='"+ voucherType + @"' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
+                    //              order by VoucherNo desc", new { @NowDate = date, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
                     var batchName = voucher.BatchName; //GetBatchName(voucherType, flowNo);
-                    var voucherName = GetVoucherName(voucherNo);
+                    //var voucherName = GetVoucherName(voucherNo);
                     //凭证主表
                     Business_VoucherList voucherList = new Business_VoucherList();
                     voucherList.AttachmentDetail = "";
@@ -116,7 +116,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     {
                         guid = Guid.NewGuid();
                         voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期)
-                        voucherList.VoucherNo = voucherName;//凭证号自动生成
+                        voucherList.VoucherNo = "";//手工凭证,凭证号在审核后生成
                         voucherList.VGUID = guid;
                         voucherList.Automatic = "0";//手动
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
@@ -212,7 +212,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             }
             return voucherType + DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
-        private string GetVoucherName(string voucherNo)
+        public static string GetVoucherName(string voucherNo)
         {
             var batchNo = 0;
             if (voucherNo.IsValuable() && voucherNo.Length > 4)

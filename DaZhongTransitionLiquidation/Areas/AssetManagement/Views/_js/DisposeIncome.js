@@ -180,11 +180,23 @@ var $page = function () {
                 //pagerButtonsCount: 10,
                 source: typeAdapter,
                 rowsheight: 40,
+                showstatusbar: true,
+                statusbarheight: 22,
+                showaggregates: true,
                 selectionmode: 'checkbox',
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
-                    { text: '资产编号', datafield: 'AssetID', width: 150, align: 'center', cellsAlign: 'center' },
+                    {
+                        text: '资产编号', datafield: 'AssetID', width: 150, align: 'center', cellsAlign: 'center',
+                        aggregates: ['count',
+                            {
+                                function (aggregatedValue, currentValue) {
+                                    return aggregatedValue + 1;
+                                }
+                            }
+                        ]
+                    },
                     { text: '车管车牌号', datafield: 'DepartmentVehiclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: 'Oracle车牌号', datafield: 'OraclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '出售车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },

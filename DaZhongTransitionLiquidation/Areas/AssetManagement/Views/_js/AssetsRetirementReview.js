@@ -151,11 +151,23 @@ var $page = function () {
                 //pagerButtonsCount: 10,
                 selectionmode: 'checkbox',
                 source: typeAdapter,
+                showstatusbar: true,
+                statusbarheight: 22,
+                showaggregates: true,
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center',  cellsAlign: 'center', cellclassname: cellclass,, cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '资产编号', datafield: 'ASSET_ID', width: 100, align: 'center',  cellsAlign: 'center', cellclassname: cellclass },
+                    {
+                        text: '资产编号', datafield: 'ASSET_ID', width: 100, align: 'center', cellsAlign: 'center', cellclassname: cellclass,
+                        aggregates: ['count',
+                            {
+                                function (aggregatedValue, currentValue) {
+                                    return aggregatedValue + 1;
+                                }
+                            }
+                        ]
+                    },
                     { text: '车管车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center',  cellsAlign: 'center', cellclassname: cellclass },
                     { text: '资产标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center',  cellsAlign: 'center', cellclassname: cellclass },
                     { text: '车辆简称', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center',  cellsAlign: 'center', cellclassname: cellclass },

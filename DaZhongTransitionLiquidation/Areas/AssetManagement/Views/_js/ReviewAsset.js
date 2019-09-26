@@ -223,13 +223,25 @@ var $page = function () {
                 source: typeAdapter,
                 rowsheight: 40,
                 selectionmode: 'checkbox',
+                showstatusbar: true,
+                statusbarheight: 22,
+                showaggregates: true,
                 theme: "office",
                 columnsHeight: 40,
                 enablehover:false,
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden:false,align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'GroupID', datafield: 'GROUP_ID', width: 100, hidden: true, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '资产账簿', datafield: 'BOOK_TYPE_CODE', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    {
+                        text: '资产账簿', datafield: 'BOOK_TYPE_CODE', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center',
+                        aggregates: ['count',
+                            {
+                                function (aggregatedValue, currentValue) {
+                                    return aggregatedValue + 1;
+                                }
+                            }
+                        ]
+                    },
                     { text: '资产ID', datafield: 'ASSET_ID', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },

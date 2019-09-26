@@ -187,7 +187,10 @@ var $page = function () {
                 height: 400,
                 //pageSize: 5,
                 //serverProcessing: true,
-                //pagerButtonsCount: 10,
+                //pagerButtonsCount: 10,                
+                showstatusbar: true,
+                statusbarheight: 22,
+                showaggregates: true,
                 source: typeAdapter,
                 rowsheight: 40,
                 selectionmode: 'checkbox',
@@ -198,7 +201,16 @@ var $page = function () {
                 columns: [
                     //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden:false,align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'GroupID', datafield: 'GROUP_ID', width: 100, hidden: true, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
-                    { text: '资产账簿', datafield: 'BOOK_TYPE_CODE', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
+                    {
+                        text: '资产账簿', datafield: 'BOOK_TYPE_CODE', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center', editable: false,
+                        aggregates: ['count',
+                            {
+                                function (aggregatedValue, currentValue) {
+                                    return aggregatedValue + 1;
+                                }
+                            }
+                        ]
+                    },
                     { text: '资产ID', datafield: 'ASSET_ID', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     //{ text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:true },

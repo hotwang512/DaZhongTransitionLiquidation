@@ -183,10 +183,22 @@ var $page = function () {
                 rowsheight: 40,
                 selectionmode: 'checkbox',
                 theme: "office",
+                showstatusbar: true,
+                statusbarheight: 22,
+                showaggregates: true,
                 columnsHeight: 40,
                 columns: [
                     //{ text: '车主', datafield: 'VehicleOwner', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '资产编号', datafield: 'AssetID', width: 150, align: 'center', cellsAlign: 'center' },
+                    {
+                        text: '资产编号', datafield: 'AssetID', width: 150, align: 'center', cellsAlign: 'center' ,
+                        aggregates: ['count',
+                            {
+                                function (aggregatedValue, currentValue) {
+                                    return aggregatedValue + 1;
+                                }
+                            }
+                        ]
+                    },
                     { text: '管理公司', datafield: 'ManageCompany', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '所属公司', datafield: 'BelongToCompany', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '车管车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },

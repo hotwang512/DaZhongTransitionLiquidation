@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
@@ -54,7 +55,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     .WhereIF(!searchParams.CHASSIS_NUMBER.IsNullOrEmpty(), i => i.CHASSIS_NUMBER.Contains(searchParams.CHASSIS_NUMBER))
                     .WhereIF(!searchParams.VEHICLE_SHORTNAME.IsNullOrEmpty(), i => i.VEHICLE_SHORTNAME.Contains(searchParams.VEHICLE_SHORTNAME))
                     .WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
-                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
+                    //.OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 //var list = jsonResult.Rows = db.SqlQueryable<Business_ModifyVehicleModel>
                 //(@"SELECT mv.*,
                 //       mi.PLATE_NUMBER AS PLATE_NUMBER_M,
@@ -68,9 +70,24 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 //var table1 = list.TryToDataTable();;
                 jsonResult.TotalRows = pageCount;
             });
-            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            return Json(
+                jsonResult,
+                "application/json",
+                Encoding.UTF8,
+                JsonRequestBehavior.AllowGet
+            );
         }
-
+        protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = Int32.MaxValue
+            };
+        }
         public JsonResult SubmitModifyVehicleReview(List<Guid> guids, string MODIFY_TYPE)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };

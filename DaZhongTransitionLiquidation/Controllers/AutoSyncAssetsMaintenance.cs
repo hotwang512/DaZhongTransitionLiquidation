@@ -157,7 +157,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //管理公司
                             MODIFY_TYPE = "FA_LOC_2";
-                            OLDDATA = assetMaintenanceInfo.PLATE_NUMBER;
+                            OLDDATA = assetMaintenanceInfo.MANAGEMENT_COMPANY;
                             if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
                             {
                                 list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE, OLDDATA));

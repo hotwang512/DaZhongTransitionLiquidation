@@ -117,7 +117,7 @@ var $page = function () {
                     { text: '存放地点1', datafield: 'FA_LOC_1', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '存放地点2', datafield: 'FA_LOC_2', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '存放地点3', datafield: 'FA_LOC_3', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '资产编号', datafield: 'ASSET_ID', width: 100, align: 'center', cellsAlign: 'center' },
+                    { text: '资产编号', datafield: 'ASSET_ID', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '最后更新时间', datafield: 'LAST_UPDATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" }
                 ]

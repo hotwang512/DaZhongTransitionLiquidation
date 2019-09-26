@@ -192,11 +192,22 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         }
                         else
                         {
-                            //更新主表信息
-                            saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                            if(voucherOne.Status == "4")
                             {
-                                Status = status,
-                            }).Where(it => it.VGUID == item).ExecuteCommand();
+                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                {
+                                    Automatic = "1",
+                                    Status = "2",
+                                }).Where(it => it.VGUID == voucherOne.VGUID).ExecuteCommand();
+                            }
+                            else
+                            {
+                                //更新主表信息
+                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                {
+                                    Status = status,
+                                }).Where(it => it.VGUID == item).ExecuteCommand();
+                            }
                         }
                         //审核成功写入中间表
                         if (status == "3")
@@ -287,7 +298,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.ACCOUNTED_CR = items.LoanMoney.TryToString();
                 //asset.SubjectCount = items.CompanySection + "." + items.SubjectSection + "." + items.AccountSection + "." + items.CostCenterSection + "." + items.SpareOneSection + "." + items.SpareTwoSection + "." + items.IntercourseSection;
                 //同步至中间表
-                db.Insertable(asset).IgnoreColumns(it => new { it.VGUID, it.SubjectVGUID }).ExecuteCommand();
+                db.Insertable(asset).IgnoreColumns(it => new { }).ExecuteCommand();
             }
         }
         public JsonResult SyncAssetsData()
@@ -437,7 +448,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 var saveChanges = 0;
                 var vguidList = db.SqlQueryable<AssetsGeneralLedger_Swap>(@"select distinct(LINE_ID) from AssetsGeneralLedger_Swap where STATUS = 'E' and (CheckStatus != '1' or CheckStatus is null) ").ToList();
                 var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.Status == "3").ToList();
-                var oracleDataList = db.Queryable<AssetsGeneralLedger_Swap>().Where(x => x.STATUS == "E" && x.CheckStatus != "1").ToList();
+                var oracleDataList = db.Queryable<AssetsGeneralLedger_Swap>().Where(x => x.STATUS == "E" && (x.CheckStatus != "1" || x.CheckStatus == null)).ToList();
                 foreach (var item in vguidList)
                 {
                     var oracleRemark = "";
@@ -448,7 +459,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                         {
                             oracleRemark += it.MESSAGE + ",";
                         }
-                        var vguid = item.TryToGuid();
+                        var vguid = item.LINE_ID.TryToGuid();
                         var oracleData = voucherData.Where(x => x.VGUID == vguid).FirstOrDefault();
                         oracleData.Status = "4";
                         oracleData.Automatic = "4";

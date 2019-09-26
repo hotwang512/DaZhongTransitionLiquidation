@@ -564,7 +564,7 @@ var $page = function () {
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: '批名', datafield: 'BatchName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '营运公司', datafield: 'CompanyName', width: 350, pinned: false, align: 'center', cellsAlign: 'center', },
+                    { text: '营运公司', datafield: 'CompanyName', width: 380, pinned: false, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },

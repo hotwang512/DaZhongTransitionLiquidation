@@ -137,6 +137,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public decimal? ConstructionTax { get; set; }
+        public decimal? ConsignFee { get; set; }
 
         /// <summary>
         /// Desc:根据数据字典计算

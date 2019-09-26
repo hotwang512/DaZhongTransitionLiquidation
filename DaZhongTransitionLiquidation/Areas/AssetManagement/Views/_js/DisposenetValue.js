@@ -120,7 +120,7 @@ var $page = function () {
                 layer.load();
                 $.ajax({
                     url: "/AssetManagement/DisposeNetValue/SubmitDisposeNetValue",
-                    data: { vguids: pars },
+                    data: { guids: pars },
                     //traditional: true,
                     type: "post",
                     success: function (msg) {
@@ -146,6 +146,9 @@ var $page = function () {
                 datafields:
                 [
                     { name: 'VGUID', type: 'string' },
+                    { name: 'AssetID', type: 'string' },
+                    { name: 'ManageCompany', type: 'string' },
+                    { name: 'BelongToCompany', type: 'string' },
                     { name: 'DepartmentVehiclePlateNumber', type: 'string' },
                     { name: 'OraclePlateNumber', type: 'string' },
                     { name: 'VehicleOwner', type: 'string' },
@@ -182,7 +185,10 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
-                    { text: '车主', datafield: 'VehicleOwner', width: 150, align: 'center', cellsAlign: 'center' },
+                    //{ text: '车主', datafield: 'VehicleOwner', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产编号', datafield: 'AssetID', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '管理公司', datafield: 'ManageCompany', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '所属公司', datafield: 'BelongToCompany', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '车管车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: 'Oracle车牌号', datafield: 'OraclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置车牌号', datafield: 'DepartmentVehiclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
@@ -192,7 +198,8 @@ var $page = function () {
                     { text: '创建日期', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '修改日期', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '修改人', datafield: 'ChangeUser', width: 150, align: 'center', cellsAlign: 'center' }
+                    { text: '修改人', datafield: 'ChangeUser', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });
     }

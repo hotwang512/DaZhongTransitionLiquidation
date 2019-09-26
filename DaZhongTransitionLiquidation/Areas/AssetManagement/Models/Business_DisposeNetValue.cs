@@ -88,6 +88,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string CreateUser { get; set; }
+        public string ManageCompany { get; set; }
+        public string BelongToCompany { get; set; }
 
         /// <summary>
         /// Desc:

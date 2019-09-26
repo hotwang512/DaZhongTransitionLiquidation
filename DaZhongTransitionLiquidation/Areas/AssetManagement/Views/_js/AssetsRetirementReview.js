@@ -64,12 +64,14 @@ var $page = function () {
     });
     //提交
     function submit(selection) {
+        layer.load();
         $.ajax({
             url: "/AssetManagement/AssetsRetirementReview/SubmitRetirementVehicleReview",
             data: { guids: selection },
             //traditional: true,
             type: "post",
             success: function (msg) {
+                layer.closeAll('loading');
                 switch (msg.Status) {
                     case "0":
                         jqxNotification("审核失败！", null, "error");

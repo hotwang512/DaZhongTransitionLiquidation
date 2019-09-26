@@ -82,11 +82,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                     {
                         var retirement = db.Queryable<Business_DisposeProfitLoss>().First(x => x.AssetID == item.AssetID);
                         retirement.NetValue = item.NetValue;
+                        retirement.OraclePlateNumber = item.OraclePlateNumber;
                         DisposeProfitLossList.Add(retirement);
                         item.SubmitStatus = 1;
                     }
                     db.Updateable<Business_DisposeProfitLoss>(DisposeProfitLossList).ExecuteCommand();
-                    db.Updateable<Business_DisposeNetValue>(NetValueList).UpdateColumns(x => x.SubmitStatus).ExecuteCommand();
+                    db.Updateable<Business_DisposeNetValue>(NetValueList).UpdateColumns(x => new { x.SubmitStatus}).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;

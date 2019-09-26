@@ -32,18 +32,18 @@ var $page = function () {
                 $("#LocalFileInput").click();
             }
         );
-        selector.$btnImportSale().on("click",
-            function () {
-                $("#ImportType").val("Sale");
-                $("#LocalFileInput").click();
-            }
-        );
-        selector.$btnImportScrap().on("click",
-            function () {
-                $("#ImportType").val("Scrap");
-                $("#LocalFileInput").click();
-            }
-        );
+        //selector.$btnImportSale().on("click",
+        //    function () {
+        //        $("#ImportType").val("Sale");
+        //        $("#LocalFileInput").click();
+        //    }
+        //);
+        //selector.$btnImportScrap().on("click",
+        //    function () {
+        //        $("#ImportType").val("Scrap");
+        //        $("#LocalFileInput").click();
+        //    }
+        //);
         //统一上传文件
         $("#LocalFileInput").on("change",
             function () {
@@ -103,9 +103,10 @@ var $page = function () {
                 jqxNotification("请选择一条数据！", null, "error");
             } else {
                 layer.load();
+                debugger;
                 $.ajax({
                     url: "/AssetManagement/DisposeIncome/SubmitDisposeIncome",
-                    data: { vguids: pars },
+                    data: { guids: pars },
                     //traditional: true,
                     type: "post",
                     success: function (msg) {
@@ -115,7 +116,7 @@ var $page = function () {
                             jqxNotification("提交失败！", null, "error");
                             break;
                         case "1":
-                            jqxNotification("提交成功！", null, "success");
+                            jqxNotification(msg.ResultInfo, null, "success");
                             $("#jqxTable").jqxGrid('updateBoundData');
                             $('#jqxTable').jqxGrid('clearselection');
                             break;
@@ -151,6 +152,8 @@ var $page = function () {
                     { name: 'LocalAdditionalEducationTax', type: 'float' },
                     { name: 'ReturnToPilot', type: 'float' },
                     { name: 'NetIncomeValue', type: 'float' },
+                    { name: 'ServiceFee', type: 'float' },
+                    { name: 'ConsignFee', type: 'float' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
                     { name: 'CreateUser', type: 'string' },
@@ -202,10 +205,12 @@ var $page = function () {
                     { text: '处置收入返还驾驶员', datafield: 'ReturnToPilot', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置净收入', datafield: 'NetIncomeValue', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '报废服务费收入', datafield: 'ServiceFee', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '托运费收入', datafield: 'ConsignFee', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '创建日期', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '修改日期', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '修改人', datafield: 'ChangeUser', width: 150, align: 'center', cellsAlign: 'center' }
+                    { text: '修改人', datafield: 'ChangeUser', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });
     }

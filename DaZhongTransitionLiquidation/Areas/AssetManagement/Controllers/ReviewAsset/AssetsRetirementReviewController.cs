@@ -160,18 +160,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         var disposeNetValue = new Business_DisposeNetValue();
                         disposeNetValue.VGUID = Guid.NewGuid();
                         disposeNetValue.AssetID = assetInfo.ASSET_ID;
+                        disposeNetValue.ManageCompany = assetInfo.MANAGEMENT_COMPANY;
+                        disposeNetValue.BelongToCompany = assetInfo.BELONGTO_COMPANY;
                         disposeNetValue.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
                         //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeNetValue.CreateDate = DateTime.Now;
                         disposeNetValue.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeNetValueList.Add(disposeNetValue);
                         //提交到处置损益
-
                         var disposeProfitLoss = new Business_DisposeProfitLoss();
                         disposeProfitLoss.VGUID = Guid.NewGuid();
                         disposeProfitLoss.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeProfitLoss.AssetID = assetInfo.ASSET_ID;
-                        //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
+                        disposeProfitLoss.BusinessModel = assetInfo.MODEL_MAJOR + "-" + assetInfo.MODEL_MINOR;
+                        disposeIncome.BackCarDate = assetInfo.BACK_CAR_DATE;
                         disposeProfitLoss.CreateDate = DateTime.Now;
                         disposeProfitLoss.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeProfitLossList.Add(disposeProfitLoss);

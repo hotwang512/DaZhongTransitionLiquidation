@@ -81,7 +81,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                         @"SELECT top 1 * FROM Business_TaxesInfo info order by convert(int,info.Year),convert(int,info.Month) desc")
                                     .First();
                             var TaxesList = db.Ado.SqlQuery<v_TaxesInfo>(@"select b.CompanyCode,b.AccountModeCode, a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
-                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year='2019'and b.Month='9'
+                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID
                                     where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43'
                                     and (a.Code like '%6403%' or a.Code like '%2221%') order by Code", new { Year = maxTaxes.Year, Month = maxTaxes.Month }).ToList();
                             var disposeIncomeList = db.Queryable<Business_DisposeIncome>().ToList();
@@ -104,23 +104,22 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                             foreach (var item in disposeAuctionImportList)
                             {
                                 if (disposeIncomeList.Any(x =>
-                                        x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber)) ||
-                                    disposeIncomeList.Any(x => x.OraclePlateNumber.Contains(item.ImportPlateNumber)))
+                                        x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber)) )
                                 {
                                     var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber));
                                     updateModel.ImportPlateNumber = item.ImportPlateNumber;
                                     //updateModel.VehicleModel = item.VehicleModel;
                                     //updateModel.BackCarDate = item.BackCarDate.TryToDate();
                                     //updateModel.BusinessModel = item.BusinessModel;
-                                    updateModel.ServiceFee = item.ServiceFee.TryToDecimal();
-                                    updateModel.ConsignFee = item.ConsignFee.TryToDecimal();
+                                    updateModel.ServiceFee = item.ServiceFee.IsNullOrEmpty() ? 0 : item.ServiceFee.TryToDecimal();
+                                    updateModel.ConsignFee = item.ConsignFee.IsNullOrEmpty() ? 0 : item.ConsignFee.TryToDecimal();
                                     updateModel.DisposeIncomeValue = item.DisposeIncomeValue.TryToDecimal();
                                     updateModel.SaleType = item.SaleType;
                                     updateModel.SaleMonth = item.SaleMonth;
                                     updateModel.ChangeDate = DateTime.Now;
                                     updateModel.ChangeUser = cache[PubGet.GetUserKey].LoginName;
                                     //计算税金，收入
-                                    var companyInfo = ssList.First(x => x.Abbreviation == updateModel.ManageCompany);
+                                    var companyInfo = ssList.First(x => x.Abbreviation == updateModel.BelongToCompany);
                                     //companyInfo.Code = "01";
                                     var AddedValueTax = TaxesList.First(x => x.AccountModeCode == companyInfo.AccountModeCode &&
                                                                              x.CompanyCode == companyInfo.Code && x.TaxesType.StartsWith("旧车处置增值税"));

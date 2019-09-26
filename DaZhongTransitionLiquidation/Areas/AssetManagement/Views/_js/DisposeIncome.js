@@ -213,7 +213,7 @@ var $page = function () {
                     { text: '处置税金-增值税', datafield: 'AddedValueTax', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置税金-城建税', datafield: 'ConstructionTax', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置税金-教育费附加', datafield: 'AdditionalEducationTax', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '处置税金-地方教育费附加', datafield: 'LocalAdditionalEducationTax', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '处置税金-地方教育费附加', datafield: 'LocalAdditionalEducationTax', width: 160, align: 'center', cellsAlign: 'center' },
                     { text: '处置收入返还驾驶员', datafield: 'ReturnToPilot', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '处置净收入', datafield: 'NetIncomeValue', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '报废服务费收入', datafield: 'ServiceFee', width: 150, align: 'center', cellsAlign: 'center' },

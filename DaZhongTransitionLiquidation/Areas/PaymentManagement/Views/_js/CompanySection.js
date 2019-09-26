@@ -1548,7 +1548,7 @@ function settingTaxes(code, companyName, subjectGuid) {
                 Year: $("#Year").val(),
                 Month: $("#Month").val(),
                 AccountModeCode: accountModeCode,
-                CompanyCode: code,
+                CompanyCode: $("#CompanyCodeTaxes").val(),
                 SubjectVGUID: rowData.KeyVGUID,
                 VGUID: rowData.VGUID
             },

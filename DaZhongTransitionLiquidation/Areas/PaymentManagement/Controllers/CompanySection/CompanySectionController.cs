@@ -629,7 +629,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     accountModeCode = UserInfo.AccountModeCode;
                 }
                 response = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
-                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month
+                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month and b.AccountModeCode=@AccountModeCode and b.CompanyCode=@CompanyCode 
                                     where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' and a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode
                                     and (a.Code like '%6403%' or a.Code like '%2221%') and a.Status='1' order by Code", new { Year = year, Month = month, AccountModeCode = accountModeCode, CompanyCode = companyCode }).ToList();
             });

@@ -685,7 +685,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     var data = db.Queryable<Business_TaxesInfo>().Where(x => x.VGUID == taxesInfo.VGUID).First();
                     if (data != null)
                     {
-                        if (data.TaxesType.IsNullOrEmpty() && data.TaxRate.IsNullOrEmpty())
+                        if ((data.TaxesType == "" || data.TaxesType == null) && (data.TaxRate == "" || data.TaxRate == null))
                         {
                             db.Deleteable<Business_TaxesInfo>(x => x.VGUID == taxesInfo.VGUID).ExecuteCommand();
                         }

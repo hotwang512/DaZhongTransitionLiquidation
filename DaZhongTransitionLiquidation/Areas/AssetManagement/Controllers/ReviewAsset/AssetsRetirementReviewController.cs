@@ -159,6 +159,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         //提交到处置净值
                         var disposeNetValue = new Business_DisposeNetValue();
                         disposeNetValue.VGUID = Guid.NewGuid();
+                        disposeNetValue.AssetID = assetInfo.ASSET_ID;
                         disposeNetValue.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
                         //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeNetValue.CreateDate = DateTime.Now;
@@ -169,15 +170,15 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         var disposeProfitLoss = new Business_DisposeProfitLoss();
                         disposeProfitLoss.VGUID = Guid.NewGuid();
                         disposeProfitLoss.DepartmentVehiclePlateNumber = assetInfo.PLATE_NUMBER;
+                        disposeProfitLoss.AssetID = assetInfo.ASSET_ID;
                         //disposeIncome.OraclePlateNumber = assetInfo.PLATE_NUMBER;
                         disposeProfitLoss.CreateDate = DateTime.Now;
                         disposeProfitLoss.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         assetDisposeProfitLossList.Add(disposeProfitLoss);
                     }
-                    //db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
+                    db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                     db.Insertable<Business_DisposeIncome>(assetDisposeIncomeList).ExecuteCommand();
                     db.Insertable<Business_DisposeNetValue>(assetDisposeNetValueList).ExecuteCommand();
-                    //db.Insertable<Business_DisposeTax>(assetDisposeTaxList).ExecuteCommand();
                     db.Insertable<Business_DisposeProfitLoss>(assetDisposeProfitLossList).ExecuteCommand();
                 });
                 resultModel.IsSuccess = result.IsSuccess;

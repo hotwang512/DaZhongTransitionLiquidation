@@ -183,9 +183,9 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: '车主', datafield: 'VehicleOwner', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '车管车牌号', datafield: 'DepartmentVehiclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    //{ text: '车管车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: 'Oracle车牌号', datafield: 'OraclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '处置车牌号', datafield: 'ImportPlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '处置车牌号', datafield: 'DepartmentVehiclePlateNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '原值', datafield: 'OriginalValue', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '累计折旧', datafield: 'AcctDepreciation', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '净值', datafield: 'NetValue', width: 150, align: 'center', cellsAlign: 'center' },

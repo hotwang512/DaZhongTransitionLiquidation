@@ -78,10 +78,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                         {
                             var maxTaxes =
                                 db.SqlQueryable<v_TaxesInfo>(
-                                        @"SELECT * FROM Business_TaxesInfo info order by convert(int,info.Year),convert(int,info.Month) desc")
+                                        @"SELECT top 1 * FROM Business_TaxesInfo info order by convert(int,info.Year),convert(int,info.Month) desc")
                                     .First();
-                            var TaxesList = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
-                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month
+                            var TaxesList = db.Ado.SqlQuery<v_TaxesInfo>(@"select b.CompanyCode,b.AccountModeCode, a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
+                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year='2019'and b.Month='9'
                                     where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43'
                                     and a.Code like '%6403%' order by Code", new { Year = maxTaxes.Year, Month = maxTaxes.Month }).ToList();
                             var disposeIncomeList = db.Queryable<Business_DisposeIncome>().ToList();
@@ -114,8 +114,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                             x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber)) ||
                                         disposeIncomeList.Any(x => x.OraclePlateNumber.Contains(item.ImportPlateNumber)))
                                     {
-                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber) ||
-                                                                                       x.OraclePlateNumber.Contains(item.ImportPlateNumber));
+                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber));
                                         updateModel.ImportPlateNumber = item.ImportPlateNumber;
                                         //updateModel.VehicleModel = item.VehicleModel;
                                         //updateModel.BackCarDate = item.BackCarDate.TryToDate();
@@ -198,8 +197,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                             x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber)) ||
                                         disposeIncomeList.Any(x => x.OraclePlateNumber.Contains(item.ImportPlateNumber)))
                                     {
-                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber) ||
-                                                                                       x.OraclePlateNumber.Contains(item.ImportPlateNumber));
+                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber));
                                         updateModel.ImportPlateNumber = item.ImportPlateNumber;
                                         updateModel.ServiceFee = 0;
                                         updateModel.DisposeIncomeValue = item.DisposeIncomeValue.TryToDecimal();
@@ -270,8 +268,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                 {
                                     var dispose = new Excel_DisposeIncomeScrap();
                                     dispose.ImportPlateNumber = dt.Rows[i][1].ToString();
-                                    dispose.DisposeIncomeValue = dt.Rows[i][8].ToString();
-                                    dispose.ServiceFee = dt.Rows[i][10].ToString();
+                                    dispose.DisposeIncomeValue = dt.Rows[i][9].ToString();
+                                    dispose.ServiceFee = dt.Rows[i][11].ToString();
                                     //dispose.VehicleOwner = dt.Rows[i][2].ToString();
                                     //dispose.VehicleModel = dt.Rows[i][3].ToString();
                                     //dispose.VehicleType = dt.Rows[i][4].ToString();
@@ -294,8 +292,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                                             x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber)) ||
                                         disposeIncomeList.Any(x => x.OraclePlateNumber.Contains(item.ImportPlateNumber)))
                                     {
-                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber) ||
-                                                                                       x.OraclePlateNumber.Contains(item.ImportPlateNumber));
+                                        var updateModel = disposeIncomeList.First(x => x.DepartmentVehiclePlateNumber.Contains(item.ImportPlateNumber));
                                         updateModel.ImportPlateNumber = item.ImportPlateNumber;
                                         updateModel.DisposeIncomeValue = item.DisposeIncomeValue.TryToDecimal();
                                         updateModel.SaleType = "出售";

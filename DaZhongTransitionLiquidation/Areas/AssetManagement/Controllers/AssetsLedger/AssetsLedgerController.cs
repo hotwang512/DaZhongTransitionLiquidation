@@ -37,7 +37,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<AssetsLedger_Swap>().PartitionBy(it => new { it.ASSET_ID }).Take(1)
+                jsonResult.Rows = db.Queryable<AssetsLedger_Swap>()
+                    .PartitionBy(it => new { it.ASSET_ID }).Take(1)
                     .WhereIF(PERIOD != null, i => i.PERIOD_CODE.Contains(PERIOD))
                     .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
                     .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
@@ -54,6 +55,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             DbBusinessDataService.Command(db =>
             {
                 dt = db.Queryable<AssetsLedger_Swap>()
+                    .PartitionBy(it => new { it.ASSET_ID }).Take(1)
                     .WhereIF(PERIOD != null, i => i.PERIOD_CODE.Contains(PERIOD))
                     .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
                     .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))

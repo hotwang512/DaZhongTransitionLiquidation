@@ -7,8 +7,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
 {
     public class AssetsGeneralLedger_Swap
     {
-        public Guid VGUID { get; set; }
-        public Guid SubjectVGUID { get; set; }
+        //public Guid VGUID { get; set; }
+        //public Guid SubjectVGUID { get; set; }
         /// <summary>
         /// Desc:账套名称 
         /// Default:

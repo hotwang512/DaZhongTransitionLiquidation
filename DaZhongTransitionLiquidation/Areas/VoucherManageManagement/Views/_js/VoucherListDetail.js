@@ -69,8 +69,14 @@ var $page = function () {
                 var trId = $("#VoucherTable tr")[trIndex].id;
                 if (trId.length == 9) {
                     trIndex = parseInt(trId.substr(trId.length - 2, 2)) + 1;
+                    if ($("#SubjectName0").val() == "" && $("#SubjectName1").val() != "") {
+                        trIndex = trIndex;
+                    }
                 } else {
                     trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
+                    if ($("#SubjectName0").val() == "" && $("#SubjectName1").val() != "") {
+                        trIndex = trIndex;
+                    } 
                 }
             }
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
@@ -80,7 +86,12 @@ var $page = function () {
                              "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                              "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
-            $("#countTr").before(trMore);
+            if ($("#SubjectName0").val() == "" && $("#SubjectName1").val() != "") {
+                $("#closeTr1").before(trMore);
+            }else{
+                $("#countTr").before(trMore);
+            }
+            
             tdClick();
         });
         //取消
@@ -555,21 +566,21 @@ var $page = function () {
 
     function addVoucherListTable() {
         voucherHtmls = "<table id='VoucherTable' style='width:100%;white-space:pre;' border='1' cellspacing='0'>" +
-                        "<tr style='height:40px'>" +
+                        "<tr id='headTr' style='height:40px'>" +
                              "<td style='width: 250px;text-align: center;font-size: 18px;'>摘要</td>" +
                              "<td style='text-align: center;font-size: 18px;'>科目及描述</td>" +
                              "<td style='width: 150px;text-align: center;font-size: 18px;'>借方金额</td>" +
                              "<td style='width: 150px;text-align: center;font-size: 18px;'>贷方金额</td>" +
                              "<td style='width: 50px;text-align: center;'></td>" +
                        "</tr>" +
-                       "<tr style='height:60px'>" +
+                       "<tr id='closeTr0' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark0' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName0' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit0' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' /></td>" +
                              "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
                       "</tr>" +
-                       "<tr style='height:60px'>" +
+                       "<tr id='closeTr1' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark1' style='width: 248px;' class='input_text form-control'></textarea></td>" +
                              "<td style='text-align: center;'><textarea id='SubjectName1' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit1' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' /></td>" +
@@ -629,6 +640,7 @@ var $page = function () {
                 if ($("#Status").val() == "4") {
                     $("#hideButton").show();
                     $("#btnUp").show();
+                    $("#btnSave").show();
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳

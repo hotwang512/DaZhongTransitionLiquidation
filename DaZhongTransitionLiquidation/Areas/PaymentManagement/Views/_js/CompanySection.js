@@ -1560,6 +1560,7 @@ function settingTaxes(code, companyName, subjectGuid) {
                         jqxNotification("保存失败！", null, "error");
                         break;
                     case "1":
+                        $('#jqxTaxesSetting').jqxTreeGrid('updateBoundData');
                         //jqxNotification("保存成功！", null, "success");
                         break;
                 }

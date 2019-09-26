@@ -164,18 +164,21 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
                     if (loanMoney == borrowMoney)
                     {
-                        var voucherName = "";
                         if (status == "3")
                         {
                             if(voucherOne.VoucherNo == "" || voucherOne.VoucherNo == null)
                             {
-                                var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='" + voucherOne.VoucherType + @"' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
-                                  order by VoucherNo desc", new { @NowDate = DateTime.Now, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
-                                voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
+                                var type = "Bank";
+                                if(voucherOne.VoucherType == "现金类")
+                                {
+                                    type = "Money";
+                                }
+                                var voucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '"+ type + "', @output output  select @output").FirstOrDefault();
+                                //voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
                                 //更新主表信息
                                 saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
                                 {
-                                    VoucherNo = voucherName,
+                                    VoucherNo = voucherNo,
                                     Status = status,
                                 }).Where(it => it.VGUID == item).ExecuteCommand();
                             }

@@ -424,18 +424,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CompanyCode = item.CompanyCode;
                 voucher.CompanyName = item.PaymentUnit.ToDBC();
                 voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
-                var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
-                x++;
-                var voucherNo = voucherName.Substring(voucherName.Length - 4, 4).TryToInt();
-                voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMM") + (voucherNo + x).TryToString().PadLeft(4, '0');
+                //var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
+                voucher.VoucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono 'Bank', @output output  select @output").FirstOrDefault();
                 voucherData = voucherData.Where(i => i.AccountModeName == item.AccountModeName && i.CompanyCode == item.CompanyCode).ToList();
-                var isAnyNo = voucherData.Any(i => i.VoucherNo == voucher.VoucherNo);
-                if (isAnyNo)
-                {
-                    //防止凭证号码重复
-                    voucher.VoucherNo = item.TransactionDate.GetValueOrDefault().ToString("yyyyMM") + (voucher.VoucherNo.Substring(voucherName.Length - 4, 4).TryToInt() + 1).TryToString();
-                    x = x + 2;
-                }
                 voucher.DocumentMaker = "";
                 voucher.Status = "1";
                 voucher.VoucherDate = item.TransactionDate;

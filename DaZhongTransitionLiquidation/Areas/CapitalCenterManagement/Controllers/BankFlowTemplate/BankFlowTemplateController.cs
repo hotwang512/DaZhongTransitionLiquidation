@@ -296,10 +296,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         var isAny = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ToList();
                         if (isAny.Count == 1)
                         {
-                            //newBankFlowList.Add(items);
-                            //isAny[0].BankAccount = item.BankAccount;
-                            //isAny[0].TurnIn = items.TurnIn;
-                            //isAny[0].TurnOut = items.TurnOut;
+                            //if (items.Batch == "FT19270044869552" || items.Batch == "BEA192450414366493500")
+                            //{
+                            //    items.AccountModeCode = item.AccountModeCode;
+                            //    items.AccountModeName = accountModeName;
+                            //    items.AccountModeName = accountModeName;
+                            //    items.CompanyCode = item.CompanyCode;
+                            //    newBankFlowList.Add(items);
+                            //}
                             items.AccountModeCode = item.AccountModeCode;
                             items.AccountModeName = accountModeName;
                             items.CompanyCode = item.CompanyCode;
@@ -425,7 +429,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CompanyName = item.PaymentUnit.ToDBC();
                 voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
                 //var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
-                voucher.VoucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono 'Bank', @output output  select @output").FirstOrDefault();
+                var bank = "Bank" + item.AccountModeCode + item.CompanyCode;
+                voucher.VoucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '"+ bank + "', @output output  select @output").FirstOrDefault();
                 voucherData = voucherData.Where(i => i.AccountModeName == item.AccountModeName && i.CompanyCode == item.CompanyCode).ToList();
                 voucher.DocumentMaker = "";
                 voucher.Status = "1";

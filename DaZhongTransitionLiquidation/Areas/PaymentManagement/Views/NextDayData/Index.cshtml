@@ -11,7 +11,7 @@
     <script src="@Url.CusContent("~/Areas/PaymentManagement/Views/_js/NextDayData.js")"></script>
 }
 
-@if (currentModuleRolePermission.Import == 1)
+@if (currentModuleRolePermission.Adds == 1)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
@@ -21,7 +21,7 @@
                         <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                     </td>
                 }*@
-            @if (currentModuleRolePermission.Import == 1)
+            @if (currentModuleRolePermission.Adds == 1)
             {
                 <td style="width: 135px;">
                     <button id="btnImportHuiDouQuan" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="">导入(慧兜圈)</span></button>@*style="margin-left: 7px; float: left;"*@

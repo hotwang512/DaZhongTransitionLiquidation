@@ -65,9 +65,9 @@ var $page = function () {
             if (!Validate(selector.$txtBank_Dialog())) {
                 validateError++;
             }
-            if (!Validate(selector.$txtChannel_Dialog())) {
-                validateError++;
-            }
+            //if (!Validate(selector.$txtChannel_Dialog())) {
+            //    validateError++;
+            //}
             //var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
             //var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
             if (validateError <= 0) {

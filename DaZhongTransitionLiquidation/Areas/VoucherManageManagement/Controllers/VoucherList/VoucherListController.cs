@@ -36,66 +36,80 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 var starDate = "2019-09-01".TryToDate();
-                var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherDate >= starDate)
-                .Where(i => i.Status == searchParams.Status)
-                .Where(i => i.Automatic == searchParams.Automatic)
-                .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
-                .Where(x => x.VoucherNo.Length > 10 || x.TradingBank == "" || x.TradingBank == null).ToList();
-                foreach (var item in voucherData)
+                if (searchParams.Automatic != "0")
                 {
-                    if (item.VoucherNo.Length > 10)
+                    var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherDate >= starDate)
+                    .Where(i => i.Status == searchParams.Status)
+                    .Where(i => i.Automatic == searchParams.Automatic)
+                    .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
+                    .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
+                    .Where(x => x.VoucherNo.Length > 10 || x.TradingBank == "" || x.TradingBank == null || x.VoucherNo == null || x.VoucherNo == "").ToList();
+                    foreach (var item in voucherData)
                     {
-                        var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
-                        item.VoucherNo = no;
-                        db.Updateable(item).ExecuteCommand();
-                    }
-                    if (item.TradingBank == "" || item.TradingBank == null)
-                    {
-                        var bankFlow1 = db.SqlQueryable<Business_BankFlowTemplate>(@"select * from Business_BankFlowTemplate where CONVERT(varchar(100), TransactionDate, 23)='" + item.VoucherDate.TryToDate().ToString("yyyy-MM-dd") + @"'").ToList();
-                        var bankFlow = bankFlow1.Where(x => x.TurnIn == item.CreditAmountTotal || x.TurnOut == item.DebitAmountTotal)
-                                        .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
-                        if (bankFlow.Count == 1)
+                        if (item.VoucherNo == null || item.VoucherNo == "")
                         {
-                            item.TradingBank = bankFlow[0].TradingBank;
-                            item.ReceivingUnit = bankFlow[0].ReceivingUnit;
-                            item.TransactionDate = bankFlow[0].TransactionDate;
-                            item.Batch = bankFlow[0].Batch;
+                            var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                            item.VoucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault();
+                            db.Updateable(item).ExecuteCommand();
                         }
                         else
                         {
-                            var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item.VGUID).ToList();
-                            foreach (var it in voucherDetail)
+                            if (item.VoucherNo.Length > 10)
                             {
-                                var bankFlow2 = bankFlow1
-                                .Where(x => x.Remark == it.Abstract)
-                                .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
-                                .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
-                                if (bankFlow2.Count == 1)
+                                var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
+                                item.VoucherNo = no;
+                                db.Updateable(item).ExecuteCommand();
+                            }
+                        }
+                        if (item.TradingBank == "" || item.TradingBank == null)
+                        {
+                            var bankFlow1 = db.SqlQueryable<Business_BankFlowTemplate>(@"select * from Business_BankFlowTemplate where CONVERT(varchar(100), TransactionDate, 23)='" + item.VoucherDate.TryToDate().ToString("yyyy-MM-dd") + @"'").ToList();
+                            var bankFlow = bankFlow1.Where(x => x.TurnIn == item.CreditAmountTotal || x.TurnOut == item.DebitAmountTotal)
+                                            .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                            if (bankFlow.Count == 1)
+                            {
+                                item.TradingBank = bankFlow[0].TradingBank;
+                                item.ReceivingUnit = bankFlow[0].ReceivingUnit;
+                                item.TransactionDate = bankFlow[0].TransactionDate;
+                                item.Batch = bankFlow[0].Batch;
+                            }
+                            else
+                            {
+                                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item.VGUID).ToList();
+                                foreach (var it in voucherDetail)
                                 {
-                                    item.TradingBank = bankFlow2[0].TradingBank;
-                                    item.ReceivingUnit = bankFlow2[0].ReceivingUnit;
-                                    item.TransactionDate = bankFlow2[0].TransactionDate;
-                                    item.Batch = bankFlow2[0].Batch;
-                                }
-                                else
-                                {
-                                    var bankFlow3 = bankFlow1
-                               .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
-                               .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
-                                    if (bankFlow3.Count == 1)
+                                    var bankFlow2 = bankFlow1
+                                    .Where(x => x.Remark == it.Abstract)
+                                    .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
+                                    .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                                    if (bankFlow2.Count == 1)
                                     {
-                                        item.TradingBank = bankFlow3[0].TradingBank;
-                                        item.ReceivingUnit = bankFlow3[0].ReceivingUnit;
-                                        item.TransactionDate = bankFlow3[0].TransactionDate;
-                                        item.Batch = bankFlow3[0].Batch;
+                                        item.TradingBank = bankFlow2[0].TradingBank;
+                                        item.ReceivingUnit = bankFlow2[0].ReceivingUnit;
+                                        item.TransactionDate = bankFlow2[0].TransactionDate;
+                                        item.Batch = bankFlow2[0].Batch;
+                                    }
+                                    else
+                                    {
+                                        var bankFlow3 = bankFlow1
+                                   .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
+                                   .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
+                                        if (bankFlow3.Count == 1)
+                                        {
+                                            item.TradingBank = bankFlow3[0].TradingBank;
+                                            item.ReceivingUnit = bankFlow3[0].ReceivingUnit;
+                                            item.TransactionDate = bankFlow3[0].TransactionDate;
+                                            item.Batch = bankFlow3[0].Batch;
+                                        }
                                     }
                                 }
+                                //var bankFlow2 = bankFlow1.
                             }
-                            //var bankFlow2 = bankFlow1.
+                            db.Updateable(item).ExecuteCommand();
                         }
-                        db.Updateable(item).ExecuteCommand();
                     }
                 }
+                
                 
                 //DateTime? firstDay = null;
                 //DateTime? lastDay = null;
@@ -166,10 +180,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         {
                             if(voucherOne.VoucherNo == "" || voucherOne.VoucherNo == null)
                             {
-                                var type = "Bank";
+                                var type = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
                                 if(voucherOne.VoucherType == "现金类")
                                 {
-                                    type = "Money";
+                                    type = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
                                 }
                                 var voucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '"+ type + "', @output output  select @output").FirstOrDefault();
                                 //voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
@@ -261,14 +275,21 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             //asset.VGUID = Guid.NewGuid();
             foreach (var items in voucherDetail)
             {
-                var four = voucher.VoucherNo.Substring(voucher.VoucherNo.Length - 4, 4);
+                //var four = voucher.VoucherNo.Substring(voucher.VoucherNo.Length - 4, 4);
+                var dateNow = DateTime.Now;
+                var month = dateNow.Month.TryToString();
+                if (dateNow.Month < 10)
+                {
+                    month = "0" + dateNow.Month;
+                }
+                var batchName = voucher.VoucherType + dateNow.Year.TryToString() + month + dateNow.Day.TryToString();
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
                 asset.CREATE_USER = documentMaker;
                 //asset.SubjectVGUID = guid;
                 asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;
-                asset.JE_BATCH_NAME = voucher.BatchName + four;
+                asset.JE_BATCH_NAME = batchName;//批名按审核日期生成
                 asset.JE_BATCH_DESCRIPTION = "";
                 asset.JE_HEADER_NAME = voucher.VoucherNo;
                 asset.JE_HEADER_DESCRIPTION = "";

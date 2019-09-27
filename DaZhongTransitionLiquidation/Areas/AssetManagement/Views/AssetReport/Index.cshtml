@@ -70,7 +70,27 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
     </div>
-    <div id="jqxTable" class="jqxTable" style="height:500px;width:100%;background-color: white;">
+    <div style="max-width:1200px; overflow-x: scroll;">
+        <div style="min-width:2260px;">
+            <div id="jqxStartPeriodTable" class="jqxTable" style="height:300px;background-color: white; float: left;">
+            </div>
+            <div id="jqxAddedTable" class="jqxTable" style="height: 300px; background-color: white;float:left;">
+            </div>
+            <div id="jqxReduceTable" class="jqxTable" style="height: 300px;background-color: white;float:left;">
+            </div>
+            <div id="jqxEndPeriodTable" class="jqxTable" style="height: 300px;background-color: white;float:left;">
+            </div>
+        </div>
+        <div style="min-width:2260px;clear:left">
+            <div id="jqxStartPeriodTable1" class="jqxTable" style="height:300px;background-color: white; float: left;">
+            </div>
+            <div id="jqxAddedTable1" class="jqxTable" style="height: 300px;  background-color: white;float:left;">
+            </div>
+            <div id="jqxReduceTable1" class="jqxTable" style="height: 300px;  background-color: white;float:left;">
+            </div>
+            <div id="jqxEndPeriodTable1" class="jqxTable" style="height: 300px;  background-color: white;float:left;">
+            </div>
+        </div>
     </div>
 </div>
 <style>
@@ -80,3 +100,5 @@
 </style>
 <!-- 底部表格 -->
 <input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<input type="hidden" id="PeriodType" value="" />
+<input type="hidden" id="ShowType" value="" />

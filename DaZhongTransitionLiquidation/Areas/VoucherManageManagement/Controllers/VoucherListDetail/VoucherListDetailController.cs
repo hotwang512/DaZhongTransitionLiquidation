@@ -67,6 +67,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 var IsSuccess = "0";
+                var guid = Guid.Empty;
                 var result = db.Ado.UseTran(() =>
                 {
                     var loanMoney = voucher.Detail == null ? null : voucher.Detail.Where(i => i.LoanMoney != -1).Sum(x => x.LoanMoney);//贷方总金额
@@ -111,7 +112,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     voucherList.CreditAmountTotal = loanMoney;
                     voucherList.DebitAmountTotal = borrowMoney;
                     voucherList.CreateTime = DateTime.Now;
-                    var guid = voucher.VGUID;
+                    guid = voucher.VGUID;
                     if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
@@ -194,7 +195,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     
                 });
                 resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.ResultInfo = guid.TryToString();
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 if (IsSuccess == "2")
                 {

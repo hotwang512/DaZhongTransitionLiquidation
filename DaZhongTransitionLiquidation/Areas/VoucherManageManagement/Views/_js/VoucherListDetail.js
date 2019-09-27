@@ -230,6 +230,7 @@ var $page = function () {
                                 break;
                             case "1":
                                 jqxNotification("保存成功！", null, "success");
+                                $("#VGUID").val(msg.ResultInfo);
                                 //history.go(-1);
                                 //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                 break;
@@ -436,10 +437,7 @@ var $page = function () {
         $("#btnUp").on("click", function () {
             var vguid = $("#VGUID").val();
             var tableIndex = $("#Automatic").val();
-            var status = "";
-            if ($("#Status").val() == "1") {
-                status = "2";
-            }
+            var status = "2";
             if ($("#Status").val() == "2") {
                 status = "3";
             }

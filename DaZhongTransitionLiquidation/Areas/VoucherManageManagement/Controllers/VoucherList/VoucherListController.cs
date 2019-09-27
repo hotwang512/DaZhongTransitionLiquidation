@@ -38,7 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 var starDate = "2019-09-01".TryToDate();
-                var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherDate > starDate)
+                var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherDate >= starDate)
                 .Where(i => i.Status == searchParams.Status)
                 .Where(i => i.Automatic == searchParams.Automatic)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
@@ -116,7 +116,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 jsonResult.Rows = db.Queryable<Business_VoucherList>()
                 .Where(i => i.Status == searchParams.Status)
                 .Where(i => i.Automatic == searchParams.Automatic)
-                .Where(i => i.VoucherDate > starDate)
+                .Where(i => i.VoucherDate >= starDate)
                 .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
                 .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
                 .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
@@ -298,7 +298,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 asset.ACCOUNTED_CR = items.LoanMoney.TryToString();
                 //asset.SubjectCount = items.CompanySection + "." + items.SubjectSection + "." + items.AccountSection + "." + items.CostCenterSection + "." + items.SpareOneSection + "." + items.SpareTwoSection + "." + items.IntercourseSection;
                 //同步至中间表
-                db.Insertable(asset).IgnoreColumns(it => new { }).ExecuteCommand();
+                db.Insertable(asset).ExecuteCommand();
             }
         }
         public JsonResult SyncAssetsData()

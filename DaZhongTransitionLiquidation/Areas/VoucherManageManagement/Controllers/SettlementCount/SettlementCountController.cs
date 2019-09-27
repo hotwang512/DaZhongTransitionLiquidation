@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using Spire.Xls;
 using System.Drawing.Printing;
+using System.Text;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.SettlementCount
 {
@@ -64,9 +65,24 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 string uniqueKey = PubGet.GetUserKey + "SettlementCount";
                 CacheManager<List<Business_SettlementCount>>.GetInstance().Add(uniqueKey, data);
             });
-            return Json(jsonResult.Rows, JsonRequestBehavior.AllowGet);
+            return Json(
+                 jsonResult.Rows,
+                 "application/json",
+                 Encoding.UTF8,
+                 JsonRequestBehavior.AllowGet
+             );
         }
-
+        protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = Int32.MaxValue
+            };
+        }
         public JsonResult GetSettlementCountJson(string yearMonth)
         {
             var jsonResult = new JsonResultModel<DataTable>();

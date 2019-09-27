@@ -561,7 +561,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             }
             if (assetList.Count > 0)
             {
-                db.Insertable(assetList).IgnoreColumns(it => new { }).ExecuteCommand();
+                db.Insertable(assetList).ExecuteCommand();
             }
         }
         public static void GetOtherSubject(List<Business_VoucherDetail> BVDetailList, List<Business_BankFlowTemplate> newBankFlowList, Guid guid, Business_BankFlowTemplate item)

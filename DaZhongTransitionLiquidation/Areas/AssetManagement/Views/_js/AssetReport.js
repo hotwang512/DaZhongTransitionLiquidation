@@ -62,8 +62,8 @@ var $page = function () {
     }; //addEvent end
     function initStartPeriodTable() {
         layer.load();
-        $("#PeriodType").val("StartPeriod");
         getPeriodData(function (data) {
+            $("#PeriodType").val("StartPeriod");
             var source =
             {
                 localdata: data,
@@ -90,7 +90,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#PeriodType").val() == "StartPeriod"?"期初":"期末",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -110,7 +110,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#PeriodType").val() == "StartPeriod" ? "期初" : "期末",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -137,8 +137,8 @@ var $page = function () {
     }
     function initEndPeriodTable() {
         layer.load();
-        $("#PeriodType").val("EndPeriod");
         getPeriodData(function (data) {
+            $("#PeriodType").val("EndPeriod");
             var source =
             {
                 localdata: data,
@@ -165,7 +165,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#PeriodType").val() == "StartPeriod" ? "期初" : "期末",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -185,7 +185,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#PeriodType").val() == "StartPeriod" ? "期初" : "期末",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -240,7 +240,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -260,7 +260,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -315,7 +315,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
@@ -335,7 +335,7 @@ var $page = function () {
                             dataField: 'Quantity',
                             'function': 'sum',
                             showHeader: false,
-                            text: '数量',
+                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
                             width: 80,
                             align: 'center',
                             formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },

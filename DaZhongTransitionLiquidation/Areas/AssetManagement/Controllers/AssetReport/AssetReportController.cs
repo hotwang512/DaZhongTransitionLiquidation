@@ -76,7 +76,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                         x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                     foreach (var item in assetModifyFlowList)
                     {
-                        if (item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
+                        if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
                         {
                             //Code转名称
                             if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
@@ -208,7 +208,48 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                             .ToList();
                     }
                 }
-
+                //增加数量为0的公司
+                var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+                var resultApiModifyModel = apiReaultModify
+                    .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                //全量获取车辆信息
+                var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                var resultData = resultApiModifyModel.data[0].DATA;
+                foreach (var item in resultData)
+                {
+                    var nv = new Api_ModifyVehicleAsset();
+                    var t = nv.GetType();
+                    for (var k = 0; k < resultColumn.Count; k++)
+                    {
+                        var pi = t.GetProperty(resultColumn[k]);
+                        if (pi != null) pi.SetValue(nv, item[k], null);
+                    }
+                    assetModifyFlowList.Add(nv);
+                }
+                var companyData = assetModifyFlowList.GroupBy(x => new { x.BELONGTO_COMPANY }).ToList();
+                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                foreach (var item in companyData)
+                {
+                    if (ssList.Any(x => x.OrgID == item.Key.BELONGTO_COMPANY))
+                    {
+                        var belongToCompany = ssList.First(x => x.OrgID == item.Key.BELONGTO_COMPANY).Abbreviation;
+                        if (reportAddedList.Count > 0 && !reportAddedList.Any(x => x.BelongToCompany == belongToCompany))
+                        {
+                            var report = new Business_VehicleCheckChangeReport();
+                            report.YearMonth = YearMonth;
+                            report.VGUID = Guid.NewGuid();
+                            report.VehicleModel = reportAddedList.First().VehicleModel;
+                            report.BelongToCompany = belongToCompany;
+                            report.ManageCompany = reportAddedList.First().ManageCompany;
+                            report.ChangeType = ShowType;
+                            report.Quantity = 0;
+                            report.CreateDate = DateTime.Now;
+                            report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                            reportAddedList.Add(report);
+                        }
+                    }
+                }
             });
             return Json(reportAddedList.OrderBy(x => x.VehicleModel).ToList(), JsonRequestBehavior.AllowGet);
         }

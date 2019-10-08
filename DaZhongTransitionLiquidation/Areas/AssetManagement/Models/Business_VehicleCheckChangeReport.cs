@@ -6,13 +6,13 @@ using SqlSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
 {
-    ///<summary>
+    //<summary>
     ///车辆核定表
     ///</summary>
-    [SugarTable("Business_VehicleCheckReport")]
-    public partial class Business_VehicleCheckReport
+    [SugarTable("Business_VehicleCheckChangeReport")]
+    public partial class Business_VehicleCheckChangeReport
     {
-        public Business_VehicleCheckReport()
+        public Business_VehicleCheckChangeReport()
         {
         }
         /// <summary>
@@ -52,6 +52,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string YearMonth { get; set; }
+        public string ChangeType { get; set; }
 
         /// <summary>
         /// Desc:

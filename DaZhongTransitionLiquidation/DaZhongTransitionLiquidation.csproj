@@ -2394,6 +2394,7 @@
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyOBD.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckChangeReport.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckReport.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeAuction.cs" />
     <Compile Include="Areas\AssetManagement\Models\Excel_DisposeIncomeSale.cs" />

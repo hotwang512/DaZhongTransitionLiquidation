@@ -59,31 +59,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                  JsonRequestBehavior.AllowGet
              );
         }
-        public JsonResult GetSubjectBalanceGrid(string companyCode, string accountModeCode, string year, string month, GridParams para)
-        {
-            var jsonResult = new List<v_Business_SubjectSettingInfo>();
-            DbBusinessDataService.Command(db =>
-            {
-                //int pageCount = 0;
-                para.pagenum = para.pagenum + 1;
-                string sql = string.Format(@" exec sp_recompile @objname = 'usp_SubjectSettingInfo'");
-                var str = db.Ado.SqlQuery<string>(sql).ToString();
-                var data = db.Ado.UseStoredProcedure().SqlQuery<v_Business_SubjectSettingInfo>("usp_SubjectSettingInfo",
-                    new { AccountModeCode = accountModeCode, CompanyCode = companyCode, Year = year, Month = month }).ToList();
-                //jsonResult.Rows = data.Skip((para.pagenum - 1) * para.pagesize).Take(para.pagesize).ToList();
-
-                //string sql = string.Format(@" exec usp_SubjectSettingInfo  '{0}','{1}','{2}','{3}' ", accountModeCode, companyCode, year, month);
-                //var data = db.SqlQueryable<v_Business_SubjectSettingInfo>(sql).ToPageList(para.pagenum, para.pagesize, ref pageCount);
-                jsonResult = data;
-                //jsonResult.TotalRows = pageCount;
-            });
-            return Json(
-                 jsonResult,
-                 "application/json",
-                 Encoding.UTF8,
-                 JsonRequestBehavior.AllowGet
-             );
-        }
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
             return new JsonResult()

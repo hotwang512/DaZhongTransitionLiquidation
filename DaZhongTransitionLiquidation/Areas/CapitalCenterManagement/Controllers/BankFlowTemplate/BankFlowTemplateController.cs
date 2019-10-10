@@ -717,7 +717,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         {
                             //从金额报表中按配置获取金额
                             var amountReport = bankFlowList.Where(x => x.OrganizationName == it.TransferCompany && x.Channel_Id == it.Channel && x.RevenueDate == item.TransactionDate.TryToDate().ToString("yyyy-MM-dd")).ToList();
-                            if (amountReport.Count > 0)
+                            if (amountReport.Count > 0 && it.TransferType != null)
                             {
                                 switch (it.TransferType)
                                 {

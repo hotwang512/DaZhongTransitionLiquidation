@@ -282,7 +282,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             continue;
                                         }
                                         var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM-dd")).ToList();
-                                        if (amountReport.Count > 0)
+                                        if (amountReport.Count > 0 && paySetting.TransferType != null)
                                         {
                                             it.LoanMoney = 0;
                                             switch (paySetting.TransferType)
@@ -314,7 +314,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             }
                                             //从金额报表中按配置获取金额
                                             var amountReport = bankFlowList.Where(x => x.Channel_Id == paySetting.Channel && x.RevenueDate == item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM-dd")).ToList();
-                                            if (amountReport.Count > 0)
+                                            if (amountReport.Count > 0 && paySetting.TransferType != null)
                                             {
                                                 switch (paySetting.TransferType)
                                                 {

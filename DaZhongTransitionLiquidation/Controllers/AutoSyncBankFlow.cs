@@ -208,6 +208,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
                         var bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
+                        var sevenData = _db.Queryable<Business_SevenSection>().ToList();
                         foreach (var item in voucherData)
                         {
                             var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x=>x.ReceivableAccount).ToList();
@@ -219,7 +220,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 continue;
                             }
-                            if(voucherDetail.Count == 2)
+                            var accountModeCode = "";
+                            var accountModeData = sevenData.Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.AccountModeName).First();
+                            if (accountModeData != null)
+                            {
+                                accountModeCode = accountModeData.Code;
+                            }
+                            if (voucherDetail.Count == 2)
                             {
                                 //一借一贷
                                 var borrowMoney = voucherDetail[0].BorrowMoney;
@@ -263,7 +270,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                         //贷配置明细
                                         var subject = it.CompanySection+"."+it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
-                                        var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject).FirstOrDefault();
+                                        var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
                                         if(paySetting == null)
                                         {
                                             continue;
@@ -299,7 +306,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                         {
                                             var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                             var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
-                                            var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject).FirstOrDefault();
+                                            var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
                                             if (paySetting.Channel == "898319841215600")
                                             {
                                                 //自助发票机另外处理

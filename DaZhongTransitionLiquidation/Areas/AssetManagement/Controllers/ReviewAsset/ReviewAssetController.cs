@@ -55,7 +55,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         if (item.ORIGINALID.IsNullOrEmpty() || item.PLATE_NUMBER.IsNullOrEmpty() ||
                             item.TAG_NUMBER.IsNullOrEmpty() || item.MANAGEMENT_COMPANY.IsNullOrEmpty() ||
                             item.BELONGTO_COMPANY.IsNullOrEmpty() || item.ASSET_ID.IsNullOrEmpty() || item.DESCRIPTION.IsNullOrEmpty() || item.ASSET_COST.IsNullOrEmpty() || 
-                            item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() || item.BOOK_TYPE_CODE.IsNullOrEmpty() || item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty()||
+                            item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() || item.BOOK_TYPE_CODE.IsNullOrEmpty() || item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() || item.COMMISSIONING_DATE.IsNullOrEmpty() ||
                             item.MODEL_MAJOR.IsNullOrEmpty() || item.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
                         {
                             item.GROUP_ID = "1";
@@ -122,6 +122,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             }
                             newVehicleList.Add(nv);
                         }
+                        //var aVehicleList = newVehicleList.ToList().TryToDataTable();
                         //var bVehicleList = newVehicleList.Where(x => x.MODEL_MINOR.IsNullOrEmpty() && x.OPERATING_STATE == "在运").ToList().TryToDataTable();
                         //获取所有的公司
                         var ssList = db.Queryable<Business_SevenSection>().Where(x =>
@@ -323,7 +324,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             !item.DESCRIPTION.IsNullOrEmpty() && !item.ASSET_COST.IsNullOrEmpty() &&
                             !item.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() && !item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() &&
                             !item.BOOK_TYPE_CODE.IsNullOrEmpty() && !item.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() &&
-                            !item.MODEL_MAJOR.IsNullOrEmpty() && !item.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
+                            !item.MODEL_MAJOR.IsNullOrEmpty() && !item.ASSET_CATEGORY_MINOR.IsNullOrEmpty() && !item.COMMISSIONING_DATE.IsNullOrEmpty())
                         {
                             var assetSwapModel = new AssetMaintenanceInfo_Swap();
                             assetSwapModel.TRANSACTION_ID = item.VGUID;
@@ -338,7 +339,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             assetSwapModel.AMORTIZATION_FLAG = item.AMORTIZATION_FLAG;
                             assetSwapModel.YTD_DEPRECIATION = item.YTD_DEPRECIATION;
                             assetSwapModel.ACCT_DEPRECIATION = item.ACCT_DEPRECIATION;
-                            assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
+                            assetSwapModel.PERIOD = item.COMMISSIONING_DATE.Year + item.COMMISSIONING_DATE.Month.ToString().PadLeft(2,'0');
                             assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
                             //传入订单选择的部门
                             assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY;
@@ -368,7 +369,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             !reviewItem.DESCRIPTION.IsNullOrEmpty() && !reviewItem.ASSET_COST.IsNullOrEmpty() &&
                             !reviewItem.ASSET_CATEGORY_MAJOR.IsNullOrEmpty() && !reviewItem.ASSET_CATEGORY_MINOR.IsNullOrEmpty() &&
                             !reviewItem.BOOK_TYPE_CODE.IsNullOrEmpty() && !reviewItem.EXP_ACCOUNT_SEGMENT.IsNullOrEmpty() &&
-                            !reviewItem.MODEL_MAJOR.IsNullOrEmpty() && !reviewItem.ASSET_CATEGORY_MINOR.IsNullOrEmpty())
+                            !reviewItem.MODEL_MAJOR.IsNullOrEmpty() && !reviewItem.ASSET_CATEGORY_MINOR.IsNullOrEmpty() && !reviewItem.COMMISSIONING_DATE.IsNullOrEmpty())
                         {
                             var asset = new Business_AssetMaintenanceInfo();
                             asset.VGUID = reviewItem.VGUID;

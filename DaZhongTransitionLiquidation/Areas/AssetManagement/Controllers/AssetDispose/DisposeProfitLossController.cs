@@ -76,5 +76,28 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
             }
             return Json(resultModel);
         }
+
+        /// <summary>
+        /// 计算损益
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult ComputeProfitLoss()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    //计算损益
+                    db.Ado.ExecuteCommand(@"update dbo.Business_DisposeProfitLoss set RealizedProfitLoss = Price + Taxes + DriverRentCarFee");
+                    //同步主表
+                    db.Ado.ExecuteCommand(@"update  info set info.DISPOSAL_AMOUNT = loss.Price, info.DISPOSAL_TAX = loss.Taxes, info.DISPOSAL_PROFIT_LOSS = loss.RealizedProfitLoss from Business_AssetMaintenanceInfo as info left join Business_DisposeProfitLoss loss on info.PLATE_NUMBER = loss.DepartmentVehiclePlateNumber");
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
     }
 }

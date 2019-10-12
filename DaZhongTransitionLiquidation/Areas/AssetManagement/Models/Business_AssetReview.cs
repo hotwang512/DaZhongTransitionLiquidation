@@ -139,7 +139,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public DateTime? COMMISSIONING_DATE { get; set; }
+        public DateTime COMMISSIONING_DATE { get; set; }
 
         /// <summary>
         /// Desc:

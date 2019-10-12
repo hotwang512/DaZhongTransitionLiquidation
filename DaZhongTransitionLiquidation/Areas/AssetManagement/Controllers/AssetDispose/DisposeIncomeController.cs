@@ -201,6 +201,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                             DisposeProfitLoss.BackCarDate = item.BackCarDate;
                             DisposeProfitLoss.BackCarAge = item.BackCarAge;
                             DisposeProfitLossList.Add(DisposeProfitLoss);
+                            db.Updateable<Business_AssetMaintenanceInfo>()
+                                .UpdateColumns(it => new Business_AssetMaintenanceInfo { ASSET_DISPOSITION_TYPE = item.SaleType }).Where(it => it.ASSET_ID == item.AssetID).ExecuteCommand();
                             item.SubmitStatus = 1;
                         }
                     }

@@ -38,6 +38,7 @@ var $page = function () {
         initTable();
         getCompanyCode();
         getPaySettingList();
+        initBorrowTable(companyCode, accountMode);
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
@@ -344,7 +345,7 @@ function add(type) {
     $("#myModalLabel_title").text("新增借/贷方信息");
     selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
     selector.$AddBankChannelDialog().modal("show");
-    initBorrowTable(companyCode, accountMode);
+    //initBorrowTable(companyCode, accountMode);
 }
 
 function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, Loan,Remark, Channel) {
@@ -362,7 +363,7 @@ function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, L
     $("#Month").val(Month);
     $("#Remark").val(Remark);
     $("#CompanyCode").val(CompanyCode);
-    initBorrowTable(CompanyCode, accountMode);
+    //initBorrowTable(CompanyCode, accountMode);
     if (Remark == null || Remark == "null") {
         $("#Remark").val("");
     }
@@ -444,12 +445,17 @@ function initBorrowTable(companyCode, accountMode) {
         pageable: true,
         width: "100%",
         autoheight: false,
+        height: 350,
         columnsresize: true,
         pageSize: 15,
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
         theme: "office",
+        rendergridrows: function (obj) {
+            return obj.data;
+        },
+        virtualmode: false,
         pagermode: 'simple',
         columnsHeight: 40,
         columns: [
@@ -487,12 +493,17 @@ function initBorrowTable(companyCode, accountMode) {
         pageable: true,
         width: "100%",
         autoheight: false,
+        height: 350,
         columnsresize: true,
         pageSize: 15,
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
         theme: "office",
+        rendergridrows: function (obj) {
+            return obj.data;
+        },
+        virtualmode: false,
         pagermode: 'simple',
         columnsHeight: 40,
         columns: [

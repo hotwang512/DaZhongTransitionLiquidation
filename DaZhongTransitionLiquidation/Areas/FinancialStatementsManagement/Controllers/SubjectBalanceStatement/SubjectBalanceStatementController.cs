@@ -54,6 +54,8 @@ namespace DaZhongTransitionLiquidation.Areas.FinancialStatementsManagement.Contr
                     return;
                 }
                 //查询期初7个段组合编码,期初余额
+                string sql = string.Format(@" exec sp_recompile @objname = 'usp_SubjectSettingInfo'");
+                var str = db.Ado.SqlQuery<string>(sql).ToString();
                 var SubjectBalance = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode,@Year,@Month",
                     new { AccountModeCode = accountModeCode, CompanyCode = companyCode, Year = year, Month = month }).ToList();
                 //查询账期下的借贷额

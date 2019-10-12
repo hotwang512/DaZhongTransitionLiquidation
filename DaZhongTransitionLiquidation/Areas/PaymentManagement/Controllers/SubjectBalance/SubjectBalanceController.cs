@@ -41,7 +41,10 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                var data = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>("exec usp_SubjectSettingInfo @AccountModeCode,@CompanyCode,@Year,@Month",
+                //重新编译存储过程
+                string sql = string.Format(@" exec sp_recompile @objname = 'usp_SubjectSettingInfo'");
+                var str = db.Ado.SqlQuery<string>(sql).ToString();
+                var data = db.Ado.UseStoredProcedure().SqlQuery<v_Business_SubjectSettingInfo>("usp_SubjectSettingInfo",
                     new { AccountModeCode = accountModeCode, CompanyCode = companyCode, Year = year, Month = month }).ToList();
                 //jsonResult.Rows = data.Skip((para.pagenum - 1) * para.pagesize).Take(para.pagesize).ToList();
 

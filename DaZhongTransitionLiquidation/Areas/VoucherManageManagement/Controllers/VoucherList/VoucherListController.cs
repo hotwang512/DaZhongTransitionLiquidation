@@ -256,14 +256,22 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             //删除现有中间表数据
             //db.Deleteable<AssetsGeneralLedger_Swap>().Where(x => x.LINE_ID == item.TryToString()).ExecuteCommand();
             //凭证中间表
+            var accountModeCode = "";
+            var assetsData = db.Queryable<AssetsGeneralLedger_Swap>().ToList();
             var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
             var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item).ToList();
+            var accountModeData = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == voucher.AccountModeName).First();
+            if(accountModeData != null)
+            {
+                accountModeCode = accountModeData.Code;
+            }
             var type = "";
+            var voucherType = "";
             switch (voucher.VoucherType)
             {
-                case "现金类": type = "x.现金"; break;
-                case "银行类": type = "y.银行"; break;
-                case "转账类": type = "z.转账"; break;
+                case "现金类": type = "x.现金"; voucherType = "X"; break;
+                case "银行类": type = "y.银行"; voucherType = "Y"; break;
+                case "转账类": type = "z.转账"; voucherType = "Z"; break;
                 default: break;
             }            
             var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
@@ -282,16 +290,54 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 {
                     month = "0" + dateNow.Month;
                 }
-                var batchName = voucher.VoucherType + dateNow.Year.TryToString() + month + dateNow.Day.TryToString();
+                //批名（100201Y190930+01） 批名按审核日期生成+已审核批次
+                var times = "01";
+                var batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 4) + month + dateNow.Day.TryToString();
+                if(dateNow.Month != voucher.VoucherDate.Value.Month)
+                {
+                    //审核跨月,取凭证日期的当月最后一天
+                    var lastDay = voucher.VoucherDate.Value.AddDays(1 - voucher.VoucherDate.Value.Day).AddMonths(1).AddDays(-1).Day;
+                    batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 4) + voucher.VoucherDate.Value.Month + lastDay;
+                }
+                var batchNameData = assetsData.Where(x => x.JE_BATCH_NAME.Contains(accountModeCode + voucher.CompanyCode + voucherType)).OrderByDescending(x=>x.JE_BATCH_NAME).ToList();
+                if(batchNameData.Count > 0)
+                {
+                    var isAnyData = assetsData.Where(x => x.JE_BATCH_NAME.Contains(batchName) && x.STATUS == "S").OrderByDescending(x => x.JE_BATCH_NAME).ToList();
+                    if (isAnyData.Count > 0)
+                    {
+                        var batchTimes = isAnyData[0].JE_BATCH_NAME.Substring(13, 15).TryToInt();
+                        var newBatchTimes = "";
+                        if (batchTimes > 8)
+                        {
+                            newBatchTimes = (batchTimes + 1).TryToString();
+                        }
+                        else
+                        {
+                            newBatchTimes = "0" + (batchTimes + 1).TryToString();
+                        }
+                        batchName = batchName + newBatchTimes;
+                    }
+                    else
+                    {
+                        batchName = batchNameData[0].JE_BATCH_NAME;
+                    }
+                }
+                else
+                {
+                    batchName = batchName + times;
+                }
+                //var batchNames = getBatchName(batchName, times);
+                //凭证号（10020119090001）
+                var voucherNo = accountModeCode + voucher.CompanyCode + voucher.VoucherNo.Substring(2, 10);
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
                 asset.CREATE_USER = documentMaker;
                 //asset.SubjectVGUID = guid;
                 asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;
-                asset.JE_BATCH_NAME = batchName;//批名按审核日期生成
+                asset.JE_BATCH_NAME = batchName;
                 asset.JE_BATCH_DESCRIPTION = "";
-                asset.JE_HEADER_NAME = voucher.VoucherNo;
+                asset.JE_HEADER_NAME = voucherNo;
                 asset.JE_HEADER_DESCRIPTION = "";
                 asset.JE_SOURCE_NAME = "大众出租财务共享平台";
                 asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转账)

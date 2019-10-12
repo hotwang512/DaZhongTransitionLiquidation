@@ -41,7 +41,7 @@ var $page = function () {
         initTable();
 
         selector.$btnSearch().unbind("click").on("click", function () {
-            initTable();
+            //initTable();
         });
 
         //重置按钮事件

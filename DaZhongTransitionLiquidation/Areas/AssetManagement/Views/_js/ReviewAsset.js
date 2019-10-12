@@ -251,7 +251,7 @@ var $page = function () {
                     { text: '资产次类', datafield: 'ASSET_CATEGORY_MINOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '车型', datafield: 'VEHICLE_SHORTNAME', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '启用日期', datafield: 'LISENSING_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '期间', datafield: 'START_VEHICLE_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '期间', datafield: 'COMMISSIONING_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '资产原值', datafield: 'ASSET_COST', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '摊销标记', datafield: 'AMORTIZATION_FLAG', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '存放地点1', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },

@@ -84,6 +84,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetDi
                         retirement.NetValue = item.NetValue;
                         retirement.OraclePlateNumber = item.OraclePlateNumber;
                         DisposeProfitLossList.Add(retirement);
+                        db.Updateable<Business_AssetMaintenanceInfo>()
+                            .UpdateColumns(it => new Business_AssetMaintenanceInfo {SCRAP_INFORMATION = "Y"}).Where(it => it.ASSET_ID == item.AssetID).ExecuteCommand();
                         item.SubmitStatus = 1;
                     }
                     db.Updateable<Business_DisposeProfitLoss>(DisposeProfitLossList).ExecuteCommand();

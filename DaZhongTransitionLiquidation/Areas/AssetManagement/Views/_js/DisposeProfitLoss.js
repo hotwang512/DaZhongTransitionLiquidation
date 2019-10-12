@@ -3,8 +3,7 @@ var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
-    $EditPermission: function () { return $("#EditPermission") },
-    $btnImport: function () { return $("#btnImport") }
+    $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
 var isEdit = false;
 var vguid = "";
@@ -23,53 +22,27 @@ var $page = function () {
         selector.$btnReset().on("click", function () {
             $("#PlateNumber").val("");
         });
-        selector.$btnImport().on("click",
-            function () {
-                $("#LocalFileInput").click();
-            }
-        );
-        //统一上传文件
-        $("#LocalFileInput").on("change",
-            function () {
-                debugger;
-                var filePath = this.value;
-                var fileExt = filePath.substring(filePath.lastIndexOf("."))
-                    .toLowerCase();
-                if (!checkFileExt(fileExt)) {
-                    jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
-                    this.value = "";
-                    return;
-                } else {
-                    layer.load();
-                    $("#localFormFile").ajaxSubmit({
-                        url: "/AssetManagement/DisposeNetValue/ImportDisposeProfitLossFile",
-                        type: "post",
-                        success: function (msg) {
-                            layer.closeAll('loading');
-                            switch (msg.Status) {
-                                case "0":
-                                    if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
-                                        jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
-                                    } else {
-                                        jqxNotification("导入失败", null, "error");
-                                    }
-                                    $('#LocalFileInput').val('');
-                                    break;
-                                case "1":
-                                    jqxNotification("导入成功！", null, "success");
-                                    $('#LocalFileInput').val('');
-                                    initTable();
-                                    break;
-                                case "2":
-                                    jqxNotification(msg.ResultInfo, null, "error");
-                                    $('#LocalFileInput').val('');
-                                    initTable();
-                                    break;
-                            }
-                        }
-                    });
+        //计算数据
+        $("#btnCompute").on("click", function () {
+            layer.load();
+            $.ajax({
+                url: "/AssetManagement/DisposeProfitLoss/ComputeProfitLoss",
+                //traditional: true,
+                type: "post",
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("计算失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("计算成功！", null, "success");
+                        initTable();
+                        break;
+                    }
                 }
             });
+        });
     }; //addEvent end
     function initTable() {
         var source =

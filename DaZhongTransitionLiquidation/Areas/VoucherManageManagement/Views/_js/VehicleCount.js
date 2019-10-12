@@ -18,25 +18,6 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        $("#btnSync").on("click", function () {
-            layer.load();
-            $.ajax({
-                url: "/VoucherManageManagement/VehicleBusiness/GetVehicleBusinessInfo",
-                data: {},
-                type: "post",
-                dataType: "json",
-                success: function (msg) {
-                    if (msg.IsSuccess == true) {
-                        layer.closeAll('loading');
-                        jqxNotification("同步成功！", null, "success");
-                        initTable();
-                    } else {
-                        layer.closeAll('loading');
-                        jqxNotification("同步失败！", null, "error");
-                    }
-                }
-            });
-        });
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -58,21 +39,25 @@ var $page = function () {
                 datafields:
                 [
                     //{ name: "checkbox", type: null },
-                    { name: 'ORIGINALID', type: 'string' },
-                    { name: 'PLATE_NUMBER', type: 'string' },
-                    { name: 'MODEL_DAYS', type: 'string' },
-                    { name: 'MODEL_MINOR', type: 'string' },
-                    { name: 'MODEL_MAJOR', type: 'string' },
+                    { name: 'VGUID', type: 'string' },
+                    { name: 'Model', type: 'string' },
+                    { name: 'ClassType', type: 'string' },
+                    { name: 'CarType', type: 'string' },
+                    { name: 'Business', type: 'string' },
+                    { name: 'BusinessKey', type: 'string' },
+                    { name: 'BusinessType', type: 'string' },
                     { name: 'YearMonth', type: 'string' },
+                    { name: 'DAYS', type: 'string' },
+                    { name: 'Money', type: 'number' },
+                    { name: 'Account', type: 'number' },
                     { name: 'MANAGEMENT_COMPANY', type: 'string' },
                     { name: 'BELONGTO_COMPANY', type: 'string' },
                     { name: 'VGUID', type: 'string' },
-                    { name: 'CarType', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "YearMonth": $("#YearMonth").val(), "PLATE_NUMBER": $("#PLATE_NUMBER").val(), "MODEL_DAYS": $("#MODEL_DAYS").val(), "MODEL_MINOR": $("#MODEL_MINOR").val() },
-                url: "/VoucherManageManagement/VehicleBusiness/GeVehicleData"   //获取数据源的路径
+                data: { "YearMonth": $("#YearMonth").val() },
+                url: "/VoucherManageManagement/VehicleCount/GeVehicleData"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source);
         //创建卡信息列表（主表）
@@ -87,22 +72,24 @@ var $page = function () {
             theme: "office",
             groupable: true,
             groupsexpandedbydefault: true,
-            groups: ['MANAGEMENT_COMPANY', 'BELONGTO_COMPANY', 'MODEL_MAJOR', 'MODEL_MINOR', 'CarType'],
+            groups: ['MANAGEMENT_COMPANY', 'BELONGTO_COMPANY', 'Model', 'ClassType', 'CarType'],
             showgroupsheader: false,
             columnsHeight: 30,
             pagermode: 'simple',
             selectionmode: 'singlerow',
             columns: [
                 //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                { text: '编码', datafield: 'ORIGINALID', width: 100, align: 'center', cellsAlign: 'center' },
+                //{ text: '编码', datafield: 'ORIGINALID', width: 100, align: 'center', cellsAlign: 'center' },
                 { text: '资产管理公司', datafield: 'MANAGEMENT_COMPANY', width: 200, align: 'center', cellsAlign: 'center' },
                 { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 200, align: 'center', cellsAlign: 'center' },
-                { text: '模式', datafield: 'MODEL_MAJOR', width: 200, align: 'center', cellsAlign: 'center' },
-                { text: '班型', datafield: 'MODEL_MINOR', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '模式', datafield: 'Model', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '班型', datafield: 'ClassType', width: 200, align: 'center', cellsAlign: 'center' },
                 { text: '车型', datafield: 'CarType', width: 150, align: 'center', cellsAlign: 'center' },
                 { text: '日期', datafield: 'YearMonth', width: 120, align: 'center', cellsAlign: 'center' },
-                { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                { text: '车辆运营天数', datafield: 'MODEL_DAYS',align: 'center', cellsAlign: 'center' },
+                { text: '车牌号', datafield: 'PLATE_NUMBER', width: 120, align: 'center', cellsAlign: 'center' },
+                { text: '结算标准', datafield: 'Money', align: 'center', cellsAlign: 'center' },
+                { text: '平均车辆数', datafield: 'DAYS', align: 'center', cellsAlign: 'center' },
+                { text: '结算合计', datafield: 'Account', align: 'center', cellsAlign: 'center' },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true },
             ]
         });

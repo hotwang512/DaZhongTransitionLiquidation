@@ -658,55 +658,77 @@
         </div>
         <div class="menue_body" id="SettlementStandards" style="display: none;">
             <table>
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算项目标准" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算金额标准" && i.Reads == 1))
                 {
                     <tr class="menue_item" id="SettlementImport_SettlementStandards" pageurl="/VoucherManageManagement/SettlementImport/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">结算项目标准</td>
+                        <td class="menue_text">结算金额标准</td>
                         <td></td>
                     </tr>
                 }
             </table>
             <table>
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算项目" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="SettlementSubject_SettlementStandards" pageurl="/VoucherManageManagement/SettlementSubject/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">结算项目</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-            <table>
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "冲销托管税金" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="EliminationTaxImport_SettlementStandards" pageurl="/VoucherManageManagement/EliminationTaxImport/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">冲销托管税金</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-            <table>
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "车辆经营模式天数" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算车辆经营天数" && i.Reads == 1))
                 {
                     <tr class="menue_item" id="VehicleBusiness_SettlementStandards" pageurl="/VoucherManageManagement/VehicleBusiness/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">车辆经营模式天数</td>
+                        <td class="menue_text">结算车辆经营天数</td>
                         <td></td>
                     </tr>
                 }
             </table>
             <table>
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算项目汇总" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算单位平均车辆数" && i.Reads == 1))
                 {
-                    <tr class="menue_item" id="SettlementCount_SettlementStandards" pageurl="/VoucherManageManagement/SettlementCount/Index">
+                    <tr class="menue_item" id="VehicleUnit_SettlementStandards" pageurl="/VoucherManageManagement/VehicleUnit/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">结算项目汇总</td>
+                        <td class="menue_text">结算单位平均车辆数</td>
                         <td></td>
                     </tr>
                 }
             </table>
+            <table>
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算单位金额计算" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="VehicleCount_SettlementStandards" pageurl="/VoucherManageManagement/VehicleCount/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">结算单位金额计算</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+            <table>
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算报表汇总" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="SettlementCount_SettlementStandards" pageurl="/VoucherManageManagement/SettlementCount/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">结算报表汇总</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+            <table>
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算科目配置" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="SettlementSubject_SettlementStandards" pageurl="/VoucherManageManagement/SettlementSubject/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">结算科目配置</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+            <table>
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "结算税金计算" && i.Reads == 1))
+                {
+                    <tr class="menue_item" id="EliminationTaxImport_SettlementStandards" pageurl="/VoucherManageManagement/EliminationTaxImport/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">结算税金计算@*冲销托管税金*@</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+            
+            
         </div>
 
     }

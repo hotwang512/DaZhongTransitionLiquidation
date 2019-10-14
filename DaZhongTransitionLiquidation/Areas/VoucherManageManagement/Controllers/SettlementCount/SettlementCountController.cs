@@ -109,10 +109,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 try
                 {
-                    var data = db.Ado.SqlQuery<Business_SettlementCount>(@"select c.Model,c.ClassType, c.CarType,c.BusinessType ,a.YearMonth,a.MODEL_DAYS as DAYS,c.Money,(a.MODEL_DAYS*c.Money) as Account,c.MoneyRow,c.MoneyColumns from Business_VehicleList as a
+                    var data = db.Ado.SqlQuery<Business_SettlementCount>(@"select c.Model,c.ClassType, c.CarType,c.BusinessType ,a.YearMonth,CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as DAYS,
+                            c.Money,(CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2))*c.Money) as Account,c.MoneyRow,c.MoneyColumns from Business_VehicleList as a
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER
                             left join Business_SettlementImport as c on c.Model=b.MODEL_MAJOR and c.ClassType=b.MODEL_MINOR and
-                            c.CarType = b.DESCRIPTION where b.OPERATING_STATE='在运' and c.Model is not null  and a.YearMonth=@YearMonth
+                            c.CarType = b.DESCRIPTION where b.OPERATING_STATE='在运' and b.GROUP_ID='出租车' and c.Model is not null and a.YearMonth=@YearMonth
                             order by c.Model,c.ClassType, c.CarType,c.BusinessType asc", new { YearMonth = YearMonth }).ToList();
                     foreach (var item in data)
                     {

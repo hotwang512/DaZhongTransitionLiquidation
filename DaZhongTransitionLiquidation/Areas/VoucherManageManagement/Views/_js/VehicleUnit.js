@@ -18,25 +18,6 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        $("#btnSync").on("click", function () {
-            layer.load();
-            $.ajax({
-                url: "/VoucherManageManagement/VehicleBusiness/GetVehicleBusinessInfo",
-                data: {},
-                type: "post",
-                dataType: "json",
-                success: function (msg) {
-                    if (msg.IsSuccess == true) {
-                        layer.closeAll('loading');
-                        jqxNotification("同步成功！", null, "success");
-                        initTable();
-                    } else {
-                        layer.closeAll('loading');
-                        jqxNotification("同步失败！", null, "error");
-                    }
-                }
-            });
-        });
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -72,7 +53,7 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 data: { "YearMonth": $("#YearMonth").val(), "PLATE_NUMBER": $("#PLATE_NUMBER").val(), "MODEL_DAYS": $("#MODEL_DAYS").val(), "MODEL_MINOR": $("#MODEL_MINOR").val() },
-                url: "/VoucherManageManagement/VehicleBusiness/GeVehicleData"   //获取数据源的路径
+                url: "/VoucherManageManagement/VehicleUnit/GeVehicleData"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source);
         //创建卡信息列表（主表）
@@ -89,7 +70,7 @@ var $page = function () {
             groupsexpandedbydefault: true,
             groups: ['MANAGEMENT_COMPANY', 'BELONGTO_COMPANY', 'MODEL_MAJOR', 'MODEL_MINOR', 'CarType'],
             showgroupsheader: false,
-            columnsHeight: 30,
+            columnsHeight: 40,
             pagermode: 'simple',
             selectionmode: 'singlerow',
             columns: [
@@ -101,8 +82,8 @@ var $page = function () {
                 { text: '班型', datafield: 'MODEL_MINOR', width: 200, align: 'center', cellsAlign: 'center' },
                 { text: '车型', datafield: 'CarType', width: 150, align: 'center', cellsAlign: 'center' },
                 { text: '日期', datafield: 'YearMonth', width: 120, align: 'center', cellsAlign: 'center' },
-                { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                { text: '车辆运营天数', datafield: 'MODEL_DAYS',align: 'center', cellsAlign: 'center' },
+                { text: '车牌号', datafield: 'PLATE_NUMBER', width: 120, align: 'center', cellsAlign: 'center' },
+                { text: '平均车辆数', datafield: 'MODEL_DAYS', align: 'center', cellsAlign: 'center' },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true },
             ]
         });

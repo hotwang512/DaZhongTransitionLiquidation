@@ -22,5 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public int MoneyColumns { get; set; }
         public string Founder { get; set; }
         public DateTime? CreatTime { get; set; }
+        //public string MANAGEMENT_COMPANY { get; set; }
+        //public string BELONGTO_COMPANY { get; set; }
     }
 }

@@ -289,6 +289,8 @@
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementImport.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementSubject.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VehicleBusiness.js" />
+    <Content Include="Areas\VoucherManageManagement\Views\_js\VehicleCount.js" />
+    <Content Include="Areas\VoucherManageManagement\Views\_js\VehicleUnit.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VoucherList.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VoucherListDetail.js" />
     <Content Include="Content\bootstrap.css" />
@@ -393,6 +395,8 @@
     <Content Include="Areas\AssetManagement\Views\AssetReport\Index.cshtml" />
     <Content Include="Areas\ReimbursementCenter\Views\ReimburseOrder\Index.cshtml" />
     <Content Include="Areas\ReimbursementCenter\Views\ReimburseOrderDetail\Index.cshtml" />
+    <Content Include="Areas\VoucherManageManagement\Views\VehicleUnit\Index.cshtml" />
+    <Content Include="Areas\VoucherManageManagement\Views\VehicleCount\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2550,12 +2554,15 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementImport\SettlementImportController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementSubject\SettlementSubjectController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VehicleBusiness\VehicleBusinessController.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Controllers\VehicleCount\VehicleCountController.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Controllers\VehicleUnit\VehicleUnitController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_AssetsGeneralLedger_Swap.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_SettlementCount.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_SettlementImport.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_SettlementSubject.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_SettlementSubjectDetail.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_VehicleList.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\Business_VehicleUnitList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_VoucherAttachmentList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\Business_VoucherDetail.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\VoucherListDetail.cs" />

@@ -733,6 +733,16 @@
                     </tr>
                 }
             </table>
+            <table>
+                @if (currentUserRoleModules.Any(i => i.PageName == "报销订单" && i.Reads == 1) || isadmin)
+                {
+                    <tr class="menue_item" id="ReimburseOrder_ROrderListManage" pageurl="/ReimbursementCenter/ReimburseOrder/Index">
+                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                        <td class="menue_text">报销订单</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
         </div>
     }
     @******************************************************报表管理中心******************************************************@

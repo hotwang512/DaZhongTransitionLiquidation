@@ -1,0 +1,437 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.AssetPurchase.Models;
+@{
+    ViewBag.Title = "订单管理/报销订单明细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/_theme/tool/qwebchannel.js")"></script>
+    <script src="@Url.CusContent("~/Areas/ReimbursementCenter/Views/_js/ReimburseOrderDetail.js")"></script>
+    <script src="@Url.CusContent("~/_theme/_js/jquery.form.js")"></script>
+}
+<style>
+    .input_text {
+        width: 150px;
+        height: 35px;
+        border: 1px;
+        border-style: solid;
+        border-color: #dddddd;
+        -moz-box-shadow: 0px 1px 10px #dddddd;
+        -webkit-box-shadow: 0px 1px 10px #dddddd;
+        box-shadow: 0 0 10px #dddddd;
+        background-color: white !important;
+        border-radius: 4px;
+        float: left;
+    }
+
+    .jqx-combobox-input {
+        padding-left: 10px;
+        color: #555;
+    }
+
+    .jqx-tabs-content-element {
+        overflow: auto !important;
+    }
+
+    .jqx-dropdownlist-content {
+        padding-left: 5px;
+        padding-top: 3px;
+    }
+    /*.SearchInput {
+        background-image: url(/_theme/jqwidgets-ver5.5.0/images/search_lg.png);
+        background-size: 20px 20px;
+        background-position: right;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }*/
+    .SubmitStatus {
+        display: none;
+    }
+
+    .jqx-dropdownlist-content {
+        padding-left: 5px;
+    }
+
+    table .mk {
+        width: 98%;
+    }
+
+    .delAttachment {
+        cursor: pointer;
+    }
+
+    .GoodsModel {
+        display: none;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;display:block">
+    <tr style="height: 50px;">
+        @if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 1)
+        {
+            @*<td style="width: 95px;">移到列表页
+                    <button id="btnSubmit" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
+                </td>*@
+        }
+        <td style="width: 95px;">
+            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+        </td>
+        <td id="tdPrint" style="width: 95px;display:none">
+            <button id="btnPrint" type="button" class="buttons" style="width: 130px; margin-right: 18px;"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e; </i><span style="margin-left: 7px; float: left;">打印付款凭证</span></button>
+        </td>
+        <td style="width: 95px;">
+            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+    </tr>
+</table>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">采购信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 240px;">
+        <table id="VoucherList" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">采购部门：</td>
+                <td style="text-align: left;">
+                    <div id="PurchaseDepartment" style="padding-left:6px"></div>
+                </td>
+                <td style="text-align: right">采购物品：</td>
+                <td style="text-align: left;">
+                    <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;"></select>
+                </td>
+                <td style="text-align:right" class="GoodsModel">物品型号：</td>
+                <td style="text-align: left;" class="GoodsModel">
+                    <select id="GoodsModel" class="input_text form-control" style="width: 200px;"></select>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">采购数量：</td>
+                <td style="text-align: left;">
+                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" validatetype="required" />
+                </td>
+                <td style="text-align: right;">采购单价：</td>
+                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">采购金额：</td>
+                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right; vertical-align: top;padding-top: 15px">采购说明：</td>
+                <td style="text-align: left;" colspan="4">
+                    @* <input id="AssetDescription" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required"/> *@
+                    <textarea id="AssetDescription" style="width: 528px; height: 100px;margin-top: 8px" class="input_text form-control" validatetype="required"></textarea>
+                </td>
+                @*<td style="text-align: right;">验收日期：</td>
+                    <td style="text-align: left;">
+                        <input id="AcceptanceDate" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                    </td>
+                    <td style="text-align: right;">使用部门：</td>
+                    <td style="text-align: left;">
+                        <select id="UseDepartment" class="input_text form-control" style="width: 200px;"></select>
+                    </td>*@
+            </tr>
+
+            <tr style="display: none">
+                <td></td>
+                <td style="text-align: left;">
+                    @*<input id="PaymentInformationVguid" />*@
+                </td>
+                <td></td>
+                <td>
+                    <input id="VGUID" name="VGUID" />
+                </td>
+                <td></td>
+                <td>
+                    @*<input id="AssetsOrderVguid" />*@
+                </td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">供应商信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 120px;">
+        <table id="Supplier" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height:50px">
+                <td style="text-align: right;">供应商名称：</td>
+                <td style="text-align: left;">
+                    <div id="PaymentInformation">
+                    </div>
+                    <div style="display: none">
+                        <input id="hiddenPaymentInformationVguid" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                        <input id="hiddenPaymentInformation" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput" />
+                    </div>
+                </td>
+                <td style="text-align: right;">户名：</td>
+                <td style="text-align: left;"><input id="BankAccountName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">账号：</td>
+                <td style="text-align: left;"><input id="BankAccount" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="Bank" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">行号：</td>
+                <td style="text-align: left;"><input id="BankNo" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">付款信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 180px;">
+        <table id="PayInfo" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height: 50px">
+                <td style="text-align: right;">付款方式：</td>
+                <td style="text-align: left;">
+                    <select id="PayMode" class="input_text form-control" style="width: 200px;">
+                        <option value="转账" selected="selected">银行转账</option>
+                        <option value="现金">现金支付</option>
+                    </select>
+                </td>
+                <td style="text-align: right;">付款公司：</td>
+                <td style="text-align: left;">
+                    <div id="PayCompanyDropdown">
+                    </div>
+                    <input id="hidPayCompany" disabled="disabled" type="text" value="" style="width: 200px;display: none" class="input_text form-control" />
+                </td>
+                <td style="text-align: right;">开户行：</td>
+                <td style="text-align: left;"><input id="CompanyBankName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">银行账号：</td>
+                <td style="text-align: left;"><input id="CompanyBankAccount" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">银行户名：</td>
+                <td style="text-align: left;"><input id="CompanyBankAccountName" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: right;">银行类别：</td>
+                <td style="text-align: left;"><input id="AccountType" disabled="disabled" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="text-align: right;">付款日期：</td>
+                <td style="text-align: left;">
+                    <input id="PaymentDate" type="text" onfocus="WdatePicker({minDate:'%y-%M-{%d+1}', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!--附件信息-->
+<table style="width: 98.5%;margin-bottom: 20px" margin=5 padding=10>
+    <tr style="height:100px">
+        <td style="vertical-align:top; width: 30%;">
+            <div class="mk">
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div">
+                        <span class="header_text_span">付款凭证</span>
+                        <div class="header_operation" style="float: right;margin-right:8px">
+                            <button AttachmentType="付款凭证" title="拍照上传" type="button" class="btn camera" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe8d3;</i></button>
+                            <button AttachmentType="付款凭证" title="本地上传" type="button" class="btn upload" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe98e;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ImgPaymentReceipt" class="body_mk" style="min-height:150px;height:auto;padding:10px">
+
+                </div>
+            </div>
+        </td>
+        <td style="vertical-align:top; width: 30%;">
+            <div class="mk">
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div">
+                        <span class="header_text_span">发票</span>
+                        <div class="header_operation" style="float: right;margin-right:8px">
+                            <button AttachmentType="发票" title="拍照上传" type="button" class="btn camera" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe8d3;</i></button>
+                            <button AttachmentType="发票" title="本地上传" type="button" class="btn upload" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe98e;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ImgInvoiceReceipt" class="body_mk" style="min-height:150px;height:auto;padding:10px">
+
+                </div>
+            </div>
+        </td>
+        <td style="text-align: left; width: 30%">
+            <div class="mk">
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div">
+                        <span class="header_text_span">OA审批单</span>
+                        <div class="header_operation" style="float: right;margin-right:8px">
+                            <button AttachmentType="OA审批单" title="拍照上传" type="button" class="btn camera" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe8d3;</i></button>
+                            <button AttachmentType="OA审批单" title="本地上传" type="button" class="btn upload" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe98e;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ImgApprovalReceipt" class="body_mk" style="min-height:150px;height:auto;padding:10px">
+
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">
+            <div class="mk">
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div">
+                        <span class="header_text_span">合同</span>
+                        <div class="header_operation" style="float: right;margin-right:8px">
+                            <button AttachmentType="合同" title="拍照上传" type="button" class="btn camera" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe8d3;</i></button>
+                            <button AttachmentType="合同" title="本地上传" type="button" class="btn upload" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe98e;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ImgContract" class="body_mk" style="min-height:150px;height:auto;padding:10px">
+
+                </div>
+            </div>
+        </td>
+        <td style="text-align: left;">
+            <div class="mk">
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div">
+                        <span class="header_text_span">清单、清册</span>
+                        <div class="header_operation" style="float: right;margin-right:8px">
+                            <button AttachmentType="清单、清册" title="拍照上传" type="button" class="btn camera" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe8d3;</i></button>
+                            <button AttachmentType="清单、清册" title="本地上传" type="button" class="btn upload" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe98e;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ImgDetailList" class="body_mk" style="min-height:150px;height:auto;padding:10px">
+
+                </div>
+            </div>
+        </td>
+        <td style="text-align: left;">
+            <div class="mk">
+                <div class="header_mk">
+                    <div class="header_icon"></div>
+                    <div class="header_text_div">
+                        <span class="header_text_span">其他</span>
+                        <div class="header_operation" style="float: right;margin-right:8px">
+                            <button AttachmentType="其他" title="拍照上传" type="button" class="btn camera" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe8d3;</i></button>
+                            <button AttachmentType="其他" title="本地上传" type="button" class="btn upload" style="width: 26px; padding: 0; vertical-align:baseline; height: 30px; background-color: #F5F5F5 !important;"><i class="iconfont">&#xe98e;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ImgOtherReceipt" class="body_mk" style="min-height:150px;height:auto;padding:10px">
+
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<div class="mk" hidden>
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">附件信息</span></div>
+    </div>
+    <div class="body_mk" style="height: 240px;">
+        <table id="AttachInfo" style="width:90%;margin-left:50px;margin-top:20px">
+            <tr style="height: 50px">
+                <td style="text-align: right;" width="100">采购合同：</td>
+                <td style="text-align: left;">
+                    <a id="UploadContractFile" style="cursor:pointer">本地上传</a>&nbsp;
+                    <a id="Attachment" href="" target="_blank" style="cursor:pointer" hidden="hidden">查看</a>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <form id="contractFormFile" hidden>
+            <input type="file" id="ContractFileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.jpeg,.png" />
+        </form>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="OrderDetailsDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 520px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">订单明细</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 330px; overflow: auto">
+                <div id="grid"></div>
+                <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+                    <div id="cellbegineditevent"></div>
+                    <div style="margin-top: 10px;" id="cellendeditevent"></div>
+                </div>
+                <form id="formFile" hidden>
+                    <input type="file" id="FileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.png" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="OrderDetailsDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="OrderDetailsDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="CreditDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 1150px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">付款凭证</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 600px;">
+                <iframe id="ifrPrint" width="100%" height="100%" src="" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button id="CreditDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">关闭</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--拍照上传-->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="UploadPictureDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 10px;">
+        <div class="modal-content" style="width: 620px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">拍照上传</h4>
+            </div>
+            <div class="modal-body" style="width:100%;height:486px">
+                <div style="position:relative">
+                    <img style="position:absolute;top:0px;left:0px;z-index:2" id="bigPriDev" width="576" height="432" />
+                    <img hidden style="position:absolute;top:0px;left:0px;z-index:3" id="devPhoto" width="576" height="432" />
+                    <div style="position:absolute;top:432px;left:0px;z-index:2">
+                        <input id="setdeskew" style="display: inline-block;vertical-align: middle;margin-bottom: 8px;" type="checkbox" value="">
+                        <label for="setdeskew" style="font-size:13px;cursor:pointer">纠偏裁边</label>
+                        <label id="rotateLeft" style="font-size:13px; cursor: pointer; margin-left:5px">左转</label>
+                        <label id="rotateRight" style="font-size:13px;cursor:pointer; margin-left:5px">右转</label>
+                        <label id="showProperty" style="font-size:13px;cursor:pointer; margin-left:5px">属性设置</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="photographPri" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe660;</i><span style="margin-left: 7px; float: left;">拍照</span></button>
+                <button id="Upload_OKBtn" type="button" class="btn btn-warning" style="display:none;width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">上传</span></button>
+                <button id="Upload_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="jqxLoader" style="z-index:9999">
+</div>
+<div style="display: none">
+    <input id="AttachmentType" />
+    @*清算平台待支付订单唯一标识*@
+    <input id="PaymentVoucherVguid" />
+</div>
+<form id="localFormFile" hidden>
+    <input type="file" id="LocalFileInput" name="file" accept=".xls,.xlsx,.doc,.docx,.pdf,.jpg,.jpeg,.png" />
+</form>

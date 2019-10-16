@@ -267,6 +267,8 @@
     <Content Include="Areas\PaymentManagement\Views\_js\SubjectBalance.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\SubjectSection.js" />
     <Content Include="Areas\ReimbursementCenter\Views\web.config" />
+    <Content Include="Areas\ReimbursementCenter\Views\_js\ReimburseOrder.js" />
+    <Content Include="Areas\ReimbursementCenter\Views\_js\ReimburseOrderDetail.js" />
     <Content Include="Areas\ReimbursementCenter\Views\_js\ROrderListDraft.js" />
     <Content Include="Areas\ReimbursementCenter\Views\_js\ROrderListDraftDetail.js" />
     <Content Include="Areas\ReportManagement\Views\_css\Reconciliation.css" />
@@ -391,6 +393,8 @@
     <Content Include="Areas\AssetManagement\Views\AssetException\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\OBDModifyReview\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\AssetReport\Index.cshtml" />
+    <Content Include="Areas\ReimbursementCenter\Views\ReimburseOrder\Index.cshtml" />
+    <Content Include="Areas\ReimbursementCenter\Views\ReimburseOrderDetail\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleUnit\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleCount\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
@@ -2506,8 +2510,11 @@
     <Compile Include="Areas\PaymentManagement\Models\v_Business_SubjectSettingInfo.cs" />
     <Compile Include="Areas\PaymentManagement\Models\v_TaxesInfo.cs" />
     <Compile Include="Areas\PaymentManagement\PaymentManagementAreaRegistration.cs" />
+    <Compile Include="Areas\ReimbursementCenter\Controllers\ReimburseOrderController.cs" />
+    <Compile Include="Areas\ReimbursementCenter\Controllers\ReimburseOrderDetailController.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftController.cs" />
     <Compile Include="Areas\ReimbursementCenter\Controllers\ROrderListDraftDetailController.cs" />
+    <Compile Include="Areas\ReimbursementCenter\Models\Business_ReimburseOrder.cs" />
     <Compile Include="Areas\ReimbursementCenter\ReimbursementCenterAreaRegistration.cs" />
     <Compile Include="Areas\ReportManagement\Controllers\AmountReport\AmountReportController.cs" />
     <Compile Include="Areas\ReportManagement\Controllers\ExceptionDataReport\ExceptionDataReportController.cs" />

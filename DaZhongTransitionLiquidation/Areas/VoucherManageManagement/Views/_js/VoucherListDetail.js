@@ -17,6 +17,8 @@ var selectIndex = 0;//生成块的数量
 var loginCompanyCode = $("#LoginCompanyCode").val();
 var loginAccountModeCode = $("#LoginAccountModeCode").val();
 var voucherHtmls = "";
+var subjectName0 = "";
+var subjectName1 = "";
 var $page = function () {
 
     this.init = function () {
@@ -60,23 +62,27 @@ var $page = function () {
         }
         //控件ID后缀
         var str = "";
+
         //新增
         $("#btnAddDetail").on("click", function () {
             //addSectionDiv();
             var trMore = "";
             var trIndex = $("#VoucherTable tr").length - 2;
             if (trIndex > 2) {
-                var trId = $("#VoucherTable tr")[trIndex].id;
-                if (trId.length == 9) {
-                    trIndex = parseInt(trId.substr(trId.length - 2, 2)) + 1;
-                    if ($("#SubjectName0").val() == "" && $("#SubjectName1").val() != "") {
-                        trIndex = trIndex;
+                if (subjectName0 == "" && subjectName1 != "") {
+                    var trId = $("#VoucherTable tr")[trIndex - 1].id;
+                    if (trId.length == 9) {
+                        trIndex = parseInt(trId.substr(trId.length - 2, 2)) + 1;
+                    } else {
+                        trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
                     }
                 } else {
-                    trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
-                    if ($("#SubjectName0").val() == "" && $("#SubjectName1").val() != "") {
-                        trIndex = trIndex;
-                    } 
+                    var trId = $("#VoucherTable tr")[trIndex].id;
+                    if (trId.length == 9) {
+                        trIndex = parseInt(trId.substr(trId.length - 2, 2)) + 1
+                    } else {
+                        trIndex = parseInt(trId.substr(trId.length - 1, 1)) + 1;
+                    }
                 }
             }
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
@@ -86,12 +92,12 @@ var $page = function () {
                              "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                              "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
-            if ($("#SubjectName0").val() == "" && $("#SubjectName1").val() != "") {
+            if (subjectName0 == "" && subjectName1 != "") {
                 $("#closeTr1").before(trMore);
-            }else{
+            } else {
                 $("#countTr").before(trMore);
             }
-            
+
             tdClick();
         });
         //取消
@@ -159,7 +165,14 @@ var $page = function () {
             if (validateError <= 0) {
                 var detailList = [];
                 var length = $("#VoucherTable tr").length - 2;
-                for (var i = 0; i < length; i++) {
+                for (var j = 0; j < length; j++) {
+                    var i = 0;
+                    var idName = $("#VoucherTable tr")[j].id;
+                    if (idName.search("closeTr") != -1) {
+                        i = idName.substring(idName.length - 1, idName.length);
+                    } else {
+                        continue;
+                    }
                     var remark = $("#Remark" + i).val();
                     var subjectNames = $("#SubjectName" + i).val()
                     var subjectName = $("#SubjectName" + i).val().split(".");
@@ -174,8 +187,8 @@ var $page = function () {
                     var companyName = subjectName[6].split(/[\s\n]/)[1];
                     var borrowMoney = 0;
                     var loanMoney = 0;
-                    borrowMoney = $(".money")[i * 2].value.replace(/,/g, '');
-                    loanMoney = $(".money")[i * 2 + 1].value.replace(/,/g, '');
+                    borrowMoney = $("#Borrow" + i).val().replace(/,/g, '');
+                    loanMoney = $("#Loan" + i).val().replace(/,/g, '');
                     var detail = {
                         "VGUID": "",
                         "Abstract": remark,
@@ -190,7 +203,7 @@ var $page = function () {
                         "BorrowMoney": borrowMoney,
                         "LoanMoney": loanMoney,
                         "SevenSubjectName": subjectNames,
-                        "JE_LINE_NUMBER":i
+                        "JE_LINE_NUMBER": i
                     }
                     detailList.push(detail);
                 }
@@ -290,11 +303,18 @@ var $page = function () {
             var htmls = "";
             var list1 = "";
 
-            for (var i = 0; i < $("#VoucherTable tr").length - 2; i++) {
+            for (var j = 0; j < $("#VoucherTable tr").length; j++) {
+                var i = 0;
+                var idName = $("#VoucherTable tr")[j].id;
+                if (idName.search("closeTr") != -1) {
+                    i = idName.substring(idName.length - 1, idName.length);
+                } else {
+                    continue;
+                }
                 var borrowMoney = 0;
                 var loanMoney = 0;
-                borrowMoney = $(".money")[i * 2].value;
-                loanMoney = $(".money")[i * 2 + 1].value;
+                borrowMoney = $("#Borrow" + i).val();
+                loanMoney = $("#Loan" + i).val();
                 list1 += "<tr style='height:40px'>" +
                               "<td style='text-align: left;'>" + "  " + $("#Remark" + i).val() + "</td>" +
                               "<td style='text-align: left;'>" + "  " + $("#SubjectName" + i).val() + "</td>" +
@@ -441,12 +461,14 @@ var $page = function () {
             if ($("#Status").val() == "2") {
                 status = "3";
             }
+            layer.load();
             $.ajax({
                 url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
                 data: { vguids: vguid, status: status, index: tableIndex },
                 traditional: true,
                 type: "post",
                 success: function (msg) {
+                    layer.closeAll('loading');
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("提交失败！", null, "error");
@@ -661,8 +683,10 @@ var $page = function () {
                 $("#VoucherType").val(msg.VoucherType);
                 $("#Automatic").val(msg.Automatic);
                 var datas = msg.Detail;
-                    //setVoucherDetail(datas);
+                //setVoucherDetail(datas);
                 createTable(datas);
+                subjectName0 = $("#SubjectName0").val();
+                subjectName1 = $("#SubjectName1").val();
                 loadAttachments(msg.Attachment);
             }
         });

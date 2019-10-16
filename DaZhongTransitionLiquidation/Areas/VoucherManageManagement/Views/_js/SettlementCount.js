@@ -145,6 +145,7 @@ var $page = function () {
                             { name: 'CarAccount2', type: 'number' },
                             { name: 'CarAccount3', type: 'number' },
                             { name: 'CarAccount4', type: 'number' },
+                            { name: 'CarAccount5', type: 'number' },
                         ],
                         datatype: "json",
                         //data: { "Month": selector.$txtMonth().val() },
@@ -189,6 +190,14 @@ var $page = function () {
                                dataField: 'CarAccount4',
                                'function': 'sum',
                                text: '途安1.6L',
+                               align: 'center',
+                               formatSettings: { prefix: '', decimalPlaces: 2 },
+                               sortable: false
+                           },
+                           {
+                               dataField: 'CarAccount5',
+                               'function': 'sum',
+                               text: '荣威Ei5',
                                align: 'center',
                                formatSettings: { prefix: '', decimalPlaces: 2 },
                                sortable: false

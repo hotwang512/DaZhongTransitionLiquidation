@@ -15,14 +15,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string BusinessKey { get; set; }
         public string BusinessType { get; set; }
         public string YearMonth { get; set; }
-        public string DAYS { get; set; }
+        public decimal? DAYS { get; set; }
         public decimal? Money { get; set; }
         public decimal? Account { get; set; }
         public int MoneyRow { get; set; }
         public int MoneyColumns { get; set; }
         public string Founder { get; set; }
         public DateTime? CreatTime { get; set; }
-        //public string MANAGEMENT_COMPANY { get; set; }
-        //public string BELONGTO_COMPANY { get; set; }
+        public string MANAGEMENT_COMPANY { get; set; }
+        public string BELONGTO_COMPANY { get; set; }
     }
 }

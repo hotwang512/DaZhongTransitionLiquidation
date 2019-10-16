@@ -475,7 +475,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         item.AccountModeName = accountModeName;
                         item.CompanyCode = companyBankData.CompanyCode;
                         item.CompanyName = companyName;
-                        //if(item.Batch == "278906" || item.Batch == "278978")
+                        //if (item.Batch == "FT19285060551795" || item.Batch == "FT19285065481068")
                         //{
                         //    bankFlowLists.Add(item);
                         //}

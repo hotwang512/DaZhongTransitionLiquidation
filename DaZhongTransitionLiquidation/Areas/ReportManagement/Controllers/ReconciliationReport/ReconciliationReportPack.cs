@@ -26,7 +26,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
             List<v_Business_Reconciliation> business_Reconciliations = new List<v_Business_Reconciliation>();
             dbBusinessDataService.Command(db =>
             {
-                business_Reconciliations = db.Queryable<v_Business_Reconciliation>().Where(c => c.Status == "1" && c.BankBillDate > DateTime.Now.AddDays(-7)).ToList();
+                business_Reconciliations = db.Queryable<v_Business_Reconciliation>().Where(c => c.Status == "1" && c.BankBillDate > DateTime.Now.AddDays(-7) && c.Channel_Id != null).ToList();
             });
             if (business_Reconciliations.Count > 0)
             {

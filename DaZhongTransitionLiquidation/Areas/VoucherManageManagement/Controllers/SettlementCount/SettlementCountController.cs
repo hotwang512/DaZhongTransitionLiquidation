@@ -56,8 +56,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     sc.ClassType = item.ClassType;
                     sc.BusinessKey = item.BusinessKey == null ? item.BusinessType : item.BusinessKey;
                     sc.BusinessType = item.BusinessType;
-                    sc.CarAccount1 = carAccount[0].Account;
-                    sc.CarAccount3 = carAccount[1].Account;
+                    //sc.CarAccount1 = carAccount[0].Account;
+                    //sc.CarAccount3 = carAccount[1].Account;
                     dataList.Add(sc);
                 }
                 jsonResult.Rows = dataList;
@@ -109,12 +109,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 try
                 {
-                    var data = db.Ado.SqlQuery<Business_SettlementCount>(@"select c.Model,c.ClassType, c.CarType,c.BusinessType ,a.YearMonth,CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as DAYS,
-                            c.Money,(CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2))*c.Money) as Account,c.MoneyRow,c.MoneyColumns from Business_VehicleList as a
-                            left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER
-                            left join Business_SettlementImport as c on c.Model=b.MODEL_MAJOR and c.ClassType=b.MODEL_MINOR and
-                            c.CarType = b.DESCRIPTION where b.OPERATING_STATE='在运' and b.GROUP_ID='出租车' and c.Model is not null and a.YearMonth=@YearMonth
-                            order by c.Model,c.ClassType, c.CarType,c.BusinessType asc", new { YearMonth = YearMonth }).ToList();
+                    var data = db.Ado.SqlQuery<Business_SettlementCount>(@"select x.MODEL_MAJOR as Model,x.MODEL_MINOR as ClassType,x.CarType,x.YearMonth,x.MODEL_DAYS as DAYS,c.Money,(x.MODEL_DAYS*c.Money) as Account,c.BusinessType,c.MoneyRow,c.MoneyColumns from ( select                      
+                            t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.MANAGEMENT_COMPANY,t.YearMonth,SUM(MODEL_DAYS) as MODEL_DAYS from (select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,b.MODEL_MAJOR, b.MODEL_MINOR,CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                            ,b.MANAGEMENT_COMPANY,b.BELONGTO_COMPANY,b.DESCRIPTION as CarType from Business_VehicleList as a left join Business_AssetMaintenanceInfo
+                            as b on a.PLATE_NUMBER = b.PLATE_NUMBER where b.OPERATING_STATE='在运' and b.GROUP_ID='出租车' 
+                            ) as t group by t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.MANAGEMENT_COMPANY,t.YearMonth ) as x  
+                            left join Business_SettlementImport as c on x.MODEL_MAJOR = c.Model and x.MODEL_MINOR = parsename(REPLACE(c.ClassType,'-','.'),1)
+                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth", 
+                            new { YearMonth = YearMonth }).ToList();
                     foreach (var item in data)
                     {
                         item.VGUID = Guid.NewGuid();

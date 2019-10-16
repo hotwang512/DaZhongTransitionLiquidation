@@ -208,4 +208,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string MODEL_MINOR { get; set; }
 
     }
+
+    public class AssetsLedger_SwapCompare : AssetsLedger_Swap
+    {
+        public string Message { get;set; }
+    }
 }

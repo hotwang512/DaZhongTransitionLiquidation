@@ -2575,6 +2575,7 @@
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
     <Compile Include="AutoMapper\Configuration.cs" />
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />
+    <Compile Include="AutoMapper\Profiles\AssetLedgerProfile.cs" />
     <Compile Include="AutoMapper\Profiles\AssignProfile.cs" />
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />

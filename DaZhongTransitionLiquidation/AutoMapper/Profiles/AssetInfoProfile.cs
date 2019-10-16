@@ -12,6 +12,12 @@ namespace DaZhongTransitionLiquidation.AutoMapper.Profiles
         protected override void Configure()
         {
             CreateMap<Business_AssetMaintenanceInfo, AssetMaintenanceInfo_Swap>();
+            CreateMap<Business_AssetMaintenanceInfo, AssetsLedger_SwapCompare>()
+                .ForMember(dest => dest.FA_LOC_1, opt => opt.MapFrom(src => src.BELONGTO_COMPANY))
+                .ForMember(dest => dest.ASSET_CREATION_DATE, opt => opt.MapFrom(src => src.LISENSING_DATE))
+                .ForMember(dest => dest.FA_LOC_2, opt => opt.MapFrom(src => src.MANAGEMENT_COMPANY))
+                .ForMember(dest => dest.ACCT_DEPRECIATION, opt => opt.MapFrom(src => src.ACCT_DEPRECIATION.ToString()))
+                .ForMember(dest => dest.FA_LOC_3, opt => opt.MapFrom(src => src.ORGANIZATION_NUM));
         }
     }
 }

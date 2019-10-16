@@ -36,7 +36,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetEx
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.Queryable<AssetMaintenanceInfo_Swap>()
-                    .Where(x => x.STATUS == "E" && !x.CHECK_STATE)
+                    .Where(x => x.STATUS != "N" && x.STATUS != "S" && !x.CHECK_STATE)
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc)
                     .ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

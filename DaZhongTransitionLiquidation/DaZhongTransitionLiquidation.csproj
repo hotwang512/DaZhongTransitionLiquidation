@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>C:\Users\peter\Documents\WeChat Files\Takuya-Star\FileStorage\File\2019-10\Aspose.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\Autofac.dll</HintPath>
@@ -2569,6 +2572,8 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\VoucherListDetailController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\Business_VoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\PrintVoucherDetail.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\PrintVoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\SettlementCountList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\VehicleResult.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\v_AssetsGeneralLedger_Swap.cs" />

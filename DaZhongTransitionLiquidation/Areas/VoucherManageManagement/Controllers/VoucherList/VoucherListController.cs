@@ -166,88 +166,91 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-                var i = 1;
-                int saveChanges = 1;
-                foreach (var item in vguids)
+                db.Ado.UseTran(() =>
                 {
-                    var voucherOne = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
-                    var voucher = db.Queryable<Business_VoucherDetail>().Where(it => it.VoucherVGUID == item).ToList();
-                    var loanMoney = voucher == null ? null : voucher.Sum(x => x.LoanMoney);//贷方总金额
-                    var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
-                    if (loanMoney == borrowMoney)
+                    var i = 1;
+                    int saveChanges = 1;
+                    foreach (var item in vguids)
                     {
-                        if (status == "3")
+                        var voucherOne = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
+                        var voucher = db.Queryable<Business_VoucherDetail>().Where(it => it.VoucherVGUID == item).ToList();
+                        var loanMoney = voucher == null ? null : voucher.Sum(x => x.LoanMoney);//贷方总金额
+                        var borrowMoney = voucher == null ? null : voucher.Sum(x => x.BorrowMoney);//借方总金额
+                        if (loanMoney == borrowMoney)
                         {
-                            if(voucherOne.VoucherNo == "" || voucherOne.VoucherNo == null)
+                            if (status == "3")
                             {
-                                var type = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                                if(voucherOne.VoucherType == "现金类")
+                                if (voucherOne.VoucherNo == "" || voucherOne.VoucherNo == null)
                                 {
-                                    type = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                                    var type = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                                    if (voucherOne.VoucherType == "现金类")
+                                    {
+                                        type = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                                    }
+                                    var voucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + type + "', @output output  select @output").FirstOrDefault();
+                                    //voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
+                                    //更新主表信息
+                                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                    {
+                                        VoucherNo = voucherNo,
+                                        Status = status,
+                                    }).Where(it => it.VGUID == item).ExecuteCommand();
                                 }
-                                var voucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '"+ type + "', @output output  select @output").FirstOrDefault();
-                                //voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
-                                //更新主表信息
-                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                else
                                 {
-                                    VoucherNo = voucherNo,
-                                    Status = status,
-                                }).Where(it => it.VGUID == item).ExecuteCommand();
+                                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                    {
+                                        Status = status,
+                                    }).Where(it => it.VGUID == item).ExecuteCommand();
+                                }
                             }
                             else
                             {
-                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                if (voucherOne.Status == "4")
                                 {
-                                    Status = status,
-                                }).Where(it => it.VGUID == item).ExecuteCommand();
-                            } 
+                                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                    {
+                                        Automatic = "1",
+                                        Status = "2",
+                                    }).Where(it => it.VGUID == voucherOne.VGUID).ExecuteCommand();
+                                }
+                                else
+                                {
+                                    //更新主表信息
+                                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
+                                    {
+                                        Status = status,
+                                    }).Where(it => it.VGUID == item).ExecuteCommand();
+                                }
+                            }
+                            //审核成功写入中间表
+                            if (status == "3")
+                            {
+                                if (index != "2")
+                                {
+                                    var result = new List<Sys_User>();
+                                    DbService.Command(_db =>
+                                    {
+                                        result = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role,a.Email from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                                    });
+                                    InsertAssetsGeneralLedger(item, db, result);
+                                }
+                            }
                         }
                         else
                         {
-                            if(voucherOne.Status == "4")
-                            {
-                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
-                                {
-                                    Automatic = "1",
-                                    Status = "2",
-                                }).Where(it => it.VGUID == voucherOne.VGUID).ExecuteCommand();
-                            }
-                            else
-                            {
-                                //更新主表信息
-                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
-                                {
-                                    Status = status,
-                                }).Where(it => it.VGUID == item).ExecuteCommand();
-                            }
-                        }
-                        //审核成功写入中间表
-                        if (status == "3")
-                        {
-                            if (index != "2")
-                            {
-                                var result = new List<Sys_User>();
-                                DbService.Command(_db =>
-                                {
-                                    result = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role,a.Email from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
-                                });
-                                InsertAssetsGeneralLedger(item, db, result);
-                            }
+                            var j = i++;
+                            resultModel.Status = "2";
+                            resultModel.ResultInfo = j.ToString();
+                            continue;
                         }
                     }
-                    else
+                    if (resultModel.Status != "2")
                     {
-                        var j = i++;
-                        resultModel.Status = "2";
-                        resultModel.ResultInfo = j.ToString();
-                        continue;
+                        resultModel.IsSuccess = saveChanges == 1;
+                        resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                     }
-                }
-                if (resultModel.Status != "2")
-                {
-                    resultModel.IsSuccess = saveChanges == 1;
-                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-                }
+                });
             });
             return Json(resultModel);
         }

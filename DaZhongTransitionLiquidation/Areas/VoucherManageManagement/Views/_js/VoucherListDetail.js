@@ -158,23 +158,23 @@ var $page = function () {
         //保存
         $("#btnSave").on("click", function () {
             var validateError = 0;//未通过验证的数量
-            //if (!Validate($("#")) {
-            //    validateError++;
-            //}
-
             if (validateError <= 0) {
                 var detailList = [];
-                var length = $("#VoucherTable tr").length - 2;
+                var length = $("#VoucherTable tr").length;
                 for (var j = 0; j < length; j++) {
                     var i = 0;
                     var idName = $("#VoucherTable tr")[j].id;
                     if (idName.search("closeTr") != -1) {
-                        i = idName.substring(idName.length - 1, idName.length);
+                        if (idName.length == 9) {
+                            i = idName.substring(idName.length - 2, idName.length);
+                        } else {
+                            i = idName.substring(idName.length - 1, idName.length);
+                        }
                     } else {
                         continue;
                     }
                     var remark = $("#Remark" + i).val();
-                    var subjectNames = $("#SubjectName" + i).val()
+                    var subjectNames = $("#SubjectName" + i).val();
                     var subjectName = $("#SubjectName" + i).val().split(".");
                     var CompanySection = subjectName[0];
                     var SubjectSection = subjectName[1];
@@ -307,7 +307,11 @@ var $page = function () {
                 var i = 0;
                 var idName = $("#VoucherTable tr")[j].id;
                 if (idName.search("closeTr") != -1) {
-                    i = idName.substring(idName.length - 1, idName.length);
+                    if (idName.length == 9) {
+                        i = idName.substring(idName.length - 2, idName.length);
+                    } else {
+                        i = idName.substring(idName.length - 1, idName.length);
+                    }
                 } else {
                     continue;
                 }
@@ -484,6 +488,31 @@ var $page = function () {
                 }
             });
         });
+        //打印
+        $("#btnPrint").on("click", function () {
+            var vguid = $("#VGUID").val();
+            layer.load();
+            $.ajax({
+                url: "/VoucherManageManagement/VoucherListDetail/PrintVoucherList",
+                data: { vguids: vguid },
+                async: false,
+                type: "post",
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    switch (msg.Status) {
+                        case "0":                           
+                            break;
+                        case "1":
+                            window.open("/Temp/NewVoucherReport.pdf");
+                            break;
+                        case "2":
+                            window.open("/Temp/LastVoucherReport.pdf");
+                            break;
+                    }
+                }
+            });
+        });
+        
     }; //addEvent end
 
     function addSectionDiv() {

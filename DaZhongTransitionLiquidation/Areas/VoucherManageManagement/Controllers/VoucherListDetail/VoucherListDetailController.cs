@@ -247,7 +247,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         {
                             case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                             case "财务主管": voucher.Bookkeeping = user.LoginName; break;
-                            case "审核岗": voucher.Auditor = user.LoginName; break;
+                            //case "审核岗": voucher.Auditor = user.LoginName; break;
                             case "出纳": voucher.Cashier = user.LoginName; break;
                             default: break;
                         }
@@ -328,8 +328,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 var data = db.Ado.SqlQuery<PrintVoucherList>(@"select CONVERT(varchar(100), a.AccountingPeriod, 23) as AccountingPeriod,CONVERT(varchar(100), a.VoucherDate, 23) as VoucherDate,a.BatchName,a.VoucherNo,a.CompanyName,
                             a.FinanceDirector,a.Bookkeeping,a.Auditor,a.DocumentMaker,a.Cashier  from 
                             Business_VoucherList as a where a.VGUID = @VGUID ", new { VGUID = vguids }).ToList().FirstOrDefault();
-                var dataDetail = db.Ado.SqlQuery<PrintVoucherDetail>(@"select b.Abstract,b.SevenSubjectName,cast(b.BorrowMoney as varchar(50)) as BorrowMoney,cast(b.LoanMoney as varchar(50)) as LoanMoney,cast(b.BorrowMoneyCount as varchar(50)) as BorrowMoneyCount,
-                            cast(b.LoanMoneyCount as varchar(50)) as LoanMoneyCount,b.JE_LINE_NUMBER from 
+                var dataDetail = db.Ado.SqlQuery<PrintVoucherDetail>(@"select b.Abstract,b.SevenSubjectName,convert(varchar(1000),cast(b.BorrowMoney as money),1) as BorrowMoney,
+                          convert(varchar(1000),cast(b.LoanMoney as money),1) as LoanMoney,convert(varchar(1000),cast(b.BorrowMoneyCount as money),1) as BorrowMoneyCount,
+                          convert(varchar(1000),cast(b.LoanMoneyCount as money),1) as LoanMoneyCount,b.JE_LINE_NUMBER from 
                             Business_VoucherDetail  as b where b.VoucherVGUID = @VGUID ", new { VGUID = vguids }).OrderBy(x=>x.JE_LINE_NUMBER).ToList();
                 var attachmentCount = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguids).ToList().Count;
                 for (int i = 0; i < dataDetail.Count; i++)
@@ -400,7 +401,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 cells[0, 0].PutValue(data.CompanyName);
                 cells[1, 4].PutValue(data.AccountingPeriod);
                 cells[1, 16].PutValue(data.BatchName);
-                cells[2, 16].PutValue(data.VoucherNo);
+                cells[2, 16].PutValue(data.VoucherNo+"-"+i);
                 cells[3, 10].PutValue(data.VoucherDate);
                 cells[3, 19].PutValue(attachmentCount);
                 cells[7, 2].PutValue(data.FinanceDirector);

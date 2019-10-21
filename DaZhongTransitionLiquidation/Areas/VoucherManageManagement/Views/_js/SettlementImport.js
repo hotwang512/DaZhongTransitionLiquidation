@@ -21,11 +21,11 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-
-        initTable();
+        getSettlementImport();
+        //initTable();
         //查询
         selector.$btnSearch().on("click", function () {
-            initTable();
+            //initTable();
         });
 
         //重置
@@ -104,9 +104,31 @@ var $page = function () {
                     ]
                 });
         }
-
-    }; //addEvent end
-
+        function getSettlementImport() {
+            layer.load();
+            $.ajax({
+                url: '/VoucherManageManagement/SettlementImport/GetSettlementData',
+                type: 'post',
+                data: {},
+                success: function (msg) {
+                    if (msg != null) {
+                        creatTable(msg);
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrow) {
+                    layer.closeAll('loading');
+                }
+            });
+        }
+        function creatTable(msg) {
+            var model = [];
+            var classType = [];
+            var carType = [];
+            var business = [];
+            var businessType = [];
+            layer.closeAll('loading');
+        }
+    };
 };
 
 $(function () {

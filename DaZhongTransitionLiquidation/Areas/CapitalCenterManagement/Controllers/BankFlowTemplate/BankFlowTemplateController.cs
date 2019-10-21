@@ -461,7 +461,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         case "财务经理":voucher.FinanceDirector = user.LoginName;break;
                         case "财务主管": voucher.Bookkeeping = user.LoginName; break;
-                        case "审核岗": voucher.Auditor = user.LoginName; break;
+                        //case "审核岗": voucher.Auditor = user.LoginName; break;
                         case "出纳": voucher.Cashier = user.LoginName; break;
                         default: break;
                     }

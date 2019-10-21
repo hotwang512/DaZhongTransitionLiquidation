@@ -57,6 +57,9 @@ var $page = function () {
             addVoucherListTable();
             $("#hideButton").show();
             $("#DocumentMaker").val($("#LoginName").val());
+            if ($("#Status").val() != "1" && $("#Status").val() != "") {
+                $("#Auditor").val($("#LoginName").val());
+            }
             $("#AttachmentHide").show();
             getPersonInfo();
         }
@@ -257,12 +260,16 @@ var $page = function () {
             var borrowCount = $("#BorrowCount").val();
             var loanCount = $("#LoanCount").val();
             var documentMaker = $("#DocumentMaker").val();
+            var auditor = $("#Auditor").val();
             if (borrowCount != loanCount) {
                 jqxNotification("借贷不相等！", null, "error");
                 return;
             }
             if (documentMaker == "") {
                 $("#DocumentMaker").val($("#LoginName").val());
+            }
+            if (auditor == "" && $("#Status").val() != "1" && $("#Status").val() != "") {
+                $("#Auditor").val($("#LoginName").val());
             }
             $("#SubjectTable").remove();
             //var x = $(".nav-i")[0].id.split("_")[1];
@@ -700,11 +707,13 @@ var $page = function () {
                 $("#VoucherNo").val(msg.VoucherNo);
                 $("#FinanceDirector").val(msg.FinanceDirector);
                 $("#Bookkeeping").val(msg.Bookkeeping);
-                $("#Auditor").val(msg.Auditor);
                 if (msg.DocumentMaker == "" || msg.DocumentMaker == null) {
                     $("#DocumentMaker").val($("#LoginName").val());
                 } else {
                     $("#DocumentMaker").val(msg.DocumentMaker);
+                }
+                if ($("#Status").val() != "1" && $("#Status").val() != "") {
+                    $("#Auditor").val($("#LoginName").val());
                 }
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
@@ -914,7 +923,7 @@ var $page = function () {
                     switch (msg[i].Role) {
                         case "财务经理": $("#FinanceDirector").val(msg[i].LoginName); break;
                         case "财务主管": $("#Bookkeeping").val(msg[i].LoginName); break;
-                        case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
+                        //case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
                         case "出纳": $("#Cashier").val(msg[i].LoginName); break;
                         default: break;
                     }

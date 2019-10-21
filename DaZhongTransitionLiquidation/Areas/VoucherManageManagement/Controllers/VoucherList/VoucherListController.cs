@@ -194,6 +194,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                                     {
                                         VoucherNo = voucherNo,
                                         Status = status,
+                                        Auditor = UserInfo.LoginName
                                     }).Where(it => it.VGUID == item).ExecuteCommand();
                                 }
                                 else
@@ -201,6 +202,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                                     saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
                                     {
                                         Status = status,
+                                        Auditor = UserInfo.LoginName
                                     }).Where(it => it.VGUID == item).ExecuteCommand();
                                 }
                             }
@@ -295,12 +297,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 }
                 //批名（100201Y190930+01） 批名按审核日期生成+已审核批次
                 var times = "01";
-                var batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 4) + month + dateNow.Day.TryToString();
+                var batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 2) + month + dateNow.Day.TryToString();
                 if(dateNow.Month != voucher.VoucherDate.Value.Month)
                 {
                     //审核跨月,取凭证日期的当月最后一天
                     var lastDay = voucher.VoucherDate.Value.AddDays(1 - voucher.VoucherDate.Value.Day).AddMonths(1).AddDays(-1).Day;
-                    batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 4) + voucher.VoucherDate.Value.Month + lastDay;
+                    batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 2) + voucher.VoucherDate.Value.Month + lastDay;
                 }
                 var batchNameData = assetsData.Where(x => x.JE_BATCH_NAME.Contains(accountModeCode + voucher.CompanyCode + voucherType)).OrderByDescending(x=>x.JE_BATCH_NAME).ToList();
                 if(batchNameData.Count > 0)
@@ -331,7 +333,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 }
                 //var batchNames = getBatchName(batchName, times);
                 //凭证号（10020119090001）
-                var voucherNo = accountModeCode + voucher.CompanyCode + voucher.VoucherNo.Substring(2, 10);
+                var voucherNo = accountModeCode + voucher.CompanyCode + voucher.VoucherNo.Substring(2, 8);
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
                 asset.CREATE_USER = documentMaker;

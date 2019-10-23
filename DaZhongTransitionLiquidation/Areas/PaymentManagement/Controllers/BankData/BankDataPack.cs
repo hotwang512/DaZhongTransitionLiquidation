@@ -1,7 +1,9 @@
 ﻿using DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.ReconciliationReport;
+using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using SqlSugar;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 
@@ -55,6 +57,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
             dbBusinessDataService.Command(db =>
             {
                 bankFlows = db.SqlQueryable<T_Bank>(sql).ToList();
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", sql, bankFlows.ModelToJson()));
             });
             if (bankFlows.Count > 0)
             {

@@ -34,7 +34,19 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 response = db.Queryable<Business_SettlementImport>()
                 .WhereIF(searchParams.Model != null, i => i.Model.Contains(searchParams.Model))
                 .WhereIF(searchParams.ClassType != null, i => i.ClassType.Contains(searchParams.ClassType))
-                .OrderBy("Model,ClassType,CarType,BusinessType").ToList();
+                .OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
+                foreach (var item in response)
+                {
+                    if (item.BusinessType.Contains("-"))
+                    {
+                        item.Business = item.BusinessType.Split("-")[0];
+                        item.BusinessType = item.BusinessType.Split("-")[1];
+                    }
+                    else
+                    {
+                        item.Business = item.BusinessType;
+                    }
+                }
                 //jsonResult.TotalRows = pageCount;
             });
             return Json(response, JsonRequestBehavior.AllowGet);

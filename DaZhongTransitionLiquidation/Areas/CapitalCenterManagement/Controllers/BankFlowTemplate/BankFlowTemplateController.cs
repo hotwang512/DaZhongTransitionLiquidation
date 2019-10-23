@@ -148,7 +148,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         if (isAny.Count == 1)
                         {
                             isAny[0].PaymentUnitInstitution = bankData.Where(x => x.BankAccount == bankAccount.ToString()).FirstOrDefault().BankName;
-                            db.Updateable(isAny[0]).ExecuteCommand();
+                            db.Updateable(isAny[0]).IgnoreColumns(it => it == "CreateTime").ExecuteCommand();
                             continue;
                         }
                         var companyBankData = bankData.Single(x => x.BankAccount == bankAccount.ObjToString());
@@ -307,7 +307,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             items.AccountModeCode = item.AccountModeCode;
                             items.AccountModeName = accountModeName;
                             items.CompanyCode = item.CompanyCode;
-                            db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                            db.Updateable(items).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
                         items.BankAccount = item.BankAccount;
@@ -373,7 +373,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                                 items.AccountModeCode = item.AccountModeCode;
                                 items.AccountModeName = accountModeName;
                                 items.CompanyCode = item.CompanyCode;
-                                db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                                db.Updateable(items).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                                 continue;
                             }
                             items.AccountModeCode = item.AccountModeCode;

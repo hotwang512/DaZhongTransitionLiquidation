@@ -21,7 +21,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         {
             return View();
         }
-        public JsonResult GeVehicleData(Business_SettlementCount searchParams, GridParams para)
+        public JsonResult GeVehicleData(string YearMonth, GridParams para)
         {
             var response = new List<Business_SettlementCount>();
             DbBusinessDataService.Command(db =>
@@ -29,9 +29,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //int pageCount = 0;
                 //para.pagenum = para.pagenum + 1;
                 var yearMonth = "";
-                if (searchParams.YearMonth != null)
+                if (YearMonth != "" && YearMonth != null)
                 {
-                    yearMonth = searchParams.YearMonth.Replace("-", "");
+                    yearMonth = YearMonth.Replace("-", "");
                 }
                 //response = db.SqlQueryable<Business_SettlementCount>(@"select c.Model,c.ClassType, c.CarType,c.BusinessType ,a.YearMonth,b.MANAGEMENT_COMPANY,b.BELONGTO_COMPANY,CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as DAYS,
                 //            c.Money,(CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2))*c.Money) as Account,c.MoneyRow,c.MoneyColumns from Business_VehicleList as a
@@ -44,8 +44,21 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             as b on a.PLATE_NUMBER = b.PLATE_NUMBER where b.OPERATING_STATE='在运' and b.GROUP_ID='出租车' and a.YearMonth=@YearMonth
                             ) as t where  t.YearMonth=@YearMonth group by t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.MANAGEMENT_COMPANY,t.YearMonth ) as x  
                             left join Business_SettlementImport as c on x.MODEL_MAJOR = c.Model and x.MODEL_MINOR = parsename(REPLACE(c.ClassType,'-','.'),1)
-                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth ", new { YearMonth = yearMonth })
-                .OrderBy(x=>x.MoneyRow).ToList();
+                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth  order by c.MoneyRow asc,c.MoneyColumns asc", 
+                            new { YearMonth = yearMonth }).ToList();
+                //.OrderBy(x=>x.MoneyRow).OrderBy(x => x.MoneyColumns).ToList();
+                foreach (var item in response)
+                {
+                    if (item.BusinessType.Contains("-"))
+                    {
+                        item.Business = item.BusinessType.Split("-")[0];
+                        item.BusinessType = item.BusinessType.Split("-")[1];
+                    }
+                    else
+                    {
+                        item.Business = item.BusinessType;
+                    }
+                }
                 //jsonResult.TotalRows = pageCount;
             });
             return Json(

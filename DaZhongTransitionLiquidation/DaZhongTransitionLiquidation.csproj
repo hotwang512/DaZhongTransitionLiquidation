@@ -2329,9 +2329,14 @@
     <Content Include="_theme\_js\common.js" />
     <Content Include="_theme\_js\jquery-1.11.1.min.js" />
     <Content Include="_theme\_js\jquery-3.2.1.min.js" />
+    <Content Include="_theme\_js\jquery-ui-1.8.20.js" />
+    <Content Include="_theme\_js\jquery-ui-1.8.20.min.js" />
     <Content Include="_theme\_js\jquery.form.js" />
     <Content Include="_theme\_js\jweixin-1.0.0.js" />
     <Content Include="_theme\_js\menueCookie.js" />
+    <Content Include="_theme\_js\pivot.cs.js" />
+    <Content Include="_theme\_js\pivot.css" />
+    <Content Include="_theme\_js\pivot.js" />
     <Content Include="_theme\_js\tool.js" />
     <Content Include="_theme\layer\文档\jquery下载.url" />
     <Content Include="_theme\layer\文档\layer官网.url" />

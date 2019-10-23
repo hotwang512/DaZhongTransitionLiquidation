@@ -206,7 +206,7 @@ var $page = function () {
                         "BorrowMoney": borrowMoney,
                         "LoanMoney": loanMoney,
                         "SevenSubjectName": subjectNames,
-                        "JE_LINE_NUMBER": i
+                        "JE_LINE_NUMBER": j
                     }
                     detailList.push(detail);
                 }

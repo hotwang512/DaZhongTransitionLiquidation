@@ -486,7 +486,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //{
                         //    bankFlowLists.Add(item);
                         //}
-                        _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                        _db.Updateable(item).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                         continue;
                     }
                     item.AccountModeCode = companyBankData.AccountModeCode;

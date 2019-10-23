@@ -33,10 +33,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             var jsonResult = new JsonResultModel<Business_ScrapVehicleShowModel>();
             DbBusinessDataService.Command(db =>
             {
-                int pageCount = 0;
-                para.pagenum = para.pagenum + 1;
-                //var date = "2019-09-01".TryToDate();
-                jsonResult.Rows = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
+                var result = db.Ado.UseTran(() =>
+                {
+                    int pageCount = 0;
+                    para.pagenum = para.pagenum + 1;
+                    //var date = "2019-09-01".TryToDate();
+                    jsonResult.Rows = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
                          , mi.VEHICLE_SHORTNAME
                          , mi.MANAGEMENT_COMPANY
                          , mi.BELONGTO_COMPANY
@@ -53,24 +55,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                     from Business_ScrapVehicle mv
                         left join Business_AssetMaintenanceInfo mi
                             on mv.ORIGINALID = mi.ORIGINALID")
-                    .Where(i => !i.ISVERIFY)
-                    //.Where(x => x.BACK_CAR_DATE <= date)
-                    //.WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
-                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
-                if (ISVerify)
-                {
-                    //校验数据
-                    foreach (var item in jsonResult.Rows)
+                        .Where(i => !i.ISVERIFY)
+                        //.Where(x => x.BACK_CAR_DATE <= date)
+                        //.WhereIF(!searchParams.PLATE_NUMBER.IsNullOrEmpty(), i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
+                        .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
+                    if (ISVerify)
                     {
-                        if (item.BOOK_TYPE_CODE.IsNullOrEmpty() ||
-                            item.ASSET_COST.IsNullOrEmpty() || item.BACK_CAR_DATE.IsNullOrEmpty() ||
-                            item.ASSET_ID.IsNullOrEmpty())
+                        //校验数据
+                        foreach (var item in jsonResult.Rows)
                         {
-                            item.GROUP_ID = "1";
+                            if (item.BOOK_TYPE_CODE.IsNullOrEmpty() ||
+                                item.ASSET_COST.IsNullOrEmpty() || item.BACK_CAR_DATE.IsNullOrEmpty() ||
+                                item.ASSET_ID.IsNullOrEmpty())
+                            {
+                                item.GROUP_ID = "1";
+                            }
                         }
                     }
-                }
-                jsonResult.TotalRows = pageCount;
+                    jsonResult.TotalRows = pageCount;
+                });
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

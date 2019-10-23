@@ -66,75 +66,78 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
-                var orderList = db.Queryable<Business_FundClearingOrder>()
-                    .Where(x => x.FixedAssetsOrderVguid == fundClearingModel.FixedAssetsOrderVguid).ToList();
-                if (orderList.Any(x => x.SubmitStatus == 0))
+                var result = db.Ado.UseTran(() =>
                 {
-                    foreach (var order in orderList)
+                    var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
+                    var orderList = db.Queryable<Business_FundClearingOrder>()
+                        .Where(x => x.FixedAssetsOrderVguid == fundClearingModel.FixedAssetsOrderVguid).ToList();
+                    if (orderList.Any(x => x.SubmitStatus == 0))
                     {
-                        //请求清算平台、待付款请求生成支付凭证接口
-                        var pendingPaymentmodel = new PendingPaymentModel();
-                        //统计附件信息
-                        var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == fundClearingModel.FixedAssetsOrderVguid).ToList();
-                        pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
-                        pendingPaymentmodel.InvoiceReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
-                        pendingPaymentmodel.ApprovalReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
-                        pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
-                        pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
-                        pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
-                        var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
-                            .Where(x => x.VGUID == order.PurchaseGoodsVguid).First();
-                        var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
-                            .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
-                        pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
-                        pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|"
-                                                              + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
-                        //根据供应商账号找到供应商类别
-                        pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
-                            .Where(x => x.BankAccount == order.SupplierBankAccount).First().CompanyOrPerson; ;
-                        pendingPaymentmodel.CollectBankAccountName = order.SupplierBankAccountName;
-                        pendingPaymentmodel.CollectBankAccouont = order.SupplierBankAccount;
-                        pendingPaymentmodel.CollectBankName = order.SupplierBank;
-                        pendingPaymentmodel.CollectBankNo = order.SupplierBankNo;
-                        pendingPaymentmodel.PaymentMethod = order.PayType;
-                        pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
-                        pendingPaymentmodel.FunctionSiteId = "61";
-                        pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
-                        pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
-                        pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
-                        pendingPaymentmodel.Amount = order.ContractAmount.ToString();
-                        pendingPaymentmodel.Summary = order.AssetDescription;
-                        pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
-                        var apiReault = PendingPaymentApi(pendingPaymentmodel);
-                        var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
-                        if (pendingRedult.success)
+                        foreach (var order in orderList)
                         {
-                            var orderModel = db.Queryable<Business_FundClearingOrder>()
-                                .Where(x => x.VGUID == order.VGUID).First();
-                            orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
-                            orderModel.PaymentVoucherUrl = pendingRedult.data.url;
-                            db.Updateable<Business_FundClearingOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
-                            order.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
-                            order.SubmitDate = DateTime.Now;
-                            order.SubmitUser = cache[PubGet.GetUserKey].LoginName;
-                            db.Updateable<Business_FundClearingOrder>(order).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
-                            resultModel.ResultInfo = pendingRedult.data.url;
-                            resultModel.IsSuccess = true;
-                            resultModel.Status = "1";
-                        }
-                        else
-                        {
-                            LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
+                            //请求清算平台、待付款请求生成支付凭证接口
+                            var pendingPaymentmodel = new PendingPaymentModel();
+                            //统计附件信息
+                            var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == fundClearingModel.FixedAssetsOrderVguid).ToList();
+                            pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
+                            pendingPaymentmodel.InvoiceReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
+                            pendingPaymentmodel.ApprovalReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
+                            pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
+                            pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
+                            pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+                            var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
+                                .Where(x => x.VGUID == order.PurchaseGoodsVguid).First();
+                            var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
+                                .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
+                            pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
+                            pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|"
+                                                                  + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
+                            //根据供应商账号找到供应商类别
+                            pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
+                                .Where(x => x.BankAccount == order.SupplierBankAccount).First().CompanyOrPerson; ;
+                            pendingPaymentmodel.CollectBankAccountName = order.SupplierBankAccountName;
+                            pendingPaymentmodel.CollectBankAccouont = order.SupplierBankAccount;
+                            pendingPaymentmodel.CollectBankName = order.SupplierBank;
+                            pendingPaymentmodel.CollectBankNo = order.SupplierBankNo;
+                            pendingPaymentmodel.PaymentMethod = order.PayType;
+                            pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
+                            pendingPaymentmodel.FunctionSiteId = "61";
+                            pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
+                            pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
+                            pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
+                            pendingPaymentmodel.Amount = order.ContractAmount.ToString();
+                            pendingPaymentmodel.Summary = order.AssetDescription;
+                            pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
+                            var apiReault = PendingPaymentApi(pendingPaymentmodel);
+                            var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
+                            if (pendingRedult.success)
+                            {
+                                var orderModel = db.Queryable<Business_FundClearingOrder>()
+                                    .Where(x => x.VGUID == order.VGUID).First();
+                                orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
+                                orderModel.PaymentVoucherUrl = pendingRedult.data.url;
+                                db.Updateable<Business_FundClearingOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid }).ExecuteCommand();
+                                order.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
+                                order.SubmitDate = DateTime.Now;
+                                order.SubmitUser = cache[PubGet.GetUserKey].LoginName;
+                                db.Updateable<Business_FundClearingOrder>(order).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                                resultModel.ResultInfo = pendingRedult.data.url;
+                                resultModel.IsSuccess = true;
+                                resultModel.Status = "1";
+                            }
+                            else
+                            {
+                                LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
+                            }
                         }
                     }
-                }
-                else
-                {
-                    resultModel.ResultInfo = "该状态下不允许发起支付";
-                    resultModel.IsSuccess = false;
-                    resultModel.Status = "2";
-                }
+                    else
+                    {
+                        resultModel.ResultInfo = "该状态下不允许发起支付";
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                    }
+                });
             });
             return Json(resultModel);
         }
@@ -144,14 +147,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
-                fundClearingModel.SubmitStatus = 2;//驳回
-                db.Updateable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
-                var orderList = db.Queryable<Business_FundClearingOrder>()
-                    .Where(x => x.FixedAssetsOrderVguid == fundClearingModel.FixedAssetsOrderVguid).ToList();
-                db.Deleteable<Business_FundClearingOrder>(orderList).ExecuteCommand();
-                resultModel.IsSuccess = true;
-                resultModel.Status = "1";
+                var result = db.Ado.UseTran(() =>
+                {
+                    var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
+                    fundClearingModel.SubmitStatus = 2;//驳回
+                    db.Updateable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
+                    var orderList = db.Queryable<Business_FundClearingOrder>()
+                        .Where(x => x.FixedAssetsOrderVguid == fundClearingModel.FixedAssetsOrderVguid).ToList();
+                    db.Deleteable<Business_FundClearingOrder>(orderList).ExecuteCommand();
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = "1";
+                });
             });
             return Json(resultModel);
         }

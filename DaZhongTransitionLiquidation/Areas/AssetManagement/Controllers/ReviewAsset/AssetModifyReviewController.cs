@@ -278,7 +278,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             assetModifyFlowList.Add(nv);
                         }
 
-                        var dt = assetModifyFlowList.Where(x => x.OPERATING_STATE == "在运" && x.MODEL_MINOR == "").ToList().TryToDataTable();
+                        //var dt = assetModifyFlowList.Where(x => x.OPERATING_STATE == "在运" && x.MODEL_MINOR == "").ToList().TryToDataTable();
                         AutoSyncAssetsMaintenance.WirterSyncModifyAssetFlow(assetModifyFlowList);
                     }
                 });

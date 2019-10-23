@@ -95,11 +95,11 @@ namespace DaZhongTransitionLiquidation.Controllers
         }
         public static int WirterSyncModifyAssetFlow(List<Api_ModifyVehicleAsset> assetFlowList)
         {
-            var alist = assetFlowList.GroupBy(x => x.ORIGINALID).ToList();
-            var vlist = assetFlowList.Where(x => x.MODEL_MINOR.IsNullOrEmpty()).ToList();
-            var slist = assetFlowList.Where(x => x.CHASSIS_NUMBER == "LSVVL41T2J2010240").ToList();
-            var test1 = assetFlowList.Where(x => x.MANAGEMENT_COMPANY == "37").ToList();
-            var test2 = assetFlowList.Where(x => x.BELONGTO_COMPANY == "37").ToList();
+            //var alist = assetFlowList.GroupBy(x => x.ORIGINALID).ToList();
+            //var vlist = assetFlowList.Where(x => x.MODEL_MINOR.IsNullOrEmpty()).ToList();
+            //var slist = assetFlowList.Where(x => x.CHASSIS_NUMBER == "LSVVL41T2J2010240").ToList();
+            //var test1 = assetFlowList.Where(x => x.MANAGEMENT_COMPANY == "37").ToList();
+            //var test2 = assetFlowList.Where(x => x.BELONGTO_COMPANY == "37").ToList();
             var list = new List<Business_ModifyVehicle>();
             SqlSugarClient _db = DbBusinessDataConfig.GetInstance();
             var assetMaintenanceInfoList = _db.Queryable<Business_AssetMaintenanceInfo>().Where(x => x.GROUP_ID == "出租车").ToList();
@@ -227,7 +227,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //经营模式
                             MODIFY_TYPE = "BUSINESS_MODEL";
-                            OLDDATA = assetMaintenanceInfo.MODEL_MAJOR + "-" + assetMaintenanceInfo.MODEL_MAJOR;
+                            OLDDATA = assetMaintenanceInfo.MODEL_MAJOR + "-" + assetMaintenanceInfo.MODEL_MINOR;
                             if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
                             {
                                 list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE,OLDDATA));

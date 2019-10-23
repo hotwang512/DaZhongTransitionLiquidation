@@ -49,71 +49,73 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetEx
             var cache = CacheManager<Sys_User>.GetInstance();
             DbBusinessDataService.Command(db =>
             {
-                var exceptionList = db.Queryable<AssetMaintenanceInfo_Swap>()
+                var result = db.Ado.UseTran(() =>
+                {
+                    var exceptionList = db.Queryable<AssetMaintenanceInfo_Swap>()
                     .Where(i => vguids.Contains(i.TRANSACTION_ID))
                     .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
-                try
-                {
-                    foreach (var exceptionItem in exceptionList)
+                    try
                     {
-                        var assetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
-                            .Where(x => x.ASSET_ID == exceptionItem.ASSET_ID).First();
-                        //NEW_ASSET,PLATE_NUMBER,FA_LOC_1,FA_LOC_3
-                        if (exceptionItem.PROCESS_TYPE == "NEW_ASSET")
+                        foreach (var exceptionItem in exceptionList)
                         {
-                            
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "PLATE_NUMBER")
-                        {
-                            assetInfo.PLATE_NUMBER = exceptionItem.TAG_NUMBER.Split("-")[0].ToString();
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "FA_LOC_1")
-                        {
-                            assetInfo.BELONGTO_COMPANY = exceptionItem.FA_LOC_1;
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "FA_LOC_3")
-                        {
-                            assetInfo.ORGANIZATION_NUM = exceptionItem.FA_LOC_3;
-                        }
-                        else if (exceptionItem.PROCESS_TYPE == "RETIRE")
-                        {
-                            assetInfo.BACK_CAR_DATE = exceptionItem.RETIRE_DATE;
-                        }
-                        assetInfo.ASSET_CATEGORY_MAJOR = exceptionItem.ASSET_CATEGORY_MAJOR;
-                        assetInfo.ASSET_CATEGORY_MINOR = exceptionItem.ASSET_CATEGORY_MINOR;
-                        assetInfo.ASSET_COST = exceptionItem.ASSET_COST;
-                        assetInfo.METHOD = exceptionItem.METHOD;
-                        assetInfo.BELONGTO_COMPANY = exceptionItem.FA_LOC_1;
-                        assetInfo.MANAGEMENT_COMPANY = exceptionItem.FA_LOC_2;
-                        assetInfo.ORGANIZATION_NUM = exceptionItem.FA_LOC_3;
-                        assetInfo.MODEL_MAJOR = exceptionItem.MODEL_MAJOR;
-                        assetInfo.MODEL_MINOR = exceptionItem.MODEL_MINOR;
-                        db.Updateable<Business_AssetMaintenanceInfo>().UpdateColumns(x => new
-                        {
-                            x.ASSET_CATEGORY_MAJOR,
-                            x.ASSET_CATEGORY_MINOR,
-                            x.ASSET_COST,
-                            x.METHOD,
-                            x.BELONGTO_COMPANY,
-                            x.MANAGEMENT_COMPANY,
-                            x.MODEL_MAJOR,
-                            x.MODEL_MINOR,
-                            x.ORGANIZATION_NUM
-                        }).ExecuteCommand();
-                        exceptionItem.TRANSACTION_ID = Guid.NewGuid();
-                        exceptionItem.CREATE_DATE = DateTime.Now;
-                        exceptionItem.LAST_UPDATE_DATE = DateTime.Now;
-                        exceptionItem.STATUS = "N";
-                        db.Insertable<AssetMaintenanceInfo_Swap>(exceptionItem).ExecuteCommand();
-                    }
-                    resultModel.IsSuccess = true;
-                    resultModel.Status = "1";
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
+                            var assetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
+                                .Where(x => x.ASSET_ID == exceptionItem.ASSET_ID).First();
+                            //NEW_ASSET,PLATE_NUMBER,FA_LOC_1,FA_LOC_3
+                            if (exceptionItem.PROCESS_TYPE == "NEW_ASSET")
+                            {
 
+                            }
+                            else if (exceptionItem.PROCESS_TYPE == "PLATE_NUMBER")
+                            {
+                                assetInfo.PLATE_NUMBER = exceptionItem.TAG_NUMBER.Split("-")[0].ToString();
+                            }
+                            else if (exceptionItem.PROCESS_TYPE == "FA_LOC_1")
+                            {
+                                assetInfo.BELONGTO_COMPANY = exceptionItem.FA_LOC_1;
+                            }
+                            else if (exceptionItem.PROCESS_TYPE == "FA_LOC_3")
+                            {
+                                assetInfo.ORGANIZATION_NUM = exceptionItem.FA_LOC_3;
+                            }
+                            else if (exceptionItem.PROCESS_TYPE == "RETIRE")
+                            {
+                                assetInfo.BACK_CAR_DATE = exceptionItem.RETIRE_DATE;
+                            }
+                            assetInfo.ASSET_CATEGORY_MAJOR = exceptionItem.ASSET_CATEGORY_MAJOR;
+                            assetInfo.ASSET_CATEGORY_MINOR = exceptionItem.ASSET_CATEGORY_MINOR;
+                            assetInfo.ASSET_COST = exceptionItem.ASSET_COST;
+                            assetInfo.METHOD = exceptionItem.METHOD;
+                            assetInfo.BELONGTO_COMPANY = exceptionItem.FA_LOC_1;
+                            assetInfo.MANAGEMENT_COMPANY = exceptionItem.FA_LOC_2;
+                            assetInfo.ORGANIZATION_NUM = exceptionItem.FA_LOC_3;
+                            assetInfo.MODEL_MAJOR = exceptionItem.MODEL_MAJOR;
+                            assetInfo.MODEL_MINOR = exceptionItem.MODEL_MINOR;
+                            db.Updateable<Business_AssetMaintenanceInfo>().UpdateColumns(x => new
+                            {
+                                x.ASSET_CATEGORY_MAJOR,
+                                x.ASSET_CATEGORY_MINOR,
+                                x.ASSET_COST,
+                                x.METHOD,
+                                x.BELONGTO_COMPANY,
+                                x.MANAGEMENT_COMPANY,
+                                x.MODEL_MAJOR,
+                                x.MODEL_MINOR,
+                                x.ORGANIZATION_NUM
+                            }).ExecuteCommand();
+                            exceptionItem.TRANSACTION_ID = Guid.NewGuid();
+                            exceptionItem.CREATE_DATE = DateTime.Now;
+                            exceptionItem.LAST_UPDATE_DATE = DateTime.Now;
+                            exceptionItem.STATUS = "N";
+                            db.Insertable<AssetMaintenanceInfo_Swap>(exceptionItem).ExecuteCommand();
+                        }
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                });
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }

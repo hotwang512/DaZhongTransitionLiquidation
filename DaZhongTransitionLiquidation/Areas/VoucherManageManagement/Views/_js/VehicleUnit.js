@@ -36,7 +36,7 @@ var $page = function () {
         //layer.load();
         $.ajax({
             url: "/VoucherManageManagement/VehicleUnit/GeVehicleData",
-            data: { YearMonth: month },
+            data: { },
             async: false,
             type: "post",
             success: function (mps) {

@@ -51,6 +51,25 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult SaveSettlementImport(string Model, string ClassType, string CarType, string Business, string BusinessType, decimal? Money, decimal? NewMoney)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                int saveChanges = 0;
+                BusinessType = Business + "-" + BusinessType;
+                var data = db.Queryable<Business_SettlementImport>().Where(x => x.Model == Model && x.ClassType == ClassType && x.CarType == CarType
+                             && x.BusinessType == BusinessType && x.Money == Money).ToList();
+                if(data.Count == 1)
+                {
+                    data[0].Money = NewMoney;
+                    saveChanges = db.Updateable(data[0]).ExecuteCommand();
+                }
+                resultModel.IsSuccess = saveChanges == 1;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult ImportSettlementData(string fileName)
         {
             ResultModel<string> data = new ResultModel<string>

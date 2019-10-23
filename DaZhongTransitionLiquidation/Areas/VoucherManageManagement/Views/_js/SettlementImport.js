@@ -6,10 +6,10 @@
     //按钮
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
-
+    $AddBankChannelDialog: function () { return $("#AddBankChannelDialog") },
+    $AddBankChannel_OKButton: function () { return $("#AddBankChannel_OKButton") },
+    $AddBankChannel_CancelBtn: function () { return $("#AddBankChannel_CancelBtn") },
     $btnExport: function () { return $("#btnExport") }
-
-
 };
 
 var $page = function () {
@@ -31,7 +31,42 @@ var $page = function () {
         selector.$btnReset().on("click", function () {
             $("#YearMonth").val("");
         });
+        selector.$AddBankChannel_CancelBtn().on("click", function () {
+            selector.$AddBankChannelDialog().modal("hide");
+        });
+        //弹出框中的保存按钮
+        selector.$AddBankChannel_OKButton().on("click", function () {
+            var validateError = 0;//未通过验证的数量
+            if (validateError <= 0) {
+                $.ajax({
+                    url: "/VoucherManageManagement/SettlementImport/SaveSettlementImport",
+                    data: {
+                        Model: $("#txtModel").val(),
+                        ClassType: $("#txtClassType").val(),
+                        CarType: $("#txtCarType").val(),
+                        Business: $("#txtBusiness").val(),
+                        BusinessType: $("#txtBusinessType").val(),
+                        Money: $("#txtMoney").val(),
+                        NewMoney: $("#newMoney").val()
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("保存失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("保存成功！", null, "success");
+                                initTable();
+                                selector.$AddBankChannelDialog().modal("hide");
+                                break;
+                        }
 
+                    }
+                });
+            }
+        });
         //导入
         $("#btnImporting").on("click", function () {
             $("#uploadFile").val("");
@@ -56,76 +91,82 @@ var $page = function () {
 
         function initTable() {
             //layer.load();
-            $.getJSON("/VoucherManageManagement/SettlementImport/GetSettlementData", function (mps) {
-                var utils = $.pivotUtilities;
-                var heatmap = utils.renderers["Heatmap"];
-                var sumOverSum = utils.aggregators["Sum"];
-                var model = [];
-                var classType = [];
-                var carType = [];
-                var business = [];
-                var businessType = [];
-                for (var i = 0; i < mps.length; i++) {
-                    if (model.indexOf(mps[i].Model) < 0) {
-                        model.push(mps[i].Model);
-                    }
-                    if (classType.indexOf(mps[i].ClassType) < 0) {
-                        classType.push(mps[i].ClassType);
-                    }
-                    if (carType.indexOf(mps[i].CarType) < 0) {
-                        carType.push(mps[i].CarType);
-                    }
-                    if (business.indexOf(mps[i].Business) < 0) {
-                        business.push(mps[i].Business);
-                    }
-                    if (businessType.indexOf(mps[i].BusinessType) < 0) {
-                        businessType.push(mps[i].BusinessType);
-                    }
-                }
-                $("#SettlementImportTable").pivot(mps, {
-                    rows: ["Business", "BusinessType"],
-                    cols: ["Model", "ClassType", "CarType"],
-                    //aggregatorName: "Sum",
-                    aggregator: sumOverSum(["Money"]),
-                    //vals: ["Money"],
-                    sorters: {
-                        Business: $.pivotUtilities.sortAs(business),
-                        BusinessType: $.pivotUtilities.sortAs(businessType),
-                        Model: $.pivotUtilities.sortAs(model),
-                        ClassType: $.pivotUtilities.sortAs(classType),
-                        CarType: $.pivotUtilities.sortAs(carType),
-                    },
-                    rendererOptions: {
-                        table: {
-                            clickCallback: function (e, value, filters, pivotData) {
-                                //var names = [];
-                                //pivotData.forEachMatchingRecord(filters,
-                                //    function (record) { names.push(record.Name); });
-                                //alert(names.join("\n"));
+            $.ajax({
+                url: "/VoucherManageManagement/SettlementImport/GetSettlementData",
+                data: {},
+                async: false,
+                type: "post",
+                success: function (mps) {
+                    //layer.closeAll('loading');
+                    if (mps != null) {
+                        var utils = $.pivotUtilities;
+                        var heatmap = utils.renderers["Heatmap"];
+                        var sumOverSum = utils.aggregators["Sum"];
+                        var model = [];
+                        var classType = [];
+                        var carType = [];
+                        var business = [];
+                        var businessType = [];
+                        for (var i = 0; i < mps.length; i++) {
+                            if (model.indexOf(mps[i].Model) < 0) {
+                                model.push(mps[i].Model);
+                            }
+                            if (classType.indexOf(mps[i].ClassType) < 0) {
+                                classType.push(mps[i].ClassType);
+                            }
+                            if (carType.indexOf(mps[i].CarType) < 0) {
+                                carType.push(mps[i].CarType);
+                            }
+                            if (business.indexOf(mps[i].Business) < 0) {
+                                business.push(mps[i].Business);
+                            }
+                            if (businessType.indexOf(mps[i].BusinessType) < 0) {
+                                businessType.push(mps[i].BusinessType);
                             }
                         }
+                        $("#SettlementImportTable").pivot(mps, {
+                            rows: ["Business", "BusinessType"],
+                            cols: ["Model", "ClassType", "CarType"],
+                            //aggregatorName: "Sum",
+                            aggregator: sumOverSum(["Money"]),
+                            //vals: ["Money"],
+                            sorters: {
+                                Business: $.pivotUtilities.sortAs(business),
+                                BusinessType: $.pivotUtilities.sortAs(businessType),
+                                Model: $.pivotUtilities.sortAs(model),
+                                ClassType: $.pivotUtilities.sortAs(classType),
+                                CarType: $.pivotUtilities.sortAs(carType),
+                            },
+                            rendererOptions: {
+                                table: {
+                                    clickCallback: function (e, value, filters, pivotData) {
+                                        $("#txtModel").val(filters.Model),
+                                        $("#txtClassType").val(filters.ClassType),
+                                        $("#txtCarType").val(filters.CarType),
+                                        $("#txtBusiness").val(filters.Business),
+                                        $("#txtBusinessType").val(filters.BusinessType),
+                                        $("#txtMoney").val(value),
+                                        selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
+                                        selector.$AddBankChannelDialog().modal("show");
+                                    }
+                                }
+                            }
+                        });
+
+                        $(".pvtAxisLabel").eq(0).text("模式");
+                        $(".pvtAxisLabel").eq(0).css("text-align", "center")
+                        $(".pvtAxisLabel").eq(1).text("班型");
+                        $(".pvtAxisLabel").eq(1).css("text-align", "center")
+                        $(".pvtAxisLabel").eq(2).text("车型");
+                        $(".pvtAxisLabel").eq(2).css("text-align", "center")
+                        $(".pvtAxisLabel").eq(3).text("营收主类");
+                        $(".pvtAxisLabel").eq(3).css("text-align", "center")
+                        $(".pvtAxisLabel").eq(4).text("营收子类");
+                        $(".pvtAxisLabel").eq(4).css("text-align", "center")
+                        $("#SettlementImportTable").show();
                     }
-                });
+                }
             });
-            setTimeout(function () {
-                $(".pvtAxisLabel").eq(0).text("模式");
-                $(".pvtAxisLabel").eq(0).css("width", "200px")
-                $(".pvtAxisLabel").eq(0).css("text-align", "center")
-                $(".pvtAxisLabel").eq(1).text("班型");
-                $(".pvtAxisLabel").eq(1).css("width", "200px")
-                $(".pvtAxisLabel").eq(1).css("text-align", "center")
-                $(".pvtAxisLabel").eq(2).text("车型");
-                $(".pvtAxisLabel").eq(2).css("width", "200px")
-                $(".pvtAxisLabel").eq(2).css("text-align", "center")
-                $(".pvtAxisLabel").eq(3).text("营收主类");
-                $(".pvtAxisLabel").eq(3).css("width", "200px")
-                $(".pvtAxisLabel").eq(3).css("text-align", "center")
-                $(".pvtAxisLabel").eq(4).text("营收子类");
-                $(".pvtAxisLabel").eq(4).css("width", "200px")
-                $(".pvtAxisLabel").eq(4).css("text-align", "center")
-                //layer.closeAll('loading');
-                $("#SettlementImportTable").show();
-            }, 2000)
         }
     };
 };

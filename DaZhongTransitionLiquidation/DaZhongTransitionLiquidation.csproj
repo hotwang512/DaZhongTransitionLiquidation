@@ -56,8 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="Aspose.Pdf">
-      <HintPath>C:\Users\peter\Documents\WeChat Files\Takuya-Star\FileStorage\File\2019-10\Aspose.Pdf.dll</HintPath>
+    <Reference Include="Aspose.Pdf, Version=10.1.0.0, Culture=neutral, PublicKeyToken=00725b1ceb58d0a9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_lib\Aspose.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -406,6 +407,7 @@
     <Content Include="scripts\modernizr-2.6.2.js" />
     <Content Include="Views\_css\home-index.css" />
     <Content Include="_lib\Aspose.Cells.dll" />
+    <Content Include="_lib\Aspose.Pdf.dll" />
     <Content Include="_lib\Autofac.dll" />
     <Content Include="_lib\Autofac.Integration.Mvc.dll" />
     <Content Include="_lib\log4net.dll" />

@@ -2480,6 +2480,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_ComeOnAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CustomerBankSetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_PaySetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_PaySettingDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_GeneralLedgerBalance_Swap.cs" />
@@ -2487,6 +2488,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\v_Business_CustomerBankInfo.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\V_Business_PaySetting.cs" />
     <Compile Include="Areas\FinancialStatementsManagement\Controllers\SubjectBalanceStatement\SubjectBalanceStatementController.cs" />
     <Compile Include="Areas\FinancialStatementsManagement\FinancialStatementsManagementAreaRegistration.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />

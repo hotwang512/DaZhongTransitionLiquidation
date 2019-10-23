@@ -78,8 +78,7 @@ var $page = function () {
                         BankAccountName: selector.$txtBankAccountName_Dialog().val(),
                         Bank: selector.$txtBank_Dialog().val(),
                         Channel: selector.$txtChannel_Dialog().val(),
-                        VGUID: vguid,
-                        IsShow:"1"
+                        VGUID: vguid
                     },
                     type: "post",
                     dataType: "json",

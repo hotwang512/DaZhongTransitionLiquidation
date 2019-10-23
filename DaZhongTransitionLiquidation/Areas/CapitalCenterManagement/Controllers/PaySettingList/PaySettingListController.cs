@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Infrastructure.Dao;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
@@ -31,15 +32,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// <returns></returns>
         public JsonResult GetBankChannelMappingInfos(string BankAccount, string Channel, GridParams para)
         {
-            var jsonResult = new JsonResultModel<V_BankChannelMapping>();
+            var jsonResult = new JsonResultModel<V_Business_PaySetting>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<V_BankChannelMapping>()
+                jsonResult.Rows = db.Queryable<V_Business_PaySetting>()
                 .WhereIF(!string.IsNullOrEmpty(BankAccount), i => i.BankAccount.Contains(BankAccount))
                 .WhereIF(!string.IsNullOrEmpty(Channel), i => i.ChannelName.Contains(Channel))
-                .Where(x=>x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1")
                 .OrderBy(i => i.BankAccountName, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -51,7 +51,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             DbBusinessDataService.Command(db =>
             {
                 result = db.Queryable<T_Channel>().ToList();
-
             });
             return result;
         }
@@ -60,7 +59,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// </summary>
         /// <param name="bankChannel"></param>
         /// <returns></returns>
-        public JsonResult SaveBankChannelInfo(T_BankChannelMapping bankChannel, bool isEdit)
+        public JsonResult SaveBankChannelInfo(Business_PaySetting bankChannel, bool isEdit)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             if (isEdit)
@@ -81,7 +80,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 {
                     if (isEdit)
                     {
-                        db.Updateable(bankChannel).IgnoreColumns(x=>x == "IsShow").ExecuteCommand();
+                        db.Updateable(bankChannel).ExecuteCommand();
                     }
                     else
                     {
@@ -104,7 +103,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-                int saveChanges = db.Deleteable<T_BankChannelMapping>(vguids).ExecuteCommand();
+                int saveChanges = db.Deleteable<Business_PaySetting>(vguids).ExecuteCommand();
                 resultModel.IsSuccess = saveChanges == vguids.Count;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
@@ -118,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 int saveChanges = 0;
                 foreach (var item in vguids)
                 {
-                    saveChanges = db.Updateable<T_BankChannelMapping>().UpdateColumns(it => new T_BankChannelMapping()
+                    saveChanges = db.Updateable<Business_PaySetting>().UpdateColumns(it => new Business_PaySetting()
                     {
                         IsUnable = isUnable,
                     }).Where(it => it.VGUID == item).ExecuteCommand();

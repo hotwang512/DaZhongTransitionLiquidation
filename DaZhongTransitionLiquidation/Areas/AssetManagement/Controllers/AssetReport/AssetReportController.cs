@@ -34,21 +34,131 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
         /// <param name="PeriodType">期初期末</param>
         /// <param name="para"></param>
         /// <returns></returns>
-        public JsonResult GetAssetReportPeriodListDatas(string YearMonth, string PeriodType, GridParams para)
+        //public JsonResult GetAssetReportPeriodListDatas(string YearMonth, string PeriodType, GridParams para)
+        //{
+        //    var date = YearMonth.TryToDate();
+        //    if (PeriodType == "StartPeriod")
+        //    {
+        //        date = date.AddMonths(-1);
+        //        YearMonth = date.Year.ToString() + date.Month.ToString().PadLeft(2,'0');
+        //    }
+        //    else
+        //    {
+        //        YearMonth = YearMonth.Replace("-", "");
+        //    }
+        //    var cache = CacheManager<Sys_User>.GetInstance();
+        //    List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
+        //    var reportList = new List<Business_VehicleCheckReport>();
+        //    //var reportShowList = new List<Business_VehicleCheckReport>();
+        //    DbBusinessDataService.Command(db =>
+        //    {
+        //        if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "期初"))
+        //        {
+        //            YearMonth = YearMonth.Replace("-", "");
+        //            var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+        //            var resultApiModifyModel = apiReaultModify
+        //                .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+        //            //全量获取车辆信息
+        //            var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+        //            var resultData = resultApiModifyModel.data[0].DATA;
+        //            foreach (var item in resultData)
+        //            {
+        //                var nv = new Api_ModifyVehicleAsset();
+        //                var t = nv.GetType();
+        //                for (var k = 0; k < resultColumn.Count; k++)
+        //                {
+        //                    var pi = t.GetProperty(resultColumn[k]);
+        //                    if (pi != null) pi.SetValue(nv, item[k], null);
+        //                }
+        //                assetModifyFlowList.Add(nv);
+        //            }
+        //            //获取所有的公司
+        //            var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+        //                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+        //            foreach (var item in assetModifyFlowList)
+        //            {
+        //                if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.MANAGEMENT_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
+        //                {
+        //                    //Code转名称
+        //                    if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
+        //                    {
+        //                        item.MANAGEMENT_COMPANY =
+        //                            ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
+        //                    }
+        //                    if (ssList.Any(x => x.OrgID == item.BELONGTO_COMPANY))
+        //                    {
+        //                        item.BELONGTO_COMPANY =
+        //                            ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
+        //                    }
+        //                    var report = new Business_VehicleCheckReport();
+        //                    report.YearMonth = YearMonth;
+        //                    
+        //                    report.VGUID = Guid.NewGuid();
+        //                    report.VehicleModel = item.VEHICLE_SHORTNAME;
+        //                    report.ManageCompany = item.MANAGEMENT_COMPANY;
+        //                    report.BelongToCompany = item.BELONGTO_COMPANY;
+        //                    report.Quantity = 1;
+        //                    report.CreateDate = DateTime.Now;
+        //                    report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+        //                    report.PeriodType = PeriodType == "StartPeriod" ? "期初" : "期末";
+        //                    reportList.Add(report);
+        //                }
+        //            }
+        //            var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
+        //            reportCache.Remove(PubGet.GetVehicleCheckReportKey);
+        //            reportCache.Add(PubGet.GetVehicleCheckReportKey, reportList, 8 * 60 * 60);
+        //        }
+        //        else
+        //        {
+        //            reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth)
+        //                .ToList();
+        //        }
+        //    });
+        //    var dataShow = reportList.GroupBy(x => new { x.PeriodType, x.ManageCompany, x.VehicleModel })
+        //        .Select(x => new
+        //        {
+        //            ManageCompany = x.Key.ManageCompany,
+        //            VehicleModel = x.Key.VehicleModel,
+        //            Quantity = x.Sum(s => s.Quantity),
+        //            PeriodType = x.Key.PeriodType
+        //        }).OrderBy(x => x.VehicleModel).ToList();
+        //    var listCompany = new List<string>();
+        //    var vehicleModelList = reportList.GroupBy(x => new { x.ManageCompany })
+        //        .Select(x => new { x.Key }).OrderBy(x => x.Key.ManageCompany).ToList();
+        //    foreach (var item in vehicleModelList)
+        //    {
+        //        if (!item.Key.ManageCompany.IsNullOrEmpty())
+        //        {
+        //            listCompany.Add(item.Key.ManageCompany);
+        //        }
+        //    }
+        //    var listReport = new List<VehicleCheckShowReport>();
+        //    for (var i = 0; i < listCompany.Count; i++)
+        //    {
+        //        var report = new VehicleCheckShowReport();
+        //        report.PeriodType = "期初";
+        //        report.Company = listCompany[i];
+        //        var showList = dataShow.Where(x => x.ManageCompany == report.Company).GroupBy(x => new { x.VehicleModel}).Select(x => new {x.Key.VehicleModel}).ToList();
+        //        foreach (var item in showList)
+        //        {
+        //            var mdata = new VehicleModelData();
+        //            mdata.VehicleModel = item.VehicleModel;
+        //            mdata.Quantity = dataShow
+        //                .Where(x => x.ManageCompany == report.Company && x.VehicleModel == item.VehicleModel)
+        //                .Sum(s => s.Quantity);
+        //            report.ResultVehicleModelList.Add(mdata);
+        //        }
+        //        listReport.Add(report);
+        //    }
+        //    //return Json(listReport, JsonRequestBehavior.AllowGet);
+        //    return Json(reportList.OrderBy(x => x.VehicleModel).ToList(), JsonRequestBehavior.AllowGet);
+        //}
+        public JsonResult GetAssetReportVehicleModel(string YearMonth)
         {
+            var listType = new List<string>();
             var date = YearMonth.TryToDate();
-            if (PeriodType == "StartPeriod")
-            {
-                date = date.AddMonths(-1);
-                YearMonth = date.Year.ToString() + date.Month.ToString().PadLeft(2,'0');
-            }
-            else
-            {
-                YearMonth = YearMonth.Replace("-", "");
-            }
-            var cache = CacheManager<Sys_User>.GetInstance();
+            YearMonth = YearMonth.Replace("-", "");
             List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
-            var reportList = new List<Business_VehicleCheckReport>();
             DbBusinessDataService.Command(db =>
             {
                 if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth))
@@ -71,12 +181,251 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                         }
                         assetModifyFlowList.Add(nv);
                     }
-                    //获取所有的公司
-                    var ssList = db.Queryable<Business_SevenSection>().Where(x =>
-                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                    var vehicleModelList = assetModifyFlowList.GroupBy(x => new {x.VEHICLE_SHORTNAME})
+                        .Select(x => new {x.Key}).OrderBy(x => x.Key.VEHICLE_SHORTNAME).ToList();
+                    foreach (var item in vehicleModelList)
+                    {
+                        if (!item.Key.VEHICLE_SHORTNAME.IsNullOrEmpty())
+                        {
+                            listType.Add(item.Key.VEHICLE_SHORTNAME);
+                        }
+                    }
+                }
+                else
+                {
+                    var vehicleModelList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth).GroupBy(x => new { x.VehicleModel}).Select(x => new {x.VehicleModel}).ToList();
+                    foreach (var item in vehicleModelList)
+                    {
+                        listType.Add(item.VehicleModel);
+                    }
+                }
+            });
+            return Json(listType.ToList(), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="YearMonth">年月</param>
+        /// <param name="ShowType">增加减少</param>
+        /// <param name="para"></param>
+        /// <returns></returns>
+        //public JsonResult GetAssetReportChangedListDatas(string YearMonth, string ShowType, GridParams para)
+        //{
+        //    YearMonth = YearMonth.Replace("-", "");
+        //    var cache = CacheManager<Sys_User>.GetInstance();
+        //    List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
+        //    var reportAddedList = new List<Business_VehicleCheckChangeReport>();
+        //    var reportReduceList = new List<Business_VehicleCheckChangeReport>();
+        //    DbBusinessDataService.Command(db =>
+        //    {
+        //        if (ShowType == "Added")
+        //        {
+        //            if (!db.Queryable<Business_VehicleCheckChangeReport>().Any(x => x.YearMonth == YearMonth && x.ChangeType == ShowType))
+        //            {
+        //                YearMonth = YearMonth.Replace("-", "");
+        //                var addedList = db.Queryable<Business_AssetReview>().Where(x => x.GROUP_ID == "出租车" && !x.ISVERIFY)
+        //                    .ToList();
+        //                foreach (var item in addedList)
+        //                {
+        //                    var report = new Business_VehicleCheckChangeReport();
+        //                    report.YearMonth = YearMonth;
+        //                    
+        //                    report.VGUID = Guid.NewGuid();
+        //                    report.VehicleModel = item.VEHICLE_SHORTNAME;
+        //                    report.ManageCompany = item.MANAGEMENT_COMPANY;
+        //                    report.BelongToCompany = item.BELONGTO_COMPANY;
+        //                    report.ChangeType = ShowType;
+        //                    report.Quantity = 1;
+        //                    report.CreateDate = DateTime.Now;
+        //                    report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+        //                    reportAddedList.Add(report);
+        //                }
+        //                var reportAddedCache = CacheManager<List<Business_VehicleCheckChangeReport>>.GetInstance();
+        //                reportAddedCache.Remove(PubGet.GetVehicleCheckReportKey);
+        //                reportAddedCache.Add(PubGet.GetVehicleCheckReportKey, reportAddedList, 8 * 60 * 60);
+        //            }
+        //            else
+        //            {
+        //                reportAddedList = db.Queryable<Business_VehicleCheckChangeReport>().Where(x => x.YearMonth == YearMonth && x.ChangeType == ShowType)
+        //                    .ToList();
+        //            }
+        //        }else if (ShowType == "Reduce")
+        //        {
+        //            if (!db.Queryable<Business_VehicleCheckChangeReport>().Any(x => x.YearMonth == YearMonth && x.ChangeType == ShowType))
+        //            {
+        //                YearMonth = YearMonth.Replace("-", "");
+        //                var ReduceList = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
+        //                                                                                         , mi.VEHICLE_SHORTNAME
+        //                                                                                         , mi.MANAGEMENT_COMPANY
+        //                                                                                         , mi.BELONGTO_COMPANY
+        //                                                                                         , mi.ENGINE_NUMBER
+        //                                                                                         , mv.*
+	       //                                                                                      , mi.EXP_ACCOUNT_SEGMENT
+	       //                                                                                      , mi.COMMISSIONING_DATE as PERIOD
+	       //                                                                                      , mi.QUANTITY
+	       //                                                                                      , mi.ASSET_COST
+	       //                                                                                      , mi.ASSET_ID
+	       //                                                                                      , mi.GROUP_ID
+	       //                                                                                      , mi.BOOK_TYPE_CODE
+						  //                                                                       , mi.LISENSING_DATE
+        //                                                                                    from Business_ScrapVehicle mv
+        //                                                                                    left join Business_AssetMaintenanceInfo mi
+        //                                                                                    on mv.ORIGINALID = mi.ORIGINALID").Where(i => !i.ISVERIFY).ToList();
+        //                foreach (var item in ReduceList)
+        //                {
+        //                    var report = new Business_VehicleCheckChangeReport();
+        //                    report.YearMonth = YearMonth;
+        //                    
+        //                    report.VGUID = Guid.NewGuid();
+        //                    report.VehicleModel = item.VEHICLE_SHORTNAME;
+        //                    report.ManageCompany = item.MANAGEMENT_COMPANY;
+        //                    report.BelongToCompany = item.BELONGTO_COMPANY;
+        //                    report.ChangeType = ShowType;
+        //                    report.Quantity = 1;
+        //                    report.CreateDate = DateTime.Now;
+        //                    report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+        //                    reportAddedList.Add(report);
+        //                }
+        //                var reportReduceCache = CacheManager<List<Business_VehicleCheckChangeReport>>.GetInstance();
+        //                reportReduceCache.Remove(PubGet.GetVehicleCheckReportKey);
+        //                reportReduceCache.Add(PubGet.GetVehicleCheckReportKey, reportAddedList, 8 * 60 * 60);
+        //            }
+        //            else
+        //            {
+        //                reportAddedList = db.Queryable<Business_VehicleCheckChangeReport>().Where(x => x.YearMonth == YearMonth && x.ChangeType == ShowType)
+        //                    .ToList();
+        //            }
+        //        }
+        //        //增加数量为0的公司
+        //        var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+        //        var resultApiModifyModel = apiReaultModify
+        //            .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+        //        //全量获取车辆信息
+        //        var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+        //        var resultData = resultApiModifyModel.data[0].DATA;
+        //        foreach (var item in resultData)
+        //        {
+        //            var nv = new Api_ModifyVehicleAsset();
+        //            var t = nv.GetType();
+        //            for (var k = 0; k < resultColumn.Count; k++)
+        //            {
+        //                var pi = t.GetProperty(resultColumn[k]);
+        //                if (pi != null) pi.SetValue(nv, item[k], null);
+        //            }
+        //            assetModifyFlowList.Add(nv);
+        //        }
+        //        var companyData = assetModifyFlowList.GroupBy(x => new { x.BELONGTO_COMPANY }).ToList();
+        //        var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+        //            x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+        //        foreach (var item in companyData)
+        //        {
+        //            if (ssList.Any(x => x.OrgID == item.Key.BELONGTO_COMPANY))
+        //            {
+        //                var belongToCompany = ssList.First(x => x.OrgID == item.Key.BELONGTO_COMPANY).Abbreviation;
+        //                if (reportAddedList.Count > 0 && !reportAddedList.Any(x => x.BelongToCompany == belongToCompany))
+        //                {
+        //                    var report = new Business_VehicleCheckChangeReport();
+        //                    report.YearMonth = YearMonth;
+        //                    report.VGUID = Guid.NewGuid();
+        //                    report.VehicleModel = reportAddedList.First().VehicleModel;
+        //                    report.BelongToCompany = belongToCompany;
+        //                    report.ManageCompany = reportAddedList.First().ManageCompany;
+        //                    report.ChangeType = ShowType;
+        //                    report.Quantity = 0;
+        //                    report.CreateDate = DateTime.Now;
+        //                    report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+        //                    reportAddedList.Add(report);
+        //                }
+        //            }
+        //        }
+        //    });
+        //    return Json(reportAddedList.OrderBy(x => x.VehicleModel).ToList(), JsonRequestBehavior.AllowGet);
+        //}
+        public JsonResult SubmitAssetReport(string YearMonth)
+        {
+            YearMonth = YearMonth.Replace("-", "");
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var reportCache = CacheManager<List<VehicleCheckShowReport>>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth))
+                {
+                    var cache = CacheManager<Sys_User>.GetInstance();
+                    var listManageReport = reportCache[PubGet.GetVehicleCheckMangeCompanyReportKey].OrderBy(x => x.Sort).ToList();
+                    var listBelongToReport = reportCache[PubGet.GetVehicleCheckBelongToCompanyReportKey].OrderBy(x => x.Sort).ToList();
+                    var listReport = listManageReport.Union(listBelongToReport);
+                    var listCheckReport = new List<Business_VehicleCheckReport>();
+                    foreach (var itemParent in listReport)
+                    {
+                        foreach (var itemChildren in itemParent.ResultVehicleModelList)
+                        {
+                            var report = new Business_VehicleCheckReport();
+                            report.VGUID = Guid.NewGuid();
+                            report.CreateDate = DateTime.Now;
+                            report.YearMonth = YearMonth;
+                            report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                            report.CompanyType = itemParent.CompanyType;
+                            report.PeriodType = itemParent.PeriodType;
+                            report.CompanyName = itemParent.Company;
+                            report.VehicleModel = itemChildren.VehicleModel;
+                            report.Quantity = itemChildren.Quantity;
+                            listCheckReport.Add(report);
+                        }
+                    }
+                    db.Insertable<Business_VehicleCheckReport>(listCheckReport).ExecuteCommand();
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = "1";
+                }
+                else
+                {
+                    resultModel.IsSuccess = false;
+                    resultModel.Status = "2";
+                }
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetManageCompanyAssetReport(string YearMonth, GridParams para)
+        {
+            var date = YearMonth.TryToDate();
+            YearMonth = YearMonth.Replace("-", "");
+            var cache = CacheManager<Sys_User>.GetInstance();
+            List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
+            var reportList = new List<Business_VehicleCheckReport>();
+            var listReport = new List<VehicleCheckShowReport>();
+            var listStrCompany = new List<string>();
+            var listStrVehicleModel = new List<string>();
+            //var reportShowList = new List<Business_VehicleCheckReport>();
+            DbBusinessDataService.Command(db =>
+            {
+                //获取所有的公司
+                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                #region 期末
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.CompanyType == "管理公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    YearMonth = date.Year.ToString() + date.Month.ToString().PadLeft(2, '0');
+                    YearMonth = YearMonth.Replace("-", "");
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+                    var resultApiModifyModel = apiReaultModify
+                        .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                    //全量获取车辆信息
+                    var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                    var resultData = resultApiModifyModel.data[0].DATA;
+                    foreach (var item in resultData)
+                    {
+                        var nv = new Api_ModifyVehicleAsset();
+                        var t = nv.GetType();
+                        for (var k = 0; k < resultColumn.Count; k++)
+                        {
+                            var pi = t.GetProperty(resultColumn[k]);
+                            if (pi != null) pi.SetValue(nv, item[k], null);
+                        }
+                        assetModifyFlowList.Add(nv);
+                    }
                     foreach (var item in assetModifyFlowList)
                     {
-                        if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
+                        if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.MANAGEMENT_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
                         {
                             //Code转名称
                             if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
@@ -91,82 +440,224 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                             }
                             var report = new Business_VehicleCheckReport();
                             report.YearMonth = YearMonth;
-                            report.Orginalid = item.ORIGINALID;
+                            
                             report.VGUID = Guid.NewGuid();
                             report.VehicleModel = item.VEHICLE_SHORTNAME;
-                            report.ManageCompany = item.MANAGEMENT_COMPANY;
-                            report.BelongToCompany = item.BELONGTO_COMPANY;
+                            report.CompanyName = item.MANAGEMENT_COMPANY;
                             report.Quantity = 1;
                             report.CreateDate = DateTime.Now;
                             report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                            report.PeriodType = "期末";
+                            report.CompanyType = "管理公司";
                             reportList.Add(report);
                         }
                     }
-                    var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
-                    reportCache.Remove(PubGet.GetVehicleCheckReportKey);
-                    reportCache.Add(PubGet.GetVehicleCheckReportKey, reportList, 8 * 60 * 60);
                 }
                 else
                 {
-                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth)
-                        .ToList();
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "期末" && x.CompanyType == "管理公司").ToList();
                 }
-            });
-            return Json(reportList.OrderBy(x => x.VehicleModel).ToList(), JsonRequestBehavior.AllowGet);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="YearMonth">年月</param>
-        /// <param name="ShowType">增加减少</param>
-        /// <param name="para"></param>
-        /// <returns></returns>
-        public JsonResult GetAssetReportChangedListDatas(string YearMonth, string ShowType, GridParams para)
-        {
-            YearMonth = YearMonth.Replace("-", "");
-            var cache = CacheManager<Sys_User>.GetInstance();
-            List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
-            var reportAddedList = new List<Business_VehicleCheckChangeReport>();
-            var reportReduceList = new List<Business_VehicleCheckChangeReport>();
-            DbBusinessDataService.Command(db =>
-            {
-                if (ShowType == "Added")
+                //期末数据构造
                 {
-                    if (!db.Queryable<Business_VehicleCheckChangeReport>().Any(x => x.YearMonth == YearMonth && x.ChangeType == ShowType))
-                    {
-                        YearMonth = YearMonth.Replace("-", "");
-                        var addedList = db.Queryable<Business_AssetReview>().Where(x => x.GROUP_ID == "出租车" && !x.ISVERIFY)
-                            .ToList();
-                        foreach (var item in addedList)
+                    var dataShow = reportList.GroupBy(x => new {x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
                         {
-                            var report = new Business_VehicleCheckChangeReport();
+                            CompanyType = x.Key.CompanyType,
+                            CompanyName = x.Key.CompanyName,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+                    var companylList = reportList.GroupBy(x => new { x.CompanyName }).Where(x => x.Key.CompanyName != null)
+                        .Select(x => new { x.Key }).OrderBy(x => x.Key.CompanyName).ToList();
+                    foreach (var item in companylList)
+                    {
+                        listStrCompany.Add(item.Key.CompanyName);
+                    }
+                    var showList = dataShow.GroupBy(x => new { x.VehicleModel }).Where(x => x.Key.VehicleModel != null).Select(x => new { x.Key.VehicleModel }).ToList();
+                    foreach (var item in showList)
+                    {
+                        listStrVehicleModel.Add(item.VehicleModel);
+                    }
+                    for (var i = 0; i < companylList.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "期末";
+                        report.CompanyType = "管理公司";
+                        report.Sort = 4;
+                        report.Company = companylList[i].Key.CompanyName;
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.CompanyName == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+                #region 期初
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "期初" && x.CompanyType == "管理公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    reportList.Clear();
+                    date = date.AddMonths(-1);
+                    YearMonth = date.Year.ToString() + date.Month.ToString().PadLeft(2, '0');
+                    YearMonth = YearMonth.Replace("-", "");
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+                    var resultApiModifyModel = apiReaultModify
+                        .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                    //全量获取车辆信息
+                    var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                    var resultData = resultApiModifyModel.data[0].DATA;
+                    foreach (var item in resultData)
+                    {
+                        var nv = new Api_ModifyVehicleAsset();
+                        var t = nv.GetType();
+                        for (var k = 0; k < resultColumn.Count; k++)
+                        {
+                            var pi = t.GetProperty(resultColumn[k]);
+                            if (pi != null) pi.SetValue(nv, item[k], null);
+                        }
+                        assetModifyFlowList.Add(nv);
+                    }
+                    foreach (var item in assetModifyFlowList)
+                    {
+                        if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.MANAGEMENT_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
+                        {
+                            //Code转名称
+                            if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
+                            {
+                                item.MANAGEMENT_COMPANY =
+                                    ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
+                            }
+                            if (ssList.Any(x => x.OrgID == item.BELONGTO_COMPANY))
+                            {
+                                item.BELONGTO_COMPANY =
+                                    ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
+                            }
+                            var report = new Business_VehicleCheckReport();
                             report.YearMonth = YearMonth;
-                            report.Orginalid = item.ORIGINALID;
+                            
                             report.VGUID = Guid.NewGuid();
                             report.VehicleModel = item.VEHICLE_SHORTNAME;
-                            report.ManageCompany = item.MANAGEMENT_COMPANY;
-                            report.BelongToCompany = item.BELONGTO_COMPANY;
-                            report.ChangeType = ShowType;
+                            report.CompanyName = item.MANAGEMENT_COMPANY;
                             report.Quantity = 1;
                             report.CreateDate = DateTime.Now;
                             report.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                            reportAddedList.Add(report);
+                            report.PeriodType = "期初";
+                            report.CompanyType = "管理公司";
+                            reportList.Add(report);
                         }
-                        var reportAddedCache = CacheManager<List<Business_VehicleCheckChangeReport>>.GetInstance();
-                        reportAddedCache.Remove(PubGet.GetVehicleCheckReportKey);
-                        reportAddedCache.Add(PubGet.GetVehicleCheckReportKey, reportAddedList, 8 * 60 * 60);
                     }
-                    else
-                    {
-                        reportAddedList = db.Queryable<Business_VehicleCheckChangeReport>().Where(x => x.YearMonth == YearMonth && x.ChangeType == ShowType)
-                            .ToList();
-                    }
-                }else if (ShowType == "Reduce")
+                }
+                else
                 {
-                    if (!db.Queryable<Business_VehicleCheckChangeReport>().Any(x => x.YearMonth == YearMonth && x.ChangeType == ShowType))
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "期初" && x.CompanyType == "管理公司")
+                        .ToList();
+                }
+                //期初数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            ManageCompany = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+                    
+                    for (var i = 0; i < listStrCompany.Count; i++)
                     {
-                        YearMonth = YearMonth.Replace("-", "");
-                        var ReduceList = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "期初";
+                        report.CompanyType = "管理公司";
+                        report.Sort = 1;
+                        report.Company = listStrCompany[i];
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.ManageCompany == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+                #region 增加
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "增加" && x.CompanyType == "管理公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    reportList.Clear();
+                    YearMonth = YearMonth.Replace("-", "");
+                    var addedList = db.Queryable<Business_AssetReview>().Where(x => x.GROUP_ID == "出租车" && !x.ISVERIFY)
+                        .ToList();
+                    foreach (var item in addedList)
+                    {
+                        var report = new Business_VehicleCheckReport();
+                        report.YearMonth = YearMonth;
+                        
+                        report.VGUID = Guid.NewGuid();
+                        report.VehicleModel = item.VEHICLE_SHORTNAME;
+                        report.CompanyName = item.MANAGEMENT_COMPANY;
+                        report.Quantity = 1;
+                        report.CreateDate = DateTime.Now;
+                        report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                        report.PeriodType = "增加";
+                        reportList.Add(report);
+                    }
+                }
+                else
+                {
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "增加" && x.CompanyType == "管理公司")
+                        .ToList();
+                }
+                //增加数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            CompanyName = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+
+                    for (var i = 0; i < listStrCompany.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "增加";
+                        report.CompanyType = "管理公司";
+                        report.Sort = 2;
+                        report.Company = listStrCompany[i];
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.CompanyName == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+                #region 减少
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "减少" && x.CompanyType == "管理公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    reportList.Clear();
+                    YearMonth = YearMonth.Replace("-", "");
+                    var ReduceList = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
                                                                                                  , mi.VEHICLE_SHORTNAME
                                                                                                  , mi.MANAGEMENT_COMPANY
                                                                                                  , mi.BELONGTO_COMPANY
@@ -183,97 +674,415 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                                                                                             from Business_ScrapVehicle mv
                                                                                             left join Business_AssetMaintenanceInfo mi
                                                                                             on mv.ORIGINALID = mi.ORIGINALID").Where(i => !i.ISVERIFY).ToList();
-                        foreach (var item in ReduceList)
-                        {
-                            var report = new Business_VehicleCheckChangeReport();
-                            report.YearMonth = YearMonth;
-                            report.Orginalid = item.ORIGINALID;
-                            report.VGUID = Guid.NewGuid();
-                            report.VehicleModel = item.VEHICLE_SHORTNAME;
-                            report.ManageCompany = item.MANAGEMENT_COMPANY;
-                            report.BelongToCompany = item.BELONGTO_COMPANY;
-                            report.ChangeType = ShowType;
-                            report.Quantity = 1;
-                            report.CreateDate = DateTime.Now;
-                            report.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                            reportAddedList.Add(report);
-                        }
-                        var reportReduceCache = CacheManager<List<Business_VehicleCheckChangeReport>>.GetInstance();
-                        reportReduceCache.Remove(PubGet.GetVehicleCheckReportKey);
-                        reportReduceCache.Add(PubGet.GetVehicleCheckReportKey, reportAddedList, 8 * 60 * 60);
-                    }
-                    else
+                    foreach (var item in ReduceList)
                     {
-                        reportAddedList = db.Queryable<Business_VehicleCheckChangeReport>().Where(x => x.YearMonth == YearMonth && x.ChangeType == ShowType)
-                            .ToList();
+                        var report = new Business_VehicleCheckReport();
+                        report.YearMonth = YearMonth;
+                        
+                        report.VGUID = Guid.NewGuid();
+                        report.VehicleModel = item.VEHICLE_SHORTNAME;
+                        report.CompanyName = item.MANAGEMENT_COMPANY;
+                        report.Quantity = 1;
+                        report.CreateDate = DateTime.Now;
+                        report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                        report.PeriodType = "减少";
+                        report.CompanyType = "管理公司";
+                        reportList.Add(report);
                     }
-                }
-                //增加数量为0的公司
-                var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
-                var resultApiModifyModel = apiReaultModify
-                    .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
-                //全量获取车辆信息
-                var resultColumn = resultApiModifyModel.data[0].COLUMNS;
-                var resultData = resultApiModifyModel.data[0].DATA;
-                foreach (var item in resultData)
-                {
-                    var nv = new Api_ModifyVehicleAsset();
-                    var t = nv.GetType();
-                    for (var k = 0; k < resultColumn.Count; k++)
-                    {
-                        var pi = t.GetProperty(resultColumn[k]);
-                        if (pi != null) pi.SetValue(nv, item[k], null);
-                    }
-                    assetModifyFlowList.Add(nv);
-                }
-                var companyData = assetModifyFlowList.GroupBy(x => new { x.BELONGTO_COMPANY }).ToList();
-                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
-                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                foreach (var item in companyData)
-                {
-                    if (ssList.Any(x => x.OrgID == item.Key.BELONGTO_COMPANY))
-                    {
-                        var belongToCompany = ssList.First(x => x.OrgID == item.Key.BELONGTO_COMPANY).Abbreviation;
-                        if (reportAddedList.Count > 0 && !reportAddedList.Any(x => x.BelongToCompany == belongToCompany))
-                        {
-                            var report = new Business_VehicleCheckChangeReport();
-                            report.YearMonth = YearMonth;
-                            report.VGUID = Guid.NewGuid();
-                            report.VehicleModel = reportAddedList.First().VehicleModel;
-                            report.BelongToCompany = belongToCompany;
-                            report.ManageCompany = reportAddedList.First().ManageCompany;
-                            report.ChangeType = ShowType;
-                            report.Quantity = 0;
-                            report.CreateDate = DateTime.Now;
-                            report.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                            reportAddedList.Add(report);
-                        }
-                    }
-                }
-            });
-            return Json(reportAddedList.OrderBy(x => x.VehicleModel).ToList(), JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult SubmitAssetReport(string YearMonth)
-        {
-            YearMonth = YearMonth.Replace("-", "");
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
-            var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
-            DbBusinessDataService.Command(db =>
-            {
-                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth))
-                {
-                    var list = reportCache[PubGet.GetVehicleCheckReportKey];
-                    db.Insertable<Business_VehicleCheckReport>(list).ExecuteCommand();
-                    resultModel.IsSuccess = true;
-                    resultModel.Status = "1";
                 }
                 else
                 {
-                    resultModel.IsSuccess = false;
-                    resultModel.Status = "2";
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "减少" && x.CompanyType == "管理公司")
+                        .ToList();
                 }
+                //增加数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            CompanyName = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+
+                    for (var i = 0; i < listStrCompany.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "减少";
+                        report.CompanyType = "管理公司";
+                        report.Sort = 3;
+                        report.Company = listStrCompany[i];
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.CompanyName == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
             });
-            return Json(resultModel, JsonRequestBehavior.AllowGet);
+            var reportManageCompanyCache = CacheManager<List<VehicleCheckShowReport>>.GetInstance();
+            reportManageCompanyCache.Remove(PubGet.GetVehicleCheckMangeCompanyReportKey);
+            reportManageCompanyCache.Add(PubGet.GetVehicleCheckMangeCompanyReportKey, listReport, 8 * 60 * 60);
+            return Json(listReport.OrderBy(x => x.Sort).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetBelongToCompanyAssetReport(string YearMonth, GridParams para)
+        {
+            var date = YearMonth.TryToDate();
+            YearMonth = YearMonth.Replace("-", "");
+            var cache = CacheManager<Sys_User>.GetInstance();
+            List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
+            var reportList = new List<Business_VehicleCheckReport>();
+            var listReport = new List<VehicleCheckShowReport>();
+            var listStrCompany = new List<string>();
+            var listStrVehicleModel = new List<string>();
+            //var reportShowList = new List<Business_VehicleCheckReport>();
+            DbBusinessDataService.Command(db =>
+            {
+                //获取所有的公司
+                var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                #region 期末
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.CompanyType == "所属公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    YearMonth = date.Year.ToString() + date.Month.ToString().PadLeft(2, '0');
+                    YearMonth = YearMonth.Replace("-", "");
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+                    var resultApiModifyModel = apiReaultModify
+                        .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                    //全量获取车辆信息
+                    var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                    var resultData = resultApiModifyModel.data[0].DATA;
+                    foreach (var item in resultData)
+                    {
+                        var nv = new Api_ModifyVehicleAsset();
+                        var t = nv.GetType();
+                        for (var k = 0; k < resultColumn.Count; k++)
+                        {
+                            var pi = t.GetProperty(resultColumn[k]);
+                            if (pi != null) pi.SetValue(nv, item[k], null);
+                        }
+                        assetModifyFlowList.Add(nv);
+                    }
+                    foreach (var item in assetModifyFlowList)
+                    {
+                        if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.MANAGEMENT_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
+                        {
+                            //Code转名称
+                            if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
+                            {
+                                item.MANAGEMENT_COMPANY =
+                                    ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
+                            }
+                            if (ssList.Any(x => x.OrgID == item.BELONGTO_COMPANY))
+                            {
+                                item.BELONGTO_COMPANY =
+                                    ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
+                            }
+                            var report = new Business_VehicleCheckReport();
+                            report.YearMonth = YearMonth;
+                            
+                            report.VGUID = Guid.NewGuid();
+                            report.VehicleModel = item.VEHICLE_SHORTNAME;
+                            report.CompanyName = item.BELONGTO_COMPANY;
+                            report.Quantity = 1;
+                            report.CreateDate = DateTime.Now;
+                            report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                            report.PeriodType = "期末";
+                            report.CompanyType = "所属公司";
+                            reportList.Add(report);
+                        }
+                    }
+                }
+                else
+                {
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "期末" && x.CompanyType == "所属公司").ToList();
+                }
+                //期末数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            CompanyName = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+                    var companylList = reportList.GroupBy(x => new { x.CompanyName }).Where(x => x.Key.CompanyName != null)
+                        .Select(x => new { x.Key }).OrderBy(x => x.Key.CompanyName).ToList();
+                    foreach (var item in companylList)
+                    {
+                        listStrCompany.Add(item.Key.CompanyName);
+                    }
+                    var showList = dataShow.GroupBy(x => new { x.VehicleModel }).Where(x => x.Key.VehicleModel != null).Select(x => new { x.Key.VehicleModel }).ToList();
+                    foreach (var item in showList)
+                    {
+                        listStrVehicleModel.Add(item.VehicleModel);
+                    }
+                    for (var i = 0; i < companylList.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "期末";
+                        report.CompanyType = "所属公司";
+                        report.Sort = 4;
+                        report.Company = companylList[i].Key.CompanyName;
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.CompanyName == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+                #region 期初
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "期初" && x.CompanyType == "所属公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    reportList.Clear();
+                    date = date.AddMonths(-1);
+                    YearMonth = date.Year.ToString() + date.Month.ToString().PadLeft(2, '0');
+                    YearMonth = YearMonth.Replace("-", "");
+                    var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
+                    var resultApiModifyModel = apiReaultModify
+                        .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
+                    //全量获取车辆信息
+                    var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                    var resultData = resultApiModifyModel.data[0].DATA;
+                    foreach (var item in resultData)
+                    {
+                        var nv = new Api_ModifyVehicleAsset();
+                        var t = nv.GetType();
+                        for (var k = 0; k < resultColumn.Count; k++)
+                        {
+                            var pi = t.GetProperty(resultColumn[k]);
+                            if (pi != null) pi.SetValue(nv, item[k], null);
+                        }
+                        assetModifyFlowList.Add(nv);
+                    }
+                    foreach (var item in assetModifyFlowList)
+                    {
+                        if (item.BELONGTO_COMPANY.TryToInt() != 37 && item.MANAGEMENT_COMPANY.TryToInt() != 37 && item.BELONGTO_COMPANY.TryToInt() < 100 && item.MANAGEMENT_COMPANY.TryToInt() < 100)
+                        {
+                            //Code转名称
+                            if (ssList.Any(x => x.OrgID == item.MANAGEMENT_COMPANY))
+                            {
+                                item.MANAGEMENT_COMPANY =
+                                    ssList.First(x => x.OrgID == item.MANAGEMENT_COMPANY).Abbreviation;
+                            }
+                            if (ssList.Any(x => x.OrgID == item.BELONGTO_COMPANY))
+                            {
+                                item.BELONGTO_COMPANY =
+                                    ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
+                            }
+                            var report = new Business_VehicleCheckReport();
+                            report.YearMonth = YearMonth;
+                            
+                            report.VGUID = Guid.NewGuid();
+                            report.VehicleModel = item.VEHICLE_SHORTNAME;
+                            report.CompanyName = item.BELONGTO_COMPANY;
+                            report.CompanyType = "所属公司";
+                            report.Quantity = 1;
+                            report.CreateDate = DateTime.Now;
+                            report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                            report.PeriodType = "期初";
+                            reportList.Add(report);
+                        }
+                    }
+                }
+                else
+                {
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "期初" && x.CompanyType == "所属公司")
+                        .ToList();
+                }
+                //期初数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            ManageCompany = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+
+                    for (var i = 0; i < listStrCompany.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "期初";
+                        report.CompanyType = "所属公司";
+                        report.Sort = 1;
+                        report.Company = listStrCompany[i];
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.ManageCompany == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+                #region 增加
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "增加" && x.CompanyType == "所属公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    reportList.Clear();
+                    YearMonth = YearMonth.Replace("-", "");
+                    var addedList = db.Queryable<Business_AssetReview>().Where(x => x.GROUP_ID == "出租车" && !x.ISVERIFY)
+                        .ToList();
+                    foreach (var item in addedList)
+                    {
+                        var report = new Business_VehicleCheckReport();
+                        report.YearMonth = YearMonth;
+                        
+                        report.VGUID = Guid.NewGuid();
+                        report.VehicleModel = item.VEHICLE_SHORTNAME;
+                        report.CompanyName = item.BELONGTO_COMPANY;
+                        report.Quantity = 1;
+                        report.CreateDate = DateTime.Now;
+                        report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                        report.PeriodType = "增加";
+                        report.CompanyType = "所属公司";
+                        reportList.Add(report);
+                    }
+                }
+                else
+                {
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "增加" && x.CompanyType == "所属公司")
+                        .ToList();
+                }
+                //增加数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            CompanyName = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+
+                    for (var i = 0; i < listStrCompany.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "增加";
+                        report.CompanyType = "所属公司";
+                        report.Sort = 2;
+                        report.Company = listStrCompany[i];
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.CompanyName == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+                #region 减少
+                if (!db.Queryable<Business_VehicleCheckReport>().Any(x => x.YearMonth == YearMonth && x.PeriodType == "减少" && x.CompanyType == "所属公司"))
+                {
+                    assetModifyFlowList.Clear();
+                    reportList.Clear();
+                    YearMonth = YearMonth.Replace("-", "");
+                    var ReduceList = db.SqlQueryable<Business_ScrapVehicleShowModel>(@"select mi.TAG_NUMBER
+                                                                                                 , mi.VEHICLE_SHORTNAME
+                                                                                                 , mi.MANAGEMENT_COMPANY
+                                                                                                 , mi.BELONGTO_COMPANY
+                                                                                                 , mi.ENGINE_NUMBER
+                                                                                                 , mv.*
+	                                                                                             , mi.EXP_ACCOUNT_SEGMENT
+	                                                                                             , mi.COMMISSIONING_DATE as PERIOD
+	                                                                                             , mi.QUANTITY
+	                                                                                             , mi.ASSET_COST
+	                                                                                             , mi.ASSET_ID
+	                                                                                             , mi.GROUP_ID
+	                                                                                             , mi.BOOK_TYPE_CODE
+						                                                                         , mi.LISENSING_DATE
+                                                                                            from Business_ScrapVehicle mv
+                                                                                            left join Business_AssetMaintenanceInfo mi
+                                                                                            on mv.ORIGINALID = mi.ORIGINALID").Where(i => !i.ISVERIFY).ToList();
+                    foreach (var item in ReduceList)
+                    {
+                        var report = new Business_VehicleCheckReport();
+                        report.YearMonth = YearMonth;
+                        
+                        report.VGUID = Guid.NewGuid();
+                        report.VehicleModel = item.VEHICLE_SHORTNAME;
+                        report.CompanyName = item.BELONGTO_COMPANY;
+                        report.Quantity = 1;
+                        report.CreateDate = DateTime.Now;
+                        report.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                        report.PeriodType = "减少";
+                        report.CompanyType = "所属公司";
+                        reportList.Add(report);
+                    }
+                }
+                else
+                {
+                    reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "减少")
+                        .ToList();
+                }
+                //增加数据构造
+                {
+                    var dataShow = reportList.GroupBy(x => new { x.CompanyType, x.PeriodType, x.CompanyName, x.VehicleModel })
+                        .Select(x => new
+                        {
+                            CompanyName = x.Key.CompanyName,
+                            CompanyType = x.Key.CompanyType,
+                            VehicleModel = x.Key.VehicleModel,
+                            Quantity = x.Sum(s => s.Quantity),
+                            PeriodType = x.Key.PeriodType
+                        }).OrderBy(x => x.VehicleModel).ToList();
+
+                    for (var i = 0; i < listStrCompany.Count; i++)
+                    {
+                        var report = new VehicleCheckShowReport();
+                        report.PeriodType = "减少";
+                        report.CompanyType = "所属公司";
+                        report.Sort = 3;
+                        report.Company = listStrCompany[i];
+                        foreach (var item in listStrVehicleModel)
+                        {
+                            var mdata = new VehicleModelData();
+                            mdata.VehicleModel = item;
+                            mdata.Quantity = dataShow
+                                .Where(x => x.CompanyName == report.Company && x.VehicleModel == item)
+                                .Sum(s => s.Quantity);
+                            report.ResultVehicleModelList.Add(mdata);
+                        }
+                        listReport.Add(report);
+                    }
+                }
+                #endregion
+            });
+            var reportBelongToCompanyCache = CacheManager<List<VehicleCheckShowReport>>.GetInstance();
+            reportBelongToCompanyCache.Remove(PubGet.GetVehicleCheckBelongToCompanyReportKey);
+            reportBelongToCompanyCache.Add(PubGet.GetVehicleCheckBelongToCompanyReportKey, listReport, 8 * 60 * 60);
+            return Json(listReport.OrderBy(x => x.Sort).ToList(), JsonRequestBehavior.AllowGet);
         }
     }
 }

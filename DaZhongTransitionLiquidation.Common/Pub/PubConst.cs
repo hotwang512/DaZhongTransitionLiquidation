@@ -3,9 +3,8 @@
     public class PubConst
     {
         public const string CostCache = "DaZhongTransitionLiquidation";
-        public const string VehicleCheckReportCostCache = "VehicleCheckReport";
-        public const string VehicleAddedReportCostCache = "VehicleAddedCheckReport";
-        public const string VehicleReduceReportCostCache = "VehicleReduceCheckReport";
+        public const string GetVehicleCheckMangeCompanyReportCostCache = "VehicleCheckManageCompanyReport";
+        public const string GetVehicleCheckBelongToCompanyReportCostCache = "VehicleCheckBelongToCompanyReport";
     }
     public class AcceptStatus
     {

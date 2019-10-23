@@ -1,14 +1,15 @@
 ﻿//资产维护
 //所有元素选择器
 var selector = {
-    $grid: function () { return $("#jqxStartPeriodTable") },
-    $grid1: function () { return $("#jqxStartPeriodTable1") },
+    $grid: function () { return $("#jqxManageCompanyPeriodTable") },
+    $grid1: function () { return $("#jqxBelongToCompanyPeriodTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
     $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
 var isEdit = false;
 var vguid = "";
+var values = new Array();
 var $page = function () {
     this.init = function () {
         var date = new Date;
@@ -17,15 +18,44 @@ var $page = function () {
         month = (month < 10 ? "0" + month : month);
         var currentDate = (year.toString() + "-" + month.toString());
         $("#YearMonth").val(currentDate);
-        addEvent();
+        //获取车型
+        $.ajax({
+            data: { YearMonth: $("#YearMonth").val() },
+            url: "/AssetManagement/AssetReport/GetAssetReportVehicleModel",
+            //traditional: true,
+            type: "post",
+            success: function (msg) {
+                debugger;
+                for (var i = 0; i < msg.length; i++) {
+                    var valueObj = new Object();
+                    valueObj.dataField = 'VehicleModel' + i;
+                    valueObj['function'] = 'sum';
+                    valueObj.text = msg[i];
+                    valueObj.width = 80;
+                    valueObj.align = 'center';
+                    valueObj.sortable = false;
+                    valueObj.formatSettings = { prefix: '', decimalPlaces: 2 };
+                    values.push(valueObj);
+                }
+                var valueObj1 = new Object();
+                valueObj1.dataField = 'Quantity';
+                valueObj1['function'] = 'sum';
+                valueObj1.text = 'total';
+                valueObj1.width = 80;
+                valueObj1.align = 'center';
+                valueObj1.sortable = false;
+                valueObj1.formatSettings = { prefix: '', decimalPlaces: 2 };
+                values.push(valueObj1);
+                addEvent();
+            }
+        });
+        
     }
     //所有事件
     function addEvent() {
         //加载列表数据
-        initStartPeriodTable();
-        initEndPeriodTable();
-        initAddedTable();
-        initReduceTable();
+        initPeriodTable();
+        initPeriodTable1();
         //提交
         $("#btnSubmit").on("click", function () {
             $.ajax({
@@ -50,8 +80,8 @@ var $page = function () {
             });
         });
         $("#btnGetData").on("click", function () {
-            initStartPeriodTable();
-            initEndPeriodTable();
+            initPeriodTable();
+            //initEndPeriodTable();
         });
         //关闭
         $("#AssetReviewDialog_CancelBtn").on("click",
@@ -60,20 +90,22 @@ var $page = function () {
             }
         );
     }; //addEvent end
-    function initStartPeriodTable() {
+    function initPeriodTable() {
         layer.load();
         getPeriodData(function (data) {
-            $("#PeriodType").val("StartPeriod");
+            var datashow = fillData(data);
+            var datafields = new Array();
+            datafields.push({ name: 'Company', type: 'string' });
+            datafields.push({ name: 'PeriodType', type: 'string' });
+            datafields.push({ name: 'Quantity', type: 'number' });
+            for (var i = 0; i < values.length; i++) {
+                datafields.push({ name: 'VehicleModel' + i, type: 'number' });
+            }
+            debugger;
             var source =
             {
-                localdata: data,
-                datafields:
-                [
-                    { name: 'BelongToCompany', type: 'string' },
-                    { name: 'ManageCompany', type: 'string' },
-                    { name: 'VehicleModel', type: 'string' },
-                    { name: 'Quantity', type: 'number' }
-                ],
+                localdata: datashow,
+                datafields:datafields,
                 datatype: "json"
             };
             var dataAdapter = new $.jqx.dataAdapter(source);
@@ -82,308 +114,97 @@ var $page = function () {
                 dataAdapter,
                 {
                     pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'ManageCompany', text: '管理公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#PeriodType").val() == "StartPeriod"?"期初":"期末",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
+                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: false } },
+                    rows: [{ dataField: 'Company', text: '管理公司', align: 'center', width: 150, isHidden: true}],
+                    columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }],
+                    values: values
                 });
-            var pivotDataSource1 = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'BelongToCompany', text: '所属公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#PeriodType").val() == "StartPeriod" ? "期初" : "期末",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            selector.$grid().jqxPivotGrid(
+                selector.$grid().jqxPivotGrid(
                 {
                     source: pivotDataSource,
                     treeStyleRows: true,
                     autoResize: true,
                     selectionEnabled: true
+                });
+            layer.closeAll('loading');
+        });
+    }
+    function fillData(data) {
+        var newData = [];
+        for (var j = 0; j < data.length; j++) {
+            var currentData = { "Company": data[j].Company, "PeriodType": data[j].PeriodType }//PeriodType
+            var sum = 0;
+            debugger;
+            for (var k = 0; k < data[j].ResultVehicleModelList.length; k++) {
+                currentData["VehicleModel" + k] = data[j].ResultVehicleModelList[k].Quantity;
+                sum += data[j].ResultVehicleModelList[k].Quantity;
+            }
+            currentData["Quantity"]= sum;
+            newData.push(currentData);
+        }
+        debugger;
+        return newData;
+    }
+    function initPeriodTable1() {
+        layer.load();
+        getPeriodData1(function (data) {
+            var datashow = fillData(data);
+            var datafields = new Array();
+            datafields.push({ name: 'Company', type: 'string' });
+            datafields.push({ name: 'PeriodType', type: 'string' });
+            datafields.push({ name: 'Quantity', type: 'number' });
+            for (var i = 0; i < values.length; i++) {
+                datafields.push({ name: 'VehicleModel' + i, type: 'number' });
+            }
+            debugger;
+            var source =
+            {
+                localdata: datashow,
+                datafields: datafields,
+                datatype: "json"
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            dataAdapter.dataBind();
+            var pivotDataSource = new $.jqx.pivot(
+                dataAdapter,
+                {
+                    pivotValuesOnRows: false,
+                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: false } },
+                    rows: [{ dataField: 'Company', text: '所属公司', align: 'center', width: 150, isHidden: true }],
+                    columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }],
+                    values: values
                 });
             selector.$grid1().jqxPivotGrid(
                 {
-                    source: pivotDataSource1,
-                    treeStyleRows: true,
-                    autoResize: true,
-                    selectionEnabled: true
-                });
-            layer.closeAll('loading');
-        });
-    }
-    function initEndPeriodTable() {
-        layer.load();
-        getPeriodData(function (data) {
-            $("#PeriodType").val("EndPeriod");
-            var source =
-            {
-                localdata: data,
-                datafields:
-                [
-                    { name: 'BelongToCompany', type: 'string' },
-                    { name: 'ManageCompany', type: 'string' },
-                    { name: 'VehicleModel', type: 'string' },
-                    { name: 'Quantity', type: 'number' }
-                ],
-                datatype: "json"
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            dataAdapter.dataBind();
-            var pivotDataSource = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'ManageCompany', text: '管理公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#PeriodType").val() == "StartPeriod" ? "期初" : "期末",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            var pivotDataSource1 = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'BelongToCompany', text: '所属公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#PeriodType").val() == "StartPeriod" ? "期初" : "期末",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            $("#jqxEndPeriodTable").jqxPivotGrid(
-                {
                     source: pivotDataSource,
                     treeStyleRows: true,
                     autoResize: true,
                     selectionEnabled: true
                 });
-            $("#jqxEndPeriodTable1").jqxPivotGrid(
-                {
-                    source: pivotDataSource1,
-                    treeStyleRows: true,
-                    autoResize: true,
-                    selectionEnabled: true
-                });
             layer.closeAll('loading');
         });
     }
-    function initAddedTable() {
-        layer.load();
-        $("#ShowType").val("Added");
-        getChangedData(function (data) {
-            var source =
-            {
-                localdata: data,
-                datafields:
-                [
-                    { name: 'BelongToCompany', type: 'string' },
-                    { name: 'ManageCompany', type: 'string' },
-                    { name: 'VehicleModel', type: 'string' },
-                    { name: 'Quantity', type: 'number' }
-                ],
-                datatype: "json"
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            dataAdapter.dataBind();
-            var pivotDataSource = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'ManageCompany', text: '管理公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            var pivotDataSource1 = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'BelongToCompany', text: '所属公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            $("#jqxAddedTable").jqxPivotGrid(
-                {
-                    source: pivotDataSource,
-                    treeStyleRows: true,
-                    autoResize: true,
-                    selectionEnabled: true
-                });
-            $("#jqxAddedTable1").jqxPivotGrid(
-                {
-                    source: pivotDataSource1,
-                    treeStyleRows: true,
-                    autoResize: true,
-                    selectionEnabled: true
-                });
-            layer.closeAll('loading');
-        });
-    }
-    function initReduceTable() {
-        layer.load();
-        $("#ShowType").val("Reduce");
-        getChangedData(function (data) {
-            var source =
-            {
-                localdata: data,
-                datafields:
-                [
-                    { name: 'BelongToCompany', type: 'string' },
-                    { name: 'ManageCompany', type: 'string' },
-                    { name: 'VehicleModel', type: 'string' },
-                    { name: 'Quantity', type: 'number' }
-                ],
-                datatype: "json"
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            dataAdapter.dataBind();
-            var pivotDataSource = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'ManageCompany', text: '管理公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            var pivotDataSource1 = new $.jqx.pivot(
-                dataAdapter,
-                {
-                    pivotValuesOnRows: false,
-                    totals: { rows: { subtotals: false, grandtotals: true }, columns: { subtotals: false, grandtotals: true } },
-                    rows: [{ dataField: 'BelongToCompany', text: '所属公司', align: 'center', width: 150 }],
-                    columns: [{ dataField: 'VehicleModel', width: 110, align: 'center' }],
-                    values: [
-                        {
-                            dataField: 'Quantity',
-                            'function': 'sum',
-                            showHeader: false,
-                            text: $("#ShowType").val() == "Added" ? "增加" : "减少",
-                            width: 80,
-                            align: 'center',
-                            formatSettings: { align: 'center', prefix: '', decimalPlaces: 0 },
-                            sortable: false
-                        }
-                    ]
-                });
-            $("#jqxReduceTable").jqxPivotGrid(
-                {
-                    source: pivotDataSource,
-                    treeStyleRows: true,
-                    autoResize: true,
-                    selectionEnabled: true
-                });
-            $("#jqxReduceTable1").jqxPivotGrid(
-                {
-                    source: pivotDataSource1,
-                    treeStyleRows: true,
-                    autoResize: true,
-                    selectionEnabled: true
-                });
-            layer.closeAll('loading');
-        });
-    }
+   
     var tableValue = "";
     function getPeriodData(callback) {
-        debugger;
         $.ajax({
-            url: "/AssetManagement/AssetReport/GetAssetReportPeriodListDatas",
-            data: { "YearMonth": $("#YearMonth").val(), "PeriodType": $("#PeriodType").val() },
+            url: "/AssetManagement/AssetReport/GetManageCompanyAssetReport",
+            data: { "YearMonth": $("#YearMonth").val()},
             datatype: "json",
             type: "post",
             success: function (result) {
-                debugger;
                 tableValue = result;
                 callback(result);
             }
         });
     }
-    function getChangedData(callback) {
-        debugger;
+    function getPeriodData1(callback) {
         $.ajax({
-            url: "/AssetManagement/AssetReport/GetAssetReportChangedListDatas",
-            data: { "YearMonth": $("#YearMonth").val(), "ShowType": $("#ShowType").val() },
+            url: "/AssetManagement/AssetReport/GetBelongToCompanyAssetReport",
+            data: { "YearMonth": $("#YearMonth").val() },
             datatype: "json",
             type: "post",
             success: function (result) {
-                debugger;
                 tableValue = result;
                 callback(result);
             }
@@ -393,5 +214,4 @@ var $page = function () {
 $(function () {
     var page = new $page();
     page.init();
-    debugger;
 });

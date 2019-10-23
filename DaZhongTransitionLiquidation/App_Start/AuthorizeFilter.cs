@@ -21,9 +21,13 @@ namespace DaZhongTransitionLiquidation
             {
                 cm.Add(PubConst.CostCache, Guid.NewGuid().ToString(), cm.Day * 365);
             }
-            if (!cm.ContainsKey(PubConst.VehicleCheckReportCostCache) || cm[PubConst.VehicleCheckReportCostCache].IsNullOrEmpty())
+            if (!cm.ContainsKey(PubConst.GetVehicleCheckMangeCompanyReportCostCache) || cm[PubConst.GetVehicleCheckMangeCompanyReportCostCache].IsNullOrEmpty())
             {
-                cm.Add(PubConst.VehicleCheckReportCostCache, Guid.NewGuid().ToString(), cm.Day * 365);
+                cm.Add(PubConst.GetVehicleCheckMangeCompanyReportCostCache, Guid.NewGuid().ToString(), cm.Day * 365);
+            }
+            if (!cm.ContainsKey(PubConst.GetVehicleCheckBelongToCompanyReportCostCache) || cm[PubConst.GetVehicleCheckBelongToCompanyReportCostCache].IsNullOrEmpty())
+            {
+                cm.Add(PubConst.GetVehicleCheckBelongToCompanyReportCostCache, Guid.NewGuid().ToString(), cm.Day * 365);
             }
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToLower();
             var actionName = filterContext.ActionDescriptor.ActionName.ToLower();

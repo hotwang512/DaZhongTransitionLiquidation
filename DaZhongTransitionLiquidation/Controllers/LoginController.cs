@@ -122,7 +122,8 @@ namespace DaZhongTransitionLiquidation.Controllers
             cm.Remove(PubGet.GetUserKey);
             CookiesManager<string>.GetInstance().Remove(PubConst.CostCache);
             var reportCache = CacheManager<List<Business_VehicleCheckReport>>.GetInstance();
-            reportCache.Remove(PubGet.GetVehicleCheckReportKey);
+            reportCache.Remove(PubGet.GetVehicleCheckMangeCompanyReportKey);
+            reportCache.Remove(PubGet.GetVehicleCheckBelongToCompanyReportKey);
         }
         /// <summary>
         /// 加密用户密码

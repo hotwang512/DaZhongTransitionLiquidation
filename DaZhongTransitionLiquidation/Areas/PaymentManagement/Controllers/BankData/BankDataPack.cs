@@ -1,7 +1,9 @@
 ﻿using DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.ReconciliationReport;
+using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using SqlSugar;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 
@@ -49,12 +51,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
                                           from[dbo].[T_BankChannelMapping] m
                                           left join [Business_BankFlowTemplate] f on m.BankAccount = f.PayeeAccount or m.BankAccount = f.ReceivableAccount
                                           left join [dbo].[T_ReceiveBank] rb on f.ReceivableAccount=rb.BankAccount or rb.BankAccount = f.PayeeAccount
-                                          where f.VGUID is not null and f.TransactionDate>'{0}'", date.ObjToString("yyyy-MM-dd"));
+                                          where f.VGUID is not null and (m.IsShow != '1' or m.IsShow is null) and f.TransactionDate>'{0}'", date.ObjToString("yyyy-MM-dd"));
             List<T_Bank> bankFlows = new List<T_Bank>();
             DbBusinessDataService dbBusinessDataService = new DbBusinessDataService();
             dbBusinessDataService.Command(db =>
             {
                 bankFlows = db.SqlQueryable<T_Bank>(sql).ToList();
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", sql, bankFlows.ModelToJson()));
             });
             if (bankFlows.Count > 0)
             {

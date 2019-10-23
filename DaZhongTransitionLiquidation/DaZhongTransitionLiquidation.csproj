@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>C:\Users\peter\Documents\WeChat Files\Takuya-Star\FileStorage\File\2019-10\Aspose.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_lib\Autofac.dll</HintPath>
@@ -2326,9 +2329,14 @@
     <Content Include="_theme\_js\common.js" />
     <Content Include="_theme\_js\jquery-1.11.1.min.js" />
     <Content Include="_theme\_js\jquery-3.2.1.min.js" />
+    <Content Include="_theme\_js\jquery-ui-1.8.20.js" />
+    <Content Include="_theme\_js\jquery-ui-1.8.20.min.js" />
     <Content Include="_theme\_js\jquery.form.js" />
     <Content Include="_theme\_js\jweixin-1.0.0.js" />
     <Content Include="_theme\_js\menueCookie.js" />
+    <Content Include="_theme\_js\pivot.cs.js" />
+    <Content Include="_theme\_js\pivot.css" />
+    <Content Include="_theme\_js\pivot.js" />
     <Content Include="_theme\_js\tool.js" />
     <Content Include="_theme\layer\文档\jquery下载.url" />
     <Content Include="_theme\layer\文档\layer官网.url" />
@@ -2473,6 +2481,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_ComeOnAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CustomerBankSetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_PaySetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_PaySettingDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_GeneralLedgerBalance_Swap.cs" />
@@ -2480,6 +2489,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\TransferResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\UserCompanySetDetail.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\v_Business_CustomerBankInfo.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\V_Business_PaySetting.cs" />
     <Compile Include="Areas\FinancialStatementsManagement\Controllers\SubjectBalanceStatement\SubjectBalanceStatementController.cs" />
     <Compile Include="Areas\FinancialStatementsManagement\FinancialStatementsManagementAreaRegistration.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />
@@ -2570,6 +2580,8 @@
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherListDetail\VoucherListDetailController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\Business_VoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VoucherList\VoucherListController.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\PrintVoucherDetail.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\PrintVoucherList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\SettlementCountList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\VehicleResult.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\v_AssetsGeneralLedger_Swap.cs" />

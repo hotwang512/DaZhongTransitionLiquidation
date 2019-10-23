@@ -5,12 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section js{
+<link href="@Url.CusContent("~/_theme/_js/pivot.css")" rel="stylesheet" />
     @*<script src="@Url.CusContent("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.css")"></script>
         <script src="@Url.CusContent("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>*@
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivot.js"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotdesigner.js"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotgrid.js"></script>
+<script src="~/_theme/_js/jquery-ui-1.8.20.js"></script>
+<script src="~/_theme/_js/jquery-ui-1.8.20.min.js"></script>
+    <script src="~/_theme/_js/pivot.js"></script>
+
     <script src="@Url.CusContent("~/Areas/VoucherManageManagement/Views/_js/SettlementImport.js")"></script>
 }
 
@@ -25,7 +30,7 @@
 </table>
 
 <!-- 中部条件 -->
-<div class="mk">
+<div class="mk" style="display:none">
     <div class="header_mk">
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
@@ -58,7 +63,8 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
     </div>
-
-    <div id="datatable" class="jqxTable" style="height:500px;width:100%;background-color: white;">
+    <div id="datatable" class="jqxTable" style="height:500px;width:100%;background-color: white;display:none">
+        
     </div>
+    <div id="SettlementImportTable" style="overflow-y:auto;display:none"></div>
 </div>

@@ -70,8 +70,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 FileInfo file = new FileInfo(Path.Combine(fileFolder, fileName));
                                 messagePart.Save(file);
                                 fileNames.Add(fileName);
-                                break;
                             }
+                        }
+                        if (message.Headers.DateSent < DateTime.Today)
+                        {
+                            break;
                         }
                     }
                 }

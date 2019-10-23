@@ -57,6 +57,9 @@ var $page = function () {
             addVoucherListTable();
             $("#hideButton").show();
             $("#DocumentMaker").val($("#LoginName").val());
+            if ($("#Status").val() != "1" && $("#Status").val() != "") {
+                $("#Auditor").val($("#LoginName").val());
+            }
             $("#AttachmentHide").show();
             getPersonInfo();
         }
@@ -158,23 +161,23 @@ var $page = function () {
         //保存
         $("#btnSave").on("click", function () {
             var validateError = 0;//未通过验证的数量
-            //if (!Validate($("#")) {
-            //    validateError++;
-            //}
-
             if (validateError <= 0) {
                 var detailList = [];
-                var length = $("#VoucherTable tr").length - 2;
+                var length = $("#VoucherTable tr").length;
                 for (var j = 0; j < length; j++) {
                     var i = 0;
                     var idName = $("#VoucherTable tr")[j].id;
                     if (idName.search("closeTr") != -1) {
-                        i = idName.substring(idName.length - 1, idName.length);
+                        if (idName.length == 9) {
+                            i = idName.substring(idName.length - 2, idName.length);
+                        } else {
+                            i = idName.substring(idName.length - 1, idName.length);
+                        }
                     } else {
                         continue;
                     }
                     var remark = $("#Remark" + i).val();
-                    var subjectNames = $("#SubjectName" + i).val()
+                    var subjectNames = $("#SubjectName" + i).val();
                     var subjectName = $("#SubjectName" + i).val().split(".");
                     var CompanySection = subjectName[0];
                     var SubjectSection = subjectName[1];
@@ -203,7 +206,7 @@ var $page = function () {
                         "BorrowMoney": borrowMoney,
                         "LoanMoney": loanMoney,
                         "SevenSubjectName": subjectNames,
-                        "JE_LINE_NUMBER": i
+                        "JE_LINE_NUMBER": j
                     }
                     detailList.push(detail);
                 }
@@ -257,12 +260,16 @@ var $page = function () {
             var borrowCount = $("#BorrowCount").val();
             var loanCount = $("#LoanCount").val();
             var documentMaker = $("#DocumentMaker").val();
+            var auditor = $("#Auditor").val();
             if (borrowCount != loanCount) {
                 jqxNotification("借贷不相等！", null, "error");
                 return;
             }
             if (documentMaker == "") {
                 $("#DocumentMaker").val($("#LoginName").val());
+            }
+            if (auditor == "" && $("#Status").val() != "1" && $("#Status").val() != "") {
+                $("#Auditor").val($("#LoginName").val());
             }
             $("#SubjectTable").remove();
             //var x = $(".nav-i")[0].id.split("_")[1];
@@ -307,7 +314,11 @@ var $page = function () {
                 var i = 0;
                 var idName = $("#VoucherTable tr")[j].id;
                 if (idName.search("closeTr") != -1) {
-                    i = idName.substring(idName.length - 1, idName.length);
+                    if (idName.length == 9) {
+                        i = idName.substring(idName.length - 2, idName.length);
+                    } else {
+                        i = idName.substring(idName.length - 1, idName.length);
+                    }
                 } else {
                     continue;
                 }
@@ -484,6 +495,31 @@ var $page = function () {
                 }
             });
         });
+        //打印
+        $("#btnPrint").on("click", function () {
+            var vguid = $("#VGUID").val();
+            layer.load();
+            $.ajax({
+                url: "/VoucherManageManagement/VoucherListDetail/PrintVoucherList",
+                data: { vguids: vguid },
+                async: false,
+                type: "post",
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    switch (msg.Status) {
+                        case "0":                           
+                            break;
+                        case "1":
+                            window.open("/Temp/NewVoucherReport.pdf");
+                            break;
+                        case "2":
+                            window.open("/Temp/LastVoucherReport.pdf");
+                            break;
+                    }
+                }
+            });
+        });
+        
     }; //addEvent end
 
     function addSectionDiv() {
@@ -671,11 +707,13 @@ var $page = function () {
                 $("#VoucherNo").val(msg.VoucherNo);
                 $("#FinanceDirector").val(msg.FinanceDirector);
                 $("#Bookkeeping").val(msg.Bookkeeping);
-                $("#Auditor").val(msg.Auditor);
                 if (msg.DocumentMaker == "" || msg.DocumentMaker == null) {
                     $("#DocumentMaker").val($("#LoginName").val());
                 } else {
                     $("#DocumentMaker").val(msg.DocumentMaker);
+                }
+                if ($("#Status").val() != "1" && $("#Status").val() != "") {
+                    $("#Auditor").val($("#LoginName").val());
                 }
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
@@ -885,7 +923,7 @@ var $page = function () {
                     switch (msg[i].Role) {
                         case "财务经理": $("#FinanceDirector").val(msg[i].LoginName); break;
                         case "财务主管": $("#Bookkeeping").val(msg[i].LoginName); break;
-                        case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
+                        //case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
                         case "出纳": $("#Cashier").val(msg[i].LoginName); break;
                         default: break;
                     }

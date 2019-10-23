@@ -148,7 +148,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         if (isAny.Count == 1)
                         {
                             isAny[0].PaymentUnitInstitution = bankData.Where(x => x.BankAccount == bankAccount.ToString()).FirstOrDefault().BankName;
-                            db.Updateable(isAny[0]).ExecuteCommand();
+                            db.Updateable(isAny[0]).IgnoreColumns(it => it == "CreateTime").ExecuteCommand();
                             continue;
                         }
                         var companyBankData = bankData.Single(x => x.BankAccount == bankAccount.ObjToString());
@@ -307,7 +307,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             items.AccountModeCode = item.AccountModeCode;
                             items.AccountModeName = accountModeName;
                             items.CompanyCode = item.CompanyCode;
-                            db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                            db.Updateable(items).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                             continue;
                         }
                         items.BankAccount = item.BankAccount;
@@ -373,7 +373,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                                 items.AccountModeCode = item.AccountModeCode;
                                 items.AccountModeName = accountModeName;
                                 items.CompanyCode = item.CompanyCode;
-                                db.Updateable(items).Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                                db.Updateable(items).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == items.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                                 continue;
                             }
                             items.AccountModeCode = item.AccountModeCode;
@@ -426,7 +426,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             var orderListDraft = db.Queryable<Business_OrderListDraft>().ToList();
             var orderList = db.Queryable<Business_OrderList>().ToList();
             var userCompanySet = db.Queryable<Business_UserCompanySetDetail>().ToList();
-            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
+            var bankChannel = db.Queryable<Business_PaySetting>().Where(i => (i.IsUnable == "启用" || i.IsUnable == null)).ToList();
             var paySetting = db.Queryable<Business_PaySettingDetail>().ToList();
             var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherType == "银行类" && i.Automatic != "3").ToList();
             #region 循环银行流水数组
@@ -461,7 +461,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     {
                         case "财务经理":voucher.FinanceDirector = user.LoginName;break;
                         case "财务主管": voucher.Bookkeeping = user.LoginName; break;
-                        case "审核岗": voucher.Auditor = user.LoginName; break;
+                        //case "审核岗": voucher.Auditor = user.LoginName; break;
                         case "出纳": voucher.Cashier = user.LoginName; break;
                         default: break;
                     }
@@ -584,7 +584,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => x.IsUnable != "禁用").ToList();
+            var bankChannel = db.Queryable<Business_PaySetting>().Where(x => x.IsUnable != "禁用").ToList();
             foreach (var it in bankChannel)
             {
                 var subject = "";
@@ -634,7 +634,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             , List<Business_OrderListDraft> orderListDraft, List<Business_OrderList> orderList, List<Business_UserCompanySetDetail> userCompanySet)
         {
             Business_VoucherDetail BVDetail = new Business_VoucherDetail();
-            var bankChannel = db.Queryable<T_BankChannelMapping>().Where(x => (x.IsUnable == "启用" || x.IsUnable == null) && x.BankAccount == item.ReceivableAccount).ToList();
+            var bankChannel = db.Queryable<Business_PaySetting>().Where(x => (x.IsUnable == "启用" || x.IsUnable == null) && x.BankAccount == item.ReceivableAccount).ToList();
             if (bankChannel.Count > 0)
             {
                 var bankChannelOne = bankChannel.First();

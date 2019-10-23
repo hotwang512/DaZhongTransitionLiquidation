@@ -13,6 +13,11 @@ using SyntacticSugar;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using System.Data;
+using Aspose.Cells;
+using System.Collections;
+using System.Reflection;
+using Aspose.Pdf;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -242,7 +247,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         {
                             case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                             case "财务主管": voucher.Bookkeeping = user.LoginName; break;
-                            case "审核岗": voucher.Auditor = user.LoginName; break;
+                            //case "审核岗": voucher.Auditor = user.LoginName; break;
                             case "出纳": voucher.Cashier = user.LoginName; break;
                             default: break;
                         }
@@ -313,6 +318,174 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 result = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult PrintVoucherList(Guid vguids)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                DataTable dt = new DataTable();
+                var data = db.Ado.SqlQuery<PrintVoucherList>(@"select CONVERT(varchar(100), a.AccountingPeriod, 23) as AccountingPeriod,CONVERT(varchar(100), a.VoucherDate, 23) as VoucherDate,a.BatchName,a.VoucherNo,a.CompanyName,
+                            a.FinanceDirector,a.Bookkeeping,a.Auditor,a.DocumentMaker,a.Cashier  from 
+                            Business_VoucherList as a where a.VGUID = @VGUID ", new { VGUID = vguids }).ToList().FirstOrDefault();
+                var dataDetail = db.Ado.SqlQuery<PrintVoucherDetail>(@"select b.Abstract,b.SevenSubjectName,convert(varchar(1000),cast(b.BorrowMoney as money),1) as BorrowMoney,
+                          convert(varchar(1000),cast(b.LoanMoney as money),1) as LoanMoney,convert(varchar(1000),cast(b.BorrowMoneyCount as money),1) as BorrowMoneyCount,
+                          convert(varchar(1000),cast(b.LoanMoneyCount as money),1) as LoanMoneyCount,b.JE_LINE_NUMBER from 
+                            Business_VoucherDetail  as b where b.VoucherVGUID = @VGUID ", new { VGUID = vguids }).OrderBy(x=>x.JE_LINE_NUMBER).ToList();
+                var attachmentCount = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguids).ToList().Count;
+                for (int i = 0; i < dataDetail.Count; i++)
+                {
+                    if (dataDetail[i].BorrowMoney == null)
+                    {
+                        dataDetail[i].BorrowMoney = "";
+                    }
+                    if (dataDetail[i].LoanMoney == null)
+                    {
+                        dataDetail[i].LoanMoney = "";
+                    }
+                    if (dataDetail[i].BorrowMoneyCount == null)
+                    {
+                        dataDetail[i].BorrowMoneyCount = "";
+                    }
+                    if (dataDetail[i].LoanMoneyCount == null)
+                    {
+                        dataDetail[i].LoanMoneyCount = "";
+                    }
+                }
+                if (dataDetail.Count <= 7)
+                {
+                    //打印一张
+                    PrintExcel(dt, data, dataDetail, attachmentCount);
+                    resultModel.Status = "1";
+                }
+                else
+                {
+                    //打印多张
+                    PrintExcelMore(dt, data, dataDetail, attachmentCount);
+                    resultModel.Status = "2";
+                }
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet); ;
+        }
+
+        private void PrintExcelMore(DataTable dt, PrintVoucherList data, List<PrintVoucherDetail> dataDetail,int attachmentCount)
+        {
+            string rootPath = System.Web.HttpContext.Current.Server.MapPath("/Template/财务打印样式模板.xlsx");
+            string url = System.Web.HttpContext.Current.Server.MapPath("/Temp");
+            var pageCount = (dataDetail.Count / 7).TryToInt();//总张数
+            var lastPage = dataDetail.Count % 7;//最后一张的条数
+            if(lastPage != 0)
+            {
+                pageCount = pageCount + 1;
+            }
+            Document pdf = new Document();
+            for (int i = 1; i <= pageCount; i++)
+            {
+                string fileName = "VoucherReport" + i + ".xlsx";
+                string filePath = System.IO.Path.Combine(url, fileName);
+                Workbook wk = new Workbook(rootPath);
+                Worksheet sheet = wk.Worksheets[0]; //工作表
+                Aspose.Cells.Cells cells = sheet.Cells;//单元格
+                dt = dataDetail.Skip((i - 1) * 7).Take(7).ToList().TryToDataTable();
+                dt.TableName = "VoucherReport";
+                if(i == pageCount)
+                {
+                    //循环至最后一张,补全7行
+                    for (int j = 0; j < 7 - dt.Rows.Count; j++)
+                    {
+                        dt.AddRow();
+                    }
+                    cells[6, 15].PutValue(dataDetail[0].BorrowMoneyCount);
+                    cells[6, 18].PutValue(dataDetail[0].LoanMoneyCount);
+                }
+                cells[0, 0].PutValue(data.CompanyName);
+                cells[1, 4].PutValue(data.AccountingPeriod);
+                cells[1, 16].PutValue(data.BatchName);
+                cells[2, 16].PutValue(data.VoucherNo+"-"+i);
+                cells[3, 10].PutValue(data.VoucherDate);
+                cells[3, 19].PutValue(attachmentCount);
+                cells[7, 2].PutValue(data.FinanceDirector);
+                cells[7, 6].PutValue(data.Bookkeeping);
+                cells[7, 10].PutValue(data.Auditor);
+                cells[7, 15].PutValue(data.DocumentMaker);
+                cells[7, 19].PutValue(data.Cashier);
+                WorkbookDesigner designer = new WorkbookDesigner(wk);
+                designer.SetDataSource(dt);
+                designer.Process();
+                designer.Workbook.Save(filePath);
+                Workbook wb = new Workbook(System.Web.HttpContext.Current.Server.MapPath("/Temp/VoucherReport" + i + ".xlsx"));
+                wb.Save(System.Web.HttpContext.Current.Server.MapPath("/Temp/NewVoucherReport" + i + ".pdf"), Aspose.Cells.SaveFormat.Pdf);
+                Document pdf2 = new Document(System.Web.HttpContext.Current.Server.MapPath("/Temp/NewVoucherReport" + i + ".pdf"));
+                pdf.Pages.Add(pdf2.Pages);
+            }
+            pdf.Save(System.Web.HttpContext.Current.Server.MapPath("/Temp/LastVoucherReport.pdf"));
+        }
+        private void PrintExcel(DataTable dt, PrintVoucherList data,List<PrintVoucherDetail> dataDetail,int attachmentCount)
+        {
+            dt = dataDetail.TryToDataTable();
+            dt.TableName = "VoucherReport";
+            if (dataDetail.Count != 7)
+            {
+                for (int i = 0; i < 7 - dataDetail.Count; i++)
+                {
+                    dt.AddRow();
+                }
+            }
+            string rootPath = System.Web.HttpContext.Current.Server.MapPath("/Template/财务打印样式模板.xlsx");
+            string url = System.Web.HttpContext.Current.Server.MapPath("/Temp");
+            string fileName = "VoucherReport.xlsx";
+            string filePath = System.IO.Path.Combine(url, fileName);
+            Workbook wk = new Workbook(rootPath);
+            Worksheet sheet = wk.Worksheets[0]; //工作表
+            Aspose.Cells.Cells cells = sheet.Cells;//单元格
+            cells[0, 0].PutValue(data.CompanyName);
+            cells[1, 4].PutValue(data.AccountingPeriod);
+            cells[1, 16].PutValue(data.BatchName);
+            cells[2, 16].PutValue(data.VoucherNo);
+            cells[3, 10].PutValue(data.VoucherDate);
+            cells[3, 19].PutValue(attachmentCount);
+            cells[7, 2].PutValue(data.FinanceDirector);
+            cells[7, 6].PutValue(data.Bookkeeping);
+            cells[7, 10].PutValue(data.Auditor);
+            cells[7, 15].PutValue(data.DocumentMaker);
+            cells[7, 19].PutValue(data.Cashier);
+            cells[6, 15].PutValue(dataDetail[0].BorrowMoneyCount);
+            cells[6, 18].PutValue(dataDetail[0].LoanMoneyCount);
+            WorkbookDesigner designer = new WorkbookDesigner(wk);
+            designer.SetDataSource(dt);
+            designer.Process();
+            designer.Workbook.Save(filePath);
+            Workbook wb = new Workbook(System.Web.HttpContext.Current.Server.MapPath("/Temp/VoucherReport.xlsx"));
+            wb.Save(System.Web.HttpContext.Current.Server.MapPath("/Temp/NewVoucherReport.pdf"), Aspose.Cells.SaveFormat.Pdf);
+        }
+
+        /// <summary>
+        /// list to datatable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public DataTable ListToDt<T>(IEnumerable<T> collection)
+        {
+            var props = typeof(T).GetProperties();
+            var dt = new DataTable();
+            dt.Columns.AddRange(props.Select(p => new
+            DataColumn(p.Name, p.PropertyType)).ToArray());
+            if (collection.Count() > 0)
+            {
+                for (int i = 0; i < collection.Count(); i++)
+                {
+                    ArrayList tempList = new ArrayList();
+                    foreach (PropertyInfo pi in props)
+                    {
+                        object obj = pi.GetValue(collection.ElementAt(i), null);
+                        tempList.Add(obj);
+                    }
+                    object[] array = tempList.ToArray();
+                    dt.LoadDataRow(array, true);
+                }
+            }
+            return dt;
         }
     }
 }

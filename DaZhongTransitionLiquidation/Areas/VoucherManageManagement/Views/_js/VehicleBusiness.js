@@ -37,10 +37,16 @@ var $page = function () {
                 }
             });
         });
+        var myDate = new Date();
+        var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+        var date = myDate.getFullYear() + "-" + month;
+        $("#YearMonth").val(date);
+        var month = $("#YearMonth").val();
         //加载列表数据
-        initTable();
+        initTable(month);
         selector.$btnSearch().unbind("click").on("click", function () {
-            initTable();
+            month = $("#YearMonth").val();
+            initTable(month);
         });
         //重置按钮事件
         selector.$btnReset().on("click", function () {
@@ -51,60 +57,66 @@ var $page = function () {
         });
     }; //addEvent end
 
+    function initTable(month) {
+        //layer.load();
+        $.ajax({
+            url: "/VoucherManageManagement/VehicleBusiness/GeVehicleData",
+            data: { YearMonth: month },
+            async: false,
+            type: "post",
+            success: function (mps) {
+                //layer.closeAll('loading');
+                if (mps != null) {
+                    var utils = $.pivotUtilities;
+                    var heatmap = utils.renderers["Heatmap"];
+                    var sumOverSum = utils.aggregators["Sum"];
+                    //var model = [];
+                    //var classType = [];
+                    //var carType = [];
+                    //var business = [];
+                    //var businessType = [];
+                    //for (var i = 0; i < mps.length; i++) {
+                    //    if (model.indexOf(mps[i].Model) < 0) {
+                    //        model.push(mps[i].Model);
+                    //    }
+                    //    if (classType.indexOf(mps[i].ClassType) < 0) {
+                    //        classType.push(mps[i].ClassType);
+                    //    }
+                    //    if (carType.indexOf(mps[i].CarType) < 0) {
+                    //        carType.push(mps[i].CarType);
+                    //    }
+                    //    if (business.indexOf(mps[i].Business) < 0) {
+                    //        business.push(mps[i].Business);
+                    //    }
+                    //    if (businessType.indexOf(mps[i].BusinessType) < 0) {
+                    //        businessType.push(mps[i].BusinessType);
+                    //    }
+                    //}
+                    $("#jqxTable").pivot(mps, {
+                        rows: ["MANAGEMENT_COMPANY", "BELONGTO_COMPANY"],
+                        cols: ["MODEL_MAJOR", "MODEL_MINOR", "CarType"],
+                        //aggregatorName: "Sum",
+                        aggregator: sumOverSum(["MODEL_DAYS"]),
+                        //vals: ["Money"],
+                        rendererOptions: {
+                        },
+                        renderers: {
 
-    function initTable() {
-        var source =
-            {
-                datafields:
-                [
-                    //{ name: "checkbox", type: null },
-                    { name: 'ORIGINALID', type: 'string' },
-                    { name: 'PLATE_NUMBER', type: 'string' },
-                    { name: 'MODEL_DAYS', type: 'string' },
-                    { name: 'MODEL_MINOR', type: 'string' },
-                    { name: 'MODEL_MAJOR', type: 'string' },
-                    { name: 'YearMonth', type: 'string' },
-                    { name: 'MANAGEMENT_COMPANY', type: 'string' },
-                    { name: 'BELONGTO_COMPANY', type: 'string' },
-                    { name: 'VGUID', type: 'string' },
-                    { name: 'CarType', type: 'string' },
-                ],
-                datatype: "json",
-                id: "VGUID",
-                data: { "YearMonth": $("#YearMonth").val(), "PLATE_NUMBER": $("#PLATE_NUMBER").val(), "MODEL_DAYS": $("#MODEL_DAYS").val(), "MODEL_MINOR": $("#MODEL_MINOR").val() },
-                url: "/VoucherManageManagement/VehicleBusiness/GeVehicleData"   //获取数据源的路径
-            };
-        var typeAdapter = new $.jqx.dataAdapter(source);
-        //创建卡信息列表（主表）
-        selector.$grid().jqxGrid({
-            pageable: true,
-            width: "100%",
-            height: 450,
-            pageSize: 999999999,
-            //serverProcessing: true,
-            pagerButtonsCount: 10,
-            source: typeAdapter,
-            theme: "office",
-            groupable: true,
-            groupsexpandedbydefault: true,
-            groups: ['MANAGEMENT_COMPANY', 'BELONGTO_COMPANY', 'MODEL_MAJOR', 'MODEL_MINOR', 'CarType'],
-            showgroupsheader: false,
-            columnsHeight: 30,
-            pagermode: 'simple',
-            selectionmode: 'singlerow',
-            columns: [
-                //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                { text: '编码', datafield: 'ORIGINALID', width: 100, align: 'center', cellsAlign: 'center' },
-                { text: '资产管理公司', datafield: 'MANAGEMENT_COMPANY', width: 200, align: 'center', cellsAlign: 'center' },
-                { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 200, align: 'center', cellsAlign: 'center' },
-                { text: '模式', datafield: 'MODEL_MAJOR', width: 200, align: 'center', cellsAlign: 'center' },
-                { text: '班型', datafield: 'MODEL_MINOR', width: 200, align: 'center', cellsAlign: 'center' },
-                { text: '车型', datafield: 'CarType', width: 150, align: 'center', cellsAlign: 'center' },
-                { text: '日期', datafield: 'YearMonth', width: 120, align: 'center', cellsAlign: 'center' },
-                { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                { text: '车辆运营天数', datafield: 'MODEL_DAYS',align: 'center', cellsAlign: 'center' },
-                { text: 'VGUID', datafield: 'VGUID', hidden: true },
-            ]
+                        }
+                    });
+                    $(".pvtAxisLabel").eq(0).text("模式");
+                    $(".pvtAxisLabel").eq(0).css("text-align", "center")
+                    $(".pvtAxisLabel").eq(1).text("班型");
+                    $(".pvtAxisLabel").eq(1).css("text-align", "center")
+                    $(".pvtAxisLabel").eq(2).text("车型");
+                    $(".pvtAxisLabel").eq(2).css("text-align", "center")
+                    $(".pvtAxisLabel").eq(3).text("资产主类");
+                    $(".pvtAxisLabel").eq(3).css("text-align", "center")
+                    $(".pvtAxisLabel").eq(4).text("资产子类");
+                    $(".pvtAxisLabel").eq(4).css("text-align", "center")
+                    $("#jqxTable").show();
+                }
+            }
         });
     }
 };

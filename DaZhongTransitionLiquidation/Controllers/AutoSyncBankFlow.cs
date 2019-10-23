@@ -203,14 +203,21 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
                         var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-7)).ToList();
-                        var voucherDetails = _db.Queryable<Business_VoucherDetail>().OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
-                        var accountInfo = _db.Queryable<V_BankChannelMapping>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1").ToList();
+                        //voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate == "2019-10-01".TryToDate()).ToList();
+                        var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-7,GETDATE()))").OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
+                        var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1").ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
                         var bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
-                        var sevenData = _db.Queryable<Business_SevenSection>().ToList();
+                        var sevenData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
                         foreach (var item in voucherData)
                         {
+                            //跨月时获取前月的对账数据
+                            var voucherMonth = item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM");
+                            if (voucherMonth != month)
+                            {
+                                bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = voucherMonth, Channel = "" }).ToList();
+                            }
                             var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x=>x.ReceivableAccount).ToList();
                             if(voucherDetail.Count < 2)
                             {
@@ -221,7 +228,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 continue;
                             }
                             var accountModeCode = "";
-                            var accountModeData = sevenData.Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == item.AccountModeName).First();
+                            var accountModeData = sevenData.Where(x => x.Descrption == item.AccountModeName).First();
                             if (accountModeData != null)
                             {
                                 accountModeCode = accountModeData.Code;
@@ -479,7 +486,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //{
                         //    bankFlowLists.Add(item);
                         //}
-                        _db.Updateable(item).Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                        _db.Updateable(item).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
                         continue;
                     }
                     item.AccountModeCode = companyBankData.AccountModeCode;

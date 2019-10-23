@@ -257,7 +257,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var result = db.Ado.UseTran(() =>
                 {
                     List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
-                    var YearMonth = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                    var lastMonthDate = DateTime.Now.AddMonths(-1);
+                    var YearMonth = lastMonthDate.Year.ToString() + lastMonthDate.Month.ToString().PadLeft(2, '0');
                     var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
                     var resultApiModifyModel = apiReaultModify
                         .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
@@ -276,6 +277,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             }
                             assetModifyFlowList.Add(nv);
                         }
+
+                        var dt = assetModifyFlowList.Where(x => x.OPERATING_STATE == "在运" && x.MODEL_MINOR == "").ToList().TryToDataTable();
                         AutoSyncAssetsMaintenance.WirterSyncModifyAssetFlow(assetModifyFlowList);
                     }
                 });

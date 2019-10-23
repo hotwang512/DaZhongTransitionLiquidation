@@ -227,7 +227,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //经营模式
                             MODIFY_TYPE = "BUSINESS_MODEL";
-                            OLDDATA = assetMaintenanceInfo.MODEL_MAJOR + "-" + assetMaintenanceInfo.ASSET_CATEGORY_MINOR;
+                            OLDDATA = assetMaintenanceInfo.MODEL_MAJOR + "-" + assetMaintenanceInfo.MODEL_MAJOR;
                             if (!modifyVehicleList.Any(x => x.ORIGINALID == item.ORIGINALID))
                             {
                                 list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE,OLDDATA));

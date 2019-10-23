@@ -28,8 +28,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Default:
         /// Nullable:True
         /// </summary>           
-        public string BelongToCompany { get; set; }
-        public string ManageCompany { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyType { get; set; }
 
         /// <summary>
         /// Desc:
@@ -37,7 +37,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string VehicleModel { get; set; }
-        public string Orginalid { get; set; }
 
         /// <summary>
         /// Desc:
@@ -80,6 +79,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public string ChangeUser { get; set; }
+        public string PeriodType { get; set; }
 
     }
 }

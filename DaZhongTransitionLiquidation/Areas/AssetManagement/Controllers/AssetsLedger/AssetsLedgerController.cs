@@ -36,18 +36,32 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
 
             DbBusinessDataService.Command(db =>
             {
-                int pageCount = 0;
-                para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<AssetsLedger_Swap>()
-                    .PartitionBy(it => new { it.ASSET_ID }).Take(1)
-                    .WhereIF(PERIOD != null, i => i.PERIOD_CODE.Contains(PERIOD))
-                    .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
-                    .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
-                    .WhereIF(CategoryMinor != null, i => i.ASSET_CATEGORY_MINOR.Contains(CategoryMinor))
-                    .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
-                jsonResult.TotalRows = pageCount;
+                if (PERIOD != null)
+                {
+                    int pageCount = 0;
+                    para.pagenum = para.pagenum + 1;
+                    jsonResult.Rows = db.Queryable<AssetsLedger_Swap>()
+                        .PartitionBy(it => new { it.ASSET_ID }).Take(1)
+                        .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
+                        .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
+                        .WhereIF(CategoryMinor != null, i => i.ASSET_CATEGORY_MINOR.Contains(CategoryMinor))
+                        .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    jsonResult.TotalRows = pageCount;
+                }
+                else
+                {
+                    int pageCount = 0;
+                    para.pagenum = para.pagenum + 1;
+                    jsonResult.Rows = db.Queryable<AssetsLedger_Swap>()
+                        .Where(i => i.PERIOD_CODE == PERIOD)
+                        .PartitionBy(it => new { it.ASSET_ID }).Take(1)
+                        .WhereIF(TagNumber != null, i => i.TAG_NUMBER.Contains(TagNumber))
+                        .WhereIF(CategoryMajor != null, i => i.ASSET_CATEGORY_MAJOR.Contains(CategoryMajor))
+                        .WhereIF(CategoryMinor != null, i => i.ASSET_CATEGORY_MINOR.Contains(CategoryMinor))
+                        .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    jsonResult.TotalRows = pageCount;
+                }
             });
-
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
         public FileResult ExportExcel(string PERIOD, string TagNumber, string CategoryMajor, string CategoryMinor)
@@ -76,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             {
                 var listAsset = db.Queryable<Business_AssetMaintenanceInfo>().ToList();
                 var listAssetTAG = listAsset.Select(x => new { TAG_NUMBER = x.TAG_NUMBER }).ToList();
-                var listAssetLedgerTAG = db.Queryable<AssetsLedger_Swap>()
+                var listAssetLedgerTAG = db.Queryable<AssetsLedger_Swap>().PartitionBy(it => new { it.ASSET_ID }).Take(1)
                     .Select(x => new { TAG_NUMBER = x.TAG_NUMBER }).ToList();
                 //资产表存在，Oracle台账不存在
                 var infoExcept = listAssetTAG.Except(listAssetLedgerTAG).ToList();
@@ -91,7 +105,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
                 }
                 if (allExcept.Count > 0)
                 {
-                    var exceptLedgerData = db.Queryable<AssetsLedger_Swap>().In(it => it.TAG_NUMBER, allExceptList).ToList();
+                    var exceptLedgerData = db.Queryable<AssetsLedger_Swap>().PartitionBy(it => new { it.ASSET_ID }).Take(1).In(it => it.TAG_NUMBER, allExceptList).ToList();
                     var compareLedgerData = Mapper.Map<List<AssetsLedger_Swap>, List<AssetsLedger_SwapCompare>>(exceptLedgerData).ToList();
                     compareLedgerData.ForEach(x => x.Message = "主表标签号不存在");
                     var exceptaAssetData = db.Queryable<Business_AssetMaintenanceInfo>().In(it => it.TAG_NUMBER, allExceptList).ToList();
@@ -101,12 +115,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
                     var data = compareData.TryToDataTable();
                     resultModel.IsSuccess = true;
                     resultModel.Status = "1";
-                    resultModel.ResultInfo = "数量对比不一致";
+                    resultModel.ResultInfo = "标签号对比不一致";
                     resultModel.ResultInfo2 = compareData;
                 }
                 else
                 {
-                    var listLedger = db.Queryable<AssetsLedger_Swap>().ToList();
+                    var listLedger = db.Queryable<AssetsLedger_Swap>().PartitionBy(it => new { it.ASSET_ID }).Take(1).ToList();
                     var compareData = Mapper.Map<List<AssetsLedger_Swap>, List<AssetsLedger_SwapCompare>>(listLedger).ToList();
                     var errorCount = 0;
                     foreach (var item in compareData)
@@ -221,6 +235,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
                         resultModel.IsSuccess = true;
                         resultModel.Status = "2";
                     }
+                    var dt1 = compareData.TryToDataTable();
                 }
             });
             return Json(

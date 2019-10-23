@@ -63,6 +63,7 @@ var $page = function () {
         }
     });
     $("#btnGetModify").on("click", function () {
+        layer.load();
         $.ajax({
             url: "/AssetManagement/AssetModifyReview/GetModifyVehicleReview",
             data: { "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
@@ -76,8 +77,10 @@ var $page = function () {
                 case "1":
                     jqxNotification("获取成功！", null, "success");
                     $("#jqxTable").jqxDataTable('updateBoundData');
+                    initTable();
                     break;
                 }
+                layer.closeAll('loading');
             }
         });
     });
@@ -131,7 +134,7 @@ var $page = function () {
             columns = [
                     //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     {
-                        text: '变更前经营模式', datafield: 'OLDDATA', width: 240, align: 'center', cellsAlign: 'center',
+                        text: '变更前经营模式主类', datafield: 'MODEL_MAJOR_M', width: 240, align: 'center', cellsAlign: 'center',
                         aggregates: ['count',
                             {
                                 function (aggregatedValue, currentValue) {
@@ -140,6 +143,7 @@ var $page = function () {
                             }
                         ]
                     },
+                    { text: '变更前经营模式子类', datafield: 'MODEL_MINOR_M', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '变更后经营模式主类', datafield: 'MODEL_MAJOR', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '变更后模式子类', datafield: 'MODEL_MINOR', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '变更前资产类型', width: 170, align: 'center', cellsAlign: 'center', cellsrenderer: cellstyperenderer },

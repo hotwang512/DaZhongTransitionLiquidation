@@ -41,7 +41,7 @@ var $page = function () {
             type: "post",
             success: function (mps) {
                 //layer.closeAll('loading');
-                if (mps != null) {
+                if (mps.length > 0) {
                     var utils = $.pivotUtilities;
                     var heatmap = utils.renderers["Heatmap"];
                     var sumOverSum = utils.aggregators["Sum"];
@@ -49,7 +49,7 @@ var $page = function () {
                         rows: ["MANAGEMENT_COMPANY", "BELONGTO_COMPANY"],
                         cols: ["MODEL_MAJOR", "MODEL_MINOR", "CarType"],
                         //aggregatorName: "Sum",
-                        aggregator: sumOverSum(["MODEL_DAYS"]),
+                        aggregator: sumOverSum(["DAYS"]),
                         //vals: ["Money"],
                         rendererOptions: {
                             table: {

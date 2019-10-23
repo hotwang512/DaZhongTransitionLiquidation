@@ -232,7 +232,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         }
                         assetScrapFlowList =
                             assetScrapFlowList.Where(x => x.BACK_CAR_DATE.Contains(YearMonth)).ToList();
-                        var dt =assetScrapFlowList.TryToDataTable();
+                        //var dt =assetScrapFlowList.TryToDataTable();
                         AutoSyncAssetsMaintenance.WirterScrapSyncAssetFlow(assetScrapFlowList);
                     }
                 });

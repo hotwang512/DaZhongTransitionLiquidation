@@ -122,9 +122,9 @@ var $page = function () {
                 selector.$grid().jqxPivotGrid(
                 {
                     source: pivotDataSource,
-                    treeStyleRows: true,
+                    treeStyleRows: false,
                     autoResize: true,
-                    selectionEnabled: true
+                    selectionEnabled: false
                 });
             layer.closeAll('loading');
         });
@@ -177,9 +177,9 @@ var $page = function () {
             selector.$grid1().jqxPivotGrid(
                 {
                     source: pivotDataSource,
-                    treeStyleRows: true,
+                    treeStyleRows: false,
                     autoResize: true,
-                    selectionEnabled: true
+                    selectionEnabled: false
                 });
             layer.closeAll('loading');
         });

@@ -40,29 +40,15 @@
     <div class="body_mk" style="height: 60px;">
         <table style="margin-top: 20px; margin-left: 20px;">
             <tr style="height: 45px;">
-                @*<td class="td_span">车牌号：</td>
-                    <td class="td_input">
-                        <input id="PLATE_NUMBER" type="text" class="input_text form-control" />
-                    </td>*@
                 <td class="td_span">日期：</td>
                 <td class="td_input">
-                    <input id="YearMonth" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '#F{$dp.$D(\'YearMonth\')||\'%y-#{%M}\'}', realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" />
+                    <input id="YearMonth" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" />
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnCount" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">计算</span></button>
                 </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
-                </td>
-            </tr>
-            <tr style="height: 45px;display:none">
-                <td class="td_span">运营模式：</td>
-                <td class="td_input">
-                    <input id="MODEL_MINOR" type="text" class="input_text form-control" />
-                </td>
-                <td class="td_span">平均车辆数：</td>
-                <td class="td_input">
-                    <input id="MODEL_DAYS" type="text" class="input_text form-control" />
-                </td>
-                <td>
-                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
                 </td>
             </tr>
         </table>

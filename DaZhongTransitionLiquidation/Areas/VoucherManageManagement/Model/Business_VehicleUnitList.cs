@@ -12,6 +12,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string YearMonth { get; set; }
         public string PLATE_NUMBER { get; set; }
         public decimal MODEL_DAYS { get; set; }
+        public int DAYS { get; set; }
         public string MODEL_MINOR { get; set; }
         public string Founder { get; set; }
         public DateTime CreatTime { get; set; }

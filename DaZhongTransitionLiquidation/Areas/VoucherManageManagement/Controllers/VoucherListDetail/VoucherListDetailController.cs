@@ -121,8 +121,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
-                        voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期)
-                        voucherList.VoucherNo = "";//手工凭证,凭证号在审核后生成
+                        var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        if (voucherType == "现金类")
+                        {
+                            bank = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        }
+                        var no = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault();
+                        voucher.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;
+                        voucher.BatchName = voucher.VoucherNo;
                         voucherList.VGUID = guid;
                         voucherList.Automatic = "0";//手动
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();

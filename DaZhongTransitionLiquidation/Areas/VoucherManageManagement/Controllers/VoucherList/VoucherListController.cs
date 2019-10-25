@@ -43,23 +43,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     .Where(i => i.Automatic == searchParams.Automatic)
                     .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
                     .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
-                    .Where(x => x.VoucherNo.Length > 10 || x.TradingBank == "" || x.TradingBank == null || x.VoucherNo == null || x.VoucherNo == "").ToList();
+                    .Where(x => x.TradingBank == "" || x.TradingBank == null || x.VoucherNo == null || x.VoucherNo == "").ToList();
                     foreach (var item in voucherData)
                     {
                         if (item.VoucherNo == null || item.VoucherNo == "")
                         {
                             var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                            item.VoucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault();
+                            var no = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault();
+                            item.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + item.VoucherType + no;
                             db.Updateable(item).ExecuteCommand();
-                        }
-                        else
-                        {
-                            if (item.VoucherNo.Length > 10)
-                            {
-                                var no = item.VoucherNo.Substring(0, 6) + item.VoucherNo.Substring(item.VoucherNo.Length - 4, 4);
-                                item.VoucherNo = no;
-                                db.Updateable(item).ExecuteCommand();
-                            }
                         }
                         if (item.TradingBank == "" || item.TradingBank == null)
                         {
@@ -180,31 +172,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         {
                             if (status == "3")
                             {
-                                if (voucherOne.VoucherNo == "" || voucherOne.VoucherNo == null)
+                                saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
                                 {
-                                    var type = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                                    if (voucherOne.VoucherType == "现金类")
-                                    {
-                                        type = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                                    }
-                                    var voucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + type + "', @output output  select @output").FirstOrDefault();
-                                    //voucherName = VoucherListDetailController.GetVoucherName(voucherNo);
-                                    //更新主表信息
-                                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
-                                    {
-                                        VoucherNo = voucherNo,
-                                        Status = status,
-                                        Auditor = UserInfo.LoginName
-                                    }).Where(it => it.VGUID == item).ExecuteCommand();
-                                }
-                                else
-                                {
-                                    saveChanges = db.Updateable<Business_VoucherList>().UpdateColumns(it => new Business_VoucherList()
-                                    {
-                                        Status = status,
-                                        Auditor = UserInfo.LoginName
-                                    }).Where(it => it.VGUID == item).ExecuteCommand();
-                                }
+                                    Status = status,
+                                    Auditor = UserInfo.LoginName
+                                }).Where(it => it.VGUID == item).ExecuteCommand();
                             }
                             else
                             {
@@ -270,15 +242,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 accountModeCode = accountModeData.Code;
             }
-            var type = "";
-            var voucherType = "";
-            switch (voucher.VoucherType)
-            {
-                case "现金类": type = "x.现金"; voucherType = "X"; break;
-                case "银行类": type = "y.银行"; voucherType = "Y"; break;
-                case "转账类": type = "z.转账"; voucherType = "Z"; break;
-                default: break;
-            }            
+            var type = "";            
             var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
             var documentMaker = "";
             if (documentMakerData != null)
@@ -288,61 +252,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             //asset.VGUID = Guid.NewGuid();
             foreach (var items in voucherDetail)
             {
-                //var four = voucher.VoucherNo.Substring(voucher.VoucherNo.Length - 4, 4);
-                var dateNow = DateTime.Now;
-                var month = dateNow.Month.TryToString();
-                if (dateNow.Month < 10)
-                {
-                    month = "0" + dateNow.Month;
-                }
-                //批名（100201Y190930+01） 批名按审核日期生成+已审核批次
-                var times = "01";
-                var batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 2) + month + dateNow.Day.TryToString();
-                if(dateNow.Month != voucher.VoucherDate.Value.Month)
-                {
-                    //审核跨月,取凭证日期的当月最后一天
-                    var lastDay = voucher.VoucherDate.Value.AddDays(1 - voucher.VoucherDate.Value.Day).AddMonths(1).AddDays(-1).Day;
-                    batchName = accountModeCode + voucher.CompanyCode + voucherType + dateNow.Year.TryToString().Substring(2, 2) + voucher.VoucherDate.Value.Month + lastDay;
-                }
-                var batchNameData = assetsData.Where(x => x.JE_BATCH_NAME.Contains(accountModeCode + voucher.CompanyCode + voucherType)).OrderByDescending(x=>x.JE_BATCH_NAME).ToList();
-                if(batchNameData.Count > 0)
-                {
-                    var isAnyData = assetsData.Where(x => x.JE_BATCH_NAME.Contains(batchName) && x.STATUS == "S").OrderByDescending(x => x.JE_BATCH_NAME).ToList();
-                    if (isAnyData.Count > 0)
-                    {
-                        var batchTimes = isAnyData[0].JE_BATCH_NAME.Substring(13, 15).TryToInt();
-                        var newBatchTimes = "";
-                        if (batchTimes > 8)
-                        {
-                            newBatchTimes = (batchTimes + 1).TryToString();
-                        }
-                        else
-                        {
-                            newBatchTimes = "0" + (batchTimes + 1).TryToString();
-                        }
-                        batchName = batchName + newBatchTimes;
-                    }
-                    else
-                    {
-                        batchName = batchNameData[0].JE_BATCH_NAME;
-                    }
-                }
-                else
-                {
-                    batchName = batchName + times;
-                }
-                //var batchNames = getBatchName(batchName, times);
-                //凭证号（10020119090001）
-                var voucherNo = accountModeCode + voucher.CompanyCode + voucher.VoucherNo.Substring(2, 8);
                 AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
                 asset.CREATE_DATE = DateTime.Now;
                 asset.CREATE_USER = documentMaker;
                 //asset.SubjectVGUID = guid;
                 asset.LINE_ID = item.TryToString();
                 asset.LEDGER_NAME = voucher.AccountModeName;
-                asset.JE_BATCH_NAME = batchName;
+                asset.JE_BATCH_NAME = voucher.BatchName;
                 asset.JE_BATCH_DESCRIPTION = "";
-                asset.JE_HEADER_NAME = voucherNo;
+                asset.JE_HEADER_NAME = voucher.VoucherNo;
                 asset.JE_HEADER_DESCRIPTION = "";
                 asset.JE_SOURCE_NAME = "大众出租财务共享平台";
                 asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转账)

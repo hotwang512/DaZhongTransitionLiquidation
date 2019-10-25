@@ -44,22 +44,32 @@ var $page = function () {
         );
     }; //addEvent end
     $("#btnSubmit").on("click", function () {
-        debugger;
-        var selection = [];
-        var grid = $("#jqxTable");
-        var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-        checedBoxs.each(function () {
-            var th = $(this);
-            if (th.is(":checked")) {
-                var index = th.attr("index");
-                var data = grid.jqxDataTable('getRows')[index];
-                selection.push(data.VGUID);
+        //var selection = [];
+        //var grid = $("#jqxTable");
+        //debugger;
+        //var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+        //checedBoxs.each(function () {
+        //    var th = $(this);
+        //    if (th.is(":checked")) {
+        //        var index = th.attr("index");
+        //        var data = grid.jqxDataTable('getRows')[index];
+        //        selection.push(data.VGUID);
+        //    }
+        //});
+        var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+        var pars = [];
+        $(array).each(function (i, v) {
+            try {
+                debugger;
+                var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID").value;
+                pars.push(value);
+            } catch (e) {
             }
         });
-        if (selection.length < 1) {
+        if (array.length < 1) {
             jqxNotification("请选择您要提交的数据！", null, "error");
         } else {
-            WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", selection);
+            WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", pars);
         }
     });
     $("#btnGetModify").on("click", function () {
@@ -87,12 +97,14 @@ var $page = function () {
     //提交
     function submit(selection) {
         debugger;
+        layer.load();
         $.ajax({
             url: "/AssetManagement/AssetModifyReview/SubmitModifyVehicleReview",
-            data: { guids: selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
+            data: { "vguids": selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
             //traditional: true,
             type: "post",
             success: function (msg) {
+                layer.closeAll('loading');
                 switch (msg.Status) {
                     case "0":
                         jqxNotification("审核失败！", null, "error");
@@ -158,7 +170,7 @@ var $page = function () {
                     { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
+                    { text: 'VGUID', datafield: 'VGUID', hidden: false }
             ];
         } else if (mtype == "FA_LOC_1") {
             columns = [

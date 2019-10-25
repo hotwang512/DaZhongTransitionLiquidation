@@ -88,7 +88,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 MaxJsonLength = Int32.MaxValue
             };
         }
-        public JsonResult SubmitModifyVehicleReview(List<Guid> guids, string MODIFY_TYPE)
+        public JsonResult SubmitModifyVehicleReview(List<Guid> vguids, string MODIFY_TYPE)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -107,7 +107,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                        mi.ASSET_ID AS ASSET_ID
                     FROM Business_ModifyVehicle mv
                     LEFT JOIN Business_AssetMaintenanceInfo mi
-                        ON mv.ORIGINALID = mi.ORIGINALID").Where(x => guids.Contains(x.VGUID) && x.MODIFY_TYPE == MODIFY_TYPE).ToList();
+                        ON mv.ORIGINALID = mi.ORIGINALID").Where(x => vguids.Contains(x.VGUID) && x.MODIFY_TYPE == MODIFY_TYPE).ToList();
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();
                     switch (MODIFY_TYPE)
                     {
@@ -122,7 +122,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
-                                assetSwapModel.TRANSACTION_ID = item.VGUID;
+                                assetSwapModel.TRANSACTION_ID =Guid.NewGuid();
                                 assetSwapModel.TAG_NUMBER = item.TAG_NUMBER;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
@@ -141,7 +141,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.PROCESS_TYPE = "PLATE_NUMBER";
                                 assetSwapList.Add(assetSwapModel);
                             }
-                            db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                             break;
                         case "FA_LOC_1":
                             foreach (var item in modifyVehicleList)
@@ -152,7 +151,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
-                                assetSwapModel.TRANSACTION_ID = item.VGUID;
+                                assetSwapModel.TRANSACTION_ID =Guid.NewGuid();
                                 assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
@@ -171,7 +170,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.PROCESS_TYPE = "FA_LOC_1";
                                 assetSwapList.Add(assetSwapModel);
                             }
-                            db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                             break;
                         case "FA_LOC_2":
                             foreach (var item in modifyVehicleList)
@@ -182,7 +180,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
-                                assetSwapModel.TRANSACTION_ID = item.VGUID;
+                                assetSwapModel.TRANSACTION_ID =Guid.NewGuid();
                                 assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
@@ -201,7 +199,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.PROCESS_TYPE = "FA_LOC_2";
                                 assetSwapList.Add(assetSwapModel);
                             }
-                            db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                             break;
                         case "BUSINESS_MODEL":
                             foreach (var item in modifyVehicleList)
@@ -221,7 +218,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 }
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
-                                assetSwapModel.TRANSACTION_ID = item.VGUID;
+                                assetSwapModel.TRANSACTION_ID =Guid.NewGuid();
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                                 assetSwapModel.CREATE_DATE = DateTime.Now;
@@ -239,8 +236,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.PROCESS_TYPE = "BUSINESS_MODEL";
                                 assetSwapList.Add(assetSwapModel);
                             }
-                            db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                             break;
+                    }
+                    if (assetSwapList.Count > 0)
+                    {
+                        db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

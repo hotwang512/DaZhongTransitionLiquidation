@@ -311,8 +311,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var result = db.Ado.UseTran(() =>
                 {
                     var reviewList = db.Queryable<Business_AssetReview>()
-                 .Where(i => vguids.Contains(i.VGUID) && !i.ISVERIFY)
-                 .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
+                                 .Where(i => vguids.Contains(i.VGUID) && !i.ISVERIFY)
+                                 .OrderBy(i => i.CREATE_DATE, OrderByType.Desc).ToList();
                     //先进中间表再进资产表
                     //资产新增后写入Oracle中间表
                     var assetSwapList = new List<AssetMaintenanceInfo_Swap>();

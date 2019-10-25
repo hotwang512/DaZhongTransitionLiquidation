@@ -4,7 +4,7 @@ var selector = {
     $btnAdd: function () { return $("#btnAdd") },
     $btnDelete: function () { return $("#btnDelete") },
     $btnSearch: function () { return $("#btnSearch") },
-    $btnReset: function () { return $("#btnReset") },
+    $btnExport: function () { return $("#btnExport") },
     $txtDatedTime: function () { return $("#txtDatedTime") },
 }; //selector end
 
@@ -48,9 +48,9 @@ var $page = function () {
                 }
             });
         });
-        //重置按钮事件
-        selector.$btnReset().on("click", function () {
-            tableToExcel("","结算单位金额计算");
+        //html导出
+        selector.$btnExport().on("click", function () {
+            tableToExcel("pvtTable", "结算单位金额计算");//class名,excel名
         });
     }; //addEvent end 
     function count() {

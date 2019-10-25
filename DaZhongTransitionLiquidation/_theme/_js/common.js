@@ -62,24 +62,24 @@ var tableToExcel = (function () {
     ' <style type="text/css">' +
     '.excelTable  {' +
     'border-collapse:collapse;' +
-    ' border:1px solid #333; ' +
+    ' border:thin solid #999; ' +
     '}' +
     '   .excelTable  th {' +
-    '   border: 1px solid #333;' +
+    '   border: thin solid #999;' +
     '  padding:20px;' +
     '  text-align: center;' +
-    '  border-top: thin solid #333;' +
+    '  border-top: thin solid #999;' +
     ' ' +
     '  }' +
     ' .excelTable  td{' +
-    ' border:1px solid #333;' +
+    ' border:thin solid #999;' +
     ' padding:2px 5px;' +
     ' text-align: center;' +
     ' }</style>' + '</head><body><table border="1">{table}</table></body></html>'
         , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
         , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
     return function (table, name) {
-        if (!table.nodeType) table = document.getElementById("jqxTable")
+        if (!table.nodeType) table = $("." + table)[0]
         var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML };
         var downloadLink = document.createElement("a");
         downloadLink.href = uri + base64(format(template, ctx));

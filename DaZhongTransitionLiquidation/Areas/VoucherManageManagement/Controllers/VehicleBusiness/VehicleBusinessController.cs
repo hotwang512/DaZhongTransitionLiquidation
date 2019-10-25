@@ -73,23 +73,23 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 MaxJsonLength = Int32.MaxValue
             };
         }
-        public JsonResult GetVehicleBusinessInfo()//Guid[] vguids
+        public JsonResult GetVehicleBusinessInfo(string YearMonth)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = true, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 var userName = UserInfo.LoginName;
-                SyncVehicleBusiness(db, resultModel, userName);
+                SyncVehicleBusiness(db, resultModel, userName, YearMonth);
             });
             return Json(resultModel);
         }
-        public static void SyncVehicleBusiness(SqlSugarClient db, ResultModel<string> resultModel,string userName)
+        public static void SyncVehicleBusiness(SqlSugarClient db, ResultModel<string> resultModel,string userName,string YearMonth)
         {
             List<Business_VehicleList> vehicleList = new List<Business_VehicleList>();
             var url = ConfigSugar.GetAppString("GetVehicleUrl");
-            var month = DateTime.Now.AddMonths(-1).Month.TryToString();
-            month = month.Length > 1 ? month : "0" + month;
-            var yearMonth = DateTime.Now.Year.TryToString() + month;
+            var yearMonth = YearMonth.Replace("-","");
+            //month = month.Length > 1 ? month : "0" + month;
+            //var yearMonth = DateTime.Now.Year.TryToString() + month;
             var data = "{" +
                                     "\"YearMonth\":\"{YearMonth}\"".Replace("{YearMonth}", yearMonth) +
                                     "}";

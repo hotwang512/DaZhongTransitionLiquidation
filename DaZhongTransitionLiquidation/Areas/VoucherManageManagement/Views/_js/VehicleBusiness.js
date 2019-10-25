@@ -18,29 +18,9 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
-        $("#btnSync").on("click", function () {
-            layer.load();
-            $.ajax({
-                url: "/VoucherManageManagement/VehicleBusiness/GetVehicleBusinessInfo",
-                data: {},
-                type: "post",
-                dataType: "json",
-                success: function (msg) {
-                    if (msg.IsSuccess == true) {
-                        layer.closeAll('loading');
-                        jqxNotification("同步成功！", null, "success");
-                        initTable();
-                    } else {
-                        layer.closeAll('loading');
-                        jqxNotification("同步失败！", null, "error");
-                    }
-                }
-            });
-        });
         var myDate = new Date();
-        var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
-        var date = myDate.getFullYear() + "-" + month;
-        $("#YearMonth").val(date);
+        var myMonth = $.convert.toDate(addMonth(myDate, -1), "yyyy-MM");
+        $("#YearMonth").val(myMonth);
         var month = $("#YearMonth").val();
         //加载列表数据
         initTable(month);
@@ -54,6 +34,27 @@ var $page = function () {
             $("#TransactionDate").val("");
             $("#TransactionDateEnd").val("");
             $("#PaymentUnit").val("");
+        });
+        //同步车辆数据
+        $("#btnSync").on("click", function () {
+            layer.load();
+            $.ajax({
+                url: "/VoucherManageManagement/VehicleBusiness/GetVehicleBusinessInfo",
+                data: { YearMonth: $("#YearMonth").val() },
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.IsSuccess == true) {
+                        layer.closeAll('loading');
+                        jqxNotification("同步成功！", null, "success");
+                        var month2 = $("#YearMonth").val();
+                        initTable(month2);
+                    } else {
+                        layer.closeAll('loading');
+                        jqxNotification("同步失败！", null, "error");
+                    }
+                }
+            });
         });
     }; //addEvent end
 
@@ -116,7 +117,7 @@ var $page = function () {
                     $("#jqxTable .pvtAxisLabel").eq(2).css("text-align", "center")
                     $("#jqxTable .pvtAxisLabel").eq(3).text("所属公司");
                     $("#jqxTable .pvtAxisLabel").eq(3).css("text-align", "center")
-
+                    $(".pvtRowTotalLabel").css("text-align", "center")
                     $("#jqxTable2 tr").eq(0).hide();
                     $("#jqxTable2 tr").eq(1).hide();
                     $("#jqxTable2 tr").eq(2).hide();

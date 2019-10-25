@@ -172,7 +172,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var nowDate = DateTime.Now.ToLongDateString();
                         if (nowDate == beginTime)
                         {
-                            VehicleBusinessController.SyncVehicleBusiness(_db, resultModel, "admin");
+                            //月初拉取上月车辆数据
+                            var month = DateTime.Now.AddMonths(-1).Month.TryToString();
+                            month = month.Length > 1 ? month : "0" + month;
+                            var yearMonth = DateTime.Now.AddMonths(-1).Year.TryToString() + month;
+                            VehicleBusinessController.SyncVehicleBusiness(_db, resultModel, "admin", yearMonth);
                         }
                     }
                 }

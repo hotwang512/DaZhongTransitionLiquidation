@@ -13,6 +13,7 @@ using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using System.Text.RegularExpressions;
+using DaZhongTransitionLiquidation.Controllers;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -49,7 +50,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         if (item.VoucherNo == null || item.VoucherNo == "")
                         {
                             var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                            var no = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault();
+                            var no = CreateNo.GetCreateNo(db, bank);
                             item.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + item.VoucherType + no;
                             db.Updateable(item).ExecuteCommand();
                         }

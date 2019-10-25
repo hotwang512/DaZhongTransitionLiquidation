@@ -20,9 +20,8 @@ var $page = function () {
     function addEvent() {
         //加载列表数据
         var myDate = new Date();
-        var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
-        var date = myDate.getFullYear() + "-" + month;
-        $("#YearMonth").val(date);
+        var myMonth = $.convert.toDate(addMonth(myDate, -1), "yyyy-MM");
+        $("#YearMonth").val(myMonth);
         var month = $("#YearMonth").val();
         initTable(month);
         selector.$btnSearch().unbind("click").on("click", function () {

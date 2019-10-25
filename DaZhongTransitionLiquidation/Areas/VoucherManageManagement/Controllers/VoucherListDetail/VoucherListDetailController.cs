@@ -18,6 +18,7 @@ using Aspose.Cells;
 using System.Collections;
 using System.Reflection;
 using Aspose.Pdf;
+using DaZhongTransitionLiquidation.Controllers;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -126,9 +127,9 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         {
                             bank = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
                         }
-                        var no = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault();
-                        voucher.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;
-                        voucher.BatchName = voucher.VoucherNo;
+                        var no = CreateNo.GetCreateNo(db, bank);
+                        voucherList.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;
+                        voucherList.BatchName = voucherList.VoucherNo;
                         voucherList.VGUID = guid;
                         voucherList.Automatic = "0";//手动
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
@@ -153,7 +154,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     
                     if (voucher.Detail != null)
                     {
-                        var i = 0;
                         foreach (var item in voucher.Detail)
                         {
                             Business_VoucherDetail BVDetail = new Business_VoucherDetail();

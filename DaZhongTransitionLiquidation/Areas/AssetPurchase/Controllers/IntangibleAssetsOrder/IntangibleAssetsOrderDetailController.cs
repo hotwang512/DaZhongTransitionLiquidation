@@ -455,8 +455,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var isAnySubmited = db.Queryable<Business_IntangibleAssetsOrder>().Any(c => c.VGUID == sevenSection.VGUID && (c.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt() || c.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnPay.TryToInt()));
-                    if (!isAnySubmited)
+                    var isAnySubmited = db.Queryable<Business_IntangibleAssetsOrder>().Any(c => c.VGUID == sevenSection.VGUID && c.SubmitStatus > IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt());
+                    if (isAnySubmited)
                     {
                         resultModel.ResultInfo = "此状态下不允许作废!";
                         resultModel.IsSuccess = false;

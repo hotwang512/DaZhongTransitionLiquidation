@@ -55,10 +55,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
             DbBusinessDataService.Command(db =>
             {
                 int saveChanges = 1;
-                var isAnySubmited = db.Queryable<Business_TaxFeeOrder>().Any(c => vguids.Contains(c.VGUID) && (c.SubmitStatus != FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt()));
+                var isAnySubmited = db.Queryable<Business_TaxFeeOrder>().Any(c => vguids.Contains(c.VGUID) && c.SubmitStatus > FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt());
                 if (isAnySubmited)
                 {
-                    resultModel.ResultInfo = "存在已提交的订单，订单提交后不允许删除";
+                    resultModel.ResultInfo = "存在已提交的订单，订单提交后不允许作废";
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
                 }

@@ -47,9 +47,9 @@ var $page = function () {
                 }
             });
             if (selection.length < 1) {
-                jqxNotification("请选择您要删除的数据！", null, "error");
+                jqxNotification("请选择您要作废的数据！", null, "error");
             } else {
-                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
+                WindowConfirmDialog(dele, "您确定要作废选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
         $("#CreditDialog_OKBtn").on("click",
@@ -127,13 +127,13 @@ var $page = function () {
             success: function (msg) {
                 switch (msg.Status) {
                     case "0":
-                        jqxNotification("删除失败！", null, "error");
+                        jqxNotification("作废失败！", null, "error");
                         break;
                     case "2":
                         jqxNotification(msg.ResultInfo, null, "error");
                         break;
                     case "1":
-                        jqxNotification("删除成功！", null, "success");
+                        jqxNotification("作废成功！", null, "success");
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
                 }

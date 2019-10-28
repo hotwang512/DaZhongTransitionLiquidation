@@ -15,6 +15,7 @@ using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using Business_AssetOrderDetails = DaZhongTransitionLiquidation.Areas.AssetPurchase.Models.Business_AssetOrderDetails;
@@ -282,7 +283,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                             var purchaseAssign = db.Queryable<Business_PurchaseAssign>()
                                 .Where(c => c.FixedAssetsOrderVguid == vguid).First();
                             //判断判断车架号发动机号，系统中没有才可以导入
-                            var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>()
+                            var listAssetInfo = db.Queryable<Business_AssetMaintenanceInfo>().Where(x => x.GROUP_ID == "出租车")
                             .Select(x => new { EngineNumber_ChassisNumber = x.ENGINE_NUMBER + x.CHASSIS_NUMBER }).ToList();
                             var listExcel = list.Select(x => new
                             { EngineNumber_ChassisNumber = x.EngineNumber + x.ChassisNumber }).ToList();
@@ -346,18 +347,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     //出库费
                                     var maxOrderNumRight = 0;
                                     var orderNumberLeft = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                    //查出当前日期数据库中最大的订单号
-                                    var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
-                                        .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                    var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
-                                        .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                    var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
-                                        .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                                    var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
-                                    if (currentDayList.Any())
-                                    {
-                                        maxOrderNumRight = currentDayList.OrderByDescending(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
-                                    }
                                     //供应商信息
                                     var bankInfoList = db.SqlQueryable<v_Business_CustomerBankInfo>(
                                             @"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
@@ -383,8 +372,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         feeOrder.VGUID = Guid.NewGuid();
                                         feeOrder.CreateDate = DateTime.Now;
                                         feeOrder.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                                        maxOrderNumRight = maxOrderNumRight + 1;
-                                        feeOrder.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
+                                        var autoID = "TaxFeeOrder";
+                                        var no = CreateNo.GetCreateNo(db, autoID);
+                                        feeOrder.OrderNumber = no;
                                         var purchaseOrderNum = new Business_PurchaseOrderNum();
                                         purchaseOrderNum.VGUID = Guid.NewGuid();
                                         purchaseOrderNum.PayItemCode = feeOrder.PayItemCode;
@@ -430,15 +420,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 }
                                 var belongToList = db.Queryable<Business_AssetOrderBelongTo>()
                                     .Where(x => x.AssetsOrderVguid == vguid).ToList();
-                                var orderNumberLeftAsset = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                //查出当前日期数据库中最大的订单号
-                                var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
-                                    .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
-                                var maxOrderNumRightAsset = 0;
-                                if (currentDayAssetReviewList.Any())
-                                {
-                                    maxOrderNumRightAsset = currentDayAssetReviewList.OrderByDescending(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
-                                }
                                 //获取订单部门
                                 var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
                                                                                         FROM Business_SevenSection
@@ -466,10 +447,11 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     //根据车型获取各项费用的单价
                                     var feeList = db.Queryable<Business_VehicleExtrasFeeSetting>()
                                         .Where(x => x.VehicleModel == item.VehicleModel && x.Status).ToList();
-                                    maxOrderNumRightAsset++;
                                     var assetReview = new Business_AssetReview();
                                     assetReview.VGUID = Guid.NewGuid();
-                                    assetReview.ASSET_ID = orderNumberLeftAsset + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
+                                    var autoID = "FixedAssetID";
+                                    var no = CreateNo.GetCreateNo(db, autoID);
+                                    assetReview.ASSET_ID = no;
                                     assetReview.GROUP_ID = fixedAssetsOrder.PurchaseGoods;
                                     assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;//item.VehicleModel;
                                     assetReview.ENGINE_NUMBER = item.EngineNumber;
@@ -651,14 +633,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     db.Deleteable<Business_AssetReview>().Where(c => c.FIXED_ASSETS_ORDERID == vguid).ExecuteCommand();
                                 }
                                 var orderNumberLeftAsset = "CZ" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                                //查出当前日期数据库中最大的订单号
-                                var currentDayAssetReviewList = db.Queryable<Business_AssetReview>()
-                                    .Where(c => c.ASSET_ID.StartsWith(orderNumberLeftAsset)).Select(c => new { c.ASSET_ID }).ToList();
-                                var maxOrderNumRightAsset = 0;
-                                if (currentDayAssetReviewList.Any())
-                                {
-                                    maxOrderNumRightAsset = currentDayAssetReviewList.OrderByDescending(c => c.ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt()).First().ASSET_ID.Replace(orderNumberLeftAsset, "").TryToInt();
-                                }
                                 //获取订单部门
                                 var departmentList = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
                                                                                         FROM Business_SevenSection
@@ -686,17 +660,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 departmentStr = departmentStr.Substring(0, departmentStr.Length - 1);
                                 foreach (var item in list)
                                 {
-                                    maxOrderNumRightAsset++;
                                     var assetReview = new Business_AssetReview();
                                     assetReview.VGUID = Guid.NewGuid();
-                                    assetReview.ASSET_ID = orderNumberLeftAsset + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
+                                    var autoID = "FixedAssetID";
+                                    var no = CreateNo.GetCreateNo(db, autoID);
+                                    assetReview.ASSET_ID = no;
                                     assetReview.GROUP_ID = fixedAssetsOrder.PurchaseGoods;
                                     assetReview.PLATE_NUMBER = item.PlateNumber;
                                     assetReview.CHASSIS_NUMBER = item.EquipmentNumber;
                                     assetReview.VEHICLE_SHORTNAME = "OBD";
                                     assetReview.DESCRIPTION = item.PlateNumber;
                                     assetReview.LISENSING_DATE = item.LisensingDate;
-                                    assetReview.TAG_NUMBER = orderNumberLeftAsset.Replace("CZ","JK") + maxOrderNumRightAsset.ToString().PadLeft(4, '0');
+                                    assetReview.TAG_NUMBER = assetReview.ASSET_ID.Replace("CZ","JK");
                                     //assetReview.START_VEHICLE_DATE = fixedAssetsOrderInfo.LISENSING_DATE;
                                     //assetReview.PURCHASE_DATE = fixedAssetsOrderInfo.CreateDate;
                                     assetReview.QUANTITY = 1;

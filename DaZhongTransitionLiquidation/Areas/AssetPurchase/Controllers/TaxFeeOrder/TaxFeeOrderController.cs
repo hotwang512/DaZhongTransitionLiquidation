@@ -64,12 +64,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                 }
                 else
                 {
-                    //删除主表信息
-                    saveChanges = db.Deleteable<Business_TaxFeeOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
-                    //删除订单数量关联表信息
-                    db.Deleteable<Business_PurchaseOrderNum>(x => vguids.Contains(x.FaxOrderVguid)).ExecuteCommand();
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    db.Updateable<Business_TaxFeeOrder>()
+                        .UpdateColumns(it => new Business_TaxFeeOrder() { SubmitStatus = 4 })
+                        .Where(it => vguids.Contains(it.VGUID)).ExecuteCommand();
+                    resultModel.IsSuccess = true;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+
                 }
             });
             return Json(resultModel);

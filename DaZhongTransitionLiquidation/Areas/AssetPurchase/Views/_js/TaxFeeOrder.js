@@ -37,7 +37,7 @@ var $page = function () {
             debugger;
             var selection = [];
             var grid = $("#jqxTable");
-            var checedBoxs = grid.find("#tablejqxTable .jqx_datatable_checkbox:checked");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
                 if (th.is(":checked")) {
@@ -150,10 +150,10 @@ var $page = function () {
             success: function (msg) {
                 switch (msg.Status) {
                     case "0":
-                        jqxNotification("提交失败！", null, "error");
+                        jqxNotification("发起失败！", null, "error");
                         break;
                     case "1":
-                        jqxNotification("提交成功！", null, "success");
+                        jqxNotification("发起成功！", null, "success");
                         $("#jqxTable").jqxDataTable('updateBoundData');
                         break;
                 }
@@ -280,6 +280,8 @@ var $page = function () {
             return '<span style="margin: 4px; margin-top:8px;">已支付</span>';
         } else if (value == 3) {
             return '<span style="margin: 4px; margin-top:8px;">支付失败-' + rowData.BankStatus + '</span>';
+        } else if (value == 4) {
+            return '<span style="margin: 4px; margin-top:8px;">作废</span>';
         }
     }
     function rendererFunc() {

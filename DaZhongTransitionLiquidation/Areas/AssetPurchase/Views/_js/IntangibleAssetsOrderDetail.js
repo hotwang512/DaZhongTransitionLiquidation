@@ -194,7 +194,7 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("发起成功！", null, "success");
-                        $("#btnPrint").show();
+                        $("#btnPrint").parent().show();
                         $("#btnSubmit").parent().hide();
                         $("#btnObsolete").parent().hide();
                         $("#btnSave").parent().hide();
@@ -295,22 +295,22 @@ var $page = function () {
             }
         );
         //提交
-        $("#btnSubmit").on("click",
-            function () {
-                $.post("/AssetPurchase/IntangibleAssetsOrderDetail/SubmitIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-                    switch (msg.Status) {
-                    case "0":
-                        jqxNotification("提交失败！", null, "error");
-                        break;
-                    case "1":
-                        jqxNotification("提交成功！", null, "success");
-                        history.go(-1);
-                        window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
-                        break;
-                    }
-                });
-            }
-        );
+        //$("#btnSubmit").on("click",
+        //    function () {
+        //        $.post("/AssetPurchase/IntangibleAssetsOrderDetail/SubmitIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+        //            switch (msg.Status) {
+        //            case "0":
+        //                jqxNotification("提交失败！", null, "error");
+        //                break;
+        //            case "1":
+        //                jqxNotification("提交成功！", null, "success");
+        //                history.go(-1);
+        //                window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+        //                break;
+        //            }
+        //        });
+        //    }
+        //);
         //计算金额
         $("#FirstPayment").on("blur",
             function () {

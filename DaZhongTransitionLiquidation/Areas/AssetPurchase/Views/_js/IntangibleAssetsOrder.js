@@ -153,6 +153,7 @@ var $page = function () {
                     { name: 'PaymentInformation', type: 'string' },
                     { name: 'SumPayment', type: 'float' },
                     { name: 'FirstPayment', type: 'float' },
+                    { name: 'InterimPayment', type: 'float' },
                     { name: 'TailPayment', type: 'float' },
                     { name: 'ContractName', type: 'string' },
                     { name: 'ContractFilePath', type: 'string' },
@@ -191,13 +192,14 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 40,
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '无形资产采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: "", datafield: "checkbox", hidden:true,width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: '采购状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' ,cellsRenderer: detailFunc},
                     { text: '订单编号', datafield: 'OSNO', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同总价', datafield: 'SumPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同首付款', datafield: 'FirstPayment', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '合同中期款', datafield: 'InterimPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '合同尾款', datafield: 'TailPayment', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款方式', datafield: 'PayType', width: 150, align: 'center', cellsAlign: 'center' },
@@ -220,7 +222,16 @@ var $page = function () {
             window.location.href = "/AssetPurchase/IntangibleAssetsOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
         });
     }
-
+    function detailFunc(row, column, value, rowData) {
+        var container = "";
+        rowData.PaymentVoucherVguid = rowData.PaymentVoucherVguid == null ? "" : rowData.PaymentVoucherVguid;
+        if (selector.$EditPermission().val() == "1") {
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.PaymentVoucherVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.OrderNumber + "</a>";
+        } else {
+            container = "<span>" + rowData.OrderNumber + "</span>";
+        }
+        return container;
+    }
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
@@ -241,6 +252,8 @@ var $page = function () {
             return '<span style="margin: 4px; margin-top:8px;">尾款支付中</span>';
         } else if (value == 7) {
             return '<span style="margin: 4px; margin-top:8px;">支付失败-' + rowData.BankStatus + '</span>';
+        } else if (value == 8) {
+            return '<span style="margin: 4px; margin-top:8px;">作废</span>';
         }
     }
     function rendererFunc() {
@@ -269,6 +282,11 @@ var $page = function () {
     }
 };
 
+function link(VGUID, PaymentVoucherVguid) {
+    debugger;
+    PaymentVoucherVguid = PaymentVoucherVguid == null ? "" : PaymentVoucherVguid;
+    window.location.href = "/AssetPurchase/IntangibleAssetsOrderDetail/Index?VGUID=" + VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
+}
 $(function () {
     var page = new $page();
     page.init();

@@ -42,7 +42,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                 jsonResult.Rows = db.Queryable<Business_TaxFeeOrder>()
                     .WhereIF(searchParams.VehicleModelCode != null, i => i.VehicleModelCode == searchParams.VehicleModelCode)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
-                    .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
+                    .WhereIF(searchParams.OrderNumber != null, i => i.OrderNumber.Contains(searchParams.OrderNumber))
                     .WhereIF(searchParams.PayItemCode != "-1", i => i.PayItemCode == searchParams.PayItemCode)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

@@ -7,9 +7,9 @@ var baseUrl = "ws://127.0.0.1:12345";
 var socket;
 var $page = function () {
     this.init = function () {
-        initSelect();
-        initSelectPurchaseGoods();
-        initPaymentInformationComboBox();
+        //initSelect();
+        //initSelectPurchaseGoods();
+        initPaymentInformationComboBox(true);
         initPayCompanyDropdown();
         initSelectPurchaseDepartment();
         addEvent();
@@ -24,13 +24,18 @@ var $page = function () {
             $("#VGUID").val(guid);
             if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
                 debugger;
+                $("#btnSave").parent().hide();
                 $("#btnPrint").parent().show();
                 $("#tdPrint").show();
+                $("#btnObsolete").parent().hide();
+                $("#btnSubmit").parent().hide();
             } else {
                 $("#btnPrint").parent().hide();
                 $("#tdPrint").hide();
+                $("#btnObsolete").parent().show();
+                $("#btnSubmit").parent().show();
             }
-            $("#btnSave").parent().hide();
+            //$("#btnSave").parent().hide();
             getIntangibleAssetsOrderDetail();
             getAttachment();
         } else {
@@ -50,12 +55,48 @@ var $page = function () {
                     validateError++;
                 }
                 if (!Validate($("#AssetDescription"))) {
-                    validateError++;
+                    validateError++; 
                 }
                 if (!Validate($("#OrderQuantity"))) {
                     validateError++;
                 }
+                if (!Validate($("#PurchaseGoods"))) {
+                    validateError++;
+                }
+                if (!Validate($("#SumPayment"))) {
+                    validateError++;
+                }
+                if (!Validate($("#FirstPayment"))) {
+                    validateError++;
+                }
+                if (!Validate($("#InterimPayment"))) {
+                    validateError++;
+                }
                 if (!Validate($("#PurchasePrices"))) {
+                    validateError++;
+                }
+                if ($("#PurchaseDepartment").val() == "") {
+                    $("#PurchaseDepartment").addClass("input_Validate");
+                    $("#PurchaseDepartment").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
+                } else {
+                    $("#PurchaseDepartment").removeClass("input_Validate");
+                    $("#PurchaseDepartment").next(".msg").remove();
+                }
+                if ($("#PayCompanyDropdown").val() == "") {
+                    $("#PayCompanyDropdown").addClass("input_Validate");
+                    $("#PayCompanyDropdown").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
+                } else {
+                    $("#PayCompanyDropdown").removeClass("input_Validate");
+                    $("#PayCompanyDropdown").next(".msg").remove();
+                }
+                if ($("#PaymentInformation").val() == "") {
+                    $("#PaymentInformation").addClass("input_Validate");
+                    $("#PaymentInformation").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
+                } else {
+                    $("#PaymentInformation").removeClass("input_Validate");
+                    $("#PaymentInformation").next(".msg").remove();
+                }
+                if (!Validate($("#PurchaseGoods"))) {
                     validateError++;
                 }
                 //尾款不能为0
@@ -63,17 +104,12 @@ var $page = function () {
                     validateError++;
                 }
                 if (validateError <= 0) {
-                    var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-                    var DepartmentModelList = [];
-                    for (var i = 0; i < checkedItems.length; i++) {
-                        DepartmentModelList.push(checkedItems[i].value);
-                    };
                     $.ajax({
                         url: "/AssetPurchase/IntangibleAssetsOrderDetail/SaveIntangibleAssetsOrder",
                         data: {
                             "VGUID": $("#VGUID").val(),
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
-                            "PurchaseDepartmentIDs": DepartmentModelList.join(","),
+                            "PurchaseDepartmentIDs": $("#PurchaseDepartment").val(),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "AssetDescription": $("#AssetDescription").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
@@ -118,6 +154,61 @@ var $page = function () {
         //    function () {
         //        initTable();
         //    });
+        $("#btnObsolete").on("click",
+            function () {
+                $.ajax({
+                    url: "/AssetPurchase/IntangibleAssetsOrderDetail/ObsoleteIntangibleAssetsOrder",
+                    data: {
+                        "VGUID": $("#VGUID").val()
+                    },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("作废失败！", null, "error");
+                            break;
+                        case "2":
+                            jqxNotification("此状态下不允许作废！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("成功作废！", null, "success");
+                            history.go(-1);
+                            window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        }
+                    }
+                });
+            });
+        $("#btnSubmit").on("click", function () {
+            layer.load();
+            debugger;
+            $.ajax({
+                url: "/AssetPurchase/IntangibleAssetsOrderDetail/SubmitIntangibleAssetsOrder",
+                data: { "vguid": $("#VGUID").val() },
+                type: "post",
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("发起失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("发起成功！", null, "success");
+                        $("#btnPrint").show();
+                        $("#btnSubmit").parent().hide();
+                        $("#btnObsolete").parent().hide();
+                        $("#btnSave").parent().hide();
+                        document.getElementById('ifrPrint').src = msg.ResultInfo;
+                        $("#btnPrint").trigger("click");
+                        //$("#CreditDialog").modal("show");
+                        break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo, null, "error");
+                        break;
+                    }
+                }
+            });
+        });
         $("#UploadContractFile").on("click",
             function () {
                 $("#ContractFileInput").click();
@@ -266,13 +357,15 @@ var $page = function () {
                 });
             }
         });
-        $("#PurchaseDepartment").on('checkChange', function (event) {
+        $("#PurchaseDepartment").on('select', function (event) {
+            debugger;
             if (event.args) {
-                var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-                var DepartmentModelList = [];
-                for (var i = 0; i < checkedItems.length; i++) {
-                    DepartmentModelList.push(checkedItems[i].value);
-                };
+                $("#PurchaseDepartment").removeClass("input_Validate");
+                $("#PurchaseDepartment").next(".msg").remove();
+                var args = event.args;
+                var item = args.item;
+                var DepartmentModelList = [];   
+                DepartmentModelList.push(item.value);
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
@@ -287,9 +380,11 @@ var $page = function () {
             });
         $("#PurchaseGoods").on("change",
              function () {
-                 initPaymentInformationComboBox();
+                 initPaymentInformationComboBox(false);
                  $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
                  $("#PurchaseGoods").attr("disabled", true);
+                 $("#PayCompanyDropdown").removeClass("input_Validate");
+                 $("#PayCompanyDropdown").next(".msg").remove();
                  getCompanyBankInfoDropdownByCode();
              });
     }; //addEvent end
@@ -326,15 +421,12 @@ var $page = function () {
     function getIntangibleAssetsOrderDetail() {
         $.post("/AssetPurchase/IntangibleAssetsOrderDetail/GetIntangibleAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             debugger;
-            var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
-            for (var i = 0; i < PurchaseDepartment.length; i++) {
-                var item = $("#PurchaseDepartment").jqxDropDownList('getItemByValue', PurchaseDepartment[i]);
-                $("#PurchaseDepartment").jqxDropDownList('checkItem', item);
-            }
+            var PurchaseDepartment = msg.PurchaseDepartmentIDs;
+            $("#PurchaseDepartment").val(PurchaseDepartment);
             $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             $("#PurchaseGoods").attr("disabled", true);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
-            initPaymentInformationComboBox();
+            initPaymentInformationComboBox(false);
             getCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
@@ -488,7 +580,7 @@ function initSelectPurchaseDepartment() {
         async: false
     };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0, placeHolder: "请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
+    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: false, selectedIndex: -1, placeHolder: "请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
     $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
 }
 
@@ -594,31 +686,54 @@ function initPayCompanyDropdown() {
         }
     });
 }
-function initPaymentInformationComboBox() {
+function initPaymentInformationComboBox(isInit) {
     //付款单位及相关账户信息
-    $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
-        data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
-        type: "POST",
-        dataType: "json",
-        async: false,
-        success: function (data) {
-            debugger;
-            var source = new Array();
-            for (var i = 0; i < data.Rows.length; i++) {
-                var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
-                    + "<b>户名</b><div>" + data.Rows[i].BankAccountName + "</div><div style='margin-top: 5px;'><b>账号</b><div>" + data.Rows[i].BankAccount + "</div></div></div>";
-                source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
-            }
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            $("#PaymentInformation").jqxComboBox({
-                source: dataAdapter, selectedIndex: 0,
-                displayMember: "title", valueMember: "value",
-                width: 198, height: 33
-            });
+    if (!isInit) {
+        $.ajax({
+            url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
+            data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                $("#PaymentInformation").removeClass("input_Validate");
+                $("#PaymentInformation").next(".msg").remove();
+                debugger;
+                var source = new Array();
+                for (var i = 0; i < data.Rows.length; i++) {
+                    var html =
+                        "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>" +
+                            "<b>户名</b><div>" +
+                            data.Rows[i].BankAccountName +
+                            "</div><div style='margin-top: 5px;'><b>账号</b><div>" +
+                            data.Rows[i].BankAccount +
+                            "</div></div></div>";
+                    source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
+                }
+                var dataAdapter = new $.jqx.dataAdapter(source);
+                $("#PaymentInformation").jqxComboBox({
+                    source: dataAdapter,
+                    selectedIndex: 0,
+                    displayMember: "title",
+                    valueMember: "value",
+                    searchMode: 'contains',
+                    width: 198,
+                    height: 33
+                });
 
-        }
-    });
+            }
+        });
+    } else {
+        $("#PaymentInformation").jqxComboBox({
+            source: null,
+            selectedIndex: 0,
+            displayMember: "title",
+            valueMember: "value",
+            searchMode: 'contains',
+            width: 198,
+            height: 33
+        });
+    }
 }
 function getAttachment() {
     $.ajax({

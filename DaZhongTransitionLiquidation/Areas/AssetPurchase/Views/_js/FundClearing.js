@@ -113,6 +113,15 @@ var $page = function () {
                 });
             }
         });
+        $("#jqxTable").on('rowExpand',
+            function (event) {
+                debugger;
+                // event args.
+                var args = event.args;
+                // row data.
+                var row = args.row;
+                $("#OrderQuantity").val(row.OrderQuantity);
+            });
     }; //addEvent end
     function initTable() {
         var source =
@@ -162,23 +171,40 @@ var $page = function () {
                 data: { "Vguid": id },
                 url: "/AssetPurchase/FundClearing/GetAssignCompany",
                 updateRow: function (rowID, rowData, commit) {
-                    rowData.ContractAmount = rowData.PurchasePrices * rowData.AssetNum;
-                    $.ajax({
-                        url: "/AssetPurchase/FundClearing/UpdateAssignCompany",
-                        data: { Vguid: rowID, AssetNum: rowData.AssetNum },
-                        traditional: true,
-                        type: "post",
-                        success: function (msg) {
-                            switch (msg.Status) {
-                            case "0":
-                                break;
-                            case "1":
-                                commit(true);
-                                break;
-                            }
+                    debugger;
+                    var count = 0;
+                    var orderQuantity = parseInt($("#OrderQuantity").val());
+                    var rows = $(nestedDataTable).jqxDataTable('getView');
+                    for (var i = 0; i < rows.length; i++) {
+                        if (rowData.VGUID == rows[i].VGUID) {
+                            count += parseInt(rowData.AssetNum);
+                        } else {
+                            count += parseInt(rows[i].AssetNum);
                         }
-                    });
-                },
+                    }
+                    rowData.ContractAmount = rowData.PurchasePrices * rowData.AssetNum;
+                    if (orderQuantity >= count) {
+                        rowData.ContractAmount = rowData.PurchasePrices * rowData.AssetNum;
+                        $.ajax({
+                            url: "/AssetPurchase/FundClearing/UpdateAssignCompany",
+                            data: { Vguid: rowID, AssetNum: rowData.AssetNum },
+                            traditional: true,
+                            type: "post",
+                            success: function (msg) {
+                                switch (msg.Status) {
+                                case "0":
+                                    break;
+                                case "1":
+                                    commit(true);
+                                    break;
+                                }
+                            }
+                        });
+                    } else {
+                        jqxNotification("分配数量不能大于订单总数量！", null, "error");
+                        return;
+                    }
+                }
             }
             if (nestedDataTable != null) {
                 var nestedDataTableAdapter = new $.jqx.dataAdapter(ordersSource);
@@ -187,7 +213,7 @@ var $page = function () {
                     editable: rowinfo.row.SubmitStatus == 1 ? false : true,
                     altRows: true,
                     editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
-                    width: 770, height: 180,
+                    width: '100%', height: 180,
                     pageable: false,
                     showToolbar: true,
                     renderToolbar: function (toolBar) {
@@ -266,7 +292,7 @@ var $page = function () {
                 rowDetails: true,
                 initRowDetails: initRowDetails,
                 ready: function () {
-                    selector.$grid().jqxDataTable('showDetails', 0);
+                    //elector.$grid().jqxDataTable('showDetails', 0);
                 },
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
@@ -284,6 +310,7 @@ var $page = function () {
                 ]
             });
     }
+
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }

@@ -21,7 +21,6 @@ var $page = function () {
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
-
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#PurchaseGoods").val("");
@@ -75,11 +74,13 @@ var $page = function () {
             if (selection.length < 1) {
                 jqxNotification("请选择数据！", null, "error");
             } else {
+                layer.load();
                 $.ajax({
                     url: "/AssetPurchase/TaxFeeOrder/CompareTaxFeeOrder",
                     data: { vguids: selection },
                     type: "post",
                     success: function (msg) {
+                        layer.closeAll('loading');
                         switch (msg.Status) {
                         case "0":
                             jqxNotification(msg.ResultInfo, null, "error");
@@ -205,7 +206,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "VehicleModelCode": $("#VehicleModel").val(), "SubmitStatus": $("#SubmitStatus").val(), "OSNO": $("#OSNO").val(), "PayItemCode": $("#PayItem").val() },
+                data: { "VehicleModelCode": $("#VehicleModel").val(), "SubmitStatus": $("#SubmitStatus").val(), "OrderNumber": $("#OrderNumber").val(), "PayItemCode": $("#PayItem").val() },
                 url: "/AssetPurchase/TaxFeeOrder/GetOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -227,8 +228,8 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '支付状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
-                    { text: '车辆附属采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '采购状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '订单编号', datafield: 'OSNO', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款项目', datafield: 'PayItem', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '车型', datafield: 'VehicleModel', width: 150, align: 'center', cellsAlign: 'center' },
@@ -257,7 +258,16 @@ var $page = function () {
             window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
         });
     }
-
+    function detailFunc(row, column, value, rowData) {
+        var container = "";
+        rowData.PaymentVoucherVguid = rowData.PaymentVoucherVguid == null ? "" : rowData.PaymentVoucherVguid;
+        if (selector.$EditPermission().val() == "1") {
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.PaymentVoucherVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.OrderNumber + "</a>";
+        } else {
+            container = "<span>" + rowData.OrderNumber + "</span>";
+        }
+        return container;
+    }
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
@@ -308,6 +318,11 @@ function initSelectPayItem() {
             $("#PayItem").prepend("<option value=\"-1\" selected='true'>请选择</>");
         }
     });
+}
+function link(VGUID, PaymentVoucherVguid) {
+    debugger;
+    PaymentVoucherVguid = PaymentVoucherVguid == null ? "" : PaymentVoucherVguid;
+    window.location.href = "/AssetPurchase/TaxFeeOrderDetail/Index?VGUID=" + VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
 }
 $(function () {
     var page = new $page();

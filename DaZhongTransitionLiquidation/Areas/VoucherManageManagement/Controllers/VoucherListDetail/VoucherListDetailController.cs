@@ -18,6 +18,7 @@ using Aspose.Cells;
 using System.Collections;
 using System.Reflection;
 using Aspose.Pdf;
+using DaZhongTransitionLiquidation.Controllers;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -121,8 +122,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
-                        voucherList.BatchName = batchName;//批名自动生成(凭证类型+日期)
-                        voucherList.VoucherNo = "";//手工凭证,凭证号在审核后生成
+                        var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        if (voucherType == "现金类")
+                        {
+                            bank = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        }
+                        var no = CreateNo.GetCreateNo(db, bank);
+                        voucherList.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;
+                        voucherList.BatchName = voucherList.VoucherNo;
                         voucherList.VGUID = guid;
                         voucherList.Automatic = "0";//手动
                         db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
@@ -147,7 +154,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     
                     if (voucher.Detail != null)
                     {
-                        var i = 0;
                         foreach (var item in voucher.Detail)
                         {
                             Business_VoucherDetail BVDetail = new Business_VoucherDetail();

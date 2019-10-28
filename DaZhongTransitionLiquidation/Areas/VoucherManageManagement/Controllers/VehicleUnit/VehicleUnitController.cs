@@ -27,19 +27,27 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 //int pageCount = 0;
                 //para.pagenum = para.pagenum + 1;
+                //b.OPERATING_STATE='在运'
                 var yearMonth = "";
                 if (searchParams.YearMonth != null)
                 {
                     yearMonth = searchParams.YearMonth.Replace("-", "");
                 }
-                response = db.SqlQueryable<Business_VehicleUnitList>(@"select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,b.MODEL_MAJOR, b.MODEL_MINOR,CAST(CAST(a.MODEL_DAYS AS decimal(18,2)/30) as int) as DAYS
-                            ,b.MANAGEMENT_COMPANY,b.BELONGTO_COMPANY,b.DESCRIPTION as CarType from Business_VehicleList as a left join Business_AssetMaintenanceInfo
-                            as b on a.PLATE_NUMBER = b.PLATE_NUMBER where  b.GROUP_ID='出租车' ")
+                response = db.SqlQueryable<Business_VehicleUnitList>(@"select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,m.BusinessName1 as MODEL_MAJOR, 
+                            m.BusinessName2 as MODEL_MINOR,CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                            ,b.MANAGEMENT_COMPANY,b.BELONGTO_COMPANY,b.DESCRIPTION as CarType from Business_VehicleList as a 
+                           left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 
+                           left join (select a.BusinessName as BusinessName1,b.BusinessName as BusinessName2,c.BusinessName as BusinessName3 from Business_ManageModel as a
+							            left join Business_ManageModel as b on a.VGUID = b.ParentVGUID
+							            left join Business_ManageModel as c on b.VGUID = c.ParentVGUID
+							            where c.BusinessName is not null
+							            group by a.BusinessName,b.BusinessName,c.BusinessName) as m on a.MODEL_MINOR = m.BusinessName3
+                            where b.GROUP_ID='出租车' ")
                 .WhereIF(searchParams.YearMonth != null, i => i.YearMonth == yearMonth)
                 .WhereIF(searchParams.PLATE_NUMBER != null, i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
                 .WhereIF(searchParams.MODEL_MINOR != null, i => i.MODEL_MINOR.Contains(searchParams.MODEL_MINOR))
                 //.WhereIF(searchParams.MODEL_DAYS != null, i => i.MODEL_DAYS == searchParams.MODEL_DAYS)
-                .OrderBy("BELONGTO_COMPANY asc,MODEL_MINOR asc").ToList();
+                .OrderBy("MODEL_MAJOR asc,MODEL_MINOR asc,CarType asc").ToList();
                 //jsonResult.TotalRows = pageCount;
             });
             return Json(

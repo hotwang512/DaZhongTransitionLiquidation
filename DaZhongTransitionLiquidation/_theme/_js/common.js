@@ -55,6 +55,81 @@ function showLoading() {
 
 }
 
+//html导出Excel
+var tableToExcel = (function () {
+    var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' +
+    ' <style type="text/css">' +
+    '.excelTable  {' +
+    'border-collapse:collapse;' +
+    ' border:thin solid #999; ' +
+    '}' +
+    '   .excelTable  th {' +
+    '   border: thin solid #999;' +
+    '  padding:20px;' +
+    '  text-align: center;' +
+    '  border-top: thin solid #999;' +
+    ' ' +
+    '  }' +
+    ' .excelTable  td{' +
+    ' border:thin solid #999;' +
+    ' padding:2px 5px;' +
+    ' text-align: center;' +
+    ' }</style>' + '</head><body><table border="1">{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+    return function (table, name) {
+        if (!table.nodeType) table = $("." + table)[0]
+        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML };
+        var downloadLink = document.createElement("a");
+        downloadLink.href = uri + base64(format(template, ctx));
+        downloadLink.download = name + ".xls";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+})();
+//月份加减
+function addMonth(date, num) {
+    num = parseInt(num);
+    var sDate = dateToDate(date);
+
+    var sYear = sDate.getFullYear();
+    var sMonth = sDate.getMonth() + 1;
+    var sDay = sDate.getDate();
+
+    var eYear = sYear;
+    var eMonth = sMonth + num;
+    var eDay = sDay;
+    while (eMonth > 12) {
+        eYear++;
+        eMonth -= 12;
+    }
+
+    var eDate = new Date(eYear, eMonth - 1, eDay);
+
+    while (eDate.getMonth() != eMonth - 1) {
+        eDay--;
+        eDate = new Date(eYear, eMonth - 1, eDay);
+    }
+
+    return eDate;
+};
+function dateToDate(date) {
+    var sDate = new Date();
+    if (typeof date == 'object'
+      && typeof new Date().getMonth == "function"
+      ) {
+        sDate = date;
+    }
+    else if (typeof date == "string") {
+        var arr = date.split('-')
+        if (arr.length == 3) {
+            sDate = new Date(arr[0] + '-' + arr[1] + '-' + arr[2]);
+        }
+    }
+    return sDate;
+};
 //关闭加载框
 function closeLoading() {
     $("#loadingDialog").modal('hide');

@@ -4,7 +4,7 @@ var selector = {
     $btnAdd: function () { return $("#btnAdd") },
     $btnDelete: function () { return $("#btnDelete") },
     $btnSearch: function () { return $("#btnSearch") },
-    $btnReset: function () { return $("#btnReset") },
+    $btnExport: function () { return $("#btnExport") },
     $txtDatedTime: function () { return $("#txtDatedTime") },
 }; //selector end
 
@@ -20,9 +20,8 @@ var $page = function () {
     function addEvent() {
         //加载列表数据
         var myDate = new Date();
-        var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
-        var date = myDate.getFullYear() + "-" + month;
-        $("#YearMonth").val(date);
+        var myMonth = $.convert.toDate(addMonth(myDate, - 1), "yyyy-MM");
+        $("#YearMonth").val(myMonth);
         var month = $("#YearMonth").val();
         var type = "S";
         initTable(month, type);
@@ -34,10 +33,11 @@ var $page = function () {
         });
         //计算
         $("#btnCount").on("click", function () {
+            var month3 = $("#YearMonth").val();
             $.ajax({
                 url: "/VoucherManageManagement/VehicleCount/SelectVehicleData",
-                data: { YearMonth: month },
-                //async: false,
+                data: { YearMonth: month3 },
+                async: false,
                 type: "post",
                 success: function (mps) {
                     if (mps.length > 0) {
@@ -48,8 +48,9 @@ var $page = function () {
                 }
             });
         });
-        //重置按钮事件
-        selector.$btnReset().on("click", function () {
+        //html导出
+        selector.$btnExport().on("click", function () {
+            tableToExcel("pvtTable", "结算单位金额计算");//class名,excel名
         });
     }; //addEvent end 
     function count() {
@@ -59,13 +60,14 @@ var $page = function () {
         initTable(month2, type2);
     }
     function initTable(month, type) {
+        layer.load();
         $.ajax({
             url: "/VoucherManageManagement/VehicleCount/GetVehicleData",
             data: { YearMonth: month, Type: type },
-            async: false,
+            async: true,
             type: "post",
             success: function (mps) {
-                //layer.closeAll('loading');
+                layer.closeAll('loading');
                 if (mps.length > 0) {
                     var utils = $.pivotUtilities;
                     var heatmap = utils.renderers["Heatmap"];
@@ -118,6 +120,7 @@ var $page = function () {
                     $(".pvtAxisLabel").eq(3).css("text-align", "center")
                     $(".pvtAxisLabel").eq(4).text("营收子类");
                     $(".pvtAxisLabel").eq(4).css("text-align", "center")
+                    $(".pvtRowTotalLabel").css("text-align", "center")
                     $("#jqxTable").show();
                 } else {
                     if (type == "S") {

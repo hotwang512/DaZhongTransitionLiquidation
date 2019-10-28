@@ -172,7 +172,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var nowDate = DateTime.Now.ToLongDateString();
                         if (nowDate == beginTime)
                         {
-                            VehicleBusinessController.SyncVehicleBusiness(_db, resultModel, "admin");
+                            //月初拉取上月车辆数据
+                            var month = DateTime.Now.AddMonths(-1).Month.TryToString();
+                            month = month.Length > 1 ? month : "0" + month;
+                            var yearMonth = DateTime.Now.AddMonths(-1).Year.TryToString() + month;
+                            VehicleBusinessController.SyncVehicleBusiness(_db, resultModel, "admin", yearMonth);
                         }
                     }
                 }
@@ -205,7 +209,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-7)).ToList();
                         //voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate == "2019-10-01".TryToDate()).ToList();
                         var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-7,GETDATE()))").OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
-                        var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1").ToList();
+                        var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
                         var bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();

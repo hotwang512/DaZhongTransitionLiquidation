@@ -163,6 +163,7 @@ var $page = function () {
                         $(".pvtAxisLabel").eq(3).css("text-align", "center")
                         $(".pvtAxisLabel").eq(4).text("营收子类");
                         $(".pvtAxisLabel").eq(4).css("text-align", "center")
+                        $(".pvtRowTotalLabel").css("text-align", "center")
                         $("#SettlementImportTable").show();
                     }
                 }

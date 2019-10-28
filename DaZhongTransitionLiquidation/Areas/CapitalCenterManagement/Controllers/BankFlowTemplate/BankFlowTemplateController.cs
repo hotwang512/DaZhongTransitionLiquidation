@@ -26,6 +26,7 @@ using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
+using DaZhongTransitionLiquidation.Controllers;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
 {
@@ -438,10 +439,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.AccountModeName = item.AccountModeName;
                 voucher.CompanyCode = item.CompanyCode;
                 voucher.CompanyName = item.PaymentUnit.ToDBC();
-                voucher.BatchName = "银行类" + item.TransactionDate.GetValueOrDefault().ToString("yyyyMMdd");
                 //var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
                 var bank = "Bank" + item.AccountModeCode + item.CompanyCode;
-                voucher.VoucherNo = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '"+ bank + "', @output output  select @output").FirstOrDefault();
+                //100201银行类2019090001
+                var no = CreateNo.GetCreateNo(db, bank);
+                voucher.VoucherNo = item.AccountModeCode + item.CompanyCode + "银行类" + no;
+                voucher.BatchName = voucher.VoucherNo;
                 voucherData = voucherData.Where(i => i.AccountModeName == item.AccountModeName && i.CompanyCode == item.CompanyCode).ToList();
                 voucher.DocumentMaker = "";
                 voucher.Status = "1";

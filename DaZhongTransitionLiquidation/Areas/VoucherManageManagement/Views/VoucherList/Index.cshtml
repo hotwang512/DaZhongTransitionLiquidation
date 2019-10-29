@@ -23,6 +23,12 @@
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnPrint" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+                </td>
+            }
             @if (currentModuleRolePermission.Deletes == 1)
             {
                 <td style="width: 95px;display:none;">
@@ -35,11 +41,14 @@
                     <button id="btnUp" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
                 </td>
             }
-
+            
         </tr>
     </table>
     <table style="margin-top: 10px;display:none;" id="buttonList2">
         <tr style="height: 50px;">
+            <td style="width: 95px;">
+                <button id="btnPrint2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+            </td>
             <td style="width: 95px;">
                 <button id="AddSubject_OKButton" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>
                 <button id="btnCheckStatus" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">校验</span></button>

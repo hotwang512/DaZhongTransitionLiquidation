@@ -33,7 +33,12 @@ var $page = function () {
             //$("#AddSubject_OKButton").show();
         }
         if (status == "3") {
+            $("#buttonList2").show();
             $("#Oracle").show();
+            $("#OracleCheck").hide();
+            $("#btnCheckStatus").hide();
+            $("#btnCheck").hide();
+            $("#AddSubject_OKButton").hide();
         }
         if (status == "4") {
             $("#buttonList2").show();
@@ -70,7 +75,13 @@ var $page = function () {
             //$("#TransactionDateEnd").val("");
             //$("#PaymentUnit").val("");
         });
-
+        //打印
+        $("#btnPrint").on("click", function () {
+            print();
+        });
+        $("#btnPrint2").on("click", function () {
+            print();
+        });
         //新增
         $("#btnAdd").on("click", function () {
             if (type == "现金类") {
@@ -167,7 +178,40 @@ var $page = function () {
             checkOracleData();
         });
     }; //addEvent end
-
+    //打印
+    function print() {
+        var selection = [];
+        var grid = $("#jqxTable");
+        if (tableIndex == 1) {
+            grid = $("#jqxTable1");
+        }
+        var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+        checedBoxs.each(function () {
+            var th = $(this);
+            if (th.is(":checked")) {
+                var index = th.attr("index");
+                var data = grid.jqxDataTable('getRows')[index];
+                selection.push(data.VGUID);
+            }
+        });
+        if (selection.length < 1) {
+            jqxNotification("请选择您要打印的数据！", null, "error");
+        } else {
+            layer.load();
+            $.ajax({
+                url: "/VoucherManageManagement/VoucherListDetail/PrintVoucherList",
+                data: { vguids: selection },
+                //async: false,
+                type: "post",
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    if (msg.ResultInfo != null) {
+                        window.open(msg.ResultInfo);
+                    }
+                }
+            });
+        }
+    }
     //删除
     function dele(selection) {
         $.ajax({

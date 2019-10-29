@@ -506,16 +506,9 @@ var $page = function () {
                 type: "post",
                 success: function (msg) {
                     layer.closeAll('loading');
-                    switch (msg.Status) {
-                        case "0":                           
-                            break;
-                        case "1":
-                            window.open("/Temp/NewVoucherReport.pdf");
-                            break;
-                        case "2":
-                            window.open("/Temp/LastVoucherReport.pdf");
-                            break;
-                    }
+                    if (msg.ResultInfo != null) {
+                        window.open(msg.ResultInfo);
+                    } 
                 }
             });
         });

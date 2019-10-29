@@ -422,23 +422,14 @@
         </div>
         <div class="menue_body" id="PaymentOrder" style="display: none;">
             <table>
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "个人账号信息" && i.Reads == 1))
+                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "客户银行信息维护" && i.Reads == 1))
                 {
                     <tr class="menue_item" id="PersonInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">个人账号信息</td>
+                        <td class="menue_text">客户银行信息维护</td>
                         <td></td>
                     </tr>
                 }
-                @if (isadmin || currentUserRoleModules.Any(i => i.PageName == "公司账号信息" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="CustomerBankingInformation_PaymentOrder" pageurl="/CapitalCenterManagement/CustomerBankInfo/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">公司账号信息</td>
-                        <td></td>
-                    </tr>
-                }
-
             </table>
         </div>
 

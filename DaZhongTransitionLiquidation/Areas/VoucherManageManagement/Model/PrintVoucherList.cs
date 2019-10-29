@@ -17,5 +17,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string Auditor { get; set; }
         public string DocumentMaker { get; set; }
         public string Cashier { get; set; }
+        public string Status { get; set; }
     }
 }

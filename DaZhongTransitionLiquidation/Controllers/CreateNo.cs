@@ -8,9 +8,9 @@ namespace DaZhongTransitionLiquidation.Controllers
 {
     public class CreateNo
     {
-        public static string GetCreateNo(SqlSugarClient db, string bank)
+        public static string GetCreateNo(SqlSugarClient db, string autoID)
         {
-            var No = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + bank + "', @output output  select @output").FirstOrDefault(); ;
+            var No = db.Ado.SqlQuery<string>(@"declare @output varchar(50) exec getautono '" + autoID + "', @output output  select @output").FirstOrDefault(); ;
             return No;
         }
     }

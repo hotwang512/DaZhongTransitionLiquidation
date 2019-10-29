@@ -59,8 +59,11 @@
     .GoodsModel {
         display: none;
     }
+    .msg {
+        width:auto;
+    }
 </style>
-<table id="hideButton" style="margin-top: 10px;display:block">
+<table id="hideButton" style="margin-top: 10px;display:block" width="98%">
     <tr style="height: 50px;">
         @if (ViewBag.SubmitStatus != null && ViewBag.SubmitStatus != 1)
         {
@@ -68,14 +71,20 @@
                 <button id="btnSubmit" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
             </td>*@
         }
-        <td style="width: 95px;">
+        <td style="width: 95px;padding-right: 10px;">
             <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
         </td>
-        <td id="tdPrint" style="width: 95px;display:none">
-            <button id="btnPrint" type="button" class="buttons" style="width: 130px; margin-right: 18px;"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e; </i><span style="margin-left: 7px; float: left;">打印付款凭证</span></button>
+        <td id="tdPrint" style="width: 95px;padding-right: 10px;display:none">
+            <button id="btnPrint" type="button" class="buttons" style="width: 130px;"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e; </i><span style="margin-left: 7px; float: left;">打印付款凭证</span></button>@*margin-right: 18px;*@
         </td>
-        <td style="width: 95px;">
+        <td style="width: 95px;padding-right: 10px;">
             <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+        </td>
+        <td style="width: 95px;padding-right: 10px;display:none">
+            <button id="btnObsolete" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">作废</span></button>
+        </td>
+        <td width="100%" align="right" hidden>
+            <button id="btnSubmit" type="button" class="buttons" style="width:100px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">发起支付</span></button>
         </td>
     </tr>
 </table>
@@ -93,23 +102,23 @@
                 </td>
                 <td style="text-align: right">采购物品：</td>
                 <td style="text-align: left;">
-                    <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;"></select>
+                    <select id="PurchaseGoods" class="input_text form-control" style="width: 200px;" validatetype="required"></select>
                 </td>
                 <td style="text-align:right" class="GoodsModel">物品型号：</td>
                 <td style="text-align: left;" class="GoodsModel">
-                    <select id="GoodsModel" class="input_text form-control" style="width: 200px;">
+                    <select id="GoodsModel" class="input_text form-control" style="width: 200px;" validatetype="required">
                     </select>
                 </td>
             </tr>
             <tr style="height: 50px">
                 <td style="text-align: right;">采购数量：</td>
                 <td style="text-align: left;">
-                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput"  validatetype="required"/>
+                    <input id="OrderQuantity" type="text" value="" style="width: 200px;" class="input_text form-control SearchInput"  validatetype="required,number"/>
                 </td>
                 <td style="text-align: right;">采购单价：</td>
-                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required,number"/></td>
                 <td style="text-align: right;">采购金额：</td>
-                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required" /></td>
+                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required,number" /></td>
             </tr>
             <tr style="height: 50px">
                 <td style="text-align: right; vertical-align: top;padding-top: 15px">采购说明：</td>
@@ -189,14 +198,14 @@
             <tr style="height: 50px">
                 <td style="text-align: right;">付款方式：</td>
                 <td style="text-align: left;">
-                    <select id="PayMode" class="input_text form-control" style="width: 200px;">
+                    <select id="PayMode" class="input_text form-control" disabled style="width: 200px;">
                         <option value="转账" selected="selected">银行转账</option>
                         <option value="现金">现金支付</option>
                     </select>
                 </td>
                 <td style="text-align: right;">付款公司：</td>
                 <td style="text-align: left;">
-                    <div id="PayCompanyDropdown">
+                    <div id="PayCompanyDropdown" validatetype="required">
                     </div>
                     <input id="hidPayCompany" disabled="disabled" type="text" value="" style="width: 200px;display: none" class="input_text form-control"/>
                 </td>

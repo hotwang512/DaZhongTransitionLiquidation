@@ -48,7 +48,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                 jsonResult.Rows = db.Queryable<Business_FixedAssetsOrder>()
                     .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
-                    .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
+                    .WhereIF(searchParams.OrderNumber != null, i => i.OrderNumber.Contains(searchParams.OrderNumber))
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

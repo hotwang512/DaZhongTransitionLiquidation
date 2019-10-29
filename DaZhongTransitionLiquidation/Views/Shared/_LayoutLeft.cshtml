@@ -1158,7 +1158,7 @@
                 {
                     <tr class="menue_item" id="PurchaseAssign_AssetPurchase" pageurl="/AssetPurchase/PurchaseAssign/Index">
                         <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">采购分配</td>
+                        <td class="menue_text">清册导入</td>
                         <td></td>
                     </tr>
                 }
@@ -1399,7 +1399,7 @@
                     <table>
                
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "折旧方法维护" && i.Reads == 1))
-                {
+                        {
                             <tr class="menue_item" id="AssetBasicInfoMaintenance_AssetManagement" pageurl="/AssetManagement/AssetBasicInfoMaintenance/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">折旧方法维护</td>
@@ -1407,14 +1407,26 @@
                             </tr>
                         }
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "经营模式维护" && i.Reads == 1))
-                {
+                        {
                             <tr class="menue_item" id="ManageModel_AssetManagement" pageurl="/AssetManagement/ManageModel/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">经营模式维护</td>
                                 <td></td>
                             </tr>
                         }
-                       
+                        @if (true)//isadmin || currentUserRoleModules.Any(i => i.PageName == "采购资产基础信息配置" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="PurchaseOrderSetting_AssetManagement" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购资产基础信息配置</td>
+                                <td></td>
+                            </tr>
+                            <tr class="menue_item" id="PurchaseFaxOrderSetting_AssetManagement" pageurl="/Systemmanagement/VehicleExtrasFeeSetting/Index?Status=1">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">车辆类资产费用标准</td>
+                                <td></td>
+                            </tr>
+                        }
                     </table>
                 </div>
 
@@ -1900,32 +1912,7 @@
                         }
                     </table>
                 </div>
-                <div class="menue_header SystemManage OracleButt OrderSetting PurchaseOrderSetting PaySetting TransferSetting" style="display: none;">
-                    <table style="cursor: pointer;">
-                        <tr>
-                            <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                            <td class="menue_text_header">采购资产订单配置</td>
-                            <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="menue_body" id="PurchaseOrderSetting" style="display: none;">
-                    <table>
-                        @if (true)//isadmin || currentUserRoleModules.Any(i => i.PageName == "采购资产基础信息配置" && i.Reads == 1))
-                        {
-                            <tr class="menue_item" id="PurchaseOrderSetting_PurchaseOrderSetting" pageurl="/Systemmanagement/PurchaseOrderSetting/Index?Status=1">
-                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">采购资产基础信息配置</td>
-                                <td></td>
-                            </tr>
-                            <tr class="menue_item" id="PurchaseFaxOrderSetting_PurchaseOrderSetting" pageurl="/Systemmanagement/VehicleExtrasFeeSetting/Index?Status=1">
-                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">车辆类资产费用标准</td>
-                                <td></td>
-                            </tr>
-                        }
-                    </table>
-                </div>
+                
     }
 </body>
 </html>

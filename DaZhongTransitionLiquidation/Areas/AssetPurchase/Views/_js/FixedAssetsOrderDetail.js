@@ -8,8 +8,8 @@ var socket;
 var $page = function () {
     this.init = function () {
         //initSelect();
-        initSelectPurchaseGoods();
-        initPaymentInformationComboBox();
+        //initSelectPurchaseGoods();
+        initPaymentInformationComboBox(true);
         initPayCompanyDropdown();
         initSelectPurchaseDepartment();
         addEvent();
@@ -21,14 +21,18 @@ var $page = function () {
         var paymentVoucherVguid = $.request.queryString().PaymentVoucherVguid;
         $("#VGUID").val(guid);
         if (guid != "" && guid != null) {
+            debugger;
             if (paymentVoucherVguid != null && paymentVoucherVguid != "") {
-                debugger;
                 $("#btnSave").parent().hide();
                 $("#btnPrint").parent().show();
                 $("#tdPrint").show();
+                $("#btnObsolete").parent().hide();
+                $("#btnSubmit").parent().hide();
             } else {
                 $("#btnPrint").parent().hide();
                 $("#tdPrint").hide();
+                $("#btnObsolete").parent().show();
+                $("#btnSubmit").parent().show();
             }
             getFixedAssetsOrderDetail();
             getAttachment();
@@ -38,9 +42,63 @@ var $page = function () {
         }
         //取消
         $("#btnCancel").on("click",
-            function() {
+            function () {
                 history.go(-1);
             });
+        $("#btnObsolete").on("click",
+            function () {
+                $.ajax({
+                    url: "/AssetPurchase/FixedAssetsOrderDetail/ObsoleteFixedAssetsOrder",
+                    data: {
+                        "VGUID": $("#VGUID").val()
+                    },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("作废失败！", null, "error");
+                            break;
+                        case "2":
+                            jqxNotification("此状态下不允许作废！", null, "error");
+                            break;
+                        case "1":
+                                jqxNotification("成功作废！", null, "success");
+                                history.go(-1);
+                                window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+                                break;
+                        }
+                    }
+                });
+            });
+        $("#btnSubmit").on("click", function () {
+            layer.load();
+            $.ajax({
+                url: "/AssetPurchase/FixedAssetsOrderDetail/SubmitFixedAssetsOrder",
+                data: { "vguid": $("#VGUID").val() },
+                type: "post",
+                success: function (msg) {
+                    layer.closeAll('loading');
+                    switch (msg.Status) {
+                    case "0":
+                        jqxNotification("发起失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("发起成功！", null, "success");
+                        $("#btnPrint").show();
+                        $("#btnSubmit").parent().hide();
+                        $("#btnObsolete").parent().hide();
+                        $("#btnSave").parent().hide();
+                        $("#btnPrint").trigger("click");
+                        document.getElementById('ifrPrint').src = msg.ResultInfo;
+                        //$("#CreditDialog").modal("show");
+                        break;
+                    case "2":
+                        jqxNotification(msg.ResultInfo, null, "error");
+                        break;
+                    }
+                }
+            });
+        });
         //保存
         $("#btnSave").on("click",
             function() {
@@ -57,13 +115,32 @@ var $page = function () {
                 if (!Validate($("#PurchasePrices"))) {
                     validateError++;
                 }
+                if ($("#PurchaseDepartment").val() == "") {
+                    $("#PurchaseDepartment").addClass("input_Validate");
+                    $("#PurchaseDepartment").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
+                } else {
+                    $("#PurchaseDepartment").removeClass("input_Validate");
+                    $("#PurchaseDepartment").next(".msg").remove();
+                }
+                if ($("#PayCompanyDropdown").val() == "") {
+                    $("#PayCompanyDropdown").addClass("input_Validate");
+                    $("#PayCompanyDropdown").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
+                } else {
+                    $("#PayCompanyDropdown").removeClass("input_Validate");
+                    $("#PayCompanyDropdown").next(".msg").remove();
+                }
+                if ($("#PaymentInformation").val() == "") {
+                    $("#PaymentInformation").addClass("input_Validate");
+                    $("#PaymentInformation").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
+                } else {
+                    $("#PaymentInformation").removeClass("input_Validate");
+                    $("#PaymentInformation").next(".msg").remove();
+                }
+                if (!Validate($("#PurchaseGoods"))) {
+                    validateError++;
+                }
                 if (validateError <= 0) {
-                    var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
-                    var DepartmentModelList = [];
-                    for (var i = 0; i < checkedItems.length; i++) {
-                        DepartmentModelList.push(checkedItems[i].value);
-                    };
-                    debugger;
+                    
                     $.ajax({
                         url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
@@ -71,7 +148,7 @@ var $page = function () {
                             "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
                             "GoodsModel": $("#GoodsModel option:selected").text(),
                             "GoodsModelCode": $("#GoodsModel").val(),
-                            "PurchaseDepartmentIDs": DepartmentModelList.join(","),
+                            "PurchaseDepartmentIDs": $("#PurchaseDepartment").val(),
                             "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
                             "PaymentInformationVguid": $("#hiddenPaymentInformationVguid").val(),
                             "PayCompanyVguid": $("#PayCompanyDropdown").val(),
@@ -167,7 +244,7 @@ var $page = function () {
             });
         $("#Upload_OKBtn").on("click", function () {
             //$('#jqxLoader').jqxLoader('open');
-            debugger;
+            
             if ($("#devPhoto").attr("src") != undefined) {
                 layer.load();
                 $.ajax({
@@ -242,7 +319,7 @@ var $page = function () {
             }
         });
         $('#PayCompanyDropdown').on('select', function (event) {
-            debugger;
+            
             $("#CompanyBankName").val("");
             $("#CompanyBankAccount").val("");
             $("#CompanyBankAccountName").val("");
@@ -254,7 +331,7 @@ var $page = function () {
                 $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
                     { Vguid: $("#PayCompanyDropdown").val() },
                     function (msg) {
-                        debugger;
+                        
                         $("#CompanyBankName").val(msg.PayBank);
                         $("#CompanyBankAccount").val(msg.PayAccount);
                         $("#CompanyBankAccountName").val(msg.PayBankAccountName);
@@ -264,19 +341,20 @@ var $page = function () {
         });
         $("#PurchaseGoods").on("change",
             function () {
-                initPaymentInformationComboBox();
+                initPaymentInformationComboBox(false);
                 $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
                 $("#PurchaseGoods").attr("disabled", true);
                 GetCompanyBankInfoDropdownByCode();
                 initSelectGoodsModel($("#PurchaseGoods option:selected").text());
             });
-        $("#PurchaseDepartment").on('checkChange', function (event) {
+        $("#PurchaseDepartment").on('select', function (event) {
             if (event.args) {
-                var checkedItems = $("#PurchaseDepartment").jqxDropDownList('getCheckedItems');
+                $("#PurchaseDepartment").removeClass("input_Validate");
+                $("#PurchaseDepartment").next(".msg").remove();
+                var args = event.args;
+                var item = args.item;
                 var DepartmentModelList = [];
-                for (var i = 0; i < checkedItems.length; i++) {
-                    DepartmentModelList.push(checkedItems[i].value);
-                };
+                DepartmentModelList.push(item.value);
                 initSelectPurchaseGoods(DepartmentModelList);
             }
         });
@@ -292,7 +370,7 @@ var $page = function () {
         $("#jqxLoader").jqxLoader({ isModal: true, width: 100, height: 60, imagePosition: 'top' });
     }; //addEvent end
     function GetCompanyBankInfoDropdownByCode() {
-        debugger;
+        
         var url = "/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfoDropdownByCode";
         var source =
         {
@@ -306,7 +384,7 @@ var $page = function () {
             async: false
         };
         var dataAdapter = new $.jqx.dataAdapter(source);
-        debugger;
+        
         $('#PayCompanyDropdown').jqxDropDownList({
             enableSelection: true,
             filterable: true,  source: dataAdapter, displayMember: "CompanyName", dropDownWidth:
@@ -331,11 +409,7 @@ var $page = function () {
     function getFixedAssetsOrderDetail() {
         $.post("/AssetPurchase/FixedAssetsOrderDetail/GetFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
             if (msg.PurchaseDepartmentIDs != null) {
-                var PurchaseDepartment = msg.PurchaseDepartmentIDs.split(",");
-                for (var i = 0; i < PurchaseDepartment.length; i++) {
-                    var item = $("#PurchaseDepartment").jqxDropDownList('getItemByValue', PurchaseDepartment[i]);
-                    $("#PurchaseDepartment").jqxDropDownList('checkItem', item);
-                }
+                $("#PurchaseDepartment").val(msg.PurchaseDepartmentIDs);
             }
             $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             initSelectPurchaseGoods();
@@ -343,7 +417,7 @@ var $page = function () {
             $("#PurchaseGoods").trigger("change");
             $("#PurchaseGoods").attr("disabled", true);
 
-            initPaymentInformationComboBox();
+            initPaymentInformationComboBox(false);
             GetCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
             $("#hiddenPaymentInformation").val(msg.PaymentInformation);
@@ -371,7 +445,7 @@ var $page = function () {
             $("#SupplierBank").val(msg.SupplierBank);
             $("#SupplierBankNo").val(msg.SupplierBankNo);
             $("#PayMode").val(msg.PayType);
-            debugger;
+            
             $("#PayCompanyDropdown").val(msg.PayCompanyVguid);
             $("#CompanyBankName").val(msg.CompanyBankName);
             $("#CompanyBankAccount").val(msg.CompanyBankAccount);
@@ -380,7 +454,7 @@ var $page = function () {
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
             $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
-            debugger;
+            
             $("#GoodsModel").val(msg.GoodsModelCode);
         });
     }
@@ -601,7 +675,7 @@ function initSelectPurchaseDepartment() {
         async: false
     };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: true, selectedIndex: 0,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
+    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: false, selectedIndex: -1,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
     $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
 }
 //function initSelect()
@@ -618,37 +692,61 @@ function initSelectPurchaseDepartment() {
 //        }
 //    });
 //}
-function initPaymentInformationComboBox() {
+function initPaymentInformationComboBox(isInit) {
     //付款单位及相关账户信息
-    $.ajax({
-        url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
-        data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
-        type: "POST",
-        dataType: "json",
-        async: false,
-        success: function (data) {
-            
-            var source = new Array();
-            for (var i = 0; i < data.Rows.length; i++) {
-                var html = "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>"
-                    + "<b>户名</b><div>" + data.Rows[i].BankAccountName + "</div><div style='margin-top: 5px;'><b>账号</b><div>" + data.Rows[i].BankAccount + "</div></div></div>";
-                source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
+    if (!isInit) {
+        $.ajax({
+            url: "/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfoList",
+            data: { "PurchaseOrderSetting": $("#PurchaseGoods").val() },
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                $("#PaymentInformation").removeClass("input_Validate");
+                $("#PaymentInformation").next(".msg").remove();
+                var source = new Array();
+                for (var i = 0; i < data.Rows.length; i++) {
+                    var html =
+                        "<div style='padding: 0px; margin: 0px; height: 76px; float: left;'><div style='margin-top: 5px; font-size: 13px;'>" +
+                            "<b>户名</b><div>" +
+                            data.Rows[i].BankAccountName +
+                            "</div><div style='margin-top: 5px;'><b>账号</b><div>" +
+                            data.Rows[i].BankAccount +
+                            "</div></div></div>";
+                    source[i] = { html: html, title: data.Rows[i].BankAccountName, value: data.Rows[i].VGUID };
+                }
+                var dataAdapter = new $.jqx.dataAdapter(source);
+                $("#PaymentInformation").jqxComboBox({
+                    source: dataAdapter,
+                    selectedIndex: 0,
+                    displayMember: "title",
+                    valueMember: "value",
+                    searchMode: 'contains',
+                    width: 198,
+                    height: 33
+                });
+                $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo",
+                    { vguid: $("#PaymentInformation").val() },
+                    function(msg) {
+                        $("#BankAccountName").val(msg.BankAccountName);
+                        $("#BankAccount").val(msg.BankAccount);
+                        $("#Bank").val(msg.Bank);
+                        $("#BankNo").val(msg.BankNo);
+                    });
             }
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            $("#PaymentInformation").jqxComboBox({
-                source: dataAdapter, selectedIndex: 0,
-                displayMember: "title", valueMember: "value",
-                searchMode: 'contains',
-                width: 198, height: 33
-            });
-            $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCustomerBankInfo", { vguid: $("#PaymentInformation").val() }, function (msg) {
-                $("#BankAccountName").val(msg.BankAccountName);
-                $("#BankAccount").val(msg.BankAccount);
-                $("#Bank").val(msg.Bank);
-                $("#BankNo").val(msg.BankNo);
-            });
-        }
-    });
+        });
+    } else {
+        $("#PaymentInformation").jqxComboBox({
+            source: null,
+            selectedIndex: 0,
+            displayMember: "title",
+            valueMember: "value",
+            searchMode: 'contains',
+            width: 198,
+            height: 33
+        });
+    }
+   
 }
 function initSelectPurchaseGoods(PurchaseDepartment) {
     //使用部门
@@ -673,7 +771,7 @@ function initSelectGoodsModel(Goods) {
         dataType: "json",
         async: false,
         success: function (msg) {
-            debugger;
+            
             if (msg.length > 0) {
                 uiEngineHelper.bindSelect('#GoodsModel', msg, "Code", "Descrption");
                 $("#GoodsModel").prepend("<option value=\"\" selected='true'>请选择</>");
@@ -843,7 +941,7 @@ function getAttachment() {
             $("#ImgDetailList").html("");
             $("#ImgOtherReceipt").html("");
             for (var i = 0; i < msg.length; i++) {
-                debugger;
+                
                 var num;
                 var fileName = "";
                 var fileType = "";
@@ -852,7 +950,7 @@ function getAttachment() {
                     fileName = msg[i].Attachment.split("/")[num];
                     fileType = fileName.split(".")[1];
                 } else {
-                    debugger;
+                    
                     num = msg[i].Attachment.lastIndexOf("/") + 1;
                     fileName = msg[i].Attachment.substring(num, msg[i].Attachment.length);
                     fileType = fileName.split(".")[1];

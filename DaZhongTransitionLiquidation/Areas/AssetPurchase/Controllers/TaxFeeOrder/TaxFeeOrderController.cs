@@ -42,7 +42,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
                 jsonResult.Rows = db.Queryable<Business_TaxFeeOrder>()
                     .WhereIF(searchParams.VehicleModelCode != null, i => i.VehicleModelCode == searchParams.VehicleModelCode)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
-                    .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
+                    .WhereIF(searchParams.OrderNumber != null, i => i.OrderNumber.Contains(searchParams.OrderNumber))
                     .WhereIF(searchParams.PayItemCode != "-1", i => i.PayItemCode == searchParams.PayItemCode)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
@@ -55,21 +55,21 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.TaxFeeOrd
             DbBusinessDataService.Command(db =>
             {
                 int saveChanges = 1;
-                var isAnySubmited = db.Queryable<Business_TaxFeeOrder>().Any(c => vguids.Contains(c.VGUID) && (c.SubmitStatus != FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt()));
+                var isAnySubmited = db.Queryable<Business_TaxFeeOrder>().Any(c => vguids.Contains(c.VGUID) && c.SubmitStatus > FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt());
                 if (isAnySubmited)
                 {
-                    resultModel.ResultInfo = "存在已提交的订单，订单提交后不允许删除";
+                    resultModel.ResultInfo = "存在已提交的订单，订单提交后不允许作废";
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
                 }
                 else
                 {
-                    //删除主表信息
-                    saveChanges = db.Deleteable<Business_TaxFeeOrder>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
-                    //删除订单数量关联表信息
-                    db.Deleteable<Business_PurchaseOrderNum>(x => vguids.Contains(x.FaxOrderVguid)).ExecuteCommand();
-                    resultModel.IsSuccess = saveChanges == vguids.Count;
+                    db.Updateable<Business_TaxFeeOrder>()
+                        .UpdateColumns(it => new Business_TaxFeeOrder() { SubmitStatus = 4 })
+                        .Where(it => vguids.Contains(it.VGUID)).ExecuteCommand();
+                    resultModel.IsSuccess = true;
                     resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+
                 }
             });
             return Json(resultModel);

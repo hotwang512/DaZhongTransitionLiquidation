@@ -11,12 +11,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderList;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
+using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 
@@ -51,22 +53,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     var model = db.Queryable<Business_IntangibleAssetsOrder>().Where(c => c.VGUID == sevenSection.VGUID);
                     if (model.Count() == 0)
                     {
-                        var orderNumberLeft = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                        //查出当前日期数据库中最大的订单号
-                        var currentDayFixedAssetOrderList = db.Queryable<Business_FixedAssetsOrder>()
-                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayTaxFeeOrderList = db.Queryable<Business_TaxFeeOrder>()
-                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayIntangibleAssetsOrderList = db.Queryable<Business_IntangibleAssetsOrder>()
-                            .Where(c => c.OrderNumber.StartsWith(orderNumberLeft)).Select(c => new { c.OrderNumber }).ToList();
-                        var currentDayList = currentDayFixedAssetOrderList.Union(currentDayIntangibleAssetsOrderList).Union(currentDayTaxFeeOrderList).ToList();
-                        var maxOrderNumRight = 0;
-                        if (currentDayList.Any())
-                        {
-                            maxOrderNumRight = currentDayList.OrderByDescending(c => c.OrderNumber.Replace(orderNumberLeft, "").TryToInt()).First().OrderNumber.Replace(orderNumberLeft, "").TryToInt();
-                        }
-                        maxOrderNumRight = maxOrderNumRight + 1;
-                        sevenSection.OrderNumber = orderNumberLeft + maxOrderNumRight.ToString().PadLeft(4, '0');
+                        var autoID = "IntangibleAssetsOrder";
+                        var no = CreateNo.GetCreateNo(db, autoID);
+                        sevenSection.OrderNumber = no;
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
@@ -147,6 +136,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             {
                 LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
                 return "";
+            }
+        }
+        public string JoinStr(List<Business_AssetAttachmentList> list)
+        {
+            var strArr = "";
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    strArr = strArr + item.Attachment + ",";
+                }
+                strArr = strArr.Substring(0, strArr.Length - 1);
+                return strArr;
+            }
+            else
+            {
+                return strArr;
             }
         }
         public JsonResult PendingPaymentAttachmentUpload(Guid PaymentVoucherVguid, Guid Vguid)
@@ -240,23 +246,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                 return "";
             }
         }
-        public string JoinStr(List<Business_AssetAttachmentList> list)
-        {
-            var strArr = "";
-            if (list.Count > 0)
-            {
-                foreach (var item in list)
-                {
-                    strArr = strArr + item.Attachment + ",";
-                }
-                strArr = strArr.Substring(0, strArr.Length - 1);
-                return strArr;
-            }
-            else
-            {
-                return strArr;
-            }
-        }
         public JsonResult GetIntangibleAssetsOrder(Guid vguid)
         {
             Business_IntangibleAssetsOrder model = new Business_IntangibleAssetsOrder();
@@ -330,22 +319,84 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             {
                 var result = db.Ado.UseTran(() =>
                 {
+                    //请求清算平台、待付款请求生成支付凭证接口
+                    var pendingPaymentmodel = new PendingPaymentModel();
                     var model = db.Queryable<Business_IntangibleAssetsOrder>().Where(c => c.VGUID == vguid).First();
                     if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt())
                     {
-                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt();
+                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnPay.TryToInt();
+                        pendingPaymentmodel.Amount = model.FirstPayment.ToString();
+                    }
+                    else if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.InterimPaymentUnSubmit.TryToInt())
+                    {
+                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.InterimPaymentUnPay.TryToInt();
+                        pendingPaymentmodel.Amount = model.InterimPayment.ToString();
+                    }
+                    else if (model.SubmitStatus == IntangibleAssetsSubmitStatusEnum.TailPaymentUnSubmit.TryToInt())
+                    {
+                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.TailPaymentUnPay.TryToInt();
+                        pendingPaymentmodel.Amount = model.TailPayment.ToString();
                     }
                     else
                     {
-                        model.SubmitStatus = IntangibleAssetsSubmitStatusEnum.Submited.TryToInt();
+                        resultModel.ResultInfo = "该状态下不能发起支付";
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                        return;
                     }
-                    model.SubmitDate = DateTime.Now;
-                    model.SubmitUser = cache[PubGet.GetUserKey].LoginName;
-                    db.Updateable<Business_IntangibleAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                    //统计附件信息
+                    var assetAttachmentList = db.Queryable<Business_AssetAttachmentList>().Where(x => x.AssetOrderVGUID == vguid).ToList();
+                    pendingPaymentmodel.PaymentReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "付款凭证").ToList());
+                    pendingPaymentmodel.InvoiceReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList());
+                    pendingPaymentmodel.ApprovalReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "OA审批单").ToList());
+                    pendingPaymentmodel.Contract = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "合同").ToList());
+                    pendingPaymentmodel.DetailList = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "清单、清册").ToList());
+                    pendingPaymentmodel.OtherReceipt = JoinStr(assetAttachmentList.Where(x => x.AttachmentType == "其他").ToList());
+
+                    pendingPaymentmodel.IdentityToken = cache[PubGet.GetUserKey].Token;
+                    pendingPaymentmodel.FunctionSiteId = "61";
+                    pendingPaymentmodel.OperatorIP = GetSystemInfo.GetClientLocalIPv4Address();
+                    var goodsData = db.Queryable<Business_PurchaseOrderSetting>()
+                        .Where(x => x.VGUID == model.PurchaseGoodsVguid).First();
+
+                    var orderListData = db.Queryable<v_Business_BusinessTypeSet>()
+                        .Where(x => x.BusinessSubItem1 == goodsData.BusinessSubItem).First();
+
+                    pendingPaymentmodel.ServiceCategory = orderListData.BusinessProject;
+                    pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|" + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
+                    //根据供应商账号找到供应商类别
+                    pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
+                        .Where(x => x.BankAccount == model.SupplierBankAccount).First().CompanyOrPerson; ;
+                    pendingPaymentmodel.CollectBankAccountName = model.SupplierBankAccountName;
+                    pendingPaymentmodel.CollectBankAccouont = model.SupplierBankAccount;
+                    pendingPaymentmodel.CollectBankName = model.SupplierBank;
+                    pendingPaymentmodel.CollectBankNo = model.SupplierBankNo;
+                    pendingPaymentmodel.PaymentMethod = model.PayType;
+                    pendingPaymentmodel.AccountSetCode = cache[PubGet.GetUserKey].AccountModeCode + "|" + cache[PubGet.GetUserKey].CompanyCode;
+                    pendingPaymentmodel.invoiceNumber = assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count().ToString();
+                    pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
+                    //pendingPaymentmodel.Amount = model.SumPayment.ToString();
+                    pendingPaymentmodel.Summary = model.AssetDescription;
+
+                    var apiReault = PendingPaymentApi(pendingPaymentmodel);
+                    var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
+                    if (pendingRedult.success)
+                    {
+                        var orderModel = db.Queryable<Business_IntangibleAssetsOrder>()
+                            .Where(x => x.VGUID == model.VGUID).First();
+                        orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
+                        orderModel.PaymentVoucherUrl = pendingRedult.data.url;
+                        orderModel.SubmitStatus = model.SubmitStatus;
+                        db.Updateable<Business_IntangibleAssetsOrder>(orderModel).UpdateColumns(x => new { x.PaymentVoucherUrl, x.PaymentVoucherVguid, x.SubmitStatus }).ExecuteCommand();
+                        resultModel.ResultInfo = pendingRedult.data.url;
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = "1";
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
+                    }
                 });
-                resultModel.IsSuccess = result.IsSuccess;
-                resultModel.ResultInfo = result.ErrorMessage;
-                resultModel.Status = resultModel.IsSuccess.ObjToBool() ? "1" : "0";
             });
             return Json(resultModel);
         }
@@ -383,6 +434,33 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                 }
             });
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult ObsoleteIntangibleAssetsOrder(Business_IntangibleAssetsOrder sevenSection)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var cache = CacheManager<Sys_User>.GetInstance();
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    var isAnySubmited = db.Queryable<Business_IntangibleAssetsOrder>().Any(c => c.VGUID == sevenSection.VGUID && c.SubmitStatus > IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt());
+                    if (isAnySubmited)
+                    {
+                        resultModel.ResultInfo = "此状态下不允许作废!";
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                    }
+                    else
+                    {
+                        db.Updateable<Business_IntangibleAssetsOrder>()
+                            .UpdateColumns(it => new Business_IntangibleAssetsOrder() { SubmitStatus = 8 })
+                            .Where(it => it.VGUID == sevenSection.VGUID).ExecuteCommand();
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                    }
+                });
+            });
+            return Json(resultModel);
         }
 
     }

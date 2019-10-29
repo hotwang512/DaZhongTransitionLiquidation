@@ -224,7 +224,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     item.MODEL_MINOR = "新车停运";
                                 }
                             }
-                            if (assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR)
+                            if ((assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR))
                             {
                                 //经营模式
                                 MODIFY_TYPE = "BUSINESS_MODEL";

@@ -82,22 +82,21 @@ var $page = function () {
                 };
                 var dataAdapter = new $.jqx.dataAdapter(source);
                 dataAdapter.dataBind();
-                var pivotDataSource = new $.jqx.pivot(
-                    dataAdapter,
-                    {
-                        pivotValuesOnRows: false,
-                        totals: { rows: { subtotals: false, grandtotals: false }, columns: { subtotals: false, grandtotals: false } },
-                        rows: [{ dataField: 'CompanyType' }, { dataField: 'Company' }],
-                        columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }],
-                        values: values
-                    });
+                var pivotDataSource = new $.jqx.pivot(dataAdapter,
+                {
+                    pivotValuesOnRows: false,
+                    totals: { rows: { subtotals: false, grandtotals: false }, columns: { subtotals: false, grandtotals: false } },
+                    rows: [{ dataField: 'CompanyType' }, { dataField: 'Company' }],
+                    columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }],
+                    values: values
+                });
                 selector.$grid().jqxPivotGrid(
-                    {
-                        source: pivotDataSource,
-                        treeStyleRows: true,
-                        autoResize: true,
-                        selectionEnabled: true
-                    });
+                {
+                    source: pivotDataSource,
+                    treeStyleRows: true,
+                    autoResize: true,
+                    selectionEnabled: true
+                });
                 var pivotGrid = selector.$grid().jqxPivotGrid('getInstance');
                 var pivotRows = pivotGrid.getPivotRows();
                 for (var k = 0; k < pivotRows.items.length; k++) {

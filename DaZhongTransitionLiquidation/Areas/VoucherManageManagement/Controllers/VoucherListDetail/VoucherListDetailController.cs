@@ -420,8 +420,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 }
                 cells[0, 0].PutValue(data.CompanyName);
                 cells[1, 4].PutValue(data.AccountingPeriod);
-                cells[1, 16].PutValue(data.BatchName);
-                cells[2, 16].PutValue(data.VoucherNo + "-" + i);
+                cells[1, 15].PutValue(data.BatchName);
+                cells[2, 15].PutValue(data.VoucherNo + "-" + i);
                 cells[3, 10].PutValue(data.VoucherDate);
                 cells[3, 19].PutValue(attachmentCount);
                 cells[7, 2].PutValue(data.FinanceDirector);
@@ -460,8 +460,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             Aspose.Cells.Cells cells = sheet.Cells;//单元格
             cells[0, 0].PutValue(data.CompanyName);
             cells[1, 4].PutValue(data.AccountingPeriod);
-            cells[1, 16].PutValue(data.BatchName);
-            cells[2, 16].PutValue(data.VoucherNo);
+            cells[1, 15].PutValue(data.BatchName);
+            cells[2, 15].PutValue(data.VoucherNo);
             cells[3, 10].PutValue(data.VoucherDate);
             cells[3, 19].PutValue(attachmentCount);
             cells[7, 2].PutValue(data.FinanceDirector);

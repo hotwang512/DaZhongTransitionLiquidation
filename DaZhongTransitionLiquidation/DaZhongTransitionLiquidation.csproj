@@ -2416,6 +2416,8 @@
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel_AssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyOBD.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_PurchaseItem.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_PurchaseItem_Supplier.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckChangeReport.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckReport.cs" />

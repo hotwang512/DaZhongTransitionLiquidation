@@ -14,6 +14,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
     public class Business_PurchaseOrderSetting
     {
         public Guid VGUID { get; set; }
+        public Guid PurchaseGoodsVguid { get; set; }
         public string PurchaseGoods { get; set; }
         public string AssetCategoryMajor { get; set; }
         public string AssetCategoryMinor { get; set; }

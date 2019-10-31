@@ -13,7 +13,6 @@ var isEdit = false;
 var vguid = "";
 var allvguids = [];
 var $page = function () {
-
     this.init = function () {
         addEvent();
     }
@@ -25,15 +24,42 @@ var $page = function () {
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
-
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             $("#PurchaseGoods").val("");
         });
         //新增
         $("#btnAdd").on("click", function () {
-            window.location.href = "/Systemmanagement/PurchaseOrderSettingDetail/Index";
-            //window.open("/CapitalCenterManagement/OrderListDetail/Index");
+            $("#PurchaseItemModalDialog").modal("show");
+        });
+        $("#PurchaseItemDialog_OKBtn").on("click", function () {
+            var validateError = 0; //未通过验证的数量
+            if (!Validate($("#PurchaseItem"))) {
+                validateError++;
+            }
+            if (validateError <= 0) {
+                $.ajax({
+                    url: "/AssetManagement/PurchaseItem/AddBankInfo",
+                    data: { PurchaseItem: $("#PurchaseItem").val() },
+                    traditional: true,
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("添加失败！", null, "error");
+                            break;
+                        case "1":
+                            $("#PurchaseItemModalDialog").modal("hide");
+                            jqxNotification("添加成功！", null, "success");
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        }
+                    }
+                });
+            }
+        });
+        $("#PurchaseItemDialog_CancelBtn").on("click", function () {
+            $("#PurchaseItemModalDialog").modal("hide");
         });
         //删除
         $("#btnDelete").on("click", function () {
@@ -124,7 +150,6 @@ var $page = function () {
             }
         );
     }; //addEvent end
-
     function initBankTable() {
         var source =
             {
@@ -212,10 +237,12 @@ var $page = function () {
         });
         return true;
     }
+    
     //删除
     function dele(selection) {
+        debugger;
         $.ajax({
-            url: "/AssetManagement/PurchaseItem/DeletePurchaseOrderSetting",
+            url: "/AssetManagement/PurchaseItem/DeletePurchaseItem",
             data: { vguids: selection },
             traditional: true,
             type: "post",
@@ -239,8 +266,6 @@ var $page = function () {
                 datafields:
                 [
                     { name: "Setting", type: null },
-                    { name: "SettingDepartment", type: null },
-                    { name: "SettingAssetManagementCompany", type: null },
                     { name: 'PurchaseGoods', type: 'string' },
                     { name: 'AssetCategoryMajor', type: 'string' },
                     { name: 'AssetCategoryMinor', type: 'string' },
@@ -253,7 +278,7 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 data: { "PurchaseGoods": $("#PurchaseGoods").val() },
-                url: "/AssetManagement/PurchaseItem/GetPurchaseOrderSettingListDatas"   //获取数据源的路径
+                url: "/AssetManagement/PurchaseItem/GetPurchaseItemListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -275,12 +300,10 @@ var $page = function () {
                 columnsResize: true,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '配置供应商', datafield: 'Setting',width: 90, align: 'center', cellsAlign: 'center',hidden:true, cellsRenderer: cellsSettingRenderer },
+                    { text: '配置供应商', datafield: 'Setting',width: 90, align: 'center', cellsAlign: 'center',hidden:false, cellsRenderer: cellsSettingRenderer },
                     //{ text: '配置部门', datafield: 'SettingDepartment', hidden: false, width: 70, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingDepartmentRenderer },
                     //{ text: '配置资产管理公司', datafield: 'SettingAssetManagementCompany', hidden: false, width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingAssetManagementCompany},
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '资产主类', datafield: 'AssetCategoryMajor', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '资产子类', datafield: 'AssetCategoryMinor', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },

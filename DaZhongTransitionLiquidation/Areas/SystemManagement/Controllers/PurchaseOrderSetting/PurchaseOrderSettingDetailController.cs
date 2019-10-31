@@ -270,6 +270,15 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetPurchaseItem()
+        {
+            var list = new List<Business_PurchaseItem>();
+            DbBusinessDataService.Command(db =>
+            {
+                list = db.SqlQueryable<Business_PurchaseItem>(@"select * from Business_PurchaseItem").ToList();
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetBusinessProject(string BusinessProject)
         {
             var list = new List<BusinessProjectModel>();

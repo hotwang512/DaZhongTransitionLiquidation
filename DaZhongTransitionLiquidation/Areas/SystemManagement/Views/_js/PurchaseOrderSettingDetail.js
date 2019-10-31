@@ -58,10 +58,10 @@ var $page = function () {
                         url: "/Systemmanagement/PurchaseOrderSettingDetail/SavePurchaseOrderSetting",
                         data: {
                             "VGUID": $("#VGUID").val(),
-                            "AssetCategoryMajor": $("#AssetCategoryMajor").val(),
-                            "AssetCategoryMinor": $("#AssetCategoryMinor").val(),
+                            "AssetCategoryMajor": $("#ASSET_CATEGORY_MAJOR").val(),
+                            "AssetCategoryMinor": $("#ASSET_CATEGORY_MINOR").text(),
                             "OrderCategory": $("#OrderCategory").val(),
-                            "AssetCategoryMinorVguid": $("#AssetCategoryMinorVguid").val(),
+                            "AssetCategoryMinorVguid": $("#ASSET_CATEGORY_MINOR").val(),
                             "PurchaseGoods": $("#PurchaseGoods").val(),
                             "BusinessSubItem": $("#BusinessSubItem").text(),
                             "DepartmentModelList": DepartmentModelList,

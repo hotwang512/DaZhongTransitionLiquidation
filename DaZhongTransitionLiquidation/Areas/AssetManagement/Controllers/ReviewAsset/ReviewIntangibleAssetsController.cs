@@ -90,7 +90,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             .Where(x => x.VGUID == assetsOrderInfo.PurchaseGoodsVguid).First();
                         var assetInfo = new Business_AssetMaintenanceInfo();
                         assetInfo.VGUID = Guid.NewGuid();
-                        var autoID = "IntangibleAssetID";
+                        var autoID = "InAssetID";
                         var no = CreateNo.GetCreateNo(db, autoID);
                         assetInfo.ASSET_ID = no;
                         assetInfo.GROUP_ID = "无形资产";
@@ -164,7 +164,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.VEHICLE_TYPE = assetInfo.DESCRIPTION;
                         assetSwapModel.MODEL_MAJOR = assetInfo.MODEL_MAJOR;
                         assetSwapModel.MODEL_MINOR = assetInfo.MODEL_MINOR;
-                        assetSwapModel.PERIOD = assetInfo.START_VEHICLE_DATE;
+                        assetSwapModel.PERIOD = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0');
                         assetSwapModel.PROCESS_TYPE = "NEW_ASSET";
                         assetSwapList.Add(assetSwapModel);
                     }

@@ -10,8 +10,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Infrastructure.ApiResultEntity;
@@ -132,7 +134,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         pendingPaymentmodel.BusinessProject = orderListData.BusinessSubItem1.Split("|")[0] + "|" + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
                         //根据供应商账号找到供应商类别
                         pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
-                            .Where(x => x.BankAccount == model.SupplierBankAccount).First().CompanyOrPerson; ;
+                            .Where(x => x.BankAccount == model.SupplierBankAccount).First().CompanyOrPerson;
                         pendingPaymentmodel.CollectBankAccountName = model.SupplierBankAccountName;
                         pendingPaymentmodel.CollectBankAccouont = model.SupplierBankAccount;
                         pendingPaymentmodel.CollectBankName = model.SupplierBank;
@@ -143,13 +145,28 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         pendingPaymentmodel.numberOfAttachments = (assetAttachmentList.Count() - assetAttachmentList.Where(x => x.AttachmentType == "发票").ToList().Count()).ToString();
                         //pendingPaymentmodel.Amount = model.SumPayment.ToString();
                         pendingPaymentmodel.Summary = model.AssetDescription;
-
                         var apiReault = PendingPaymentApi(pendingPaymentmodel);
                         var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
                         if (pendingRedult.success)
                         {
                             var orderModel = db.Queryable<Business_IntangibleAssetsOrder>()
                                 .Where(x => x.VGUID == model.VGUID).First();
+                            if (model.SubmitStatus == 1)
+                            {
+                                var purchaseClearingmodel = new Business_FundClearing();
+                                purchaseClearingmodel.VGUID = Guid.NewGuid();
+                                purchaseClearingmodel.CreateDate = DateTime.Now;
+                                purchaseClearingmodel.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                                purchaseClearingmodel.FixedAssetsOrderVguid = model.VGUID;
+                                purchaseClearingmodel.PurchaseGoodsVguid = model.PurchaseGoodsVguid;
+                                purchaseClearingmodel.PurchaseGoods = model.PurchaseGoods;
+                                purchaseClearingmodel.OrderQuantity = 1;
+                                purchaseClearingmodel.PurchasePrices = model.SumPayment;
+                                purchaseClearingmodel.ContractAmount = model.SumPayment;
+                                purchaseClearingmodel.AssetDescription = model.AssetDescription;
+                                purchaseClearingmodel.AssetType = "无形资产";
+                                db.Insertable<Business_FundClearing>(purchaseClearingmodel).ExecuteCommand();
+                            }
                             orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                             orderModel.PaymentVoucherUrl = pendingRedult.data.url;
                             orderModel.SubmitStatus = model.SubmitStatus;

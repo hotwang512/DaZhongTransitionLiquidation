@@ -12,7 +12,7 @@ namespace DaZhongTransitionLiquidation.AutoMapper.Profiles
     {
         protected override void Configure()
         {
-            CreateMap<Business_PurchaseAssign, Business_FundClearing>();
+            CreateMap<Business_PurchaseAssign, Business_FundClearing>().ForMember(dest => dest.AssetType, opt => opt.MapFrom(src => src.OrderType));
         }
     }
 }

@@ -334,7 +334,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
-                                assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
+                                assetSwapModel.PERIOD = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0');
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();

@@ -215,6 +215,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\DisposeProfitLoss.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeTax.js" />
     <Content Include="Areas\AssetManagement\Views\_js\OBDModifyReview.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\PurchaseItem.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewAsset.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
@@ -236,6 +237,7 @@
     <Content Include="Areas\AssetPurchase\Views\_js\PurchaseAssign.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\TaxFeeOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\TaxFeeOrderDetail.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\VehicleLiquidationReview.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
@@ -401,6 +403,8 @@
     <Content Include="Areas\ReimbursementCenter\Views\ReimburseOrderDetail\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleUnit\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleCount\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\VehicleLiquidationReview\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\PurchaseItem\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -2388,6 +2392,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\PurchaseItem\PurchaseItemController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetsRetirementReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\OBDModifyReviewController.cs" />
@@ -2425,6 +2430,7 @@
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\LiquidationReviewController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\VehicleLiquidationReviewController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\PurchaseAssign\PurchaseAssignController.cs" />

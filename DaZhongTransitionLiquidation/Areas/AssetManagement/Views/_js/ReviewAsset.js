@@ -242,7 +242,7 @@ var $page = function () {
                             }
                         ]
                     },
-                    { text: '资产ID', datafield: 'ASSET_ID', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    { text: '资产ID', datafield: 'ASSET_ID', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '标签号', datafield: 'TAG_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
@@ -254,9 +254,9 @@ var $page = function () {
                     { text: '期间', datafield: 'COMMISSIONING_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '资产原值', datafield: 'ASSET_COST', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '摊销标记', datafield: 'AMORTIZATION_FLAG', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '存放地点1', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '存放地点2', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
-                    { text: '存放地点3', datafield: 'ORGANIZATION_NUM', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center'},
+                    { text: '存放地点1', datafield: 'BELONGTO_COMPANY', width: 150, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    { text: '存放地点2', datafield: 'MANAGEMENT_COMPANY', width: 150, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
+                    { text: '存放地点3', datafield: 'ORGANIZATION_NUM', width: 120, align: 'center', cellclassname: cellclass, cellsalign: 'center'},
                     { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },
                     { text: '经营模式主类', datafield: 'MODEL_MAJOR', width: 180, align: 'center', cellclassname: cellclass, cellsAlign: 'center' },

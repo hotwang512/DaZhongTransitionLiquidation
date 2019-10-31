@@ -43,6 +43,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 jsonResult.Rows = db.SqlQueryable<Business_PurchaseAssign>("SELECT pa.* FROM Business_PurchaseAssign pa INNER JOIN (select * from Business_FixedAssetsOrder where SubmitStatus = 2) fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
+                    .Where(x => x.OrderType == searchParams.OrderType)
                     .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
                     .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
@@ -505,6 +506,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                     assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
                                     assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
                                     assetReview.ISVERIFY = false;
+                                    assetReview.OBDSTATUS = false;
                                     //var ssList = db.Queryable<Business_SevenSection>().Where(x =>
                                     //     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                                     //assetReview.MANAGEMENT_COMPANY = item.AssetManagementCompany;
@@ -833,6 +835,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                 assetReview.YTD_DEPRECIATION = 0;
                                 assetReview.ACCT_DEPRECIATION = 0;
                                 assetReview.FIXED_ASSETS_ORDERID = vguid;
+                                assetReview.OBDSTATUS = false;
                                 assetReview.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
                                 assetReview.CREATE_DATE = DateTime.Now;
                                 assetReview.ORGANIZATION_NUM = "财务共享-" + departmentStr;

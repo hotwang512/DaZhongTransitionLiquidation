@@ -8,9 +8,15 @@ var selector = {
 }; //selector end
 var isEdit = false;
 var vguid = "";
+var orderType = "";
 var $page = function () {
-
     this.init = function () {
+        orderType = $.request.queryString().OrderType;
+        if (orderType == "OBD") {
+            $("#btnImport").parent().show();
+        } else {
+            $("#btnAdd").parent().show();
+        }
         initSelectPurchaseGoods();
         addEvent();
     }
@@ -29,8 +35,53 @@ var $page = function () {
         });
         //新增
         $("#btnAdd").on("click", function () {
-            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index";
+            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?OrderType=" + orderType;
         });
+        //导入
+        $("#btnImport").on("click", function () {
+            $("#LocalOBDFileInput").click();
+        }); //OBD导入
+        $("#LocalOBDFileInput").on("change",
+            function () {
+                debugger;
+                layer.load();
+                var vguid = newguid();
+                var filePath = this.value;
+                var fileExt = filePath.substring(filePath.lastIndexOf("."))
+                    .toLowerCase();
+                if (!checkFileExt(fileExt)) {
+                    jqxNotification("您上传的文件类型不允许,请重新上传！！", null, "error");
+                    this.value = "";
+                    return;
+                } else {
+                    layer.load();
+                    $("#localOBDFormFile").ajaxSubmit({
+                        url: "/AssetPurchase/FixedAssetsOrder/ImportOBDAssignFile",
+                        type: "post",
+                        data: {
+                            'vguid': vguid
+                        },
+                        success: function (msg) {
+                            layer.closeAll('loading');
+                            switch (msg.Status) {
+                            case "0":
+                                if (msg.ResultInfo != null || msg.ResultInfo2 != null) {
+                                    jqxNotification((msg.ResultInfo == null ? "" : msg.ResultInfo) + " " + (msg.ResultInfo2 == null ? "" : msg.ResultInfo2), null, "error");
+                                } else {
+                                    jqxNotification("导入失败", null, "error");
+                                }
+                                $('#LocalOBDFileInput').val('');
+                                break;
+                            case "1":
+                                jqxNotification("导入成功！", null, "success");
+                                $('#LocalOBDFileInput').val('');
+                                initTable();
+                                break;
+                            }
+                        }
+                    });
+                }
+            });
         //删除
         $("#btnDelete").on("click", function () {
             var selection = [];
@@ -189,7 +240,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val(), "OrderNumber": $("#OrderNumber").val() },
+                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val(), "OrderNumber": $("#OrderNumber").val(), "OrderType": orderType },
                 url: "/AssetPurchase/FixedAssetsOrder/GetFixedAssetsOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -236,7 +287,7 @@ var $page = function () {
             var args = event.args;
             var row = args.row;
             var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" : row.PaymentVoucherVguid;
-            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
+            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid + "&OrderType=" + orderType;
         });
     }
     function detailFunc(row, column, value, rowData) {
@@ -293,9 +344,31 @@ var $page = function () {
 
 function link(VGUID, PaymentVoucherVguid) {
     debugger;
-    window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid;
+    window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid + "&OrderType=" + orderType;
 }
 $(function () {
     var page = new $page();
     page.init();
 });
+function checkFileExt(ext) {
+    if (!ext.match(/.xls|.xlsx/i)) {
+        return false;
+    }
+    return true;
+}
+function isNumber(val) {
+    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+    var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+    if (regPos.test(val) || regNeg.test(val)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+//生成guid
+function newguid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}

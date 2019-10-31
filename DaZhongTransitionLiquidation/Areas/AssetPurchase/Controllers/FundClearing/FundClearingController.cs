@@ -10,6 +10,7 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -41,13 +42,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.SqlQueryable<Business_FundClearing>("SELECT pa.* FROM Business_FundClearing pa INNER JOIN (select * from Business_FixedAssetsOrder where SubmitStatus = 2 and PurchaseGoods = '出租车') fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
-                    .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
-                    .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
-                    .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
-                jsonResult.TotalRows = pageCount;
+                if (searchParams.AssetType == "Vehicle" || searchParams.AssetType == "Office")
+                {
+                    jsonResult.Rows = db.SqlQueryable<Business_FundClearing>("SELECT pa.* FROM Business_FundClearing pa INNER JOIN (select * from Business_FixedAssetsOrder where SubmitStatus = 2 and OrderType = '" + searchParams.AssetType + "' ) fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
+                        .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
+                        .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
+                        .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    jsonResult.TotalRows = pageCount;
+                }
+                else if (searchParams.AssetType == "Intangible")
+                {
+                    jsonResult.Rows = db.SqlQueryable<Business_FundClearing>("SELECT pa.* FROM Business_FundClearing pa INNER JOIN (select * from Business_IntangibleAssetsOrder where SubmitStatus = 6 ) fao ON pa.FixedAssetsOrderVguid = fao.VGUID")//WHERE fao.SubmitStatus = 1
+                        .WhereIF(searchParams.PurchaseGoodsVguid != null, i => i.PurchaseGoodsVguid == searchParams.PurchaseGoodsVguid)
+                        .WhereIF(searchParams.SubmitStatus != -1, i => i.SubmitStatus == searchParams.SubmitStatus)
+                        .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                    jsonResult.TotalRows = pageCount;
+                }
             });
-
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetCompanyData()
@@ -57,6 +68,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             {
                 list = db.Queryable<Business_SevenSection>()
                     .Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetDepartmentListDatas()
+        {
+            var list = new List<PurchaseDepartmentModel>();
+            DbBusinessDataService.Command(db =>
+            {
+                list = db.SqlQueryable<PurchaseDepartmentModel>(@"SELECT VGUID,Descrption
+                    FROM Business_SevenSection
+                    WHERE SectionVGUID = 'D63BD715-C27D-4C47-AB66-550309794D43'
+                          AND AccountModeCode = '1002'
+                          AND CompanyCode = '01'
+                          AND Status = '1'
+                          AND Code LIKE '10%'").ToList();
+                foreach (var item in list)
+                {
+                    item.Descrption = "财务共享-" + item.Descrption;
+                }
             });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
@@ -99,7 +129,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult AddAssign(Guid FundClearingVguid,Guid CompanyVguid,string Company,int AssetNum)
+        public JsonResult AddAssign(Guid FundClearingVguid,Guid CompanyVguid,string Company,int AssetNum, Guid ManageCompanyVguid, string ManageCompanyName, Guid DepartmentVguid, string Department)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -112,6 +142,10 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                 liquidationDistribution.AssetsOrderVguid = FundClearingModel.FixedAssetsOrderVguid;
                 liquidationDistribution.CompanyVguid = CompanyVguid;
                 liquidationDistribution.Company = Company;
+                liquidationDistribution.ManageCompanyVguid = ManageCompanyVguid;
+                liquidationDistribution.ManageCompany = ManageCompanyName;
+                liquidationDistribution.DepartmentVguid = DepartmentVguid;
+                liquidationDistribution.Department = Department;
                 liquidationDistribution.PurchasePrices = FundClearingModel.PurchasePrices;
                 liquidationDistribution.AssetNum = AssetNum;
                 liquidationDistribution.ContractAmount = FundClearingModel.PurchasePrices * AssetNum;
@@ -132,83 +166,95 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                 var result = db.Ado.UseTran(() =>
                 {
                     var fundClearingModel = db.Queryable<Business_FundClearing>().Where(x => x.VGUID == FundClearingVguid).First();
+                    var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                     if (fundClearingModel.SubmitStatus == 0 || fundClearingModel.SubmitStatus == 2)
                     {
+                        var liquidationDistributionList = db.Queryable<Business_LiquidationDistribution>()
+                            .Where(x => x.FundClearingVguid == FundClearingVguid).ToList();
                         //检查数量是否匹配
-                        var assetSum = db.Queryable<Business_LiquidationDistribution>()
-                            .Where(x => x.FundClearingVguid == FundClearingVguid).Sum(x => x.AssetNum);
+                        var assetSum = liquidationDistributionList.Sum(x => x.AssetNum);
+                        //var assetOrder = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fundClearingModel.FixedAssetsOrderVguid).First();
+                        //var orderSetting = db.Queryable<Business_PurchaseOrderSetting>()
+                        //    .Where(x => x.VGUID == assetOrder.PurchaseGoodsVguid).First();
+                        //var assetsCategoryList = db.Queryable<Business_AssetsCategory>().ToList();
                         if (assetSum == fundClearingModel.OrderQuantity)
                         {
-                            //供应商信息
-                            var bankInfoList = db.SqlQueryable<v_Business_CustomerBankInfo>(
-                                    @"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
-                                                left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
-                                                left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID where b.Isable = '1'")
-                                .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
-                            //生成支付订单
-                            var assets = db.Queryable<Business_LiquidationDistribution>()
-                                .Where(x => x.FundClearingVguid == FundClearingVguid).ToList();
-                            foreach (var asset in assets)
+                            //var assetReviewList = new List<Business_AssetReview>();
+                            if (fundClearingModel.AssetType == "Office")
                             {
-                                var assetOrder = db.Queryable<Business_FixedAssetsOrder>()
-                                    .Where(x => x.VGUID == asset.AssetsOrderVguid).First();
-                                if (assetOrder.PayCompany != asset.Company)
-                                {
-                                    var fundClearingOrder = new Business_FundClearingOrder();
-                                    fundClearingOrder.VGUID = Guid.NewGuid();
-                                    fundClearingOrder.OrderNumber = assetOrder.OrderNumber;
-                                    fundClearingOrder.FixedAssetsOrderVguid = assetOrder.VGUID;
-                                    fundClearingOrder.PurchaseDepartmentIDs = assetOrder.PurchaseDepartmentIDs;
-                                    fundClearingOrder.PurchaseGoods = assetOrder.PurchaseGoods;
-                                    fundClearingOrder.PurchaseGoodsVguid = assetOrder.PurchaseGoodsVguid;
-                                    fundClearingOrder.OrderQuantity = asset.AssetNum;
-                                    fundClearingOrder.PurchasePrices = assetOrder.PurchasePrices;
-                                    fundClearingOrder.ContractAmount = asset.AssetNum * assetOrder.PurchasePrices;
-                                    fundClearingOrder.AssetDescription = assetOrder.AssetDescription;
-                                    fundClearingOrder.PaymentDate = assetOrder.PaymentDate;
-                                    fundClearingOrder.ContractName = assetOrder.ContractName;
-                                    fundClearingOrder.ContractFilePath = assetOrder.ContractFilePath;
-                                    fundClearingOrder.PayType = assetOrder.PayType;
-                                    //根据付款项目填充供应商信息和付款信息
-                                    var BusinessSubItem = db.Queryable<Business_PurchaseOrderSetting>().Where(x => x.VGUID == assetOrder.PurchaseGoodsVguid).First().BusinessSubItem;
-                                    var OrderVguid = db.Queryable<v_Business_BusinessTypeSet>().Where(x => x.BusinessSubItem1 == BusinessSubItem).First().VGUID.ToString();
-                                    if (bankInfoList.Any(x => x.OrderVGUID == OrderVguid) && bankInfoList.Count(x => x.OrderVGUID == OrderVguid) == 1)
-                                    {
-                                        var bankInfo = bankInfoList.First(x => x.OrderVGUID == OrderVguid);
-                                        fundClearingOrder.PaymentInformationVguid = bankInfo.VGUID;
-                                        fundClearingOrder.PaymentInformation = bankInfo.BankAccountName;
-                                        fundClearingOrder.SupplierBankAccountName = bankInfo.BankAccountName;
-                                        fundClearingOrder.SupplierBankAccount = bankInfo.BankAccount;
-                                        fundClearingOrder.SupplierBankNo = bankInfo.BankNo;
-                                        fundClearingOrder.SupplierBank = bankInfo.Bank;
-                                    }
-                                    //付款信息
-                                    //var AccountModeCode = cache[PubGet.GetUserKey].AccountModeCode;
-                                    var companylist = db.Queryable<Business_UserCompanySetDetail>().Where(x => x.OrderVGUID == OrderVguid && x.Isable)
-                                        .OrderBy(i => i.CompanyCode).ToList();
-                                    if (companylist.Any(x => x.OrderVGUID == OrderVguid))
-                                    {
-                                        var companyInfo = companylist.First(x => x.OrderVGUID == OrderVguid && x.CompanyName == asset.Company);
-                                        fundClearingOrder.PayCompanyVguid = companyInfo.VGUID;
-                                        fundClearingOrder.PayCompany = companyInfo.PayBankAccountName;
-                                        fundClearingOrder.CompanyBankName = companyInfo.PayBank;
-                                        fundClearingOrder.CompanyBankAccountName = companyInfo.PayBankAccountName;
-                                        fundClearingOrder.CompanyBankAccount = companyInfo.PayAccount;
-                                        fundClearingOrder.AccountType = companyInfo.AccountType;
-                                    }
-                                    fundClearingOrder.CreateDate = DateTime.Now;
-                                    fundClearingOrder.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                                    fundClearingOrder.SubmitStatus = 0;
-                                    db.Insertable<Business_FundClearingOrder>(fundClearingOrder).ExecuteCommand();
-                                }
+                                //    移到清算
+                                //    //无形资产和其它类资产进固定资产审核
+                                //    foreach (var liquidation in liquidationDistributionList)
+                                //    {
+                                //        for (int i = 0; i <= liquidation.AssetNum; i++)
+                                //        {
+                                //            var assetReview = new Business_AssetReview();
+                                //            assetReview.VGUID = Guid.NewGuid();
+                                //            assetReview.OBDSTATUS = false;
+                                //            var autoID = "FixedAssetID";
+                                //            var no = CreateNo.GetCreateNo(db, autoID);
+                                //            assetReview.ASSET_ID = no;
+                                //            assetReview.GROUP_ID = assetOrder.PurchaseGoods;
+                                //            //assetReview.PLATE_NUMBER = item.PlateNumber;
+                                //            //assetReview.CHASSIS_NUMBER = item.EquipmentNumber;
+                                //            assetReview.VEHICLE_SHORTNAME = "OBD";
+                                //            assetReview.DESCRIPTION = assetOrder.AssetDescription;
+                                //            //assetReview.LISENSING_DATE = item.LisensingDate;
+                                //            assetReview.TAG_NUMBER = assetReview.ASSET_ID.Replace("CZ", "BG");
+                                //            assetReview.PURCHASE_DATE = DateTime.Now;
+                                //            assetReview.QUANTITY = 1;
+                                //            assetReview.ASSET_COST = liquidation.PurchasePrices;
+                                //            //资产主类次类 根据采购物品获取
+                                //            assetReview.ASSET_CATEGORY_MAJOR = orderSetting.AssetCategoryMajor;
+                                //            assetReview.ASSET_CATEGORY_MINOR = orderSetting.AssetCategoryMinor;
+                                //            //根据主类子类从折旧方法表中获取
+                                //            var assetsCategoryInfo = assetsCategoryList.First(x => x.ASSET_CATEGORY_MAJOR == assetReview.ASSET_CATEGORY_MAJOR &&
+                                //                                                                   x.ASSET_CATEGORY_MINOR == assetReview.ASSET_CATEGORY_MINOR);
+                                //            assetReview.LIFE_YEARS = assetsCategoryInfo.LIFE_YEARS;
+                                //            assetReview.LIFE_MONTHS = assetsCategoryInfo.LIFE_MONTHS;
+                                //            assetReview.AMORTIZATION_FLAG = "N";
+                                //            assetReview.METHOD = assetsCategoryInfo.METHOD;
+                                //            assetReview.BOOK_TYPE_CODE = assetsCategoryInfo.BOOK_TYPE_CODE;
+                                //            assetReview.ASSET_COST_ACCOUNT = assetsCategoryInfo.ASSET_COST_ACCOUNT;
+                                //            assetReview.ASSET_SETTLEMENT_ACCOUNT = assetsCategoryInfo.ASSET_SETTLEMENT_ACCOUNT;
+                                //            assetReview.DEPRECIATION_EXPENSE_SEGMENT = assetsCategoryInfo.DEPRECIATION_EXPENSE_SEGMENT;
+                                //            assetReview.ACCT_DEPRECIATION_ACCOUNT = assetsCategoryInfo.ACCT_DEPRECIATION_ACCOUNT;
+                                //            assetReview.SALVAGE_PERCENT = assetsCategoryInfo.SALVAGE_PERCENT;
+                                //            assetReview.ISVERIFY = false;
+                                //            assetReview.OBDSTATUS = false;
+                                //            assetReview.YTD_DEPRECIATION = 0;
+                                //            assetReview.ACCT_DEPRECIATION = 0;
+                                //            assetReview.FIXED_ASSETS_ORDERID = assetOrder.VGUID;
+                                //            assetReview.CREATE_USER = cache[PubGet.GetUserKey].LoginName;
+                                //            assetReview.CREATE_DATE = DateTime.Now;
+                                //            assetReview.BELONGTO_COMPANY = liquidation.Company;
+                                //            assetReview.MANAGEMENT_COMPANY = liquidation.ManageCompany;
+                                //            assetReview.MODEL_MAJOR = "无";
+                                //            assetReview.MODEL_MINOR = "无";
+                                //            var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
+                                //                x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == assetReview.BELONGTO_COMPANY_CODE).First();
+                                //            var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
+                                //                x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
+                                //                x.Code == ssModel.AccountModeCode).First().Descrption;
+                                //            assetReview.EXP_ACCOUNT_SEGMENT = accountMode;
+                                //            //assetReview.VEHICLE_STATE = assetInfo.VEHICLE_STATE;
+                                //            //assetReview.OPERATING_STATE = assetInfo.OPERATING_STATE;
+                                //            assetReview.ORGANIZATION_NUM = liquidation.Department;
+                                //            assetReviewList.Add(assetReview);
+                                //        }
+                                //    }
+                                //    db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
+                                //}
+                                //fundClearingModel.SubmitStatus = 1;
+                                //fundClearingModel.LiquidationStatus = 0;
+                                //fundClearingModel.SubmitDate = DateTime.Now;
+                                //fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].LoginName;
+                                //db.Updateable<Business_FundClearing>(fundClearingModel)
+                                //    .UpdateColumns(x => new { x.SubmitDate, x.SubmitStatus,x.LiquidationStatus, x.SubmitUser }).ExecuteCommand();
+                                //resultModel.IsSuccess = true;
+                                //resultModel.Status = "1";
                             }
-                            fundClearingModel.SubmitStatus = 1;
-                            fundClearingModel.SubmitDate = DateTime.Now;
-                            fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].LoginName;
-                            db.Updateable<Business_FundClearing>(fundClearingModel)
-                                .UpdateColumns(x => new { x.SubmitDate, x.SubmitStatus, x.SubmitUser }).ExecuteCommand();
-                            resultModel.IsSuccess = true;
-                            resultModel.Status = "1";
                         }
                         else
                         {

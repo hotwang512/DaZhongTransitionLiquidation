@@ -127,7 +127,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '车辆附属采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '采购编号', datafield: 'OrderNumber', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '订单编号', datafield: 'OSNO', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '付款项目', datafield: 'PayItem', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '供应商名称', datafield: 'PaymentInformation', width: 150, align: 'center', cellsAlign: 'center' },

@@ -8,9 +8,10 @@ var selector = {
 }; //selector end
 var isEdit = false;
 var vguid = "";
+var orderType = "";
 var $page = function () {
-
     this.init = function () {
+        orderType = $.request.queryString().OrderType;
         initSelectPurchaseGoods();
         addEvent();
     }
@@ -195,7 +196,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val() },
+                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val(), "OrderType": orderType },
                 url: "/AssetPurchase/PurchaseAssign/GetBusiness_PurchaseAssignListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

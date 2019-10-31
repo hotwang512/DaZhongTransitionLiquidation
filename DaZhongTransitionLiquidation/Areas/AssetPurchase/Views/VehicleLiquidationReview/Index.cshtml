@@ -1,12 +1,12 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
-    ViewBag.Title = "资产采购/资金清算/资产分配";
+    ViewBag.Title = "资产采购/资金清算/分配清算";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.CusContent("~/Areas/AssetPurchase/Views/_js/FundClearing.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetPurchase/Views/_js/VehicleLiquidationReview.js")"></script>
     <script src="@Url.CusContent("~/_theme/_js/jquery.form.js")"></script>
 }
 
@@ -28,6 +28,9 @@
                 <td style="width: 80px;">
                     <button id="btnSubmit" type="button" class="buttons" style="width:80px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
                 </td>
+                <td style="width: 80px;">
+                    <button id="btnReject" type="button" class="buttons" style="width: 80px;margin-left: 10px"><i class="iconfont btn_icon" style="color: black !important;">&#xe678;</i><span style="margin-left: 7px; float: left;">退回</span></button>
+                </td>
             }
         </tr>
     </table>
@@ -47,11 +50,10 @@
                 </td>
                 <td class="td_span">提交状态：</td>
                 <td class="td_input">
-                    <select id="SubmitStatus" class="input_text form-control" style="width: 200px">
+                    <select id="LiquidationStatus" class="input_text form-control" style="width: 200px">
                         <option value="-1">全部</option>
                         <option value="0" selected>待提交</option>
                         <option value="1">已提交</option>
-                        <option value="2">退回待提交</option>
                     </select>
                 </td>
                 <td style="width: 95px;">
@@ -88,21 +90,9 @@
             <div class="modal-body" style="width: 100%;">
                 <table style="width: 100%;">
                     <tr style="height: 45px;">
-                        <td style="width: 100px;text-align: left"><span class="spanText">管理公司</span></td>
-                        <td>
-                            <select id="ManageCompanyName" class="input_text form-control"></select>
-                        </td>
-                    </tr>
-                    <tr style="height: 45px;">
-                        <td style="width: 100px;text-align: left"><span class="spanText">所属公司</span></td>
+                        <td style="width: 100px;text-align: left"><span class="spanText">公司</span></td>
                         <td>
                             <select id="CompanyName" class="input_text form-control"></select>
-                        </td>
-                    </tr>
-                    <tr style="height: 45px;">
-                        <td style="width: 100px;text-align: left"><span class="spanText">部门</span></td>
-                        <td>
-                            <select id="Department" class="input_text form-control"></select>
                         </td>
                     </tr>
                     <tr id="SubjectVehicleAge" class="SubjectTr" style="height: 45px; ">

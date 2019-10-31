@@ -1121,62 +1121,71 @@
             </table>
         </div>
         <div class="menue_body" id="AssetPurchase" style="display: none;">
-
             <table style="cursor: pointer;" class="bodyTable">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header" style="font-weight: 600;font-size: 15px">订单管理</td>
+                    <td class="menue_text_header" style="font-weight: 600;font-size: 15px">车辆采购</td>
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
-
             <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
                 <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
                     <table>
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="FixedAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index">
+                            <tr class="menue_item" id="FixedAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index?OrderType=Vehicle">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">固定资产订单</td>
+                                <td class="menue_text">订单管理</td>
                                 <td></td>
                             </tr>
                         }
-                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "采购分配" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/IntangibleAssetsOrder/Index">
+                            <tr class="menue_item" id="PurchaseAssign_AssetPurchase" pageurl="/AssetPurchase/PurchaseAssign/Index?OrderType=Vehicle">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">无形资产订单</td>
+                                <td class="menue_text">清册导入</td>
                                 <td></td>
                             </tr>
                         }
-
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
                         {
                             <tr class="menue_item" id="TaxFeeOrder_AssetPurchase" pageurl="/AssetPurchase/TaxFeeOrder/Index">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">车辆附属订单</td>
+                                <td class="menue_text">附属订单</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产分配" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="FundClearing_AssetPurchase" pageurl="/AssetPurchase/FundClearing/Index?OrderType=Vehicle">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产分配</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @*@if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "清算审核" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="LiquidationReview_AssetPurchase" pageurl="/AssetPurchase/LiquidationReview/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">清算审核</td>
+                                <td></td>
+                            </tr>
+                        }*@
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "清算审核" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="LiquidationReview_AssetPurchase" pageurl="/AssetPurchase/VehicleLiquidationReview/Index?OrderType=Vehicle">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">分配清算</td>
                                 <td></td>
                             </tr>
                         }
                     </table>
                 </div>
             </div>
-
-            <table style="cursor: pointer; margin-left: -8px" class="bodyTable">
-                @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "采购分配" && i.Reads == 1))
-                {
-                    <tr class="menue_item" id="PurchaseAssign_AssetPurchase" pageurl="/AssetPurchase/PurchaseAssign/Index">
-                        <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                        <td class="menue_text">清册导入</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-
             <table style="cursor: pointer;" class="bodyTable">
                 <tr>
                     <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
-                    <td class="menue_text_header" style="font-weight: 600;font-size: 15px">资金清算</td>
+                    <td class="menue_text_header" style="font-weight: 600;font-size: 15px">OBD采购</td>
                     <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
                 </tr>
             </table>
@@ -1185,7 +1194,37 @@
                     <table>
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产分配" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="FundClearing_AssetPurchase" pageurl="/AssetPurchase/FundClearing/Index">
+                            <tr class="menue_item" id="FixedAssetsOrderOBD_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index?OrderType=OBD">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">订单管理</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header" style="font-weight: 600;font-size: 15px">其它资产</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
+                    <table>
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "固定资产" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="FixedAssetsOrderOffice_AssetPurchase" pageurl="/AssetPurchase/FixedAssetsOrder/Index?OrderType=Office">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">订单管理</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产分配" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="FundClearingOffice_AssetPurchase" pageurl="/AssetPurchase/FundClearing/Index?OrderType=Office">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">资产分配</td>
                                 <td></td>
@@ -1193,9 +1232,46 @@
                         }
                         @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "清算审核" && i.Reads == 1))
                         {
-                            <tr class="menue_item" id="LiquidationReview_AssetPurchase" pageurl="/AssetPurchase/LiquidationReview/Index">
+                            <tr class="menue_item" id="LiquidationReviewOffice_AssetPurchase" pageurl="/AssetPurchase/VehicleLiquidationReview/Index?OrderType=Office">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
-                                <td class="menue_text">清算审核</td>
+                                <td class="menue_text">分配清算</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+            <table style="cursor: pointer;" class="bodyTable">
+                <tr>
+                    <td class="menue_icon_header"><i class="icon iconfont iconfont_menue">&#xe61d;</i></td>
+                    <td class="menue_text_header" style="font-weight: 600;font-size: 15px">无形资产</td>
+                    <td align="center" style="width: 50px; font-weight: normal; color: white;"></td>
+                </tr>
+            </table>
+            <div class="menue_bodychild" style="font-weight: 200;line-height: 40px;margin-left: 20px;display: none;">
+                <div class="AssetManagement AssetPurchase NewAssets AssetChange AssetDisposal AssetAllocation TaxFeeOrder" style="display: none;">
+                    <table>
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "无形资产" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="IntangibleAssetsOrder_AssetPurchase" pageurl="/AssetPurchase/IntangibleAssetsOrder/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">无形资产订单</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "资产分配" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="FundClearingIntangible_AssetPurchase" pageurl="/AssetPurchase/FundClearing/Index?OrderType=Intangible">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">资产分配</td>
+                                <td></td>
+                            </tr>
+                        }
+                        @if (true)//(isadmin || currentUserRoleModules.Any(i => i.PageName == "清算审核" && i.Reads == 1))
+                        {
+                            <tr class="menue_item" id="LiquidationReviewIntangible_AssetPurchase" pageurl="/AssetPurchase/VehicleLiquidationReview/Index?OrderType=Intangible">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">分配清算</td>
                                 <td></td>
                             </tr>
                         }
@@ -1433,6 +1509,11 @@
                             <tr class="menue_item" id="PurchaseFaxOrderSetting_AssetManagement" pageurl="/Systemmanagement/VehicleExtrasFeeSetting/Index?Status=1">
                                 <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
                                 <td class="menue_text">车辆类资产费用标准</td>
+                                <td></td>
+                            </tr>
+                            <tr class="menue_item" id="PurchaseItem_AssetManagement" pageurl="/AssetManagement/PurchaseItem/Index">
+                                <td class="menue_icon"><i class="icon iconfont iconfont_menue">&#xe618;</i></td>
+                                <td class="menue_text">采购项目配置</td>
                                 <td></td>
                             </tr>
                         }

@@ -5,8 +5,10 @@ var vehicleDefaultData;
 //拍照数据（base64）
 var baseUrl = "ws://127.0.0.1:12345";
 var socket;
+var orderType = "";
 var $page = function () {
     this.init = function () {
+        orderType = $.request.queryString().OrderType;
         //initSelect();
         //initSelectPurchaseGoods();
         initPaymentInformationComboBox(true);
@@ -74,7 +76,7 @@ var $page = function () {
             layer.load();
             $.ajax({
                 url: "/AssetPurchase/FixedAssetsOrderDetail/SubmitFixedAssetsOrder",
-                data: { "vguid": $("#VGUID").val() },
+                data: { "vguid": $("#VGUID").val(), "OrderType": orderType },
                 type: "post",
                 success: function (msg) {
                     layer.closeAll('loading');
@@ -163,15 +165,16 @@ var $page = function () {
                             "PaymentDate": $("#PaymentDate").val(),
                             "ContractName": $("#Attachment").attr("title"),
                             "ContractFilePath": $("#Attachment").attr("href"),
-                            "PayCompany": $("#PayCompanyDropdown").text(),
                             "SupplierBankAccountName": $("#BankAccountName").val(),
                             "SupplierBankAccount": $("#BankAccount").val(),
                             "SupplierBank": $("#Bank").val(),
                             "SupplierBankNo": $("#BankNo").val(),
                             "PayType": $("#PayMode").val(),
+                            "PayCompany": $("#PayCompanyDropdown").text(),
                             "CompanyBankName": $("#CompanyBankName").val(),
                             "CompanyBankAccount": $("#CompanyBankAccount").val(),
                             "CompanyBankAccountName": $("#CompanyBankAccountName").val(),
+                            "OrderType": OrderType,
                             "AccountType": $("#AccountType").val()
                         },
                         type: "post",
@@ -289,21 +292,21 @@ var $page = function () {
                 computeValue();
             });
         //提交
-        $("#btnSubmit").on("click",
-            function () {
-                $.post("/AssetPurchase/FixedAssetsOrderDetail/SubmitFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
-                    switch (msg.Status) {
-                    case "0":
-                        jqxNotification("提交失败！", null, "error");
-                        break;
-                    case "1":
-                        jqxNotification("提交成功！", null, "success");
-                        history.go(-1);
-                        window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
-                        break;
-                    }
-                });
-            });
+        //$("#btnSubmit").on("click",
+        //    function () {
+        //        $.post("/AssetPurchase/FixedAssetsOrderDetail/SubmitFixedAssetsOrder", { vguid: $("#VGUID").val() }, function (msg) {
+        //            switch (msg.Status) {
+        //            case "0":
+        //                jqxNotification("提交失败！", null, "error");
+        //                break;
+        //            case "1":
+        //                jqxNotification("提交成功！", null, "success");
+        //                history.go(-1);
+        //                window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
+        //                break;
+        //            }
+        //        });
+        //    });
         $('#PaymentInformation').on('select', function (event) {
             var args = event.args;
             if (args) {

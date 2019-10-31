@@ -1,0 +1,151 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "资产维护/采购项目配置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/PurchaseItem.js")"></script>
+}
+
+
+@section css{
+
+}<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+{
+    <table style="margin-top: 10px;display:block;" id="buttonList">
+        <tr style="height: 50px;">
+            @if (currentModuleRolePermission.Adds == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td>
+            }
+            @if (currentModuleRolePermission.Deletes == 1)
+            {
+                <td style="width: 95px;">
+                    <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">采购物品：</td>
+                <td class="td_input">
+                    <input id="PurchaseGoods" type="text" class="input_text form-control" style="width: 200px">
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+            <tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="SettingModalDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 800px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">供应商信息</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 480px; overflow: auto">
+                @if (currentModuleRolePermission.Adds == 1)
+                {
+                    <button id="btnAddSetting" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">配置</span></button>
+                }
+                <div id="jqxSettingTable"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="SettingDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="SettingDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="BankInfoModalDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 800px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">配置供应商信息</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 480px; overflow: auto">
+                <div class="body_mk" style="height: 60px;">
+                    <table style="margin-top: 10px; width: 730px;">
+                        <tr style="height: 45px;">
+                            <td class="td_span">供应商类别：</td>
+                            <td class="td_input">
+                                <div id="BankCategory">
+                                </div>
+                            </td>
+                            <td class="td_span">账号：</td>
+                            <td class="td_input">
+                                <input id="BankAccount" type="text" style="width: 200px;" class="input_text form-control" />
+                            </td>
+                            <td style="width: 95px;">
+                                <button id="btnModalSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="jqxBankInfoTable"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="BankInfoDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="BankInfoDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--配置部门信息-->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="DepartmentModalDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 800px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title_department" style="color: #555; font-family: Calibri;">配置部门信息</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 480px; overflow: auto">
+                <div id="jqxDepartmentTable"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="DepartmentDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="DepartmentDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display: none">
+    <input id="PurchaseOrderSettingVguid" />
+</div>
+<style>
+    .input_text {
+        width: 340px;
+    }
+</style>

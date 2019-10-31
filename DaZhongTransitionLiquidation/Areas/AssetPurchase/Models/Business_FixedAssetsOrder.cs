@@ -45,5 +45,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string BankStatus { get; set; }
         public string GoodsModel { get; set; }
         public string GoodsModelCode { get; set; }
+        public string OrderType { get; set; }
+        public string OrderFrom { get; set; }
+        public Guid? OrderFromVguid { get; set; }
     }
 }

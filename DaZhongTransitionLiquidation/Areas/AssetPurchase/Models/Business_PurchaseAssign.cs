@@ -22,5 +22,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string ChangeUser { set; get; }
         public DateTime? SubmitDate { set; get; }
         public string SubmitUser { set; get; }
+        public string OrderType { set; get; }
     }
 }

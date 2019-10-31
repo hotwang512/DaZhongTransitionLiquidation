@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -67,7 +68,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         /// Default:
         /// Nullable:True
         /// </summary> 
-        public decimal? CreditAmountTotal { get; set; }     
+        public decimal? CreditAmountTotal { get; set; }
         /// <summary>
         /// Desc:财务主管
         /// Default:

@@ -1,9 +1,7 @@
 ﻿using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using SqlSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
@@ -15,10 +13,9 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using System.Data;
 using Aspose.Cells;
-using System.Collections;
-using System.Reflection;
 using Aspose.Pdf;
 using DaZhongTransitionLiquidation.Controllers;
+using System.Collections.Generic;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -137,7 +134,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     else
                     {
                         voucherList.VGUID = voucher.VGUID;
-                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo ,it.Automatic,it.TradingBank ,it.ReceivingUnit ,it.TransactionDate ,it.Batch }).ExecuteCommand();
+                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo, it.Automatic, it.TradingBank, it.ReceivingUnit, it.TransactionDate, it.Batch }).ExecuteCommand();
                     }
                     //科目信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
@@ -151,7 +148,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         receivableAccount = Account[0].ReceivableAccount;
                     }
                     db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucher.VGUID).ExecuteCommand();
-                    
+
                     if (voucher.Detail != null)
                     {
                         foreach (var item in voucher.Detail)
@@ -174,7 +171,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             BVDetail.JE_LINE_NUMBER = item.JE_LINE_NUMBER;
                             BVDetail.VGUID = Guid.NewGuid();
                             BVDetail.VoucherVGUID = guid;
-                            if(item.LoanMoney != null && item.LoanMoney != 0)
+                            if (item.LoanMoney != null && item.LoanMoney != 0)
                             {
                                 BVDetail.ReceivableAccount = receivableAccount;
                             }
@@ -203,7 +200,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         }
                         db.Insertable(BVAttachList).ExecuteCommand();
                     }
-                    
+
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = guid.TryToString();
@@ -240,7 +237,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 //主信息
                 var voucher = db.Queryable<Business_VoucherList>().Single(x => x.VGUID == vguid);
-                if(voucher.FinanceDirector == "" || voucher.FinanceDirector == null)
+                if (voucher.FinanceDirector == "" || voucher.FinanceDirector == null)
                 {
                     var userData = new List<Sys_User>();
                     DbService.Command(_db =>
@@ -301,7 +298,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             try
             {
                 resultModel.IsSuccess = true;
-                resultModel.ResultInfo = "\\"+ uploadPath;//路径
+                resultModel.ResultInfo = "\\" + uploadPath;//路径
                 resultModel.ResultInfo2 = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);//名称
                 resultModel.Status = Convert.ToBoolean(resultModel.IsSuccess) ? "1" : "0";
             }
@@ -325,79 +322,96 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult PrintVoucherList(Guid vguids)
+        public JsonResult PrintVoucherList(List<Guid> vguids)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-                DataTable dt = new DataTable();
-                var data = db.Ado.SqlQuery<PrintVoucherList>(@"select CONVERT(varchar(100), a.AccountingPeriod, 23) as AccountingPeriod,CONVERT(varchar(100), a.VoucherDate, 23) as VoucherDate,a.BatchName,a.VoucherNo,a.CompanyName,
-                            a.FinanceDirector,a.Bookkeeping,a.Auditor,a.DocumentMaker,a.Cashier  from 
-                            Business_VoucherList as a where a.VGUID = @VGUID ", new { VGUID = vguids }).ToList().FirstOrDefault();
-                var dataDetail = db.Ado.SqlQuery<PrintVoucherDetail>(@"select b.Abstract,b.SevenSubjectName,convert(varchar(1000),cast(b.BorrowMoney as money),1) as BorrowMoney,
-                          convert(varchar(1000),cast(b.LoanMoney as money),1) as LoanMoney,convert(varchar(1000),cast(b.BorrowMoneyCount as money),1) as BorrowMoneyCount,
-                          convert(varchar(1000),cast(b.LoanMoneyCount as money),1) as LoanMoneyCount,b.JE_LINE_NUMBER from 
-                            Business_VoucherDetail  as b where b.VoucherVGUID = @VGUID ", new { VGUID = vguids }).OrderBy(x=>x.JE_LINE_NUMBER).ToList();
-                var attachmentCount = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == vguids).ToList().Count;
-                for (int i = 0; i < dataDetail.Count; i++)
+                List<string> pdfPathList = new List<string>();
+                foreach (var item in vguids)
                 {
-                    if (dataDetail[i].BorrowMoney == null)
+                    DataTable dt = new DataTable();
+                    var data = db.Ado.SqlQuery<PrintVoucherList>(@"select CONVERT(varchar(100), a.AccountingPeriod, 23) as AccountingPeriod,CONVERT(varchar(100), a.VoucherDate, 23) as VoucherDate,a.BatchName,a.VoucherNo,a.CompanyName,
+                            a.FinanceDirector,a.Bookkeeping,a.Auditor,a.DocumentMaker,a.Cashier,a.Status  from 
+                            Business_VoucherList as a where a.VGUID = @VGUID ", new { VGUID = item }).ToList().FirstOrDefault();
+                    var pdfPath = "/Temp/NewVoucherReport" + data.VoucherNo + ".pdf";
+                    var isAny = System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(pdfPath));
+                    if (isAny && data.Status == "3")
                     {
-                        dataDetail[i].BorrowMoney = "";
+                        //存在已生成的PDF文件直接添加进打印集合
+                        pdfPathList.Add(pdfPath);
+                        continue;
                     }
-                    if (dataDetail[i].LoanMoney == null)
+                    var dataDetail = db.Ado.SqlQuery<PrintVoucherDetail>(@"select b.Abstract,b.SevenSubjectName,convert(varchar(1000),cast(b.BorrowMoney as money),1) as BorrowMoney,
+                            convert(varchar(1000),cast(b.LoanMoney as money),1) as LoanMoney,convert(varchar(1000),cast(b.BorrowMoneyCount as money),1) as BorrowMoneyCount,
+                            convert(varchar(1000),cast(b.LoanMoneyCount as money),1) as LoanMoneyCount,b.JE_LINE_NUMBER from 
+                            Business_VoucherDetail  as b where b.VoucherVGUID = @VGUID ", new { VGUID = item }).OrderBy(x => x.JE_LINE_NUMBER).ToList();
+                    var attachmentCount = db.Queryable<Business_VoucherAttachmentList>().Where(x => x.VoucherVGUID == item).ToList().Count;
+                    for (int i = 0; i < dataDetail.Count; i++)
                     {
-                        dataDetail[i].LoanMoney = "";
+                        if (dataDetail[i].BorrowMoney == null)
+                        {
+                            dataDetail[i].BorrowMoney = "";
+                        }
+                        if (dataDetail[i].LoanMoney == null)
+                        {
+                            dataDetail[i].LoanMoney = "";
+                        }
+                        if (dataDetail[i].BorrowMoneyCount == null)
+                        {
+                            dataDetail[i].BorrowMoneyCount = "";
+                        }
+                        if (dataDetail[i].LoanMoneyCount == null)
+                        {
+                            dataDetail[i].LoanMoneyCount = "";
+                        }
                     }
-                    if (dataDetail[i].BorrowMoneyCount == null)
+                    
+                    if (dataDetail.Count <= 7)
                     {
-                        dataDetail[i].BorrowMoneyCount = "";
+                        //打印一张
+                        PrintExcel(dt, data, dataDetail, attachmentCount, pdfPathList);
+                        resultModel.Status = "1";
                     }
-                    if (dataDetail[i].LoanMoneyCount == null)
+                    else
                     {
-                        dataDetail[i].LoanMoneyCount = "";
+                        //打印多张
+                        PrintExcelMore(dt, data, dataDetail, attachmentCount, pdfPathList);
+                        resultModel.Status = "2";
                     }
                 }
-                if (dataDetail.Count <= 7)
-                {
-                    //打印一张
-                    PrintExcel(dt, data, dataDetail, attachmentCount);
-                    resultModel.Status = "1";
-                }
-                else
-                {
-                    //打印多张
-                    PrintExcelMore(dt, data, dataDetail, attachmentCount);
-                    resultModel.Status = "2";
-                }
+                //合并PDF
+                resultModel.ResultInfo = MergePdf(pdfPathList);
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet); ;
         }
 
-        private void PrintExcelMore(DataTable dt, PrintVoucherList data, List<PrintVoucherDetail> dataDetail,int attachmentCount)
+        private void PrintExcelMore(DataTable dt, PrintVoucherList data, List<PrintVoucherDetail> dataDetail, int attachmentCount, List<string> pdfPathList)
         {
             string rootPath = System.Web.HttpContext.Current.Server.MapPath("/Template/财务打印样式模板.xlsx");
             string url = System.Web.HttpContext.Current.Server.MapPath("/Temp");
             var pageCount = (dataDetail.Count / 7).TryToInt();//总张数
             var lastPage = dataDetail.Count % 7;//最后一张的条数
-            if(lastPage != 0)
+            if (lastPage != 0)
             {
                 pageCount = pageCount + 1;
             }
-            Document pdf = new Document();
             for (int i = 1; i <= pageCount; i++)
             {
-                string fileName = "VoucherReport" + i + ".xlsx";
+                var excelPath = "/Temp/VoucherReport" + data.VoucherNo + "-" + i + ".xlsx";
+                var pdfPath = "/Temp/NewVoucherReport" + data.VoucherNo + "-" + i + ".pdf";
+                string fileName = "VoucherReport" + data.VoucherNo + "-" + i + ".xlsx";
                 string filePath = System.IO.Path.Combine(url, fileName);
                 Workbook wk = new Workbook(rootPath);
                 Worksheet sheet = wk.Worksheets[0]; //工作表
                 Aspose.Cells.Cells cells = sheet.Cells;//单元格
                 dt = dataDetail.Skip((i - 1) * 7).Take(7).ToList().TryToDataTable();
                 dt.TableName = "VoucherReport";
-                if(i == pageCount)
+                if (i == pageCount)
                 {
                     //循环至最后一张,补全7行
-                    for (int j = 0; j < 7 - dt.Rows.Count; j++)
+                    var rowCount = dt.Rows.Count;
+                    for (int j = 0; j < 7 - rowCount; j++)
                     {
                         dt.AddRow();
                     }
@@ -406,8 +420,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 }
                 cells[0, 0].PutValue(data.CompanyName);
                 cells[1, 4].PutValue(data.AccountingPeriod);
-                cells[1, 16].PutValue(data.BatchName);
-                cells[2, 16].PutValue(data.VoucherNo+"-"+i);
+                cells[1, 15].PutValue(data.BatchName);
+                cells[2, 15].PutValue(data.VoucherNo + "-" + i);
                 cells[3, 10].PutValue(data.VoucherDate);
                 cells[3, 19].PutValue(attachmentCount);
                 cells[7, 2].PutValue(data.FinanceDirector);
@@ -419,15 +433,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 designer.SetDataSource(dt);
                 designer.Process();
                 designer.Workbook.Save(filePath);
-                Workbook wb = new Workbook(System.Web.HttpContext.Current.Server.MapPath("/Temp/VoucherReport" + i + ".xlsx"));
-                wb.Save(System.Web.HttpContext.Current.Server.MapPath("/Temp/NewVoucherReport" + i + ".pdf"), Aspose.Cells.SaveFormat.Pdf);
-                Document pdf2 = new Document(System.Web.HttpContext.Current.Server.MapPath("/Temp/NewVoucherReport" + i + ".pdf"));
-                pdf.Pages.Add(pdf2.Pages);
+                Workbook wb = new Workbook(System.Web.HttpContext.Current.Server.MapPath(excelPath));
+                wb.Save(System.Web.HttpContext.Current.Server.MapPath(pdfPath), Aspose.Cells.SaveFormat.Pdf);
+                pdfPathList.Add(pdfPath);
             }
-            pdf.Save(System.Web.HttpContext.Current.Server.MapPath("/Temp/LastVoucherReport.pdf"));
         }
-        private void PrintExcel(DataTable dt, PrintVoucherList data,List<PrintVoucherDetail> dataDetail,int attachmentCount)
+        private void PrintExcel(DataTable dt, PrintVoucherList data, List<PrintVoucherDetail> dataDetail, int attachmentCount, List<string> pdfPathList)
         {
+            var excelPath = "/Temp/VoucherReport" + data.VoucherNo + ".xlsx";
+            var pdfPath = "/Temp/NewVoucherReport" + data.VoucherNo + ".pdf";
             dt = dataDetail.TryToDataTable();
             dt.TableName = "VoucherReport";
             if (dataDetail.Count != 7)
@@ -439,15 +453,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             }
             string rootPath = System.Web.HttpContext.Current.Server.MapPath("/Template/财务打印样式模板.xlsx");
             string url = System.Web.HttpContext.Current.Server.MapPath("/Temp");
-            string fileName = "VoucherReport.xlsx";
+            string fileName = "VoucherReport" + data.VoucherNo + ".xlsx";
             string filePath = System.IO.Path.Combine(url, fileName);
             Workbook wk = new Workbook(rootPath);
             Worksheet sheet = wk.Worksheets[0]; //工作表
             Aspose.Cells.Cells cells = sheet.Cells;//单元格
             cells[0, 0].PutValue(data.CompanyName);
             cells[1, 4].PutValue(data.AccountingPeriod);
-            cells[1, 16].PutValue(data.BatchName);
-            cells[2, 16].PutValue(data.VoucherNo);
+            cells[1, 15].PutValue(data.BatchName);
+            cells[2, 15].PutValue(data.VoucherNo);
             cells[3, 10].PutValue(data.VoucherDate);
             cells[3, 19].PutValue(attachmentCount);
             cells[7, 2].PutValue(data.FinanceDirector);
@@ -461,37 +475,38 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             designer.SetDataSource(dt);
             designer.Process();
             designer.Workbook.Save(filePath);
-            Workbook wb = new Workbook(System.Web.HttpContext.Current.Server.MapPath("/Temp/VoucherReport.xlsx"));
-            wb.Save(System.Web.HttpContext.Current.Server.MapPath("/Temp/NewVoucherReport.pdf"), Aspose.Cells.SaveFormat.Pdf);
+            Workbook wb = new Workbook(System.Web.HttpContext.Current.Server.MapPath(excelPath));
+            wb.Save(System.Web.HttpContext.Current.Server.MapPath(pdfPath), Aspose.Cells.SaveFormat.Pdf);
+            pdfPathList.Add(pdfPath);
         }
-
-        /// <summary>
-        /// list to datatable
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        public DataTable ListToDt<T>(IEnumerable<T> collection)
+        public bool DeleteFile(string path)
         {
-            var props = typeof(T).GetProperties();
-            var dt = new DataTable();
-            dt.Columns.AddRange(props.Select(p => new
-            DataColumn(p.Name, p.PropertyType)).ToArray());
-            if (collection.Count() > 0)
+            try
             {
-                for (int i = 0; i < collection.Count(); i++)
+                if (System.IO.File.Exists(path))
                 {
-                    ArrayList tempList = new ArrayList();
-                    foreach (PropertyInfo pi in props)
-                    {
-                        object obj = pi.GetValue(collection.ElementAt(i), null);
-                        tempList.Add(obj);
-                    }
-                    object[] array = tempList.ToArray();
-                    dt.LoadDataRow(array, true);
+                    System.IO.File.Delete(path);
                 }
+                return true;
             }
-            return dt;
+            catch
+            {
+                return false;
+            }
+        }
+        public string MergePdf(List<string> pdfPathList)
+        {
+            Document pdf = new Document();
+            for (int i = 0; i < pdfPathList.Count; i++)
+            {
+                var path = pdfPathList[i];
+                Document pdf2 = new Document(System.Web.HttpContext.Current.Server.MapPath(path));
+                pdf.Pages.Add(pdf2.Pages);
+            }
+            var guid = Guid.NewGuid();
+            var lastPath = "/Temp/LastVoucherReport" + guid + ".pdf";
+            pdf.Save(System.Web.HttpContext.Current.Server.MapPath(lastPath));
+            return lastPath;
         }
     }
 }

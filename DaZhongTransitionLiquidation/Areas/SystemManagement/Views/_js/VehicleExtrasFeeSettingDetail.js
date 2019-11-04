@@ -63,6 +63,40 @@ var $page = function () {
                     }
                 });
             });
+
+        $("#VehicleExtrasFeeSettingDialog_OKBtn").on("click", function () {
+            var validateError = 0; //未通过验证的数量
+            if (!Validate($("#StartDate"))) {
+                validateError++;
+            }
+            if (!Validate($("#PurchaseItem"))) {
+                validateError++;
+            }
+            //$("#VehicleExtrasFeeSettingDialog_OKBtn").attr("vguid", dataRecord.VGUID);
+            if (validateError <= 0) {
+                $.ajax({
+                    url: "/Systemmanagement/VehicleExtrasFeeSettingDetail/UpdateExtrasFeeSetting",
+                    data: { StartDate: $("#StartDate").val(), Fee: $("#Fee").val(), VGUID: $("#VehicleExtrasFeeSettingDialog_OKBtn").attr("vguid") },
+                    traditional: true,
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("修改失败！", null, "error");
+                            break;
+                        case "1":
+                            $("#VehicleExtrasFeeSettingModalDialog").modal("hide");
+                            jqxNotification("修改成功！", null, "success");
+                            getOrderSettingInfoList();
+                            break;
+                        }
+                    }
+                });
+            }
+        });
+        $("#VehicleExtrasFeeSettingDialog_CancelBtn").on("click", function () {
+            $("#VehicleExtrasFeeSettingModalDialog").modal("hide");
+        });
     }; //addEvent end
     function GetVehicleModelDropDown() {
         $.ajax({
@@ -76,24 +110,6 @@ var $page = function () {
             }
         });
     }
-    //var getEditorDataAdapter = function (datafield) {
-    //    var url = "/Systemmanagement/VehicleExtrasFeeSettingDetail/GetBusinessProject";
-    //    var source =
-    //    {
-    //        datatype: "json",
-    //        data: {
-    //            "BusinessProject": ""
-    //        },
-    //        datafields: [
-    //            { name: 'BusinessProject', type: 'string' },
-    //            { name: 'BusinessSubItem1', type: 'string' }
-    //        ],
-    //        url: url,
-    //        async: false
-    //    };
-    //    var dataAdapter = new $.jqx.dataAdapter(source, { uniqueDataFields: [datafield] });
-    //    return dataAdapter;
-    //}
     function getOrderSettingInfoList() {
         var url = "/SystemManagement/VehicleExtrasFeeSettingDetail/GetVehicleExtrasFeeSettingListDatas";
         var ordersSource =
@@ -101,8 +117,10 @@ var $page = function () {
             dataFields: [
                 { name: 'VehicleModel', type: 'string' },
                 { name: 'BusinessProject', type: 'string' },
+                { name: 'StartDate', type: 'date' },
                 { name: 'BusinessSubItem', type: 'string' },
-                { name: 'Fee', type: 'string' },
+                { name: 'Fee', type: 'number' },
+                { name: 'strShow', type: 'string' },
                 { name: 'Status', type: 'bool' },
                 { name: 'VGUID', type: 'string' }
             ],
@@ -116,9 +134,9 @@ var $page = function () {
         };
         var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
             loadComplete: function () {
-                // data is loaded.
             }
         });
+        var editrow = -1;
         $("#table").jqxGrid(
         {
             width: "100%",
@@ -126,7 +144,7 @@ var $page = function () {
             source: dataAdapter,
             selectionmode: 'singlerow',
             editable: true,
-            editmode: 'selectedrow',
+            editmode: 'selectedcell',
             ready: function () {
             },
             toolbarHeight: 35,
@@ -214,8 +232,9 @@ var $page = function () {
             columns: [
                 { text: '业务项目', editable: false, dataField: 'BusinessProject', width: 200, cellsAlign: 'center', align: 'center' },
                 { text: '业务编码', editable: false, dataField: 'BusinessSubItem', width: 200, cellsAlign: 'center', align: 'center' },
+                { text: '启用日期', editable: false, datafield: 'StartDate', width: 200, align: 'center', cellsalign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                 {
-                    text: '费用', columntype: 'template',cellsAlign: 'center',datafield: 'Fee', width: 180,height: 90,align: 'center', createEditor: function (row, cellvalue, editor, cellText, width, height) {
+                    text: '费用', editable: false, columntype: 'template', cellsAlign: 'center', datafield: 'Fee', width: 180, height: 90, align: 'center', createEditor: function (row, cellvalue, editor, cellText, width, height) {
                         // construct the editor.
                         var inputElement = $("<input style='padding-left: 4px; border: none;width:200px;height:20px'/>").appendTo(editor);
                         inputElement.jqxInput({ width: '100%', height: '100%' });
@@ -229,11 +248,35 @@ var $page = function () {
                     }
                 },
                 { text: '状态', datafield: 'Status', editable: true, align: 'center', columntype: 'checkbox', width: 67, cellsAlign: 'center' },
+                {
+                    text: '编辑', editable: false, datafield: 'Edit', align: 'center', width: 67, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                        var dataRecord = $("#table").jqxGrid('getrowdata', row);
+                        debugger;
+                        if (dataRecord.strShow != "") {
+                            return "<div style='margin-top:6px;margin-left:20px'><a href='#' title=" +
+                                dataRecord.strShow +
+                                " onclick=Edit('" +
+                                row +
+                                "') style=\"text-decoration: underline;color: #333;\">编辑</a></div>";
+                        } else {
+                            return "<div style='margin-top:6px;margin-left:20px'><a href='#'onclick=Edit('" +
+                                row +
+                                "') style=\"text-decoration: underline;color: #333;\">编辑</a></div>";
+                        }
+                    }
+                },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true }
             ]
         });
     }
 };
+function Edit(row) {
+    var dataRecord = $("#table").jqxGrid('getrowdata', row);
+    $("#Fee").val(dataRecord.Fee);
+    $("#StartDate").val(formatDate(dataRecord.StartDate));
+    $("#VehicleExtrasFeeSettingModalDialog").modal("show");
+    $("#VehicleExtrasFeeSettingDialog_OKBtn").attr("vguid", dataRecord.VGUID);
+}
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
@@ -243,3 +286,8 @@ $(function () {
     var page = new $page();
     page.init();
 });
+function formatDate(NewDtime) {
+    var d = NewDtime;
+    var datetime = d.getFullYear() + '-' + (d.getMonth() + 1);//  + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
+    return datetime;
+}

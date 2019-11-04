@@ -15,6 +15,7 @@ namespace DaZhongTransitionLiquidation.AutoMapper
                 cfg.AddProfile<Profiles.AssetInfoProfile>();
                 cfg.AddProfile<Profiles.AssignProfile>();
                 cfg.AddProfile<Profiles.AssetLedgerProfile>();
+                cfg.AddProfile<Profiles.VehicleExtrasFeeSettingProfile>();
             });
         }
     }

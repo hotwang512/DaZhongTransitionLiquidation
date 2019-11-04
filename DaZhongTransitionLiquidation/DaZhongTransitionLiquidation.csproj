@@ -2567,6 +2567,7 @@
     <Compile Include="Areas\SystemManagement\Models\Business_TransferSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_TransferSettingDetail.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_VehicleExtrasFeeSettingHistory.cs" />
     <Compile Include="Areas\SystemManagement\Models\PurchaseDepartmentModel.cs" />
     <Compile Include="Areas\SystemManagement\Models\VehicleExtrasFeeSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\v_BankPurchaseSupplier.cs" />
@@ -2600,6 +2601,7 @@
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />
     <Compile Include="AutoMapper\Profiles\AssetLedgerProfile.cs" />
     <Compile Include="AutoMapper\Profiles\AssignProfile.cs" />
+    <Compile Include="AutoMapper\Profiles\VehicleExtrasFeeSettingProfile.cs" />
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\CreateNo.cs" />

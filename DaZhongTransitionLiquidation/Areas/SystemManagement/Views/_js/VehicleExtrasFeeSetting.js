@@ -10,15 +10,15 @@ var $page = function () {
 
     this.init = function () {
         GetVehicleModelDropDown();
+        GetVehicleExtrasFeeSettingColumns();
+        //加载列表数据
         addEvent();
     }
     //所有事件
     function addEvent() {
-        //加载列表数据
-        initTable();
         //InitVehicleModelSelect();
         selector.$btnSearch().unbind("click").on("click", function () {
-            initTable();
+            GetVehicleExtrasFeeSettingColumns();
         });
 
         //重置按钮事件
@@ -72,65 +72,57 @@ var $page = function () {
         });
     }
 
-    function initTable() {
-        var source =
-            {
-                datafields:
-                [
-                    { name: 'VehicleModelCode', type: 'string' },
-                    { name: 'VehicleModel', type: 'string' },
-                    { name: 'BusinessProject', type: 'string' },
-                    { name: 'Fee', type: 'float' },
-                    { name: 'Status', type: 'number' },
-                    { name: 'CreateDate', type: 'date' },
-                    { name: 'CreateUser', type: 'string' },
-                    { name: 'ChangeDate', type: 'date' },
-                    { name: 'ChangeUser', type: 'string' },
-                    { name: 'VGUID', type: 'string' }
-                ],
-                datatype: "json",
-                id: "VGUID",
-                data: { "VehicleModel": $("#VehicleModel").val() },
-                url: "/Systemmanagement/VehicleExtrasFeeSetting/GetVehicleExtrasFeeSettingListDatas"   //获取数据源的路径
-            };
-        var typeAdapter = new $.jqx.dataAdapter(source, {
-            downloadComplete: function (data) {
-                source.totalrecords = data.TotalRows;
+    function initTable(data, para) {
+        var datafields = [{ name: 'BusinessProject', type: 'string' }];
+        var columns = [
+            { text: '业务项目', datafield: 'BusinessProject', width: 100, align: 'center', cellsAlign: 'center' }
+        ];
+        for (var i = 0; i < data.length; i++) {
+            datafields.push({ name: data[i], type: 'float' });
+            columns.push({ text: data[i], datafield: data[i], width: 100, align: 'center', cellsAlign: 'center' });
+        }
+        $.ajax({
+            url: "/Systemmanagement/VehicleExtrasFeeSetting/GetVehicleExtrasFeeSettingListDatas",
+            type: "GET",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                var source =
+                {
+                    datafields: datafields,
+                    datatype: "json",
+                    data: { "VehicleModel": para },
+                    localdata: msg   //获取数据源的路径
+                };
+                var typeAdapter = new $.jqx.dataAdapter(source, {
+                    downloadComplete: function (data) {
+                        source.totalrecords = data.TotalRows;
+                    }
+                });
+                //创建卡信息列表（主表）
+                selector.$grid().jqxDataTable(
+                    {
+                        pageable: true,
+                        width: "100%",
+                        height: 400,
+                        pageSize: 10,
+                        serverProcessing: true,
+                        pagerButtonsCount: 10,
+                        source: typeAdapter,
+                        theme: "office",
+                        columnsHeight: 40,
+                        columnsResize: true,
+                        columns: columns
+                    });
+                //selector.$grid().on('rowDoubleClick', function (event) {
+                //    // event args.
+                //    var args = event.args;
+                //    // row data.
+                //    var row = args.row;
+                //    // row index.
+                //    window.location.href = "/Systemmanagement/VehicleExtrasFeeSettingDetail/Index?VGUID=" + row.VGUID + "&Code=" + row.VehicleModelCode;
+                //});
             }
-        });
-        //创建卡信息列表（主表）
-        selector.$grid().jqxDataTable(
-            {
-                pageable: true,
-                width: "100%",
-                height: 400,
-                pageSize: 10,
-                serverProcessing: true,
-                pagerButtonsCount: 10,
-                source: typeAdapter,
-                theme: "office",
-                columnsHeight: 40,
-                columnsResize: true,
-                columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '车型', datafield: 'VehicleModel', width: 200, align: 'center', cellsAlign: 'center' },
-                    { text: '业务项目', datafield: 'BusinessProject', width: 300, align: 'center', cellsAlign: 'center' },
-                    { text: '费用', datafield: 'Fee', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '状态', datafield: 'Status', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer:statusFunc},
-                    { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '创建人', datafield: 'CreateUser', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '修改时间', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: '修改人', datafield: 'ChangeUser', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
-                ]
-            });
-        selector.$grid().on('rowDoubleClick', function (event) {
-            // event args.
-            var args = event.args;
-            // row data.
-            var row = args.row;
-            // row index.
-            window.location.href = "/Systemmanagement/VehicleExtrasFeeSettingDetail/Index?VGUID=" + row.VGUID + "&Code=" + row.VehicleModelCode;
         });
     }
     function statusFunc(row, column, value, rowData) {
@@ -174,10 +166,24 @@ var $page = function () {
             dataType: "json",
             async: false,
             success: function (msg) {
-                debugger;
                 uiEngineHelper.bindSelect('#VehicleModel', msg, "Code", "Descrption");
                 $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
-                debugger;
+            }
+        });
+    }
+    function GetVehicleExtrasFeeSettingColumns() {
+        $.ajax({
+            url: "/Systemmanagement/VehicleExtrasFeeSetting/GetVehicleExtrasFeeSettingColumns",
+            type: "GET",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                var para = "";
+                for (var i = 0; i < msg.ResultInfo.length; i++) {
+                    para += "[" + msg.ResultInfo[i] + "],";
+                }
+                para = para.substring(0, para.length - 1);
+                initTable(msg.ResultInfo,para);
             }
         });
     }

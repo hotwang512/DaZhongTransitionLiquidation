@@ -209,6 +209,7 @@ var $page = function () {
         return checkBox;
     }
     function cellsBankInfoRendererFunc(row, column, value, rowData) {
+        debugger;
         if (allvguids.indexOf(rowData.uid) == -1) {
             allvguids.push(rowData.uid);
         }
@@ -303,7 +304,7 @@ var $page = function () {
                     { text: '配置供应商', datafield: 'Setting',width: 90, align: 'center', cellsAlign: 'center',hidden:false, cellsRenderer: cellsSettingRenderer },
                     //{ text: '配置部门', datafield: 'SettingDepartment', hidden: false, width: 70, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingDepartmentRenderer },
                     //{ text: '配置资产管理公司', datafield: 'SettingAssetManagementCompany', hidden: false, width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingAssetManagementCompany},
-                    { text: '采购物品', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '采购项目', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: '创建人', datafield: 'CreateUser', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '修改时间', datafield: 'ChangeDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },

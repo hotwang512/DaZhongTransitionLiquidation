@@ -154,7 +154,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '供应商类别', datafield: 'CompanyOrPerson', width:'250px',align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
+                    { text: '供应商类别',hidden:true, datafield: 'CompanyOrPerson', width:'250px',align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
                     { text: '账号', datafield: 'BankAccount', align: 'center', width: '250px', cellsAlign: 'center', },
                     { text: '户名', datafield: 'BankAccountName', align: 'center', width: '350px', cellsAlign: 'center' },
                     { text: '开户行', datafield: 'Bank', align: 'center', width: '350px', cellsAlign: 'center' },

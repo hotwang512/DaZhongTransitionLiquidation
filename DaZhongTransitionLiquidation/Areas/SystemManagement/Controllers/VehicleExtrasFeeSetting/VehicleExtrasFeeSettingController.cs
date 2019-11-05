@@ -56,7 +56,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             var resultModel = new ResultModel<List<string>>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Queryable<Business_VehicleExtrasFeeSetting>().GroupBy(x => x.VehicleModel)
+                var data = db.Queryable<Business_VehicleExtrasFeeSetting>().Where(x => x.Status).GroupBy(x => x.VehicleModel)
                     .Select(x => x.VehicleModel).ToList();
                 resultModel.ResultInfo = data;
                 resultModel.IsSuccess = true;

@@ -255,6 +255,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                 //resultModel.IsSuccess = true;
                                 //resultModel.Status = "1";
                             }
+                            fundClearingModel.SubmitStatus = 1;
+                            fundClearingModel.LiquidationStatus = 0;
+                            fundClearingModel.SubmitDate = DateTime.Now;
+                            fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].LoginName;
+                            db.Updateable<Business_FundClearing>(fundClearingModel)
+                                .UpdateColumns(x => new { x.SubmitDate, x.SubmitStatus,x.LiquidationStatus, x.SubmitUser }).ExecuteCommand();
+                            resultModel.IsSuccess = true;
+                            resultModel.Status = "1";
                         }
                         else
                         {

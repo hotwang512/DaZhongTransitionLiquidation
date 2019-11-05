@@ -168,12 +168,14 @@ var $page = function () {
             { name: 'VGUID', type: 'string' },
             { name: 'FundClearingVguid', type: 'string' },
             { name: 'Company', type: 'string' },
+            { name: 'OrderNumber', type: 'string' },
             { name: 'PurchasePrices', type: 'number' },
             { name: 'AssetNum', type: 'number' },
             { name: 'ContractAmount', type: 'number' }
         ];
         var columns = [
-            { text: '公司', dataField: 'Company', editable: false, width: '45%', align: 'center', cellsAlign: 'center' },
+            { text: '订单编号', dataField: 'OrderNumber', editable: false, width: '15%', align: 'center', cellsAlign: 'center' },
+            { text: '公司', dataField: 'Company', editable: false, width: '30%', align: 'center', cellsAlign: 'center' },
             { text: '单价', dataField: 'PurchasePrices', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
             { text: '数量', dataField: 'AssetNum', width: '15%', align: 'center', cellsAlign: 'center' },
             { text: '金额', dataField: 'ContractAmount', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
@@ -184,11 +186,12 @@ var $page = function () {
             datafields.push({ name: 'ManageCompany', type: 'string' });
             datafields.push({ name: 'Department', type: 'string' });
             columns = [
-                { text: '管理公司', dataField: 'ManageCompany', editable: false, width: '25%', align: 'center', cellsAlign: 'center' },
-                { text: '所属公司', dataField: 'Company', editable: false, width: '25%', align: 'center', cellsAlign: 'center' },
+                { text: '订单编号', dataField: 'OrderNumber', editable: false, width: '15%', align: 'center', cellsAlign: 'center' },
+                { text: '管理公司', dataField: 'ManageCompany', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
+                { text: '所属公司', dataField: 'Company', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
                 { text: '部门', dataField: 'Department', editable: false, width: '15%', align: 'center', cellsAlign: 'center' },
                 { text: '单价', dataField: 'PurchasePrices', editable: false, width: '10%', align: 'center', cellsAlign: 'center' },
-                { text: '数量', dataField: 'AssetNum', width: '15%', align: 'center', cellsAlign: 'center' },
+                { text: '数量', dataField: 'AssetNum', width: '10%', align: 'center', cellsAlign: 'center' },
                 { text: '金额', dataField: 'ContractAmount', editable: false, width: '10%', align: 'center', cellsAlign: 'center' },
                 { text: '删除', dataField: 'VGUID', hidden: true, align: 'center', cellsAlign: 'center' }
             ];
@@ -296,7 +299,7 @@ var $page = function () {
                         container.append(addButton);
                         container.append(deleteButton);
                         if (orderType != "Vehicle") {
-                            toolBar.append(container);
+                            //toolBar.append(container);
                         }
                         addButton.jqxButton({ cursor: "pointer", enableDefault: false, height: 25, width: 25 });
                         addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));

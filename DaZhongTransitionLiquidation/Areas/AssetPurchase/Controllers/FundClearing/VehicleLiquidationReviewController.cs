@@ -165,6 +165,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                         var fundClearingOrderList = new List<Business_FixedAssetsOrder>();
                         var fundClearingIntangibleOrderList = new List<Business_IntangibleAssetsOrder>();
                         var assetReviewList = new List<Business_AssetReview>();
+                        var updateLiquidationDistributionList = new List<Business_LiquidationDistribution>();
                         if (OrderType == "Vehicle" || OrderType == "Office")
                         {
                             var assetOrder = db.Queryable<Business_FixedAssetsOrder>().Where(x => x.VGUID == fundClearingModel.FixedAssetsOrderVguid).First();
@@ -228,10 +229,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                     fundClearingOrder.OrderFrom = "分配清算";
                                     fundClearingOrder.OrderType = OrderType;
                                     fundClearingOrderList.Add(fundClearingOrder);
+                                    asset.OrderNumber = fundClearingOrder.OrderNumber;
+                                    updateLiquidationDistributionList.Add(asset);
                                 }
                                 if (OrderType == "Office")
                                 {
-                                    for (int i = 0; i <= asset.AssetNum; i++)
+                                    for (int i = 0; i < asset.AssetNum; i++)
                                     {
                                         var assetReview = new Business_AssetReview();
                                         assetReview.VGUID = Guid.NewGuid();
@@ -277,7 +280,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                         assetReview.MODEL_MAJOR = "无";
                                         assetReview.MODEL_MINOR = "无";
                                         var ssModel = db.Queryable<Business_SevenSection>().Where(x =>
-                                            x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.OrgID == assetReview.BELONGTO_COMPANY_CODE).First();
+                                            x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Abbreviation == assetReview.BELONGTO_COMPANY).First();
                                         var accountMode = db.Queryable<Business_SevenSection>().Where(x =>
                                             x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" &&
                                             x.Code == ssModel.AccountModeCode).First().Descrption;
@@ -342,8 +345,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                     LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
                                 }
                             }
-                            db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
-                            db.Insertable<Business_FixedAssetsOrder>(fundClearingOrderList).ExecuteCommand();
+                            if (updateLiquidationDistributionList.Count > 0)
+                            {
+                                db.Updateable(updateLiquidationDistributionList).ExecuteCommand();
+                            }
+                            if (assetReviewList.Count > 0)
+                            {
+                                db.Insertable<Business_AssetReview>(assetReviewList).ExecuteCommand();
+                            }
+                            if (fundClearingOrderList.Count > 0)
+                            {
+                                db.Insertable<Business_FixedAssetsOrder>(fundClearingOrderList).ExecuteCommand();
+                            }
                             fundClearingModel.LiquidationStatus = 1;
                             fundClearingModel.SubmitDate = DateTime.Now;
                             fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].LoginName;
@@ -407,8 +420,17 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                     fundClearingOrder.CreateDate = DateTime.Now;
                                     fundClearingOrder.CreateUser = cache[PubGet.GetUserKey].LoginName;
                                     fundClearingOrder.SubmitStatus = 0;
+                                    fundClearingOrder.NeedVerifie = true;
                                     fundClearingOrder.OrderFrom = "分配清算";
                                     fundClearingIntangibleOrderList.Add(fundClearingOrder);
+                                    asset.OrderNumber = fundClearingOrder.OrderNumber;
+                                    updateLiquidationDistributionList.Add(asset);
+                                }
+                                else
+                                {
+                                    db.Updateable<Business_IntangibleAssetsOrder>()
+                                        .UpdateColumns(x => new Business_IntangibleAssetsOrder(){ NeedVerifie = true })
+                                        .Where(x => x.VGUID == assetOrder.VGUID).ExecuteCommand();
                                 }
                             }
                             foreach (var model in fundClearingIntangibleOrderList)
@@ -481,7 +503,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FundClear
                                     LogHelper.WriteLog(string.Format("result:{0}", pendingRedult.message));
                                 }
                             }
-                            db.Insertable<Business_IntangibleAssetsOrder>(fundClearingIntangibleOrderList).ExecuteCommand();
+                            if (updateLiquidationDistributionList.Count > 0)
+                            {
+                                db.Updateable(updateLiquidationDistributionList).ExecuteCommand();
+                            }
+                            if (fundClearingIntangibleOrderList.Count > 0)
+                            {
+                                db.Insertable<Business_IntangibleAssetsOrder>(fundClearingIntangibleOrderList).ExecuteCommand();
+                            }
                             fundClearingModel.LiquidationStatus = 1;
                             fundClearingModel.SubmitDate = DateTime.Now;
                             fundClearingModel.SubmitUser = cache[PubGet.GetUserKey].LoginName;

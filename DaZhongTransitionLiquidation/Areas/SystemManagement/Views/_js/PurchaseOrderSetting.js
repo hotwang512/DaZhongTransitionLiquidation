@@ -278,7 +278,7 @@ var $page = function () {
                     { text: '配置供应商', datafield: 'Setting',width: 90, align: 'center', cellsAlign: 'center',hidden:true, cellsRenderer: cellsSettingRenderer },
                     //{ text: '配置部门', datafield: 'SettingDepartment', hidden: false, width: 70, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingDepartmentRenderer },
                     //{ text: '配置资产管理公司', datafield: 'SettingAssetManagementCompany', hidden: false, width: 120, align: 'center', cellsAlign: 'center', cellsRenderer: cellsSettingAssetManagementCompany},
-                    { text: '采购物品', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '采购物品', datafield: 'PurchaseGoods', width: 200, align: 'center', cellsAlign: 'center',cellsRenderer: detailFunc },
                     { text: '资产主类', datafield: 'AssetCategoryMajor', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '资产子类', datafield: 'AssetCategoryMinor', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '创建时间', datafield: 'CreateDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
@@ -336,7 +336,16 @@ var $page = function () {
         });
         return true;
     }
+    function detailFunc(row, column, value, rowData) {
+        var container = "";
+        container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.PurchaseGoods + "</a>";
+        return container;
+    }
 };
+function link(VGUID) {
+    debugger;
+    window.location.href = "/Systemmanagement/PurchaseOrderSettingDetail/Index?VGUID=" + VGUID;
+}
 function cellsSettingAssetManagementCompany(vguid) {
     $("#PurchaseOrderSettingVguid").val(vguid);
     var source =

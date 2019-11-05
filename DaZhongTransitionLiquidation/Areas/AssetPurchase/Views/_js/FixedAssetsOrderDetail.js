@@ -174,7 +174,7 @@ var $page = function () {
                             "CompanyBankName": $("#CompanyBankName").val(),
                             "CompanyBankAccount": $("#CompanyBankAccount").val(),
                             "CompanyBankAccountName": $("#CompanyBankAccountName").val(),
-                            "OrderType": OrderType,
+                            "OrderType": orderType,
                             "AccountType": $("#AccountType").val()
                         },
                         type: "post",

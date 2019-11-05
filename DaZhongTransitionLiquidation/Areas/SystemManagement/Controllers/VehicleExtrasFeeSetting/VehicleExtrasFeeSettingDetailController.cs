@@ -112,7 +112,8 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
                     var list = db.SqlQueryable<Business_SevenSection>(@"SELECT * FROM Business_SevenSection WHERE SectionVGUID = 'F63BD715-C27D-4C47-AB66-550309794D43'
 AND AccountModeCode = '1002' AND status = 1 AND CompanyCode = '01' AND code LIKE '10%'").ToList();
                     var vDescrptionehicleModelName = list.Where(x => x.Code == VehicleModel).First().Descrption;
-                    var feeSettingList = new List<Business_VehicleExtrasFeeSetting>();
+                    var feeSettingInsertList = new List<Business_VehicleExtrasFeeSetting>();
+                    var feeSettingUpdateList = new List<Business_VehicleExtrasFeeSetting>();
                     var businessProjectList = db.SqlQueryable<BusinessProjectModel>(@"SELECT BusinessSubItem1,BusinessProject FROM v_Business_BusinessTypeSet Where  BusinessSubItem1 LIKE 'cz|03|0301|%' AND BusinessSubItem1 != 'cz|03|0301|030101'").ToList();
                     foreach (var item in businessProjectList)
                     {
@@ -130,14 +131,29 @@ AND AccountModeCode = '1002' AND status = 1 AND CompanyCode = '01' AND code LIKE
                         vehicleExtrasFeeSettingModel.CreateDate= DateTime.Now;
                         vehicleExtrasFeeSettingModel.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x =>
-                            x.BusinessSubItem == vehicleExtrasFeeSettingModel.BusinessSubItem))
+                            x.BusinessSubItem == vehicleExtrasFeeSettingModel.BusinessSubItem && x.VehicleModelCode == VehicleModel))
                         {
-                            feeSettingList.Add(vehicleExtrasFeeSettingModel);
+                            feeSettingInsertList.Add(vehicleExtrasFeeSettingModel);
+                        }
+                        if (!db.Queryable<Business_VehicleExtrasFeeSetting>().Any(x =>
+                            x.BusinessSubItem == vehicleExtrasFeeSettingModel.BusinessSubItem && x.VehicleModelCode == VehicleModel && x.BusinessProject == item.BusinessProject))
+                        {
+                            feeSettingUpdateList.Add(vehicleExtrasFeeSettingModel);
                         }
                     }
-                    if (feeSettingList.Count > 0)
+                    if (feeSettingInsertList.Count > 0)
                     {
-                        db.Insertable<Business_VehicleExtrasFeeSetting>(feeSettingList).ExecuteCommand();
+                        db.Insertable<Business_VehicleExtrasFeeSetting>(feeSettingInsertList).ExecuteCommand();
+                    }
+                    if (feeSettingUpdateList.Count > 0)
+                    {
+                        foreach (var item in feeSettingUpdateList)
+                        {
+                            db.Updateable<Business_VehicleExtrasFeeSetting>()
+                                .UpdateColumns(x => new Business_VehicleExtrasFeeSetting
+                                    {BusinessProject = item.BusinessProject})
+                                .Where(x => x.BusinessSubItem == item.BusinessSubItem).ExecuteCommand();
+                        }
                     }
                 }
                 resultModel.IsSuccess = true;

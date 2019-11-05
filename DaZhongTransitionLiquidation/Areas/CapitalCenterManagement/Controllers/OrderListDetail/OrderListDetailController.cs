@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDetail
 {
@@ -143,18 +144,19 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
                 var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID && x.PurchaseItemVGUID == PurchaseID).ToList();
                 if (data.Count > 0)
                 {
-                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select distinct info.*
-	                     , setting.Isable
+                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select distinct
+                           info.*
+                         , setting.Isable
                          , setting.OrderVGUID
-	                     , setting.PurchaseItemVGUID
+                         , setting.PurchaseItemVGUID
                     from Business_CustomerBankInfo             as info
-                        left join Business_CustomerBankSetting as setting
+                    left join Business_PurchaseSupplier as supplier 
+                    on supplier.CustomerBankInfoVguid = info.VGUID
+                    left join (select * from Business_CustomerBankSetting where OrderVGUID = '"+ OrderVGUID + @"') as setting
                             on info.VGUID = setting.CustomerID
-                        left join Business_PurchaseSupplier    as supplier
-                            on setting.PurchaseItemVGUID = supplier.PurchaseOrderSettingVguid
-                        left join v_Business_BusinessTypeSet   as typeset
-                            on typeset.VGUID = setting.OrderVGUID").Where(x => x.PurchaseItemVGUID == PurchaseID && x.OrderVGUID == OrderVGUID)
-                    .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+		                     left join v_Business_BusinessTypeSet   as typeset
+                            on typeset.VGUID = setting.OrderVGUID where supplier.PurchaseOrderSettingVguid = '"+ PurchaseID + @"'")
+                                            .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
                 }
                 else
                 {

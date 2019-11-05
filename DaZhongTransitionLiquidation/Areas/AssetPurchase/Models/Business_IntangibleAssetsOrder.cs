@@ -46,5 +46,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string OSNO { get; set; }
         public string BankStatus { get; set; }
         public bool ISVerify { get; set; }
+        public bool NeedVerifie { get; set; }
     }
 }

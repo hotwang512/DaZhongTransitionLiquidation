@@ -104,6 +104,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         /// Nullable:True
         /// </summary>           
         public string ChangeUser { get; set; }
+        public string OrderNumber { get; set; }
 
     }
 }

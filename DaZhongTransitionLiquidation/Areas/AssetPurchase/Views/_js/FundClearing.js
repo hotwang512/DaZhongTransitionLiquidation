@@ -263,6 +263,8 @@ var $page = function () {
                         container.append(addButton);
                         container.append(deleteButton);
                         if (orderType != "Vehicle") {
+                            debugger;
+                            if (rowinfo.row.SubmitStatus == 0 || rowinfo.row.SubmitStatus == 2)
                             toolBar.append(container);
                         }
                         addButton.jqxButton({ cursor: "pointer", enableDefault: false, height: 25, width: 25 });

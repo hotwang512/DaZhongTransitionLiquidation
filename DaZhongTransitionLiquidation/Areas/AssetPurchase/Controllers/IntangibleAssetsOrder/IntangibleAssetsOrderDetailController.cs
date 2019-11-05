@@ -60,6 +60,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
+                        sevenSection.NeedVerifie = false;
                         sevenSection.ISVerify = false;
                         db.Insertable<Business_IntangibleAssetsOrder>(sevenSection).ExecuteCommand();
                     }
@@ -386,7 +387,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
 
                         var orderModel = db.Queryable<Business_IntangibleAssetsOrder>()
                                 .Where(x => x.VGUID == model.VGUID).First();
-                        if (model.SubmitStatus == 1)
+                        if (model.SubmitStatus == 1 && model.OrderFrom != "分配清算")
                         {
                             var purchaseClearingmodel = new Business_FundClearing();
                             purchaseClearingmodel.VGUID = Guid.NewGuid();

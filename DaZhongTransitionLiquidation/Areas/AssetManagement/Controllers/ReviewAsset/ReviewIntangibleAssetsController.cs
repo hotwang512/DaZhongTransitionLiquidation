@@ -41,7 +41,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_IntangibleAssetsOrder>()
+                jsonResult.Rows = db.Queryable<Business_IntangibleAssetsOrder>().Where(x => x.NeedVerifie && !x.ISVerify)
                     .WhereIF(searchParams.OSNO != null, i => i.OSNO.Contains(searchParams.OSNO))
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;

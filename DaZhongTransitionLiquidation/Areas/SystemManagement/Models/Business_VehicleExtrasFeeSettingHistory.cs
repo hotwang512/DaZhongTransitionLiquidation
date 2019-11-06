@@ -6,11 +6,7 @@ using SqlSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
 {
-    ///<summary>
-    ///车辆类资产费用标准
-    ///</summary>
-    [SugarTable("Business_VehicleExtrasFeeSetting")]
-    public class Business_VehicleExtrasFeeSetting
+    public class Business_VehicleExtrasFeeSettingHistory
     {
         /// <summary>
         /// Desc:
@@ -19,6 +15,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         /// </summary>           
         [SugarColumn(IsPrimaryKey = true)]
         public Guid VGUID { get; set; }
+        public Guid LGUID { get; set; }
 
         /// <summary>
         /// Desc:
@@ -79,34 +76,5 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         /// </summary>           
         public string ChangeUser { get; set; }
         public DateTime StartDate { get; set; }
-
-    }
-
-    public class SaveFeeSettingModel
-    {
-        public List<Business_VehicleExtrasFeeSetting> FeeSettingList { get; set; }
-    }
-    public class Business_VehicleExtrasFeeSettingShow: Business_VehicleExtrasFeeSetting
-    {
-        //public Business_VehicleExtrasFeeSetting FeeSetting { get; set; }
-
-        public string strShow
-        {
-            get
-            {
-                var str = "";
-                foreach (var item in SettingHistoryList)
-                {
-                    str = str + item.StartDate.ToString("yyyy-MM")+ "&nbsp;" + item.Fee + "&#13;";
-                }
-                return str;
-            }
-        }
-        public List<Business_VehicleExtrasFeeSettingHistory> SettingHistoryList { get; set; }
-    }
-    public class ExtrasFeeSettingHistory
-    {
-        public string StartDate { get; set; }
-        public string Fee { get; set; }
     }
 }

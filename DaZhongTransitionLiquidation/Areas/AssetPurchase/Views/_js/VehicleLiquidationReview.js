@@ -3,6 +3,7 @@ var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnSubmit: function () { return $("#btnSubmit") },
+    $btnReject: function () { return $("#btnReject") },
     $btnReset: function () { return $("#btnReset") },
     $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
@@ -14,8 +15,6 @@ var $page = function () {
         orderType = $.request.queryString().OrderType;
         initSelectPurchaseGoods();
         initSelectCompany();
-        initManageSelectCompany();
-        initSelectDepartment();
         addEvent();
     }
     //所有事件
@@ -33,15 +32,11 @@ var $page = function () {
         $("#OrderBelongToDialog_OKBtn").on("click",
             function () {
                 $.ajax({
-                    url: "/AssetPurchase/FundClearing/AddAssign",
+                    url: "/AssetPurchase/VehicleLiquidationReview/AddAssign",
                     data: {
                         "FundClearingVguid": $("#AssignVguid").val(),
                         "CompanyVguid": $("#CompanyName").val(),
                         "Company": $("#CompanyName option:selected").text(),
-                        "ManageCompanyVguid": $("#ManageCompanyName").val(),
-                        "ManageCompanyName": $("#ManageCompanyName option:selected").text(),
-                        "DepartmentVguid": $("#Department").val(),
-                        "Department": $("#Department option:selected").text(),
                         "AssetNum": $("#AssetNum").val()
                     },
                     type: "post",
@@ -85,7 +80,7 @@ var $page = function () {
                 $("#AssignDialog").modal("show");
             }
         });
-        selector.$btnSubmit().on("click", function() {
+        selector.$btnSubmit().on("click", function () {
             var selection = [];
             var grid = $("#jqxTable");
             var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
@@ -101,21 +96,21 @@ var $page = function () {
                 jqxNotification("请选择一条数据！", null, "error");
             } else {
                 $.ajax({
-                    url: "/AssetPurchase/FundClearing/SubmitAssign",
-                    data: { FundClearingVguid: selection[0] },
+                    url: "/AssetPurchase/VehicleLiquidationReview/SubmitAssign",
+                    data: { FundClearingVguid: selection[0], OrderType:orderType},
                     type: "post",
                     success: function (msg) {
                         switch (msg.Status) {
-                        case "0":
-                            jqxNotification("提交失败！", null, "error");
-                            break;
-                        case "2":
-                            jqxNotification(msg.ResultInfo, null, "error");
-                            break;
-                        case "1":
-                            jqxNotification("提交成功！", null, "success");
-                            $("#jqxTable").jqxDataTable('updateBoundData');
-                            break;
+                            case "0":
+                                jqxNotification("提交失败！", null, "error");
+                                break;
+                            case "2":
+                                jqxNotification(msg.ResultInfo, null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("提交成功！", null, "success");
+                                $("#jqxTable").jqxDataTable('updateBoundData');
+                                break;
                         }
                     }
                 });
@@ -130,33 +125,73 @@ var $page = function () {
                 var row = args.row;
                 $("#OrderQuantity").val(row.OrderQuantity);
             });
+        selector.$btnReject().on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length != 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            } else {
+                $.ajax({
+                    url: "/AssetPurchase/VehicleLiquidationReview/RejectLiquidation",
+                    data: { FundClearingVguid: selection[0] },
+                    type: "post",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                        case "0":
+                            jqxNotification("退回失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("退回成功！", null, "success");
+                            $("#jqxTable").jqxDataTable('updateBoundData');
+                            break;
+                        case "2":
+                            jqxNotification(msg.ResultInfo, null, "error");
+                            break;
+                        }
+                    }
+                });
+            }
+        });
     }; //addEvent end
+
     function initTable() {
         var datafields = [
             { name: 'VGUID', type: 'string' },
             { name: 'FundClearingVguid', type: 'string' },
             { name: 'Company', type: 'string' },
+            { name: 'OrderNumber', type: 'string' },
             { name: 'PurchasePrices', type: 'number' },
             { name: 'AssetNum', type: 'number' },
             { name: 'ContractAmount', type: 'number' }
         ];
         var columns = [
-            { text: '公司', dataField: 'Company', editable: false, width: '45%', align: 'center', cellsAlign: 'center' },
+            { text: '订单编号', dataField: 'OrderNumber', editable: false, width: '15%', align: 'center', cellsAlign: 'center' },
+            { text: '公司', dataField: 'Company', editable: false, width: '30%', align: 'center', cellsAlign: 'center' },
             { text: '单价', dataField: 'PurchasePrices', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
             { text: '数量', dataField: 'AssetNum', width: '15%', align: 'center', cellsAlign: 'center' },
             { text: '金额', dataField: 'ContractAmount', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
             { text: '删除', dataField: 'VGUID', hidden: true, align: 'center', cellsAlign: 'center' }
         ];
-        
+
         if (orderType != "Vehicle") {
             datafields.push({ name: 'ManageCompany', type: 'string' });
             datafields.push({ name: 'Department', type: 'string' });
             columns = [
-                { text: '管理公司', dataField: 'ManageCompany', editable: false, width: '25%', align: 'center', cellsAlign: 'center' },
-                { text: '所属公司', dataField: 'Company', editable: false, width: '25%', align: 'center', cellsAlign: 'center' },
+                { text: '订单编号', dataField: 'OrderNumber', editable: false, width: '15%', align: 'center', cellsAlign: 'center' },
+                { text: '管理公司', dataField: 'ManageCompany', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
+                { text: '所属公司', dataField: 'Company', editable: false, width: '20%', align: 'center', cellsAlign: 'center' },
                 { text: '部门', dataField: 'Department', editable: false, width: '15%', align: 'center', cellsAlign: 'center' },
                 { text: '单价', dataField: 'PurchasePrices', editable: false, width: '10%', align: 'center', cellsAlign: 'center' },
-                { text: '数量', dataField: 'AssetNum', width: '15%', align: 'center', cellsAlign: 'center' },
+                { text: '数量', dataField: 'AssetNum', width: '10%', align: 'center', cellsAlign: 'center' },
                 { text: '金额', dataField: 'ContractAmount', editable: false, width: '10%', align: 'center', cellsAlign: 'center' },
                 { text: '删除', dataField: 'VGUID', hidden: true, align: 'center', cellsAlign: 'center' }
             ];
@@ -173,6 +208,7 @@ var $page = function () {
                     { name: 'PurchasePrices', type: 'float' },
                     { name: 'ContractAmount', type: 'float' },
                     { name: 'AssetDescription', type: 'string' },
+                    { name: 'LiquidationStatus', type: 'number' },
                     { name: 'SubmitStatus', type: 'number' },
                     { name: 'CreateDate', type: 'date' },
                     { name: 'ChangeDate', type: 'date' },
@@ -181,8 +217,8 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "SubmitStatus": $("#SubmitStatus").val(), "AssetType": orderType },
-                url: "/AssetPurchase/FundClearing/GetListDatas"   //获取数据源的路径
+                data: { "PurchaseGoodsVguid": $("#PurchaseGoods").val(), "LiquidationStatus": $("#LiquidationStatus").val(), "AssetType": orderType },
+                url: "/AssetPurchase/VehicleLiquidationReview/GetListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -199,7 +235,7 @@ var $page = function () {
                 datatype: "json",
                 id: 'VGUID',
                 data: { "Vguid": id },
-                url: "/AssetPurchase/FundClearing/GetAssignCompany",
+                url: "/AssetPurchase/VehicleLiquidationReview/GetAssignCompany",
                 updateRow: function (rowID, rowData, commit) {
                     debugger;
                     var count = 0;
@@ -222,11 +258,11 @@ var $page = function () {
                             type: "post",
                             success: function (msg) {
                                 switch (msg.Status) {
-                                case "0":
-                                    break;
-                                case "1":
-                                    commit(true);
-                                    break;
+                                    case "0":
+                                        break;
+                                    case "1":
+                                        commit(true);
+                                        break;
                                 }
                             }
                         });
@@ -244,7 +280,7 @@ var $page = function () {
                 //}
                 nestedDataTable.jqxDataTable({
                     source: nestedDataTableAdapter,
-                    editable: rowinfo.row.SubmitStatus == 1 ? false : true,
+                    editable: false,
                     altRows: true,
                     editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
                     width: '100%', height: 180,
@@ -263,9 +299,7 @@ var $page = function () {
                         container.append(addButton);
                         container.append(deleteButton);
                         if (orderType != "Vehicle") {
-                            debugger;
-                            if (rowinfo.row.SubmitStatus == 0 || rowinfo.row.SubmitStatus == 2)
-                            toolBar.append(container);
+                            //toolBar.append(container);
                         }
                         addButton.jqxButton({ cursor: "pointer", enableDefault: false, height: 25, width: 25 });
                         addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
@@ -292,12 +326,12 @@ var $page = function () {
                                 type: "post",
                                 success: function (msg) {
                                     switch (msg.Status) {
-                                    case "0":
-                                        jqxNotification("删除失败！", null, "error");
-                                        break;
-                                    case "1":
-                                        jqxNotification("删除成功！", null, "success");
-                                        break;
+                                        case "0":
+                                            jqxNotification("删除失败！", null, "error");
+                                            break;
+                                        case "1":
+                                            jqxNotification("删除成功！", null, "success");
+                                            break;
                                     }
                                 }
                             });
@@ -328,7 +362,7 @@ var $page = function () {
                 },
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '提交状态', datafield: 'SubmitStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
+                    { text: '提交状态', datafield: 'LiquidationStatus', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererSubmit },
                     { text: 'FixedAssetsOrderVguid', datafield: 'FixedAssetsOrderVguid', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '采购物品', datafield: 'PurchaseGoods', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '采购数量', datafield: 'OrderQuantity', width: 150, align: 'center', cellsAlign: 'center' },
@@ -370,6 +404,7 @@ var $page = function () {
         return true;
     }
     function cellsRendererSubmit(row, column, value, rowData) {
+        debugger;
         if (value == 1) {
             return '<span style="margin: 4px; margin-top:8px;">已提交</span>';
         } else if (value == 0) {
@@ -395,39 +430,12 @@ var $page = function () {
     function initSelectCompany() {
         //使用部门
         $.ajax({
-            url: "/AssetPurchase/FundClearing/GetCompanyData",
+            url: "/AssetPurchase/VehicleLiquidationReview/GetCompanyData",
             type: "POST",
             dataType: "json",
             async: false,
             success: function (msg) {
-                uiEngineHelper.bindSelect('#CompanyName', msg, "VGUID", "Abbreviation");
-                $("#Company").prepend("<option value=\"\" selected='true'>请选择</>");
-            }
-        });
-    }
-
-    function initManageSelectCompany() {
-        //使用部门
-        $.ajax({
-            url: "/AssetPurchase/FundClearing/GetCompanyData",
-            type: "POST",
-            dataType: "json",
-            async: false,
-            success: function (msg) {
-                uiEngineHelper.bindSelect('#ManageCompanyName', msg, "VGUID", "Abbreviation");
-                $("#Company").prepend("<option value=\"\" selected='true'>请选择</>");
-            }
-        });
-    }
-    function initSelectDepartment() {
-        //使用部门
-        $.ajax({
-            url: "/AssetPurchase/FundClearing/GetDepartmentListDatas",
-            type: "POST",
-            dataType: "json",
-            async: false,
-            success: function (msg) {
-                uiEngineHelper.bindSelect('#Department', msg, "VGUID", "Descrption");
+                uiEngineHelper.bindSelect('#CompanyName', msg, "VGUID", "Descrption");
                 $("#Company").prepend("<option value=\"\" selected='true'>请选择</>");
             }
         });

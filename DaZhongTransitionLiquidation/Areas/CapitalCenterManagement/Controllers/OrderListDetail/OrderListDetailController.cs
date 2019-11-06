@@ -14,6 +14,8 @@ using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.OrderListDetail
 {
@@ -43,7 +45,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     if(sevenSection.CollectionCompany != null)
                     {
                         var guid = new Guid(sevenSection.CollectionCompany);
-                        sevenSection.CollectionCompanyName = db.Queryable<Business_CustomerBankInfo>().Single(x => x.VGUID == guid).CompanyOrPerson;
+                        sevenSection.CollectionCompanyName = db.Queryable<Business_PurchaseItem>().Single(x => x.VGUID == guid).PurchaseGoods;
                     }
                     var isAny = db.Queryable<Business_OrderList>().Any(x => x.VGUID == sevenSection.VGUID);
                     var customer = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == sevenSection.VGUID.ToString() && x.Isable == true);
@@ -134,26 +136,46 @@ left join Business_OrderList as b on a.VGUID = b.OrderDetailValue").Single(x => 
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }
-        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID,string CustomerID)
+        public JsonResult GetCollectionBankChange(string CollectionCompany,string OrderVGUID,Guid PurchaseID)
         {
             var result = new List<v_Business_CustomerBankInfo>();
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID && x.CustomerID == CustomerID).ToList();
+                var data = db.Queryable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == OrderVGUID && x.PurchaseItemVGUID == PurchaseID).ToList();
                 if (data.Count > 0)
                 {
-                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select a.*,b.Isable,b.OrderVGUID from Business_CustomerBankInfo as a 
-left join Business_CustomerBankSetting as b on a.VGUID = b.CustomerID
-left join v_Business_BusinessTypeSet as c on c.VGUID = b.OrderVGUID").Where(x => x.CompanyOrPerson == CollectionCompany && x.OrderVGUID == OrderVGUID)
-                    .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
+                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select distinct
+                           info.*
+                         , setting.Isable
+                         , setting.OrderVGUID
+                         , setting.PurchaseItemVGUID
+                    from Business_CustomerBankInfo             as info
+                    left join Business_PurchaseSupplier as supplier 
+                    on supplier.CustomerBankInfoVguid = info.VGUID
+                    left join (select * from Business_CustomerBankSetting where OrderVGUID = '"+ OrderVGUID + @"') as setting
+                            on info.VGUID = setting.CustomerID
+		                     left join v_Business_BusinessTypeSet   as typeset
+                            on typeset.VGUID = setting.OrderVGUID where supplier.PurchaseOrderSettingVguid = '"+ PurchaseID + @"'")
+                                            .OrderBy(i => i.CreateTime, OrderByType.Desc).ToList();
                 }
                 else
                 {
-                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select * from Business_CustomerBankInfo").Where(x => x.CompanyOrPerson == CollectionCompany).ToList();
+                    result = db.SqlQueryable<v_Business_CustomerBankInfo>(@"select info.*,supplier.PurchaseOrderSettingVguid as PurchaseItemVGUID
+                                from Business_CustomerBankInfo             as info
+                                    left join Business_PurchaseSupplier    as supplier
+                                        on info.VGUID = supplier.CustomerBankInfoVguid").Where(x => x.PurchaseItemVGUID == PurchaseID).ToList();
                 }
-               
             });
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPurchaseItem()
+        {
+            var list = new List<Business_PurchaseItem>();
+            DbBusinessDataService.Command(db =>
+            {
+                list = db.SqlQueryable<Business_PurchaseItem>(@"select * from Business_PurchaseItem").ToList();
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
         public JsonResult SaveBusinessTypeName(string BusinessTypeName, string BusinessVGUID)
         {
@@ -378,7 +400,7 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
             });
             return Json(resultModel);
         }
-        public JsonResult UpdataCustomerIsable(string vguids, bool ischeck,string orderVguid,string companyOrPerson)
+        public JsonResult UpdataCustomerIsable(string vguids, bool ischeck,string orderVguid,Guid purchaseItemID, string purchaseItem)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -394,7 +416,11 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                     {
                         db.Deleteable<Business_CustomerBankSetting>().Where(x => x.OrderVGUID == orderVguid).ExecuteCommand();
                     }
-                    var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == companyOrPerson).ToList();
+                    //var data = db.Queryable<Business_CustomerBankInfo>().Where(x => x.CompanyOrPerson == companyOrPerson).ToList();
+                    var data = db.SqlQueryable<Business_CustomerBankInfo>(
+                        @"select bankInfo.* from Business_CustomerBankInfo as bankInfo left join Business_PurchaseSupplier item on bankInfo.VGUID = item.CustomerBankInfoVguid where item.PurchaseOrderSettingVguid = '" +
+                        purchaseItemID + "'").ToList();
+                        //.Where(x => x.CompanyOrPerson == purchaseItem).ToList();
                     foreach (var item in data)
                     {
                         var isAny = db.Queryable<Business_CustomerBankSetting>().Any(x => x.CustomerID == item.VGUID.TryToString() && x.OrderVGUID == orderVguid);
@@ -404,6 +430,7 @@ left join Business_UserCompanySetDetail as b on b.KeyData = a.KeyData where a.Us
                             customer.VGUID = Guid.NewGuid();
                             customer.CustomerID = item.VGUID.TryToString();
                             customer.Isable = false;
+                            customer.PurchaseItemVGUID = purchaseItemID;
                             if (item.VGUID == vguids.TryToGuid())
                             {
                                 customer.CustomerID = vguids;

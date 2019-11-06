@@ -50,6 +50,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         /// </summary>           
         public string Company { get; set; }
 
+        public Guid? ManageCompanyVguid { get; set; }
+
+        public string ManageCompany { get; set; }
+        public Guid? DepartmentVguid { get; set; }
+
+        public string Department { get; set; }
         /// <summary>
         /// Desc:
         /// Default:
@@ -98,6 +104,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         /// Nullable:True
         /// </summary>           
         public string ChangeUser { get; set; }
+        public string OrderNumber { get; set; }
 
     }
 }

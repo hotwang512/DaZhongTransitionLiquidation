@@ -215,6 +215,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\DisposeProfitLoss.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeTax.js" />
     <Content Include="Areas\AssetManagement\Views\_js\OBDModifyReview.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\PurchaseItem.js" />
     <Content Include="Areas\AssetManagement\Views\_js\ReviewAsset.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsLedger.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetsMaintenance.js" />
@@ -236,6 +237,7 @@
     <Content Include="Areas\AssetPurchase\Views\_js\PurchaseAssign.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\TaxFeeOrder.js" />
     <Content Include="Areas\AssetPurchase\Views\_js\TaxFeeOrderDetail.js" />
+    <Content Include="Areas\AssetPurchase\Views\_js\VehicleLiquidationReview.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_css\OrderListDraftPrint.css" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BankFlowTemplate.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\BusinessTypeSet.js" />
@@ -402,6 +404,8 @@
     <Content Include="Areas\ReimbursementCenter\Views\ReimburseOrderDetail\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleUnit\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VehicleCount\Index.cshtml" />
+    <Content Include="Areas\AssetPurchase\Views\VehicleLiquidationReview\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\PurchaseItem\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleMenu\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
@@ -3288,6 +3292,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\AssetsMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetsRetirement\AssetsRetirementController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\PurchaseItem\PurchaseItemController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetsRetirementReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\OBDModifyReviewController.cs" />
@@ -3311,6 +3316,8 @@
     <Compile Include="Areas\AssetManagement\Models\Business_ManageModel_AssetsCategory.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyOBD.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ModifyVehicle.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_PurchaseItem.cs" />
+    <Compile Include="Areas\AssetManagement\Models\Business_PurchaseItem_Supplier.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_ScrapVehicle.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckChangeReport.cs" />
     <Compile Include="Areas\AssetManagement\Models\Business_VehicleCheckReport.cs" />
@@ -3325,6 +3332,7 @@
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\FundClearingOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\LiquidationReviewController.cs" />
+    <Compile Include="Areas\AssetPurchase\Controllers\FundClearing\VehicleLiquidationReviewController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\IntangibleAssetsOrder\IntangibleAssetsOrderDetailController.cs" />
     <Compile Include="Areas\AssetPurchase\Controllers\PurchaseAssign\PurchaseAssignController.cs" />
@@ -3462,6 +3470,7 @@
     <Compile Include="Areas\SystemManagement\Models\Business_TransferSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_TransferSettingDetail.cs" />
     <Compile Include="Areas\SystemManagement\Models\Business_UserCompanySet.cs" />
+    <Compile Include="Areas\SystemManagement\Models\Business_VehicleExtrasFeeSettingHistory.cs" />
     <Compile Include="Areas\SystemManagement\Models\PurchaseDepartmentModel.cs" />
     <Compile Include="Areas\SystemManagement\Models\SysNewModulesModule.cs" />
     <Compile Include="Areas\SystemManagement\Models\VehicleExtrasFeeSetting.cs" />
@@ -3496,6 +3505,7 @@
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />
     <Compile Include="AutoMapper\Profiles\AssetLedgerProfile.cs" />
     <Compile Include="AutoMapper\Profiles\AssignProfile.cs" />
+    <Compile Include="AutoMapper\Profiles\VehicleExtrasFeeSettingProfile.cs" />
     <Compile Include="Controllers\AutoSyncAssetsMaintenance.cs" />
     <Compile Include="Controllers\AutoSyncBankFlow.cs" />
     <Compile Include="Controllers\CreateNo.cs" />

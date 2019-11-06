@@ -61,6 +61,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         var autoID = "FixedAssetsOrder";
                         var no = CreateNo.GetCreateNo(db, autoID);
                         sevenSection.OrderNumber = no;
+                        sevenSection.OrderFrom = "手动新增";
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = FixedAssetsSubmitStatusEnum.UnSubmit.TryToInt();
@@ -321,7 +322,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);
         }
         
-        public JsonResult SubmitFixedAssetsOrder(Guid vguid)
+        public JsonResult SubmitFixedAssetsOrder(Guid vguid,string OrderType)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -351,7 +352,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                                                               + orderListData.BusinessSubItem1.Substring(orderListData.BusinessSubItem1.LastIndexOf("|") + 1, orderListData.BusinessSubItem1.Length - orderListData.BusinessSubItem1.LastIndexOf("|") - 1);
                         //根据供应商账号找到供应商类别
                         pendingPaymentmodel.PaymentCompany = db.Queryable<Business_CustomerBankInfo>()
-                            .Where(x => x.BankAccount == model.SupplierBankAccount).First().CompanyOrPerson; ;
+                            .Where(x => x.BankAccount == model.SupplierBankAccount).First().CompanyOrPerson; 
                         pendingPaymentmodel.CollectBankAccountName = model.SupplierBankAccountName;
                         pendingPaymentmodel.CollectBankAccouont = model.SupplierBankAccount;
                         pendingPaymentmodel.CollectBankName = model.SupplierBank;
@@ -377,42 +378,63 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                             model.SubmitStatus = FixedAssetsSubmitStatusEnum.UnPay.TryToInt();
                             model.SubmitDate = DateTime.Now;
                             model.SubmitUser = cache[PubGet.GetUserKey].LoginName;
-                            db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
-                            //提交完后写入采购分配表
-                            var purchaseAssignmodel = new Business_PurchaseAssign();
-                            purchaseAssignmodel.VGUID = Guid.NewGuid();
-                            purchaseAssignmodel.CreateDate = DateTime.Now;
-                            purchaseAssignmodel.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                            purchaseAssignmodel.FixedAssetsOrderVguid = model.VGUID;
-                            purchaseAssignmodel.PurchaseGoodsVguid = model.PurchaseGoodsVguid;
-                            purchaseAssignmodel.PurchaseGoods = model.PurchaseGoods;
-                            purchaseAssignmodel.OrderQuantity = model.OrderQuantity;
-                            purchaseAssignmodel.PurchasePrices = model.PurchasePrices;
-                            purchaseAssignmodel.ContractAmount = model.ContractAmount;
-                            purchaseAssignmodel.AssetDescription = model.AssetDescription;
-                            db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
-                            var fundClearingModel = Mapper.Map<Business_FundClearing>(purchaseAssignmodel);
-                            fundClearingModel.VGUID = Guid.NewGuid();
-                            db.Insertable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
-                            var companys = db.Queryable<Business_PurchaseManagementCompany>()
-                                .Where(x => x.PurchaseOrderSettingVguid == orderModel.PurchaseGoodsVguid && x.IsCheck).ToList();
-                            var liquidationDistributionList = new List<Business_LiquidationDistribution>();
-                            foreach (var company in companys)
+                            if (model.OrderFrom != "清算提交" && OrderType != "OBD")
                             {
-                                var liquidationDistribution = new Business_LiquidationDistribution();
-                                liquidationDistribution.VGUID = Guid.NewGuid();
-                                liquidationDistribution.FundClearingVguid = fundClearingModel.VGUID;
-                                liquidationDistribution.AssetsOrderVguid = fundClearingModel.FixedAssetsOrderVguid;
-                                liquidationDistribution.CompanyVguid = company.ManagementCompanyVguid;
-                                liquidationDistribution.Company = company.ManagementCompany;
-                                liquidationDistribution.PurchasePrices = fundClearingModel.PurchasePrices;
-                                liquidationDistribution.AssetNum = 0;
-                                liquidationDistribution.ContractAmount = 0;
-                                liquidationDistribution.CreateDate = DateTime.Now;
-                                liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].LoginName;
-                                liquidationDistributionList.Add(liquidationDistribution);
+                                //提交完后写入采购分配表
+                                var purchaseAssignmodel = new Business_PurchaseAssign();
+                                purchaseAssignmodel.VGUID = Guid.NewGuid();
+                                purchaseAssignmodel.CreateDate = DateTime.Now;
+                                purchaseAssignmodel.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                                purchaseAssignmodel.FixedAssetsOrderVguid = model.VGUID;
+                                purchaseAssignmodel.PurchaseGoodsVguid = model.PurchaseGoodsVguid;
+                                purchaseAssignmodel.PurchaseGoods = model.PurchaseGoods;
+                                purchaseAssignmodel.OrderQuantity = model.OrderQuantity;
+                                purchaseAssignmodel.PurchasePrices = model.PurchasePrices;
+                                purchaseAssignmodel.ContractAmount = model.ContractAmount;
+                                purchaseAssignmodel.AssetDescription = model.AssetDescription;
+                                purchaseAssignmodel.OrderType = model.OrderType;
+                                if (OrderType != "Office")
+                                {
+                                    db.Insertable<Business_PurchaseAssign>(purchaseAssignmodel).ExecuteCommand();
+                                    var fundClearingModel = Mapper.Map<Business_FundClearing>(purchaseAssignmodel);
+                                    fundClearingModel.VGUID = Guid.NewGuid();
+                                    var companys = db.Queryable<Business_PurchaseManagementCompany>()
+                                        .Where(x => x.PurchaseOrderSettingVguid == orderModel.PurchaseGoodsVguid && x.IsCheck).ToList();
+                                    var liquidationDistributionList = new List<Business_LiquidationDistribution>();
+                                    var ssList = db.Queryable<Business_SevenSection>().Where(x =>
+                                        x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                                    foreach (var company in companys)
+                                    {
+                                        var liquidationDistribution = new Business_LiquidationDistribution();
+                                        liquidationDistribution.VGUID = Guid.NewGuid();
+                                        liquidationDistribution.FundClearingVguid = fundClearingModel.VGUID;
+                                        liquidationDistribution.AssetsOrderVguid = fundClearingModel.FixedAssetsOrderVguid;
+                                        liquidationDistribution.CompanyVguid = company.ManagementCompanyVguid;
+                                        liquidationDistribution.Company = ssList.Where(x => x.Descrption == company.ManagementCompany).First().Abbreviation;
+                                        liquidationDistribution.PurchasePrices = fundClearingModel.PurchasePrices;
+                                        liquidationDistribution.AssetNum = 0;
+                                        liquidationDistribution.ContractAmount = 0;
+                                        liquidationDistribution.CreateDate = DateTime.Now;
+                                        liquidationDistribution.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                                        liquidationDistributionList.Add(liquidationDistribution);
+                                    }
+                                    db.Insertable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
+                                    db.Insertable<Business_LiquidationDistribution>(liquidationDistributionList).ExecuteCommand();
+                                }
+                                else
+                                {
+                                    var fundClearingModel = Mapper.Map<Business_FundClearing>(purchaseAssignmodel);
+                                    fundClearingModel.VGUID = Guid.NewGuid();
+                                    db.Insertable<Business_FundClearing>(fundClearingModel).ExecuteCommand();
+                                }
+                                
                             }
-                            db.Insertable<Business_LiquidationDistribution>(liquidationDistributionList).ExecuteCommand();
+                            db.Updateable<Business_FixedAssetsOrder>(model).UpdateColumns(x => new { x.SubmitStatus, x.SubmitDate, x.SubmitUser }).ExecuteCommand();
+                            if (OrderType == "OBD")
+                            {
+                                db.Updateable<Business_AssetReview>().UpdateColumns(it => it.OBDSTATUS == true)
+                                    .Where(x => x.FIXED_ASSETS_ORDERID == orderModel.VGUID).ExecuteCommand();
+                            }
                             resultModel.ResultInfo = pendingRedult.data.url;
                             resultModel.IsSuccess = true;
                             resultModel.Status = "1";

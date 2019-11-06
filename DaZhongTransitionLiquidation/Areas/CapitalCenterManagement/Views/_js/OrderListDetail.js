@@ -14,7 +14,8 @@ var isEdit = false;
 var vguid = "";
 var index = 0;//切换借贷
 //var CompanyCode = loadCompanyCode("A");
-var collectionCompany = loadCollectionCompany();
+//var collectionCompany = loadCollectionCompany();
+var collectionCompany = initiSelectPurchaseItem();
 //var businessType = loadBusinessType();
 var AccountSection = null;
 var CostCenterSection = null;
@@ -196,7 +197,7 @@ var $page = function () {
             $.ajax({
                 url: "/CapitalCenterManagement/OrderListDetail/UpdataIsable",
                 //data: { vguids: selection },
-                data: { vguids: rowData.VGUID, ischeck: args.value},
+                data: { vguids: rowData.VGUID, ischeck: args.value },
                 type: "post",
                 success: function (msg) {
                     $("#jqxSettingTable").jqxGrid('updateBoundData');
@@ -211,7 +212,7 @@ var $page = function () {
             $.ajax({
                 url: "/CapitalCenterManagement/OrderListDetail/UpdataCustomerIsable",
                 //data: { vguids: selection },
-                data: { vguids: rowData.VGUID, ischeck: args.value, orderVguid: $("#VGUID").val(), companyOrPerson: $("#CollectionCompany").text() },
+                data: { vguids: rowData.VGUID, ischeck: args.value, orderVguid: $("#VGUID").val(), purchaseItemID: $("#CollectionCompany").val(), purchaseItem: $("#CollectionCompany").text() },
                 type: "post",
                 success: function (msg) {
                     $("#jqxCustomerBankInfo").jqxGrid('updateBoundData');
@@ -412,7 +413,7 @@ function collectionBankChange(label) {
         success: function (result) {
             //uiEngineHelper.bindSelect('#CollectionBankAccountName', result, "VGUID", "BankAccountName");
             //$("#CollectionBankAccountName").prepend("<option value=\"\" selected='true'>请选择</>");
-           
+
         }
     });
 }
@@ -480,21 +481,40 @@ function loadSelectFun() {
 //    return value;
 //}
 
-function loadCollectionCompany() {
-    var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
+//function loadCollectionCompany() {
+//    var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
+//    var source =
+//                {
+//                    datatype: "json",
+//                    datafields: [
+//                        { name: 'VGUID' },
+//                        { name: 'CompanyOrPerson' }
+//                    ],
+//                    url: url,
+//                    async: true
+//                };
+//    var dataAdapter = new $.jqx.dataAdapter(source);
+//    $('#CollectionCompany').jqxDropDownList({
+//        filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "VGUID",
+//        itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
+//    });
+//}
+function initiSelectPurchaseItem() {
+    debugger;
+    var url = "/CapitalCenterManagement/OrderListDetail/GetPurchaseItem";
     var source =
-                {
-                    datatype: "json",
-                    datafields: [
-                        { name: 'VGUID' },
-                        { name: 'CompanyOrPerson' }
-                    ],
-                    url: url,
-                    async: true
-                };
+    {
+        datatype: "json",
+        datafields: [
+            { name: 'VGUID' },
+            { name: 'PurchaseGoods' }
+        ],
+        url: url,
+        async: true
+    };
     var dataAdapter = new $.jqx.dataAdapter(source);
     $('#CollectionCompany').jqxDropDownList({
-        filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "VGUID",
+        filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "PurchaseGoods", valueMember: "VGUID",
         itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
     });
 }
@@ -622,33 +642,33 @@ function getBusinessText(parentItem) {
 }
 
 function initTable(companyCode, accountModeCode) {
-    var source ={
-            datafields:
-            [
-                { name: 'BusinessCode', type: 'string' },
-                { name: 'Company', type: 'string' },
-                { name: 'CompanyCode', type: 'string' },
-                { name: 'AccountingCode', type: 'string' },
-                { name: 'CostCenterCode', type: 'string' },
-                { name: 'SpareOneCode', type: 'string' },
-                { name: 'SpareTwoCode', type: 'string' },
-                { name: 'IntercourseCode', type: 'string' },
-                { name: 'Accounting', type: 'string' },
-                { name: 'CostCenter', type: 'string' },
-                { name: 'SpareOne', type: 'string' },
-                { name: 'SpareTwo', type: 'string' },
-                { name: 'Intercourse', type: 'string' },
-                { name: 'SubjectCode', type: 'string' },
-                { name: 'SubjectVGUID', type: 'string' },
-                { name: 'Checked', type: 'string' },
-                { name: 'Balance', type: 'number' },
-            ],
-            datatype: "json",
-            cache: false,
-            id: "SectionVGUID",
-            data: { companyCode: companyCode, accountModeCode: accountModeCode },
-            url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径
-        };
+    var source = {
+        datafields:
+        [
+            { name: 'BusinessCode', type: 'string' },
+            { name: 'Company', type: 'string' },
+            { name: 'CompanyCode', type: 'string' },
+            { name: 'AccountingCode', type: 'string' },
+            { name: 'CostCenterCode', type: 'string' },
+            { name: 'SpareOneCode', type: 'string' },
+            { name: 'SpareTwoCode', type: 'string' },
+            { name: 'IntercourseCode', type: 'string' },
+            { name: 'Accounting', type: 'string' },
+            { name: 'CostCenter', type: 'string' },
+            { name: 'SpareOne', type: 'string' },
+            { name: 'SpareTwo', type: 'string' },
+            { name: 'Intercourse', type: 'string' },
+            { name: 'SubjectCode', type: 'string' },
+            { name: 'SubjectVGUID', type: 'string' },
+            { name: 'Checked', type: 'string' },
+            { name: 'Balance', type: 'number' },
+        ],
+        datatype: "json",
+        cache: false,
+        id: "SectionVGUID",
+        data: { companyCode: companyCode, accountModeCode: accountModeCode },
+        url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径
+    };
     var typeAdapter = new $.jqx.dataAdapter(source);
     //创建卡信息列表（主表）
     $("#grid1").jqxGrid({
@@ -747,7 +767,7 @@ function checkboxOnclick(event) {
             }
         } else {
             $(".permissions").eq(i).prop("checked", false);
-        } 
+        }
     }
 }
 
@@ -789,7 +809,7 @@ function getCompanyCode() {
     });
     companyCode = $("#CompanyCode").val();
     initTable(companyCode, accountMode);
-    getPayBankInfo(companyCode, accountMode, '', '', '','');
+    getPayBankInfo(companyCode, accountMode, '', '', '', '');
 }
 
 //付款银行信息（默认）
@@ -861,7 +881,7 @@ function initSettingTable() {
         editable: true,
         columns: [
             { text: '启用', datafield: 'Isable', width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox' },
-            { text: '账套', datafield: 'AccountModeName', width: 180,pinned:true, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc},
+            { text: '账套', datafield: 'AccountModeName', width: 180, pinned: true, align: 'center', cellsAlign: 'center', editable: false, cellsRenderer: editBankFunc },
             { text: '公司', datafield: 'CompanyName', width: 400, pinned: true, align: 'center', cellsAlign: 'center', editable: false },
             { text: '开户行', datafield: 'PayBank', width: 180, align: 'center', cellsAlign: 'center', editable: false },
             { text: '账号', datafield: 'PayAccount', width: 180, align: 'center', cellsAlign: 'center', editable: false },
@@ -888,11 +908,11 @@ function initSettingTable() {
 }
 
 function editBankFunc(row, columnfield, value, defaulthtml, columnproperties) {
-    var container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" +value + "</div>";
+    var container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
     return container;
 }
 
-function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBankAccountName, accountType,borrow, loan) {
+function editBank(guid, accountModeCode, companyCode, payBank, payAccount, payBankAccountName, accountType, borrow, loan) {
     $("#PayBank").val("");
     $("#PayAccount").val("");
     $("#PayBankAccountName").val("");
@@ -952,7 +972,7 @@ function initCustomerBank(label) {
                 ],
                 datatype: "json",
                 id: "Vguid",
-                data: { "CollectionCompany": label, "OrderVGUID": $("#VGUID").val(), "CustomerID": $('#CollectionCompany').val() },
+                data: { "CollectionCompany": label, "OrderVGUID": $("#VGUID").val(), "PurchaseID": $('#CollectionCompany').val() },
                 url: "/CapitalCenterManagement/OrderListDetail/GetCollectionBankChange"   //获取数据源的路径
             };
     var typeAdapter = new $.jqx.dataAdapter(source, {

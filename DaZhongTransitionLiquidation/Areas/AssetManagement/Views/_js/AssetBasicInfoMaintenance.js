@@ -149,7 +149,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '资产主类', datafield: 'ASSET_CATEGORY_MAJOR', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '资产主类', datafield: 'ASSET_CATEGORY_MAJOR', width: 150, align: 'center', cellsAlign: 'center' , cellsRenderer: detailFunc},
                     { text: '资产子类', datafield: 'ASSET_CATEGORY_MINOR', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '使用年限(年)', datafield: 'LIFE_YEARS', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '使用年限(月)', datafield: 'LIFE_MONTHS', width: 100, align: 'center', cellsAlign: 'center' },
@@ -176,7 +176,11 @@ var $page = function () {
             window.location.href = "/AssetManagement/AssetBasicInfoMaintenanceDetail/Index?VGUID=" + row.VGUID;
         });
     }
-
+    function detailFunc(row, column, value, rowData) {
+        var container = "";
+        container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.ASSET_CATEGORY_MAJOR + "</a>";
+        return container;
+    }
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }
@@ -209,6 +213,10 @@ var $page = function () {
     }
 };
 
+function link(VGUID) {
+    debugger;
+    window.location.href = "/AssetManagement/AssetBasicInfoMaintenanceDetail/Index?VGUID=" + VGUID;
+}
 $(function () {
     var page = new $page();
     page.init();

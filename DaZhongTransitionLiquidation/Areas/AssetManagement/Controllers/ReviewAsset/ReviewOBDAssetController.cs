@@ -42,7 +42,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 var startDate = YearMonth.TryToDate();
                 var endDate = startDate.AddMonths(1);
                 int pageCount = 0;
-                jsonResult.Rows = db.Queryable<Business_AssetReview>().Where(i => !i.ISVERIFY && i.GROUP_ID == "OBD设备")
+                jsonResult.Rows = db.Queryable<Business_AssetReview>().Where(i => !i.ISVERIFY && i.GROUP_ID == "OBD设备" && i.OBDSTATUS)
                     .WhereIF(!YearMonth.IsNullOrEmpty(), i => i.LISENSING_DATE >= startDate && i.LISENSING_DATE < endDate)
                     .WhereIF(!Company.IsNullOrEmpty(), i => i.BELONGTO_COMPANY == Company)
                     .WhereIF(!VehicleModel.IsNullOrEmpty(), i => i.VEHICLE_SHORTNAME == VehicleModel)
@@ -351,7 +351,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                             assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                             assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
-                            assetSwapModel.PERIOD = item.START_VEHICLE_DATE;
+                            assetSwapModel.PERIOD = item.LISENSING_DATE.ObjToDate().Year + item.LISENSING_DATE.ObjToDate().Month.ToString().PadLeft(2,'0');
                             assetSwapList.Add(assetSwapModel);
                         }
                         db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();

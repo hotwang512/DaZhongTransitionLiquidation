@@ -1,24 +1,24 @@
-﻿using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
-using DaZhongTransitionLiquidation.Common.Pub;
-using DaZhongTransitionLiquidation.Infrastructure.Dao;
-using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
-using SqlSugar;
-using SyntacticSugar;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CustomerBankInfo;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
+using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SqlSugar;
+using SyntacticSugar;
 
-namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.PurchaseOrderSetting
+namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.PurchaseItem
 {
-    public class PurchaseOrderSettingController : BaseController
+    public class PurchaseItemController : BaseController
     {
-        // GET: SystemManagement/PurchaseOrderSetting
-        public PurchaseOrderSettingController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
+        // AssetManagement/AssetsLedger
+        public PurchaseItemController(DbService dbService, DbBusinessDataService dbBusinessDataService) : base(dbService, dbBusinessDataService)
         {
 
         }
@@ -28,21 +28,37 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }
-        public JsonResult GetPurchaseOrderSettingListDatas(Business_PurchaseOrderSetting searchModel, GridParams para)
+        public JsonResult GetPurchaseItemListDatas(Business_PurchaseItem searchModel, GridParams para)
         {
-            var jsonResult = new JsonResultModel<Business_PurchaseOrderSetting>();
+            var jsonResult = new JsonResultModel<Business_PurchaseItem>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_PurchaseOrderSetting>()
+                jsonResult.Rows = db.Queryable<Business_PurchaseItem>()
                     .WhereIF(!searchModel.PurchaseGoods.IsNullOrEmpty(), i => i.PurchaseGoods.Contains(searchModel.PurchaseGoods))
                     .OrderBy(i => i.CreateDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
-
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult AddBankInfo(string PurchaseItem)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var insertObj = new Business_PurchaseItem();
+                insertObj.VGUID = Guid.NewGuid();
+                insertObj.PurchaseGoods = PurchaseItem.Trim();
+                insertObj.CreateDate = DateTime.Now;
+                insertObj.CreateUser = UserInfo.LoginName;
+                db.Insertable<Business_PurchaseItem>(insertObj).ExecuteCommand();
+                resultModel.IsSuccess = true;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel);
+        }
+
         public JsonResult GetPurchaseSupplierListDatas(Guid Vguid, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_BankPurchaseSupplier>();
@@ -57,8 +73,6 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-      
-        
         public JsonResult GetCustomerBankInfo(Guid OrderSettingVguid, string BankAccount, string BankCategory, GridParams para)
         {
             var jsonResult = new JsonResultModel<v_BankInfoSetting>();
@@ -75,8 +89,8 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
                     'Checked'
                     END AS IsCheck
                         FROM Business_CustomerBankInfo bcbi
-                    LEFT JOIN(SELECT * FROM Business_PurchaseSupplier WHERE PurchaseOrderSettingVguid = '"+ OrderSettingVguid + @"') bps
-                        ON bps.CustomerBankInfoVguid = bcbi.VGUID " ).WhereIF(!string.IsNullOrEmpty(BankCategory) && BankCategory != "请选择", i => i.CompanyOrPerson.Contains(BankCategory))
+                    LEFT JOIN(SELECT * FROM Business_PurchaseSupplier WHERE PurchaseOrderSettingVguid = '" + OrderSettingVguid + @"') bps
+                        ON bps.CustomerBankInfoVguid = bcbi.VGUID ").WhereIF(!string.IsNullOrEmpty(BankCategory) && BankCategory != "请选择", i => i.CompanyOrPerson.Contains(BankCategory))
                     .WhereIF(!string.IsNullOrEmpty(BankAccount), i => i.BankAccount.Contains(BankAccount))
                     .Where(i => i.PurchaseOrderSettingVguid == null || i.PurchaseOrderSettingVguid == OrderSettingVguid).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
@@ -84,20 +98,21 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult DeletePurchaseOrderSetting(List<Guid> vguids)//Guid[] vguids
+        
+        public JsonResult DeletePurchaseItem(List<Guid> vguids)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 int saveChanges = 1;
                 //删除主表信息
-                saveChanges = db.Deleteable<Business_PurchaseOrderSetting>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
+                saveChanges = db.Deleteable<Business_PurchaseItem>(x => vguids.Contains(x.VGUID)).ExecuteCommand();
                 resultModel.IsSuccess = saveChanges == vguids.Count;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
         }
-        public JsonResult SetPurchaseSupplier(List<Guid> selvguids, List<Guid> allvguids, string CustomerBankInfoCategory,Guid PurchaseOrderSettingVguid)
+        public JsonResult SetPurchaseSupplier(List<Guid> selvguids, List<Guid> allvguids, string CustomerBankInfoCategory, Guid PurchaseOrderSettingVguid)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -139,9 +154,9 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Purcha
             var list = new List<BankCategoryListData>();
             DbBusinessDataService.Command(db =>
             {
-                list = db.Queryable<Business_CustomerBankInfo>().Select(c => new BankCategoryListData { CompanyOrPerson = c.CompanyOrPerson}).ToList();
+                list = db.Queryable<Business_CustomerBankInfo>().Select(c => new BankCategoryListData { CompanyOrPerson = c.CompanyOrPerson }).ToList();
             });
-            var result = list.GroupBy(c => new { c.CompanyOrPerson}).Select(c => c.Key).ToList();
+            var result = list.GroupBy(c => new { c.CompanyOrPerson }).Select(c => c.Key).ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

@@ -8,6 +8,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
     public class Business_IntangibleAssetsOrder
     {
         public Guid VGUID { get; set; }
+        public Guid OrderFromVguid { get; set; }
+        public string OrderFrom { get; set; }
         public Guid? PurchaseGoodsVguid { set; get; }
         public string OrderNumber { set; get; }
         public string PurchaseDepartmentIDs { set; get; }
@@ -44,5 +46,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Models
         public string OSNO { get; set; }
         public string BankStatus { get; set; }
         public bool ISVerify { get; set; }
+        public bool NeedVerifie { get; set; }
     }
 }

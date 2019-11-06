@@ -5,6 +5,7 @@ var ManagementCompany = [];
 var $page = function () {
     this.init = function () {
         initSelect();
+        initiSelectPurchaseItem();
         initSelectMinor();
         initSelectPurchaseDepartment();
         initBusinessProject();
@@ -58,11 +59,12 @@ var $page = function () {
                         url: "/Systemmanagement/PurchaseOrderSettingDetail/SavePurchaseOrderSetting",
                         data: {
                             "VGUID": $("#VGUID").val(),
-                            "AssetCategoryMajor": $("#AssetCategoryMajor").val(),
-                            "AssetCategoryMinor": $("#AssetCategoryMinor").val(),
+                            "AssetCategoryMajor": $("#ASSET_CATEGORY_MAJOR").val(),
+                            "AssetCategoryMinor": $("#ASSET_CATEGORY_MINOR").text(),
                             "OrderCategory": $("#OrderCategory").val(),
-                            "AssetCategoryMinorVguid": $("#AssetCategoryMinorVguid").val(),
-                            "PurchaseGoods": $("#PurchaseGoods").val(),
+                            "AssetCategoryMinorVguid": $("#ASSET_CATEGORY_MINOR").val(),
+                            "PurchaseGoodsVguid": $("#PurchaseGoods").val(),
+                            "PurchaseGoods": $("#PurchaseGoods option:selected").text(),
                             "BusinessSubItem": $("#BusinessSubItem").text(),
                             "DepartmentModelList": DepartmentModelList,
                             "ManagementCompanyList": ManagementCompanyList
@@ -153,7 +155,7 @@ var $page = function () {
             async: false,
             dataType: "json",
             success: function (msg) {
-                $("#PurchaseGoods").val(msg.ResultInfo.PurchaseGoods);
+                $("#PurchaseGoods").val(msg.ResultInfo.PurchaseGoodsVguid);
                 $("#OrderCategory").val(msg.ResultInfo.OrderCategory);
                 $("#AssetCategoryMinor").val(msg.ResultInfo.AssetCategoryMinor);
                 $("#AssetCategoryMajor").val(msg.ResultInfo.AssetCategoryMajor);
@@ -187,7 +189,19 @@ var $page = function () {
                 initSelectMinor();
             }
         });
-
+    }
+    function initiSelectPurchaseItem() {
+        $.ajax({
+            url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseItem",
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                debugger;
+                uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
+                $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+            }
+        });
     }
     function initSelectMinor() {
         var source =

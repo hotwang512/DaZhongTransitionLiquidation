@@ -10,13 +10,14 @@ var vguid = "";
 var $page = function () {
 
     this.init = function () {
+        initiSelectPurchaseItem();
         addEvent();
     }
     var status = $.request.queryString().Status;
     //所有事件
     function addEvent() {
-        loadCollectionCompany();
-       
+        //loadCollectionCompany();
+
         //加载列表数据
         initTable();
         selector.$btnSearch().unbind("click").on("click", function () {
@@ -248,27 +249,46 @@ var $page = function () {
         return container;
     }
 
-    function loadCollectionCompany() {
-        var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
+    //function loadCollectionCompany() {
+    //    var url = "/CapitalCenterManagement/OrderListDetail/GetCollectionCompany";
+    //    var source =
+    //                {
+    //                    datatype: "json",
+    //                    datafields: [
+    //                        { name: 'VGUID' },
+    //                        { name: 'CompanyOrPerson' }
+    //                    ],
+    //                    url: url,
+    //                    async: false
+    //                };
+    //    var dataAdapter = new $.jqx.dataAdapter(source);
+       
+    //    $('#CollectionCompany').jqxDropDownList({
+    //        filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "VGUID",
+    //        itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
+    //    });
+    //    $("#CollectionCompany").jqxDropDownList('insertAt', { label: '请选择', value: '' }, 0);
+    //}
+    function initiSelectPurchaseItem() {
+        var url = "/CapitalCenterManagement/OrderListDetail/GetPurchaseItem";
         var source =
                     {
                         datatype: "json",
                         datafields: [
                             { name: 'VGUID' },
-                            { name: 'CompanyOrPerson' }
+                            { name: 'PurchaseGoods' }
                         ],
                         url: url,
                         async: false
                     };
         var dataAdapter = new $.jqx.dataAdapter(source);
-       
+
         $('#CollectionCompany').jqxDropDownList({
-            filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "CompanyOrPerson", valueMember: "VGUID",
+            filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "PurchaseGoods", valueMember: "VGUID",
             itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
         });
         $("#CollectionCompany").jqxDropDownList('insertAt', { label: '请选择', value: '' }, 0);
     }
-
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
     }

@@ -19,6 +19,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// </summary>           
         [SugarColumn(IsPrimaryKey = true)]
         public Guid VGUID { get; set; }
+        public Guid IMPORT_VGUID { get; set; }
 
         /// <summary>
         /// Desc:
@@ -429,6 +430,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         /// Nullable:True
         /// </summary>           
         public Boolean ISVERIFY { get; set; }
+        public Boolean OBDSTATUS { get; set; }
 
         /// <summary>
         /// Desc:

@@ -6,7 +6,8 @@
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
 }
 @section js{
-    <script src="@Url.CusContent("~/Areas/Systemmanagement/Views/_js/VehicleExtrasFeeSettingDetail.js")"></script>
+<script src="@Url.CusContent("~/Areas/Systemmanagement/Views/_js/VehicleExtrasFeeSettingDetail.js")"></script>
+<script src="@Url.CusContent("/_theme/DatePicker/WdatePicker.js")"></script>
 }
 <style>
     .input_text {
@@ -76,6 +77,39 @@
         <div id="table"></div>
         <div style="display: none">
             <input id="VGUID" />
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="VehicleExtrasFeeSettingModalDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 460px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title_PurchaseItem" style="color: #555; font-family: Calibri;">编辑</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 150px; overflow: auto">
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr style="height: 45px;">
+                            <td style="width: 96px;text-align: right"><span class="spanText">启用日期：</span></td>
+                            <td style="width: 140px;text-align: center">
+                                <input id="StartDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px"  validatetype="required">
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="width: 96px; text-align: right"><span class="spanText">费用：</span></td>
+                            <td style="width: 140px; text-align: center">
+                                <input id="Fee" type="text" style="width: 200px" class="input_text form-control" validatetype="required,decimalNumber">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="VehicleExtrasFeeSettingDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="VehicleExtrasFeeSettingDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
         </div>
     </div>
 </div>

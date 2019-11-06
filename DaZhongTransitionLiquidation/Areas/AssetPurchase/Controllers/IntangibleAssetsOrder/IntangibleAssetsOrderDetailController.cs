@@ -53,12 +53,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     var model = db.Queryable<Business_IntangibleAssetsOrder>().Where(c => c.VGUID == sevenSection.VGUID);
                     if (model.Count() == 0)
                     {
-                        var autoID = "IntangibleAssetsOrder";
+                        var autoID = "IntAssetsOrder";
                         var no = CreateNo.GetCreateNo(db, autoID);
                         sevenSection.OrderNumber = no;
+                        sevenSection.OrderFrom = "手动新增";
                         sevenSection.CreateDate = DateTime.Now;
                         sevenSection.CreateUser = cache[PubGet.GetUserKey].LoginName;
                         sevenSection.SubmitStatus = IntangibleAssetsSubmitStatusEnum.FirstPaymentUnSubmit.TryToInt();
+                        sevenSection.NeedVerifie = false;
                         sevenSection.ISVerify = false;
                         db.Insertable<Business_IntangibleAssetsOrder>(sevenSection).ExecuteCommand();
                     }
@@ -382,8 +384,25 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
                     var pendingRedult = apiReault.JsonToModel<JsonResultModelApi<Api_PendingPayment>>();
                     if (pendingRedult.success)
                     {
+
                         var orderModel = db.Queryable<Business_IntangibleAssetsOrder>()
-                            .Where(x => x.VGUID == model.VGUID).First();
+                                .Where(x => x.VGUID == model.VGUID).First();
+                        if (model.SubmitStatus == 1 && model.OrderFrom != "分配清算")
+                        {
+                            var purchaseClearingmodel = new Business_FundClearing();
+                            purchaseClearingmodel.VGUID = Guid.NewGuid();
+                            purchaseClearingmodel.CreateDate = DateTime.Now;
+                            purchaseClearingmodel.CreateUser = cache[PubGet.GetUserKey].LoginName;
+                            purchaseClearingmodel.FixedAssetsOrderVguid = model.VGUID;
+                            purchaseClearingmodel.PurchaseGoodsVguid = model.PurchaseGoodsVguid;
+                            purchaseClearingmodel.PurchaseGoods = model.PurchaseGoods;
+                            purchaseClearingmodel.OrderQuantity = 1;
+                            purchaseClearingmodel.PurchasePrices = model.SumPayment;
+                            purchaseClearingmodel.ContractAmount = model.SumPayment;
+                            purchaseClearingmodel.AssetDescription = model.AssetDescription;
+                            purchaseClearingmodel.AssetType = "Intangible";
+                            db.Insertable<Business_FundClearing>(purchaseClearingmodel).ExecuteCommand();
+                        }
                         orderModel.PaymentVoucherVguid = pendingRedult.data.vguid;
                         orderModel.PaymentVoucherUrl = pendingRedult.data.url;
                         orderModel.SubmitStatus = model.SubmitStatus;

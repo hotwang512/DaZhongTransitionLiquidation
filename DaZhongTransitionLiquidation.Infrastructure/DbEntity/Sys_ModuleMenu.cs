@@ -27,6 +27,8 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public bool Export { get; set; }
         public bool Generate { get; set; }
         public bool Calculation { get; set; }
+        public bool Preview { get; set; }
+        public bool Enable { get; set; }
         public int Zorder { get; set; } = 0;
         public List<Sys_ModuleMenu> children { get; set; } = new List<Sys_ModuleMenu>();
 

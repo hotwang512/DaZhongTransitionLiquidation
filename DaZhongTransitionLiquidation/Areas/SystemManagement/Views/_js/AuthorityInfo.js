@@ -152,12 +152,7 @@ var $page = function () {
     }
 
     function roleDetailFunc(row, column, value, rowData) {
-        var container = "";
-        if (selector.$EditPermission().val() == "1") {
-            container = "<a href='AuthorityDetail?Vguid=" + rowData.Vguid + "&isEdit=true' style=\"text-decoration: underline;color: #333;\">" + rowData.Role + "</a>";
-        } else {
-            container = "<span>" + rowData.Role + "</span>";
-        }
+        var container = container = "<a href='AuthorityDetail?Vguid=" + rowData.Vguid + "&isEdit=true' style=\"text-decoration: underline;color: #333;\">" + rowData.Role + "</a>";
         return container;
     }
 

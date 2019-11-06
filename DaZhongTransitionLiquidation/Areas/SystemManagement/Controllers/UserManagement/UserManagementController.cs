@@ -25,6 +25,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
 
         public ActionResult UserInfos()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.UserManagement);
             ViewData["Role"] = GetRoleInfos();
             ViewBag.UserSubDepartment = GetUserSubDepartment().ModelToJson();
@@ -178,7 +179,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                     uGuid = userInfo.Vguid.TryToString();
                     userInfo.ChangeDate = DateTime.Now;
                     userInfo.ChangeUser = userInfo.LoginName;
-                    resultModel.IsSuccess = db.Updateable(userInfo).IgnoreColumns(i => new { i.CreatedDate, i.CreatedUser }).ExecuteCommand() > 0;
+                    resultModel.IsSuccess = db.Updateable(userInfo).IgnoreColumns(i => new { i.CreatedDate, i.CreatedUser,i.Permission }).ExecuteCommand() > 0;
                 }
                 else
                 {
@@ -186,7 +187,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                     userInfo.Vguid = guid;
                     userInfo.CreatedDate = DateTime.Now;
                     userInfo.CreatedUser = userInfo.LoginName;
-                    resultModel.IsSuccess = db.Insertable(userInfo).ExecuteCommand() > 0;
+                    resultModel.IsSuccess = db.Insertable(userInfo).IgnoreColumns(i => new { i.Permission }).ExecuteCommand() > 0;
                 }
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });

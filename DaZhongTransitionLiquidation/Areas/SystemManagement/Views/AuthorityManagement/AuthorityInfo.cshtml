@@ -4,22 +4,24 @@
     ViewBag.Title = "系统管理/角色权限管理";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/Areas/SystemManagement/Views/_js/AuthorityInfo.js")"></script>
 }
 <!--按钮 开始-->
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+@if (moduleMenu.New || moduleMenu.StrikeOut)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.New)
             {
                 <td style="width: 95px;">
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Deletes == 1)
+            @if (moduleMenu.StrikeOut)
             {
                 <td style="width: 95px;">
                     <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
@@ -66,7 +68,15 @@
 </div>
 
 <!--表格 结束-->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+@if (moduleMenu.Edit)
+{
+    <input type="hidden" id="EditPermission" value="true" />
+}
+else
+{
+    <input type="hidden" id="EditPermission" value="false" />
+}
+
 
 <div class="container">
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddBankChannelDialog">

@@ -25,5 +25,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public bool Generate { get; set; }
         public bool Calculation { get; set; }
         public string ComOrMan { get; set; }
+        public bool Preview { get; set; }
+        public bool Enable { get; set; }
     }
 }

@@ -269,11 +269,13 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 decimal? debitAmountTotal = 0;
                                 foreach (var it in voucherDetail)
                                 {
+                                    var loanMoneyCount = voucherDetail.Sum(x => x.LoanMoney);
+                                    var borrowMoneyCount = voucherDetail.Sum(x => x.BorrowMoney);
                                     #region 循环借贷明细
                                     if (it.ReceivableAccount != "" && it.ReceivableAccount != null)
                                     {
                                         receivableAccount = it.ReceivableAccount;
-                                        if (it.LoanMoney != 0 && it.LoanMoney != null)
+                                        if (it.LoanMoney != 0 && it.LoanMoney != null && loanMoneyCount == borrowMoneyCount)
                                         {
                                             creditAmountTotal = creditAmountTotal + it.LoanMoney;
                                             continue;

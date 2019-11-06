@@ -119,10 +119,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
-                        var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        var bank = "B" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
                         if (voucherType == "现金类")
                         {
-                            bank = "Money" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                            bank = "M" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
                         }
                         var no = CreateNo.GetCreateNo(db, bank);
                         voucherList.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;
@@ -385,7 +385,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet); ;
         }
-
         private void PrintExcelMore(DataTable dt, PrintVoucherList data, List<PrintVoucherDetail> dataDetail, int attachmentCount, List<string> pdfPathList)
         {
             string rootPath = System.Web.HttpContext.Current.Server.MapPath("/Template/财务打印样式模板.xlsx");

@@ -37,73 +37,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 var starDate = "2019-09-01".TryToDate();
-                if (searchParams.Automatic != "0")
-                {
-                    var voucherData = db.Queryable<Business_VoucherList>().Where(i => i.VoucherDate >= starDate)
-                    .Where(i => i.Status == searchParams.Status)
-                    .Where(i => i.Automatic == searchParams.Automatic)
-                    .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
-                    .WhereIF(searchParams.VoucherType != null, i => i.VoucherType == searchParams.VoucherType)
-                    .Where(x => x.TradingBank == "" || x.TradingBank == null || x.VoucherNo == null || x.VoucherNo == "").ToList();
-                    foreach (var item in voucherData)
-                    {
-                        if (item.VoucherNo == null || item.VoucherNo == "")
-                        {
-                            var bank = "Bank" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                            var no = CreateNo.GetCreateNo(db, bank);
-                            item.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + item.VoucherType + no;
-                            db.Updateable(item).ExecuteCommand();
-                        }
-                        if (item.TradingBank == "" || item.TradingBank == null)
-                        {
-                            var bankFlow1 = db.SqlQueryable<Business_BankFlowTemplate>(@"select * from Business_BankFlowTemplate where CONVERT(varchar(100), TransactionDate, 23)='" + item.VoucherDate.TryToDate().ToString("yyyy-MM-dd") + @"'").ToList();
-                            var bankFlow = bankFlow1.Where(x => x.TurnIn == item.CreditAmountTotal || x.TurnOut == item.DebitAmountTotal)
-                                            .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
-                            if (bankFlow.Count == 1)
-                            {
-                                item.TradingBank = bankFlow[0].TradingBank;
-                                item.ReceivingUnit = bankFlow[0].ReceivingUnit;
-                                item.TransactionDate = bankFlow[0].TransactionDate;
-                                item.Batch = bankFlow[0].Batch;
-                            }
-                            else
-                            {
-                                var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item.VGUID).ToList();
-                                foreach (var it in voucherDetail)
-                                {
-                                    var bankFlow2 = bankFlow1
-                                    .Where(x => x.Remark == it.Abstract)
-                                    .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
-                                    .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
-                                    if (bankFlow2.Count == 1)
-                                    {
-                                        item.TradingBank = bankFlow2[0].TradingBank;
-                                        item.ReceivingUnit = bankFlow2[0].ReceivingUnit;
-                                        item.TransactionDate = bankFlow2[0].TransactionDate;
-                                        item.Batch = bankFlow2[0].Batch;
-                                    }
-                                    else
-                                    {
-                                        var bankFlow3 = bankFlow1
-                                   .Where(x => (x.TurnIn == it.LoanMoney || x.TurnOut == it.BorrowMoney))
-                                   .Where(x => x.AccountModeName == item.AccountModeName && x.CompanyCode == item.CompanyCode).ToList();
-                                        if (bankFlow3.Count == 1)
-                                        {
-                                            item.TradingBank = bankFlow3[0].TradingBank;
-                                            item.ReceivingUnit = bankFlow3[0].ReceivingUnit;
-                                            item.TransactionDate = bankFlow3[0].TransactionDate;
-                                            item.Batch = bankFlow3[0].Batch;
-                                        }
-                                    }
-                                }
-                                //var bankFlow2 = bankFlow1.
-                            }
-                            db.Updateable(item).ExecuteCommand();
-                        }
-                    }
-                }
-                
-                
                 //DateTime? firstDay = null;
                 //DateTime? lastDay = null;
                 //if (searchParams.AccountingPeriod != null)
@@ -239,11 +172,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == item).First();
             var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == item).ToList();
             var accountModeData = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Descrption == voucher.AccountModeName).First();
-            if(accountModeData != null)
+            if (accountModeData != null)
             {
                 accountModeCode = accountModeData.Code;
             }
-            var type = "";            
+            var type = "";
             var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
             var documentMaker = "";
             if (documentMakerData != null)

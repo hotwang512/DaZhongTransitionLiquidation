@@ -371,7 +371,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
+            //window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
         });
     }
     function initTable1() {
@@ -463,7 +463,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
+            //window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
         });
     }
     function initTable2() {
@@ -546,7 +546,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
+            //window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
         });
     }
     function initTable3() {
@@ -632,7 +632,7 @@ var $page = function () {
             // row data.
             var row = args.row;
             // row index.
-            window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
+            //window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?VGUID=" + row.VGUID;
         });
     }
     if (status == "4") {
@@ -676,8 +676,18 @@ var $page = function () {
    
     function detailFunc(row, column, value, rowData) {
         var container = "";
+        var type = "";
+        switch (rowData.VoucherType) {
+            case "现金类": type = "0"; break;
+            case "银行类": type = "1"; break;
+            case "转账类": type = "2"; break;
+        }
+        switch (rowData.Status) {
+            case "2": type = "3"; break;
+            case "3": type = "4"; break;
+        }
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?VGUID="+rowData.uid+"' style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
+            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?Type=" + type + "&VGUID=" + rowData.uid + "' style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
         } else {
             container = "<span>" + rowData.BatchName + "</span>";
         }

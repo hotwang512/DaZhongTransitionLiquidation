@@ -77,7 +77,11 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<V_User_Information>().Where(o.GetConditionalModels(searchParams))
+                //jsonResult.Rows = db.Queryable<V_User_Information>().Where(o.GetConditionalModels(searchParams))
+                //.OrderBy(i => i.CreatedDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.Rows = db.Queryable<V_User_Information>().Where(x => x.Enable == searchParams.Enable)
+                .Where(x=>x.LoginName != "admin" && x.LoginName != "sysAdmin")
+                .WhereIF(searchParams.LoginName != null,x=>x.LoginName == searchParams.LoginName)
                 .OrderBy(i => i.CreatedDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });

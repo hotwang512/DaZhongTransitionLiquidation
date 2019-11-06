@@ -1,10 +1,266 @@
-﻿body {
-    background-image: url('/_theme/images/hbg.png');
-    padding: 0;
-    margin: 0;
-    background-repeat: no-repeat;
+﻿html {
+    height: 100%;
 }
 
+body {
+    /*background-image: url('/_theme/images/hbg.png');*/
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    height: 100%;
+    font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif !important;
+    /*/*background-repeat: no-repeat;*/ */;
+}
+
+.main {
+    -webkit-animation: background 10s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: ease-in-out;
+}
+
+.imgArea {
+    background: url("/_theme/images/20191101135742.jpg") center center / cover no-repeat rgb(3, 21, 41);
+    width: 70.7%;
+    height: 100%;
+    position: absolute;
+}
+
+.alert {
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.alert-danger {
+    background-color: #f2dede;
+    border-color: #ebcccc;
+    color: #a94442;
+}
+
+.bg-icon {
+    height: 100%;
+    float: left;
+    width: 70.7%;
+    transition: all 1s;
+    background: url("/_theme/images/20191101135742.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #031529;
+}
+
+.bg-icon-info {
+    position: absolute;
+    right: 29.3%;
+    bottom: 34px;
+    width: 70%;
+    float: right;
+    text-align: right;
+    padding: 0px 35px 0px 0px;
+}
+
+.bg-icon-day {
+    font-size: 3.5rem;
+    color: #ffffff;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+}
+
+.bg-icon-yearmonth {
+    font-size: 1.5rem;
+    margin-top: -20px;
+    color: #BABEC1;
+}
+
+.bg-icon-smart {
+    margin-top: 90px;
+    font-size: 35px;
+    color: #CFD1D7;
+    letter-spacing: 10px;
+    margin-right: -9px;
+}
+
+.bg-icon-content {
+    margin-top: 25px;
+    font-size: 20px;
+    color: #CFD1D7;
+    letter-spacing: 2px;
+    margin-right: -8px;
+}
+
+.login-box {
+    margin: 0 auto;
+    width: 29.3%;
+    float: right;
+    /*min-width: 380px;*/
+    height: auto;
+    margin-top: 13%;
+    box-shadow: none;
+    border: none;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    /*background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;*/
+}
+
+    .login-box .login-icon {
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .login-box .landa-com {
+        text-align: center;
+        position: fixed;
+        width: 29.3%;
+        bottom: 100px;
+        position: fixed;
+        right: 0;
+        bottom: 35px;
+        min-width: 380px;
+    }
+
+.card .card-block {
+    padding: 15%;
+    padding-bottom: 0;
+}
+
+.form-material .form-group {
+    overflow: hidden;
+}
+
+.input-group {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+}
+
+    .input-group .form-control {
+        position: relative;
+        z-index: 2;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        width: 1%;
+        margin-bottom: 0;
+    }
+
+    .input-group .form-control, .input-group-addon, .input-group-btn {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+.form-material .form-control {
+    background-color: transparent;
+    background-position: center bottom,center calc(100% - 1px);
+    background-repeat: no-repeat;
+    background-size: 0 2px, 100% 1px;
+    padding: 0;
+    transition: background 0s ease-out 0s;
+}
+
+    .form-material .form-control, .form-material .form-control.focus, .form-material .form-control:focus {
+        background-image: linear-gradient(#009efb, #009efb),linear-gradient(#d9d9d9, #d9d9d9);
+        border: 0 none;
+        border-radius: 0;
+        box-shadow: none;
+        float: none;
+    }
+
+.input-group .form-control:not(:first-child), .input-group-addon:not(:first-child), .input-group-btn:not(:first-child) > .btn, .input-group-btn:not(:first-child) > .btn-group > .btn, .input-group-btn:not(:first-child) > .dropdown-toggle, .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .btn, .input-group-btn:not(:last-child) > .btn:not(:first-child) {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+
+
+.login-box .form-material .form-control {
+    border: 0.5px solid #C8D2DC;
+    height: 50px;
+    padding-left: 20px;
+    background-image: none;
+    font-size: 16px;
+}
+
+
+.input-group-addon {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #464a4c;
+    text-align: center;
+    background-color: #eceeef;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem;
+}
+
+.input-group-addon, .input-group-btn {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+
+.input-group-addon-define {
+    border-top: 0.5px solid #C8D2DC;
+    border-left: 0.5px solid #C8D2DC;
+    border-bottom: 0.5px solid #C8D2DC;
+    border-right: none;
+    background: #fff;
+    border-radius: unset;
+    width: 50px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.bg-icon-line {
+    display: inline-block;
+    height: 4px;
+    width: 40px;
+    background: #5F5F5F;
+    margin-left: 25px;
+    cursor: pointer;
+}
+
+    .bg-icon-line.active {
+        background: #fff;
+    }
+
+.loginArea {
+    position: absolute;
+    right: 0px;
+}
 
 #top {
     width: 500px;
@@ -91,9 +347,8 @@
 }
 
 #btnLogin, #btnReset {
-    width: 130px;
     height: 50px;
-    background-color: #00aadf;
+    background-color: #004EA1;
     font-size: 24px;
     color: white;
     font-family: Calibri;

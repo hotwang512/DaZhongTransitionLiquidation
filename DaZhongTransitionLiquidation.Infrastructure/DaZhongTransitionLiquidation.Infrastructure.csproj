@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,9 +73,11 @@
     <Compile Include="DbEntity\Master_Organization.cs" />
     <Compile Include="DbEntity\Saas_SMAUTO_1.cs" />
     <Compile Include="DbEntity\Sys_Module.cs" />
+    <Compile Include="DbEntity\Sys_ModuleMenu.cs" />
     <Compile Include="DbEntity\Sys_Role.cs" />
     <Compile Include="DbEntity\Sys_Role_Fixed.cs" />
     <Compile Include="DbEntity\Sys_Role_Module.cs" />
+    <Compile Include="DbEntity\Sys_Role_ModuleMenu.cs" />
     <Compile Include="DbEntity\Sys_User.cs" />
     <Compile Include="DbEntity\Sys_UserCompany.cs" />
     <Compile Include="DbEntity\T_Bank.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="ViewEntity\V_Revenuepayment_Information.cs" />
     <Compile Include="ViewEntity\V_Revenuepayment_Information_Date.cs" />
     <Compile Include="ViewEntity\V_Sys_Role_Module.cs" />
+    <Compile Include="ViewEntity\V_Sys_Role_ModuleMenu.cs" />
     <Compile Include="ViewEntity\V_User_Information.cs" />
   </ItemGroup>
   <ItemGroup>

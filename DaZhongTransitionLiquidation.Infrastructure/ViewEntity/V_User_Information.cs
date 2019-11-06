@@ -27,6 +27,6 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ViewEntity
         public string UserName { get; set; }
         public Guid Vguid { get; set; }
         public string WorkPhone { get; set; }
-
+        public string Permission { get; set; }
     }
 }

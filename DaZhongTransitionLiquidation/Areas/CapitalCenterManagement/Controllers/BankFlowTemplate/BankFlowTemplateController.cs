@@ -440,9 +440,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CompanyCode = item.CompanyCode;
                 voucher.CompanyName = item.PaymentUnit.ToDBC();
                 //var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
-                var bank = "Bank" + item.AccountModeCode + item.CompanyCode;
+                var bank = "B" + item.AccountModeCode + item.CompanyCode+ item.TransactionDate.Value.Year.ToString()+ item.TransactionDate.Value.Month.ToString();
                 //100201银行类2019090001
                 var no = CreateNo.GetCreateNo(db, bank);
+                //var no = "";
                 voucher.VoucherNo = item.AccountModeCode + item.CompanyCode + "银行类" + no;
                 voucher.BatchName = voucher.VoucherNo;
                 voucherData = voucherData.Where(i => i.AccountModeName == item.AccountModeName && i.CompanyCode == item.CompanyCode).ToList();
@@ -651,43 +652,46 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     //付款业务
                     Regex regExp = new Regex("^[0-9]*$");
-                    if (item.Purpose.Length == 19 && regExp.IsMatch(item.Purpose))
+                    if (item.Purpose != null)
                     {
-                        //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
-                        var osno = orderListDraft.Where(x => x.OSNO == item.Purpose).ToList();
-                        if (osno.Count == 1)
+                        if (item.Purpose.Length == 19 && regExp.IsMatch(item.Purpose))
                         {
-                            var order = orderList.Where(x => x.BusinessSubItem1 == osno[0].BusinessSubItem1).First();
-                            var orderDetail = userCompanySet.Where(x => x.OrderVGUID == order.VGUID.ToString() && x.CompanyName == osno[0].OrderCompany && x.Isable == true).ToList();
-                            if (orderDetail.Count > 0)
+                            //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
+                            var osno = orderListDraft.Where(x => x.OSNO == item.Purpose).ToList();
+                            if (osno.Count == 1)
                             {
-                                subject = orderDetail[0].Borrow;
-                                if (subject != "" && subject != null)
+                                var order = orderList.Where(x => x.BusinessSubItem1 == osno[0].BusinessSubItem1).First();
+                                var orderDetail = userCompanySet.Where(x => x.OrderVGUID == order.VGUID.ToString() && x.CompanyName == osno[0].OrderCompany && x.Isable == true).ToList();
+                                if (orderDetail.Count > 0)
                                 {
-                                    if (subject.Contains("\n"))
+                                    subject = orderDetail[0].Borrow;
+                                    if (subject != "" && subject != null)
                                     {
-                                        subject = subject.Substring(0, subject.Length - 1);
+                                        if (subject.Contains("\n"))
+                                        {
+                                            subject = subject.Substring(0, subject.Length - 1);
+                                        }
+                                        var seven = subject.Split(".");
+                                        BVDetail.CompanySection = seven[0];
+                                        BVDetail.SubjectSection = seven[1];
+                                        BVDetail.AccountSection = seven[2];
+                                        BVDetail.CostCenterSection = seven[3];
+                                        BVDetail.SpareOneSection = seven[4];
+                                        BVDetail.SpareTwoSection = seven[5];
+                                        BVDetail.IntercourseSection = seven[6];
+                                        //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                        BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
                                     }
-                                    var seven = subject.Split(".");
-                                    BVDetail.CompanySection = seven[0];
-                                    BVDetail.SubjectSection = seven[1];
-                                    BVDetail.AccountSection = seven[2];
-                                    BVDetail.CostCenterSection = seven[3];
-                                    BVDetail.SpareOneSection = seven[4];
-                                    BVDetail.SpareTwoSection = seven[5];
-                                    BVDetail.IntercourseSection = seven[6];
-                                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
-                                    BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                                    BVDetail.VGUID = Guid.NewGuid();
+                                    BVDetail.VoucherVGUID = guid;
+                                    BVDetailList.Add(BVDetail);
                                 }
-                                BVDetail.VGUID = Guid.NewGuid();
-                                BVDetail.VoucherVGUID = guid;
-                                BVDetailList.Add(BVDetail);
                             }
                         }
-                    }
-                    else
-                    {
-                        //subject = bankChannelOne.Borrow;
+                        else
+                        {
+                            //subject = bankChannelOne.Borrow;
+                        }
                     }
                 }
                 else

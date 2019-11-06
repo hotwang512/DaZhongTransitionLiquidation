@@ -31,7 +31,7 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             var result = new List<Business_UserCompanySet>();
             DbBusinessDataService.Command(db =>
             {
-                if (UserInfo.LoginName.ToLower() == "admin")
+                if (UserInfo.LoginName.ToLower() == "admin" || UserInfo.LoginName.ToLower() == "sysadmin")
                 {
                     var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
                     //var datas = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
@@ -56,7 +56,7 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             List<Business_UserCompanySet> result = new List<Business_UserCompanySet>();
             DbBusinessDataService.Command(db =>
             {
-                if (UserInfo.LoginName.ToLower() == "admin")
+                if (UserInfo.LoginName.ToLower() == "admin" || UserInfo.LoginName.ToLower() == "sysadmin")
                 {
                     var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43"
                                                                     && x.Status == "1" && x.AccountModeCode == accountMode).OrderBy("Code asc").ToList();
@@ -127,7 +127,7 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             DbBusinessDataService.Command(db =>
             {
                 //var data = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserVGUID && x.Block == "1").Count();
-                if (UserInfo.LoginName.ToLower() == "admin")
+                if (UserInfo.LoginName.ToLower() == "admin" || UserInfo.LoginName.ToLower() == "sysadmin")
                 {
                     response = db.SqlQueryable<Business_UserCompanySet>(@"select t1.Code,t1.Descrption,t2.Code as CompanyCode ,t2.Descrption as CompanyName,
  (t1.Code+t2.Code) as KeyData from Business_SevenSection t1 

@@ -30,7 +30,7 @@ var $page = function () {
         var myDate = new Date();//获取系统当前时间
         var month = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
         var day = (myDate.getDate()) < 10 ? "0" + (myDate.getDate()) : (myDate.getDate());
-        var date = myDate.getFullYear() + month + day;
+        var date = myDate.getFullYear().toString() + month.toString() + day;
         var voucherType = $("#VoucherType").val();
         var type = $.request.queryString().Type;
         if (type == 0 || type == "0") {
@@ -46,10 +46,9 @@ var $page = function () {
         $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + day);
         $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
         uiEngineHelper.bindSelect('#CompanySection', CompanyCode, "Code", "Descrption");
-        var guid = $.request.queryString().VGUID;
-        $("#VGUID").val(guid)
+        getVoucherDetail();
+        var guid = $("#VGUID").val();
         if (guid != "" && guid != null) {
-            getVoucherDetail();
             addVoucherListTable();
             $("#VoucherType").attr("disabled", "disableds");
         } else {
@@ -672,6 +671,7 @@ var $page = function () {
             type: "post",
             dataType: "json",
             success: function (msg) {
+                $("#VGUID").val(msg.VGUID);
                 $("#Status").val(msg.Status);
                 if ($("#Status").val() == "1") {
                     $("#hideButton").show();

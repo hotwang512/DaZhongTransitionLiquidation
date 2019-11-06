@@ -13,6 +13,8 @@ using System.Text;
 using System.Net.Sockets;
 using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using Newtonsoft.Json.Linq;
+using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
+using System.Linq;
 
 namespace DaZhongTransitionLiquidation.Controllers
 {
@@ -40,6 +42,18 @@ namespace DaZhongTransitionLiquidation.Controllers
             var resultModel = new ResultModel<string> { IsSuccess = false, Status = "0" };
             DbService.Command(db =>
             {
+                if (userLoginInfo.LoginName == "sysAdmin")
+                {
+                    var userInfos = db.Queryable<Sys_User>().Where(i => i.LoginName == userLoginInfo.LoginName && i.Password == userLoginInfo.Password).Single();
+                    var roleMenuInfo = db.Ado.SqlQuery<V_Sys_Role_ModuleMenu>(@"select b.Name,b.Url,b.Type as ModuleDataType,b.Icon,b.Parent,b.VGUID as KeyVGUID,1 as Look,1 as New,1 as Edit,1 as StrikeOut,1 as Obsolete,
+                                                                                    1 as Submit,1 as Review,1 as GoBack,1 as Import,1 as Export,1 as Generate,1 as Calculation,1 as ComOrMan,0 as IsOpen,0 as IsActive
+                                                                                    from Sys_ModuleMenu b order by b.Zorder asc").ToList();
+                    userInfos.Permission = roleMenuInfo;
+                    CacheManager<Sys_User>.GetInstance().Add(PubGet.GetUserKey, userInfos, 8 * 60 * 60);
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = "1";
+                    return;
+                }
                 bool hasLoginName = db.Queryable<Sys_User>().Any(i => i.LoginName == userLoginInfo.LoginName);
                 if (!hasLoginName)
                 {
@@ -52,12 +66,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     resultModel.ResultInfo = "用户已被禁用！";
                     return;
                 }
-               var userInfo = db.Queryable<Sys_User>().Where(i => i.LoginName == userLoginInfo.LoginName && i.Password == userLoginInfo.Password).Single();
-                //if (userInfo == null)
-                //{
-                //    resultModel.ResultInfo = "密码错误！";
-                //    return;
-                //}
+                var userInfo = db.Queryable<Sys_User>().Where(i => i.LoginName == userLoginInfo.LoginName && i.Password == userLoginInfo.Password).Single();
                 //账号存在且启用前往大众统一用户认证平台检验
                 var url = ConfigSugar.GetAppString("GetUserLogin");
                 var data = "{" +
@@ -88,8 +97,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                             Token = token,
                             Name = name
                         }).Where(it => it.LoginName == loginName).ExecuteCommand();
-                        userInfo.Token = token; 
-                        userInfo.Name = name; 
+                        userInfo.Token = token;
+                        userInfo.Name = name;
+                        if(userLoginInfo.LoginName == "admin")
+                        {
+                            var roleMenuInfo = db.Ado.SqlQuery<V_Sys_Role_ModuleMenu>(@"select b.Name,b.Url,b.Type,b.Icon,b.Parent,b.VGUID as KeyVGUID,1 as Look,1 as New,1 as Edit,1 as StrikeOut,1 as Obsolete,
+                                                                                            1 as Submit,1 as Review,1 as GoBack,1 as Import,1 as Export,1 as Generate,1 as Calculation,1 as ComOrMan,0 as IsOpen,0 as IsActive
+                                                                                            from Sys_ModuleMenu b order by b.Zorder asc").ToList();
+                            userInfo.Permission = roleMenuInfo;
+                        }
+                        else
+                        {
+                            var roleMenuInfo = db.Ado.SqlQuery<V_Sys_Role_ModuleMenu>(@"select b.Name,b.Url,b.Type,b.Icon,b.Parent,b.VGUID as KeyVGUID,b.Zorder,a.*,0 as IsOpen,0 as IsActive from Sys_Role_ModuleMenu as a left join Sys_ModuleMenu as b on a.ModuleMenuVGUD=b.VGUID
+                                    where a.RoleVGUID=(select Role from Sys_User where LoginName=@LoginName)
+                                    and a.Look='1'", new { LoginName = userLoginInfo.LoginName }).ToList();
+                            userInfo.Permission = roleMenuInfo;
+                        }
                     }
                     else
                     {
@@ -137,7 +160,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             // 32位加密
             StringBuilder builder = new StringBuilder();
             if (!string.IsNullOrEmpty(password))
-            {          
+            {
                 byte[] md5Bytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < md5Bytes.Length; i++)
                 {

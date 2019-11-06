@@ -300,7 +300,7 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem2 + "</a>";
+            container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.Status + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem2 + "</a>";
         } else {
             container = "<span>" + rowData.BusinessSubItem2 + "</span>";
         }
@@ -344,6 +344,11 @@ $(function () {
     page.init();
 });
 
-function link(VGUID) {
-    window.location.href = "/CapitalCenterManagement/OrderListDraftDetail/Index?VGUID=" + VGUID;
+function link(VGUID, status) {
+    var type = "";
+    switch (status) {
+        case "1": type = "0"; break;
+        case "2": type = "1"; break;
+    }
+    window.location.href = "/CapitalCenterManagement/OrderListDraftDetail/Index?Type=" + type + "&VGUID=" + VGUID;
 }

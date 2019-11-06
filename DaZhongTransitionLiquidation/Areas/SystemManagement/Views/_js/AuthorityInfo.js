@@ -5,7 +5,9 @@ var selector = {
     $btnDelete: function () { return $("#btnDelete") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
-
+    $AddBankChannelDialog: function () { return $("#AddBankChannelDialog") },
+    $AddBankChannel_OKButton: function () { return $("#AddBankChannel_OKButton") },
+    $AddBankChannel_CancelBtn: function () { return $("#AddBankChannel_CancelBtn") },
     $RoleName_Search: function () { return $("#RoleName_Search") },
 
     $EditPermission: function () { return $("#EditPermission") }
@@ -40,8 +42,49 @@ var $page = function () {
         //新增
         selector.$btnAdd().on("click", function () {
             window.location.href = "/Systemmanagement/AuthorityManagement/AuthorityDetail?isEdit=false";
+            //$("#RoleName").val("");
+            //$("#Description").val("");
+            //selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
+            //selector.$AddBankChannelDialog().modal("show");
         });
+        //弹出框中的取消按钮
+        selector.$AddBankChannel_CancelBtn().on("click", function () {
+            selector.$AddBankChannelDialog().modal("hide");
+        });
+        //弹出框中的保存按钮
+        selector.$AddBankChannel_OKButton().on("click", function () {
+            var validateError = 0;//未通过验证的数量
+            if (!Validate($("#RoleName"))) {
+                validateError++;
+            }
+            if (validateError <= 0) {
+                $.ajax({
+                    url: "/SystemManagement/AuthorityManagement/SaveRoleInfo",
+                    data: {
+                        Role: $("#RoleName").val(),
+                        Description: $("#Description").val(),
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (msg) {
+                        switch (msg.Status) {
+                            case "0":
+                                jqxNotification("保存失败！", null, "error");
+                                break;
+                            case "1":
+                                jqxNotification("保存成功！", null, "success");
+                                selector.$grid().jqxDataTable('updateBoundData');
+                                selector.$AddBankChannelDialog().modal("hide");
+                                break;
+                            case "2":
+                                jqxNotification("角色名称已经存在！", null, "error");
+                                break;
+                        }
 
+                    }
+                });
+            }
+        });
         //删除
         selector.$btnDelete().on("click", function () {
             var selection = [];

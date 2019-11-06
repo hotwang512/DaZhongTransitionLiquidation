@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using SyntacticSugar;
 using System.Collections.Generic;
+using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.AuthorityManagement
 {
@@ -126,14 +127,41 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
                     {
                         db.Insertable(roleInfo).ExecuteCommand();
                     }
-                    var moduleInfos = db.Queryable<Sys_Module>().OrderBy(i => i.CreatedDate, OrderByType.Desc).ToList();
-                    var sysRoles = o.GetRoleModule(roleInfo, moduleInfos, permissionList);
-                    if (sysRoles.Count > 0)
+                    var roleMenu = permissionList.JsonToModel<List<Sys_Role_ModuleMenu>>();
+                    
+                    List<Sys_Role_ModuleMenu> roleMenuList = new List<Sys_Role_ModuleMenu>();
+                    foreach (var item in roleMenu)
+                    {
+                        var data = roleMenuList.Where(x => x.ModuleMenuVGUD == item.ModuleMenuVGUD).ToList();
+                        if (data.Count > 0)
+                        {
+                            data[0].Look = item.Look == true? true: data[0].Look; data[0].New = item.New == true ? true : data[0].New; data[0].Edit = item.Edit == true ? true : data[0].Edit;
+                            data[0].StrikeOut = item.StrikeOut == true ? true : data[0].StrikeOut; data[0].Obsolete = item.Obsolete == true ? true : data[0].Obsolete; data[0].Submit = item.Submit == true ? true : data[0].Submit;
+                            data[0].Review = item.Review == true ? true : data[0].Review; data[0].GoBack = item.GoBack == true ? true : data[0].GoBack; data[0].Import = item.Import == true ? true : data[0].Import;
+                            data[0].Export = item.Export == true ? true : data[0].Export; data[0].Generate = item.Generate == true ? true : data[0].Generate; data[0].Calculation = item.Calculation == true ? true : data[0].Calculation;
+                            data[0].ComOrMan = item.ComOrMan == "1" ? "1" : data[0].ComOrMan;
+                        }
+                        else
+                        {
+                            item.VGUID = Guid.NewGuid();
+                            item.RoleVGUID = roleInfo.Vguid;
+                            roleMenuList.Add(item);
+                        }
+                    }
+                    if (roleMenuList.Count > 0)
                     {
                         //先删除再新增
-                        db.Deleteable<Sys_Role_Module>().Where(i => i.RoleVGUID == roleInfo.Vguid).ExecuteCommand();
-                        db.Insertable(sysRoles).ExecuteCommand();
+                        db.Deleteable<Sys_Role_ModuleMenu>().Where(i => i.RoleVGUID == roleInfo.Vguid).ExecuteCommand();
+                        db.Insertable(roleMenuList).ExecuteCommand();
                     }
+                    //var moduleInfos = db.Queryable<Sys_Module>().OrderBy(i => i.CreatedDate, OrderByType.Desc).ToList();
+                    //var sysRoles = o.GetRoleModule(roleInfo, moduleInfos, permissionList);
+                    //if (sysRoles.Count > 0)
+                    //{
+                    //    //先删除再新增
+                    //    db.Deleteable<Sys_Role_Module>().Where(i => i.RoleVGUID == roleInfo.Vguid).ExecuteCommand();
+                    //    db.Insertable(sysRoles).ExecuteCommand();
+                    //}
                 });
                 if (resultModel.Status == "2") return;
                 resultModel.IsSuccess = result.IsSuccess;
@@ -169,6 +197,59 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
             });
             jsonResult.Rows = sys_Modules;
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetNewModules(Guid? roleVguid)
+        {
+            var jsonResult = new JsonResultModel<SysNewModulesModule>();
+            DbService.Command(db =>
+            {
+                
+                if(roleVguid != null)
+                {
+                    jsonResult.Rows = db.Ado.SqlQuery<SysNewModulesModule>(@"select a.Name,a.VGUID as KeyVGUID,a.Parent,a.Look as IsLook,a.New as IsNew,a.Edit as IsEdit,a.StrikeOut as IsStrikeOut,a.Obsolete as IsObsolete,
+                                        a.Submit as IsSubmit,a.Review as IsReview,a.GoBack as IsGoBack,a.Import as IsImport,a.Export as IsExport,a.Generate as IsGenerate,a.Calculation as IsCalculation,a.Zorder,a.Type,
+                                        b.* from Sys_ModuleMenu as a left join Sys_Role_ModuleMenu as b on a.VGUID = b.ModuleMenuVGUD and b.RoleVGUID=@RoleVGUID  order by a.Zorder",
+                                        new { RoleVGUID = roleVguid }).ToList();
+                }
+                else
+                {
+                    jsonResult.Rows = db.Ado.SqlQuery<SysNewModulesModule>(@"select a.Name,a.VGUID as KeyVGUID,a.Parent,a.Look as IsLook,a.New as IsNew,a.Edit as IsEdit,a.StrikeOut as IsStrikeOut,a.Obsolete as IsObsolete,
+                                        a.Submit as IsSubmit,a.Review as IsReview,a.GoBack as IsGoBack,a.Import as IsImport,a.Export as IsExport,a.Generate as IsGenerate,a.Calculation as IsCalculation,a.Zorder,a.Type,
+                                        b.* from Sys_ModuleMenu as a left join Sys_Role_ModuleMenu as b on a.VGUID = b.ModuleMenuVGUD  and b.RoleVGUID='00000000-0000-0000-0000-000000000000'  order by a.Zorder").ToList();
+                }
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveRoleInfo(string roleName,string description)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    Sys_Role role = new Sys_Role();
+                    role.Role = roleName;
+                    role.Description = description;
+                    role.CreatedUser = UserInfo.LoginName;
+                    role.CreatedDate = DateTime.Now;
+                    role.Vguid = Guid.NewGuid();
+                    var isAny = db.Queryable<Sys_Role>().Any(x => x.Description == role.Description);
+                    if (isAny)
+                    {
+                        resultModel.Status = "2";
+                        return;
+                    }
+                    db.Insertable(role).ExecuteCommand();
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                if(resultModel.Status != "2")
+                {
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
     }
 }

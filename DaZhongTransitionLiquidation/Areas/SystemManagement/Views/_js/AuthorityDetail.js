@@ -66,19 +66,45 @@ var $page = function () {
                 validateError++;
             }
             if (validateError <= 0) {
-                var rolePermissionMode = function (moduleName, rightType) {
-                    this.ModuleName = moduleName;
-                    this.RightType = rightType;
-                }
                 var rolePermissionArray = new Array();
-
                 $('.permission').each(function () {
                     if ($(this).is(":checked")) {
-                        var pageid = $(this).attr("pageid");
-                        var buttonid = $(this).attr("buttonid");
-                        var rolePermission = new rolePermissionMode(pageid, buttonid);
+                        var modulVGUID = $(this).attr("pageid");
+                        var name = $(this).attr("name");
+                        var look = false; var review = false; 
+                        var news = false; var goBack = false;
+                        var edit = false; var imports = false;
+                        var strikeOut = false; var exports = false;
+                        var obsolete = false; var generate = false;
+                        var submit = false; var calculation = false;
+                        var comorman = "2";
+                        if (name.length > 40) {
+                            name = name.substring(0, 8);
+                        }
+                        switch (name) {
+                            case "Look": look = true; break; case "Review": review = true; break;
+                            case "New": news = true; break; case "GoBack": goBack = true; break;
+                            case "Edit": edit = true; break; case "Import": imports = true; break;
+                            case "StrikeOut": strikeOut = true; break; case "Export": exports = true; break;
+                            case "Obsolete": obsolete = true; break; case "Generate": generate = true; break;
+                            case "Submit": submit = true; break; case "Calculation": calculation = true; break;
+                            case "ComOrMan": comorman = $("input[name='ComOrMan" + modulVGUID + "']:checked").val(); break;
+                            default:
+                        }
+                        var rolePermissionMode = function () {
+                            this.ModuleMenuVGUD = modulVGUID;
+                            this.Look = look; this.Review = review;
+                            this.New = news; this.GoBack = goBack;
+                            this.Edit = edit; this.Import = imports;
+                            this.StrikeOut = strikeOut; this.Export = exports;
+                            this.Obsolete = obsolete; this.Generate = generate;
+                            this.Submit = submit; this.Calculation = calculation;
+                            this.ComOrMan = comorman;
+                        };
+                        var rolePermission = new rolePermissionMode();
                         rolePermissionArray.push(rolePermission);
                     }
+                    
                 });
                 console.log(JSON.stringify(rolePermissionArray));
                 selector.$roleForm().ajaxSubmit({
@@ -108,7 +134,7 @@ var $page = function () {
 
     function getModules(callback) {
         $.ajax({
-            url: "/SystemManagement/AuthorityManagement/GetModules",
+            url: "/SystemManagement/AuthorityManagement/GetNewModules",
             type: "get",
             dataType: "json",
             data: { "roleVguid": selector.$RoleVGUID().val() },
@@ -123,54 +149,101 @@ var $page = function () {
                 {
                     dataType: "json",
                     dataFields: [
-                    { name: 'ModuleName', type: 'string' },
+                    { name: 'Name', type: 'string' },
+                    { name: 'KeyVGUID', type: 'string' },
                     { name: 'Parent', type: 'string' },
-                    { name: 'Vguid', type: 'string' },
-                    { name: 'Reads', type: 'string' },
-                    { name: 'Adds', type: 'string' },
-                    { name: 'Edit', type: 'string' },
-                    { name: 'Deletes', type: 'string' },
-                    { name: 'Enable', type: 'string' },
-                    { name: 'Disable', type: 'string' },
-                    { name: 'Import', type: 'string' },
-                    { name: 'Export', type: 'string' },
-                    { name: 'Vguid', type: 'string' },
-                    { name: 'ModuleVGUID', type: 'string' }
+                    { name: 'IsLook', type: 'bool' },
+                    { name: 'IsNew', type: 'bool' },
+                    { name: 'IsEdit', type: 'bool' },
+                    { name: 'IsStrikeOut', type: 'bool' },
+                    { name: 'IsObsolete', type: 'bool' },
+                    { name: 'IsSubmit', type: 'bool' },
+                    { name: 'IsReview', type: 'bool' },
+                    { name: 'IsGoBack', type: 'bool' },
+                    { name: 'IsImport', type: 'bool' },
+                    { name: 'IsExport', type: 'bool' },
+                    { name: 'IsGenerate', type: 'bool' },
+                    { name: 'IsCalculation', type: 'bool' },
+                    { name: 'Look', type: 'bool' },
+                    { name: 'New', type: 'bool' },
+                    { name: 'Edit', type: 'bool' },
+                    { name: 'StrikeOut', type: 'bool' },
+                    { name: 'Obsolete', type: 'bool' },
+                    { name: 'Submit', type: 'bool' },
+                    { name: 'Review', type: 'bool' },
+                    { name: 'GoBack', type: 'bool' },
+                    { name: 'Import', type: 'bool' },
+                    { name: 'Export', type: 'bool' },
+                    { name: 'Generate', type: 'bool' },
+                    { name: 'Calculation', type: 'bool' },
+                    { name: 'ComOrMan', type: 'string' },
+                    { name: 'VGUID', type: 'string' },
+                    { name: 'RoleVGUID', type: 'string' },
+                    { name: 'ModuleMenuVGUD', type: 'string' },
                     ],
                     hierarchy:
                     {
-                        keyDataField: { name: 'Vguid' },
+                        keyDataField: { name: 'KeyVGUID' },
                         parentDataField: { name: 'Parent' }
                     },
-                    id: 'Vguid',
+                    id: '',
                     localData: modules
                 };
         var dataAdapter = new $.jqx.dataAdapter(source);
         selector.$grid().jqxTreeGrid({
-            width: selector.$grid().width(),
+            width: "100%",
+            height: 400,
+            altRows: true,
             showHeader: true,
             source: dataAdapter,
             checkboxes: false,
+            editable: false,
+            //selectionMode: "singleCell",
+            editSettings:{ saveOnBlur: false, saveOnSelectionChange: false, editOnDoubleClick: true, },
             ready: function () {
                 $("#moduletree").jqxTreeGrid('expandAll');
             },
             columns: [
-              { text: '模块名称', dataField: 'ModuleName', width: 200, },
-              //{ text: '查看', dataField: 'Reads', width: 100, },
-              { text: '查看', datafield: 'Reads', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Reads },
-                  { text: '新增', datafield: 'Adds', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Adds },
-                  { text: '编辑', datafield: 'Edit', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Edit },
-                  { text: '删除', datafield: 'Deletes', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Deletes },
-                  { text: '启用', datafield: 'Enable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
-                  { text: '禁用', datafield: 'Disable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Approved },
-                  { text: '导入', datafield: 'Import', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
-                  { text: '导出', datafield: 'Export', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
-                  { text: '全选', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, rendered: renderedFunc },
-                  { text: 'PageID', datafield: 'PageID', hidden: true },
-                  { text: 'Vguid', datafield: 'Vguid', hidden: true },
-                  { text: 'ModuleVGUID', datafield: 'ModuleVGUID', hidden: true }
-              //{ text: '', dataField: 'Parent', width: "100%", hidden: true },
-              //{ text: '', dataField: 'Vguid', width: "100%", hidden: true },
+                    { text: '模块名称', dataField: 'Name', editable: false, width: 250, },
+                    { text: '查看', dataField: 'Look', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Look },
+                    { text: '新增', dataField: 'New', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_New },
+                    { text: '编辑', dataField: 'Edit', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Edit },
+                    { text: '删除', dataField: 'StrikeOut', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_StrikeOut },
+                    { text: '作废', dataField: 'Obsolete', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Obsolete },
+                    { text: '提交', dataField: 'Submit', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
+                    { text: '预览', dataField: 'Review', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Review },
+                    { text: '退回', dataField: 'GoBack', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_GoBack },
+                    { text: '导入', dataField: 'Import', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
+                    { text: '导出', dataField: 'Export', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
+                    { text: '生成', dataField: 'Generate', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Generate },
+                    { text: '计算', dataField: 'Calculation', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Calculation },
+                    {
+                        text: '数据权限', dataField: 'ComOrMan', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_ComOrMan
+                        //createEditor: function (rowKey, cellvalue, editor, cellText, width, height) {
+                        //    var dropDownList = $("<div class='dropDownList' style='border: none;'></div>").appendTo(editor);
+                        //    dropDownList.jqxDropDownList({width: '100%', height: '100%', autoDropDownHeight: true, source: ["个人", "公司"] });
+                        //},
+                        //initEditor: function (rowKey, cellvalue, editor, celltext, width, height) {
+                        //    $(editor.find('.dropDownList')).val(cellvalue);
+                        //},
+                        //// returns the value of the custom editor.
+                        //getEditorValue: function (rowKey, cellvalue, editor) {
+                        //    return $(editor.find('.dropDownList')).val();
+                        //}
+                    },
+                    //cellsRenderer: cellsRendererFunc_ComOrMan
+                  //{ text: '查看', datafield: 'Reads', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Reads },
+                  //{ text: '新增', datafield: 'Adds', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Adds },
+                  //{ text: '编辑', datafield: 'Edit', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Edit },
+                  //{ text: '删除', datafield: 'Deletes', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Deletes },
+                  //{ text: '启用', datafield: 'Enable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
+                  //{ text: '禁用', datafield: 'Disable', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Approved },
+                  //{ text: '导入', datafield: 'Import', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
+                  //{ text: '导出', datafield: 'Export', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
+                  //{ text: '全选', align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, rendered: renderedFunc },
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
+                    { text: 'RoleVGUID', datafield: 'RoleVGUID', hidden: true },
+                    { text: 'ModuleMenuVGUD', datafield: 'ModuleMenuVGUD', hidden: true }
             ]
         });
     }
@@ -221,100 +294,158 @@ var $page = function () {
         return true;
     }
 
-    function cellsRendererFunc_Reads(row, column, value, rowData) {
-        if (rowData.Reads == "0") {
+    function cellsRendererFunc_Look(row, column, value, rowData) {
+        if (rowData.IsLook == false) {
             return "";
         }
-        else if (rowData.Reads == "1") {
-            return "<div><input type=\"checkbox\" class=\"permission\"  style=\"width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"1\" /></div>";
+        else if (rowData.Look == false) {
+            return "<input   type=\"checkbox\" class=\"permission\" style=\"margin:auto;width: 17px;height: 17px;\" name=\"Look\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Reads == "2") {
-            return "<input type=\"checkbox\" class=\"permission\"  style=\"width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"1\" />";
+        else if (rowData.Look == true) {
+            return "<input   type=\"checkbox\" class=\"permission\" style=\"margin:auto;width: 17px;height: 17px;\" name=\"Look\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
-    function cellsRendererFunc_Adds(row, column, value, rowData) {
-        if (rowData.Adds == "0") {
+    function cellsRendererFunc_New(row, column, value, rowData) {
+        if (rowData.IsNew == false) {
             return "";
         }
-        else if (rowData.Adds == "1") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"2\" />";
+        else if (rowData.New == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"New\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Adds == "2") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"2\" />";
+        else if (rowData.New == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"New\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
     function cellsRendererFunc_Edit(row, column, value, rowData) {
-        if (rowData.Edit == "0") {
+        if (rowData.IsEdit == false) {
             return "";
         }
-        else if (rowData.Edit == "1") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"3\" />";
+        else if (rowData.Edit == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Edit\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Edit == "2") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"3\" />";
+        else if (rowData.Edit == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Edit\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
-    function cellsRendererFunc_Deletes(row, column, value, rowData) {
-        if (rowData.Deletes == "0") {
+    function cellsRendererFunc_StrikeOut(row, column, value, rowData) {
+        if (rowData.IsStrikeOut == false) {
             return "";
         }
-        else if (rowData.Deletes == "1") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"4\" />";
+        else if (rowData.StrikeOut == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"StrikeOut\"  pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Deletes == "2") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"4\" />";
+        else if (rowData.StrikeOut == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"StrikeOut\"  checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+    }
+
+    function cellsRendererFunc_Obsolete(row, column, value, rowData) {
+        if (rowData.IsObsolete == false) {
+            return "";
+        }
+        else if (rowData.Obsolete == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Obsolete\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+        else if (rowData.Obsolete == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Obsolete\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
     function cellsRendererFunc_Submit(row, column, value, rowData) {
-        if (rowData.Enable == "0") {
+        if (rowData.IsSubmit == false) {
             return "";
         }
-        else if (rowData.Enable == "1") {
-            return "<input type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"5\" />";
+        else if (rowData.Submit == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Submit\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Enable == "2") {
-            return "<input type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"5\" />";
+        else if (rowData.Submit == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Submit\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
-    function cellsRendererFunc_Approved(row, column, value, rowData) {
-        if (rowData.Disable == "0") {
+    function cellsRendererFunc_Review(row, column, value, rowData) {
+        if (rowData.IsReview == false) {
             return "";
         }
-        else if (rowData.Disable == "1") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"6\" />";
+        else if (rowData.Review == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Disable == "2") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"6\" />";
+        else if (rowData.Review == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+    }
+
+    function cellsRendererFunc_GoBack(row, column, value, rowData) {
+        if (rowData.IsGoBack == false) {
+            return "";
+        }
+        else if (rowData.GoBack == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"GoBack\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+        else if (rowData.GoBack == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"GoBack\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
     function cellsRendererFunc_Import(row, column, value, rowData) {
-        if (rowData.Import == "0") {
+        if (rowData.IsImport == false) {
             return "";
         }
-        else if (rowData.Import == "1") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"7\" />";
+        else if (rowData.Import == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Import\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Import == "2") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"7\" />";
+        else if (rowData.Import == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Import\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
     function cellsRendererFunc_Export(row, column, value, rowData) {
-        if (rowData.Export == "0") {
+        if (rowData.IsExport == false) {
             return "";
         }
-        else if (rowData.Export == "1") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"8\" />";
+        else if (rowData.Export == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Export\"  pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
-        else if (rowData.Export == "2") {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" checked=\"checked\" pageid=\"" + rowData.ModuleVGUID + "\" buttonid=\"8\" />";
+        else if (rowData.Export == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Export\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
+    }
+
+    function cellsRendererFunc_Generate(row, column, value, rowData) {
+        if (rowData.IsGenerate == false) {
+            return "";
+        }
+        else if (rowData.Generate == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Generate\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+        else if (rowData.Generate == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Generate\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+    }
+
+    function cellsRendererFunc_Calculation(row, column, value, rowData) {
+        if (rowData.IsCalculation == false) {
+            return "";
+        }
+        else if (rowData.Calculation == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Calculation\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+        else if (rowData.Calculation == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Calculation\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+    }
+
+    function cellsRendererFunc_ComOrMan(row, column, value, rowData) {
+        if (value == "1" || value == null || value == "") {
+            return com = "<input type=\"radio\" name=\"ComOrMan" + rowData.KeyVGUID + "\" class=\"permission\"  style=\"margin:auto;width: 20px;height: 16px;\" pageid=\"" + rowData.KeyVGUID + "\" value=\"1\" checked>:个人&nbsp;" +
+                    "<input type=\"radio\" class=\"permission\" name=\"ComOrMan" + rowData.KeyVGUID + "\" style=\"margin:auto;width: 20px;height: 16px;\" pageid=\"" + rowData.KeyVGUID + "\" value=\"2\" >:公司";
+        } else {
+            return com = "<input type=\"radio\" name=\"ComOrMan" + rowData.KeyVGUID + "\" class=\"permission\"  style=\"margin:auto;width: 20px;height: 16px;\" pageid=\"" + rowData.KeyVGUID + "\" value=\"1\" >:个人&nbsp;" +
+                    "<input type=\"radio\" class=\"permission\" name=\"ComOrMan" + rowData.KeyVGUID + "\"  style=\"margin:auto;width: 20px;height: 16px;\" pageid=\"" + rowData.KeyVGUID + "\" value=\"2\" checked>:公司";
+        } 
     }
 };
 

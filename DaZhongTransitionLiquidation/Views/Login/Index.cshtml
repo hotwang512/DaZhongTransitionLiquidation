@@ -19,25 +19,100 @@
     <script src="@Url.CusContent("~/Views/_js/Login.js")"></script>
 </head>
 <body>
-    <div>
-        <div id="top">
-        </div>
-        <div id="loginDiv">
-            <div id="loginTop">
-                <span id="title">大众出租财务共享服务平台</span>
+    <div class="bg-icon main">
+        <div class="bg-icon-info">
+            <div class="bg-icon-day">
+                <label id="lbDateDay">31</label>
             </div>
-            <div id="LoginNameDiv">
-                <span id="spName">登录用户名</span><input id="txtName" name="login" type="text" value="admin"  autocomplete="new-password" />
+            <div class="bg-icon-yearmonth">
+                <label id="lbYearMonth">2019/10</label>
             </div>
-            <div class="line"></div>
-            <div id="pwdDiv">
-                <span id="spPwd">密码</span><input id="txtPwd" name="login" type="password" onpaste="return false" onselectstart="return false" value="admin" />
+            <div>
+                <span class="bg-icon-line active" bgurl="/_theme/images/20191101135742.jpg"></span>
+                <span class="bg-icon-line " bgurl="/_theme/images/20191101135057.jpg"></span>
+                <span class="bg-icon-line" bgurl="/_theme/images/20191101135103.jpg"></span>
             </div>
-            <div class="line"></div>
+            <div class="bg-icon-smart" style="">
+                SMART POWER
+            </div>
+            <div class="bg-icon-content" style="">
+                作为HCM领域变革的探索者和推动者,蓝灯HCM以驱动企业提升
+                <br>
+                人力资本管理效能为己任，多年来专注于对人的工作行为数据化分析和挖掘.
+            </div>
         </div>
     </div>
-    <div id="btnDiv">
-        <input type="button" id="btnLogin" value="登录" />
+    <div class="login-box card">
+        <div class="login-icon">
+            <img src="/_theme/images/logo.jpg">
+            <div>大众出租财务共享平台</div>
+        </div>
+        <div class="card-block">
+            <form class="form-horizontal form-material" id="loginform">
+                <div class="form-group" id="loginValidate" style="margin-bottom:0px; display:none;">
+                    <div class="col-xs-12">
+                        <div class="alert alert-danger" id="loginValidatealert" style="padding:6px;">
+                            <i class="fa fa-exclamation-triangle" style="margin-right:20px;"></i><span id="loginValidateMessageText">请输入用户名！</span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group " style="margin-bottom:30px;">
+                    <div class="col-xs-12">
+                        <div class="input-group">
+                            <div class="input-group-addon input-group-addon-define">
+                                <img src="/_theme/images/zhanghu.png" style="width:23px;margin:auto;">
+                            </div>
+                            <input id="txtUserAccount" name="UserAccount" class="form-control" type="text" placeholder="账号">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:30px;">
+                    <div class="col-xs-12">
+                        <div class="input-group">
+                            <div class="input-group-addon input-group-addon-define">
+                                <img src="/_theme/images/mima.png" style="width:23px;margin:auto;">
+                            </div>
+                            <input id="txtUserPwd" name="UserPwd" class="form-control" type="password" placeholder="密码">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <button id="btnLogin" class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="button">登 录</button>
+                        <div class="la-ball-fall" style="display:none;position: absolute;margin-top: -32px;left: 45%;z-index: 1;">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
+    @*<div class="loginArea">
+            <div id="top">
+            </div>
+            <div id="loginDiv">
+                <div id="loginTop">
+                    <span id="title">大众出租财务共享服务平台</span>
+                </div>
+                <div id="LoginNameDiv">
+                    <span id="spName">登录用户名</span><input id="txtName" name="login" type="text" value="admin" autocomplete="new-password" />
+                </div>
+                <div class="line"></div>
+                <div id="pwdDiv">
+                    <span id="spPwd">密码</span><input id="txtPwd" name="login" type="password" onpaste="return false" onselectstart="return false" value="admin" />
+                </div>
+                <div class="line"></div>
+            </div>
+            <div id="btnDiv">
+                <input type="button" id="btnLogin" value="登录" />
+            </div>
+        </div>*@
+
 </body>
 </html>

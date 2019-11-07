@@ -14,6 +14,7 @@ using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using System.Text.RegularExpressions;
 using DaZhongTransitionLiquidation.Controllers;
+using DaZhongTransitionLiquidation.Common.Pub;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -26,6 +27,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/VoucherList
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("395599E8-F05B-4FAD-9347-0A17F0D4CEAA");
             return View();
         }

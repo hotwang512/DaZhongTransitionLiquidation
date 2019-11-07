@@ -3,6 +3,8 @@
     ViewBag.Title = "财务报表/科目余额明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var userInfo = ViewBag.User as Sys_User;
+    var moduleMenu = userInfo.GetCurrentPagePermission();
 }
 
 @section js{
@@ -13,16 +15,13 @@
 @section css{
 
 }
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+@if (moduleMenu.Generate)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
-            {
-                <td style="width: 95px;">
-                    <button id="btnCheck" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black !important;">&#xe691;</i><span style="margin-left: -5px;">余额校验</span></button>
-                </td>
-            }
+            <td style="width: 95px;">
+                <button id="btnCheck" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black !important;">&#xe691;</i><span style="margin-left: -5px;">余额校验</span></button>
+            </td>
         </tr>
     </table>
 }

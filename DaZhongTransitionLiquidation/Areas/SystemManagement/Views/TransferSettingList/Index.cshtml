@@ -8,7 +8,7 @@
     var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
-<script src="@Url.CusContent(" ~/Areas/SystemManagement/Views/_js/TransferSettingList.js")"></script>
+    <script src="@Url.CusContent(" ~/Areas/SystemManagement/Views/_js/TransferSettingList.js")"></script>
 }
 
 @section css{
@@ -16,29 +16,29 @@
 }
 @if (moduleMenu.New || moduleMenu.StrikeOut)
 {
-<table style="margin-top: 10px;">
-    <tr style="height: 50px;">
-        @if (moduleMenu.New)
-        {
-        <td style="width: 95px;">
-            <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-        </td>
-        }
-        @if (moduleMenu.StrikeOut)
-        {
-        <td style="width: 95px;">
-            <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
-        </td>
-        }
-        @*
-        <td style="width: 95px;">
-            <button id="EditIsableTrue" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
-        </td>
-        <td style="width: 95px;">
-            <button id="EditIsableFalse" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
-        </td>*@
-    </tr>
-</table>
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @if (moduleMenu.New)
+            {
+                <td style="width: 95px;">
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td>
+            }
+            @if (moduleMenu.StrikeOut)
+            {
+                <td style="width: 95px;">
+                    <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+            @*
+                <td style="width: 95px;">
+                    <button id="EditIsableTrue" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
+                </td>
+                <td style="width: 95px;">
+                    <button id="EditIsableFalse" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
+                </td>*@
+        </tr>
+    </table>
 }
 
 <!-- 中部条件 -->
@@ -51,20 +51,20 @@
         <table style="margin-top: 20px; width: 800px; margin-left: 20px;">
             <tr style="height: 45px;">
                 @*
-                <td class="td_span">营收月份：</td>
-                <td class="td_input">
-                    <input id="txtPaymentForm" type="text" style="display:none" class="input_text form-control" value="" />
-                    <input id="txtMonth" type="text" onfocus="WdatePicker({realDateFmt: 'yyyy-MM', minDate: '#F{$dp.$D(\'txtPaymentForm\')}',dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" value="@DateTime.Now.ToString(" yyyy-MM")" />
-                </td>*@
+                    <td class="td_span">营收月份：</td>
+                    <td class="td_input">
+                        <input id="txtPaymentForm" type="text" style="display:none" class="input_text form-control" value="" />
+                        <input id="txtMonth" type="text" onfocus="WdatePicker({realDateFmt: 'yyyy-MM', minDate: '#F{$dp.$D(\'txtPaymentForm\')}',dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" value="@DateTime.Now.ToString(" yyyy-MM")" />
+                    </td>*@
                 <td class="td_span">渠道名称：</td>
                 <td class="td_input">
                     <select id="txtChannel" name="Channel_Id" class="input_text form-control">
                         <option></option>
                         @{
-                        foreach (var item in ViewBag.Channel)
-                        {
-                        <option value="@item.Id">@item.Name</option>
-                        }
+                            foreach (var item in ViewBag.Channel)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
 
                         }
                     </select>
@@ -106,13 +106,13 @@
                             <td style="width: 150px;">
                                 <input id="TransferCompany" type="text" style="" class="input_text form-control" value="" />
                                 @*<select id="TransferCompany" class="input_text form-control" validatetype="required">
-                                    <option></option>
-                                    <option value="浦东公司">浦东公司</option>
-                                    <option value="市南公司">市南公司</option>
-                                    <option value="大众新亚">大众新亚</option>
-                                    <option value="九分公司">九分公司</option>
-                                    <option value="大众星光">大众星光</option>
-                                </select>*@
+                                        <option></option>
+                                        <option value="浦东公司">浦东公司</option>
+                                        <option value="市南公司">市南公司</option>
+                                        <option value="大众新亚">大众新亚</option>
+                                        <option value="九分公司">九分公司</option>
+                                        <option value="大众星光">大众星光</option>
+                                    </select>*@
                             </td>
                         </tr>
                         <tr style="height: 45px;">
@@ -120,11 +120,11 @@
                             <td style="width: 150px;">
                                 <input id="TransferType" type="text" style="" class="input_text form-control" value="" />
                                 @*<select id="TransferType" class="input_text form-control" validatetype="required">
-                                    <option></option>
-                                    <option value="营收缴款">营收缴款</option>
-                                    <option value="手续费">手续费</option>
-                                    <option value="银行收款">银行收款</option>
-                                </select>*@
+                                        <option></option>
+                                        <option value="营收缴款">营收缴款</option>
+                                        <option value="手续费">手续费</option>
+                                        <option value="银行收款">银行收款</option>
+                                    </select>*@
                             </td>
                         </tr>
                         <tr style="height: 45px;" class="hide">

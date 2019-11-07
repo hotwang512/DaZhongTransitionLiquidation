@@ -10,6 +10,8 @@ using System.Web;
 using System.Web.Mvc;
 using SqlSugar;
 using System.Text;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
+using DaZhongTransitionLiquidation.Common.Pub;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VehicleBusiness
 {
@@ -21,6 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/VehicleBusiness
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             return View();
         }
         public JsonResult GeVehicleData(Business_VehicleUnitList searchParams, GridParams para)

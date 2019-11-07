@@ -16,6 +16,7 @@ using Spire.Xls;
 using System.Drawing.Printing;
 using System.Text;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.SettlementCount
 {
@@ -27,6 +28,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/SettlementCount
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }

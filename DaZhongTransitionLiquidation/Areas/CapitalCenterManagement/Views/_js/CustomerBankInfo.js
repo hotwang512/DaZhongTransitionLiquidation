@@ -74,7 +74,7 @@ var $page = function () {
                         BankAccountName: selector.$txtBankAccountName_Dialog().val(),
                         Bank: selector.$txtBank_Dialog().val(),
                         BankNo: selector.$txtBankNo().val(),
-                        CompanyOrPerson:$("#CompanyOrPerson").val(),
+                        CompanyOrPerson: $("#CompanyOrPerson").val(),
                         VGUID: vguid
                     },
                     type: "post",
@@ -110,7 +110,7 @@ var $page = function () {
             if (selection.length < 1) {
                 jqxNotification("请选择您要删除的数据！", null, "error");
             } else {
-                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消",selection);
+                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
 
@@ -154,7 +154,7 @@ var $page = function () {
                 columnsHeight: 40,
                 columns: [
                     { width: 35, text: "", datafield: "checkbox", align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: '供应商类别',hidden:true, datafield: 'CompanyOrPerson', width:'250px',align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
+                    { text: '供应商类别', datafield: 'CompanyOrPerson', width: '250px', align: 'center', cellsAlign: 'center', cellsRenderer: channelDetailFunc },
                     { text: '账号', datafield: 'BankAccount', align: 'center', width: '250px', cellsAlign: 'center', },
                     { text: '户名', datafield: 'BankAccountName', align: 'center', width: '350px', cellsAlign: 'center' },
                     { text: '开户行', datafield: 'Bank', align: 'center', width: '350px', cellsAlign: 'center' },
@@ -213,7 +213,7 @@ var $page = function () {
 
     //删除
     function dele(selection) {
-        
+
         $.ajax({
             url: "/CapitalCenterManagement/CustomerBankInfo/DeleteCustomerBankInfo",
             data: { vguids: selection },

@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "结算标准/结算项目";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userInfo = ViewBag.User as Sys_User;
+    var moduleMenu = userInfo.GetCurrentPagePermission();
 }
 
 @section js
@@ -12,19 +14,30 @@
 @section css{
 
 }
-<table style="margin-top: 10px;">
-    <tr style="height: 50px;">
-        <td>
-            <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-        </td>
-        <td>
-            <button id="btnEdit" type="button" class="buttons" style="margin-left: 10px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe646;</i><span style="margin-left: 7px; float: left;">编辑</span></button>
-        </td>
-        <td>
-            <button id="btnDelete" style="margin-left: 10px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
-        </td>
-    </tr>
-</table>
+@if (moduleMenu.New || moduleMenu.Edit || moduleMenu.StrikeOut)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @if (moduleMenu.New)
+            {
+                <td>
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td> }
+            @if (moduleMenu.Edit)
+            {
+                <td>
+                    <button id="btnEdit" type="button" class="buttons" style="margin-left: 10px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe646;</i><span style="margin-left: 7px; float: left;">编辑</span></button>
+                </td>}
+            @if (moduleMenu.StrikeOut)
+            {
+                <td>
+                    <button id="btnDelete" style="margin-left: 10px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
+
 <div class="mk" style="width:280px;float:left;">
     <div class="header_mk">
         <div class="header_icon"></div>
@@ -38,16 +51,26 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">结算项目明细</span></div>
     </div>
-    <table style="margin-left: 12px;">
-        <tr style="">
-            <td>
-                <button id="btnAdd2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-            </td>
-            <td>
-                <button id="btnDelete2" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
-            </td>
-        </tr>
-    </table>
+    @if (moduleMenu.New || moduleMenu.StrikeOut)
+    {
+        <table style="margin-left: 12px;">
+            <tr style="">
+                @if (moduleMenu.New)
+                {
+                    <td>
+                        <button id="btnAdd2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                    </td>
+                }
+                @if (moduleMenu.StrikeOut)
+                {
+                    <td>
+                        <button id="btnDelete2" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                    </td>
+                }
+            </tr>
+        </table>
+    }
+
     <div id="datatable" class="jqxTable"></div>
 </div>
 <!-- 底部表格 -->
@@ -61,28 +84,29 @@
             <div class="modal-body" style="width: 100%;">
                 <table style="width: 100%;margin-left: 65px;">
                     <tr id="SubjectCode" class="" style="height: 45px;">
-                        <td style="width: 100px;text-align: left"><span class="spanText">父级菜单</span></td>
-                        <td>
-                            <input id="ParentMenu" type="text" readonly="readonly" class="input_text form-control" />
-                            <input id="hideParentMenu" type="text" class="hide" />
-                        </td>
+                    <td style="width: 100px;text-align: left"><span class="spanText">父级菜单</span></td>
+                    <td>
+                        <input id="ParentMenu" type="text" readonly="readonly" class="input_text form-control" />
+                        <input id="hideParentMenu" type="text" class="hide" />
+                    </td>
                     </tr>
                     <tr style="height: 45px;">
-                        <td style="width: 100px;text-align: left"><span class="spanText">结算项目</span></td>
+                        <td style="width: 100px;text-align: left">
+                        <span class="spanText">结算项目</span></td>
                         <td>
                             <input id="BusinessType" type="text" class="input_text form-control" validatetype="required" />
                         </td>
                     </tr>
                     @*<tr id="SubjectShow" class="SubjectTr" style="height: 45px; ">
-                        <td style="width: 100px;text-align: left"><span class="spanText">是否一级菜单</span></td>
-                        <td>
-                            <select id="FirstMenu" class="input_text form-control">
-                                <option value="0">否</option>
-                                <option value="1">是</option>
-                            </select>
-                        </td>
-                    </tr>*@
-                    
+                            <td style="width: 100px;text-align: left"><span class="spanText">是否一级菜单</span></td>
+                            <td>
+                                <select id="FirstMenu" class="input_text form-control">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </td>
+                        </tr>*@
+
                 </table>
             </div>
             <div class="modal-footer">

@@ -13,6 +13,7 @@ using System.IO;
 using Aspose.Cells;
 using System.Data;
 using System.Text;
+using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextDayData
 {
@@ -25,6 +26,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
 
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("68DEB284-908E-40AC-9DF6-777888F40D7B");
             ViewBag.Channel = GetChannel();
             ViewData["transactionId"] = Request["transactionId"] ?? "";

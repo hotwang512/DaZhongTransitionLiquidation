@@ -77,6 +77,7 @@ var $page = function () {
                         var strikeOut = false; var exports = false;
                         var obsolete = false; var generate = false;
                         var submit = false; var calculation = false;
+                        var preview = false; var enable = false;
                         var comorman = "2";
                         if (name.length > 40) {
                             name = name.substring(0, 8);
@@ -88,6 +89,7 @@ var $page = function () {
                             case "StrikeOut": strikeOut = true; break; case "Export": exports = true; break;
                             case "Obsolete": obsolete = true; break; case "Generate": generate = true; break;
                             case "Submit": submit = true; break; case "Calculation": calculation = true; break;
+                            case "Preview": preview = true; break; case "Enable": enable = true; break;
                             case "ComOrMan": comorman = $("input[name='ComOrMan" + modulVGUID + "']:checked").val(); break;
                             default:
                         }
@@ -99,6 +101,7 @@ var $page = function () {
                             this.StrikeOut = strikeOut; this.Export = exports;
                             this.Obsolete = obsolete; this.Generate = generate;
                             this.Submit = submit; this.Calculation = calculation;
+                            this.Preview = preview; this.Enable = enable;
                             this.ComOrMan = comorman;
                         };
                         var rolePermission = new rolePermissionMode();
@@ -164,6 +167,8 @@ var $page = function () {
                     { name: 'IsExport', type: 'bool' },
                     { name: 'IsGenerate', type: 'bool' },
                     { name: 'IsCalculation', type: 'bool' },
+                    { name: 'IsPreview', type: 'bool' },
+                    { name: 'IsEnable', type: 'bool' },
                     { name: 'Look', type: 'bool' },
                     { name: 'New', type: 'bool' },
                     { name: 'Edit', type: 'bool' },
@@ -176,6 +181,8 @@ var $page = function () {
                     { name: 'Export', type: 'bool' },
                     { name: 'Generate', type: 'bool' },
                     { name: 'Calculation', type: 'bool' },
+                    { name: 'Preview', type: 'bool' },
+                    { name: 'Enable', type: 'bool' },
                     { name: 'ComOrMan', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'RoleVGUID', type: 'string' },
@@ -211,7 +218,9 @@ var $page = function () {
                     { text: '删除', dataField: 'StrikeOut', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_StrikeOut },
                     { text: '作废', dataField: 'Obsolete', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Obsolete },
                     { text: '提交', dataField: 'Submit', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
-                    { text: '预览', dataField: 'Review', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Review },
+                    { text: '审核', dataField: 'Review', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Review },
+                    { text: '预览', dataField: 'Preview', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Preview },
+                    { text: '启用', dataField: 'Enable', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Enable },
                     { text: '退回', dataField: 'GoBack', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_GoBack },
                     { text: '导入', dataField: 'Import', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
                     { text: '导出', dataField: 'Export', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
@@ -374,6 +383,30 @@ var $page = function () {
             return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
         else if (rowData.Review == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+    }
+
+    function cellsRendererFunc_Preview(row, column, value, rowData) {
+        if (rowData.IsPreview == false || rowData.IsEnable == undefined || rowData.IsEnable == null) {
+            return "";
+        }
+        else if (rowData.Preview == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+        else if (rowData.Preview == true) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+    }
+
+    function cellsRendererFunc_Enable(row, column, value, rowData) {
+        if (rowData.IsEnable == false || rowData.IsEnable == undefined || rowData.IsEnable == null) {
+            return "";
+        }
+        else if (rowData.Enable == false) {
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+        }
+        else if (rowData.Enable == true) {
             return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }

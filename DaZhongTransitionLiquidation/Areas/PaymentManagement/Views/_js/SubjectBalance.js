@@ -184,7 +184,7 @@ function initTable() {
 
 function detailFuncs(row, column, value, rowData) {
     var container = "";
-    if (selector.$EditPermission().val() == "1") {
+    if (selector.$EditPermission().val() == "true") {
         container = "<a href='#' onclick=edit('" + rowData.Balance + "','" + rowData.BusinessCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessCode + "</a>";
     } else {
         container = "<span>" + rowData.BusinessCode + "</span>";

@@ -22,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
 
         public ActionResult AuthorityInfo()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.AuthorityManagement);
             return View();
         }
@@ -139,7 +140,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
                             data[0].StrikeOut = item.StrikeOut == true ? true : data[0].StrikeOut; data[0].Obsolete = item.Obsolete == true ? true : data[0].Obsolete; data[0].Submit = item.Submit == true ? true : data[0].Submit;
                             data[0].Review = item.Review == true ? true : data[0].Review; data[0].GoBack = item.GoBack == true ? true : data[0].GoBack; data[0].Import = item.Import == true ? true : data[0].Import;
                             data[0].Export = item.Export == true ? true : data[0].Export; data[0].Generate = item.Generate == true ? true : data[0].Generate; data[0].Calculation = item.Calculation == true ? true : data[0].Calculation;
-                            data[0].ComOrMan = item.ComOrMan == "1" ? "1" : data[0].ComOrMan;
+                            data[0].Preview = item.Preview == true ? true : data[0].Preview; data[0].Enable = item.Enable == true ? true : data[0].Enable; data[0].ComOrMan = item.ComOrMan == "1" ? "1" : data[0].ComOrMan;
                         }
                         else
                         {
@@ -208,14 +209,14 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Author
                 if(roleVguid != null)
                 {
                     jsonResult.Rows = db.Ado.SqlQuery<SysNewModulesModule>(@"select a.Name,a.VGUID as KeyVGUID,a.Parent,a.Look as IsLook,a.New as IsNew,a.Edit as IsEdit,a.StrikeOut as IsStrikeOut,a.Obsolete as IsObsolete,
-                                        a.Submit as IsSubmit,a.Review as IsReview,a.GoBack as IsGoBack,a.Import as IsImport,a.Export as IsExport,a.Generate as IsGenerate,a.Calculation as IsCalculation,a.Zorder,a.Type,
+                                        a.Submit as IsSubmit,a.Review as IsReview,a.GoBack as IsGoBack,a.Import as IsImport,a.Export as IsExport,a.Generate as IsGenerate,a.Calculation as IsCalculation,a.Preview as IsPreview,a.Enable as IsEnable,a.Zorder,a.Type,
                                         b.* from Sys_ModuleMenu as a left join Sys_Role_ModuleMenu as b on a.VGUID = b.ModuleMenuVGUD and b.RoleVGUID=@RoleVGUID  order by a.Zorder",
                                         new { RoleVGUID = roleVguid }).ToList();
                 }
                 else
                 {
                     jsonResult.Rows = db.Ado.SqlQuery<SysNewModulesModule>(@"select a.Name,a.VGUID as KeyVGUID,a.Parent,a.Look as IsLook,a.New as IsNew,a.Edit as IsEdit,a.StrikeOut as IsStrikeOut,a.Obsolete as IsObsolete,
-                                        a.Submit as IsSubmit,a.Review as IsReview,a.GoBack as IsGoBack,a.Import as IsImport,a.Export as IsExport,a.Generate as IsGenerate,a.Calculation as IsCalculation,a.Zorder,a.Type,
+                                        a.Submit as IsSubmit,a.Review as IsReview,a.GoBack as IsGoBack,a.Import as IsImport,a.Export as IsExport,a.Generate as IsGenerate,a.Calculation as IsCalculation,a.Preview as IsPreview,a.Enable as IsEnable,a.Zorder,a.Type,
                                         b.* from Sys_ModuleMenu as a left join Sys_Role_ModuleMenu as b on a.VGUID = b.ModuleMenuVGUD  and b.RoleVGUID='00000000-0000-0000-0000-000000000000'  order by a.Zorder").ToList();
                 }
             });

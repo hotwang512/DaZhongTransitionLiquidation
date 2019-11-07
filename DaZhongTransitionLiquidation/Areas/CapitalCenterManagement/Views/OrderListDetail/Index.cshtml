@@ -9,6 +9,8 @@
     //var companyCode = ViewBag.CompanyCode as List<Business_SevenSection>;
     //var payAccount = ViewBag.PayAccount as List<Business_CompanyBankInfo>;
     var userCompanySet = ViewBag.UserCompanySet as List<UserCompanySetDetail>;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentModuleMenu();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -37,11 +39,15 @@
         margin-right:8px;
     }
 </style>
+
 <table id="hideButton" style="margin-top: 10px;">
     <tr style="height: 50px;">
-        <td style="width: 95px;">
-            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-        </td>
+        @if (moduleMenu.Edit)
+        {
+            <td style="width: 95px;">
+                <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+        }
         <td style="width: 95px;">
             <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
         </td>

@@ -297,7 +297,11 @@ var $page = function () {
     function cellsDoneFunc(row, column, value, rowData) {
         var container = "";
         if (rowData.ReconciliantStatus == "对账失败") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BankAccount + "','" + rowData.BankName + "','" + rowData.BankAccountName + "','" + rowData.BankBalance + "','" + rowData.BalanceDate.Format("yyyy-MM-dd") + "','" + rowData.ReconciliantDate.Format("yyyy-MM-dd") + "','" + rowData.Reconcilianter + "')>重新对账</a>";
+            if (selector.$EditPermission().val() == "true") {
+                container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.BankAccount + "','" + rowData.BankName + "','" + rowData.BankAccountName + "','" + rowData.BankBalance + "','" + rowData.BalanceDate.Format("yyyy-MM-dd") + "','" + rowData.ReconciliantDate.Format("yyyy-MM-dd") + "','" + rowData.Reconcilianter + "')>重新对账</a>";
+            } else {
+                container = "<span>重新对账</span>";
+            }
         }
         return container;
     }

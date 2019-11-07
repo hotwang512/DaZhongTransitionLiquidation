@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.SubjectManagement
 {
@@ -22,6 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Subjec
 
         public ActionResult SubjectManagement()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("25013924-3E19-467D-B299-09EF1621380F");
             ViewBag.Channel = GETChannel();
             return View();

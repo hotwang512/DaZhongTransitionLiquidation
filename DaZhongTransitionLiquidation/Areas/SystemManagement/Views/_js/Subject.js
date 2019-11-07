@@ -239,15 +239,15 @@ var $page = function () {
 
     function channelDetailFunc(row, column, value, rowData) {
         var container = "";
-        //if (selector.$EditPermission().val() == "1") {
+        if (selector.$EditPermission().val() == "true") {
 
-        var startTime = new Date(rowData.ContractStartTime).Format("yyyy-MM-dd");
-        var endTime = new Date(rowData.ContractEndTime).Format("yyyy-MM-dd");
+            var startTime = new Date(rowData.ContractStartTime).Format("yyyy-MM-dd");
+            var endTime = new Date(rowData.ContractEndTime).Format("yyyy-MM-dd");
 
-        container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.SubjectId + "','" + rowData.SubjectNmae + "','" + rowData.TerminalNo + "','" + rowData.ShopNo + "','" + rowData.StoreNo + "','" + rowData.Rate + "','" + rowData.Department + "','" + rowData.OrganizationName + "','" + startTime + "','" + endTime + "','" + rowData.ChannelVguid + "'," + rowData.Deposit + ") style=\"text-decoration: underline;color: #333;\">" + rowData.SubjectId + "</a>";
-        //} else {
-        //    container = "<span>" + rowData.SubjectId + "</span>";
-        //}
+            container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.SubjectId + "','" + rowData.SubjectNmae + "','" + rowData.TerminalNo + "','" + rowData.ShopNo + "','" + rowData.StoreNo + "','" + rowData.Rate + "','" + rowData.Department + "','" + rowData.OrganizationName + "','" + startTime + "','" + endTime + "','" + rowData.ChannelVguid + "'," + rowData.Deposit + ") style=\"text-decoration: underline;color: #333;\">" + rowData.SubjectId + "</a>";
+        } else {
+            container = "<span>" + rowData.SubjectId + "</span>";
+        }
         return container;
     }
 

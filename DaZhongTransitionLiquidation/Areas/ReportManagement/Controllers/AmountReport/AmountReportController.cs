@@ -1,4 +1,5 @@
 ﻿using Aspose.Cells;
+using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
@@ -28,6 +29,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Amount
         }
         public ActionResult AmountReport()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.Channel = GetChannel();
             return View();
         }

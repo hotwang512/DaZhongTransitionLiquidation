@@ -32,6 +32,8 @@ namespace DaZhongTransitionLiquidation.Infrastructure.ViewEntity
         public bool Generate { get; set; }
         public bool Calculation { get; set; }
         public bool ComOrMan { get; set; }
+        public bool Preview { get; set; }
+        public bool Enable { get; set; }
         public int? Zorder { get; set; }
         public List<V_Sys_Role_ModuleMenu> ChildModuleMenu { get; set; } = new List<V_Sys_Role_ModuleMenu>();
 

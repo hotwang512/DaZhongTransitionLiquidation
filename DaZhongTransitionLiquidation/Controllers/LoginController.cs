@@ -15,6 +15,7 @@ using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 using Newtonsoft.Json.Linq;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using System.Linq;
+using SqlSugar;
 
 namespace DaZhongTransitionLiquidation.Controllers
 {
@@ -46,7 +47,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     var userInfos = db.Queryable<Sys_User>().Where(i => i.LoginName == userLoginInfo.LoginName && i.Password == userLoginInfo.Password).Single();
                     var roleMenuInfo = db.Ado.SqlQuery<V_Sys_Role_ModuleMenu>(@"select b.Name,b.Url,b.Type as ModuleDataType,b.Icon,b.Parent,b.VGUID as KeyVGUID,1 as Look,1 as New,1 as Edit,1 as StrikeOut,1 as Obsolete,
-                                                                                    1 as Submit,1 as Review,1 as GoBack,1 as Import,1 as Export,1 as Generate,1 as Calculation,1 as ComOrMan,0 as IsOpen,0 as IsActive
+                                                                                    1 as Submit,1 as Review,1 as GoBack,1 as Import,1 as Export,1 as Generate,1 as Calculation,1 as Preview,1 as Enable,1 as ComOrMan,0 as IsOpen,0 as IsActive
                                                                                     from Sys_ModuleMenu b order by b.Zorder asc").ToList();
                     userInfos.Permission = roleMenuInfo;
                     CacheManager<Sys_User>.GetInstance().Add(PubGet.GetUserKey, userInfos, 8 * 60 * 60);
@@ -102,7 +103,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         if(userLoginInfo.LoginName == "admin")
                         {
                             var roleMenuInfo = db.Ado.SqlQuery<V_Sys_Role_ModuleMenu>(@"select b.Name,b.Url,b.Type,b.Icon,b.Parent,b.VGUID as KeyVGUID,1 as Look,1 as New,1 as Edit,1 as StrikeOut,1 as Obsolete,
-                                                                                            1 as Submit,1 as Review,1 as GoBack,1 as Import,1 as Export,1 as Generate,1 as Calculation,1 as ComOrMan,0 as IsOpen,0 as IsActive
+                                                                                            1 as Submit,1 as Review,1 as GoBack,1 as Import,1 as Export,1 as Generate,1 as Calculation,1 as ComOrMan,1 as Preview,1 as Enable,0 as IsOpen,0 as IsActive
                                                                                             from Sys_ModuleMenu b order by b.Zorder asc").ToList();
                             userInfo.Permission = roleMenuInfo;
                         }
@@ -110,7 +111,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             var roleMenuInfo = db.Ado.SqlQuery<V_Sys_Role_ModuleMenu>(@"select b.Name,b.Url,b.Type,b.Icon,b.Parent,b.VGUID as KeyVGUID,b.Zorder,a.*,0 as IsOpen,0 as IsActive from Sys_Role_ModuleMenu as a left join Sys_ModuleMenu as b on a.ModuleMenuVGUD=b.VGUID
                                     where a.RoleVGUID=(select Role from Sys_User where LoginName=@LoginName)
-                                    and a.Look='1'", new { LoginName = userLoginInfo.LoginName }).ToList();
+                                    and a.Look='1' order by b.Zorder asc", new { LoginName = userLoginInfo.LoginName }).ToList();
                             userInfo.Permission = roleMenuInfo;
                         }
                     }

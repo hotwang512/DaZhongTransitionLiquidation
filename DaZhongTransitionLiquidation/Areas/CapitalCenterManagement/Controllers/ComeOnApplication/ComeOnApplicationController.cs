@@ -2,8 +2,10 @@
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/ComeOnApplication
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("93ce22ba-a4f8-41d9-bdcd-2adac74b6372");
             return View();
         }

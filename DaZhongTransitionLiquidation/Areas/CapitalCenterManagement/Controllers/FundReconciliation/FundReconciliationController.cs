@@ -4,6 +4,7 @@ using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using SyntacticSugar;
@@ -23,6 +24,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/FundReconciliation
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("03066773-A699-4E7C-92D7-05AF0A211FF3");
             ViewBag.CompanyCode = GetCompanyCode();
             return View();

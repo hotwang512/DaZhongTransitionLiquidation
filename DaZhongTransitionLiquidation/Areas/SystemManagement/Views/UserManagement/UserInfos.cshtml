@@ -1,38 +1,39 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
-
 @{
     ViewBag.Title = "系统管理/用户管理";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentModuleMenu();
 }
 @section js
 {
     <script src="@Url.CusContent("~/Areas/SystemManagement/Views/_js/UserInfo.js")"></script>
 }
 <!-- 顶部按钮 -->
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1 || currentModuleRolePermission.Enable == 1 || currentModuleRolePermission.Disable == 1)
+@if (moduleMenu.Look)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.New)
             {
                 <td>
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Deletes == 1)
+            @if (moduleMenu.StrikeOut)
             {
                 <td>
                     <button id="btnDelete" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Enable == 1)
+            @if (moduleMenu.Enable)
             {
                 <td>
                     <button id="btnEnable" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Disable == 1)
+            @if (moduleMenu.Enable == false)
             {
                 <td>
                     <button id="btnDisable" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>

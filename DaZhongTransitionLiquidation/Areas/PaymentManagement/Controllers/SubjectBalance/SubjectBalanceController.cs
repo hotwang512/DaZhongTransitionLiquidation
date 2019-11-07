@@ -1,7 +1,9 @@
 ﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
         // GET: PaymentManagement/SubjectBalance
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("dcb08053-9a75-45f0-b5a6-02332d6dc7e3");
             ViewBag.CompanyCode = GetCompanyCode();
             ViewBag.AccountMode = GetAccountMode();

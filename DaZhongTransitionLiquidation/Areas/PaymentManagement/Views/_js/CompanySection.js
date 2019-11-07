@@ -1118,11 +1118,7 @@ var $page = function () {
 
     function detailFuncs(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
-        } else {
-            container = "<span>" + rowData.Code + "</span>";
-        }
+        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
         return container;
     }
 
@@ -1716,30 +1712,18 @@ function settingAccount(code) {
 
 function detailFunc(row, column, value, rowData) {
     var container = "";
-    if (selector.$EditPermission().val() == "1") {
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "','" + rowData.OrgID + "','" + rowData.Abbreviation + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
-    } else {
-        container = "<span>" + rowData.Code + "</span>";
-    }
+    container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "','" + rowData.OrgID + "','" + rowData.Abbreviation + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
     return container;
 }
 
 function editBankFunc(row, columnfield, value, defaulthtml, columnproperties) {
     var container = "";
-    if (selector.$EditPermission().val() == "1") {
-        container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
-    } else {
-        container = "<span>" + value + "</span>";
-    }
+    container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
     return container;
 }
 function editTaxesFunc(row, column, value, rowData) {
     var container = "";
-    if (selector.$EditPermission().val() == "1") {
-        container = "<a href='#' style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
-    } else {
-        container = "<span>" + rowData.Code + "</span>";
-    }
+    container = "<a href='#' style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
     return container;
 }
 

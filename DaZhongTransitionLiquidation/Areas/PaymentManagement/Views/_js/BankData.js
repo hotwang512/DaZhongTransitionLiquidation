@@ -219,8 +219,7 @@ var $page = function () {
 
     function detailFunc(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
-
+        if (selector.$EditPermission().val() == "true") {
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.ArrivedTotal + "','" + rowData.ExpendBankAccountName + "','" + rowData.ExpendBankAccount + "','" + rowData.ExpendBank + "','" + rowData.Channel_Id + "','" + (rowData.remark == null ? "" : rowData.remark) + "') style=\"text-decoration: underline;color: #333;\">" + rowData.ArrivedTotal + "</a>";
         } else {
             container = "<span>" + rowData.ArrivedTotal + "</span>";

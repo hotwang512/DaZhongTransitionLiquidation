@@ -3,32 +3,43 @@
 @{
     ViewBag.Title = "结算标准/结算标准汇总";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
-<link href="@Url.CusContent("~/_theme/_js/pivot.css")" rel="stylesheet" />
+    <link href="@Url.CusContent("~/_theme/_js/pivot.css")" rel="stylesheet" />
     @*<script src="@Url.CusContent("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.css")"></script>
         <script src="@Url.CusContent("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>*@
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivot.js"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotdesigner.js"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotgrid.js"></script>
-<script src="~/_theme/_js/jquery-ui-1.8.20.js"></script>
-<script src="~/_theme/_js/jquery-ui-1.8.20.min.js"></script>
-<script src="~/_theme/_js/pivot.js"></script>
+    <script src="~/_theme/_js/jquery-ui-1.8.20.js"></script>
+    <script src="~/_theme/_js/jquery-ui-1.8.20.min.js"></script>
+    <script src="~/_theme/_js/pivot.js"></script>
     <script src="@Url.CusContent("~/Areas/VoucherManageManagement/Views/_js/SettlementCount.js")"></script>
 }
+@if (moduleMenu.Calculation || moduleMenu.Export)
+{
+    <table style="margin-top: 10px;display:none">
+        <tr style="height: 50px;">
+            @if (moduleMenu.Calculation)
+            {
+                <td style="width: 95px;">
+                    @*<button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>*@
+                    <button id="btnCount" type="button" style="" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xeb8a;</i><span style="margin-left: 7px; float: left;">计算</span></button>
+                </td>
+            }
+            @if (moduleMenu.Export)
+            {
+                <td style="width: 95px;">
+                    <button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
 
-<table style="margin-top: 10px;display:none">
-    <tr style="height: 50px;">
-        <td style="width: 95px;">
-            @*<button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>*@
-            <button id="btnCount" type="button" style="" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xeb8a;</i><span style="margin-left: 7px; float: left;">计算</span></button>
-        </td>
-        <td style="width: 95px;">
-            <button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>
-        </td>
-    </tr>
-</table>
 
 <!-- 中部条件 -->
 <div class="mk">

@@ -53,7 +53,8 @@
         </td>
     </tr>
 </table>
-
+<input type="hidden" id="valEnable" value="@moduleMenu.Enable.ToString()" />
+<input type="hidden" id="valEdit" value="@moduleMenu.Edit.ToString()" />
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
@@ -91,7 +92,6 @@
     <div id="divList" class="body_mk" style="height: 200px;">
         <div>
             <div id="jqxCustomerBankInfo" class="jqxTable">
-
             </div>
         </div>
     </div>
@@ -101,11 +101,16 @@
     </div>
     <div id="divList" class="body_mk" style="height: 200px;">
         @*<button id="btnEditInfo" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">编辑</span></button>*@
-        <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-        <button id="btnDelete" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">删除</span></button>
+        @if (moduleMenu.New)
+        {
+            <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+        }
+        @if (moduleMenu.StrikeOut)
+        {
+            <button id="btnDelete" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">删除</span></button>
+        }
         <div>
             <div id="jqxSettingTable" class="jqxTable">
-
             </div>
             @*<table id="tableList" style="width:100%;margin-left: 0px;border: #ccc;" border="1" cellspacing="0">
                     <tr>

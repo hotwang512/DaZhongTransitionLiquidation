@@ -45,7 +45,7 @@ var selector = {
     //$pushPeopleDropDownButton: function () { return $("#pushPeopleDropDownButton") },
     //$pushTree: function () { return $("#pushTree") },
     $SubjectVguid: function () { return $("#SubjectVguid") },
-    //$EditPermission: function () { return $("#EditPermission") }
+    $EditPermission: function () { return $("#EditPermission") }
 }; //selector end
 
 var isEdit = false;

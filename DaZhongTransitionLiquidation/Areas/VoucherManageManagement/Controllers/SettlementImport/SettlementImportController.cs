@@ -3,6 +3,7 @@ using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Common;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SyntacticSugar;
 using System;
@@ -23,6 +24,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/SettlementImport
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }

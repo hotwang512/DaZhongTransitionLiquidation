@@ -1,7 +1,9 @@
-﻿
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 @{
     ViewBag.Title = ViewBag.IsEdit ? "系统管理/用户管理/用户编辑" : "系统管理/用户管理/用户新增";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userInfo = ViewBag.User as Sys_User;
+    var moduleMenu = userInfo.GetCurrentPagePermission();
 }
 @section js
 {
@@ -9,9 +11,12 @@
 }
 <table style="margin-top: 10px;">
     <tr style="height: 50px;">
-        <td style="width: 95px;">
-            <button id="btnSave" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-        </td>
+        @if (moduleMenu.New || moduleMenu.Edit)
+        {
+            <td style="width: 95px;">
+                <button id="btnSave" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+        }
         <td style="width: 95px;">
             <button id="btnCancel" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
         </td>

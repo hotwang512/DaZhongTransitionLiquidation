@@ -15,7 +15,7 @@
 
 }
 <input type="hidden" id="EditPermission" value="1" />
-@if (moduleMenu.New || moduleMenu.Preview || moduleMenu.Submit)
+@if (moduleMenu.New || moduleMenu.Preview || moduleMenu.Submit || moduleMenu.Generate)
 {
     <table style="margin-top: 10px;display:none;" id="buttonList">
         <tr style="height: 50px;">
@@ -40,23 +40,31 @@
                     <button id="btnUp" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
                 </td>
             }
-            
+
         </tr>
     </table>
     <table style="margin-top: 10px;display:none;" id="buttonList2">
         <tr style="height: 50px;">
-
-            <td style="width: 95px;">
-                <button id="btnPrint2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
-            </td>
-            <td style="width: 95px;">
-                <button id="AddSubject_OKButton" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>
-                <button id="btnCheckStatus" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">校验</span></button>
-                @*<button id="AddSubject_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>*@
-            </td>
-            <td style="width: 95px;">
-                <button id="btnCheck" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
-            </td>
+            @if (moduleMenu.Preview)
+            {
+                <td style="width: 95px;">
+                    <button id="btnPrint2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
+                </td>
+            }
+            @if (moduleMenu.Generate)
+            {
+                <td style="width: 95px;">
+                    <button id="AddSubject_OKButton" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>
+                    <button id="btnCheckStatus" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">校验</span></button>
+                    @*<button id="AddSubject_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe634;</i><span style="margin-left: 7px; float: left;">同步</span></button>*@
+                </td>
+            }
+            @if (moduleMenu.Submit)
+            {
+                <td style="width: 95px;">
+                    <button id="btnCheck" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
+                </td>
+            }
         </tr>
     </table>
 }
@@ -81,7 +89,7 @@
                 <td class="td_span">交易日期：</td>
                 <td class="td_input">
                     <input id="TransactionDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
-                </td> 
+                </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
                 </td>

@@ -219,12 +219,12 @@ var $page = function () {
                     { text: '作废', dataField: 'Obsolete', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Obsolete },
                     { text: '提交', dataField: 'Submit', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Submit },
                     { text: '审核', dataField: 'Review', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Review },
-                    { text: '预览', dataField: 'Preview', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Preview },
+                    { text: '预览/打印', dataField: 'Preview', width: 100, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Preview },
                     { text: '启用', dataField: 'Enable', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Enable },
                     { text: '退回', dataField: 'GoBack', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_GoBack },
                     { text: '导入', dataField: 'Import', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Import },
                     { text: '导出', dataField: 'Export', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Export },
-                    { text: '生成', dataField: 'Generate', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Generate },
+                    { text: '生成/同步/校验', dataField: 'Generate', width: 120, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Generate },
                     { text: '计算', dataField: 'Calculation', width: 80, align: 'center', editable: false, cellsAlign: 'center', cellsRenderer: cellsRendererFunc_Calculation },
                     {
                         text: '数据权限', dataField: 'ComOrMan', width: 200, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc_ComOrMan

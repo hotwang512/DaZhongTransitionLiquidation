@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "结算标准/结算标准导入";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
 <link href="@Url.CusContent("~/_theme/_js/pivot.css")" rel="stylesheet" />
@@ -18,16 +20,19 @@
 
     <script src="@Url.CusContent("~/Areas/VoucherManageManagement/Views/_js/SettlementImport.js")"></script>
 }
+@if (moduleMenu.Import)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            <td style="width: 95px;">
+                @*<button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>*@
+                <button id="btnImporting" type="button" style="" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">导入</span></button>
+                <input id="uploadFile" type="file" accept=".xls,.xlsx" style="display:none;" />
+            </td>
+        </tr>
+    </table>
+}
 
-<table style="margin-top: 10px;">
-    <tr style="height: 50px;">
-        <td style="width: 95px;">
-            @*<button id="btnExport" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe644;</i><span style="margin-left: 7px; float: left;">导出</span></button>*@
-            <button id="btnImporting" type="button" style="" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">导入</span></button>
-            <input id="uploadFile" type="file" accept=".xls,.xlsx" style="display:none;" />
-        </td>
-    </tr>
-</table>
 
 <!-- 中部条件 -->
 <div class="mk" style="display:none">

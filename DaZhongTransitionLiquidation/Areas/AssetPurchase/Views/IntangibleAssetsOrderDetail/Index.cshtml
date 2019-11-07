@@ -3,7 +3,8 @@
 @{
     ViewBag.Title = "订单管理/无形资产订单明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -55,26 +56,40 @@
        width:auto;
     }
 </style>
-<table id="hideButton" style="margin-top: 10px;display:block" width="98%">
-    <tr style="height: 50px;">
-        <td style="width: 95px;padding-right: 10px">
-            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-        </td>
-        <td style="width: 95px;padding-right: 10px">
-            <button id="btnPrint" type="button" class="buttons" style="width: 130px;"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e; </i><span style="margin-left: 7px; float: left;">打印付款凭证</span></button>
-        </td>
-        <td style="width: 95px;padding-right: 10px">
-            <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
-        </td>
-        <td style="width: 95px;padding-right: 10px;display:none">
-            <button id="btnObsolete" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">作废</span></button>
-        </td>
-        <td width="100%" align="right" hidden>
-            <button id="btnSubmit" type="button" class="buttons" style="width:100px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">发起支付</span></button>
-        </td>
-    </tr>
-</table>
-
+@if (permission.New || permission.Edit || permission.StrikeOut || permission.Submit)
+{
+    <table id="hideButton" style="margin-top: 10px;display:block" width="98%">
+        <tr style="height: 50px;">
+            @if (permission.New || permission.Edit)
+            {
+                <td style="width: 95px;padding-right: 10px">
+                    <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+                </td>
+            }
+            @if (permission.New)
+            {
+                <td style="width: 95px;padding-right: 10px">
+                    <button id="btnPrint" type="button" class="buttons" style="width: 130px;"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e; </i><span style="margin-left: 7px; float: left;">打印付款凭证</span></button>
+                </td>
+            }
+            <td style="width: 95px;padding-right: 10px">
+                <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </td>
+            @if (permission.Obsolete)
+            {
+                <td style="width: 95px; padding-right: 10px; display: none">
+                    <button id="btnObsolete" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">作废</span></button>
+                </td>
+            }
+            @if (permission.Submit)
+            {
+                <td width="100%" align="right" hidden>
+                    <button id="btnSubmit" type="button" class="buttons" style="width:100px"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">发起支付</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>

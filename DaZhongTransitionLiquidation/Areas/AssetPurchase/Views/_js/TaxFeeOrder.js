@@ -261,11 +261,7 @@ var $page = function () {
     function detailFunc(row, column, value, rowData) {
         var container = "";
         rowData.PaymentVoucherVguid = rowData.PaymentVoucherVguid == null ? "" : rowData.PaymentVoucherVguid;
-        if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.PaymentVoucherVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.OrderNumber + "</a>";
-        } else {
-            container = "<span>" + rowData.OrderNumber + "</span>";
-        }
+        container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.PaymentVoucherVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.OrderNumber + "</a>";
         return container;
     }
     function cellsRendererFunc(row, column, value, rowData) {

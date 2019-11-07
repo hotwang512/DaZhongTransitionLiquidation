@@ -334,7 +334,6 @@ var $page = function () {
                 $.post("/AssetPurchase/FixedAssetsOrderDetail/GetCompanyBankInfo",
                     { Vguid: $("#PayCompanyDropdown").val() },
                     function (msg) {
-                        
                         $("#CompanyBankName").val(msg.PayBank);
                         $("#CompanyBankAccount").val(msg.PayAccount);
                         $("#CompanyBankAccountName").val(msg.PayBankAccountName);
@@ -345,8 +344,8 @@ var $page = function () {
         $("#PurchaseGoods").on("change",
             function () {
                 initPaymentInformationComboBox(false);
-                $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
-                $("#PurchaseGoods").attr("disabled", true);
+                //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                //$("#PurchaseGoods").attr("disabled", true);
                 GetCompanyBankInfoDropdownByCode();
                 initSelectGoodsModel($("#PurchaseGoods option:selected").text());
             });
@@ -781,6 +780,8 @@ function initSelectGoodsModel(Goods) {
             }
             if ($("#PurchaseGoods option:selected").text() == "出租车") {
                 $(".GoodsModel").show();
+            } else {
+                $(".GoodsModel").hide();
             }
         }
     });

@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "资产采购/采购分配";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -13,7 +14,7 @@
 @section css{
 
 }
-
+<input type="hidden" id="ImportPermission" value="@permission.Import.ToString()" />
 <!-- 中部条件 -->
 <div class="mk">
     <div class="header_mk">
@@ -55,7 +56,6 @@
         <div class="header_text_div">
             <span class="header_text_span">数据列表</span>
             <a href="/Template/固定资产清册导入.xlsx" style="margin-left: 5px">车辆模板下载</a>
-            <a href="/Template/OBD资产清册导入.xlsx" style="margin-left: 5px">OBD模板下载</a>
         </div>
     </div>
     <div id="jqxTable" class="jqxTable">
@@ -119,7 +119,6 @@
     }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
 <input type="hidden" id="AssetsOrderVguid"/>
 <form id="localFormFile" hidden>
     <input type="file" id="LocalFileInput" name="file" accept=".xls,.xlsx" />

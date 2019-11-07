@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "资产管理/资产基础信息维护";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetBasicInfoMaintenance.js?t=2019021906")"></script>
@@ -11,18 +12,18 @@
 @section css{
 
 }
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+<input type="hidden" id="EditPermission" value="@permission.Edit" />
+@if (permission.New || permission.StrikeOut)
 {
     <table style="margin-top: 10px;display:block;" id="buttonList">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (permission.New)
             {
                 <td style="width: 95px;">
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Deletes == 1)
+            @if (permission.StrikeOut)
             {
                 <td style="width: 95px;">
                     <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
@@ -75,4 +76,4 @@
     }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<input type="hidden" id="EditPermission" value="@permission.Edit" />

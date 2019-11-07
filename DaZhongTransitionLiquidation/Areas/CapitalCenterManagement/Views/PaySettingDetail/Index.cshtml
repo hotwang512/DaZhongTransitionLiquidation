@@ -72,9 +72,15 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">借/贷配置信息</span></div>
     </div>
-    <button id="btnAddBorrow" type="button" class="buttons" style="width: 100px;margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="">新增借</span></button>
-    <button id="btnAddLoan" type="button" class="buttons" style="width: 100px;margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="">新增贷</span></button>
-    <button id="btnDelete" type="button" class="buttons" style="margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="">删除</span></button>
+    @if (moduleMenu.New)
+    {
+        <button id="btnAddBorrow" type="button" class="buttons" style="width: 100px;margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="">新增借</span></button>
+        <button id="btnAddLoan" type="button" class="buttons" style="width: 100px;margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="">新增贷</span></button>
+    }
+    @if (moduleMenu.StrikeOut)
+    {
+        <button id="btnDelete" type="button" class="buttons" style="margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="">删除</span></button>
+    }
     <div id="jqxTable" class="jqxTable" style="margin-top: 10px;">
     </div>
 </div>

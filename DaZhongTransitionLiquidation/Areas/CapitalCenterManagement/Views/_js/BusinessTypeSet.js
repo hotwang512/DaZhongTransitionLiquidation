@@ -215,11 +215,14 @@ function loadGridTree(modules) {
 }
 function detailFuncs(row, column, value, rowData) {
     var container = "";
-
-    if (rowData.parent == null) {
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.BusinessName + "','" + rowData.ParentVGUID + "','" + rowData.parent + "','" + rowData.parent + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "-" + rowData.BusinessName + "</a>";
+    if ($("#EditPermission").val()) {
+        if (rowData.parent == null) {
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.BusinessName + "','" + rowData.ParentVGUID + "','" + rowData.parent + "','" + rowData.parent + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "-" + rowData.BusinessName + "</a>";
+        } else {
+            container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.BusinessName + "','" + rowData.ParentVGUID + "','" + rowData.parent.Code + "','" + rowData.parent.BusinessName + "','" + rowData.parent.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "-" + rowData.BusinessName + "</a>";
+        }
     } else {
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.BusinessName + "','" + rowData.ParentVGUID + "','" + rowData.parent.Code + "','" + rowData.parent.BusinessName + "','" + rowData.parent.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "-" + rowData.BusinessName + "</a>";
+        container = "<span>" + rowData.Code + "-" + rowData.BusinessName + "</span>";
     }
     return container;
 }

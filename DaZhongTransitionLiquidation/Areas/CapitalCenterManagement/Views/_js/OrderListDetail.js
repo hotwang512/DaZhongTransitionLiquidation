@@ -896,19 +896,29 @@ function initSettingTable() {
         ]
     });
     $("#jqxSettingTable").on("rowclick", function (event) {
-        // event arguments.
-        var args = event.args;
-        // row's bound index.
-        var rowdata = args.row.bounddata;
-        if (rowdata.level != 0) {
-            editBank(rowdata.VGUID, rowdata.AccountModeCode, rowdata.CompanyCode, rowdata.PayBank, rowdata.PayAccount,
-                rowdata.PayBankAccountName, rowdata.AccountType, rowdata.Borrow, rowdata.Loan);
+        if ($("#valEdit").val() == "true") {
+            var args = event.args;
+            // row's bound index.
+            var rowdata = args.row.bounddata;
+            if (rowdata.level != 0) {
+                editBank(rowdata.VGUID, rowdata.AccountModeCode, rowdata.CompanyCode, rowdata.PayBank, rowdata.PayAccount,
+                    rowdata.PayBankAccountName, rowdata.AccountType, rowdata.Borrow, rowdata.Loan);
+            }
         }
     });
+    if ($("#valEnable").val() != "true") {
+        $("#jqxSettingTable").jqxGrid({ editable: false });
+        //$('#jqxSettingTable').jqxGrid('setcolumnproperty', 'Isable', 'editable', false);
+    }
 }
 
 function editBankFunc(row, columnfield, value, defaulthtml, columnproperties) {
-    var container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
+    var container = "";
+    if ($("#valEdit").val() == "true") {
+        container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
+    } else {
+        container = "<span>" + value + "</span>";
+    }
     return container;
 }
 
@@ -1004,4 +1014,8 @@ function initCustomerBank(label) {
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]
     });
+    if ($("#valEnable").val() != "true") {
+        $("#jqxCustomerBankInfo").jqxGrid({ editable: false });
+        //$('#jqxSettingTable').jqxGrid('setcolumnproperty', 'Isable', 'editable', false);
+    }
 }

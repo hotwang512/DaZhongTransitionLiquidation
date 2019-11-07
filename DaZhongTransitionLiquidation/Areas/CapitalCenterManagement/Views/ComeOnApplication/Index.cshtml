@@ -3,6 +3,8 @@
     ViewBag.Title = "借款管理/借款申请";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 
 @section js{
@@ -17,33 +19,42 @@
     .jqx-grid-cell-pinned-office {
         background-color: none !important;
     }
-    </style>
+</style>
 
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
-{ 
+@if (moduleMenu.New || moduleMenu.StrikeOut || moduleMenu.Submit)
+{
     <table style="margin-top: 10px;display:none;" id="buttonList">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.New)
             {
                 <td style="width: 95px;">
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
+            }
+            @if (moduleMenu.StrikeOut)
+            {
                 <td style="width: 95px;">
                     <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
                 </td>
+            }
+            @if (moduleMenu.Submit)
+            {
                 <td style="width: 190px;">
                     <button id="btnUp" type="button" style="" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
                 </td>
             }
         </tr>
     </table>
-    <table style="margin-top: 10px;display:none;" id="buttonList2">
-        <tr style="height: 50px;">
-            <td style="width: 95px;">
-                <button id="btnCheck" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
-            </td>
-        </tr>
-    </table>
+    if (moduleMenu.Review)
+    {
+        <table style="margin-top: 10px;display:none;" id="buttonList2">
+            <tr style="height: 50px;">
+                <td style="width: 95px;">
+                    <button id="btnCheck" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">审核</span></button>
+                </td>
+            </tr>
+        </table>
+    }
 }
 
 <!-- 中部条件 -->
@@ -62,19 +73,19 @@
                 <td class="td_span">调出公司：</td>
                 <td class="td_input">
                     <select id="TurnOutCompany" class="input_text form-control" style="width: 380px;"></select>
-                </td>    
+                </td>
                 <td class="td_span">调入公司：</td>
                 <td class="td_input">
                     <select id="TurnInCompany" class="input_text form-control" style="width: 380px;"></select>
-                </td>           
+                </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons" style="margin-left: 10px;"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
-                </td>      
+                </td>
                 <td>
                     <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
-                </td>         
+                </td>
             </tr>
-</table>
+        </table>
     </div>
 </div>
 <!-- 中部条件 -->
@@ -92,9 +103,9 @@
         width: 340px;
     }*/
     .td_span {
-    text-align: right;
-    width: 115px;
-}
+        text-align: right;
+        width: 115px;
+    }
 </style>
 <!-- 底部表格 -->
 <input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />

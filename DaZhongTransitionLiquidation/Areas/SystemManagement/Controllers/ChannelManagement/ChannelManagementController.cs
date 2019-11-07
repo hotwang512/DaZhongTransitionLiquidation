@@ -6,6 +6,7 @@ using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
+using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.ChannelManagement
 {
@@ -18,6 +19,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Channe
 
         public ActionResult Channel()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.ChannelManagement);
             return View();
         }

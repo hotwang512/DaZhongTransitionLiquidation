@@ -3,6 +3,8 @@
     ViewBag.Title = "结算数据/T+1数据";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -11,7 +13,7 @@
     <script src="@Url.CusContent("~/Areas/PaymentManagement/Views/_js/NextDayData.js")"></script>
 }
 
-@if (currentModuleRolePermission.Adds == 1)
+@if (moduleMenu.Import)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
@@ -21,17 +23,14 @@
                         <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                     </td>
                 }*@
-            @if (currentModuleRolePermission.Adds == 1)
-            {
-                <td style="width: 135px;">
-                    <button id="btnImportHuiDouQuan" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="">导入(慧兜圈)</span></button>@*style="margin-left: 7px; float: left;"*@
-                    <input id="uploadFileHuiDouQuan" type="file" accept=".txt" style="display:none;" />
-                </td>
-                <td style="width: 135px;">
-                    <button id="btnImportSelfServicePaymentMachine" type="button" class="buttons" style="width:120px;margin-top:5px;display:none"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="margin-left: 7px; float: left;">导入(自助)</span></button>
-                    <input id="uploadSelfServicePaymentMachine" type="file" accept="application/vnd.ms-excel" style="display:none;" />
-                </td>
-            }
+            <td style="width: 135px;">
+                <button id="btnImportHuiDouQuan" type="button" class="buttons" style="width:120px"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="">导入(慧兜圈)</span></button>@*style="margin-left: 7px; float: left;"*@
+                <input id="uploadFileHuiDouQuan" type="file" accept=".txt" style="display:none;" />
+            </td>
+            <td style="width: 135px;">
+                <button id="btnImportSelfServicePaymentMachine" type="button" class="buttons" style="width:120px;margin-top:5px;display:none"><i class="iconfont btn_icon" style="color: black ">&#xe72f;</i><span style="margin-left: 7px; float: left;">导入(自助)</span></button>
+                <input id="uploadSelfServicePaymentMachine" type="file" accept="application/vnd.ms-excel" style="display:none;" />
+            </td>
         </tr>
     </table>
 }

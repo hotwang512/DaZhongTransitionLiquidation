@@ -3,6 +3,8 @@
     ViewBag.Title = "凭证录入/凭证列表";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -12,30 +14,27 @@
 @section css{
 
 }
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+<input type="hidden" id="EditPermission" value="1" />
+@if (moduleMenu.New || moduleMenu.Preview || moduleMenu.Submit)
 {
     <table style="margin-top: 10px;display:none;" id="buttonList">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.New)
             {
                 <td style="width: 95px;">
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.Preview)
             {
                 <td style="width: 95px;">
                     <button id="btnPrint" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Deletes == 1)
-            {
-                <td style="width: 95px;display:none;">
-                    <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
-                </td>
-            }
-            @if (currentModuleRolePermission.Adds == 1)
+            <td style="width: 95px;display:none;">
+                <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+            </td>
+            @if (moduleMenu.Submit)
             {
                 <td style="width: 95px;">
                     <button id="btnUp" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe683;</i><span style="margin-left: 7px; float: left;">提交</span></button>
@@ -46,6 +45,7 @@
     </table>
     <table style="margin-top: 10px;display:none;" id="buttonList2">
         <tr style="height: 50px;">
+
             <td style="width: 95px;">
                 <button id="btnPrint2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
             </td>

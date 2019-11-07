@@ -212,7 +212,7 @@ var $page = function () {
 
     function channelDetailFunc(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
+        if (selector.$EditPermission().val() == "true") {
 
             container = "<a href='#' onclick=edit('" + rowData.Vguid + "','" + rowData.Id + "','" + rowData.Name + "','" + rowData.Offset + "','" + rowData.ContactBank + "','" + rowData.SupplierName + "','" + rowData.MerchantsCode + "','" + rowData.Department + "','" + rowData.OrganizationName + "','" + rowData.PaymentEncoding + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Id + "</a>";
         } else {

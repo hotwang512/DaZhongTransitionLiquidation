@@ -57,6 +57,14 @@
     </div>
 </div>
 <!-- 中部条件 -->
+@if (moduleMenu.Edit)
+{
+    <input type="hidden" id="EditPermission" value="true" />
+}
+else
+{
+    <input type="hidden" id="EditPermission" value="false" />
+}
 <!-- 底部表格 -->
 <div class="mk">
     <div class="header_mk">

@@ -3,6 +3,8 @@
     ViewBag.Title = "借款管理/借款申请";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 
 @section js{
@@ -22,19 +24,16 @@
     }
     </style>
 
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+@if (moduleMenu.New)
 { 
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
-            {
-                <td style="width: 95px;">
-                    <button id="btnLoan" type="button" class="buttons btnLR"><i class="iconfont btn_icon" style="color: black !important;">&#xe7bb;</i><span style="">申请借款</span></button>
-                </td>
-                <td style="width: 190px;">
-                    <button id="btnRepay" type="button" class="buttons btnLR" style="margin-left: 10px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe7bb;</i><span style="">申请还款</span></button>
-                </td>
-            }
+            <td style="width: 95px;">
+                <button id="btnLoan" type="button" class="buttons btnLR"><i class="iconfont btn_icon" style="color: black !important;">&#xe7bb;</i><span style="">申请借款</span></button>
+            </td>
+            <td style="width: 190px;">
+                <button id="btnRepay" type="button" class="buttons btnLR" style="margin-left: 10px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe7bb;</i><span style="">申请还款</span></button>
+            </td>
         </tr>
     </table>
 }
@@ -86,4 +85,4 @@
 }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<input type="hidden" id="EditPermission" value="1" />

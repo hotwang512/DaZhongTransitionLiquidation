@@ -281,12 +281,7 @@ var $page = function () {
     }
     function detailFunc(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
-            container = "<a href='UserInfoDetail?Vguid=" + rowData.Vguid + "&isEdit=true' style=\"text-decoration: underline;color: #333;\">" + rowData.LoginName + "</a>";
-        }
-        else {
-            container = "<span>" + rowData.LoginName + "</span>";
-        }
+        container = "<a href='UserInfoDetail?Vguid=" + rowData.Vguid + "&isEdit=true' style=\"text-decoration: underline;color: #333;\">" + rowData.LoginName + "</a>";
         return container;
     }
     function cellsRendererFunc(row, column, value, rowData) {

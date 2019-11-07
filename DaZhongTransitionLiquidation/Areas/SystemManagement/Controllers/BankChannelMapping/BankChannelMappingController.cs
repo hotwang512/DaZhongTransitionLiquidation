@@ -4,6 +4,7 @@ using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using SqlSugar;
+using SyntacticSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.BankCh
         // GET: SystemManagement/BankChannelMapping
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("66D28050-10DD-4BE2-A75A-0E8433B0BDBC");
             ViewBag.Channel = GetChannel();
             return View();

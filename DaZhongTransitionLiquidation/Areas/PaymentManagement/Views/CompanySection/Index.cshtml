@@ -3,6 +3,8 @@
     ViewBag.Title = "ORACLE对接/科目维护(8个段)";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 
 @section js{
@@ -15,38 +17,38 @@
 
 }
 <style type="text/css">
-        /*.jqx-grid-cell-pinned {
+    /*.jqx-grid-cell-pinned {
             background-color:none !important;
         }*/
     #verticalScrollBarjqxSubjectSetting {
-            visibility: inherit !important;
+        visibility: inherit !important;
     }
-    </style>
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+</style>
+@if (moduleMenu.New || moduleMenu.Enable || moduleMenu.Generate)
 {
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.New)
             {
                 <td style="width: 95px;">
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Deletes == 1)
+            @if (moduleMenu.Enable)
             {
-                @*<td style="width: 95px;">
-                        <button id="btnDelete" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
-                    </td>*@
+                <td style="width: 95px;">
+                    <button id="btnEditDo" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnEditDis" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
+                </td>
             }
-            <td style="width: 95px;">
-                <button id="btnEditDo" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
-            </td>
-            <td style="width: 95px;">
-                <button id="btnEditDis" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
-            </td>
-            <td style="width: 95px;">
-                <button id="btnTongBu" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xeb98;</i><span style="margin-left: 7px; float: left;">同步</span></button>
-            </td>
+            @if (!moduleMenu.Generate)
+            {
+                <td style="width: 95px;">
+                    <button id="btnTongBu" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xeb98;</i><span style="margin-left: 7px; float: left;">同步</span></button>
+                </td>
+            }
         </tr>
     </table>
 }
@@ -72,16 +74,14 @@
                 </td>
                 <td class="td_span"><span id="hideCompany">公司：</span></td>
                 <td class="td_input">
-                    <select id="CompanyCode" class="input_text form-control" style="width: 430px;display:none">
-                       
-                    </select>
+                    <select id="CompanyCode" class="input_text form-control" style="width: 430px;display:none"></select>
                 </td>
                 @*<td style="width: 95px;">
-                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
-                </td>
-                <td>
-                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
-                </td>*@
+                        <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                    </td>
+                    <td>
+                        <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                    </td>*@
             </tr>
 
         </table>
@@ -164,12 +164,14 @@
     </div>
 </div>
 <style>
-    .mk{
-        width:99% !important;
+    .mk {
+        width: 99% !important;
     }
+
     .input_text {
         width: 340px;
     }
+
     .modal-head {
         padding: 0px 5px 10px;
         margin-top: 0px;
@@ -178,7 +180,7 @@
     }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+<input type="hidden" id="EditPermission" value="" />
 @*<input id="SubjectCode" name="SubjectCode" type="hidden" />*@
 <div class="container">
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddNewBankDataDialog">
@@ -293,7 +295,7 @@
                 </div>
                 <div class="modal-head">
                     <table style="margin-top: 10px;">
-                        <tr style="height: 45px;"> 
+                        <tr style="height: 45px;">
                             <td class="td_span"><span id="">年：</span></td>
                             <td class="td_input">
                                 <select id="Year" class="input_text form-control" style="width:150px">
@@ -301,7 +303,7 @@
                                         for (int i = 0; i < 10; i++)
                                         {
                                             int j = i + 2019;
-                                            <option value="@j">@j</option>
+                                    <option value="@j">@j</option>
                                         }
                                     }
                                 </select>
@@ -312,7 +314,7 @@
                                     @{
                                         for (int i = 1; i <= 12; i++)
                                         {
-                                            <option value="@i">@i</option>
+                                    <option value="@i">@i</option>
                                         }
                                     }
                                 </select>
@@ -433,8 +435,8 @@
                     <h4 class="modal-title" id="myModalLabel_titles5" style="color: #555; font-family: Calibri;">ORACLE同步新增数据</h4>
                 </div>
                 @*<div class="modal-head">
-                    <button id="Refresh" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe634;</i><span style="margin-left: 7px; float: left;">刷新</span></button>
-                </div>*@
+                        <button id="Refresh" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe634;</i><span style="margin-left: 7px; float: left;">刷新</span></button>
+                    </div>*@
                 <div class="modal-body" style="width: 100%;">
                     <div id="jqxSubjectTable" class="jqxTable" style="margin-top: -2px;"></div>
                 </div>

@@ -3,6 +3,8 @@
     ViewBag.Title = "ORACLE对接/科目余额维护";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentModuleMenu();
 }
 
 @section js{
@@ -100,7 +102,15 @@
     }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+@if (moduleMenu.Edit)
+{
+    <input type="hidden" id="EditPermission" value="true" />
+}
+else
+{
+    <input type="hidden" id="EditPermission" value="false" />
+}
+
 <div class="container">
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddNewBankDataDialog">
         <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">

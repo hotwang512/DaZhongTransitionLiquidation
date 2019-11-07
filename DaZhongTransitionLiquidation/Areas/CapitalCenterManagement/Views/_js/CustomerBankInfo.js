@@ -167,7 +167,7 @@ var $page = function () {
 
     function channelDetailFunc(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
+        if (selector.$EditPermission().val() == "true") {
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','"
                 + rowData.BankAccount + "','"
                 + rowData.BankAccountName + "','"

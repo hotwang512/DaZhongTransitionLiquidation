@@ -38,6 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
         // GET: CapitalCenterManagement/BankFlowTemplate
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("2665ED30-972B-4A72-8049-1FD479502088");
             return View();
         }

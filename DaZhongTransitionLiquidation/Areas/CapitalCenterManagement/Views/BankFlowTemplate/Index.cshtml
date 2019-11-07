@@ -3,6 +3,8 @@
     ViewBag.Title = "银行管理/银行交易流水";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.SysUser;
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 
 @section js{
@@ -19,11 +21,11 @@
     }
     </style>
 
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
-{ 
+@if (moduleMenu.Generate || moduleMenu.Import)
+{
     <table style="margin-top: 10px;">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (moduleMenu.Generate)
             {
                 <td style="width: 190px;">
                     <button id="btnSync" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">同步当天银行数据</span></button>
@@ -31,6 +33,9 @@
                 <td style="width: 190px;">
                     <button id="btnYesterdaySync" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">同步昨天银行数据</span></button>
                 </td>
+            }
+            @if (moduleMenu.Import)
+            {
                 <td style="width: 190px;">
                     <button id="btnImportingCBC" type="button" style="width: 180px;" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xebda;</i><span style="margin-left: 7px; float: left;">导入建设银行数据</span></button>
                     <input id="uploadFileCBC" type="file" accept=".xls,.xlsx" style="display:none;" />

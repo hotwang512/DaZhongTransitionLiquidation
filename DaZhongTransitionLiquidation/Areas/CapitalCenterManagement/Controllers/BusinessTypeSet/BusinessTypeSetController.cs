@@ -7,6 +7,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SqlSugar;
+using SyntacticSugar;
+using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 
 namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet
 {
@@ -18,6 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/BusinessTypeSet
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             return View();
         }

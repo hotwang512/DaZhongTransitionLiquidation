@@ -8,6 +8,7 @@ using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using System.Linq;
+using SyntacticSugar;
 
 namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankData
 {
@@ -21,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
 
         public ActionResult Index()
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo("8B2F0529-34DE-4F4A-8F38-0B4B50CFC29C");
             ViewBag.Channel = GetChannel();
             ViewBag.BankChannel = GetBankChannel();

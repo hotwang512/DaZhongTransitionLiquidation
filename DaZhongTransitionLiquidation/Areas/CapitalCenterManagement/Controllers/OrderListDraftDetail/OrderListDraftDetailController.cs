@@ -23,6 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         // GET: CapitalCenterManagement/OrderListDraftDetail
         public ActionResult Index(string vguid)
         {
+            ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.VGUID = vguid;
             ViewBag.PayAccount = GetCompanyBankInfo();
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);

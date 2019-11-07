@@ -287,17 +287,14 @@ var $page = function () {
             var args = event.args;
             var row = args.row;
             var PaymentVoucherVguid = row.PaymentVoucherVguid == null ? "" : row.PaymentVoucherVguid;
-            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + row.VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid + "&OrderType=" + orderType;
+            window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?OrderType=" + orderType + "&PaymentVoucherVguid=" + PaymentVoucherVguid + "&VGUID=" + row.VGUID;
         });
     }
     function detailFunc(row, column, value, rowData) {
         var container = "";
         rowData.PaymentVoucherVguid = rowData.PaymentVoucherVguid == null ? "" : rowData.PaymentVoucherVguid;
-        if (selector.$EditPermission().val() == "1") {
-            container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.PaymentVoucherVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.OrderNumber + "</a>";
-        } else {
-            container = "<span>" + rowData.OrderNumber + "</span>";
-        }
+        debugger;
+        container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.PaymentVoucherVguid + "') style=\"text-decoration: underline;color: #333;\">" + rowData.OrderNumber + "</a>";
         return container;
     }
     function cellsRendererFunc(row, column, value, rowData) {
@@ -344,7 +341,7 @@ var $page = function () {
 
 function link(VGUID, PaymentVoucherVguid) {
     debugger;
-    window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?VGUID=" + VGUID + "&PaymentVoucherVguid=" + PaymentVoucherVguid + "&OrderType=" + orderType;
+    window.location.href = "/AssetPurchase/FixedAssetsOrderDetail/Index?OrderType=" + orderType + "&PaymentVoucherVguid=" + PaymentVoucherVguid + "&VGUID=" + VGUID;
 }
 $(function () {
     var page = new $page();

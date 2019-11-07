@@ -37,7 +37,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
         }
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo("0c8cd244-a13c-41ff-9b5e-65bf21cd35f6");
             return View();
         }
         public JsonResult GetFixedAssetsOrderListDatas(Business_FixedAssetsOrder searchParams, GridParams para)

@@ -2,8 +2,12 @@
 var vguid = "";
 var mydate = new Date();
 var ManagementCompany = [];
+var editable = false;
 var $page = function () {
     this.init = function () {
+        if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+            editable = true;
+        }
         initSelect();
         initiSelectPurchaseItem();
         initSelectMinor();
@@ -361,7 +365,7 @@ function GetManagementCompanyData() {
             selectionmode: 'none',
             columns: [
                 {
-                    text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox'
+                    text: '选择', datafield: "IsCheck", width: 60, align: 'center', cellsAlign: 'center', columntype: 'checkbox', editable: editable
                 },
                 { text: '账套编码', datafield: 'AccountModeCode', width: 120, align: 'center', cellsAlign: 'center', editable: false },
                 { text: '账套描述', datafield: 'Descrption', width: 250, align: 'center', cellsAlign: 'center', editable: false ,hidden:true},

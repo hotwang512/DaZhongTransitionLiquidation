@@ -3,7 +3,8 @@
 @{
     ViewBag.Title = "采购资产订单配置/车辆类资产费用标准明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 @section js{
 <script src="@Url.CusContent("~/Areas/Systemmanagement/Views/_js/VehicleExtrasFeeSettingDetail.js")"></script>
@@ -43,9 +44,12 @@
 </style>
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
-        <td style="width: 95px;">
-            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-        </td>
+        @if (permission.New || permission.Edit)
+        {
+            <td style="width: 95px;">
+                <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+        }
         <td style="width: 95px;">
             <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
         </td>
@@ -91,18 +95,18 @@
             <div class="modal-body" style="width: 100%; height: 150px; overflow: auto">
                 <table style="width: 100%;">
                     <tbody>
-                        <tr style="height: 45px;">
-                            <td style="width: 96px;text-align: right"><span class="spanText">启用日期：</span></td>
-                            <td style="width: 140px;text-align: center">
-                                <input id="StartDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px"  validatetype="required">
-                            </td>
-                        </tr>
-                        <tr style="height: 45px;">
-                            <td style="width: 96px; text-align: right"><span class="spanText">费用：</span></td>
-                            <td style="width: 140px; text-align: center">
-                                <input id="Fee" type="text" style="width: 200px" class="input_text form-control" validatetype="required,decimalNumber">
-                            </td>
-                        </tr>
+                    <tr style="height: 45px;">
+                        <td style="width: 96px;text-align: right"><span class="spanText">启用日期：</span></td>
+                        <td style="width: 140px;text-align: center">
+                            <input id="StartDate" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px"  validatetype="required">
+                        </td>
+                    </tr>
+                    <tr style="height: 45px;">
+                        <td style="width: 96px; text-align: right"><span class="spanText">费用：</span></td>
+                        <td style="width: 140px; text-align: center">
+                            <input id="Fee" type="text" style="width: 200px" class="input_text form-control" validatetype="required,decimalNumber">
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -113,3 +117,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="EditPermission" value="@permission.Edit.ToString()" />
+<input type="hidden" id="NewPermission" value="@permission.New.ToString()" />

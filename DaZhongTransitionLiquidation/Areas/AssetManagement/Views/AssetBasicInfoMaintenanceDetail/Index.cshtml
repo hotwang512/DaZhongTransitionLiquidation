@@ -3,7 +3,8 @@
 @{
     ViewBag.Title = "资产管理/资产基础信息明细";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/Areas/AssetManagement/Views/_js/AssetBasicInfoMaintenanceDetail.js?t=2019021911")"></script>
@@ -26,21 +27,21 @@
         padding-left:8px;
         color:#555;
     }
-    .jqx-fill-state-pressed{
-    }
-    .jqx-listitem-element{
-    }
-    .jqx-widget-content{
-    }
     .jqx-tabs-content-element {
         overflow: auto !important;
     }
 </style>
+
+
+
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
-        <td style="width: 95px;">
-            <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-        </td>
+        @if (permission.New || permission.Edit)
+        {
+            <td style="width: 95px;">
+                <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe6f3;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+        }
         <td style="width: 95px;">
             <button id="btnCancel" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe678; </i><span style="margin-left: 7px; float: left;">取消</span></button>
         </td>

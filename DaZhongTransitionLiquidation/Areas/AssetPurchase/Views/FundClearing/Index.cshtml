@@ -128,6 +128,8 @@
     }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@permission.Edit" />
 <input type="hidden" id="AssignVguid" />
 <input type="hidden" id="OrderQuantity" />
+<input type="text" hidden id="EditPermission" value="@permission.Edit.ToString()" />
+<input type="text" hidden id="NewPermission" value="@permission.New.ToString()" />
+<input type="text" hidden id="DelPermission" value="@permission.StrikeOut.ToString()" />

@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "资产维护/经营模式配置";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 
 @section js
@@ -24,16 +26,25 @@
         overflow: auto !important;
     }
 </style>
-<table style="margin-top: 10px;">
-    <tr style="height: 50px;">
-        <td>
-            <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-        </td>
-        <td>
-            <button id="btnDelete" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
-        </td>
-    </tr>
-</table>
+@if (permission.New || permission.StrikeOut)
+{
+    <table style="margin-top: 10px;">
+        <tr style="height: 50px;">
+            @if (permission.New)
+            {
+                <td>
+                    <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                </td>
+            }
+            @if (permission.StrikeOut)
+            {
+                <td>
+                    <button id="btnDelete" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                </td>
+            }
+        </tr>
+    </table>
+}
 <!-- 底部表格 -->
 <div class="mk">
     <div class="header_mk">
@@ -146,3 +157,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="EditPermission" value="@permission.Edit.ToString()" />
+<input type="hidden" id="NewPermission" value="@permission.New.ToString()" />

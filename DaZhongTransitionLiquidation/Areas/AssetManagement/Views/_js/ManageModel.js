@@ -27,6 +27,11 @@ var $page = function () {
         initSelectAssetMajor();
         initSelectGoodsModel();
         addEvent();
+        if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+            $("#AddAssetsModelButton").show();
+        } else {
+            $("#AddAssetsModelButton").hide();
+        }
     }
     function pageload() {
         getModules(function (modules) {
@@ -286,12 +291,43 @@ function loadGridTree(modules) {
 }
 function detailFuncs(row, column, value, rowData) {
     var container = "";
-    if (rowData.parent == null) {
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.level + "','" + rowData.BusinessName + "','" + rowData.VehicleAge + "','" + rowData.ParentVGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessName + "</a>";
+    if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+        if (rowData.parent == null) {
+            container = "<a href='#' onclick=edit('" +
+                rowData.VGUID +
+                "','" +
+                rowData.level +
+                "','" +
+                rowData.BusinessName +
+                "','" +
+                rowData.VehicleAge +
+                "','" +
+                rowData.ParentVGUID +
+                "') style=\"text-decoration: underline;color: #333;\">" +
+                rowData.BusinessName +
+                "</a>";
+        } else {
+            debugger;
+            container = "<a href='#' onclick=edit('" +
+                rowData.VGUID +
+                "','" +
+                rowData.level +
+                "','" +
+                rowData.BusinessName +
+                "','" +
+                rowData.VehicleAge +
+                "','" +
+                rowData.ParentVGUID +
+                "','" +
+                rowData.parent.BusinessName +
+                "') style=\"text-decoration: underline;color: #333;\">" +
+                rowData.BusinessName +
+                "</a>";
+        }
     } else {
-        debugger;
-        container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.level + "','" + rowData.BusinessName + "','" + rowData.VehicleAge + "','" + rowData.ParentVGUID + "','" + rowData.parent.BusinessName + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessName + "</a>";
+        container = rowData.BusinessName;
     }
+    
     return container;
 }
 function detailsCategoryFuncs(row, column, value, rowData) {
@@ -400,36 +436,44 @@ function editAsstsModel(VGUID, CategoryMajor, AssetsCategoryVGUID) {
 }
 function editCategory(VGUID, CategoryMajor, AssetsCategoryVGUID, GoodsModelCode) {
     debugger;
-    if (CategoryMajor != "null") {
-        $("#CategoryMajor").val(CategoryMajor);
-        $("#CategoryMinor").val(AssetsCategoryVGUID);
-        $("#GoodsModel").val(GoodsModelCode);
+    if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+        if (CategoryMajor != "null") {
+            $("#CategoryMajor").val(CategoryMajor);
+            $("#CategoryMinor").val(AssetsCategoryVGUID);
+            $("#GoodsModel").val(GoodsModelCode);
+        } else {
+            initSelectAssetMajor();
+        }
+        $("#GoodsModel").attr("disabled", true);
+        isEditAssetsCategory = 1;
+        $("#AddAssetsModelDialog").modal("show");
     } else {
-        initSelectAssetMajor();
+        jqxNotification("没有权限！", null, "error");
     }
-    $("#GoodsModel").attr("disabled", true);
-    isEditAssetsCategory = 1;
-    $("#AddAssetsModelDialog").modal("show");
 }
 function delCategory(VGUID) {
     debugger;
-    $.ajax({
-        url: "/AssetManagement/ManageModel/DelAssetsCategory",
-        type: "post",
-        async: false,
-        data: {"Vguid" :VGUID},
-        success: function (msg) {
-            switch (msg.Status) {
-            case "0":
-                jqxNotification("删除失败！", null, "error");
-                break;
-            case "1":
-                jqxNotification("删除成功！", null, "success");
-                initAssetsCategoryTable($("#AddAssetsModel_OKButton").attr("VGUID"));
-                break;
+    if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+        $.ajax({
+            url: "/AssetManagement/ManageModel/DelAssetsCategory",
+            type: "post",
+            async: false,
+            data: { "Vguid": VGUID },
+            success: function(msg) {
+                switch (msg.Status) {
+                case "0":
+                    jqxNotification("删除失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("删除成功！", null, "success");
+                    initAssetsCategoryTable($("#AddAssetsModel_OKButton").attr("VGUID"));
+                    break;
+                }
             }
-        }
-    });
+        });
+    } else {
+        jqxNotification("没有权限！", null, "error");
+    }
 }
 function initSelectAssetMajor() {
     $.ajax({

@@ -242,9 +242,13 @@ var $page = function () {
                 //if (orderType == "Vehicle") {
                 //    editable = rowinfo.row.SubmitStatus == 1 ? false : true;
                 //}
+                var editable = false;
+                if (($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True")) {
+                    editable = true;
+                }
                 nestedDataTable.jqxDataTable({
                     source: nestedDataTableAdapter,
-                    editable: rowinfo.row.SubmitStatus == 1 ? false : true,
+                    editable: rowinfo.row.SubmitStatus == 1 ? false : editable,
                     altRows: true,
                     editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
                     width: '100%', height: 180,
@@ -260,8 +264,12 @@ var $page = function () {
                         var buttonAddTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
                         var addButton = $(buttonAddTemplate);
                         var deleteButton = $(buttonDelTemplate);
-                        container.append(addButton);
-                        container.append(deleteButton);
+                        if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+                            container.append(addButton);
+                        }
+                        if ($("#DelPermission").val() == "True") {
+                            container.append(deleteButton);
+                        }
                         if (orderType != "Vehicle") {
                             debugger;
                             if (rowinfo.row.SubmitStatus == 0 || rowinfo.row.SubmitStatus == 2)

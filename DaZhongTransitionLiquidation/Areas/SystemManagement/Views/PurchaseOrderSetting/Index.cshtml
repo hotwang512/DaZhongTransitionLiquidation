@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "采购资产订单配置/采购资产基础信息配置";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -11,18 +12,18 @@
 
 @section css{
 
-}<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+}<input type="hidden" id="EditPermission" value="@permission.Edit.ToString()" />
+@if (permission.New || permission.StrikeOut)
 {
     <table style="margin-top: 10px;display:block;" id="buttonList">
         <tr style="height: 50px;">
-            @if (currentModuleRolePermission.Adds == 1)
+            @if (permission.New)
             {
                 <td style="width: 95px;">
                     <button id="btnAdd" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
                 </td>
             }
-            @if (currentModuleRolePermission.Deletes == 1)
+            @if (permission.StrikeOut)
             {
                 <td style="width: 95px;">
                     <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
@@ -73,7 +74,7 @@
                 <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">供应商信息</h4>
             </div>
             <div class="modal-body" style="width: 100%; height: 480px; overflow: auto">
-                @if (currentModuleRolePermission.Adds == 1)
+                @if (permission.New)
                 {
                     <button id="btnAddSetting" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">配置</span></button>
                 }

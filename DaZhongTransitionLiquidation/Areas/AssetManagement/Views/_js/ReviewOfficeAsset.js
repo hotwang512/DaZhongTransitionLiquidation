@@ -9,8 +9,12 @@ var selector = {
 }; //selector end
 var isEdit = false;
 var vguid = "";
+var editable = false;
 var $page = function () {
     this.init = function () {
+        if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+            editable = true;
+        }
         addEvent();
     }
     //所有事件
@@ -213,7 +217,7 @@ var $page = function () {
                     },
                     { text: '资产ID', datafield: 'ASSET_ID', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     //{ text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
-                    { text: '标签号', datafield: 'TAG_NUMBER', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:true },
+                    { text: '标签号', datafield: 'TAG_NUMBER', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center', editable: editable },
                     { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     { text: '数量', datafield: 'QUANTITY', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     { text: '资产主类', datafield: 'ASSET_CATEGORY_MAJOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
@@ -225,15 +229,15 @@ var $page = function () {
                     { text: '摊销标记', datafield: 'AMORTIZATION_FLAG', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     { text: '存放地点1', datafield: 'BELONGTO_COMPANY', width: 150, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     { text: '存放地点2', datafield: 'MANAGEMENT_COMPANY', width: 150, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
-                    { text: '存放地点3', datafield: 'ORGANIZATION_NUM', width: 120, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass },
+                    { text: '存放地点3', datafield: 'ORGANIZATION_NUM', width: 120, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellclassname: cellclass, editable: false },
                     //{ text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     //{ text: '车架号', datafield: 'CHASSIS_NUMBER', width: 120, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     //{ text: '经营模式主类', datafield: 'MODEL_MAJOR', width: 180, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     //{ text: '模式子类', datafield: 'MODEL_MINOR', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
                     { text: '创建人', datafield: 'CREATE_USER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
-                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellclassname: cellclass, cellsalign: 'center',cellsAlign: 'center' , cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellsAlign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss", editable: false },
                     { text: '修改人', datafield: 'CHANGE_USER', width: 100, align: 'center', cellclassname: cellclass, cellsAlign: 'center' , editable:false },
-                    { text: '修改日期', datafield: 'CHANGE_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center',cellsAlign: 'center' , cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
+                    { text: '修改日期', datafield: 'CHANGE_DATE', width: 100, align: 'center', cellclassname: cellclass, cellsalign: 'center', cellsAlign: 'center', cellclassname: cellclass, datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss", editable: false },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
                 ]
             });

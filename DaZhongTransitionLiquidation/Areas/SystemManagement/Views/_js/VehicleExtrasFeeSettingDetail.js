@@ -4,6 +4,11 @@ var mydate = new Date();
 var ManagementCompany = [];
 var $page = function () {
     this.init = function () {
+        if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+            $("#VehicleExtrasFeeSettingDialog_OKBtn").show();
+        } else {
+            $("#VehicleExtrasFeeSettingDialog_OKBtn").hide();
+        }
         GetVehicleModelDropDown();
         getOrderSettingInfoList();
         addEvent();

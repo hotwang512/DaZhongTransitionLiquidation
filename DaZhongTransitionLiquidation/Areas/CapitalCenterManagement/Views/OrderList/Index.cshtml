@@ -14,9 +14,7 @@
 @section css{
 
 }
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
-{
+<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString()" />
     <table style="margin-top: 10px;display:none;" id="buttonList">
         <tr style="height: 50px;">
             <td style="width: 95px;">
@@ -38,7 +36,6 @@
             </td>
         </tr>
     </table>
-}
 <!-- 中部条件 -->
 <div class="mk">
     <div class="header_mk">

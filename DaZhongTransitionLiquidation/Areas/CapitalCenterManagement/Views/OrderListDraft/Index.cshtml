@@ -3,6 +3,8 @@
     ViewBag.Title = "支付订单/订单列表";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    var userInfo = ViewBag.User as Sys_User;
+    var moduleMenu = userInfo.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -12,8 +14,8 @@
 @section css{
 
 }
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
-@if (currentModuleRolePermission.Adds == 1 || currentModuleRolePermission.Deletes == 1)
+<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString()" />
+@if (moduleMenu.Generate)
 {
     <table style="margin-top: 10px;display:none;" id="buttonList">
         <tr style="height: 50px;">
@@ -40,6 +42,9 @@
 
         </tr>
     </table>
+}
+@if (moduleMenu.Submit)
+{
     <table style="margin-top: 10px;display:none;" id="buttonList2">
         <tr style="height: 50px;">
             <td style="width: 95px;">
@@ -47,7 +52,7 @@
             </td>
         </tr>
     </table>
-}
+} 
 <!-- 中部条件 -->
 <div class="mk">
     <div class="header_mk">

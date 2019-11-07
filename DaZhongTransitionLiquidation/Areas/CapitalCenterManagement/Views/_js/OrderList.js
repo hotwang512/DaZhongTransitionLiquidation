@@ -231,17 +231,20 @@ var $page = function () {
             });
         selector.$grid().on('rowDoubleClick', function (event) {
             // event args.
-            var args = event.args;
-            // row data.
-            var row = args.row;
-            // row index.
-            window.location.href = "/CapitalCenterManagement/OrderListDetail/Index?VGUID=" + row.VGUID;
+            if (selector.$EditPermission().val() == "true") {
+                var args = event.args;
+                // row data.
+                var row = args.row;
+                // row index.
+                window.location.href = "/CapitalCenterManagement/OrderListDetail/Index?VGUID=" + row.VGUID;
+            }
+           
         });
     }
 
     function detailFunc(row, column, value, rowData) {
         var container = "";
-        if (selector.$EditPermission().val() == "1") {
+        if (selector.$EditPermission().val() == "true") {
             container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.BusinessSubItem1 + "</a>";
         } else {
             container = "<span>" + rowData.BusinessSubItem1 + "</span>";

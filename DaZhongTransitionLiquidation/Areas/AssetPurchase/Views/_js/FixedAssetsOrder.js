@@ -13,6 +13,7 @@ var $page = function () {
     this.init = function () {
         orderType = $.request.queryString().OrderType;
         if (orderType == "OBD") {
+            $("#download").show();
             $("#btnImport").parent().show();
         } else {
             $("#btnAdd").parent().show();

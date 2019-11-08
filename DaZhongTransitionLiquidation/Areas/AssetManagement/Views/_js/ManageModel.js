@@ -271,8 +271,10 @@ function loadGridTree(modules) {
                 localData: modules
             };
     var dataAdapter = new $.jqx.dataAdapter(source);
+    var width = selector.$grid().width() - 330;
     selector.$grid().jqxTreeGrid({
-        width: selector.$grid().width(),
+        width: selector.$grid().width() - 2,
+        height:400,
         showHeader: true,
         source: dataAdapter,
         //checkboxes: true,
@@ -280,11 +282,11 @@ function loadGridTree(modules) {
             selector.$grid().jqxTreeGrid('expandAll');
         },
         columns: [
-          { text: '业务名称', dataField: 'BusinessName', width: "20%", cellsRenderer: detailFuncs },
-          { text: '车龄', dataField: 'VehicleAge', width: "40%" },
-          { text: '资产类别', width: "40%", cellsRenderer: detailsCategoryFuncs },
-          { text: '', dataField: 'ParentVGUID', width: "40%", hidden: true },
-          { text: '', dataField: 'VGUID', width: "100%", hidden: true }
+          { text: '业务名称', dataField: 'BusinessName', width: "260", cellsRenderer: detailFuncs },
+          { text: '车龄', dataField: 'VehicleAge', width: "50" },
+          { text: '资产类别', width: width, cellsRenderer: detailsCategoryFuncs },
+          { text: '', dataField: 'ParentVGUID', hidden: true },
+          { text: '', dataField: 'VGUID', hidden: true }
         ]
     });
     selector.$grid().jqxTreeGrid('expandAll');
@@ -339,7 +341,7 @@ function detailsCategoryFuncs(row, column, value, rowData) {
 }
 function detailsEditCategoryFuncs(row, column, value, rowData) {
     var container = "";
-    container = "<a href='#' onclick=editCategory('" + rowData.VGUID + "','" + rowData.CategoryMajor + "','" + rowData.AssetsCategoryVGUID + "','" + rowData.GoodsModelCode + "') style=\"text-decoration: underline;color: #333;\">编辑</a>";
+    container = "<a href='#' onclick=editCategory('" + rowData.VGUID + "','" + rowData.CategoryMajor + "','" + rowData.AssetsCategoryVGUID + "','" + rowData.GoodsModelCode + "') style=\"text-decoration: underline;color: #333;\">" + rowData.GoodsModel + "</a>";
     return container;
 }
 function delCategoryFuncs(row, column, value, rowData) {
@@ -404,7 +406,7 @@ function initAssetsCategoryTable(VGUID) {
     selector.$AssetsCategoryTable().jqxDataTable(
         {
             pageable: true,
-            width: 790,
+            width: 640,
             height: 400,
             pageSize: 10,
             serverProcessing: true,
@@ -413,14 +415,19 @@ function initAssetsCategoryTable(VGUID) {
             theme: "office",
             columnsHeight: 40,
             columns: [
-                { text: '车型', datafield: 'GoodsModel', width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '车型', datafield: 'GoodsModel', width: 150, align: 'center', cellsAlign: 'center', cellsRenderer: detailsEditCategoryFuncs },
                 { text: '资产主类', datafield: 'CategoryMajor', width: 170, align: 'center', cellsAlign: 'center' },
                 { text: '资产子类', datafield: 'CategoryMinor', width: 170, align: 'center', cellsAlign: 'center' },
-                { text: '编辑', width: 150, align: 'center',cellsRenderer: detailsEditCategoryFuncs, cellsAlign: 'center' },
+                //{ text: '编辑', width: 150, align: 'center',cellsRenderer: detailsEditCategoryFuncs, cellsAlign: 'center' },
                 { text: '删除', width: 150, align: 'center', cellsRenderer: delCategoryFuncs, cellsAlign: 'center' }
                 //{ text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" }
             ]
         });
+}
+function detailFunc(row, column, value, rowData) {
+    var container = "";
+    container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.GoodsModel + "</a>";
+    return container;
 }
 function editAsstsModel(VGUID, CategoryMajor, AssetsCategoryVGUID) {
     //debugger;

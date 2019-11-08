@@ -283,7 +283,7 @@ var $page = function () {
                     editable: false,
                     altRows: true,
                     editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
-                    width: '100%', height: 180,
+                    width: '98%', height: 180,
                     pageable: false,
                     showToolbar: true,
                     renderToolbar: function (toolBar) {

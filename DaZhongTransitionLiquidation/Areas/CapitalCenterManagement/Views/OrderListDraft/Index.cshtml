@@ -14,7 +14,7 @@
 @section css{
 
 }
-<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString()" />
+<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString().ToLower()" />
 @if (moduleMenu.Generate)
 {
     <table style="margin-top: 10px;display:none;" id="buttonList">

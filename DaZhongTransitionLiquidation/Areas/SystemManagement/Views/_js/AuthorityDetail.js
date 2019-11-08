@@ -392,10 +392,10 @@ var $page = function () {
             return "";
         }
         else if (rowData.Preview == false) {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Preview\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
         else if (rowData.Preview == true) {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Preview\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 
@@ -404,10 +404,10 @@ var $page = function () {
             return "";
         }
         else if (rowData.Enable == false) {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Enable\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
         else if (rowData.Enable == true) {
-            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Review\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
+            return "<input   type=\"checkbox\" class=\"permission\"  style=\"margin:auto;width: 17px;height: 17px;\" name=\"Enable\" checked=\"checked\" pageid=\"" + rowData.KeyVGUID + "\" buttonid=\"8\" />";
         }
     }
 

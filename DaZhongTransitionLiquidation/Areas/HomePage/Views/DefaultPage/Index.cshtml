@@ -1,0 +1,29 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Sys_User user = ViewBag.User as Sys_User;
+    var moduleMenu = user.GetCurrentPagePermission();
+}
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    @*<script src="@Url.CusContent("~/Areas/VoucherManageManagement/Views/_js/VoucherList.js")"></script>*@
+}
+
+@section css{
+   
+}
+<style type="text/css">
+    .bg-icon {
+        height: 700px;
+        float: left;
+        width: 100%;
+    }
+    </style>
+<div class="mk" style="">
+    @*<div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>*@
+    <div class="bg-icon" style="background: url('/_theme/images/20191101135036.jpg')  center center / cover no-repeat rgb(3, 21, 41);"></div>
+</div>

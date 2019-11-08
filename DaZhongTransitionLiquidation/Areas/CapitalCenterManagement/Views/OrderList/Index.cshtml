@@ -14,7 +14,7 @@
 @section css{
 
 }
-<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString()" />
+<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString().ToLower()" />
     <table style="margin-top: 10px;display:none;" id="buttonList">
         <tr style="height: 50px;">
             <td style="width: 95px;">
@@ -80,4 +80,3 @@
     }
 </style>
 <!-- 底部表格 -->
-<input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />

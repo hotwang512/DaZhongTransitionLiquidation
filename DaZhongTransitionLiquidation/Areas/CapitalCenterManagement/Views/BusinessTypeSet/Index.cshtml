@@ -3,7 +3,7 @@
     ViewBag.Title = "付款业务配置/业务配置";
     Layout = "~/Views/Shared/_Layout.cshtml";
     Sys_User user = ViewBag.SysUser;
-    var moduleMenu = user.GetCurrentModuleMenu();
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 
 @section js
@@ -33,7 +33,7 @@
         </tr>
     </table>
 }
-<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString()" />
+<input type="hidden" id="EditPermission" value="@moduleMenu.Edit.ToString().ToLower()" />
 <!-- 底部表格 -->
 <div class="mk">
     <div class="header_mk">

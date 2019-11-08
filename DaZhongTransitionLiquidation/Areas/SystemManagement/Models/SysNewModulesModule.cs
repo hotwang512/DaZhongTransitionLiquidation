@@ -23,5 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         public bool IsExport { get; set; }
         public bool IsGenerate { get; set; }
         public bool IsCalculation { get; set; }
+        public bool IsPreview { get; set; }
+        public bool IsEnable { get; set; }
     }
 }

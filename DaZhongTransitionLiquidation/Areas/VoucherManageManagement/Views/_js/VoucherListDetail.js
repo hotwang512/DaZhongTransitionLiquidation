@@ -46,9 +46,10 @@ var $page = function () {
         $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + day);
         $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
         uiEngineHelper.bindSelect('#CompanySection', CompanyCode, "Code", "Descrption");
-        getVoucherDetail();
-        var guid = $("#VGUID").val();
+        var guid = $.request.queryString().VGUID;
+        $("#VGUID").val(guid)
         if (guid != "" && guid != null) {
+            getVoucherDetail();
             addVoucherListTable();
             $("#VoucherType").attr("disabled", "disableds");
         } else {
@@ -353,6 +354,11 @@ var $page = function () {
         })
         //取消
         $("#AddNewBankData_CancelBtn").on("click", function () {
+            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
+            $("#ShowDialog").modal("hide");
+        })
+        //退回
+        $("#AddNewBankData_GoBackBtn").on("click", function () {
             if ($("#Status").val() == "2") {
                 var vguid = $("#VGUID").val();
                 var tableIndex = $("#Automatic").val();
@@ -373,9 +379,6 @@ var $page = function () {
                         }
                     }
                 });
-            } else {
-                $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
-                $("#ShowDialog").modal("hide");
             }
         })
         //取消
@@ -677,19 +680,23 @@ var $page = function () {
                     $("#hideButton").show();
                     $("#btnUp").show();
                     $("#AttachmentHide").show();
+                    $("#AddNewBankData_GoBackBtn").hide();
                 } else {
                     $("#btnSave").hide();
                     $("#btnUp").hide();
+                    $("#AddNewBankData_GoBackBtn").hide();
                 }
                 if ($("#Status").val() == "2") {
                     $("#btnUp").show();
                     $("#btnUp").text("审核");
-                    $("#AddNewBankData_CancelBtn").text("退回");
+                    $("#AddNewBankData_GoBackBtn").show();
+
                 }
                 if ($("#Status").val() == "4") {
                     $("#hideButton").show();
                     $("#btnUp").show();
                     $("#btnSave").show();
+                    $("#AddNewBankData_GoBackBtn").hide();
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳

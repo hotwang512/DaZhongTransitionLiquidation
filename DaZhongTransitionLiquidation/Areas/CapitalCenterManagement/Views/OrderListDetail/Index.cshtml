@@ -10,7 +10,7 @@
     //var payAccount = ViewBag.PayAccount as List<Business_CompanyBankInfo>;
     var userCompanySet = ViewBag.UserCompanySet as List<UserCompanySetDetail>;
     Sys_User user = ViewBag.SysUser;
-    var moduleMenu = user.GetCurrentModuleMenu();
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -53,8 +53,8 @@
         </td>
     </tr>
 </table>
-<input type="hidden" id="valEnable" value="@moduleMenu.Enable.ToString()" />
-<input type="hidden" id="valEdit" value="@moduleMenu.Edit.ToString()" />
+<input type="hidden" id="valEnable" value="@moduleMenu.Enable.ToString().ToLower()" />
+<input type="hidden" id="valEdit" value="@moduleMenu.Edit.ToString().ToLower()" />
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>

@@ -147,6 +147,7 @@ function loadTreeGrid() {
                 $("#SubjectCode").hide();//父级菜单
                 $("#SubjectShow").hide();
                 $("#ParentMenu").val("");
+                $("#hideParentMenu").val(row.Parent);
             }
         },
         onClickCell: function (field, row) {

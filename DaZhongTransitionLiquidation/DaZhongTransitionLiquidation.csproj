@@ -407,6 +407,7 @@
     <Content Include="Areas\AssetPurchase\Views\VehicleLiquidationReview\Index.cshtml" />
     <Content Include="Areas\AssetManagement\Views\PurchaseItem\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleMenu\Index.cshtml" />
+    <Content Include="Areas\HomePage\Views\DefaultPage\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3404,6 +3405,7 @@
     <Compile Include="Areas\FinancialStatementsManagement\Controllers\SubjectBalanceStatement\SubjectBalanceStatementController.cs" />
     <Compile Include="Areas\FinancialStatementsManagement\FinancialStatementsManagementAreaRegistration.cs" />
     <Compile Include="Areas\HomePage\Controllers\CompanyHomePageController.cs" />
+    <Compile Include="Areas\HomePage\Controllers\DefaultPageController.cs" />
     <Compile Include="Areas\HomePage\Controllers\HomePageController.cs" />
     <Compile Include="Areas\HomePage\HomePageAreaRegistration.cs" />
     <Compile Include="Areas\PaymentManagement\Controllers\AccountingSection\AccountingSectionController.cs" />

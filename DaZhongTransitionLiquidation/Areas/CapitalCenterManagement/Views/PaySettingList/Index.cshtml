@@ -39,7 +39,7 @@
         </tr>
     </table>
 }
-
+<input type="hidden" id="valEdit" value="@moduleMenu.Edit.ToString()" />
 <!-- 中部条件 -->
 <div class="mk">
     <div class="header_mk">
@@ -114,9 +114,9 @@
                                 <select id="txtChannel_Dialog" class="input_text form-control" validatetype="">
                                     <option></option>
                                     @{
-    foreach (var item in ViewBag.Channel)
-    {
-                                    <option value="@item.Id">@item.Name</option>
+                                        foreach (var item in ViewBag.Channel)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
                                         }
                                     }
                                 </select>

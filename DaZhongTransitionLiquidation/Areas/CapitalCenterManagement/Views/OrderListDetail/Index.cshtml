@@ -10,7 +10,7 @@
     //var payAccount = ViewBag.PayAccount as List<Business_CompanyBankInfo>;
     var userCompanySet = ViewBag.UserCompanySet as List<UserCompanySetDetail>;
     Sys_User user = ViewBag.SysUser;
-    var moduleMenu = user.GetCurrentModuleMenu();
+    var moduleMenu = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>

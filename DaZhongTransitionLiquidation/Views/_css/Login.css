@@ -20,7 +20,7 @@ body {
 }
 
 .imgArea {
-    background: url("/_theme/images/20191101135742.jpg") center center / cover no-repeat rgb(3, 21, 41);
+    background: url("/_theme/images/20191107165056.jpg") center center / cover no-repeat rgb(3, 21, 41);
     width: 70.7%;
     height: 100%;
     position: absolute;
@@ -44,7 +44,7 @@ body {
     float: left;
     width: 70.7%;
     transition: all 1s;
-    background: url("/_theme/images/20191101135742.jpg");
+    background: url("/_theme/images/20191107165056.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

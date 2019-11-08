@@ -414,7 +414,7 @@ var $page = function () {
                 $("#PurchaseDepartment").val(msg.PurchaseDepartmentIDs);
             }
             //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
-            initSelectPurchaseGoods();
+            initSelectPurchaseGoods(msg.PurchaseDepartmentIDs);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").trigger("change");
             //$("#PurchaseGoods").attr("disabled", true);
@@ -754,7 +754,7 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
     //使用部门
     $.ajax({
         url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseGoods",
-        data: { "OrderCategory": 0, "PurchaseDepartment": PurchaseDepartment },
+        data: { "OrderCategory": 0, "PurchaseDepartment": PurchaseDepartment, OrderType: orderType },
         type: "POST",
         dataType: "json",
         async: false,

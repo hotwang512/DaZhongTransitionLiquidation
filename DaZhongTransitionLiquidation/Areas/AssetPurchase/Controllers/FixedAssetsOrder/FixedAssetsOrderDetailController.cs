@@ -296,10 +296,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(departmentData, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPurchaseGoods(int OrderCategory,Guid[] PurchaseDepartment)
+        public JsonResult GetPurchaseGoods(int OrderCategory,Guid[] PurchaseDepartment,string OrderType)
         {
             var PurchaseDepartmentStr = "";
-            
             var orderTypeData = new List<Business_PurchaseOrderSetting>();
             DbBusinessDataService.Command(db =>
             {
@@ -314,9 +313,23 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
                         PurchaseDepartmentStr = PurchaseDepartmentStr + str + "','";
                     }
                     PurchaseDepartmentStr = PurchaseDepartmentStr.Substring(0,PurchaseDepartmentStr.Length - 3);
-                    orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
+                    if (OrderType == "Vehicle")
+                    {
+                        orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
                     Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
-                    WHERE OrderCategory = '0' And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
+                    WHERE OrderCategory = '0' and bpos.PurchaseGoods like '%出租车%' And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
+                    }else if (OrderType == "OBD")
+                    {
+                        orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
+                    Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
+                    WHERE OrderCategory = '0' and bpos.PurchaseGoods like '%OBD%' And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
+                    }
+                    else
+                    {
+                        orderTypeData = db.SqlQueryable<Business_PurchaseOrderSetting>(@"SELECT DISTINCT bpos.* FROM  Business_PurchaseOrderSetting bpos INNER JOIN
+                    Business_PurchaseDepartment bpd ON bpos.VGUID = bpd.PurchaseOrderSettingVguid
+                    WHERE OrderCategory = '0'and bpos.PurchaseGoods not in ('出租车','OBD设备') And bpd.DepartmentVguid IN ('" + PurchaseDepartmentStr + "')").ToList();
+                    }
                 }
             });
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);

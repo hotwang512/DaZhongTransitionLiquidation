@@ -381,8 +381,8 @@ var $page = function () {
         $("#PurchaseGoods").on("change",
              function () {
                  initPaymentInformationComboBox(false);
-                 $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
-                 $("#PurchaseGoods").attr("disabled", true);
+                 //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                 //$("#PurchaseGoods").attr("disabled", true);
                  $("#PayCompanyDropdown").removeClass("input_Validate");
                  $("#PayCompanyDropdown").next(".msg").remove();
                  getCompanyBankInfoDropdownByCode();
@@ -423,8 +423,8 @@ var $page = function () {
             debugger;
             var PurchaseDepartment = msg.PurchaseDepartmentIDs;
             $("#PurchaseDepartment").val(PurchaseDepartment);
-            $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
-            $("#PurchaseGoods").attr("disabled", true);
+            //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+            //$("#PurchaseGoods").attr("disabled", true);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             initPaymentInformationComboBox(false);
             getCompanyBankInfoDropdownByCode();

@@ -413,11 +413,11 @@ var $page = function () {
             if (msg.PurchaseDepartmentIDs != null) {
                 $("#PurchaseDepartment").val(msg.PurchaseDepartmentIDs);
             }
-            $("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+            //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             initSelectPurchaseGoods();
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").trigger("change");
-            $("#PurchaseGoods").attr("disabled", true);
+            //$("#PurchaseGoods").attr("disabled", true);
 
             initPaymentInformationComboBox(false);
             GetCompanyBankInfoDropdownByCode();

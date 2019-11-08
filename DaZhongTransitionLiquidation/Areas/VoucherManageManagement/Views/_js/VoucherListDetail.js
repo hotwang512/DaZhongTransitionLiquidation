@@ -46,9 +46,10 @@ var $page = function () {
         $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + day);
         $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
         uiEngineHelper.bindSelect('#CompanySection', CompanyCode, "Code", "Descrption");
-        getVoucherDetail();
-        var guid = $("#VGUID").val();
+        var guid = $.request.queryString().VGUID;
+        $("#VGUID").val(guid)
         if (guid != "" && guid != null) {
+            getVoucherDetail();
             addVoucherListTable();
             $("#VoucherType").attr("disabled", "disableds");
         } else {

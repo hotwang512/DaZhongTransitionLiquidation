@@ -90,7 +90,7 @@ var $page = function () {
             }
             trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'></textarea></td>" +
-                             "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly'  style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                             "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style=''>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                              "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                              "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
@@ -622,18 +622,18 @@ var $page = function () {
                              "<td style='text-align: center;font-size: 18px;'>科目及描述</td>" +
                              "<td style='width: 150px;text-align: center;font-size: 18px;'>借方金额</td>" +
                              "<td style='width: 150px;text-align: center;font-size: 18px;'>贷方金额</td>" +
-                             "<td style='width: 50px;text-align: center;'></td>" +
+                             "<td style='width: 50px;text-align: center;font-size: 24px;'>×</td>" +
                        "</tr>" +
                        "<tr id='closeTr0' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark0' style='width: 248px;' class='input_text form-control'></textarea></td>" +
-                             "<td style='text-align: center;'><textarea id='SubjectName0' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit0' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                             "<td style='text-align: center;'><textarea id='SubjectName0' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit0' type='button' class='buttons subjectbtn' style=''>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow0' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' /></td>" +
                              "<td style='text-align: right;'><input id='Loan0' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
                       "</tr>" +
                        "<tr id='closeTr1' style='height:60px'>" +
                              "<td style='text-align: center;'><textarea id='Remark1' style='width: 248px;' class='input_text form-control'></textarea></td>" +
-                             "<td style='text-align: center;'><textarea id='SubjectName1' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit1' type='button' class='buttons subjectbtn' style='margin-top: 10px;'>编辑</button></td>" +
+                             "<td style='text-align: center;'><textarea id='SubjectName1' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit1' type='button' class='buttons subjectbtn' style=''>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow1' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' /></td>" +
                              "<td style='text-align: right;'><input id='Loan1' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' /></td>" +
                              "<td style='text-align: center;'></td>" +
@@ -890,7 +890,7 @@ var $page = function () {
                 trIndex = i;
                 trMore += "<tr id='closeTr" + trIndex + "' style='height:60px'>" +
                                  "<td style='text-align: center;'><textarea id='Remark" + trIndex + "' type='text' style='width: 248px;' class='input_text form-control'>" + datas[i].Abstract + "</textarea></td>" +
-                                 "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style='margin-top: 10px; '>编辑</button></td>" +
+                                 "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style=' '>编辑</button></td>" +
                                  "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                                  "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
                                  "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +

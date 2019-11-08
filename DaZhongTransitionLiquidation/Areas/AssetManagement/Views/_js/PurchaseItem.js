@@ -193,7 +193,7 @@ var $page = function () {
                 },
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsBankInfoRendererFunc, renderer: rendererBankInfoFunc, rendered: renderedBankFunc, autoRowHeight: false },
-                    { text: '供应商类别', datafield: 'CompanyOrPerson', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '供应商类别', datafield: 'CompanyOrPerson', width: 200, align: 'center', cellsAlign: 'center',hidden:true },
                     { text: '账号', datafield: 'BankAccount', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '户名', datafield: 'BankAccountName', width: 200, align: 'center', cellsAlign: 'center' },
                     { text: '开户行', datafield: 'Bank', width: 200, align: 'center', cellsAlign: 'center' },
@@ -489,7 +489,7 @@ function Setting(vguid) {
             columnsResize: true,
             columns: [
                 //{ text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                { text: '供应商类别', datafield: 'CompanyOrPerson', width: 200, align: 'center', cellsAlign: 'center' },
+                { text: '供应商类别', datafield: 'CompanyOrPerson', width: 200, align: 'center', cellsAlign: 'center',hidden:true },
                 { text: '账号', datafield: 'BankAccount', width: 200, align: 'center', cellsAlign: 'center' },
                 { text: '户名', datafield: 'BankAccountName', width: 200, align: 'center', cellsAlign: 'center' },
                 { text: '开户行', datafield: 'Bank', width: 200, align: 'center', cellsAlign: 'center' },

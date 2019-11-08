@@ -261,6 +261,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\PaySettingDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\PaySettingList.js" />
     <Content Include="Areas\FinancialStatementsManagement\Views\_js\SubjectBalanceStatement.js" />
+    <Content Include="Areas\HomePage\Views\_css\DefaultPage.css" />
     <Content Include="Areas\HomePage\Views\_js\CompanyHomePage.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />

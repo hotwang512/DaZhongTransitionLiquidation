@@ -80,10 +80,32 @@
         border: 1px solid #ccc !important;
     }
     #VoucherListTable input{
-                border-left:none !important;border-top:none !important;border-right:none !important;border-bottom-color:black;
+                border-left:none !important;border-top:none !important;border-right:none !important;border-bottom-color:black;border-radius: inherit;
+                height:58px;
             }
     #ShowSevenSubject .input_text{
         width: 435px !important;
+    }
+    textarea.form-control {
+    height: auto;
+    border-left: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom-color: black !important;
+    border-radius: inherit;
+}
+    .subjectArea{
+        border:none;
+    }
+    #BorrowCount,#LoanCount{
+        height:46px !important;
+        border: none;
+    }
+    #VoucherTable{
+        border: 1px solid #ccc;
+    }
+    .subjectbtn{
+        height:58px;
     }
 </style>
 <table id="hideButton" style="margin-top: 10px;">
@@ -124,15 +146,15 @@
             </tr>
             <tr style="height:40px">
                 <td style="text-align: right;">财务主管:</td>
-                <td style="text-align: left;"><input id="FinanceDirector" type="text" style="width: 200px;" class="input_text form-control"  /></td>
+                <td style="text-align: left;"><input id="FinanceDirector" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">记账:</td>
-                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 120px;" class="input_text form-control"  /></td>
+                <td style="text-align: left;"><input id="Bookkeeping" type="text" style="width: 120px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">审核:</td>
-                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 120px;" class="input_text form-control"  /></td>
+                <td style="text-align: left;"><input id="Auditor" type="text" style="width: 120px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;">制单:</td>
-                <td style="text-align: left;"><input id="DocumentMaker" type="text" style="width: 150px;" class="input_text form-control" validatetype="required"/></td>
+                <td style="text-align: left;"><input id="DocumentMaker" type="text" style="width: 150px;" class="input_text form-control" /></td>
                 <td style="text-align: right;">出纳:</td>
-                <td style="text-align: right;"><input id="Cashier" type="text" style="width: 150px;" class="input_text form-control"  /></td>
+                <td style="text-align: right;"><input id="Cashier" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;"><input id="Status" name="Status" value="" class="hide" /></td>
                 <td style="text-align: right;"><input id="VGUID" name="VGUID" class="hide" /></td>
                 <td style="text-align: right;"><input id="Automatic" name="Automatic" class="hide" /></td>

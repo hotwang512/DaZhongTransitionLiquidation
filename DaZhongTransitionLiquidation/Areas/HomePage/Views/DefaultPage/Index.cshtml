@@ -3,7 +3,7 @@
     ViewBag.Title = "首页";
     Layout = "~/Views/Shared/_Layout.cshtml";
     Sys_User user = ViewBag.User as Sys_User;
-    var moduleMenu = user.GetCurrentPagePermission();
+    var moduleMenu = user.GetCurrentModuleMenu();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -12,18 +12,623 @@
 
 @section css{
    
+@*<link href="~/Areas/HomePage/Views/_css/DefaultPage.css" rel="stylesheet" />*@
 }
 <style type="text/css">
-    .bg-icon {
+    /*.bg-icon {
         height: 700px;
-        float: left;
-        width: 100%;
+        width: 70%;
+        margin-left: 240px;
+    }*/
+
+
+    .mk {
+        background-color: #000;
+        margin: 0;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        width:1570px;height:700px;margin-top:15px;margin-left:5px
     }
+    .containerss{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #000000;
+}
     </style>
-<div class="mk" style="">
-    @*<div class="header_mk">
-        <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
-    </div>*@
-    <div class="bg-icon" style="background: url('/_theme/images/20191101135036.jpg')  center center / cover no-repeat rgb(3, 21, 41);"></div>
+<div class="mk" style="background-color:black;">
+    @*<div class="bg-icon" style="background: url('/_theme/images/20191101135036.jpg')  center center / cover no-repeat rgb(3, 21, 41);"></div>*@
+
+    @*<canvas id="canvas" width="1200" height="600"></canvas>*@
+
+    <div id="jsi-particle-container" class="containerss"></div>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Initialize the GL context
+        var gl = canvas.getContext('webgl');
+        if (!gl) {
+            console.error("Unable to initialize WebGL.");
+        }
+
+        //Time step
+        var dt = 0.015;
+        //Time
+        var time = 0.0;
+
+        //************** Shader sources **************
+
+        var vertexSource = `
+attribute vec2 position;
+void main() {
+	gl_Position = vec4(position, 0.0, 1.0);
+}
+`;
+
+        var fragmentSource = `
+precision highp float;
+
+uniform float width;
+uniform float height;
+vec2 resolution = vec2(width, height);
+
+uniform float time;
+
+//Base values modified with depth later
+float intensity = 1.0;
+float radius = 0.05;
+
+//Distance functions from
+//https://www.iquilezles.org/www/articles/distfunctions2d/distfunctions2d.htm
+float triangleDist(vec2 p){
+	const float k = sqrt(3.0);
+  p.x = abs(p.x) - 1.0;
+  p.y = p.y + 1.0/k;
+  if( p.x+k*p.y>0.0 ) p=vec2(p.x-k*p.y,-k*p.x-p.y)/2.0;
+  p.x -= clamp( p.x, -2.0, 0.0 );
+  return -length(p)*sign(p.y);
+}
+
+float boxDist(vec2 p){
+  vec2 d = abs(p)-1.0;
+  return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
+}
+
+float circleDist( vec2 p){
+  return length(p) - 1.0;
+}
+
+//https://www.shadertoy.com/view/3s3GDn
+float getGlow(float dist, float radius, float intensity){
+  return pow(radius/dist, intensity);
+}
+
+void main(){
+
+	vec2 uv = gl_FragCoord.xy/resolution.xy;
+  float widthHeightRatio = resolution.x/resolution.y;
+  vec2 centre;
+  vec2 pos;
+
+  float t = time * 0.05;
+
+  float dist;
+  float glow;
+  vec3 col = vec3(0);
+
+  //The spacing between shapes
+  float scale = 500.0;
+  //Number of shapes
+  const float layers = 15.0;
+
+  float depth;
+  vec2 bend;
+
+  vec3 purple = vec3(0.611, 0.129, 0.909);
+  vec3 green = vec3(0.133, 0.62, 0.698);
+
+  float angle;
+  float rotationAngle;
+  mat2 rotation;
+
+  //For movement of the anchor point in time
+  float d = 2.5*(sin(t) + sin(3.0*t));
+
+  //Create an out of frame anchor point where all shapes converge to
+  vec2 anchor = vec2(0.5 + cos(d), 0.5 + sin(d));
+
+  //Create light purple glow at the anchor loaction
+  pos = anchor - uv;
+  pos.y /= widthHeightRatio;
+  dist = length(pos);
+  glow = getGlow(dist, 0.2, 1.9);
+  col += glow * vec3(0.7,0.6,1.0);
+
+	for(float i = 0.0; i < layers; i++){
+
+  	//Time varying depth information depending on layer
+    depth = fract(i/layers + t);
+
+    //Move the focus of the camera in a circle
+    centre = vec2(0.5 + 0.2 * sin(t), 0.5 + 0.2 * cos(t));
+
+   	//Position shapes between the anchor and the camera focus based on depth
+   	bend = mix(anchor, centre, depth);
+
+    pos = bend - uv;
+   	pos.y /= widthHeightRatio;
+
+    //Rotate shapes
+    rotationAngle = 3.14 * sin(depth + fract(t) * 6.28) + i;
+    rotation = mat2(cos(rotationAngle), -sin(rotationAngle),
+                    sin(rotationAngle),  cos(rotationAngle));
+
+    pos *= rotation;
+
+    //Position shapes according to depth
+    pos *= mix(scale, 0.0, depth);
+
+    float m = mod(i, 3.0);
+    if(m == 0.0){
+    	dist = abs(boxDist(pos));
+    }else if(m == 1.0){
+      dist = abs(triangleDist(pos));
+    }else{
+    	dist = abs(circleDist(pos));
+    }
+
+    //Get glow from base radius and intensity modified by depth
+    glow = getGlow(dist, radius+(1.0-depth)*2.0, intensity + depth);
+
+    //Find angle along shape and map from [-PI; PI] to [0; 1]
+    angle = (atan(pos.y, pos.x)+3.14)/6.28;
+    //Shift angle depending on layer and map to [1...0...1]
+		angle = abs((2.0*fract(angle + i/layers)) - 1.0);
+
+    //White core
+   	//col += 10.0*vec3(smoothstep(0.03, 0.02, dist));
+
+    //Glow according to angle value
+    col += glow * mix(green, purple, angle);
+	}
+
+  //Tone mapping
+  col = 1.0 - exp(-col);
+
+  //Output to screen
+  gl_FragColor = vec4(col,1.0);
+}
+`;
+
+        //************** Utility functions **************
+
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.uniform1f(widthHandle, window.innerWidth);
+            gl.uniform1f(heightHandle, window.innerHeight);
+        }
+
+
+        //Compile shader and combine with source
+        function compileShader(shaderSource, shaderType) {
+            var shader = gl.createShader(shaderType);
+            gl.shaderSource(shader, shaderSource);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                throw "Shader compile failed with: " + gl.getShaderInfoLog(shader);
+            }
+            return shader;
+        }
+
+        //From https://codepen.io/jlfwong/pen/GqmroZ
+        //Utility to complain loudly if we fail to find the attribute/uniform
+        function getAttribLocation(program, name) {
+            var attributeLocation = gl.getAttribLocation(program, name);
+            if (attributeLocation === -1) {
+                throw 'Cannot find attribute ' + name + '.';
+            }
+            return attributeLocation;
+        }
+
+        function getUniformLocation(program, name) {
+            var attributeLocation = gl.getUniformLocation(program, name);
+            if (attributeLocation === -1) {
+                throw 'Cannot find uniform ' + name + '.';
+            }
+            return attributeLocation;
+        }
+
+        //************** Create shaders **************
+
+        //Create vertex and fragment shaders
+        var vertexShader = compileShader(vertexSource, gl.VERTEX_SHADER);
+        var fragmentShader = compileShader(fragmentSource, gl.FRAGMENT_SHADER);
+
+        //Create shader programs
+        var program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+
+        gl.useProgram(program);
+
+        //Set up rectangle covering entire canvas 
+        var vertexData = new Float32Array([
+          -1.0, 1.0, 	// top left
+          -1.0, -1.0, 	// bottom left
+           1.0, 1.0, 	// top right
+           1.0, -1.0, 	// bottom right
+        ]);
+
+        //Create vertex buffer
+        var vertexDataBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexDataBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertexData, gl.STATIC_DRAW);
+
+        // Layout of our data in the vertex buffer
+        var positionHandle = getAttribLocation(program, 'position');
+
+        gl.enableVertexAttribArray(positionHandle);
+        gl.vertexAttribPointer(positionHandle,
+          2, 				// position is a vec2 (2 values per component)
+          gl.FLOAT, // each component is a float
+          false, 		// don't normalize values
+          2 * 4, 		// two 4 byte float components per vertex (32 bit float is 4 bytes)
+          0 				// how many bytes inside the buffer to start from
+          );
+
+        //Set uniform handle
+        var timeHandle = getUniformLocation(program, 'time');
+        var widthHandle = getUniformLocation(program, 'width');
+        var heightHandle = getUniformLocation(program, 'height');
+
+        gl.uniform1f(widthHandle, window.innerWidth);
+        gl.uniform1f(heightHandle, window.innerHeight);
+
+        function draw() {
+            //Update time
+            time += dt;
+
+            //Send uniforms to program
+            gl.uniform1f(timeHandle, time);
+            //Draw a triangle strip connecting vertices 0-4
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+
+    <script>
+        var RENDERER = {
+            RESIZE_INTERVAL: 30,
+            STATIC_RADIUS: 10,
+            DYNAMIC_RADIUS: 8,
+            SPACE: 60,
+            GRAVITY: 0.1,
+            MAX_COUNT: 3,
+
+            init: function () {
+                this.setParameters();
+                this.setup();
+                this.reconstructMethods();
+                this.bindEvent();
+                this.render();
+            },
+            setParameters: function () {
+                this.$window = $(window);
+                this.$container = $('#jsi-particle-container');
+                this.$canvas = $('<canvas />');
+                this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
+                this.staticParticles = [];
+                this.dynamicParticles = [];
+                this.resizeIds = [];
+            },
+            setup: function () {
+                this.staticParticles.length = 0;
+                this.dynamicParticles.length = 0;
+                this.resizeIds.length = 0;
+                this.width = this.$container.width();
+                this.height = this.$container.height();
+                this.interval = this.getRandomValue(150, 300);
+                this.$canvas.attr({ width: this.width, height: this.height });
+                this.maxCount = Math.ceil(this.width / 1000 * this.height / 1000 * this.MAX_COUNT);
+                this.createParticles();
+            },
+            getRandomValue: function (min, max) {
+                return min + (max - min) * Math.random() | 0;
+            },
+            createParticles: function () {
+                var columnCount = Math.floor(Math.ceil(this.width / this.SPACE) / 2) * 2 + 1,
+                    rowCount = Math.ceil(this.height / this.SPACE),
+                    columnOffset = ((columnCount - 1) * this.SPACE - this.width) / 2;
+
+                for (var y = 0; y < rowCount; y++) {
+                    for (var x = 0, count = columnCount + (y % 2 == 0 ? 0 : 1) ; x < count; x++) {
+                        this.staticParticles.push(new STATIC_PARTICLE(this, x * this.SPACE - columnOffset - (y % 2 == 0 ? 0 : this.SPACE / 2), y * this.SPACE + this.SPACE, Math.round(360 * x / count)));
+                    }
+                }
+                this.dynamicParticles.push(new DYNAMIC_PARTICLE(this));
+            },
+            watchWindowSize: function () {
+                while (this.resizeIds.length > 0) {
+                    clearTimeout(this.resizeIds.pop());
+                }
+                this.tmpWidth = this.$window.width();
+                this.tmpHeight = this.$window.height();
+                this.resizeIds.push(setTimeout(this.jdugeToStopResize, this.RESIZE_INTERVAL));
+            },
+            jdugeToStopResize: function () {
+                var width = this.$window.width(),
+                    height = this.$window.height(),
+                    stopped = (width == this.tmpWidth && height == this.tmpHeight);
+
+                this.tmpWidth = width;
+                this.tmpHeight = height;
+
+                if (stopped) {
+                    this.setup();
+                }
+            },
+            reconstructMethods: function () {
+                this.watchWindowSize = this.watchWindowSize.bind(this);
+                this.jdugeToStopResize = this.jdugeToStopResize.bind(this);
+                this.render = this.render.bind(this);
+            },
+            bindEvent: function () {
+                this.$window.on('resize', this.watchWindowSize);
+            },
+            checkCollision: function () {
+                for (var i = 0; i < this.dynamicParticles.length; i++) {
+                    var dynamicParticles = this.dynamicParticles[i];
+
+                    for (var j = 0; j < this.staticParticles.length; j++) {
+                        dynamicParticles.checkCollision(this.staticParticles[j]);
+                    }
+                }
+            },
+            render: function () {
+                requestAnimationFrame(this.render);
+                this.context.save();
+                this.context.fillStyle = 'hsla(0, 0%, 0%, 0.3)';
+                this.context.fillRect(0, 0, this.width, this.height);
+                this.context.globalCompositeOperation = 'lighter';
+
+                for (var i = 0, count = this.staticParticles.length; i < count; i++) {
+                    this.staticParticles[i].render(this.context);
+                }
+                for (var i = 0, count = this.dynamicParticles.length; i < count; i++) {
+                    this.dynamicParticles[i].render(this.context);
+                }
+                this.context.restore();
+                this.checkCollision();
+
+                if (this.dynamicParticles.length < this.maxCount) {
+                    if (--this.interval == 0) {
+                        this.interval = this.getRandomValue(150, 300);
+                        this.dynamicParticles.push(new DYNAMIC_PARTICLE(this));
+                    }
+                }
+            }
+        };
+        var STATIC_PARTICLE = function (renderer, x, y, hue) {
+            this.renderer = renderer;
+            this.x = x;
+            this.y = y;
+            this.hue = hue;
+            this.init();
+        };
+        STATIC_PARTICLE.prototype = {
+            ADDITION_MAGINIFICATION: 5,
+            DELTA_LUMINANCE: Math.PI / 100,
+            DELTA_HUE: 0.2,
+
+            init: function () {
+                this.particles = [];
+                this.theta = 0;
+                this.hit = false;
+            },
+            collide: function (force) {
+                this.hit = true;
+
+                for (var i = 0, count = force * this.ADDITION_MAGINIFICATION; i < count; i++) {
+                    this.particles.push(new SPARKLER_PARTICLE(this.renderer, this));
+                }
+            },
+            render: function (context) {
+                context.save();
+                context.translate(this.x, this.y);
+
+                var gradient = context.createRadialGradient(0, 0, 0, 0, 0, this.renderer.STATIC_RADIUS);
+                gradient.addColorStop(0, 'hsl(' + this.hue + ', 70%, ' + (5 + 45 * Math.sin(this.theta)) + '%)');
+                gradient.addColorStop(1, 'hsl(' + this.hue + ', 70%, ' + (2 + 10 * Math.sin(this.theta)) + '%)');
+                context.fillStyle = gradient;
+                context.beginPath();
+                context.arc(0, 0, this.renderer.STATIC_RADIUS, 0, Math.PI * 2, false);
+                context.fill();
+
+                for (var i = this.particles.length - 1; i >= 0; i--) {
+                    if (!this.particles[i].render(context)) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+                context.restore();
+
+                if (this.hit || this.theta > 0) {
+                    if (this.hit && this.theta > Math.PI / 2) {
+                        this.theta = Math.PI - this.theta;
+                    }
+                    this.theta += this.DELTA_LUMINANCE;
+
+                    if (this.theta > Math.PI / 2) {
+                        for (var i = 0, count = this.particles.length; i < count; i++) {
+                            this.particles[i].activate();
+                        }
+                    }
+                    if (this.theta > Math.PI) {
+                        this.theta = 0;
+                    }
+                    this.hit = false;
+                }
+                this.hue += this.DELTA_HUE;
+                this.hue %= 360;
+            }
+        };
+        var DYNAMIC_PARTICLE = function (renderer) {
+            this.renderer = renderer;
+            this.init();
+        };
+        DYNAMIC_PARTICLE.prototype = {
+            RESTITUTION: 0.9,
+
+            init: function () {
+                this.x = this.renderer.getRandomValue(this.renderer.width / 10, this.renderer.width * 9 / 10);
+                this.y = -this.renderer.DYNAMIC_RADIUS;
+                this.previousX = this.x;
+                this.previousY = this.y;
+                this.vx = this.renderer.getRandomValue(1, 3) * (Math.random() < 0.5 ? 1 : -1);
+                this.vy = 0;
+                this.ax = 0;
+                this.ay = this.renderer.GRAVITY;
+                this.hue = 210;
+            },
+            rotate: function (x, y, angle) {
+                var sin = Math.sin(angle),
+                    cos = Math.cos(angle);
+                return { x: x * cos + y * sin, y: y * cos - x * sin };
+            },
+            checkCollision: function (staticParticle) {
+                var dx = staticParticle.x - this.x,
+                    dy = staticParticle.y - this.y,
+                    distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance > this.renderer.STATIC_RADIUS + this.renderer.DYNAMIC_RADIUS) {
+                    return;
+                }
+                staticParticle.collide(Math.sqrt(this.vx * this.vx + this.vy * this.vy));
+                this.hue = staticParticle.hue;
+
+                var angle = Math.atan2(dy, dx),
+                    axis1 = { x: 0, y: 0 },
+                    axis2 = this.rotate(dx, dy, angle),
+                    v1 = this.rotate(this.vx, this.vy, angle);
+                v1.x *= -this.RESTITUTION;
+
+                var vAbs = Math.abs(v1.x),
+                    overlap = (this.renderer.STATIC_RADIUS + this.renderer.DYNAMIC_RADIUS) - Math.abs(axis1.x - axis2.x);
+
+                axis1.x += Math.abs(overlap * v1.x / vAbs) * (axis1.x >= axis2.x ? 1 : -1);
+                axis1 = this.rotate(axis1.x, axis1.y, -angle);
+                v1 = this.rotate(v1.x, v1.y, -angle);
+
+                this.previousX = this.x;
+                this.previousY = this.y;
+                this.x += axis1.x;
+                this.y += axis1.y;
+                this.vx = v1.x;
+                this.vy = v1.y;
+            },
+            render: function (context) {
+                context.save();
+                context.translate(this.x, this.y);
+
+                var gradient = context.createRadialGradient(0, 0, 0, 0, 0, this.renderer.DYNAMIC_RADIUS);
+                gradient.addColorStop(0, 'hsl(' + this.hue + ', 80%, 60%)');
+                gradient.addColorStop(1, 'hsl(' + this.hue + ', 80%, 10%)');
+                context.fillStyle = gradient;
+                context.beginPath();
+                context.arc(0, 0, this.renderer.DYNAMIC_RADIUS, 0, Math.PI * 2, false);
+                context.fill();
+                context.restore();
+
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.ay;
+
+                if (this.x < this.renderer.DYNAMIC_RADIUS || this.x > this.renderer.width + this.renderer.DYNAMIC_RADIUS || this.y > this.renderer.height + this.renderer.DYNAMIC_RADIUS) {
+                    this.init();
+                }
+            }
+        };
+        var SPARKLER_PARTICLE = function (renderer, generator) {
+            this.renderer = renderer;
+            this.generator = generator;
+            this.init();
+        };
+        SPARKLER_PARTICLE.prototype = {
+            RADIUS: 20,
+            MAX_STROKE_COUNT: 8,
+            MAX_VELOCITY: 3,
+            MAX_OFFSET: 5,
+            SCALE_RATE: 0.01,
+            FRICTION: 0.99,
+
+            init: function () {
+                var velocity = this.renderer.getRandomValue(this.MAX_VELOCITY / 5, this.MAX_VELOCITY),
+                    theta = this.renderer.getRandomValue(0, Math.PI * 2),
+                    offset = this.renderer.getRandomValue(0, this.MAX_OFFSET);
+
+                this.x = offset * Math.cos(theta);
+                this.y = offset * Math.sin(theta);
+                this.radius = this.RADIUS;
+                this.strokeCount = Math.round(this.renderer.getRandomValue(4, this.MAX_STROKE_COUNT)) * 2;
+                this.radian = Math.PI * 2 / this.strokeCount;
+                this.vx = velocity * Math.cos(theta);
+                this.vy = velocity * Math.sin(theta);
+                this.theta = 0;
+                this.scale = 1;
+                this.active = false;
+            },
+            activate: function () {
+                this.active = true;
+            },
+            render: function (context) {
+                if (!this.active) {
+                    return true;
+                }
+                context.save();
+                context.translate(this.x, this.y);
+                context.scale(this.scale, this.scale);
+                context.rotate(this.theta);
+
+                if (Math.random() > 0.3) {
+                    context.fillStyle = 'hsl(' + this.generator.hue + ', 60%, 30%)';
+                    context.beginPath();
+                    context.moveTo(0, -this.radius);
+
+                    for (var i = 0, count = this.strokeCount; i < count; i++) {
+                        var radius = this.radius / ((i % 2 == 0) ? 1 : 5);
+                        context.lineTo(radius * Math.sin(this.radian * i), -radius * Math.cos(this.radian * i));
+                    }
+                    context.closePath();
+                    context.fill();
+                }
+                context.restore();
+
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.renderer.GRAVITY;
+                this.vx *= this.FRICTION;
+                this.vy *= this.FRICTION;
+                this.scale -= this.SCALE_RATE;
+                this.theta += Math.PI / 100 * this.vx;
+                this.theta %= Math.PI * 2;
+
+                return this.scale >= 0;
+            }
+        };
+        $(function () {
+            RENDERER.init();
+        });
+    </script>
 </div>

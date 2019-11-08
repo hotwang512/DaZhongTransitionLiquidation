@@ -18,6 +18,8 @@
         $(where).append('<div class="nav_box"><ul class="nav"></ul></div>');
         sidebarNav(menu);
         function sidebarNav(data, level) {
+            if (data.Type == 2)
+            { return; }
             html += '<li class="left_nav_list">';
             var eleclass = "left_nav_name_folder";
             if (data.Type != 0) {

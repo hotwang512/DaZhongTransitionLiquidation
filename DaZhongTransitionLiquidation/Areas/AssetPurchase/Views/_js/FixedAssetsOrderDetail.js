@@ -120,6 +120,15 @@ var $page = function () {
                 if (!Validate($("#PurchaseDepartment"))) {
                     validateError++;
                 }
+                if (!Validate($("#PurchaseGoods"))) {
+                    validateError++;
+                }
+                if ($("#PurchaseGoods option:selected").text() == "出租车") {
+                    debugger;
+                    if (!Validate($("#GoodsModel"))) {
+                        validateError++;
+                    }
+                }
                 if ($("#PayCompanyDropdown").val() == "") {
                     $("#PayCompanyDropdown").addClass("input_Validate");
                     $("#PayCompanyDropdown").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
@@ -133,9 +142,6 @@ var $page = function () {
                 } else {
                     $("#PaymentInformation").removeClass("input_Validate");
                     $("#PaymentInformation").next(".msg").remove();
-                }
-                if (!Validate($("#PurchaseGoods"))) {
-                    validateError++;
                 }
                 if (validateError <= 0) {
                     $.ajax({
@@ -322,7 +328,6 @@ var $page = function () {
             }
         });
         $('#PayCompanyDropdown').on('select', function (event) {
-            
             $("#CompanyBankName").val("");
             $("#CompanyBankAccount").val("");
             $("#CompanyBankAccountName").val("");
@@ -408,12 +413,9 @@ var $page = function () {
             if (msg.PurchaseDepartmentIDs != null) {
                 $("#PurchaseDepartment").val(msg.PurchaseDepartmentIDs);
             }
-            //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             initSelectPurchaseGoods(msg.PurchaseDepartmentIDs);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").trigger("change");
-            //$("#PurchaseGoods").attr("disabled", true);
-
             initPaymentInformationComboBox(false);
             GetCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
@@ -451,8 +453,16 @@ var $page = function () {
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
             $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
-            
+            debugger;
             $("#GoodsModel").val(msg.GoodsModelCode);
+            if (msg.SubmitStatus >= 1) {
+                //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                $("#PurchaseGoods").attr("disabled", true);
+                $("#PurchaseDepartment").attr("disabled", true);
+                if ($("#PurchaseGoods option:selected").text() == "出租车") {
+                    $("#GoodsModel").attr("disabled", true);
+                }
+            }
         });
     }
     //采购合同上传文件

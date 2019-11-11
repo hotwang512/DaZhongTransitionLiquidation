@@ -463,6 +463,10 @@ var $page = function () {
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
             $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
+            if (msg.SubmitStatus >= 1) {
+                $("#PurchaseGoods").attr("disabled", true);
+                $("#PurchaseDepartment").attr("disabled", true);
+            }
         });
     }
     //上传文件

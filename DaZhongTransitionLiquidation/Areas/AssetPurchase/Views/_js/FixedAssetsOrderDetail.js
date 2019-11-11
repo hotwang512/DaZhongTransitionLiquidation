@@ -117,12 +117,17 @@ var $page = function () {
                 if (!Validate($("#PurchasePrices"))) {
                     validateError++;
                 }
-                if ($("#PurchaseDepartment").val() == "") {
-                    $("#PurchaseDepartment").addClass("input_Validate");
-                    $("#PurchaseDepartment").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
-                } else {
-                    $("#PurchaseDepartment").removeClass("input_Validate");
-                    $("#PurchaseDepartment").next(".msg").remove();
+                if (!Validate($("#PurchaseDepartment"))) {
+                    validateError++;
+                }
+                if (!Validate($("#PurchaseGoods"))) {
+                    validateError++;
+                }
+                if ($("#PurchaseGoods option:selected").text() == "出租车") {
+                    debugger;
+                    if (!Validate($("#GoodsModel"))) {
+                        validateError++;
+                    }
                 }
                 if ($("#PayCompanyDropdown").val() == "") {
                     $("#PayCompanyDropdown").addClass("input_Validate");
@@ -138,11 +143,7 @@ var $page = function () {
                     $("#PaymentInformation").removeClass("input_Validate");
                     $("#PaymentInformation").next(".msg").remove();
                 }
-                if (!Validate($("#PurchaseGoods"))) {
-                    validateError++;
-                }
                 if (validateError <= 0) {
-                    
                     $.ajax({
                         url: "/AssetPurchase/FixedAssetsOrderDetail/SaveFixedAssetsOrder",
                         data: {
@@ -291,6 +292,11 @@ var $page = function () {
             function () {
                 computeValue();
             });
+        //计算金额
+        $("#OrderQuantity").on("blur",
+            function () {
+                computeValue();
+            });
         //提交
         //$("#btnSubmit").on("click",
         //    function () {
@@ -322,7 +328,6 @@ var $page = function () {
             }
         });
         $('#PayCompanyDropdown').on('select', function (event) {
-            
             $("#CompanyBankName").val("");
             $("#CompanyBankAccount").val("");
             $("#CompanyBankAccountName").val("");
@@ -349,16 +354,11 @@ var $page = function () {
                 GetCompanyBankInfoDropdownByCode();
                 initSelectGoodsModel($("#PurchaseGoods option:selected").text());
             });
-        $("#PurchaseDepartment").on('select', function (event) {
-            if (event.args) {
-                $("#PurchaseDepartment").removeClass("input_Validate");
-                $("#PurchaseDepartment").next(".msg").remove();
-                var args = event.args;
-                var item = args.item;
-                var DepartmentModelList = [];
-                DepartmentModelList.push(item.value);
-                initSelectPurchaseGoods(DepartmentModelList);
-            }
+        $("#PurchaseDepartment").on('change', function (event) {
+            debugger;
+            var DepartmentModelList = [];
+            DepartmentModelList.push($("#PurchaseDepartment").val());
+            initSelectPurchaseGoods(DepartmentModelList);
         });
         $("#PayMode").on("change",
             function () {
@@ -413,12 +413,9 @@ var $page = function () {
             if (msg.PurchaseDepartmentIDs != null) {
                 $("#PurchaseDepartment").val(msg.PurchaseDepartmentIDs);
             }
-            //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             initSelectPurchaseGoods(msg.PurchaseDepartmentIDs);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
             $("#PurchaseGoods").trigger("change");
-            //$("#PurchaseGoods").attr("disabled", true);
-
             initPaymentInformationComboBox(false);
             GetCompanyBankInfoDropdownByCode();
             $("#hiddenPaymentInformationVguid").val(msg.PaymentInformationVguid);
@@ -456,8 +453,16 @@ var $page = function () {
             $("#PaymentInformation").val(msg.PaymentInformationVguid);
             $("#ifrPrint").attr("src", msg.PaymentVoucherUrl);
             $("#PaymentVoucherVguid").val(msg.PaymentVoucherVguid);
-            
+            debugger;
             $("#GoodsModel").val(msg.GoodsModelCode);
+            if (msg.SubmitStatus >= 1) {
+                //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
+                $("#PurchaseGoods").attr("disabled", true);
+                $("#PurchaseDepartment").attr("disabled", true);
+                if ($("#PurchaseGoods option:selected").text() == "出租车") {
+                    $("#GoodsModel").attr("disabled", true);
+                }
+            }
         });
     }
     //采购合同上传文件
@@ -665,20 +670,17 @@ function openSocket() {
     }
 }
 function initSelectPurchaseDepartment() {
-    var source =
-    {
-        datatype: "json",
-        type: "post",
-        datafields: [
-            { name: 'Descrption' },
-            { name: 'VGUID' }
-        ],
-        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
-        async: false
-    };
-    var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: false, selectedIndex: -1,placeHolder:"请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
-    $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseDepartmentList",
+        type: "POST",
+        dataType: "json",
+        data: {OrderType: orderType},
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "DepartmentVguid", "DepartmentName");
+            $("#PurchaseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
 }
 //function initSelect()
 //{
@@ -761,6 +763,7 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
         success: function (msg) {
             uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
             $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+            $(".GoodsModel").hide();
         }
     });
 }

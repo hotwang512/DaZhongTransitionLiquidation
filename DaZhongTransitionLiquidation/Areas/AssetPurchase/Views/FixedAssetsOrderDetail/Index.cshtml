@@ -112,7 +112,8 @@
             <tr style="height:50px">
                 <td style="text-align: right;width:120px">采购部门：</td>
                 <td style="text-align: left;">
-                    <div id="PurchaseDepartment" style="padding-left:6px"></div>
+                    <select id="PurchaseDepartment" class="input_text form-control" style="width: 200px;" validatetype="required"></select>
+                    @*<div id="PurchaseDepartment" style="padding-left: 6px"></div>*@
                 </td>
                 <td style="text-align: right;width:100px">采购物品：</td>
                 <td style="text-align: left;">
@@ -132,7 +133,7 @@
                 <td style="text-align: right;">采购单价：</td>
                 <td style="text-align: left;"><input id="PurchasePrices" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required,number"/></td>
                 <td style="text-align: right;">采购金额：</td>
-                <td style="text-align: left;"><input id="ContractAmount" type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required,number" /></td>
+                <td style="text-align: left;"><input id="ContractAmount" disabled type="text" value="" style="width: 200px;" class="input_text form-control" validatetype="required,number" /></td>
             </tr>
             <tr style="height: 50px">
                 <td style="text-align: right; vertical-align: top;padding-top: 15px">采购说明：</td>

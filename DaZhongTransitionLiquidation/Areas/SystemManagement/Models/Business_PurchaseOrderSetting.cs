@@ -31,7 +31,7 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         public Guid VGUID { get; set; }
         public string DepartmentName { get; set; }
         public Guid? DepartmentVguid { get; set; }
-        public Guid? PurchaseOrderSettingVguid { get; set; }
+        public Guid PurchaseOrderSettingVguid { get; set; }
         public DateTime? CreateDate { get; set; }
         public string CreateUser { get; set; }
     }

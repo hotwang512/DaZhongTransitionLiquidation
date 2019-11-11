@@ -5,8 +5,10 @@ var vehicleDefaultData;
 //拍照数据（base64）
 var baseUrl = "ws://127.0.0.1:12345";
 var socket;
+var orderType = "";
 var $page = function () {
     this.init = function () {
+        orderType = $.request.queryString().OrderType;
         //initSelect();
         //initSelectPurchaseGoods();
         initPaymentInformationComboBox(true);
@@ -75,12 +77,8 @@ var $page = function () {
                 if (!Validate($("#PurchasePrices"))) {
                     validateError++;
                 }
-                if ($("#PurchaseDepartment").val() == "") {
-                    $("#PurchaseDepartment").addClass("input_Validate");
-                    $("#PurchaseDepartment").after("<div class=\"msg\" style=\"margin-left:200px;margin-top:-35px\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">必填！</div></div>");
-                } else {
-                    $("#PurchaseDepartment").removeClass("input_Validate");
-                    $("#PurchaseDepartment").next(".msg").remove();
+                if (!Validate($("#PurchaseDepartment"))) {
+                    validateError++;
                 }
                 if ($("#PayCompanyDropdown").val() == "") {
                     $("#PayCompanyDropdown").addClass("input_Validate");
@@ -578,16 +576,29 @@ function PendingPaymentAttachmentUpload() {
 }
 function initSelectPurchaseDepartment() {
     $.ajax({
-        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
+        url: "/AssetPurchase/IntangibleAssetsOrderDetail/GetPurchaseDepartmentList",
         type: "POST",
         dataType: "json",
+        data: { OrderType: orderType },
         async: false,
         success: function (msg) {
-            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "VGUID", "Descrption");
+            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "DepartmentVguid", "DepartmentName");
             $("#PurchaseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
         }
     });
 }
+//function initSelectPurchaseDepartment() {
+//    $.ajax({
+//        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListData",
+//        type: "POST",
+//        dataType: "json",
+//        async: false,
+//        success: function (msg) {
+//            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "VGUID", "Descrption");
+//            $("#PurchaseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
+//        }
+//    });
+//}
 //function initSelectPurchaseDepartment() {
 //    var source =
 //    {

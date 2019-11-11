@@ -481,6 +481,20 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.Intangibl
             });
             return Json(resultModel);
         }
+        public JsonResult GetPurchaseDepartmentList(string OrderType)
+        {
+            var list = new List<Business_PurchaseDepartment>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (db.Queryable<Business_PurchaseOrderSetting>().Any(x => x.OrderCategory == 1))
+                {
+                    var orderSettingList = db.Queryable<Business_PurchaseOrderSetting>()
+                        .Where(x => x.OrderCategory == 1).Select(x => x.VGUID).ToList();
+                    list = db.Queryable<Business_PurchaseDepartment>().Where(x => orderSettingList.Contains(x.PurchaseOrderSettingVguid)).GroupBy(x => x.DepartmentVguid).GroupBy(x => x.DepartmentName).Select(x => new Business_PurchaseDepartment() { DepartmentVguid = x.DepartmentVguid, DepartmentName = x.DepartmentName }).ToList();
+                }
+            });
 
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
     }
 }

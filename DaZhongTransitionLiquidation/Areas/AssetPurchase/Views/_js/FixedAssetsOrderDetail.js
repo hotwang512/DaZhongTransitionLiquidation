@@ -661,12 +661,13 @@ function openSocket() {
 }
 function initSelectPurchaseDepartment() {
     $.ajax({
-        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetPurchaseDepartmentList",
         type: "POST",
         dataType: "json",
+        data: {OrderType: orderType},
         async: false,
         success: function (msg) {
-            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "VGUID", "Descrption");
+            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "DepartmentVguid", "DepartmentName");
             $("#PurchaseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
         }
     });
@@ -752,6 +753,7 @@ function initSelectPurchaseGoods(PurchaseDepartment) {
         success: function (msg) {
             uiEngineHelper.bindSelect('#PurchaseGoods', msg, "VGUID", "PurchaseGoods");
             $("#PurchaseGoods").prepend("<option value=\"\" selected='true'>请选择</>");
+            $(".GoodsModel").hide();
         }
     });
 }

@@ -334,7 +334,41 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.FixedAsse
             });
             return Json(orderTypeData, JsonRequestBehavior.AllowGet);
         }
-        
+        public JsonResult GetPurchaseDepartmentList(string OrderType)
+        {
+            var list = new List<Business_PurchaseDepartment>();
+            DbBusinessDataService.Command(db =>
+            {
+                if (OrderType == "Vehicle")
+                {
+                    if (db.Queryable<Business_PurchaseOrderSetting>().Any(x => x.PurchaseGoods.Contains("出租车")))
+                    {
+                        var orderSetting = db.Queryable<Business_PurchaseOrderSetting>()
+                            .Where(x => x.PurchaseGoods.Contains("出租车")).First();
+                        list = db.SqlQueryable<Business_PurchaseDepartment>(@"SELECT * FROM Business_PurchaseDepartment where PurchaseOrderSettingVguid ='"+ orderSetting.VGUID +"'").ToList();
+                    }
+                }
+                else if(OrderType == "OBD")
+                {
+                    if (db.Queryable<Business_PurchaseOrderSetting>().Any(x => x.PurchaseGoods.Contains("OBD")))
+                    {
+                        var orderSetting = db.Queryable<Business_PurchaseOrderSetting>()
+                            .Where(x => x.PurchaseGoods.Contains("OBD")).First();
+                        list = db.SqlQueryable<Business_PurchaseDepartment>(@"SELECT * FROM Business_PurchaseDepartment where PurchaseOrderSettingVguid ='" + orderSetting.VGUID + "'").ToList();
+                    }
+                }
+                else
+                {
+                    if (db.Queryable<Business_PurchaseOrderSetting>().Any(x => !x.PurchaseGoods.Contains("OBD") && !x.PurchaseGoods.Contains("出租车") && x.OrderCategory == 0))
+                    {
+                        var orderSettingList = db.Queryable<Business_PurchaseOrderSetting>().Where(x => !x.PurchaseGoods.Contains("OBD") && !x.PurchaseGoods.Contains("出租车") && x.OrderCategory == 0).Select(x => x.VGUID).ToList();
+                        list = db.Queryable<Business_PurchaseDepartment>().Where(x => orderSettingList.Contains(x.PurchaseOrderSettingVguid)).GroupBy(x => x.DepartmentVguid).GroupBy(x => x.DepartmentName).Select(x => new Business_PurchaseDepartment() {DepartmentVguid = x.DepartmentVguid,DepartmentName = x.DepartmentName}).ToList();
+                    }
+                }
+            });
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult SubmitFixedAssetsOrder(Guid vguid,string OrderType)
         {
             var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };

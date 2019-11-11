@@ -314,12 +314,14 @@ var $page = function () {
         //计算金额
         $("#FirstPayment").on("blur",
             function () {
-                debugger;
                 computeValue();
             });
         $("#InterimPayment").on("blur",
             function () {
-                debugger;
+                computeValue();
+            });
+        $("#SumPayment").on("blur",
+            function () {
                 computeValue();
             });
         $('#PayCompanyDropdown').on('select', function (event) {
@@ -357,17 +359,23 @@ var $page = function () {
                 });
             }
         });
-        $("#PurchaseDepartment").on('select', function (event) {
+        //$("#PurchaseDepartment").on('select', function (event) {
+        //    debugger;
+        //    if (event.args) {
+        //        $("#PurchaseDepartment").removeClass("input_Validate");
+        //        $("#PurchaseDepartment").next(".msg").remove();
+        //        var args = event.args;
+        //        var item = args.item;
+        //        var DepartmentModelList = [];   
+        //        DepartmentModelList.push(item.value);
+        //        initSelectPurchaseGoods(DepartmentModelList);
+        //    }
+        //});
+        $("#PurchaseDepartment").on('change', function (event) {
             debugger;
-            if (event.args) {
-                $("#PurchaseDepartment").removeClass("input_Validate");
-                $("#PurchaseDepartment").next(".msg").remove();
-                var args = event.args;
-                var item = args.item;
-                var DepartmentModelList = [];   
-                DepartmentModelList.push(item.value);
-                initSelectPurchaseGoods(DepartmentModelList);
-            }
+            var DepartmentModelList = [];
+            DepartmentModelList.push($("#PurchaseDepartment").val());
+            initSelectPurchaseGoods(DepartmentModelList);
         });
         $("#PayMode").on("change",
             function () {
@@ -423,6 +431,7 @@ var $page = function () {
             debugger;
             var PurchaseDepartment = msg.PurchaseDepartmentIDs;
             $("#PurchaseDepartment").val(PurchaseDepartment);
+            initSelectPurchaseGoods(msg.PurchaseDepartmentIDs);
             //$("#PurchaseDepartment").jqxDropDownList({ disabled: true });
             //$("#PurchaseGoods").attr("disabled", true);
             $("#PurchaseGoods").val(msg.PurchaseGoodsVguid);
@@ -568,21 +577,33 @@ function PendingPaymentAttachmentUpload() {
     });
 }
 function initSelectPurchaseDepartment() {
-    var source =
-    {
-        datatype: "json",
-        type: "post",
-        datafields: [
-            { name: 'Descrption' },
-            { name: 'VGUID' }
-        ],
+    $.ajax({
         url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
-        async: false
-    };
-    var dataAdapter = new $.jqx.dataAdapter(source);
-    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: false, selectedIndex: -1, placeHolder: "请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
-    $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#PurchaseDepartment', msg, "VGUID", "Descrption");
+            $("#PurchaseDepartment").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
 }
+//function initSelectPurchaseDepartment() {
+//    var source =
+//    {
+//        datatype: "json",
+//        type: "post",
+//        datafields: [
+//            { name: 'Descrption' },
+//            { name: 'VGUID' }
+//        ],
+//        url: "/Systemmanagement/PurchaseOrderSettingDetail/GetPurchaseDepartmentListDatas",
+//        async: false
+//    };
+//    var dataAdapter = new $.jqx.dataAdapter(source);
+//    $("#PurchaseDepartment").jqxDropDownList({ checkboxes: false, selectedIndex: -1, placeHolder: "请选择", source: dataAdapter, displayMember: "Descrption", valueMember: "VGUID", width: 192, height: 33 });
+//    $("#PurchaseDepartment").jqxDropDownList({ itemHeight: 33 });
+//}
 
 function initSelectPurchaseGoods(PurchaseDepartment) {
     //使用部门

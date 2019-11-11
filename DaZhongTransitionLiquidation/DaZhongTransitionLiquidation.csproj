@@ -263,6 +263,7 @@
     <Content Include="Areas\FinancialStatementsManagement\Views\_js\SubjectBalanceStatement.js" />
     <Content Include="Areas\HomePage\Views\_css\DefaultPage.css" />
     <Content Include="Areas\HomePage\Views\_js\CompanyHomePage.js" />
+    <Content Include="Areas\HomePage\Views\_js\DefaultPage.js" />
     <Content Include="Areas\HomePage\Views\_js\HomePage.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\AccountingSection.js" />
     <Content Include="Areas\PaymentManagement\Views\_js\BankData.js" />

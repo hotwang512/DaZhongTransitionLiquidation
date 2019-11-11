@@ -41,10 +41,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 {
                     if (UserInfo.AccountModeCode == "1002" && (UserInfo.CompanyCode == "02" || UserInfo.CompanyCode == "03" || UserInfo.CompanyCode == "04" || UserInfo.CompanyCode == "05"))
                     {
+                        //按管理公司分类查询
                         response = db.Queryable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.MANAGEMENT_COMPANY == company).OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
                     }
                     else
                     {
+                        //按归属公司分类查询
                         response = db.Queryable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY == company).OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
                     }       
                 }
@@ -53,7 +55,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     
                     if(UserInfo.AccountModeCode == "1002" && (UserInfo.CompanyCode == "02" || UserInfo.CompanyCode == "03" || UserInfo.CompanyCode == "04" || UserInfo.CompanyCode == "05"))
                     {
-                        //按管理公司分类
+                        //按管理公司分类计算
                         response = GetSettlementMANAGEMENT(db,yearMonth, company);
                         if (response.Count > 0)
                         {
@@ -63,7 +65,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     }
                     else
                     {
-                        //按归属公司分类
+                        //按归属公司分类计算
                         response = GetSettlementBELONGTO(db, yearMonth, company);
                         if (response.Count > 0)
                         {

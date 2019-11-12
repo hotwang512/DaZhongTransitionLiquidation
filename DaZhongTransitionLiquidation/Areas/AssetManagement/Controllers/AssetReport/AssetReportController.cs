@@ -479,6 +479,18 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                                 ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
                         }
                     }
+                    var companyManageList = assetModifyCurrentFlowList.Union(assetModifyLastFlowList).GroupBy(x => new { x.MANAGEMENT_COMPANY }).Where(x => x.Key.MANAGEMENT_COMPANY != null)
+                        .Select(x => new { x.Key }).OrderBy(x => x.Key.MANAGEMENT_COMPANY).ToList();
+                    foreach (var item in companyManageList)
+                    {
+                        listStrCompany.Add(item.Key.MANAGEMENT_COMPANY);
+                    }
+                    var companyBelongList = assetModifyCurrentFlowList.Union(assetModifyLastFlowList).GroupBy(x => new { x.BELONGTO_COMPANY }).Where(x => x.Key.BELONGTO_COMPANY != null)
+                        .Select(x => new { x.Key }).OrderBy(x => x.Key.BELONGTO_COMPANY).ToList();
+                    foreach (var item in companyBelongList)
+                    {
+                        listStrBelongToCompany.Add(item.Key.BELONGTO_COMPANY);
+                    }
                 }
                 else
                 {
@@ -510,6 +522,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                 else
                 {
                     reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "期末" && x.CompanyType == "管理公司").ToList();
+                    var companylList = reportList.GroupBy(x => new { x.CompanyName }).Where(x => x.Key.CompanyName != null)
+                        .Select(x => new { x.Key }).OrderBy(x => x.Key.CompanyName).ToList();
+                    foreach (var item in companylList)
+                    {
+                        listStrCompany.Add(item.Key.CompanyName);
+                    }
                 }
                 //期末数据构造
                 {
@@ -522,19 +540,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                             Quantity = x.Sum(s => s.Quantity),
                             PeriodType = x.Key.PeriodType
                         }).OrderBy(x => x.VehicleModel).ToList();
-                    var companylList = reportList.GroupBy(x => new { x.CompanyName }).Where(x => x.Key.CompanyName != null)
-                        .Select(x => new { x.Key }).OrderBy(x => x.Key.CompanyName).ToList();
-                    foreach (var item in companylList)
-                    {
-                        listStrCompany.Add(item.Key.CompanyName);
-                    }
-                    for (var i = 0; i < companylList.Count; i++)
+                    for (var i = 0; i < listStrCompany.Count; i++)
                     {
                         var report = new VehicleCheckShowReport();
                         report.PeriodType = "期末";
                         report.CompanyType = "管理公司";
                         report.Sort = 4;
-                        report.Company = companylList[i].Key.CompanyName;
+                        report.Company = listStrCompany[i];
                         foreach (var item in listStrVehicleModel)
                         {
                             var mdata = new VehicleModelData();
@@ -583,7 +595,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                             Quantity = x.Sum(s => s.Quantity),
                             PeriodType = x.Key.PeriodType
                         }).OrderBy(x => x.VehicleModel).ToList();
-                    
                     for (var i = 0; i < listStrCompany.Count; i++)
                     {
                         var report = new VehicleCheckShowReport();
@@ -758,6 +769,12 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                 else
                 {
                     reportList = db.Queryable<Business_VehicleCheckReport>().Where(x => x.YearMonth == YearMonth && x.PeriodType == "期末" && x.CompanyType == "所属公司").ToList();
+                    var companylList = reportList.GroupBy(x => new { x.CompanyName }).Where(x => x.Key.CompanyName != null)
+                        .Select(x => new { x.Key }).OrderBy(x => x.Key.CompanyName).ToList();
+                    foreach (var item in companylList)
+                    {
+                        listStrBelongToCompany.Add(item.Key.CompanyName);
+                    }
                 }
                 //期末数据构造
                 {
@@ -770,12 +787,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                             Quantity = x.Sum(s => s.Quantity),
                             PeriodType = x.Key.PeriodType
                         }).OrderBy(x => x.VehicleModel).ToList();
-                    var companylList = reportList.GroupBy(x => new { x.CompanyName }).Where(x => x.Key.CompanyName != null)
-                        .Select(x => new { x.Key }).OrderBy(x => x.Key.CompanyName).ToList();
-                    foreach (var item in companylList)
-                    {
-                        listStrBelongToCompany.Add(item.Key.CompanyName);
-                    }
                     for (var i = 0; i < listStrBelongToCompany.Count; i++)
                     {
                         var report = new VehicleCheckShowReport();

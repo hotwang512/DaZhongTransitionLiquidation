@@ -652,46 +652,35 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 if (item.TurnOut == 0)
                 {
                     //付款业务
-                    Regex regExp = new Regex("^[0-9]*$");
-                    if (item.Purpose != null)
+                    //支付流水数据通过银行流水号匹配订单配置信息
+                    var osno = orderListDraft.Where(x => x.BankTS == item.Batch).ToList();
+                    if (osno.Count == 1)
                     {
-                        if (item.Purpose.Length == 19 && regExp.IsMatch(item.Purpose))
+                        var order = orderList.Where(x => x.BusinessSubItem1 == osno[0].BusinessSubItem1).First();
+                        var orderDetail = userCompanySet.Where(x => x.OrderVGUID == order.VGUID.ToString() && x.CompanyName == osno[0].OrderCompany && x.Isable == true).ToList();
+                        if (orderDetail.Count > 0)
                         {
-                            //保险系统银行流水数据通过备注中的流水号匹配订单配置信息
-                            var osno = orderListDraft.Where(x => x.OSNO == item.Purpose).ToList();
-                            if (osno.Count == 1)
+                            subject = orderDetail[0].Borrow;
+                            if (subject != "" && subject != null)
                             {
-                                var order = orderList.Where(x => x.BusinessSubItem1 == osno[0].BusinessSubItem1).First();
-                                var orderDetail = userCompanySet.Where(x => x.OrderVGUID == order.VGUID.ToString() && x.CompanyName == osno[0].OrderCompany && x.Isable == true).ToList();
-                                if (orderDetail.Count > 0)
+                                if (subject.Contains("\n"))
                                 {
-                                    subject = orderDetail[0].Borrow;
-                                    if (subject != "" && subject != null)
-                                    {
-                                        if (subject.Contains("\n"))
-                                        {
-                                            subject = subject.Substring(0, subject.Length - 1);
-                                        }
-                                        var seven = subject.Split(".");
-                                        BVDetail.CompanySection = seven[0];
-                                        BVDetail.SubjectSection = seven[1];
-                                        BVDetail.AccountSection = seven[2];
-                                        BVDetail.CostCenterSection = seven[3];
-                                        BVDetail.SpareOneSection = seven[4];
-                                        BVDetail.SpareTwoSection = seven[5];
-                                        BVDetail.IntercourseSection = seven[6];
-                                        //BVDetail.SubjectSectionName = item.SubjectSectionName;
-                                        BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
-                                    }
-                                    BVDetail.VGUID = Guid.NewGuid();
-                                    BVDetail.VoucherVGUID = guid;
-                                    BVDetailList.Add(BVDetail);
+                                    subject = subject.Substring(0, subject.Length - 1);
                                 }
+                                var seven = subject.Split(".");
+                                BVDetail.CompanySection = seven[0];
+                                BVDetail.SubjectSection = seven[1];
+                                BVDetail.AccountSection = seven[2];
+                                BVDetail.CostCenterSection = seven[3];
+                                BVDetail.SpareOneSection = seven[4];
+                                BVDetail.SpareTwoSection = seven[5];
+                                BVDetail.IntercourseSection = seven[6];
+                                //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                BVDetail.SevenSubjectName = subject + "\n" + GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
                             }
-                        }
-                        else
-                        {
-                            //subject = bankChannelOne.Borrow;
+                            BVDetail.VGUID = Guid.NewGuid();
+                            BVDetail.VoucherVGUID = guid;
+                            BVDetailList.Add(BVDetail);
                         }
                     }
                 }

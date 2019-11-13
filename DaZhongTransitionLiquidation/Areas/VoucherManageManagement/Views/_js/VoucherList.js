@@ -435,13 +435,13 @@ var $page = function () {
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                    { text: '批名', datafield: 'BatchName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
                     { text: '交易日期', datafield: 'TransactionDate', width: 120, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '对方公司', datafield: 'ReceivingUnit', width: 350, align: 'center', cellsAlign: 'center', },
                     { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '我方公司', datafield: 'CompanyName', width: 350, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
@@ -687,7 +687,7 @@ var $page = function () {
             case "3": type = "4"; break;
         }
         if (selector.$EditPermission().val() == "1") {
-            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?Type=" + type + "&VGUID=" + rowData.uid + "' style=\"text-decoration: underline;color: #333;\">" + rowData.BatchName + "</a>";
+            container = "<a href='/VoucherManageManagement/VoucherListDetail/Index?Type=" + type + "&VGUID=" + rowData.uid + "' style=\"text-decoration: underline;color: #333;font-family: Calibri;\">" + rowData.BatchName + "</a>";
         } else {
             container = "<span>" + rowData.BatchName + "</span>";
         }

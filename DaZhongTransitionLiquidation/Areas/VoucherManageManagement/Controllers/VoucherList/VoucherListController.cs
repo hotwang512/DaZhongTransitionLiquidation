@@ -62,8 +62,19 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDate)
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
-                .OrderBy("VoucherNo desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("CreateTime desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
+
+                //var data = jsonResult.Rows.ToList().Where(x => x.VoucherDate >= "2019-11-01".TryToDate() && x.VoucherDate <= "2019-11-12".TryToDate()).ToList();
+                //foreach (var item in data)
+                //{
+                //    if(item.VoucherNo.Length == 10)
+                //    {
+                //        item.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + item.VoucherType + item.VoucherNo;
+                //        item.BatchName = item.VoucherNo;
+                //        db.Updateable(item).ExecuteCommand();
+                //    }
+                //}
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

@@ -99,6 +99,7 @@ function initTable1() {
             pageable: false,
             width: "100%",
             autoheight: true,
+            rowsheight: 35,
             //height:500,
             pageSize: 10,
             //serverProcessing: true,

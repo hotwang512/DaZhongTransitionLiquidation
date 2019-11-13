@@ -18,6 +18,8 @@ var $page = function () {
         var currentDate = (year.toString() + "-" + month.toString());
         $("#YearMonth").val(currentDate);
         addEvent();
+        var winHeight = document.body.scrollWidth;
+        $("#assetReport").css("width", winHeight - 243);
     }
     //所有事件
     function addEvent() {

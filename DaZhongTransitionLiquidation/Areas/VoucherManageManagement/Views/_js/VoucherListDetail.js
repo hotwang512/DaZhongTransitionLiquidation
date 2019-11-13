@@ -42,7 +42,7 @@ var $page = function () {
             voucherType = "转账类";
             $("#VoucherType").val(voucherType);
         }
-        $("#BatchName").val(voucherType + date);
+        $("#BatchName").val("");
         $("#VoucherDate").val(myDate.getFullYear() + "-" + month + "-" + day);
         $("#AccountingPeriod").val(myDate.getFullYear() + "-" + month);
         uiEngineHelper.bindSelect('#CompanySection', CompanyCode, "Code", "Descrption");

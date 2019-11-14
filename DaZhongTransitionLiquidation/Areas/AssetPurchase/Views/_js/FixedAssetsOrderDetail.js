@@ -776,7 +776,6 @@ function initSelectGoodsModel(Goods) {
         dataType: "json",
         async: false,
         success: function (msg) {
-            
             if (msg.length > 0) {
                 uiEngineHelper.bindSelect('#GoodsModel', msg, "Code", "Descrption");
                 $("#GoodsModel").prepend("<option value=\"\" selected='true'>请选择</>");

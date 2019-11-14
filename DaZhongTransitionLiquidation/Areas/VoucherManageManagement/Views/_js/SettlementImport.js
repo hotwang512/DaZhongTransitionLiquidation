@@ -88,6 +88,10 @@ var $page = function () {
                 });
             })
         });
+        //给table外面的div滚动事件绑定一个函数
+        $("#pivotTable").scroll(function () {
+            //scrollFunc();
+        });
 
         function initTable() {
             //layer.load();
@@ -217,5 +221,31 @@ function runImportData(fileName, callback) {
             layer.closeAll('loading');
         }
 
+    });
+}
+
+function scrollFunc() {
+    var left = $("#pivotTable").scrollLeft();//获取滚动的距离
+    var top = $("#pivotTable").scrollTop();//获取滚动的距离
+    var trs = $("#pivotTable table tr");//获取表格的所有tr
+    trs.each(function (i) {//对每一个tr（每一行）进行处理
+        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+        //如果有必要也可以设置一个z-index属性
+        if (i < 4) {
+            $(this).children().css({ "position": "relative", "top": top, "background-color": "#F0F0F0" });
+            if (i < 3) {
+                if (i == 0) {
+                    $(this).children().eq(1).css({ "position": "relative", "left": left, "background-color": "#F0F0F0" });
+                }
+                $(this).children().eq(0).css({ "position": "relative", "left": left, "background-color": "#F0F0F0" });
+            } else {
+                $(this).children().eq(0).css({ "position": "relative", "left": left, "background-color": "#F0F0F0" });
+                $(this).children().eq(1).css({ "position": "relative", "left": left, "background-color": "#F0F0F0" });
+                $(this).children().eq(2).css({ "position": "relative", "left": left, "background-color": "#F0F0F0" });
+            }
+        } else {
+            //$(this).children().eq(0).css({ "position": "relative", "left": left, "background-color": "#F0F0F0" });
+        }
     });
 }

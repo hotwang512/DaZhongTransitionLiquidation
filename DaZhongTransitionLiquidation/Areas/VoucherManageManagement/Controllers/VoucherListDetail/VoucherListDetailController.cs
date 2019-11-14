@@ -30,6 +30,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.GetAccountMode = GetAccountModes();
+            ViewBag.GetLastYearMonth = GetLastYearMonth();
+            ViewBag.GetNowYearMonth = GetNowYearMonth();
             return View();
         }
         public JsonResult GetSelectSection(string name, string companyCode, string subjectCode)
@@ -506,6 +508,19 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var lastPath = "/Temp/LastVoucherReport" + guid + ".pdf";
             pdf.Save(System.Web.HttpContext.Current.Server.MapPath(lastPath));
             return lastPath;
+        }
+        public string GetLastYearMonth()
+        {
+            var lastDate = DateTime.Now.AddYears(-1).Year.ToString() + "-12-01 00:00:00";
+            var startMonth = lastDate;
+            return startMonth;
+        }
+        public string GetNowYearMonth()
+        {
+            DateTime s = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+            DateTime ss = s.AddDays(1 - s.Day);
+            var endMonth = ss.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss");
+            return endMonth;
         }
     }
 }

@@ -33,30 +33,24 @@
                 <tr style="height:60px; line-height:60px;">
                     <td align="right" style="width:70px;"><i id="shrinkMenue" class="icon iconfont" style="font-size:30px; cursor:pointer; color:white;">&#xe617;</i></td>
                     <td style="color:white; font-size:28px; font-family:Calibri; padding-left:20px; font-weight:bold;"><span id="gotoHome" style="cursor:pointer;color:white">大众出租财务共享服务平台</span><span id="homeModel" style="cursor:pointer;color:white;font-size: 22px"></span><input id="PageType" name="PageTypes" class="hide" /></td>
-                    <td style="color:white;">
-                        <div>@user.AccountModeName</div>
-                    </td>
-                    <td style="color:white;">
-                        <div>@user.CompanyName</div>
-                    </td>
-                    <td style="width:45px;">
-                        <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;" />
-                    </td>
-                    <td style="width: 80px; color: white; font-size: 14px; font-family: Calibri;">
-                        <div class="dropdown">
-                            <a id="drop5" href="javascript:void(0);" style="color: white; text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @user.LoginName<span class="caret" style="color: white;border-top-color: white;"></span>
+                    <td>
+                        <div style="float: right; margin-right: 20px;">
+                            <img src="../../_theme/images/1076213.gif" style="border-radius:99px; width:30px;float: left;    margin-top: 15px;" />
+                            <div class="dropdown" style="float: left;margin: 0px 40px 0px 10px;">
+                                <a id="drop5" href="javascript:void(0);" style="color: white; text-decoration:none;font-family: Calibri;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @user.LoginName<span class="caret" style="color: white;border-top-color: white;"></span>
+                                </a>
+                                <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                                    <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
+                                    <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>
+                                </ul>
+                            </div>
+                            <a id="" href="/HomePage/CompanyHomePage/Index" style="color: white; text-decoration:none;float: right;margin-top: 5px;" class="">
+                                <div style="line-height:26px !important;">@user.AccountModeName</div>
+                                <div style="line-height:20px !important;">@user.CompanyName</div>
+                                @*<span class="caret" style="color: white;border-top-color: white;"></span>*@
                             </a>
-                            <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
-                                <li role="presentation"><a role="menuitem" id="aChangePwd" href="#" vguid="@user.Vguid" tabindex="1">修改密码</a></li>
-                                <li role="presentation"><a role="menuitem" id="aLogout" tabindex="2" href="#">退出系统</a></li>
-                            </ul>
                         </div>
-                    </td>
-                    <td style="width:125px">
-                        <a id="" href="/HomePage/CompanyHomePage/Index" style="color: white; text-decoration:none;" class="">
-                            切换账套公司<span class="caret" style="color: white;border-top-color: white;"></span>
-                        </a>
                     </td>
                 </tr>
             </table>

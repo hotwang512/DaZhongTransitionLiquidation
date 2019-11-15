@@ -1,5 +1,6 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SqlSugar;
@@ -39,7 +40,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 if (data.Count > 0)
                 {
                     var userBalance = data.First().UseBalance;//第一笔流水可用余额
-                    var money = cashData.Sum(x => x.Money) - cashData.First().Money;//备用金提现总金额 - 第一笔备用金提现
+                    decimal? money = 0;
+                    if (cashData.Count > 0)
+                    {
+                        money = cashData.Sum(x => x.Money) - cashData.First().Money;//备用金提现总金额 - 第一笔备用金提现
+                    }
                     var turnOut = data.Sum(x => x.TurnOut);//现金流水支出总金额
                     result = userBalance + money - turnOut;
                 }
@@ -80,8 +85,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     var isAny = db.Queryable<Business_CashTransaction>().Any(x => x.VGUID == sevenSection.VGUID);
                     if (!isAny)
                     {
-                        var no = db.Ado.GetString(@"select top 1 Batch from Business_CashTransaction a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
-                                  order by Batch desc", new { @NowDate = DateTime.Now });
+                        var cash = "CashTran" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        //2019110001
+                        var no = CreateNo.GetCreateCashNo(db, cash);
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.Batch = GetVoucherName(no);
                         sevenSection.CreateTime = DateTime.Now;

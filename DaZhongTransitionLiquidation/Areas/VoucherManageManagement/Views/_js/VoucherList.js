@@ -70,10 +70,10 @@ var $page = function () {
 
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#AccountingPeriod").val("");
-            //$("#TransactionDate").val("");
-            //$("#TransactionDateEnd").val("");
-            //$("#PaymentUnit").val("");
+            $("#ReceivingUnit").val("");
+            $("#TradingBank").val("");
+            $("#TransactionDateS").val("");
+            $("#TransactionDateE").val("");
         });
         //打印
         $("#btnPrint").on("click", function () {
@@ -291,7 +291,8 @@ var $page = function () {
     }
 
     function initTable() {
-        //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
+        var DateEnd = $("#TransactionDateE").val();
+        var DateStar = $("#TransactionDateS").val();
         var status = $.request.queryString().Status; 
         var source =
             {
@@ -320,12 +321,23 @@ var $page = function () {
                     { name: 'Attachment5', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'Status', type: 'string' },
+                    { name: 'TradingBank', type: 'string' },
+                    { name: 'ReceivingUnit', type: 'string' },
+                    { name: 'TransactionDate', type: 'date' },
+                    { name: 'Batch', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
                 type: "post",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "0", "VoucherType": type, "TradingBank": $('#TradingBank option:selected').text(), "TransactionDate": $("#TransactionDate").val() },
-                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
+                data: {
+                    "Status": status,
+                    "AccountingPeriod": $("#AccountingPeriod").val(),
+                    "Automatic": "0",
+                    "VoucherType": type,
+                    "TradingBank": $('#TradingBank option:selected').text(),
+                    "TransactionDate": DateStar
+                },
+                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas?dateEnd=" + DateEnd   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -345,21 +357,25 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 25,
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                    { text: '批名', datafield: 'BatchName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: false, align: 'center', cellsAlign: 'center' },
-                    { text: '公司', datafield: 'CompanyName', width: 350, pinned: false, align: 'center', cellsAlign: 'center', },
-                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
-                    { text: '币种', datafield: 'Currency',hidden: true, align: 'center', cellsAlign: 'center', },
-                    { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '交易银行', datafield: 'TradingBank', width: 120, hidden: true, pinned: true, align: 'center', cellsAlign: 'center' },
+                    { text: '交易日期', datafield: 'TransactionDate', width: 120, hidden: true, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '对方公司', datafield: 'ReceivingUnit', width: 350, hidden: true, align: 'center', cellsAlign: 'center', },
                     { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '我方公司', datafield: 'CompanyName', width: 350, align: 'center', cellsAlign: 'center', },
+                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
+                    { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
+                    { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '制单', datafield: 'DocumentMaker',  align: 'center', cellsAlign: 'center' },
+                    { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '交易流水号', datafield: 'Batch', hidden: true, width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
@@ -375,7 +391,8 @@ var $page = function () {
         });
     }
     function initTable1() {
-        //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
+        var DateEnd = $("#TransactionDateE").val();
+        var DateStar = $("#TransactionDateS").val();
         var status = $.request.queryString().Status;
         var source =
             {
@@ -412,8 +429,15 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 type:"post",
-                data: { "Status": status, "ReceivingUnit": $("#ReceivingUnit").val(), "Automatic": "1", "VoucherType": type, "TradingBank": $('#TradingBank option:selected').text(), "TransactionDate": $("#TransactionDate").val() },
-                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
+                data: {
+                    "Status": status,
+                    "ReceivingUnit": $("#ReceivingUnit").val(),
+                    "Automatic": "1",
+                    "VoucherType": type,
+                    "TradingBank": $('#TradingBank option:selected').text(),
+                    "TransactionDate": DateStar
+                },
+                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas?dateEnd=" + DateEnd   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -467,7 +491,8 @@ var $page = function () {
         });
     }
     function initTable2() {
-        //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
+        var DateEnd = $("#TransactionDateE").val();
+        var DateStar = $("#TransactionDateS").val();
         var status = $.request.queryString().Status;
         var source =
             {
@@ -496,11 +521,22 @@ var $page = function () {
                     { name: 'Attachment5', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'Status', type: 'string' },
+                    { name: 'TradingBank', type: 'string' },
+                    { name: 'ReceivingUnit', type: 'string' },
+                    { name: 'TransactionDate', type: 'date' },
+                    { name: 'Batch', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "3", "VoucherType": type },
-                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
+                data: {
+                    "Status": status,
+                    "Automatic": "3",
+                    "VoucherType": type,
+                    "ReceivingUnit": $("#ReceivingUnit").val(),
+                    "TradingBank": $('#TradingBank option:selected').text(),
+                    "TransactionDate": DateStar
+                },
+                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas?dateEnd=" + DateEnd   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -520,21 +556,25 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 30,
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                    { text: '批名', datafield: 'BatchName', width: 150, pinned: false, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: false, align: 'center', cellsAlign: 'center' },
-                    { text: '营运公司', datafield: 'CompanyName', width: 350, pinned: false, align: 'center', cellsAlign: 'center', },
+                    { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
+                    { text: '交易日期', datafield: 'TransactionDate', width: 120, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '对方公司', datafield: 'ReceivingUnit', width: 350, align: 'center', cellsAlign: 'center', },
+                    { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '我方公司', datafield: 'CompanyName', width: 350, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '制单', datafield: 'DocumentMaker', align: 'center', cellsAlign: 'center' },
+                    { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '交易流水号', datafield: 'Batch', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
@@ -550,7 +590,8 @@ var $page = function () {
         });
     }
     function initTable3() {
-        //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
+        var DateEnd = $("#TransactionDateE").val();
+        var DateStar = $("#TransactionDateS").val();
         var source =
             {
                 datafields:
@@ -578,13 +619,24 @@ var $page = function () {
                     { name: 'Attachment5', type: 'string' },
                     { name: 'VGUID', type: 'string' },
                     { name: 'Status', type: 'string' },
+                    { name: 'TradingBank', type: 'string' },
+                    { name: 'ReceivingUnit', type: 'string' },
+                    { name: 'TransactionDate', type: 'date' },
+                    { name: 'Batch', type: 'string' },
                     { name: 'OracleStatus', type: 'string' },
                     { name: 'OracleMessage', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "Status": status, "AccountingPeriod": $("#AccountingPeriod").val(), "Automatic": "4", "VoucherType": type },
-                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas"   //获取数据源的路径
+                data: {
+                    "Status": status,
+                    "Automatic": "4",
+                    "VoucherType": type,
+                    "ReceivingUnit": $("#ReceivingUnit").val(),
+                    "TradingBank": $('#TradingBank option:selected').text(),
+                    "TransactionDate": DateStar
+                },
+                url: "/VoucherManageManagement/VoucherList/GetVoucherListDatas?dateEnd=" + DateEnd   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -605,22 +657,24 @@ var $page = function () {
                 columnsHeight: 30,
                 columns: [
                     { text: "", datafield: "checkbox", width: 35, hidden: true,pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                    { text: '批名', datafield: 'BatchName', width: 150, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 150, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '营运公司', datafield: 'CompanyName', width: 380, pinned: false, align: 'center', cellsAlign: 'center', },
+                   { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
+                    { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                    { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
+                    { text: '交易日期', datafield: 'TransactionDate', width: 120, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                    { text: '对方公司', datafield: 'ReceivingUnit', width: 350, align: 'center', cellsAlign: 'center', },
+                    { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '凭证号码', datafield: 'VoucherNo', width: 250, align: 'center', cellsAlign: 'center' },
+                    { text: '我方公司', datafield: 'CompanyName', width: 350, align: 'center', cellsAlign: 'center', },
                     { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
                     { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
                     { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
                     { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '借方金额合计', datafield: 'DebitAmountTotal', width: 120, cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', width: 120, cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '制单', datafield: 'DocumentMaker', width: 120, align: 'center', cellsAlign: 'center' },
-                    { text: 'Oracle返回状态', datafield: 'OracleStatus', width: 120, align: 'center', cellsAlign: 'center', hidden: true },
-                    { text: 'Oracle返回错误', datafield: 'OracleMessage', width: 200, align: 'center', cellsAlign: 'center' },
+                    { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '交易流水号', datafield: 'Batch', width: 150, align: 'center', cellsAlign: 'center' },
                     //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },

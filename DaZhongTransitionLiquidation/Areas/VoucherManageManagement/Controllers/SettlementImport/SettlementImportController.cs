@@ -80,7 +80,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 Status = "0"
             };
             Workbook workbook = new Workbook(Path.Combine(Server.MapPath(Global.Temp), fileName));
-            Worksheet worksheet = workbook.Worksheets[14];
+            Worksheet worksheet = workbook.Worksheets["各种车型各种模式结算标准"];
             Cells cells = worksheet.Cells;
             var settlementList = new List<Business_SettlementImport>();
             DbBusinessDataService.Command(db =>

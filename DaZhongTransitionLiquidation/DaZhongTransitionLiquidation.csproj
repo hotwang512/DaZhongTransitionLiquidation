@@ -247,6 +247,7 @@
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CashManagerDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CashTransaction.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CashTransactionDetail.js" />
+    <Content Include="Areas\CapitalCenterManagement\Views\_js\CashTransactionFlow.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\ComeOnApplication.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\ComeOnApplicationDetail.js" />
     <Content Include="Areas\CapitalCenterManagement\Views\_js\CustomerBankInfo.js" />
@@ -410,6 +411,7 @@
     <Content Include="Areas\AssetManagement\Views\PurchaseItem\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleMenu\Index.cshtml" />
     <Content Include="Areas\HomePage\Views\DefaultPage\Index.cshtml" />
+    <Content Include="Areas\CapitalCenterManagement\Views\CashTransactionFlow\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3365,6 +3367,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashManagerDetail\CashManagerDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashManager\CashManagerController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashTransactionDetail\CashTransactionDetailController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\CashTransactionFlow\CashTransactionFlowController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CashTransaction\CashTransactionController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\ComeOnApplicationDetail\ComeOnApplicationDetailController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\ComeOnApplication\ComeOnApplicationController.cs" />

@@ -40,12 +40,12 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.Vehicl
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
-        public string GetVehicleExtrasFeeSettingListDatas(Business_VehicleExtrasFeeSetting searchModel, GridParams para)
+        public string GetVehicleExtrasFeeSettingListDatas(string para)
         {
             var json = "";
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Ado.GetDataTable("SELECT * FROM (SELECT BusinessProject,VehicleModel,Fee FROM Business_VehicleExtrasFeeSetting) a pivot(max(Fee) for VehicleModel\r\n in (桑塔纳4000,荣威Ei5,[途安1.4T],[途安1.6],[途安1.6L]) )b");
+                var data = db.Ado.GetDataTable("SELECT * FROM (SELECT BusinessProject,VehicleModel,Fee FROM Business_VehicleExtrasFeeSetting) a pivot(max(Fee) for VehicleModel in (" + para + ") )b");
                 json = data.DataTableToJson();
             });
             return json;

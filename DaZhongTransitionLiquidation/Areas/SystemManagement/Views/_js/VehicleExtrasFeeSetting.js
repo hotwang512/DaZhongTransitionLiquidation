@@ -81,17 +81,19 @@ var $page = function () {
             datafields.push({ name: data[i], type: 'float' });
             columns.push({ text: data[i], datafield: data[i], width: 100, align: 'center', cellsAlign: 'center' });
         }
+        debugger;
         $.ajax({
             url: "/Systemmanagement/VehicleExtrasFeeSetting/GetVehicleExtrasFeeSettingListDatas",
             type: "GET",
             dataType: "json",
+            data: { para: para },
             async: false,
             success: function (msg) {
+                debugger;
                 var source =
                 {
                     datafields: datafields,
                     datatype: "json",
-                    data: { "VehicleModel": para },
                     localdata: msg   //获取数据源的路径
                 };
                 var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -114,14 +116,6 @@ var $page = function () {
                         columnsResize: true,
                         columns: columns
                     });
-                //selector.$grid().on('rowDoubleClick', function (event) {
-                //    // event args.
-                //    var args = event.args;
-                //    // row data.
-                //    var row = args.row;
-                //    // row index.
-                //    window.location.href = "/Systemmanagement/VehicleExtrasFeeSettingDetail/Index?VGUID=" + row.VGUID + "&Code=" + row.VehicleModelCode;
-                //});
             }
         });
     }

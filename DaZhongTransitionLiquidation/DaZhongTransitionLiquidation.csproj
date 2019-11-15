@@ -205,6 +205,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\FreightAnalysis.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetException.js" />
@@ -410,6 +411,8 @@
     <Content Include="Areas\AssetManagement\Views\PurchaseItem\Index.cshtml" />
     <Content Include="Areas\SystemManagement\Views\ModuleMenu\Index.cshtml" />
     <Content Include="Areas\HomePage\Views\DefaultPage\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\web.config" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\FreightAnalysis\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3281,6 +3284,9 @@
     <Compile Include="App_Start\HandleErrorFilter.cs" />
     <Compile Include="App_Start\MyUrlHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\AnalysisManagementCenterAreaRegistration.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Controllers\FreightAnalysis\FreightAnalysisController.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\Business_FreightAnalysis.cs" />
     <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceDetailController.cs" />
@@ -3605,6 +3611,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AnalysisManagementCenter\Views\Shared\" />
     <Folder Include="Areas\AssetManagement\Views\AssetsCategory\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
     <Folder Include="Areas\FinancialStatementsManagement\Models\" />

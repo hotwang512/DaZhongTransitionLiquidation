@@ -6,9 +6,9 @@ var $page = function () {
     this.init = function () {
         //$("#DateOfYear").attr("disabled",true);
         if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
-            $("#FreightAnalysisDialog_OKBtn").show();
+            $("#RentTargetDialog_OKBtn").show();
         } else {
-            $("#FreightAnalysisDialog_OKBtn").hide();
+            $("#RentTargetDialog_OKBtn").hide();
         }
         GetVehicleModelDropDown();
         addEvent();
@@ -21,22 +21,22 @@ var $page = function () {
                 var date = new Date();
                 $("#DateOfYear").val(date.getFullYear());
                 //$("#VehicleModelNew").val("");
-                //GetFreightAnalysis();
-                $("#FreightAnalysisModalDialog").modal("show");
+                //GetRentTarget();
+                $("#RentTargetModalDialog").modal("show");
             });
         $("#VehicleModel").on("change",
             function () {
-                GetFreightAnalysisYear();
+                GetRentTargetYear();
             });
         $("#VehicleModelNew").on("change",
             function () {
-                GetFreightAnalysis();
+                GetRentTarget();
             });
         $("#DateOfYear").on("blur",
             function () {
-                GetFreightAnalysis();
+                GetRentTarget();
             });
-        $("#FreightAnalysisDialog_OKBtn").on("click", function () {
+        $("#RentTargetDialog_OKBtn").on("click", function () {
             var validateError = 0;
             if (!Validate($("#VehicleModelNew"))) {
                 validateError++;
@@ -50,14 +50,14 @@ var $page = function () {
                 for (var j = 0; j < rows.length; j++) {
                     SettingList.push({
                         "VGUID": rows[j].VGUID, "VehicleModel": rows[j].VehicleModel, "VehicleModelName": rows[j].VehicleModelName,
-                        "DayDetail": rows[j].DayDetail, "NightDetail": rows[j].NightDetail, "Zorder": rows[j].Zorder,
+                        "SingleBus": rows[j].SingleBus, "DoubleBus": rows[j].DoubleBus, "Zorder": rows[j].Zorder,
                         "ProjectName": rows[j].ProjectName, "DateOfYear": rows[j].DateOfYear
                     });
                 };
                 $.ajax({
-                    url: "/AnalysisManagementCenter/FreightAnalysis/SaveFreightAnalysis",
+                    url: "/AnalysisManagementCenter/RentTarget/SaveRentTarget",
                     data: {
-                        "FreightAnalysisList": SettingList
+                        "RentTargetList": SettingList
                     },
                     type: "post",
                     success: function (msg) {
@@ -67,8 +67,8 @@ var $page = function () {
                                 break;
                             case "1":
                                 jqxNotification("保存成功！", null, "success");
-                                $("#FreightAnalysisModalDialog").modal("hide");
-                                GetFreightAnalysisYear();
+                                $("#RentTargetModalDialog").modal("hide");
+                                GetRentTargetYear();
                                 //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                 break;
                         }
@@ -76,14 +76,14 @@ var $page = function () {
                 });
             }
         });
-        $("#FreightAnalysisDialog_CancelBtn").on("click", function () {
-            $("#FreightAnalysisModalDialog").modal("hide");
+        $("#RentTargetDialog_CancelBtn").on("click", function () {
+            $("#RentTargetModalDialog").modal("hide");
         });
     }; //addEvent end
-    function GetFreightAnalysis() {
+    function GetRentTarget() {
         if ($("#VehicleModelNew").val() != "") {
             $.ajax({
-                url: "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisDetail",
+                url: "/AnalysisManagementCenter/RentTarget/GetRentTargetDetail",
                 data: {
                     "VehicleModel": $("#VehicleModelNew").val(),
                     "VehicleModelName": $("#VehicleModelNew option:selected").text(),
@@ -93,7 +93,7 @@ var $page = function () {
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    GetFreightAnalysisDetail(data);
+                    GetRentTargetDetail(data);
                 }
             });
         }
@@ -112,9 +112,9 @@ var $page = function () {
             }
         });
     }
-    function GetFreightAnalysisYear() {
+    function GetRentTargetYear() {
         $.ajax({
-            url: "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisYear",
+            url: "/AnalysisManagementCenter/RentTarget/GetRentTargetYear",
             data: { "VehicleModel": $("#VehicleModel").val() },
             type: "GET",
             dataType: "json",
@@ -124,7 +124,7 @@ var $page = function () {
                     $("#tableList").show();
                     $("#tableList1").show();
                     dataArr = data;
-                    GetFreightAnalysisList(data, "DayDetail");
+                    GetRentTargetList(data, "SingleBus");
                 } else {
                     $("#tableList").hide();
                     $("#tableList1").hide();
@@ -132,15 +132,15 @@ var $page = function () {
             }
         });
     }
-    function GetFreightAnalysisDetail(data) {
+    function GetRentTargetDetail(data) {
         var ordersSource =
         {
             dataFields: [
                 { name: 'VehicleModel', type: 'string' },
                 { name: 'VehicleModelName', type: 'string' },
                 { name: 'ProjectName', type: 'string' },
-                { name: 'DayDetail', type: 'string' },
-                { name: 'NightDetail', type: 'string' },
+                { name: 'SingleBus', type: 'string' },
+                { name: 'DoubleBus', type: 'string' },
                 { name: 'DateOfYear', type: 'string' },
                 { name: 'Zorder', type: 'string' },
                 { name: 'VGUID', type: 'string' }
@@ -170,13 +170,13 @@ var $page = function () {
             columns: [
                 { text: '车型', editable: false, dataField: 'VehicleModelName', width: 100, cellsAlign: 'center', align: 'center' },
                 { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
-                { text: '白天', editable: true, dataField: 'DayDetail', width: 200, cellsAlign: 'center', align: 'center' },
-                { text: '夜间', editable: true, dataField: 'NightDetail', width: 200, cellsAlign: 'center', align: 'center' },
+                { text: '白天', editable: true, dataField: 'SingleBus', width: 200, cellsAlign: 'center', align: 'center' },
+                { text: '夜间', editable: true, dataField: 'DoubleBus', width: 200, cellsAlign: 'center', align: 'center' },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true }
             ]
         });
     }
-    function GetFreightAnalysisList(data, DayOrNight) {
+    function GetRentTargetList(data, SingleOrDouble) {
         debugger;
         var datafields = [
             { name: 'ProjectName', type: 'string' }
@@ -201,21 +201,21 @@ var $page = function () {
             paras += "[" + data[k] + "],";
         }
         paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisList";
+        var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
         var ordersSource =
         {
             dataFields: datafields,
             dataType: "json",
             id: 'VGUID',
             url: url,
-            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, DayOrNight: DayOrNight },
+            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, SingleOrDouble: SingleOrDouble },
             updateRow: function (rowID, rowData, commit) {
                 commit(true);
             }
         };
         var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
             loadComplete: function () {
-                GetFreightAnalysisList1(dataArr, "NightDetail");
+                GetRentTargetList1(dataArr, "DoubleBus");
             }
         });
         $("#tableList").jqxGrid(
@@ -231,7 +231,7 @@ var $page = function () {
                 columns: columns
             });
     }
-    function GetFreightAnalysisList1(data, DayOrNight) {
+    function GetRentTargetList1(data, SingleOrDouble) {
         debugger;
         var datafields = [
             { name: 'ProjectName', type: 'string' }
@@ -256,14 +256,14 @@ var $page = function () {
             paras += "[" + data[k] + "],";
         }
         paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisList";
+        var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
         var ordersSource =
         {
             dataFields: datafields,
             dataType: "json",
             id: 'VGUID',
             url: url,
-            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, DayOrNight: DayOrNight },
+            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, SingleOrDouble: SingleOrDouble },
             updateRow: function (rowID, rowData, commit) {
                 commit(true);
             }

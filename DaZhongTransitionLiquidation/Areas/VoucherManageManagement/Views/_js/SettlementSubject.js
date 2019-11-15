@@ -290,6 +290,7 @@ function loadGridTree(modules) {
     var dataAdapter = new $.jqx.dataAdapter(source);
     selector.$grid().jqxTreeGrid({
         width: '100%',
+        height:'612px',
         showHeader: false,
         source: dataAdapter,
         checkboxes: true,
@@ -338,7 +339,7 @@ function initTable(vguid) {
     $("#datatable").jqxGrid({
         pageable: false,
         width: "100%",
-        height: 450,
+        height: '570px',
         pageSize: 10,
         //serverProcessing: true,
         pagerButtonsCount: 10,

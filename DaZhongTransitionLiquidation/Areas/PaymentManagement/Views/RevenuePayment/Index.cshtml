@@ -19,6 +19,10 @@
     <div class="body_mk" style="height: 100px">
         <table style="margin-top: 20px; margin-left: 20px;">
             <tr style="height: 45px;">
+                <td class="td_span">姓名：</td>
+                <td class="td_input">
+                    <input id="Name" type="text" class="input_text form-control" />
+                </td>
                 <td class="td_span" style="width:120px">一级渠道名称：</td>
                 <td class="td_input">
                     @*<input id="txtTransactionId" type="text" class="input_text form-control" />*@
@@ -30,9 +34,9 @@
                     @*<input id="txtChannel" type="text" class="input_text form-control" />*@
                 </td>
                 @*<td class="td_span">支付流水号：</td>
-                <td class="td_input">
-                    <input id="txtTransactionId" type="text" class="input_text form-control" />
-                </td>*@
+                    <td class="td_input">
+                        <input id="txtTransactionId" type="text" class="input_text form-control" />
+                    </td>*@
                 @*<td class="td_span">支付状态：</td>
                     <td class="td_input">
                         <select id="selPaymentStatus" class="input_text form-control">
@@ -48,7 +52,10 @@
                 </td>
             </tr>
             <tr style="height: 45px;">
-
+                <td class="td_span">工号：</td>
+                <td class="td_input">
+                    <input id="Code" type="text" class="input_text form-control" />
+                </td>
                 <td class="td_span">付款时间起：</td>
                 <td class="td_input">
                     <input id="txtPaymentForm" type="text" onfocus="WdatePicker({ maxDate: '#F{$dp.$D(\'txtPaymentTo\')||\'%y-#{%M}\'}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" />
@@ -57,7 +64,7 @@
                 <td class="td_input">
                     <input id="txtPaymentTo" type="text" onfocus="WdatePicker({ maxDate: '%y-#{%M}', minDate: '#F{$dp.$D(\'txtPaymentForm\')}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" class="input_text form-control" />
                 </td>
-                
+
                 <td>
                     <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
                 </td>

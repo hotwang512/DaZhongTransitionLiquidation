@@ -30,6 +30,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         {
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
             ViewBag.GetAccountMode = GetAccountModes();
+            ViewBag.GetLastYearMonth = GetLastYearMonth();
+            ViewBag.GetNowYearMonth = GetNowYearMonth();
             return View();
         }
         public JsonResult GetSelectSection(string name, string companyCode, string subjectCode)
@@ -77,13 +79,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var borrowMoney = voucher.Detail == null ? null : voucher.Detail.Where(i => i.BorrowMoney != -1).Sum(x => x.BorrowMoney);//借方总金额
                     var attachment = voucher.Attachment;
                     var voucherType = voucher.VoucherType;//凭证类型
-                    var date = DateTime.Now;
-                    //var flowNo = db.Ado.GetString(@"select top 1 BatchName from Business_VoucherList
-                    //              order by BatchName desc", new { @NowDate = date });
-                    //var voucherNo = db.Ado.GetString(@"select top 1 VoucherNo from Business_VoucherList a where DATEDIFF(month,a.CreateTime,@NowDate)=0 and VoucherType='"+ voucherType + @"' and  Automatic != '3' and AccountModeName=@AccountModeName and CompanyCode=@CompanyCode
-                    //              order by VoucherNo desc", new { @NowDate = date, @AccountModeName = UserInfo.AccountModeName, @CompanyCode = UserInfo.CompanyCode });
-                    var batchName = voucher.BatchName; //GetBatchName(voucherType, flowNo);
-                    //var voucherName = GetVoucherName(voucherNo);
+                    var batchName = voucher.BatchName; 
                     //凭证主表
                     Business_VoucherList voucherList = new Business_VoucherList();
                     voucherList.AttachmentDetail = "";
@@ -124,17 +120,21 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         {
                             bank = "M" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
                         }
+                        if (voucherType == "转账类")
+                        {
+                            bank = "Z" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
+                        }
                         var no = CreateNo.GetCreateNo(db, bank);
                         voucherList.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;
                         voucherList.BatchName = voucherList.VoucherNo;
                         voucherList.VGUID = guid;
                         voucherList.Automatic = "0";//手动
-                        db.Insertable<Business_VoucherList>(voucherList).ExecuteCommand();
+                        db.Insertable(voucherList).ExecuteCommand();
                     }
                     else
                     {
                         voucherList.VGUID = voucher.VGUID;
-                        db.Updateable<Business_VoucherList>(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo, it.Automatic, it.TradingBank, it.ReceivingUnit, it.TransactionDate, it.Batch }).ExecuteCommand();
+                        db.Updateable(voucherList).IgnoreColumns(it => new { it.BatchName, it.VoucherNo, it.Automatic, it.TradingBank, it.ReceivingUnit, it.TransactionDate, it.Batch }).ExecuteCommand();
                     }
                     //科目信息
                     List<Business_VoucherDetail> voucherdetailList = new List<Business_VoucherDetail>();
@@ -506,6 +506,21 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var lastPath = "/Temp/LastVoucherReport" + guid + ".pdf";
             pdf.Save(System.Web.HttpContext.Current.Server.MapPath(lastPath));
             return lastPath;
+        }
+        public string GetLastYearMonth()
+        {
+            //开始日期为去年12月
+            var lastDate = DateTime.Now.AddYears(-1).Year.ToString() + "-12-01 00:00:00";
+            var startMonth = lastDate;
+            return startMonth;
+        }
+        public string GetNowYearMonth()
+        {
+            //结束日期为今年当月
+            DateTime s = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+            DateTime ss = s.AddDays(1 - s.Day);
+            var endMonth = ss.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss");
+            return endMonth;
         }
     }
 }

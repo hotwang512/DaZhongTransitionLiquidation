@@ -715,6 +715,9 @@ var $page = function () {
                 if ($("#Status").val() != "1" && $("#Status").val() != "") {
                     $("#Auditor").val($("#LoginName").val());
                 }
+                if ($("#Status").val() == "3") {
+                    $("#Auditor").val(msg.Auditor);
+                }
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
                 $("#AccountModeName").val(msg.AccountModeName);

@@ -8,6 +8,8 @@
     var accountModeName = ViewBag.GetAccountMode;
     var userInfo = ViewBag.User as Sys_User;
     var moduleMenu = userInfo.GetCurrentPagePermission();
+    var nowYearMonth = ViewBag.GetNowYearMonth;
+    var lastYearMonth = ViewBag.GetLastYearMonth;
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
@@ -134,11 +136,11 @@
                 <td style="text-align: right;width: 100px;">账簿名称:</td>
                 <td style="text-align: left;"><input id="AccountModeName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" value="@accountModeName" validatetype="required" /></td>
                 <td style="text-align: right;width: 90px;">会计期:@*公司名称：*@</td>
-                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 120px;" class="input_text form-control"  onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" />@*<select id="CompanyCode" class="input_text form-control"></select>*@</td>
+                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 120px;" class="input_text form-control"  onfocus="WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn', minDate: '@lastYearMonth', maxDate: '@nowYearMonth' })" /></td>
                 <td style="text-align: right;width: 90px;">凭证类型:</td>
                 <td style="text-align: left;"><input id="VoucherType" type="text" style="width: 120px;" class="input_text form-control" readonly="readonly" value="现金类" validatetype="required" /></td>
                 <td style="text-align: right;width: 90px;">凭证日期:</td>
-                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 150px;" class="input_text form-control"  onfocus="WdatePicker({  realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" /></td>
+                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 150px;" class="input_text form-control"  onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn', minDate: '@lastYearMonth', maxDate: '@nowYearMonth' })" /></td>
                 <td style="text-align: right;width: 90px;">批名:</td>
                 <td style="text-align: left;"><input id="BatchName" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;width: 90px;">凭证号码:</td>

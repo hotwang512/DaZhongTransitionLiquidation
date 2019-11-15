@@ -1,0 +1,80 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@{
+    ViewBag.Title = "现金管理/现金交易流水";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentModuleRolePermission = ViewBag.CurrentModulePermission as Sys_Role_Module;
+    Sys_User user = ViewBag.User as Sys_User;
+}
+
+@section js{
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="@Url.CusContent("~/Areas/CapitalCenterManagement/Views/_js/CashTransactionFlow.js")"></script>
+}
+
+@section css{
+
+}
+<style type="text/css">
+    .jqx-grid-cell-pinned-office {
+        background-color: none !important;
+    }
+    </style>
+
+<!-- 中部条件 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 105px;">
+        <table style="margin-top: 20px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">交易银行：</td>
+                <td class="td_input">
+                    @*<input id="TradingBank" type="text" class="input_text form-control" />*@
+                    <select id="TradingBank" class="input_text form-control" style="width: 210px;"></select>
+                </td>
+                <td class="td_span">交易开始日期：</td>
+                <td class="td_input">
+                    <input id="TransactionDate" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td>              
+                <td style="width: 95px;">
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>               
+            </tr>
+            <tr style="height: 45px;">
+                <td class="td_span">对方单位：</td>
+                <td class="td_input">
+                    <input id="ReceivingUnit" type="text" class="input_text form-control" />
+                </td>
+                <td class="td_span">交易结束日期：</td>
+                <td class="td_input">
+                    <input id="TransactionDateEnd" type="text" style="width: 210px;" class="input_text form-control" onfocus="WdatePicker({ maxDate: '%y-#{%M}', realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn' })" />
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+</table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="jqxTable" class="jqxTable">
+    </div>
+</div>
+<style>
+    /*.input_text {
+        width: 340px;
+    }*/
+    .td_span {
+    text-align: right;
+    width: 115px;
+}
+</style>
+<!-- 底部表格 -->

@@ -40,6 +40,8 @@ var $page = function () {
 
         //重置
         selector.$btnReset().on("click", function () {
+            $("#Name").val("");
+            $("#Code").val("");
             $("#txtChannel").val("");
             $("#txtChannel2").val("");
             selector.$txtUserIDNo().val("");
@@ -153,7 +155,9 @@ var $page = function () {
                         "IDNumber": selector.$txtUserIDNo().val(),
                         "TransactionID": transactionId,
                         "PayDateFrom": selector.$txtPaymentForm().val(),
-                        "PayDateTo": selector.$txtPaymentTo().val()
+                        "PayDateTo": selector.$txtPaymentTo().val(),
+                        "Name": $("#Name").val(),
+                        "JobNumber": $("#Code").val()
                     },
                     url: "/PaymentManagement/RevenuePayment/GetRevenuePaymentInfos"    //获取数据源的路径
                 };

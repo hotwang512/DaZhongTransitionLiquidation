@@ -1,6 +1,7 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using SyntacticSugar;
@@ -61,8 +62,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     var isAny = db.Queryable<Business_CashManagerInfo>().Any(x => x.VGUID == sevenSection.VGUID);
                     if (!isAny)
                     {
-                        var no = db.Ado.GetString(@"select top 1 No from Business_CashManagerInfo a where DATEDIFF(month,a.CreateTime,@NowDate)=0 
-                                  order by No desc", new { @NowDate = DateTime.Now });
+                        var cash = "Cash" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
+                        //2019110001
+                        var no = CreateNo.GetCreateCashNo(db, cash);
                         sevenSection.VGUID = Guid.NewGuid();
                         sevenSection.No = GetVoucherName(no);
                         sevenSection.CreateTime = DateTime.Now;

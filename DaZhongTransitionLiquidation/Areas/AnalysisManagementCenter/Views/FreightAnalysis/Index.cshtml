@@ -1,0 +1,95 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+@{
+    ViewBag.Title = "运价分析";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
+}
+@section js{
+    <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/FreightAnalysis.js")"></script>
+    <script src="@Url.CusContent("/_theme/DatePicker/WdatePicker.js")"></script>
+}
+<table id="hideButton" style="margin-top: 10px;display:block">
+    <tr style="height: 50px;">
+        @if (permission.New || permission.Edit)
+        {
+            <td style="width: 95px;">
+                <button id="btnNew" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">增加</span></button>
+            </td>
+        }
+    </tr>
+</table>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span" style="width: 40px">车型：</td>
+                <td class="td_input">
+                    <select id="VehicleModel" class="input_text form-control" style="width: 200px;"></select>
+                </td>
+            </tr>
+            <tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">运价分析-白天</span></div>
+    </div>
+    <div class="body_mk" style="height: 280px;">
+        <div id="tableList"></div>
+        <div style="display: none">
+            <input id="VGUID" />
+        </div>
+    </div>
+</div>
+
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">运价分析-夜间</span></div>
+    </div>
+    <div class="body_mk" style="height: 280px;">
+        <div id="tableList1"></div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="FreightAnalysisModalDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 700px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title_PurchaseItem" style="color: #555; font-family: Calibri;">增加</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 400px; overflow: auto">
+                <table style="width: 100%;">
+                    <tbody>
+                    <tr style="height: 45px;">
+                        <td style="width: 50px; text-align: right"><span class="spanText">车型：</span></td>
+                        <td style="width: 140px; text-align: center">
+                            <select id="VehicleModelNew" class="input_text form-control" style="width: 200px;"></select>
+                        </td>
+                        <td style="width: 50px;text-align: right"><span class="spanText">日期：</span></td>
+                        <td style="width: 140px;text-align: center">
+                            <input id="DateOfYear" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy', dateFmt: 'yyyy', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px" validatetype="required">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="table" style="margin-top:10px"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="FreightAnalysisDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="FreightAnalysisDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="EditPermission" value="@permission.Edit.ToString()" />
+<input type="hidden" id="NewPermission" value="@permission.New.ToString()" />

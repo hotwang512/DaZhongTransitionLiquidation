@@ -19,8 +19,18 @@
         $("#Cashier").val($("#LoginName").val());
         //金额转化大写
         $("#Money").blur(function () {
-            var money = $("#Money").val();
-            if (money != "") {var value = smalltoBIG(money);$("#MoneyA").val(value);}
+            var money = $("#Money").val().replace(/,/g, "");//string.replace(new RegExp(key,'g'),"b");
+            var money0 = "";
+            var money1 = "";
+            var moneyList = money.split(".");
+            if (moneyList.length == 2) {
+                $("#Money").val(moneyList[0].replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,') + "." + moneyList[1]);
+            } else {
+                $("#Money").val(moneyList[0].replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            }
+            if (money != "") { var value = smalltoBIG(money); $("#MoneyA").val(value); } else {
+                $("#MoneyA").val("");
+            }
         });
         //预览
         $("#Preview").on("click", function () {

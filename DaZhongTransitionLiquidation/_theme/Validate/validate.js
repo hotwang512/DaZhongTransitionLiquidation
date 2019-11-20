@@ -216,7 +216,7 @@ function validate_decimalNumber(selecter) {
     var isValidateSuccess = true;
     //var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
     var reg = /^(\-?)\d+(\.\d+)?$/;
-    if (reg.test($(selecter).val())) {
+    if (reg.test($(selecter).val().replace(/,/g, ""))) {
         isValidateSuccess = true;
         if ($(selecter).hasClass("input_Validate")) {
             $(selecter).removeClass("input_Validate");

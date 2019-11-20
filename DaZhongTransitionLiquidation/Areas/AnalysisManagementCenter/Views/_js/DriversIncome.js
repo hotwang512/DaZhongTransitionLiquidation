@@ -232,12 +232,30 @@ var $page = function () {
                 dataField: 'ProjectName',
                 width: 200,
                 cellsAlign: 'center',
-                align: 'center'
+                align: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                }
             }
         ];
         for (var i = 0; i < data.length; i++) {
             datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+            columns.push({
+                text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                }
+            });
         }
         debugger;
         var paras = "";
@@ -287,12 +305,28 @@ var $page = function () {
                 dataField: 'ProjectName',
                 width: 200,
                 cellsAlign: 'center',
-                align: 'center'
+                align: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                }
             }
         ];
         for (var i = 0; i < data.length; i++) {
             datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                } });
         }
         debugger;
         var paras = "";

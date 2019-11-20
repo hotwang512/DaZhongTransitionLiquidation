@@ -205,6 +205,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\DriversIncome.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\FreightAnalysis.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\RentTarget.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
@@ -417,6 +418,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\FreightAnalysis\Index.cshtml" />
     <Content Include="Areas\CapitalCenterManagement\Views\CashTransactionFlow\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\RentTarget\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\DriversIncome\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3289,8 +3291,10 @@
     <Compile Include="App_Start\MyUrlHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\AnalysisManagementCenterAreaRegistration.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Controllers\DriversIncome\DriversIncomeController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\FreightAnalysis\FreightAnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\RentTarget\RentTargetController.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\Business_DriversIncome.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_FreightAnalysis.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_RentTarget.cs" />
     <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />

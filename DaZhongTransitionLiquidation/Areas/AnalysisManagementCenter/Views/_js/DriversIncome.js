@@ -6,9 +6,9 @@ var $page = function () {
     this.init = function () {
         //$("#DateOfYear").attr("disabled",true);
         if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
-            $("#RentTargetDialog_OKBtn").show();
+            $("#DriversIncomeDialog_OKBtn").show();
         } else {
-            $("#RentTargetDialog_OKBtn").hide();
+            $("#DriversIncomeDialog_OKBtn").hide();
         }
         GetVehicleModelDropDown();
         addEvent();
@@ -21,22 +21,22 @@ var $page = function () {
                 var date = new Date();
                 $("#DateOfYear").val(date.getFullYear());
                 //$("#VehicleModelNew").val("");
-                //GetRentTarget();
-                $("#RentTargetModalDialog").modal("show");
+                //GetDriversIncome();
+                $("#DriversIncomeModalDialog").modal("show");
             });
         $("#VehicleModel").on("change",
             function () {
-                GetRentTargetYear();
+                GetDriversIncomeYear();
             });
         $("#VehicleModelNew").on("change",
             function () {
-                GetRentTarget();
+                GetDriversIncome();
             });
         $("#DateOfYear").on("blur",
             function () {
-                GetRentTarget();
+                GetDriversIncome();
             });
-        $("#RentTargetDialog_OKBtn").on("click", function () {
+        $("#DriversIncomeDialog_OKBtn").on("click", function () {
             var validateError = 0;
             if (!Validate($("#VehicleModelNew"))) {
                 validateError++;
@@ -55,9 +55,9 @@ var $page = function () {
                     });
                 };
                 $.ajax({
-                    url: "/AnalysisManagementCenter/RentTarget/SaveRentTarget",
+                    url: "/AnalysisManagementCenter/DriversIncome/SaveDriversIncome",
                     data: {
-                        "RentTargetList": SettingList
+                        "DriversIncomeList": SettingList
                     },
                     type: "post",
                     success: function (msg) {
@@ -67,8 +67,8 @@ var $page = function () {
                                 break;
                             case "1":
                                 jqxNotification("保存成功！", null, "success");
-                                $("#RentTargetModalDialog").modal("hide");
-                                GetRentTargetYear();
+                                $("#DriversIncomeModalDialog").modal("hide");
+                                GetDriversIncomeYear();
                                 //window.opener.$("#jqxTable").jqxDataTable('updateBoundData');
                                 break;
                         }
@@ -76,14 +76,14 @@ var $page = function () {
                 });
             }
         });
-        $("#RentTargetDialog_CancelBtn").on("click", function () {
-            $("#RentTargetModalDialog").modal("hide");
+        $("#DriversIncomeDialog_CancelBtn").on("click", function () {
+            $("#DriversIncomeModalDialog").modal("hide");
         });
     }; //addEvent end
-    function GetRentTarget() {
+    function GetDriversIncome() {
         if ($("#VehicleModelNew").val() != "") {
             $.ajax({
-                url: "/AnalysisManagementCenter/RentTarget/GetRentTargetDetail",
+                url: "/AnalysisManagementCenter/DriversIncome/GetDriversIncomeDetail",
                 data: {
                     "VehicleModel": $("#VehicleModelNew").val(),
                     "VehicleModelName": $("#VehicleModelNew option:selected").text(),
@@ -93,7 +93,7 @@ var $page = function () {
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    GetRentTargetDetail(data);
+                    GetDriversIncomeDetail(data);
                 }
             });
         }
@@ -112,9 +112,9 @@ var $page = function () {
             }
         });
     }
-    function GetRentTargetYear() {
+    function GetDriversIncomeYear() {
         $.ajax({
-            url: "/AnalysisManagementCenter/RentTarget/GetRentTargetYear",
+            url: "/AnalysisManagementCenter/DriversIncome/GetDriversIncomeYear",
             data: { "VehicleModel": $("#VehicleModel").val() },
             type: "GET",
             dataType: "json",
@@ -124,7 +124,7 @@ var $page = function () {
                     $("#tableList").show();
                     $("#tableList1").show();
                     dataArr = data;
-                    GetRentTargetList(data, "SingleBus");
+                    GetDriversIncomeList(data, "SingleBus");
                 } else {
                     $("#tableList").hide();
                     $("#tableList1").hide();
@@ -132,7 +132,7 @@ var $page = function () {
             }
         });
     }
-    function GetRentTargetDetail(data) {
+    function GetDriversIncomeDetail(data) {
         var ordersSource =
         {
             dataFields: [
@@ -170,13 +170,57 @@ var $page = function () {
             columns: [
                 { text: '车型', editable: false, dataField: 'VehicleModelName', width: 100, cellsAlign: 'center', align: 'center' },
                 { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
-                { text: '单班车', editable: true, dataField: 'SingleBus', width: 200, cellsAlign: 'center', align: 'center' },
-                { text: '双班车', editable: true, dataField: 'DoubleBus', width: 200, cellsAlign: 'center', align: 'center' },
+                {
+                    text: '单班车',
+                    editable: true,
+                    dataField: 'SingleBus',
+                    width: 220,
+                    cellsAlign: 'center',
+                    align: 'center',
+                    cellsformat: 'F2', 
+                    createeditor: function(row, cellvalue, editor) {
+                        editor.jqxNumberInput({ digits: 3 });
+                    }
+                },
+                {
+                    text: '双班车', editable: true, dataField: 'DoubleBus', width: 210, cellsAlign: 'center', align: 'center', cellsformat: 'F2', //columntype: 'numberinput',
+                    createeditor: function (row, cellvalue, editor) {
+                        editor.jqxNumberInput({ digits: 3 });
+                    }
+                },
                 { text: 'VGUID', datafield: 'VGUID', hidden: true }
             ]
         });
+        $("#table").on('cellendedit', function (event) {
+            var args = event.args;
+            if (args.datafield == "SingleBus") {
+                window.setTimeout(function() {
+                    var rows = $('#table').jqxGrid('getboundrows');
+                    var singleBusSum = 0;
+                    for (var j = 0; j < rows.length; j++) {
+                        if (rows[j].SingleBus != null && rows[j].boundindex >= 2 && rows[j].boundindex <= 10) {
+                            singleBusSum += rows[j].SingleBus;
+                        }
+                    };
+                    $("#table").jqxGrid('setcellvalue', 1, "SingleBus", singleBusSum);
+                    $("#table").jqxGrid('setcellvalue', 13, "SingleBus", rows[12].SingleBus / 2);
+                }, 200);
+            } else {
+                window.setTimeout((function() {
+                    var rows = $('#table').jqxGrid('getboundrows');
+                    var doubleBusSum = 0;
+                    for (var j = 0; j < rows.length; j++) {
+                        if (rows[j].SingleBus != null && rows[j].boundindex > 2 && rows[j].boundindex < 11) {
+                            doubleBusSum += rows[j].DoubleBus;
+                        }
+                    };
+                    $("#table").jqxGrid('setcellvalue', 1, "SingleBus", doubleBusSum);
+                    $("#table").jqxGrid('setcellvalue', 13, "SingleBus", rows[12].DoubleBus / 2);
+                }, 200));
+            }
+        });
     }
-    function GetRentTargetList(data, SingleOrDouble) {
+    function GetDriversIncomeList(data, SingleOrDouble) {
         debugger;
         var datafields = [
             { name: 'ProjectName', type: 'string' }
@@ -188,12 +232,30 @@ var $page = function () {
                 dataField: 'ProjectName',
                 width: 200,
                 cellsAlign: 'center',
-                align: 'center'
+                align: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                }
             }
         ];
         for (var i = 0; i < data.length; i++) {
             datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+            columns.push({
+                text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                }
+            });
         }
         debugger;
         var paras = "";
@@ -201,7 +263,7 @@ var $page = function () {
             paras += "[" + data[k] + "],";
         }
         paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
+        var url = "/AnalysisManagementCenter/DriversIncome/GetDriversIncomeList";
         var ordersSource =
         {
             dataFields: datafields,
@@ -215,7 +277,7 @@ var $page = function () {
         };
         var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
             loadComplete: function () {
-                GetRentTargetList1(dataArr, "DoubleBus");
+                GetDriversIncomeList1(dataArr, "DoubleBus");
             }
         });
         $("#tableList").jqxGrid(
@@ -231,7 +293,7 @@ var $page = function () {
                 columns: columns
             });
     }
-    function GetRentTargetList1(data, SingleOrDouble) {
+    function GetDriversIncomeList1(data, SingleOrDouble) {
         debugger;
         var datafields = [
             { name: 'ProjectName', type: 'string' }
@@ -243,12 +305,28 @@ var $page = function () {
                 dataField: 'ProjectName',
                 width: 200,
                 cellsAlign: 'center',
-                align: 'center'
+                align: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                }
             }
         ];
         for (var i = 0; i < data.length; i++) {
             datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center',
+                cellclassname: function (row, column, value, data) {
+                    debugger;
+                    if (row == 0 || row == 2 || row == 12 || row == 11) {
+                        return "fontformat";
+                    } else if (row === 13) {
+                        return "colorformat";
+                    }
+                } });
         }
         debugger;
         var paras = "";
@@ -256,7 +334,7 @@ var $page = function () {
             paras += "[" + data[k] + "],";
         }
         paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
+        var url = "/AnalysisManagementCenter/DriversIncome/GetDriversIncomeList";
         var ordersSource =
         {
             dataFields: datafields,

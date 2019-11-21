@@ -1,13 +1,13 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
 @{
-    ViewBag.Title = "租金指标";
+    ViewBag.Title = "假期薪资";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var user = ViewBag.User as Sys_User;
     var permission = user.GetCurrentPagePermission();
 }
 @section js{
-    <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/RentTarget.js")"></script>
+    <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/VacationSalary.js")"></script>
     <script src="@Url.CusContent("/_theme/DatePicker/WdatePicker.js")"></script>
 }
 <table id="hideButton" style="margin-top: 10px;display:block">
@@ -28,9 +28,13 @@
     <div class="body_mk" style="height: 60px;">
         <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
             <tr style="height: 45px;">
-                <td class="td_span" style="width: 40px">车型：</td>
+                <td class="td_span" style="width: 40px">工资类型：</td>
                 <td class="td_input">
-                    <select id="VehicleModel" class="input_text form-control" style="width: 200px;"></select>
+                    <select id="VacationType" class="input_text form-control" style="width: 200px;">
+                        <option value="" selected='true'>请选择</option>
+                        <option value="公休工资" >公休工资</option>
+                        <option value="病假工资" >病假工资</option>
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -40,7 +44,7 @@
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">租金指标-单班车</span></div>
+        <div class="header_text_div"><span class="header_text_span">工资</span></div>
     </div>
     <div class="body_mk" style="height: 120px;">
         <div id="tableList"></div>
@@ -50,19 +54,9 @@
     </div>
 </div>
 
-<div class="mk">
-    <div class="header_mk">
-        <div class="header_icon"></div>
-        <div class="header_text_div"><span class="header_text_span">租金指标-双班车</span></div>
-    </div>
-    <div class="body_mk" style="height: 120px;">
-        <div id="tableList1"></div>
-    </div>
-</div>
-
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="RentTargetModalDialog">
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="VacationSalaryModalDialog">
     <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
-        <div class="modal-content" style="width: 700px; margin-left: auto; margin-right: auto;">
+        <div class="modal-content" style="width: 750px; margin-left: auto; margin-right: auto;">
             <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel_title_PurchaseItem" style="color: #555; font-family: Calibri;">增加</h4>
@@ -71,9 +65,13 @@
                 <table style="width: 100%;">
                     <tbody>
                         <tr style="height: 45px;">
-                            <td style="width: 50px; text-align: right"><span class="spanText">车型：</span></td>
+                            <td style="width: 80px; text-align: right"><span class="spanText">工资类型：</span></td>
                             <td style="width: 140px; text-align: center">
-                                <select id="VehicleModelNew" class="input_text form-control" style="width: 200px;"></select>
+                                <select id="VacationTypeNew" class="input_text form-control" style="width: 200px;">
+                                    <option value="" selected='true'>请选择</option>
+                                    <option value="32387f43-d72e-43b2-b97c-329fc326855d" >公休工资</option>
+                                    <option value="0b319659-1949-4fd6-9587-aac43677047d" >病假工资</option>
+                                </select>
                             </td>
                             <td style="width: 50px;text-align: right"><span class="spanText">日期：</span></td>
                             <td style="width: 140px;text-align: center">
@@ -85,8 +83,8 @@
                 <div id="table" style="margin-top:10px"></div>
             </div>
             <div class="modal-footer">
-                <button id="RentTargetDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
-                <button id="RentTargetDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                <button id="VacationSalaryDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="VacationSalaryDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
             </div>
         </div>
     </div>

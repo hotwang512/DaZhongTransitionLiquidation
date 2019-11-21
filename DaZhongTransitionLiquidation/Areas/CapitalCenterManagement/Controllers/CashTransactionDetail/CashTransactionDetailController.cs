@@ -92,6 +92,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         sevenSection.Batch = GetVoucherName(no);
                         sevenSection.CreateTime = DateTime.Now;
                         sevenSection.CreatePerson = UserInfo.LoginName;
+                        sevenSection.Status = "1";
                         db.Insertable(sevenSection).ExecuteCommand();
                     }
                     else

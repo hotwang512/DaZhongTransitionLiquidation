@@ -3416,6 +3416,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CapitalAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashManagerInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransaction.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransactionTemplate.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_ComeOnAllocationInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CustomerBankSetting.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_LoanApplication.cs" />

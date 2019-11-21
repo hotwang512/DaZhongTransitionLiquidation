@@ -28,7 +28,10 @@
             } else {
                 $("#Money").val(moneyList[0].replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
             }
-            if (money != "") { var value = smalltoBIG(money); $("#MoneyA").val(value); } else {
+            if (money != "") {
+                var value = smalltoBIG(money);
+                $("#MoneyA").val(value);
+            } else {
                 $("#MoneyA").val("");
             }
         });

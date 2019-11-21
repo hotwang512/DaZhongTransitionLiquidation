@@ -1,4 +1,5 @@
 ﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.CompanySection;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
@@ -37,10 +38,66 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 .WhereIF(searchParams.ReimbursementMan != null, i => i.ReimbursementMan == searchParams.ReimbursementMan)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
                 .WhereIF(searchParams.CompanyName != null, i => i.CompanyName.Contains(searchParams.CompanyName))
+                .Where(i=>i.Status == searchParams.Status)
                 .OrderBy(i => i.Batch, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult UpdataCashTransaction(List<Guid> vguids, string status)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                db.Ado.UseTran(() =>
+                {
+                    int saveChanges = 1;
+                    foreach (var item in vguids)
+                    {
+                        saveChanges = db.Updateable<Business_CashTransaction>().UpdateColumns(it => new Business_CashTransaction()
+                        {
+                            Status = status,
+                            CreatePerson = UserInfo.LoginName,
+                            CheckTime = DateTime.Now
+                        }).Where(it => it.VGUID == item).ExecuteCommand();
+                        if(status == "3")
+                        {
+                            //现金报销审核成功进入现金交易流水表
+                            SetCashTransactionFlow(db,item);
+                        }
+                    }
+                    resultModel.IsSuccess = saveChanges == 1;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                });
+            });
+            return Json(resultModel);
+        }
+        private void SetCashTransactionFlow(SqlSugarClient db,Guid vguid)
+        {
+            var cashData = db.Queryable<Business_CashTransaction>().Where(x => x.VGUID == vguid).First();
+            var bankInfo = db.Queryable<Business_CompanyBankInfo>().Where(x => x.BankStatus == true && x.AccountModeCode == cashData.AccountModeCode && x.CompanyCode == cashData.CompanyCode).First();
+            var cashFlow = new Business_CashTransactionTemplate();
+            cashFlow.VGUID = Guid.NewGuid();
+            cashFlow.AccountModeCode = cashData.AccountModeCode;
+            cashFlow.AccountModeName = cashData.AccountModeName;
+            cashFlow.CompanyCode = cashData.CompanyCode;
+            cashFlow.CompanyName = cashData.CompanyName;
+            cashFlow.TradingBank = "上海银行";
+            cashFlow.PayeeAccount = bankInfo.BankAccount;
+            cashFlow.PaymentUnitInstitution = bankInfo.BankName;
+            cashFlow.Batch = cashData.Batch;
+            cashFlow.TransactionDate = cashData.CheckTime;
+            cashFlow.TurnOut = 0;//转入(贷)
+            cashFlow.TurnIn = cashData.TurnOut;//转出(借)
+            cashFlow.Balance = null;
+            cashFlow.ReceivingUnit = cashData.ReimbursementMan;
+            cashFlow.ReceivableAccount = "";
+            cashFlow.ReceivingUnitInstitution = "";
+            cashFlow.Purpose = cashData.Purpose;
+            cashFlow.Remark = "";
+            cashFlow.CreateTime = DateTime.Now;
+            cashFlow.CreatePerson = UserInfo.LoginName;
+            db.Insertable(cashFlow).ExecuteCommand();
         }
     }
 }

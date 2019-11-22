@@ -3410,6 +3410,7 @@
     <Compile Include="Areas\CapitalCenterManagement\Model\BankPreAuthResult.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_AssetsGeneralLedgerDetail_Swap.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CapitalAllocationInfo.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashBorrowLoan.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashManagerInfo.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransaction.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Model\Business_CashTransactionTemplate.cs" />

@@ -23,6 +23,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         {
             ViewBag.GetAccountMode = GetAccountModes();
             ViewBag.GetUseBalance = GetUseBalance();
+            ViewBag.GetGuid = Guid.NewGuid().TryToString();
             return View();
         }
 
@@ -37,6 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 var cashData = db.SqlQueryable<Business_CashManagerInfo>(@"select * from Business_CashManagerInfo where CheckNo in (select VoucherSubject from Business_BankFlowTemplate 
                                     where TradingBank='交通银行' and ReceivingUnit='现金')")
                                     .OrderBy("No asc").ToList();
+                cashData = cashData.Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode).ToList();
                 if (data.Count > 0)
                 {
                     var userBalance = data.First().UseBalance;//第一笔流水可用余额
@@ -44,18 +46,20 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     if (cashData.Count > 0)
                     {
                         money = cashData.Sum(x => x.Money) - cashData.First().Money;//备用金提现总金额 - 第一笔备用金提现
+                        //money = cashData.Sum(x => x.Money);
                     }
-                    var turnOut = data.Sum(x => x.TurnOut);//现金流水支出总金额
+                    var turnOut = data.Sum(x => x.TurnOut).TryToDecimal();//现金流水支出总金额
                     result = userBalance + money - turnOut;
                 }
                 else
                 {
                     //可用余额初始值 = 期初余额 + 备用金提现
+                    var firstMoney = 0;
+                    result = firstMoney + cashData.Sum(x => x.Money);
                 }
             });
             return result;
         }
-
         public List<Business_SevenSection> GetAccountModes()
         {
             var result = new List<Business_SevenSection>();
@@ -86,18 +90,18 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     if (!isAny)
                     {
                         var cash = "CashTran" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                        //2019110001
+                        //2019110001--现金报销
                         var no = CreateNo.GetCreateCashNo(db, cash);
-                        sevenSection.VGUID = Guid.NewGuid();
-                        sevenSection.Batch = GetVoucherName(no);
+                        //sevenSection.VGUID = sevenSection.VGUID;
+                        sevenSection.Batch = "XJBX" + no;
                         sevenSection.CreateTime = DateTime.Now;
                         sevenSection.CreatePerson = UserInfo.LoginName;
                         sevenSection.Status = "1";
-                        db.Insertable(sevenSection).ExecuteCommand();
+                        db.Insertable(sevenSection).IgnoreColumns(it => it == "CheckTime").ExecuteCommand();
                     }
                     else
                     {
-                        db.Updateable(sevenSection).ExecuteCommand();
+                        db.Updateable(sevenSection).IgnoreColumns(it => it == "CheckTime").ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
@@ -106,14 +110,66 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(resultModel);
         }
-        private string GetVoucherName(string voucherNo)
+        public JsonResult GetCashBorrowLoan(Guid PayVGUID, GridParams para)
         {
-            var batchNo = 0;
-            if (voucherNo.IsValuable() && voucherNo.Length > 4)
+            var jsonResult = new JsonResultModel<Business_CashBorrowLoan>();
+            DbBusinessDataService.Command(db =>
             {
-                batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
+                int pageCount = 0;
+                para.pagenum = para.pagenum + 1;
+                jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID)
+                .OrderBy(i => i.Borrow, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                jsonResult.TotalRows = pageCount;
+            });
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteCashBorrowLoan(List<Guid> vguids)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                int saveChanges = db.Deleteable<Business_CashBorrowLoan>(vguids).ExecuteCommand();
+                resultModel.IsSuccess = saveChanges == vguids.Count;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveCashBorrowLoan(Business_CashBorrowLoan bankChannel, bool isEdit)
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            if (!isEdit)
+            {
+                bankChannel.VCRTUSER = UserInfo.LoginName;
+                bankChannel.VCRTTIME = DateTime.Now;
+                bankChannel.VGUID = Guid.NewGuid();
             }
-            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
+            DbBusinessDataService.Command(db =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    if (isEdit)
+                    {
+                        db.Updateable<Business_CashBorrowLoan>().UpdateColumns(it => new Business_CashBorrowLoan()
+                        {
+                            Borrow = bankChannel.Borrow,
+                            Loan = bankChannel.Loan,
+                            PayVGUID = bankChannel.PayVGUID,
+                            Remark = bankChannel.Remark,
+                            Money = bankChannel.Money,
+                            VMDFTIME = DateTime.Now,
+                            VMDFUSER = UserInfo.LoginName,
+                        }).Where(it => it.VGUID == bankChannel.VGUID).ExecuteCommand();
+                    }
+                    else
+                    {
+                        db.Insertable(bankChannel).ExecuteCommand();
+                    }
+                });
+                resultModel.IsSuccess = result.IsSuccess;
+                resultModel.ResultInfo = result.ErrorMessage;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
     }
 }

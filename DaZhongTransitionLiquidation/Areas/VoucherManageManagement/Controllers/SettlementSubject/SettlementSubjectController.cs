@@ -17,6 +17,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         // GET: VoucherManageManagement/SettlementSubject
         public ActionResult Index()
         {
+            ViewBag.AccountMode = GetAccountMode();
             return View();
         }
         public JsonResult GetSettlementSubject()
@@ -134,12 +135,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    var isAny = db.Queryable<Business_SettlementSubjectDetail>().Any(x => x.AccountModeCode == UserInfo.AccountModeCode && x.SettlementVGUID == bankChannel.SettlementVGUID && x.CompanyCode == bankChannel.CompanyCode && x.VGUID != bankChannel.VGUID);
-                    if (isAny)
-                    {
-                        resultModel.Status = "2";
-                        return;
-                    }
+                    //var isAny = db.Queryable<Business_SettlementSubjectDetail>().Any(x => x.AccountModeCode == UserInfo.AccountModeCode && x.SettlementVGUID == bankChannel.SettlementVGUID && x.CompanyCode == bankChannel.CompanyCode && x.VGUID != bankChannel.VGUID);
+                    //if (isAny)
+                    //{
+                    //    resultModel.Status = "2";
+                    //    return;
+                    //}
                     if (isEdit)
                     {
                         db.Updateable(bankChannel).ExecuteCommand();

@@ -194,6 +194,13 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 accountModeCode = accountModeData.Code;
             }
             var type = "";
+            switch (voucher.VoucherType)
+            {
+                case "现金类": type = "x.现金"; break;
+                case "银行类": type = "y.银行"; break;
+                case "转账类": type = "z.转账"; break;
+                default: break;
+            }
             var documentMakerData = result.Where(x => x.LoginName == voucher.DocumentMaker).FirstOrDefault();//Oracle用户名
             var documentMaker = "";
             if (documentMakerData != null)

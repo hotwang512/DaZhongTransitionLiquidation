@@ -58,13 +58,14 @@
                 @if (moduleMenu.New)
                 {
                     <td>
-                        <button id="btnAdd2" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+                        <button id="btnAddBorrow" type="button" class="buttons" style="width: 100px;margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="">新增借</span></button>
+                        <button id="btnAddLoan" type="button" class="buttons" style="width: 100px;margin-top: 5px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="">新增贷</span></button>
                     </td>
                 }
                 @if (moduleMenu.StrikeOut)
                 {
                     <td>
-                        <button id="btnDelete2" style="margin-left: 20px;" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
+                        <button id="btnDelete2" style="width: 80px;margin-top: 5px;margin-left:5px" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black!important;">&#xe640;</i><span style="">删除</span></button>
                     </td>
                 }
             </tr>
@@ -116,22 +117,36 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddBankChannelDialog">
     <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
         <div class="modal-content" style="width: 445px; margin-left: auto; margin-right: auto;">
             <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel_title2" style="color: #555; font-family: Calibri;">新增项目明细</h4>
+                <h4 class="modal-title" id="myModalLabel_title2" style="color: #555; font-family: Calibri;">新增借贷明细</h4>
             </div>
             <div class="modal-body" style="width: 100%;">
                 <table style="width: 100%;">
+                    <tr style="height: 45px;">
+                        <td style="width: 75px;text-align: center"><span class="spanText">账套</span></td>
+                        <td style="width: 150px;">
+                            <select id="AccountModeCode" class="input_text form-control" style="" onchange="getCompanyCode()">
+                                @{
+                                    foreach (var item in ViewBag.AccountMode)
+                                    {
+                                        <option value="@item.Code">@item.Descrption</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
                     <tr style="height: 45px;">
                         <td style="width: 75px;text-align: center"><span class="spanText">公司</span></td>
                         <td style="width: 150px;">
                             <select id="CompanyCode" class="input_text form-control" style="" onchange="companyChange()"></select>
                         </td>
                     </tr>
-                    <tr style="height: 45px;">
+                    <tr id="BorrowTr" style="height: 45px;display:none">
                         <td style="width: 90px;text-align: center"><span class="spanText">借</span></td>
                         <td>
                             <div id='jqxWidget1'>
@@ -143,7 +158,7 @@
                             <button id="Remove1" type="button" style="float: right;margin-top: -28px;">清除</button>
                         </td>
                     </tr>
-                    <tr style="height: 45px;">
+                    <tr id="LoanTr" style="height: 45px;display:none">
                         <td style="width: 90px;text-align: center"><span class="spanText">贷</span></td>
                         <td>
                             <div id='jqxWidget2'>
@@ -153,6 +168,12 @@
                                 </div>
                             </div>
                             <button id="Remove2" type="button" style="float: right;margin-top: -28px;">清除</button>
+                        </td>
+                    </tr>
+                    <tr style="height: 45px;">
+                        <td style="width: 90px;text-align: center"><span class="spanText">摘要</span></td>
+                        <td style="">
+                            <textarea id="Remark" class="input_text form-control" style="width: 213px !important;"></textarea>
                         </td>
                     </tr>
                 </table>

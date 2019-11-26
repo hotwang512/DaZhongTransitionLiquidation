@@ -33,6 +33,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         initTable();
+
         getCompanyCode();
         //新增
         selector.$btnAdd().click(function () {
@@ -152,21 +153,21 @@ var $page = function () {
         $("#Remove2").on("click", function () {
             $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
         })
-        //新增
-        $("#btnAdd2").on("click", function () {
+        //新增借贷
+        $("#btnAddBorrow").on("click", function () {
             if ($("#VGUID").val() == "") {
                 jqxNotification("请选择项目！", null, "error");
                 return;
             }
-            $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
-            $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
-            isEdit = false;
-            guid = "";
-            $("#myModalLabel_title2").text("新增项目明细");
-            selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
-            selector.$AddBankChannelDialog().modal("show");
-            initBorrowTable(companyCode, accountMode);
-        })
+            add("B");
+        });
+        $("#btnAddLoan").on("click", function () {
+            if ($("#VGUID").val() == "") {
+                jqxNotification("请选择项目！", null, "error");
+                return;
+            }
+            add("L");
+        });
         //删除
         $("#btnDelete2").on("click", function () {
             var array = $('#datatable').jqxGrid('getselectedrowindexes');
@@ -179,6 +180,7 @@ var $page = function () {
             });
             if (pars.length == 0) {
                 jqxNotification("请选择要删除的数据！", null, "error");
+                return;
             }
             $.ajax({
                 url: "/VoucherManageManagement/SettlementSubject/DeleteSettlementSubject",
@@ -203,6 +205,12 @@ var $page = function () {
         selector.$AddBankChannel_OKButton().on("click", function () {
             var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
             var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
+            if (borrow == "null") {
+                borrow = "";
+            }
+            if (loan == "null") {
+                loan = "";
+            }
             $.ajax({
                 url: "/VoucherManageManagement/SettlementSubject/SaveSettlementSubject?isEdit=" + isEdit,
                 data: {
@@ -211,7 +219,8 @@ var $page = function () {
                     Borrow: borrow,
                     Loan: loan,
                     VGUID: guid,
-                    SettlementVGUID: $("#VGUID").val()
+                    SettlementVGUID: $("#VGUID").val(),
+                    Remark: $("#Remark").val(),
                 },
                 type: "post",
                 dataType: "json",
@@ -236,6 +245,25 @@ var $page = function () {
     }
 }
 
+function add(type) {
+    if (type == "B") {
+        $("#BorrowTr").show();
+        $("#LoanTr").hide();
+    } else {
+        $("#BorrowTr").hide();
+        $("#LoanTr").show();
+    }
+    $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+    $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+    $("#Remark").val("");
+    $("#Month").val("");
+    isEdit = false;
+    vguid = "";
+    $("#myModalLabel_title").text("新增借/贷方信息");
+    selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
+    selector.$AddBankChannelDialog().modal("show");
+    initBorrowTable(companyCode, accountMode);
+}
 //删除
 function dele(selection) {
     $.ajax({
@@ -327,6 +355,7 @@ function initTable(vguid) {
             { name: 'AccountModeCode', type: 'string' },
             { name: 'CompanyCode', type: 'string' },
             { name: 'SettlementVGUID', type: 'string' },
+            { name: 'Remark', type: 'string' },
             { name: 'VGUID', type: 'string' },
         ],
         datatype: "json",
@@ -354,10 +383,11 @@ function initTable(vguid) {
         selectionmode: 'checkbox',
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-            { text: '账套', datafield: 'AccountModeName', width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+            { text: '账套', datafield: 'AccountModeName', pinned: true, width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
             { text: '公司', datafield: 'CompanyName', width: 400, align: 'center', cellsAlign: 'center' },
-            { text: '借', datafield: 'Borrow', width: 300, align: 'center', cellsAlign: 'center' },
-            { text: '贷', datafield: 'Loan', align: 'center', cellsAlign: 'center' },
+            { text: '借', datafield: 'Borrow', width: 250, align: 'center', cellsAlign: 'center' },
+            { text: '贷', datafield: 'Loan', width: 250, align: 'center', cellsAlign: 'center' },
+            { text: '摘要', datafield: 'Remark', width: 250, align: 'center', cellsAlign: 'center' },
             { text: 'AccountModeCode', datafield: 'AccountModeCode', hidden: true },
             { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
             { text: 'SettlementVGUID', datafield: 'SettlementVGUID', hidden: true },
@@ -371,13 +401,22 @@ function initTable(vguid) {
         var data = $('#datatable').jqxGrid('getrowdata', boundIndex);
         guid = data.VGUID;
         isEdit = true;
+        $("#AccountModeCode").val(data.AccountModeCode);
         $("#CompanyCode").val(data.CompanyCode);
+        $("#Remark").val(data.Remark);
+        if (data.Borrow != null && data.Borrow != "") {
+            $("#BorrowTr").show();
+            $("#LoanTr").hide();
+        } else {
+            $("#BorrowTr").hide();
+            $("#LoanTr").show();
+        }
         initBorrowTable(data.CompanyCode, data.AccountModeCode);
         var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Borrow + '</div>';
         $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
         var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Loan + '</div>';
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
-        $("#myModalLabel_title2").text("编辑项目明细");
+        $("#myModalLabel_title2").text("编辑借/贷方信息");
         selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
         selector.$AddBankChannelDialog().modal("show");
     });
@@ -394,7 +433,7 @@ $(function () {
 });
 
 function getCompanyCode() {
-    accountMode = $("#LoginAccountModeCode").val();
+    accountMode = $("#AccountModeCode").val();
     $.ajax({
         url: "/HomePage/CompanyHomePage/GetCompanyCode",
         data: { accountMode: accountMode },

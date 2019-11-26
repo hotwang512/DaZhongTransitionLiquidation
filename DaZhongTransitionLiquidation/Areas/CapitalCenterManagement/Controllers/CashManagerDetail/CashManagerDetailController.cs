@@ -22,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.GetAccountMode = GetAccountModes();
+            ViewBag.GetGuid = Guid.NewGuid().TryToString();
             return View();
         }
         public List<Business_SevenSection> GetAccountModes()
@@ -63,10 +64,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     if (!isAny)
                     {
                         var cash = "Cash" + UserInfo.AccountModeCode + UserInfo.CompanyCode;
-                        //2019110001
+                        //2019110001--备用金
                         var no = CreateNo.GetCreateCashNo(db, cash);
-                        sevenSection.VGUID = Guid.NewGuid();
-                        sevenSection.No = GetVoucherName(no);
+                        //sevenSection.VGUID = sevenSection.VGUID;
+                        sevenSection.No = "BYJ" + no;
+                        sevenSection.Status = "1";
                         sevenSection.CreateTime = DateTime.Now;
                         sevenSection.Founder = UserInfo.LoginName;
                         db.Insertable(sevenSection).ExecuteCommand();
@@ -83,15 +85,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
-        }
-        private string GetVoucherName(string voucherNo)
-        {
-            var batchNo = 0;
-            if (voucherNo.IsValuable() && voucherNo.Length > 4)
-            {
-                batchNo = voucherNo.Substring(voucherNo.Length - 4, 4).TryToInt();
-            }
-            return DateTime.Now.ToString("yyyyMMdd") + (batchNo + 1).TryToString().PadLeft(4, '0');
         }
     }
 }

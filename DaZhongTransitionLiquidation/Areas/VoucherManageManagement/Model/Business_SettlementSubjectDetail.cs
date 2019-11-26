@@ -15,5 +15,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string AccountModeCode { get; set; }
         public string CompanyCode { get; set; }
         public string SettlementVGUID { get; set; }
+        public string Remark { get; set; }
     }
 }

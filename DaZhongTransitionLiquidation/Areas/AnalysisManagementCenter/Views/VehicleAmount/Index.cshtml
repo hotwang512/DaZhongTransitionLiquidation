@@ -1,0 +1,158 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+@using DaZhongTransitionLiquidation.Areas.AssetManagement.Models;
+@{
+    ViewBag.Title = "车辆额度表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User as Sys_User;
+    var permission = user.GetCurrentPagePermission();
+}
+@section js{
+    <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/VehicleAmount.js")"></script>
+    <script src="@Url.CusContent("/_theme/DatePicker/WdatePicker.js")"></script>
+}
+<style type="text/css" >
+    #table table {
+        border-collapse: separate;
+        -webkit-box-sizing: content-box;
+        border-spacing: 0;
+        margin: 0;
+        border-width: 0;
+        table-layout: auto;
+        min-width: 1800px;
+        outline-width: 0;
+        cursor: default;
+        max-width: none;
+        max-height: none;    
+        border-left: 1px solid #ccc;
+    }
+    #table table td,th {
+        border-top-width: 0;
+        border-left-width: 0;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+         height: 12px; 
+        empty-cells: show;
+         line-height: 12px; 
+        padding: 10px 4px;
+        background-color: #fff;
+        vertical-align: middle;
+        overflow: hidden;
+        outline-width: 0;
+        white-space: pre-line;
+    }
+    .ht_clone_master {
+        z-index: 100;
+    }
+    .tableInput {
+        border: none;
+        outline-width: 0;
+        margin: 0;
+        padding: 1px 5px 0;
+        font-family: inherit;
+        line-height: 30px;
+        font-size: 20px;
+        box-shadow: inset 0 0 0 2px #5292f7;
+        resize: none;
+        display: block;
+        color: #000;
+        border-radius: 0;
+        background-color: #fff;
+    }
+    #menuRight{
+        width: 0; 
+        height: 25px;
+        overflow: hidden;
+        box-shadow: 0 1px 1px #888,1px 0 1px #ccc;
+        position: absolute;
+        background-color: white;
+    }
+    .menuRight{
+        width: 125px;
+        height: 25px;
+        line-height: 25px;
+        padding: 0 10px;
+        border: 1px solid #a4a4a4;
+        cursor:default;
+        
+    }
+    .menuRight:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+<table id="hideButton" style="margin-top: 10px;display:block">
+    <tr style="height: 50px;">
+        @if (permission.New || permission.Edit)
+        {
+            <td style="width: 95px;">
+                <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">保存</span></button>
+            </td>
+        }
+    </tr>
+</table>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px;">
+        <table style="margin-top: 20px; width: 900px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td style="width: 50px;text-align: right"><span class="spanText">日期：</span></td>
+                <td style="width: 140px;text-align: center">
+                    <input id="DateOfYear" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy', dateFmt: 'yyyy', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px" validatetype="required">
+                </td>
+            </tr>
+            <tr>
+        </table>
+    </div>
+</div>
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div class="body_mk" style="height: 320px; top: 0px; left: 0px;">
+        <div id="continer" style="overflow-x: scroll;position: relative;">
+            <div id="table" style="min-height: 1000px">
+            </div>
+            <div id="inputHolder" class="ht_clone_master" style="right: auto; display: none; position: absolute">
+                <textarea id="tableInput" onkeyup="format_input_num(this)" rows="1" class="tableInput" style="font-size: 15px; resize: none; min-width: 67px; max-width: 586px; overflow-y: hidden;"></textarea>
+            </div>
+            <div style="display: none">
+                <input id="VGUID"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="menuRight">
+    <div class="menuRight">插入批注</div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="CommentModalDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 350px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_title_PurchaseItem" style="color: #555; font-family: Calibri;">插入批注</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 200px; overflow: auto">
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr style="height: 45px;">
+                            <td style="width: 50px; text-align: right"><span class="spanText">批注：</span></td>
+                            <td style="width: 140px; text-align: center">
+                                <textarea id="Comment" class="input_text form-control" style="width: 260px;height:150px" ></textarea>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="CommentDialog_OKBtn" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                <button id="CommentDialog_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="EditPermission" value="@permission.Edit.ToString()" />
+<input type="hidden" id="NewPermission" value="@permission.New.ToString()" />

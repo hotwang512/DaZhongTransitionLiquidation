@@ -43,76 +43,61 @@ var $page = function () {
         $("#tableInput").on("blur",
             function () {
                 var id = $("#tableInput").attr("VGUID");
+                var oldData = $("#" + id).text();
                 $("#" + id).text($("#tableInput").val());
+                if (oldData != $("#tableInput").val()) {
+                    var leftID = id.split("_")[0];
+                    var rightID = id.split("_")[1];
+                    for (var i = rightID; i <= 12; i++) {
+                        $("#" + leftID + "_" + i).text($("#tableInput").val());
+                    }
+                }
                 $("#tableInput").val("");
                 $("#inputHolder").hide();
-                var sumID = $("#" + id).attr("parentgroup") + "_" + id.split("_")[1];
-                var objList = $("td[parentgroup$='" + $("#" + id).attr("parentgroup") + "'][id$='_" + id.split("_")[1] + "']");
-                var sum = 0;
-                for (var i = 0; i < objList.length; i++) {
-                    if (objList[i].innerText != "") {
-                        sum += parseFloat(objList[i].innerText);
-                    }
-                }
-                $("#" + sumID).text(sum);
-                var month = id.split("_")[1];
-                var shanghaiSumID = "taxiShanghaiSum_" + month;
-                var allSumID = "taxiAllSum_" + month;
-                var shanghaiSum = 0;
-                if ($("#" + id).attr("parentgroup") == "operation_manage" ||
-                    $("#" + id).attr("parentgroup") == "trip" ||
-                    $("#" + id).attr("parentgroup") == "chargeunit") {
-                    if ($("#operation_manage_" + month)[0].innerText != "") {
-                        shanghaiSum += parseFloat($("#operation_manage_" + month)[0].innerText);
-                    }
-                    if ($("#chargeunit_" + month)[0].innerText != "") {
-                        shanghaiSum += parseFloat($("#chargeunit_" + month)[0].innerText);
-                    }
-                    if ($("#trip_" + month)[0].innerText != "") {
-                        shanghaiSum += parseFloat($("#trip_" + month)[0].innerText);
-                    }
-                    $("#" + shanghaiSumID).text(shanghaiSum);
-                    if ($("#chain_" + month)[0].innerText != "") {
-                        $("#" + allSumID).text(shanghaiSum + parseFloat($("#chain_" + month)[0].innerText));
-                    } else {
-                        $("#" + allSumID).text(shanghaiSum);
-                    }
-                } else if ($("#" + id).attr("parentgroup") == "chain") {
-                    if ($("#" + shanghaiSumID)[0].innerText != "") {
-                        $("#" + allSumID).text(parseFloat($("#" + shanghaiSumID)[0].innerText) + parseFloat($("#chain_" + month)[0].innerText));
-                    } else {
-                        $("#" + allSumID).text(parseFloat($("#chain_" + month)[0].innerText));
-                    }
-                }
+                computeSum();
             });
         $("#btnSave").on("click", function () {
-            var rows = $(".tdvalue");
-            var tbValues = [];
-            for (var j = 0; j < rows.length; j++) {
-                tbValues.push({
-                    "VGUID": rows[j].getAttribute("VGUID"), "DateOfYear": $("#DateOfYear").val(),
-                    "YearMonth": rows[j].id.split("_")[1], "CompanyGuid": rows[j].id.split("_")[0],
-                    "CompanyName": rows[j].getAttribute("companyname"), "Comment": rows[j].title,
-                    "LicenseAmount": rows[j].innerText
-                });
-            };
-            $.ajax({
-                url: "/AnalysisManagementCenter/VehicleAmount/SaveVehicleAmountList",
-                data: {
-                    "tbValues": tbValues
-                },
-                type: "post",
-                success: function (msg) {
-                    switch (msg.Status) {
+            //验证
+            var validateError = 0;
+            for (var i = 1; i <= 12; i++) {
+                if ($("#operation_manage_" + i).text() != $("#operation_asset_" + i).text()) {
+                    validateError++;
+                }
+            }
+            if (validateError == 0) {
+                var rows = $(".tdvalue");
+                var tbValues = [];
+                for (var j = 0; j < rows.length; j++) {
+                    tbValues.push({
+                        "VGUID": rows[j].getAttribute("VGUID"),
+                        "DateOfYear": $("#DateOfYear").val(),
+                        "YearMonth": rows[j].id.split("_")[1],
+                        "CompanyGuid": rows[j].id.split("_")[0],
+                        "CompanyName": rows[j].getAttribute("companyname"),
+                        "Comment": rows[j].title,
+                        "LicenseAmount": rows[j].innerText
+                    });
+                };
+                $.ajax({
+                    url: "/AnalysisManagementCenter/VehicleAmount/SaveVehicleAmountList",
+                    data: {
+                        "tbValues": tbValues
+                    },
+                    type: "post",
+                    success: function(msg) {
+                        switch (msg.Status) {
                         case "0":
                             jqxNotification("保存失败", null, "error");
                             break;
                         case "1":
                             jqxNotification("保存成功！", null, "success");
                             break;
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                jqxNotification("管理公司与资产公司小计不一致", null, "error");
+            }
         });
         window.oncontextmenu = function (e) {
             e.preventDefault();
@@ -285,6 +270,7 @@ function getTbodyOperationCompany(tbody, table, datas,companytype, startnum, col
                     $("#tableInput").attr("VGUID", this.id);
                     $("#tableInput").val(this.innerText);
                     $("#tableInput").focus();
+                    $("#tableInput").select();
                 }
                 td.oncontextmenu = function (e) {
                     e.preventDefault();

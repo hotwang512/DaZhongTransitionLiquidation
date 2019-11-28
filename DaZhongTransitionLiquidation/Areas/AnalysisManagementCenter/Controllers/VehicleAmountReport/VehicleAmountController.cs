@@ -41,36 +41,37 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
             {
                 var valueData = db.Queryable<Business_VehicleAmountReport>()
                     .Where(x => x.DateOfYear == DateOfYear).ToList();
-                jsonResult.Rows = valueData;
+                if (valueData.Count > 0)
+                {
+                    jsonResult.Rows = valueData;
+                }
+                else
+                {
+                    var currentYearData = new List<Business_VehicleAmountReport>();
+                    var lastYear = DateOfYear.ObjToInt() - 1;
+                    var lastYearData = db.Queryable<Business_VehicleAmountReport>()
+                        .Where(x => x.DateOfYear == lastYear.ToString() && x.YearMonth == 12).ToList();
+                    if (lastYearData.Count > 0)
+                    {
+                        foreach (var item in lastYearData)
+                        {
+                            for (int i = 1; i <= 12; i++)
+                            {
+                                var currentYearModel = new Business_VehicleAmountReport();
+                                currentYearModel.VGUID = Guid.NewGuid();
+                                currentYearModel.YearMonth = i;
+                                currentYearModel.LicenseAmount = item.LicenseAmount;
+                                currentYearModel.CompanyGuid = item.CompanyGuid;
+                                currentYearModel.CompanyName = item.CompanyName;
+                                currentYearModel.DateOfYear = DateOfYear;
+                                currentYearData.Add(currentYearModel);
+                            }
+                        }
+                        jsonResult.Rows = currentYearData;
+                    }
+                }
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
-        }
-        public string GetVehicleAmountList(string VacationType, string paras)
-        {
-            var json = "";
-            if (!paras.IsNullOrEmpty())
-            {
-                DbBusinessDataService.Command(db =>
-                {
-                    var data = db.Ado.GetDataTable(
-                        @"select *
-                        from
-                        (
-                            select ProjectName
-                                 , DateOfYear
-		                         , Salary
-		                         , Zorder
-                            from Business_VacationSalary  where VacationType = '" + VacationType + @"'
-                        ) a
-                        pivot
-                        (
-                            max(Salary)
-                            for DateOfYear in (" + paras + @")
-                        ) b order by Zorder");
-                    json = data.DataTableToJson();
-                });
-            }
-            return json;
         }
         public JsonResult SaveVehicleAmountList(List<Business_VehicleAmountReport> tbValues)
         {

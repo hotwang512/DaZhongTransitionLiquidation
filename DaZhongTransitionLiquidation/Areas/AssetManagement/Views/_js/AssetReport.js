@@ -19,7 +19,7 @@ var $page = function () {
         $("#YearMonth").val(currentDate);
         addEvent();
         var winHeight = document.body.scrollWidth;
-        $("#assetReport").css("width", winHeight - 243);
+        $("#continer").css("width", winHeight - 243);
     }
     //所有事件
     function addEvent() {

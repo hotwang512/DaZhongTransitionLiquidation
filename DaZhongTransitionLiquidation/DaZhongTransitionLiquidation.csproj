@@ -210,6 +210,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\FreightAnalysis.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\RentTarget.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VacationSalary.js" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleAmount.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetException.js" />
@@ -425,6 +426,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\DriversIncome\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VacationSalary\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\FilialeStatistics\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\VehicleAmount\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VoucherModel\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\VoucherModelDetail\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
@@ -3304,11 +3306,13 @@
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\FreightAnalysis\FreightAnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\RentTarget\RentTargetController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VacationSalary\VacationSalaryController.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleAmountReport\VehicleAmountController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_DriversIncome.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_FilialeStatistics.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_FreightAnalysis.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_RentTarget.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_VacationSalary.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\Business_VehicleAmountReport.cs" />
     <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceDetailController.cs" />

@@ -543,7 +543,9 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     #endregion
                     default:
                         break;
-                }               
+                }
+                //删除索引重新生成
+                DeleteIndexes(db);
             });
             return Json(resultModel);
         }
@@ -1199,8 +1201,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 }
                 if (sectionList.Count > 0)
                 {
-                    //删除索引重新生成
-                    DeleteIndexes(db);
                     db.Insertable(sectionList).ExecuteCommand();
                     //db.Updateable(LedgerAccount).Where(x=>x.CheckStatus == null).ExecuteCommand();
                     db.Ado.SqlQuery<LedgerSubject_Swap>(@"update LedgerSubject_Swap set CheckStatus='2' where CheckStatus is null");

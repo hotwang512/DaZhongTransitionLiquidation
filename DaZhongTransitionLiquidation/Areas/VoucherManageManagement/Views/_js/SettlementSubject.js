@@ -214,8 +214,14 @@ var $page = function () {
             $.ajax({
                 url: "/VoucherManageManagement/SettlementSubject/SaveSettlementSubject?isEdit=" + isEdit,
                 data: {
+                    AccountModeCode: $("#AccountModeCode").val(),
+                    AccountModeName: $('#AccountModeCode option:selected').text(),
                     CompanyCode: $("#CompanyCode").val(),
                     CompanyName: $('#CompanyCode option:selected').text(),
+                    AccountModeCodeOther: $("#AccountModeCodeOther").val(),
+                    AccountModeNameOther: $('#AccountModeCodeOther option:selected').text(),
+                    CompanyCodeOther: $("#CompanyCodeOther").val(),
+                    CompanyNameOther: $('#CompanyCodeOther option:selected').text(),
                     Borrow: borrow,
                     Loan: loan,
                     VGUID: guid,
@@ -248,7 +254,7 @@ var $page = function () {
 function add(type) {
     if (type == "B") {
         $("#BorrowTr").show();
-        $("#LoanTr").hide();
+        $("#LoanTr").show();
     } else {
         $("#BorrowTr").hide();
         $("#LoanTr").show();
@@ -350,10 +356,14 @@ function initTable(vguid) {
             //{ name: "checkbox", type: null },
             { name: 'AccountModeName', type: 'string' },
             { name: 'CompanyName', type: 'string' },
+            { name: 'AccountModeNameOther', type: 'string' },
+            { name: 'CompanyNameOther', type: 'string' },
             { name: 'Borrow', type: 'string' },
             { name: 'Loan', type: 'string' },
             { name: 'AccountModeCode', type: 'string' },
             { name: 'CompanyCode', type: 'string' },
+            { name: 'AccountModeCodeOther', type: 'string' },
+            { name: 'CompanyCodeOther', type: 'string' },
             { name: 'SettlementVGUID', type: 'string' },
             { name: 'Remark', type: 'string' },
             { name: 'VGUID', type: 'string' },
@@ -383,11 +393,15 @@ function initTable(vguid) {
         selectionmode: 'checkbox',
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-            { text: '账套', datafield: 'AccountModeName', pinned: true, width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-            { text: '公司', datafield: 'CompanyName', width: 400, align: 'center', cellsAlign: 'center' },
+            { text: '我方账套', datafield: 'AccountModeName', pinned:true, width: 250, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+            { text: '我方公司', datafield: 'CompanyName', width: 200,pinned:true, align: 'center', cellsAlign: 'center' },
+            { text: '对方账套', datafield: 'AccountModeNameOther',  width: 250, align: 'center', cellsAlign: 'center'},
+            { text: '对方公司', datafield: 'CompanyNameOther', width: 200, align: 'center', cellsAlign: 'center' },
             { text: '借', datafield: 'Borrow', width: 250, align: 'center', cellsAlign: 'center' },
             { text: '贷', datafield: 'Loan', width: 250, align: 'center', cellsAlign: 'center' },
-            { text: '摘要', datafield: 'Remark', width: 250, align: 'center', cellsAlign: 'center' },
+            { text: '摘要', datafield: 'Remark',width: 250, align: 'center', cellsAlign: 'center' },
+            { text: 'AccountModeCodeOther', datafield: 'AccountModeCodeOther', hidden: true },
+            { text: 'CompanyCodeOther', datafield: 'CompanyCodeOther', hidden: true },
             { text: 'AccountModeCode', datafield: 'AccountModeCode', hidden: true },
             { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
             { text: 'SettlementVGUID', datafield: 'SettlementVGUID', hidden: true },
@@ -403,7 +417,11 @@ function initTable(vguid) {
         isEdit = true;
         $("#AccountModeCode").val(data.AccountModeCode);
         $("#CompanyCode").val(data.CompanyCode);
+        $("#AccountModeCodeOther").val(data.AccountModeCodeOther);
+        $("#CompanyCodeOther").val(data.CompanyCodeOther);
         $("#Remark").val(data.Remark);
+        getCompanyCode();
+        getCompanyCodeOther();
         if (data.Borrow != null && data.Borrow != "") {
             $("#BorrowTr").show();
             $("#LoanTr").hide();
@@ -432,21 +450,6 @@ $(function () {
     page.init();
 });
 
-function getCompanyCode() {
-    accountMode = $("#AccountModeCode").val();
-    $.ajax({
-        url: "/HomePage/CompanyHomePage/GetCompanyCode",
-        data: { accountMode: accountMode },
-        type: "POST",
-        dataType: "json",
-        async: false,
-        success: function (msg) {
-            uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "CompanyName");
-            //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
-        }
-    });
-    companyCode = $("#CompanyCode").val();
-}
 function initBorrowTable(companyCode, accountMode) {
     var source = {
         datafields:
@@ -562,9 +565,45 @@ function initBorrowTable(companyCode, accountMode) {
         $("#jqxdropdownbutton2").jqxDropDownButton('setContent', dropDownContent);
     });
 }
+
+function getCompanyCode() {
+    accountMode = $("#AccountModeCode").val();
+    $.ajax({
+        url: "/HomePage/CompanyHomePage/GetCompanyCode",
+        data: { accountMode: accountMode },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#CompanyCode', msg, "CompanyCode", "Abbreviation");
+            //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+    companyCode = $("#CompanyCode").val();
+}
 function companyChange() {
     $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
     $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     companyCode = $("#CompanyCode").val();
     initBorrowTable(companyCode, accountMode);
+}
+function getCompanyCodeOther() {
+    var accountModeOther = $("#AccountModeCodeOther").val();
+    $.ajax({
+        url: "/HomePage/CompanyHomePage/GetCompanyCode",
+        data: { accountMode: accountModeOther },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#CompanyCodeOther', msg, "CompanyCode", "Abbreviation");
+            //$("#CompanyCode").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
+function companyChangeOther() {
+    //$("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+    //$("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+    //companyCode = $("#CompanyCodeOther").val();
+    //initBorrowTable(companyCode, accountMode);
 }

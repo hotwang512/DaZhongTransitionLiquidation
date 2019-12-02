@@ -24,6 +24,9 @@ var $page = function () {
             $("#btnGoBack").show();
         }
         if (status == "3") {
+            $("#btnCash").show();
+        }
+        if (status == "4") {
             $("#cashTable").hide();
             $("#jqxTable").jqxDataTable({ height: "480px" });
         }
@@ -93,6 +96,25 @@ var $page = function () {
                 jqxNotification("请选择您要退回的数据！", null, "error");
             } else {
                 WindowConfirmDialog(goBack, "您确定要退回选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
+        //提现
+        $("#btnCash").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要修改的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(cash, "您确定要修改选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
     }
@@ -254,6 +276,27 @@ function goBack(selection) {
         }
     });
 }
+//提现
+function submit(selection) {
+    $.ajax({
+        url: "/CapitalCenterManagement/CashManager/UpdataCashManager",
+        data: { vguids: selection, status: "4" },
+        traditional: true,
+        type: "post",
+        success: function (msg) {
+            switch (msg.Status) {
+                case "0":
+                    jqxNotification("提现失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("提现成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+            }
+        }
+    });
+}
+
 function cellsRendererFunc(row, column, value, rowData) {
     return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
 }

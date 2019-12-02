@@ -63,18 +63,19 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     int saveChanges = 1;
                     foreach (var item in vguids)
                     {
-                        if (status == "3")
+                        if (status == "4")
                         {
                             saveChanges = db.Updateable<Business_CashManagerInfo>().UpdateColumns(it => new Business_CashManagerInfo()
                             {
                                 Status = status,
                                 Auditor = UserInfo.LoginName,
-                                CreateTime = DateTime.Now
+                                ChangeTime = DateTime.Now,
+                                CashTime = DateTime.Now,
                             }).Where(it => it.VGUID == item).ExecuteCommand();
                             //备用金审核成功进入现金交易流水表
                             SetCashTransactionFlow(db, item);
                             //根据备用金配置借贷生成凭证
-                            GenerateVoucherList(db, item, userData);
+                            //GenerateVoucherList(db, item, userData);
                         }
                         else
                         {
@@ -158,7 +159,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             voucher.AccountModeName = cashData.AccountModeName;
             voucher.CompanyCode = cashData.CompanyCode;
             voucher.CompanyName = cashData.CompanyName.ToDBC();
-            var bank = "M" + cashData.AccountModeCode + cashData.CompanyCode + cashData.ApplyDate.Value.Year.ToString() + cashData.ApplyDate.Value.Month.ToString();
+            var month = cashData.ApplyDate.Value.Month < 10 ? "0" + cashData.ApplyDate.Value.Month.ToString() : cashData.ApplyDate.Value.Month.ToString();
+            var bank = "M" + cashData.AccountModeCode + cashData.CompanyCode + cashData.ApplyDate.Value.Year.ToString() + month;
             //100201银行类2019090001
             var no = CreateNo.GetCreateNo(db, bank);
             voucher.VoucherNo = cashData.AccountModeCode + cashData.CompanyCode + "现金类" + no;

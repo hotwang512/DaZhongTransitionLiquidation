@@ -33,11 +33,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var response = new List<Business_SettlementImport>();
             DbBusinessDataService.Command(db =>
             {
-                response = db.Queryable<Business_SettlementImport>()
+                var responseList = db.Queryable<Business_SettlementImport>()
                 .WhereIF(searchParams.Model != null, i => i.Model.Contains(searchParams.Model))
                 .WhereIF(searchParams.ClassType != null, i => i.ClassType.Contains(searchParams.ClassType))
                 .OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
-                foreach (var item in response)
+                foreach (var item in responseList)
                 {
                     if (item.BusinessType.Contains("-"))
                     {
@@ -48,6 +48,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     {
                         item.Business = item.BusinessType;
                     }
+                    if(item.BusinessType == "小计")
+                    {
+                        continue;
+                    }
+                    response.Add(item);
                 }
                 //jsonResult.TotalRows = pageCount;
             });

@@ -56,22 +56,33 @@ namespace DaZhongTransitionLiquidation.Areas.HomePage.Controllers
             List<Business_UserCompanySet> result = new List<Business_UserCompanySet>();
             DbBusinessDataService.Command(db =>
             {
+                var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43"
+                                                                    && x.Status == "1" && x.AccountModeCode == accountMode).OrderBy("Code asc").ToList();
                 if (UserInfo.LoginName.ToLower() == "admin" || UserInfo.LoginName.ToLower() == "sysadmin")
                 {
-                    var data = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43"
-                                                                    && x.Status == "1" && x.AccountModeCode == accountMode).OrderBy("Code asc").ToList();
                     //var datas = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Status == "1").OrderBy("Code asc").ToList();
                     foreach (var item in data)
                     {
                         Business_UserCompanySet uc = new Business_UserCompanySet();
                         uc.CompanyCode = item.Code;
                         uc.CompanyName = item.Descrption;
+                        uc.Abbreviation = item.Abbreviation;
                         result.Add(uc);
                     }
                 }
                 else
                 {
-                    result = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == accountMode && x.Block == "1" && x.IsCheck == true).OrderBy("CompanyCode asc").ToList();
+                    var resultList = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.TryToString() && x.Code == accountMode && x.Block == "1" && x.IsCheck == true).OrderBy("CompanyCode asc").ToList();
+                    foreach (var item in resultList)
+                    {
+                        var abbreList = data.Where(x => x.Code == item.CompanyCode).FirstOrDefault();
+                        if(abbreList == null)
+                        {
+                            continue;
+                        }
+                        item.Abbreviation = abbreList.Abbreviation;
+                        result.Add(item);
+                    }
                 }
             });
             return Json(result, JsonRequestBehavior.AllowGet);

@@ -27,5 +27,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public string Changer { get; set; }
         public DateTime? ChangeTime { get; set; }
         public string Status { get; set; }
+        public DateTime? CashTime { get; set; }
     }
 }

@@ -6,13 +6,17 @@ var selector = {
     $grid3: function () { return $("#jqxTable3") },
     $btnSearch: function () { return $("#btnSearch") },
     $btnReset: function () { return $("#btnReset") },
-    $EditPermission: function () { return $("#EditPermission") }
+    $EditPermission: function () { return $("#EditPermission") },
+    $AddBankChannelDialog: function () { return $("#AddBankChannelDialog") },
+    $AddBankChannel_OKButton: function () { return $("#AddBankChannel_OKButton") },
+    $AddBankChannel_CancelBtn: function () { return $("#AddBankChannel_CancelBtn") },
 }; //selector end
 var isEdit = false;
 var vguid = "";
-var type = "";
+var type = $.request.queryString().Type;
 var tableIndex = 0;
 var status = $.request.queryString().Status;
+var createType = "";
 var $page = function () {
 
     this.init = function () {
@@ -24,10 +28,15 @@ var $page = function () {
         getBankInfo();
         if (status == "1") {
             $("#buttonList").show();
+            if (type == "转账类" || type == "2") {
+                $("#btnCreate").show();
+                $("#btnCreateModel").show();
+            }
         }
         if (status == "2") {
             $("#buttonList2").show();
             $("#Oracle").show();
+            $("#btnCheck").show();
             $("#OracleCheck").hide();
             $("#btnCheckStatus").hide();
             //$("#AddSubject_OKButton").show();
@@ -176,6 +185,30 @@ var $page = function () {
         //校验
         $("#btnCheckStatus").on("click", function () {
             checkOracleData();
+        });
+        //生成--根据结算项目或者模板
+        $("#btnCreate").on("click", function () {
+            createType = "1";
+            selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
+            selector.$AddBankChannelDialog().modal("show");
+        });
+        $("#btnCreateModel").on("click", function () {
+            createType = "2";
+            selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
+            selector.$AddBankChannelDialog().modal("show");
+        });
+        //弹出框中的取消按钮
+        selector.$AddBankChannel_CancelBtn().on("click", function () {
+            selector.$AddBankChannelDialog().modal("hide");
+        });
+        //弹出框中的保存按钮
+        selector.$AddBankChannel_OKButton().on("click", function () {
+            var year = $("#Year").val();
+            var month = $("#Month").val();
+            switch (createType) {
+                case "1": createVoucher(year, month); break;
+                case "2": createVoucherModel(year, month); break;
+            }
         });
     }; //addEvent end
     //打印
@@ -699,7 +732,6 @@ var $page = function () {
         }
         $('#jqxTabs').jqxTabs({ width: "99%", height: 450, initTabContent: initWidgets });
     } else {
-        type = $.request.queryString().Type;
         if (type == null) {
             type = "";
         } else {
@@ -851,4 +883,75 @@ function getBankInfo() {
             $("#TradingBank").prepend("<option value=\"\" selected='true'></>");
         }
     });
+}
+function createVoucher(year, month) {
+    layer.load();
+    $.ajax({
+        url: "/VoucherManageManagement/VoucherList/CreateVoucher",
+        data: { year: year, month: month },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            layer.closeAll('loading');
+            if (msg.IsSuccess == true) {
+                jqxNotification("同步完成！", null, "success");
+                if (tableIndex == 1) {
+                    $("#jqxTable1").jqxDataTable('updateBoundData');
+                    selector.$AddBankChannelDialog().modal("hide");
+                }
+            } else {
+                if (msg.Status == "2") {
+                    jqxNotification("我方公司借贷配置无数据！", null, "error");
+                } else if (msg.Status == "3") {
+                    jqxNotification("当前月份结算汇总无数据！", null, "error");
+                }
+            }
+        }
+    })
+}
+function selectVoucherModel(year, month) {
+    layer.load();
+    $.ajax({
+        url: "/VoucherManageManagement/VoucherList/SelectVoucherModel",
+        data: { year: year, month: month },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            layer.closeAll('loading');
+            if (msg.IsSuccess == true) {
+                
+            } else {
+                if (msg.Status == "2") {
+                    jqxNotification("当前账套公司无模板数据！", null, "error");
+                } else if (msg.Status == "3") {
+                    jqxNotification("当前月份无模板数据！", null, "error");
+                }
+            }
+        }
+    })
+}
+function createVoucherModel(year, month) {
+    layer.load();
+    $.ajax({
+        url: "/VoucherManageManagement/VoucherList/CreateVoucherModel",
+        data: { year: year, month: month },
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            layer.closeAll('loading');
+            if (msg.IsSuccess == true) {
+                jqxNotification("同步完成！", null, "success");
+                if (tableIndex == 1) {
+                    $("#jqxTable1").jqxDataTable('updateBoundData');
+                    selector.$AddBankChannelDialog().modal("hide");
+                }
+            } else {
+                if (msg.Status == "2") {
+                    jqxNotification("当前账套公司无模板数据！", null, "error");
+                } else if (msg.Status == "3") {
+                    jqxNotification("当前月份无模板数据！", null, "error");
+                }
+            }
+        }
+    })
 }

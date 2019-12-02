@@ -31,6 +31,15 @@
                     <button id="btnPrint" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xea0e;</i><span style="margin-left: 7px; float: left;">打印</span></button>
                 </td>
             }
+            @if (moduleMenu.Generate)
+            {
+                <td style="width: 132px;">
+                    <button id="btnCreate" type="button" class="buttons" style="width: 115px;display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe645;</i><span style="margin-left: 7px; float: left;">结算生成</span></button>
+                </td>
+                <td style="width: 95px;">
+                    <button id="btnCreateModel" type="button" class="buttons" style="width: 115px;display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe645;</i><span style="margin-left: 7px; float: left;">模板生成</span></button>
+                </td>
+            }
             <td style="width: 95px;display:none;">
                 <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
             </td>
@@ -40,7 +49,6 @@
                     <button id="btnUp" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe91c;</i><span style="margin-left: 7px; float: left;">提交</span></button>
                 </td>
             }
-
         </tr>
     </table>
     <table style="margin-top: 10px;display:none;" id="buttonList2">
@@ -62,7 +70,7 @@
             @if (moduleMenu.Review)
             {
                 <td style="width: 95px;">
-                    <button id="btnCheck" type="button" class="buttons hide"><i class="iconfont btn_icon" style="color: black !important;">&#xe91c;</i><span style="margin-left: 7px; float: left;">审核</span></button>
+                    <button id="btnCheck" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe91c;</i><span style="margin-left: 7px; float: left;">审核</span></button>
                 </td>
             }
         </tr>
@@ -89,7 +97,7 @@
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
                 </td>
-                </tr>
+            </tr>
             <tr>
                 <td class="td_span">交易日期始：</td>
                 <td class="td_input">
@@ -160,3 +168,125 @@
 </style>
 <!-- 底部表格 -->
 <input type="hidden" id="EditPermission" value="@currentModuleRolePermission.Edit" />
+
+<div class="container">
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddBankChannelDialog">
+        <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+            <div class="modal-content" style="width: 300px; margin-left: auto; margin-right: auto;">
+                <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">选择年月</h4>
+                </div>
+                <div class="modal-body" style="width: 100%;">
+                    <table style="width: 100%;">
+                        <tr style="height: 45px;">
+                            <td style="width: 75px;text-align: center"><span class="spanText">年</span></td>
+                            <td style="width: 150px;">
+                                <select id="Year" class="input_text form-control" style="width:150px">
+                                    @{
+                                        for (int i = 0; i < 10; i++)
+                                        {
+                                            int j = i + 2019;
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr style="height: 45px;">
+                            <td style="text-align: center"><span class="spanText">月</span></td>
+                            <td style="">
+                                <select id="Month" class="input_text form-control" style="width:150px">
+                                    @{
+                                        for (int i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="AddBankChannel_OKButton" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">确定</span></button>
+                    <button id="AddBankChannel_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="ShowDialog" style="overflow: auto;">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
+        <div class="modal-content" style="width: 1500px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">预览凭证</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <table id="VoucherListTitle" style="width:70%;margin-left: 270px;">
+                    <tr style="height:35px">
+                        @*<td style="text-align: center;font-size: 18px;" colspan="5"><label id="lblCompany" for="" style="font-size: 14px;font-family: SimSun;"></label></td>*@
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: center;font-size: 14px;"><label id="lblCompany" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: right;font-size: 14px;">会计期：</td>
+                        <td style="text-align: left;font-size: 14px;"><label id="lblAccountingPeriods" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: right;font-size: 14px;">批名：</td>
+                        <td style="text-align: left;font-size: 14px;"><label id="lblBatchName" for="" style=""></label></td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: right;font-size: 14px;">币种：</td>
+                        <td style="text-align: left;font-size: 14px;"><label id="lblCurrency" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: right;font-size: 14px;">凭证号码：</td>
+                        <td style="text-align: left;font-size: 14px;"><label id="lblVoucherNo" for="" style=""></label></td>
+                    </tr>
+                    <tr style="height:35px">
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: center;font-size: 14px;">凭证日期：<label id="lblVoucherDate" for="" style=""></label></td>
+                        <td style="text-align: center;font-size: 14px;"></td>
+                        <td style="text-align: right;font-size: 14px;">附件 <label id="lblAttachmentNumber" for=""></label> 张</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="VoucherDetail" class="modal-body" style="width: 100%;">
+                <table id='SubjectTable' style='width:100%;'></table>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <table style="width: 100%;margin-left: 50px">
+                    <tr style="height:35px">
+                        <td style="text-align: right;font-size: 14px;">财务主管 </td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblFinanceDirector" for="" style="margin-top: 5px;"></label></td>
+                        <td style="text-align: right;font-size: 14px;">记账 </td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblBookkeeping" for="" style="margin-top: 5px;"></label></td>
+                        <td style="text-align: right;font-size: 14px;">审核 </td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblAuditor" for="" style="margin-top: 5px;"></label></td>
+                        <td style="text-align: right;font-size: 14px;">制单</td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblDocumentMaker" for="" style="margin-top: 5px;"></label></td>
+                        <td style="text-align: right;font-size: 14px;">出纳 </td>
+                        <td style="text-align: left;font-size: 14px;width:200px">&nbsp;<label id="lblCashier" for="" style="margin-top: 5px;"></label></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                @if (moduleMenu.New || moduleMenu.Edit)
+                {
+                    <button id="btnPre" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">上一页</span></button>
+                }
+                @if (moduleMenu.Submit)
+                {
+                    <button id="btnNext" type="button" class="btn btn-danger" style="width: 90px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;">&#xe91c;</i><span style="margin-left: 7px; float: left;">下一页</span></button>
+                }
+                <button id="AddNewBankData_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
+            </div>
+        </div>
+    </div>
+</div>

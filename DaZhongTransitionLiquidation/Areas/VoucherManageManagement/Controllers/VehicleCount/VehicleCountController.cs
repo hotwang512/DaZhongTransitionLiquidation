@@ -47,7 +47,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     else
                     {
                         //按归属公司分类查询
-                        response = db.Queryable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY == company).OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
+                        response = db.Queryable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY != company).OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
                     }       
                 }
                 else if(Type == "C")
@@ -69,7 +69,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         response = GetSettlementBELONGTO(db, yearMonth, company);
                         if (response.Count > 0)
                         {
-                            db.Deleteable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY == company).ExecuteCommand();
+                            db.Deleteable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY != company).ExecuteCommand();
                             db.Insertable(response).ExecuteCommand();
                         }
                     }
@@ -129,14 +129,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             where    g.GROUP_ID='出租车' and g.OPERATING_STATE='在运' and g.MODEL_MAJOR is not null ) as t 
                             group by t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.MANAGEMENT_COMPANY,t.YearMonth ) as x  
                             left join Business_SettlementImport as c on x.MODEL_MAJOR = c.Model and x.MODEL_MINOR = parsename(REPLACE(c.ClassType,'-','.'),1)
-                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth and x.BELONGTO_COMPANY=@COMPANY  
+                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth and x.MANAGEMENT_COMPANY=@COMPANY  
                             order by c.MoneyRow asc,c.MoneyColumns asc",
                             new { YearMonth = yearMonth, COMPANY = company }).ToList();
             return response;
         }
         private List<Business_SettlementCount> GetSettlementBELONGTO(SqlSugarClient db,string yearMonth, string company)
         {
-            var response = db.Ado.SqlQuery<Business_SettlementCount>(@"select newid() as VGUID,x.MODEL_MAJOR as Model,x.MODEL_MINOR as ClassType,x.CarType,x.YearMonth,x.BELONGTO_COMPANY,x.MODEL_DAYS as DAYS,c.Money,CAST((CAST(x.MODEL_DAYS AS int)*c.Money) AS decimal(18,2)) as Account,c.BusinessType,c.MoneyRow,c.MoneyColumns from (                           
+            var response = db.Ado.SqlQuery<Business_SettlementCount>(@"select newid() as VGUID,x.MODEL_MAJOR as Model,x.MODEL_MINOR as ClassType,x.CarType,x.YearMonth,x.BELONGTO_COMPANY,x.MODEL_DAYS as DAYS,c.Money,CAST((round(x.MODEL_DAYS,0)*c.Money) AS decimal(18,2))*-1 as Account,c.BusinessType,c.MoneyRow,c.MoneyColumns from (                           
                             select t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.BELONGTO_COMPANY,t.YearMonth,SUM(MODEL_DAYS) as MODEL_DAYS from (
                             select g.* from (
                              select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
@@ -168,7 +168,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                             where    g.GROUP_ID='出租车' and g.OPERATING_STATE='在运' and g.MODEL_MAJOR is not null ) as t 
                             group by t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.BELONGTO_COMPANY,t.YearMonth ) as x  
                             left join Business_SettlementImport as c on x.MODEL_MAJOR = c.Model and x.MODEL_MINOR = parsename(REPLACE(c.ClassType,'-','.'),1)
-                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth and x.BELONGTO_COMPANY=@COMPANY
+                            and x.CarType = c.CarType where parsename(REPLACE(c.BusinessType,'-','.'),1) != '小计'  and x.YearMonth=@YearMonth 
+                            and x.BELONGTO_COMPANY != '财务共享-大众出租'
                             order by c.MoneyRow asc,c.MoneyColumns asc",
                             new { YearMonth = yearMonth, COMPANY = company }).ToList();
             return response;
@@ -190,7 +191,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 }
                 else
                 {
-                    response = db.Queryable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY == company).OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
+                    response = db.Queryable<Business_SettlementCount>().Where(x => x.YearMonth == yearMonth && x.BELONGTO_COMPANY != company).OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
                 }
             });
             return Json(

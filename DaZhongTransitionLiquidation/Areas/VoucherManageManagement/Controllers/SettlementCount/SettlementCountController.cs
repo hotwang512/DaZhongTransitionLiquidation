@@ -30,26 +30,40 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         {
             ViewBag.SysUser = CacheManager<Sys_User>.GetInstance()[PubGet.GetUserKey];
             ViewBag.CurrentModulePermission = GetRoleModuleInfo(MasterVGUID.BankData);
+            ViewBag.CompanyInfo = GetCompanyInfo();
             return View();
         }
-        public JsonResult GetSettlementCountData(string year)
+
+        private List<Business_SevenSection> GetCompanyInfo()
+        {
+            List<Business_SevenSection> company = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                company = db.Queryable<Business_SevenSection>("t").Where(@"t.SectionVGUID ='A63BD715-C27D-4C47-AB66-550309794D43' and t.Abbreviation not in 
+                            ('财务共享-浦东分公司', '财务共享-市南分公司', '财务共享-市北分公司', '财务共享-市中分公司', '财务共享-大众出租')").
+                            OrderBy("AccountModeCode asc").ToList();
+            });
+            return company;
+        }
+
+        public JsonResult GetSettlementCountData(string year,string company)
         {
             var dataList = new List<SettlementCountList>();
             DbBusinessDataService.Command(db =>
             { 
-                var company = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == UserInfo.AccountModeCode && x.Code == UserInfo.CompanyCode).ToList().FirstOrDefault().Abbreviation;
+                //var company = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == UserInfo.AccountModeCode && x.Code == UserInfo.CompanyCode).ToList().FirstOrDefault().Abbreviation;
                 if (UserInfo.AccountModeCode == "1002" && (UserInfo.CompanyCode == "02" || UserInfo.CompanyCode == "03" || UserInfo.CompanyCode == "04" || UserInfo.CompanyCode == "05"))
                 {
                     //按管理公司分类
                     dataList = db.Ado.SqlQuery<SettlementCountList>(@"select BusinessType,YearMonth,MANAGEMENT_COMPANY,SUM(Account) as Account from Business_SettlementCount where
-                            MANAGEMENT_COMPANY=@COMPANY and Substring(YearMonth,0,5)=@Year group by BusinessType,YearMonth,BELONGTO_COMPANY ", 
+                            MANAGEMENT_COMPANY=@COMPANY and Substring(YearMonth,0,5)=@Year group by BusinessType,YearMonth,MANAGEMENT_COMPANY ", 
                             new { COMPANY = company, Year = year }).ToList();
                 }
                 else
                 {
                     //按所属公司分类
-                    dataList = db.Ado.SqlQuery<SettlementCountList>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account) as Account from Business_SettlementCount where
-                            BELONGTO_COMPANY=@COMPANY and Substring(YearMonth,0,5)=@Year group by BusinessType,YearMonth,BELONGTO_COMPANY ", 
+                    dataList = db.Ado.SqlQuery<SettlementCountList>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount where
+                            BELONGTO_COMPANY = @COMPANY and Substring(YearMonth,0,5)=@Year group by BusinessType,YearMonth,BELONGTO_COMPANY ", 
                             new { COMPANY = company, Year = year }).ToList();
                 }
                 foreach (var item in dataList)

@@ -62,6 +62,17 @@
                         }
                     </select>
                 </td>
+                <td class="td_span">所属公司：</td>
+                <td class="">
+                    <select id="Company" class="input_text form-control" style="">
+                        @{
+                            foreach (var item in ViewBag.CompanyInfo)
+                            {
+                                <option value="@item.Code">@item.Abbreviation</option>
+                            }
+                        }
+                    </select>
+                </td>
                 <td>
                     <button id="btnSearch" type="button" class="buttons" style="margin-top: 5px;margin-left: 15px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
                 </td>

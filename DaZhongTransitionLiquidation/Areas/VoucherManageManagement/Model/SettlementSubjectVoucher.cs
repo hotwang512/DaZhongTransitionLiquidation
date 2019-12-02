@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
 {
-    public class Business_SettlementSubjectDetail
+    public class SettlementSubjectVoucher
     {
         public Guid VGUID { get; set; }
         public string AccountModeName { get; set; }
@@ -20,5 +20,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string CompanyCodeOther { get; set; }
         public string SettlementVGUID { get; set; }
         public string Remark { get; set; }
+        public string BusinessType { get; set; }
+        public string BusinessTypeKey { get; set; }
     }
 }

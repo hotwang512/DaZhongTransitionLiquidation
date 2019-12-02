@@ -34,7 +34,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var result = new List<Business_SettlementSubjectDetail>();
             DbBusinessDataService.Command(db =>
             {
-                result = db.Queryable<Business_SettlementSubjectDetail>().Where(x => x.SettlementVGUID == settlementVGUID).ToList();
+                result = db.Queryable<Business_SettlementSubjectDetail>().Where(x => x.SettlementVGUID == settlementVGUID).OrderBy("Borrow desc,AccountModeCode asc").ToList();
             });
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -129,18 +129,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 bankChannel.VGUID = Guid.NewGuid();
             }
-            bankChannel.AccountModeCode = UserInfo.AccountModeCode;
-            bankChannel.AccountModeName = UserInfo.AccountModeName;
             DbBusinessDataService.Command(db =>
             {
                 var result = db.Ado.UseTran(() =>
                 {
-                    //var isAny = db.Queryable<Business_SettlementSubjectDetail>().Any(x => x.AccountModeCode == UserInfo.AccountModeCode && x.SettlementVGUID == bankChannel.SettlementVGUID && x.CompanyCode == bankChannel.CompanyCode && x.VGUID != bankChannel.VGUID);
-                    //if (isAny)
-                    //{
-                    //    resultModel.Status = "2";
-                    //    return;
-                    //}
                     if (isEdit)
                     {
                         db.Updateable(bankChannel).ExecuteCommand();

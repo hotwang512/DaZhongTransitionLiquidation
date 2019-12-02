@@ -441,7 +441,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CompanyCode = item.CompanyCode;
                 voucher.CompanyName = item.PaymentUnit.ToDBC();
                 //var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
-                var bank = "B" + item.AccountModeCode + item.CompanyCode+ item.TransactionDate.Value.Year.ToString()+ item.TransactionDate.Value.Month.ToString();
+                var month = item.TransactionDate.Value.Month < 10 ? "0" + item.TransactionDate.Value.Month.ToString() : item.TransactionDate.Value.Month.ToString();
+                var bank = "B" + item.AccountModeCode + item.CompanyCode+ item.TransactionDate.Value.Year.ToString()+ month;
                 //100201银行类2019090001
                 var no = CreateNo.GetCreateNo(db, bank);
                 //var no = "";

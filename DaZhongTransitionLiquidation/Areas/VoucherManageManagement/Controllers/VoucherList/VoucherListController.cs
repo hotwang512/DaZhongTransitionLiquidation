@@ -11,7 +11,6 @@ using SyntacticSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
-using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
 using System.Text.RegularExpressions;
 using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Common.Pub;
@@ -420,6 +419,225 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
+        }
+        public JsonResult CreateVoucher(string year, string month)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var userData = new List<Sys_User>();
+            DbService.Command(_db =>
+            {
+                userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            DbBusinessDataService.Command(db =>
+            {
+                //查出当前登录的我方账套公司借贷配置数据
+                var myData = db.Ado.SqlQuery<SettlementSubjectVoucher>(@"select a.*,b.BusinessType,c.BusinessType as BusinessTypeKey from Business_SettlementSubjectDetail as a 
+                                        left join Business_SettlementSubject as b on a.SettlementVGUID=b.VGUID
+                                        left join Business_SettlementSubject as c on b.ParentVGUID = c.VGUID
+                                        where a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by Borrow desc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
+                var month2 = month.TryToInt() < 10 ? "0" + month : month;
+                var yearMonth = year + month2;
+                //查询出所选月份的结算金额
+                var settlementCount = db.SqlQueryable<Business_SettlementCount>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount where YearMonth = '201909' 
+                                        group by BusinessType,YearMonth,BELONGTO_COMPANY").Where(x => x.YearMonth == yearMonth).ToList();
+                if (myData.Count > 0 && settlementCount.Count > 0)
+                {
+                    //查出对方公司的数据
+                    var companyInfo = db.Ado.SqlQuery<Business_SevenSection>(@" select * from Business_SevenSection where SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43' and Descrption != @CompanyName
+                                        and OrgID in ('2','36','3','35','4') ", new { CompanyName = UserInfo.CompanyName }).ToList();
+                    foreach (var item in companyInfo)
+                    {
+                        //查出我方借出到对方的数据
+                        var myDataOther = myData.Where(x => x.AccountModeCodeOther == item.AccountModeCode && x.CompanyCodeOther == item.Code).ToList();
+                        if (myDataOther.Count > 0)
+                        {
+                            //根据借贷配置数据生成凭证
+                            GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
+                        }
+                    }
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                else
+                {
+                    if(myData.Count == 0)
+                    {
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                    }
+                    else if(settlementCount.Count == 0)
+                    {
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "3";
+                    }
+                } 
+            });
+            return Json(resultModel);
+        }
+        public JsonResult CreateVoucherModel(string year, string month)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            var userData = new List<Sys_User>();
+            DbService.Command(_db =>
+            {
+                userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            DbBusinessDataService.Command(db =>
+            {
+                //按模板取出数据
+                var myData = new List<string>();
+                var settlementCount = new List<string>();
+                var month2 = month.TryToInt() < 10 ? "0" + month : month;
+                var yearMonth = year + month2;
+                if (myData.Count > 0 && settlementCount.Count > 0)
+                {
+                    
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                else
+                {
+                    if (myData.Count == 0)
+                    {
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "2";
+                    }
+                    else if (settlementCount.Count == 0)
+                    {
+                        resultModel.IsSuccess = false;
+                        resultModel.Status = "3";
+                    }
+                }
+            });
+            return Json(resultModel);
+        }
+        private void GenerateVoucherList(SqlSugarClient db, List<SettlementSubjectVoucher> myDataOther, List<Sys_User> userData, string year, string month,List<Business_SettlementCount> settlementCount)
+        {
+            db.Ado.UseTran(() =>
+            {
+                var guid = Guid.NewGuid();
+                Business_VoucherList voucher = new Business_VoucherList();
+                GetVoucherList(db, voucher, myDataOther, guid, userData, year, month);
+                List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
+                GetVoucherDetail(db, BVDetailList, myDataOther, guid, settlementCount);
+                if (voucher != null && BVDetailList.Count > 0)
+                {
+                    db.Insertable(voucher).ExecuteCommand();
+                    db.Insertable(BVDetailList).ExecuteCommand();
+                }
+            });
+        }
+        private void GetVoucherList(SqlSugarClient db, Business_VoucherList voucher, List<SettlementSubjectVoucher> myDataOther, Guid guid, List<Sys_User> userData, string year, string month)
+        {
+            month = month.TryToInt() < 10 ? "0" + month : month;
+            var date = (year + "-" + month).TryToDate();
+            voucher.AccountingPeriod = date;
+            voucher.AccountModeName = myDataOther[0].AccountModeName;
+            voucher.CompanyCode = myDataOther[0].CompanyCode;
+            voucher.CompanyName = myDataOther[0].CompanyName.ToDBC();
+            var bank = "Z" + myDataOther[0].AccountModeCode + myDataOther[0].CompanyCode + year + month;
+            //100201转账类2019090001
+            var no = CreateNo.GetCreateNo(db, bank);
+            voucher.VoucherNo = myDataOther[0].AccountModeCode + myDataOther[0].CompanyCode + "转账类" + no;
+            voucher.BatchName = voucher.VoucherNo;
+            voucher.DocumentMaker = "";
+            voucher.Status = "1";
+            voucher.VoucherDate = DateTime.Now;
+            voucher.VoucherType = "转账类";
+            voucher.Automatic = "1";//自动
+            voucher.TradingBank = "";
+            voucher.ReceivingUnit = myDataOther[0].CompanyNameOther;
+            voucher.TransactionDate = null;
+            voucher.Batch = "";
+            voucher.CreateTime = DateTime.Now;
+            voucher.VGUID = guid;
+            foreach (var user in userData)
+            {
+                switch (user.Role)
+                {
+                    case "财务经理": voucher.FinanceDirector = user.LoginName; break;
+                    case "财务主管": voucher.Bookkeeping = user.LoginName; break;
+                    //case "审核岗": voucher.Auditor = user.LoginName; break;
+                    case "出纳": voucher.Cashier = user.LoginName; break;
+                    default: break;
+                }
+            }
+        }
+        private void GetVoucherDetail(SqlSugarClient db, List<Business_VoucherDetail> BVDetailList, List<SettlementSubjectVoucher> myDataOther, Guid guid, List<Business_SettlementCount> settlementCount)
+        {
+            var i = 0;
+            foreach (var item in myDataOther)
+            {
+                Business_VoucherDetail BVDetail = new Business_VoucherDetail();
+                BVDetail.Abstract = item.Remark;
+                BVDetail.JE_LINE_NUMBER = i++;
+                BVDetail.VGUID = Guid.NewGuid();
+                BVDetail.VoucherVGUID = guid;
+                var borrowMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
+                var loanMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyNameOther && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
+                string seven = null;
+                if (item.Borrow != "" && item.Borrow != null)
+                {
+                    if (item.Borrow.Contains("\n"))
+                    {
+                        item.Borrow = item.Borrow.Substring(0, item.Borrow.Length - 1);
+                    }
+                    seven = item.Borrow;
+                    BVDetail.BorrowMoney = borrowMoney;
+                    BVDetail.BorrowMoneyCount = null;
+                }
+                else
+                {
+                    if (item.Loan.Contains("\n"))
+                    {
+                        item.Loan = item.Loan.Substring(0, item.Loan.Length - 1);
+                    }
+                    seven = item.Loan;
+                    BVDetail.LoanMoney = loanMoney;
+                    BVDetail.LoanMoneyCount = null;
+                }
+                BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, myDataOther[0].AccountModeCode, myDataOther[0].CompanyCode);
+                BVDetailList.Add(BVDetail);
+            }
+        }
+        public static string GetSevenSubjectName(string subject, string acountModeCode, string companyCode)
+        {
+            SqlSugarClient db = DbBusinessDataConfig.GetInstance();
+            var result = "";
+            var seven = subject.Split(".");
+            var data = db.Queryable<Business_SevenSection>().ToList();
+            var i = 0;
+            var sectionVguid = "";
+            var value = "";
+            foreach (var item in seven)
+            {
+                i++;
+                switch (i)
+                {
+                    case 1: sectionVguid = "A63BD715-C27D-4C47-AB66-550309794D43"; break;//公司
+                    case 2: sectionVguid = "B63BD715-C27D-4C47-AB66-550309794D43"; break;//科目
+                    case 3: sectionVguid = "C63BD715-C27D-4C47-AB66-550309794D43"; break;//核算
+                    case 4: sectionVguid = "D63BD715-C27D-4C47-AB66-550309794D43"; break;//成本中心
+                    case 5: sectionVguid = "E63BD715-C27D-4C47-AB66-550309794D43"; break;//备用1
+                    case 6: sectionVguid = "F63BD715-C27D-4C47-AB66-550309794D43"; break;//备用2
+                    case 7: sectionVguid = "G63BD715-C27D-4C47-AB66-550309794D43"; break;//往来段
+                    default:
+                        break;
+                }
+                if (i == 1)
+                {
+                    value = data.Single(x => x.SectionVGUID == sectionVguid && x.AccountModeCode == acountModeCode
+                                     && x.Code == item).Descrption;
+                }
+                else
+                {
+                    value = data.Single(x => x.SectionVGUID == sectionVguid && x.AccountModeCode == acountModeCode
+                                    && x.CompanyCode == companyCode && x.Code == item).Descrption;
+                }
+                result += value + ".";
+            }
+            result = result.Substring(0, result.Length - 1);
+            return result;
         }
     }
 }

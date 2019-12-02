@@ -61,7 +61,7 @@ var $page = function () {
         function initTable() {
             $.ajax({
                 url: "/VoucherManageManagement/SettlementCount/GetSettlementCountData",
-                data: { "year": $("#Year").val() },
+                data: { "year": $("#Year").val(), "company": $("#Company option:selected").text() },
                 datatype: "json",
                 type: "post",
                 success: function (mps) {

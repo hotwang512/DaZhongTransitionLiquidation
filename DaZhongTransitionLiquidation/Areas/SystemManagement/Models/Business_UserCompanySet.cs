@@ -18,5 +18,6 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Models
         public string CompanyName { get; set; }
         public string BusinessCode { get; set; }
         public string BusinessName { get; set; }
+        public string Abbreviation { get; set; }
     }
 }

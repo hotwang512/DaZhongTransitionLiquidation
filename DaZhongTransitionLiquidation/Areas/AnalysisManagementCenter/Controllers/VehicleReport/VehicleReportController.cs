@@ -44,32 +44,17 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
         }
         public JsonResult GetManageCompanyVehicleReport(string YearMonth, GridParams para)
         {
-            var currentDate = YearMonth.TryToDate();
-            var nextDate = getEndMonth(currentDate);
-            var nextDateStr = nextDate.ToString("yyyy-MM-dd");
+            var currentDay = DateTime.Now.ToString("yyyy-MM-dd");
+            var currentMonnthDate = YearMonth.TryToDate();
+            var nextMonthDate = getEndMonth(currentMonnthDate).AddDays(1);
+            var nextDateStr = nextMonthDate.ToString("yyyy-MM-dd");
             var YearMonthDate = YearMonth + "-01";
             var json = "";
             var _db = DbBigDataConfig.GetInstance();
-            var sqlStr = @"select PeriodType                 = '期初'
-                             , CompanyType                = '管理公司'
-                             , info.Name                  as CompanyName
-                             , info.OwnOrganizationId     as CompanyID
-                             , abbr.VehicleAbbreviationId as VehicleID
-                             , abbr.Name                  as VehicleModel
-                             , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
-                            left join DZSrc.VehicleAbbreviation_D abbr
-                                on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-                        where info.LicenseDate < '" + YearMonthDate + @"'
-                              and info.RetireDate is not null
-                              and info.RetireDate < '" + YearMonthDate + @"'
-                        group by info.OwnOrganizationId
-                               , info.Name
-                               , abbr.VehicleAbbreviationId
-                               , abbr.Name
-                        union all
+            var sqlStr = @" with cte as (
                         select PeriodType                 = '期初'
-                             , CompanyType                = '所属公司'
+                             , Sort                = 1
+                             , CompanyType                = '管理公司'
                              , info.Name                  as CompanyName
                              , info.UsageOrganizationId     as CompanyID
                              , abbr.VehicleAbbreviationId as VehicleID
@@ -79,20 +64,54 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
                         where info.LicenseDate < '" + YearMonthDate + @"'
-                              and info.RetireDate is not null
-                              and info.RetireDate < '" + YearMonthDate + @"'
+                              and (info.RetireDate is null or info.RetireDate between '" + YearMonthDate + @"' and '" + currentDay + @"')
+                        group by info.UsageOrganizationId
+                               , info.Name
+                               , abbr.VehicleAbbreviationId
+                               , abbr.Name
+                        union all
+                        select PeriodType                 = '期初'
+                             , Sort                = 1
+                             , CompanyType                = '所属公司'
+                             , info.Name                  as CompanyName
+                             , info.OwnOrganizationId     as CompanyID
+                             , abbr.VehicleAbbreviationId as VehicleID
+                             , abbr.Name                  as VehicleModel
+                             , count(1)                   as Quantity
+                        from Cab.Cab_Base_Info_D                  info
+                            left join DZSrc.VehicleAbbreviation_D abbr
+                                on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
+                        where info.LicenseDate < '" + YearMonthDate + @"'
+                              and (info.RetireDate is null or info.RetireDate between '" + YearMonthDate + @"' and '" + currentDay + @"')
+                        group by info.OwnOrganizationId
+                               , info.Name
+                               , abbr.VehicleAbbreviationId
+                               , abbr.Name
+                        union all
+                            select PeriodType             = '增加'
+                             , Sort                       = 2
+                             , CompanyType                = '管理公司'
+                             , info.Name                  as CompanyName
+                             , info.UsageOrganizationId     as CompanyID
+                             , abbr.VehicleAbbreviationId as VehicleID
+                             , abbr.Name                  as VehicleModel
+                             , count(1)                   as Quantity
+                        from Cab.Cab_Base_Info_D                  info
+                            left join DZSrc.VehicleAbbreviation_D abbr
+                                on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
+                        where info.LicenseDate between '" + YearMonthDate + @"' and '" + nextDateStr + @"'
                         group by info.UsageOrganizationId
                                , info.Name
                                , abbr.VehicleAbbreviationId
                                , abbr.Name
                         union all
                             select PeriodType             = '增加'
-                             , CompanyType                = '管理公司'
+                             , Sort                       = 2
+                             , CompanyType                = '所属公司'
                              , info.Name                  as CompanyName
                              , info.OwnOrganizationId     as CompanyID
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
-                            
                              , count(1)                   as Quantity
                         from Cab.Cab_Base_Info_D                  info
                             left join DZSrc.VehicleAbbreviation_D abbr
@@ -104,12 +123,30 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                , abbr.Name
                         union all
                             select PeriodType                 = '减少'
+                                 , Sort                       = 3
                                  , CompanyType                = '管理公司'
+                                 , info.Name                  as CompanyName
+                                 , info.UsageOrganizationId     as CompanyID
+                                 , abbr.VehicleAbbreviationId as VehicleID
+                                 , abbr.Name                  as VehicleModel
+                                
+                                 , count(1)                   as Quantity
+                            from Cab.Cab_Base_Info_D                  info
+                                left join DZSrc.VehicleAbbreviation_D abbr
+                                    on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
+                            where info.RetireDate between '" + YearMonthDate + @"' and '" + nextDateStr + @"'
+                            group by info.UsageOrganizationId
+                                   , info.Name
+                                   , abbr.VehicleAbbreviationId
+                                   , abbr.Name
+                        union all
+                            select PeriodType                 = '减少'
+                                 , Sort                       = 3
+                                 , CompanyType                = '所属公司'
                                  , info.Name                  as CompanyName
                                  , info.OwnOrganizationId     as CompanyID
                                  , abbr.VehicleAbbreviationId as VehicleID
                                  , abbr.Name                  as VehicleModel
-                                
                                  , count(1)                   as Quantity
                             from Cab.Cab_Base_Info_D                  info
                                 left join DZSrc.VehicleAbbreviation_D abbr
@@ -121,6 +158,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                    , abbr.Name
                         union all
                         select PeriodType                 = '期末'
+                             , Sort                       = 4
                              , CompanyType                = '管理公司'
                              , info.Name                  as CompanyName
                              , info.UsageOrganizationId     as CompanyID
@@ -130,31 +168,31 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                         from Cab.Cab_Base_Info_D                  info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-                        where info.LicenseDate < '" + YearMonthDate + @"'
-                              and info.RetireDate is not null
-                              and info.RetireDate < '" + YearMonthDate + @"'
+                        where info.LicenseDate < '" + nextMonthDate + @"'
+                              and (info.RetireDate is null or info.RetireDate between '" + nextMonthDate + @"' and '" + currentDay + @"')
                         group by info.UsageOrganizationId
                                , info.Name
                                , abbr.VehicleAbbreviationId
                                , abbr.Name
                         union all
                         select PeriodType                 = '期末'
+                             , Sort                       = 4
                              , CompanyType                = '所属公司'
                              , info.Name                  as CompanyName
-                             , info.UsageOrganizationId     as CompanyID
+                             , info.OwnOrganizationId     as CompanyID
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
                         from Cab.Cab_Base_Info_D                  info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-                        where info.LicenseDate < '" + YearMonthDate + @"'
-                              and info.RetireDate is not null
-                              and info.RetireDate < '" + YearMonthDate + @"'
-                        group by info.UsageOrganizationId
+                        where info.LicenseDate < '" + nextMonthDate + @"'
+                              and (info.RetireDate is null or info.RetireDate between '" + nextMonthDate + @"' and'" + currentDay + @"')
+                        group by info.OwnOrganizationId
                                , info.Name
                                , abbr.VehicleAbbreviationId
-                               , abbr.Name";
+                               , abbr.Name)
+	                select * from cte order by cte.Sort ,cte.CompanyType,cte.VehicleID";
             var data = _db.Ado.GetDataTable(sqlStr);
             json = data.DataTableToJson();
             return Json(json, JsonRequestBehavior.AllowGet);

@@ -19,7 +19,7 @@ var $page = function () {
         $("#YearMonth").val(currentDate);
         addEvent();
         var winHeight = document.body.scrollWidth;
-        $("#continer").css("width", winHeight - 243);
+        $("#assetReport").css("width", winHeight - 243);
     }
     //所有事件
     function addEvent() {
@@ -91,8 +91,13 @@ var $page = function () {
                 columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }, { dataField: 'VehicleModel', width: 110, align: 'center' }],
                 values: [
                     {
-                        dataField: 'Quantity','function': 'sum', text: 'sum', formatSettings: { decimalPlaces:0, align: 'right' }
-                    }
+                        dataField: 'Quantity',
+                        'function': 'sum',
+                        text: '总数',
+                        formatSettings: { decimalPlaces: 0, align: 'center' },
+                        isHidden: true,
+                        sortable: false
+                    }  
                 ]
             });
             selector.$grid().jqxPivotGrid(

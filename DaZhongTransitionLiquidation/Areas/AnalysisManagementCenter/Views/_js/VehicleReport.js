@@ -24,7 +24,7 @@ var $page = function () {
     //所有事件
     function addEvent() {
         //加载列表数据
-        //initPeriodTable();
+        initPeriodTable();
         //提交
         $("#btnSubmit").on("click", function () {
             $.ajax({
@@ -68,17 +68,12 @@ var $page = function () {
     function initPeriodTable(data) {
         layer.load();
         getPeriodData(function (datashow) {
-            debugger;
-            var values = fillValues(data);
-            debugger;
             var datafields = new Array();
             datafields.push({ name: 'CompanyType', type: 'string' });
             datafields.push({ name: 'CompanyName', type: 'string' });
             datafields.push({ name: 'PeriodType', type: 'string' });
-            //datafields.push({ name: 'Quantity', type: 'number' });
-            for (var i = 0; i < values.length; i++) {
-                datafields.push({ name: values[i], type: 'number' });
-            }
+            datafields.push({ name: 'VehicleModel', type: 'string' });
+            datafields.push({ name: 'Quantity', type: 'number' });
             var source =
             {
                 localdata: datashow,
@@ -93,8 +88,12 @@ var $page = function () {
                 pivotValuesOnRows: false,
                 totals: { rows: { subtotals: false, grandtotals: false }, columns: { subtotals: false, grandtotals: false } },
                 rows: [{ dataField: 'CompanyType' }, { dataField: 'CompanyName' }],
-                columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }],
-                values: values
+                columns: [{ dataField: 'PeriodType', width: 110, align: 'center' }, { dataField: 'VehicleModel', width: 110, align: 'center' }],
+                values: [
+                    {
+                        dataField: 'Quantity','function': 'sum', text: 'sum', formatSettings: { decimalPlaces:0, align: 'right' }
+                    }
+                ]
             });
             selector.$grid().jqxPivotGrid(
             {
@@ -108,48 +107,13 @@ var $page = function () {
             for (var k = 0; k < pivotRows.items.length; k++) {
                 pivotRows.items[k].expand();
             }
+            var pivotCols = pivotGrid.getPivotColumns();
+            for (var i = 0; i < pivotCols.items.length; i++) {
+                pivotCols.items[i].expand();
+            }
             pivotGrid.refresh();
             layer.closeAll('loading');
         });
-    }
-    function fillData(data) {
-        var newData = [];
-        for (var j = 0; j < data.length; j++) {
-            var currentData = { "CompanyType": data[j].CompanyType, "PeriodType": data[j].PeriodType, "CompanyName": data[j].CompanyName }//PeriodType
-            var sum = 0;
-            for (var k = 0; k < data[j].ResultVehicleModelList.length; k++) {
-                currentData["VehicleModel" + k] = data[j].ResultVehicleModelList[k].Quantity;
-                sum += data[j].ResultVehicleModelList[k].Quantity;
-            }
-            currentData["Quantity"] = sum;
-            newData.push(currentData);
-        }
-        debugger;
-        return newData;
-    }
-    function fillValues(data) {
-        var values = [];
-        for (var i = 0; i < data.length; i++) {
-            var valueObj = new Object();
-            valueObj.dataField = data[i];
-            valueObj.function = 'sum';
-            valueObj.text = data[i];
-            valueObj.width = 80;
-            valueObj.align = 'center';
-            valueObj.sortable = false;
-            valueObj.formatSettings = { prefix: '', decimalPlaces: 0 };
-            values.push(valueObj);
-        }
-        //var QuantityObj = new Object();
-        //QuantityObj.dataField = 'Quantity';
-        //QuantityObj.function = 'sum';
-        //QuantityObj.text = '小计';
-        //QuantityObj.width = 80;
-        //QuantityObj.align = 'center';
-        //QuantityObj.sortable = false;
-        //QuantityObj.formatSettings = { prefix: '', decimalPlaces: 0 };
-        //values.push(QuantityObj);
-        return values;
     }
     var tableValue = "";
     function getPeriodData(callback) {

@@ -269,6 +269,8 @@ var $page = function () {
         $("#AddNewBankData_CancelBtn").on("click", function () {
             voucherIndex = 0;
             pageIndex = 1;
+            $("#btnNext").show();
+            $("#btnFinish").hide();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("hide");
         })
@@ -540,8 +542,7 @@ var $page = function () {
             }
         });
         //创建卡信息列表（主表）
-        selector.$grid1().jqxDataTable(
-            {
+        selector.$grid1().jqxDataTable({
                 pageable: true,
                 width: "100%",
                 height: 400,
@@ -985,6 +986,11 @@ function getVoucherModelVGUID() {
         success: function (msg) {
             if (msg.length > 0) {
                 modelVGUID = msg;
+                if (modelVGUID.length == 1) {
+                    $("#btnPre").hide();
+                    $("#btnNext").hide();
+                    $("#btnFinish").show();
+                }
             } else {
                 jqxNotification("当前账套公司无模板数据！", null, "error");
             }
@@ -1035,6 +1041,7 @@ function saveVoucherModel(year, month) {
             type: "POST",
             dataType: "json",
             success: function (msg) {
+                $("#jqxTable1").jqxDataTable('updateBoundData');
             }
         })
     }
@@ -1053,7 +1060,7 @@ function previewVoucher(data) {
     var subjectName = "";
     var voucher = data.VoucherData;
     $("#lblPageIndex").text(pageIndex);
-    $("#lblPageCount").text(voucher.length);
+    $("#lblPageCount").text(modelVGUID.length);
     for (var j = 0; j < voucher.length; j++) {
         var borrow = 0;
         var loan = 0;

@@ -437,6 +437,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                         var myDataOther = myData.Where(x => x.AccountModeCodeOther == item.AccountModeCode && x.CompanyCodeOther == item.Code).ToList();
                         if (myDataOther.Count > 0)
                         {
+                            myDataOther[0].CompanyNameOther = myDataOther[0].CompanyNameOther + "（结算）";
                             //根据借贷配置数据生成凭证
                             GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
                         }
@@ -489,7 +490,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 {
                     status = isAnyModelList[0].Status;
                 }
-                var cashDataList = db.Queryable<Business_CashBorrowLoan>().ToList();
+                var cashDataList = db.Queryable<Business_CashBorrowLoan>().OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToList();
                 var voucherDetails = db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where AccountingPeriod >= '"+ firstDay + "' and AccountingPeriod <= '" + lastDay + "')").ToList();
                 //获取借贷配置
                 var cashData = cashDataList.Where(x => x.PayVGUID == myData.VGUID).ToList();
@@ -540,11 +541,11 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             DbBusinessDataService.Command(db =>
             {
                 //取出模板数据
-                month = month.TryToInt() < 10 ? "0" + month : month;
-                var date = (year + "-" + month).TryToDate();
+                var months = month.TryToInt() < 10 ? "0" + month : month;
+                var date = (year + "-" + months).TryToDate();
                 var myData = db.Queryable<Business_VoucherModel>().Where(x => x.VGUID == vguid).ToList().FirstOrDefault();
                 List<Business_CashBorrowLoan> cashList = new List<Business_CashBorrowLoan>();
-                var cashDataLsit = db.Queryable<Business_CashBorrowLoan>().ToList();
+                var cashDataLsit = db.Queryable<Business_CashBorrowLoan>().OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToList();
                 for (int i = 0; i < key.Count; i++)
                 {
                     var vguidCash = key[i].TryToGuid();
@@ -623,8 +624,8 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
         }
         private void GetVoucherList(SqlSugarClient db, Business_VoucherList voucher, List<SettlementSubjectVoucher> myDataOther, Guid guid, List<Sys_User> userData, string year, string month)
         {
-            month = month.TryToInt() < 10 ? "0" + month : month;
-            var date = (year + "-" + month).TryToDate();
+            var months = month.TryToInt() < 10 ? "0" + month : month;
+            var date = (year + "-" + months).TryToDate();
             voucher.AccountingPeriod = date;
             voucher.AccountModeName = myDataOther[0].AccountModeName;
             voucher.CompanyCode = myDataOther[0].CompanyCode;
@@ -640,7 +641,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             voucher.VoucherType = "转账类";
             voucher.Automatic = "1";//自动
             voucher.TradingBank = "";
-            voucher.ReceivingUnit = myDataOther[0].CompanyNameOther + "（结算）";
+            voucher.ReceivingUnit = myDataOther[0].CompanyNameOther;
             voucher.TransactionDate = null;
             voucher.Batch = "";
             voucher.CreateTime = DateTime.Now;

@@ -65,7 +65,8 @@ var $page = function () {
             case "0":
                 jqxNotification("获取数据失败！", null, "error");
                 break;
-            case "1":
+                case "1":
+                debugger;
                 var values = fillValues(msg.ResultInfo);
                 var datashow = fillData(msg.ResultInfo2);
                 var datafields = new Array();

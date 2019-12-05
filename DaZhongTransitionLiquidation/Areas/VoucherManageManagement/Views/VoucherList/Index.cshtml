@@ -69,9 +69,9 @@
             }
             @if (moduleMenu.Review)
             {
-                <td style="width: 95px;">
+                @*<td style="width: 95px;">
                     <button id="btnCheck" type="button" class="buttons" style="display:none"><i class="iconfont btn_icon" style="color: black !important;">&#xe91c;</i><span style="margin-left: 7px; float: left;">审核</span></button>
-                </td>
+                </td>*@
             }
         </tr>
     </table>
@@ -222,7 +222,7 @@
         <div class="modal-content" style="width: 1500px; margin-left: auto; margin-right: auto;">
             <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">预览凭证</h4>
+                <h4 class="modal-title" id="myModalLabel_titles" style="color: #555; font-family: Calibri;">预览模板凭证--<label id="lblModelName" for="" style=""></label></h4>
             </div>
             <div class="modal-body" style="width: 100%;">
                 <table id="VoucherListTitle" style="width:70%;margin-left: 270px;">
@@ -277,13 +277,12 @@
                 </table>
             </div>
             <div class="modal-footer">
+                <label id="lblPageIndex" for="" style=""></label>/<label id="lblPageCount" for="" style=""></label>
                 @if (moduleMenu.New || moduleMenu.Edit)
                 {
-                    <button id="btnPre" type="button" class="btn btn-warning" style="width: 85px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe6f3;</i><span style="margin-left: 7px; float: left;">上一页</span></button>
-                }
-                @if (moduleMenu.Submit)
-                {
-                    <button id="btnNext" type="button" class="btn btn-danger" style="width: 90px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;">&#xe91c;</i><span style="margin-left: 7px; float: left;">下一页</span></button>
+                    <button id="btnPre" type="button" class="btn btn-warning" style="width: 100px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe659;</i><span style="margin-left: 7px; float: left;">上一页</span></button>
+                    <button id="btnNext" type="button" class="btn btn-danger" style="width: 105px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;">&#xe673;</i><span style="margin-left: 7px; float: left;">下一页</span></button>
+                    <button id="btnFinish" type="button" class="btn btn-danger" style="width: 105px;background-color: #16609c!important;margin-left: 18px; margin-top: 10px;display:none"><i class="iconfont btn_icon" style="color: white !important;">&#xe677;</i><span style="margin-left: 7px; float: left;">完成</span></button>
                 }
                 <button id="AddNewBankData_CancelBtn" type="button" class="btn btn-danger" style="width: 85px; border-color: #16609c !important; background-color: #16609c !important;margin-left: 18px; margin-top: 10px"><i class="iconfont btn_icon" style="color: white !important;margin-left: 0">&#xe678;</i><span style="margin-left: 7px; float: left;">取消</span></button>
             </div>

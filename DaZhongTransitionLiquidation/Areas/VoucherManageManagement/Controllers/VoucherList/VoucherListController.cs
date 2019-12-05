@@ -14,6 +14,7 @@ using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using System.Text.RegularExpressions;
 using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Common.Pub;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CashTransaction;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -33,18 +34,16 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public JsonResult GetVoucherListDatas(Business_VoucherList searchParams,DateTime? dateEnd, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_VoucherList>();
+            //var userData = new List<Sys_User>();
+            //DbService.Command(_db =>
+            //{
+            //    userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            //});
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
                 var starDate = "2019-09-01".TryToDate();
-                //DateTime? firstDay = null;
-                //DateTime? lastDay = null;
-                //if (searchParams.AccountingPeriod != null)
-                //{
-                //    firstDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day);
-                //    lastDay = searchParams.AccountingPeriod.Value.AddDays(1 - searchParams.AccountingPeriod.Value.Day).AddMonths(1).AddDays(-1);
-                //}
                 DateTime? transactionDateE = DateTime.MaxValue;
                 if (dateEnd != null)
                 {
@@ -67,17 +66,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy("CreateTime desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
-
-                //var data = jsonResult.Rows.ToList().Where(x => x.VoucherDate >= "2019-11-01".TryToDate() && x.VoucherDate <= "2019-11-12".TryToDate()).ToList();
-                //foreach (var item in data)
-                //{
-                //    if(item.VoucherNo.Length == 10)
-                //    {
-                //        item.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + item.VoucherType + item.VoucherNo;
-                //        item.BatchName = item.VoucherNo;
-                //        db.Updateable(item).ExecuteCommand();
-                //    }
-                //}
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
@@ -474,7 +462,97 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             });
             return Json(resultModel);
         }
-        public JsonResult CreateVoucherModel(string year, string month)//Guid[] vguids
+        public JsonResult GetVoucherModelVGUID()//Guid[] vguids
+        {
+            var resultModel = new List<Business_VoucherModel>();
+            DbBusinessDataService.Command(db =>
+            {
+                resultModel = db.Queryable<Business_VoucherModel>().Where(x=>x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode).ToList();
+            });
+            return Json(resultModel);
+        }
+        public JsonResult GetVoucherModel(string year, string month,Guid vguid)//Guid[] vguids
+        {
+            var resultModel = new List<VoucherModelDetails>();
+            DbBusinessDataService.Command(db =>
+            {
+                month = month.TryToInt() < 10 ? "0" + month : month;
+                var date = (year + "-" + month).TryToString();
+                var firstDay = FirstDayOfMonth(date.TryToDate());
+                var lastDay = LastDayOfMonth(date.TryToDate());
+                //按模板取出数据
+                var myData = db.Queryable<Business_VoucherModel>().Where(x => x.VGUID == vguid).ToList();
+                var cashDataList = db.Queryable<Business_CashBorrowLoan>().ToList();
+                var voucherDetails = db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where AccountingPeriod >= '"+ firstDay + "' and AccountingPeriod <= '" + lastDay + "')").ToList();
+                foreach (var item in myData)
+                {
+                    //获取借贷配置
+                    var cashData = cashDataList.Where(x => x.PayVGUID == item.VGUID).ToList();
+                    foreach (var cash in cashData)
+                    {
+                        var seven = "";
+                        cash.Money = 0;
+                        var moneyData = voucherDetails.Where(x => x.ModelVGUID == cash.VGUID).ToList().FirstOrDefault();
+                        if (cash.Borrow != null && cash.Borrow != "")
+                        {
+                            seven = cash.Borrow;
+                            cash.Borrow = seven + "\n" + GetSevenSubjectName(seven, item.AccountModeCode, item.CompanyCode);
+                            if (moneyData != null)
+                            {
+                                cash.Money = moneyData.BorrowMoney.TryToDecimal();
+                            }
+                        }
+                        if (cash.Loan != null && cash.Loan != "")
+                        {
+                            seven = cash.Loan;
+                            cash.Loan = seven + "\n" + GetSevenSubjectName(seven, item.AccountModeCode, item.CompanyCode);
+                            if (moneyData != null)
+                            {
+                                cash.Money = moneyData.LoanMoney.TryToDecimal();
+                            }
+                        }
+                    }
+                    VoucherModelDetails vm = new VoucherModelDetails();
+                    vm.VGUID = item.VGUID;
+                    vm.ModelName = item.ModelName;
+                    vm.VoucherDate = DateTime.Now;
+                    vm.YearMonth = date;
+                    vm.VoucherData = cashData;
+                    resultModel.Add(vm);
+                }
+            });
+            return Json(resultModel);
+        }
+        public JsonResult SaveVoucherModel(List<string> key, List<string> value, string year, string month, Guid vguid)//Guid[] vguids
+        {
+            var userData = new List<Sys_User>();
+            DbService.Command(_db =>
+            {
+                userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+            });
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                List<Business_CashBorrowLoan> cashList = new List<Business_CashBorrowLoan>();
+                for (int i = 0; i < key.Count; i++)
+                {
+                    var vguidCash = key[i].TryToGuid();
+                    var cashData = db.Queryable<Business_CashBorrowLoan>().Where(x => x.VGUID == vguidCash).First();
+                    cashData.Money = value[i].TryToDecimal();
+                    cashList.Add(cashData);
+                }
+                var guid = Guid.NewGuid();
+                //主信息
+                Business_VoucherList voucher = new Business_VoucherList();
+                //GetVoucherListModel(db, voucher, guid, userData)
+                //GetVoucherList(db, voucher, myDataOther, guid, userData, year, month);
+                //借贷信息
+                List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
+                CashTransactionController.GetVoucherDetail(db, BVDetailList, UserInfo.AccountModeCode, UserInfo.CompanyCode, cashList, guid);
+            });
+            return Json(resultModel);
+        }
+        public JsonResult CreateVoucherModel(string year, string month,Guid vguid)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var userData = new List<Sys_User>();
@@ -596,6 +674,13 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                     BVDetail.LoanMoney = loanMoney;
                     BVDetail.LoanMoneyCount = null;
                 }
+                BVDetail.CompanySection = seven.Split(".")[0];
+                BVDetail.SubjectSection = seven.Split(".")[1];
+                BVDetail.AccountSection = seven.Split(".")[2];
+                BVDetail.CostCenterSection = seven.Split(".")[3];
+                BVDetail.SpareOneSection = seven.Split(".")[4];
+                BVDetail.SpareTwoSection = seven.Split(".")[5];
+                BVDetail.IntercourseSection = seven.Split(".")[6];
                 BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, myDataOther[0].AccountModeCode, myDataOther[0].CompanyCode);
                 BVDetailList.Add(BVDetail);
             }
@@ -638,6 +723,25 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             }
             result = result.Substring(0, result.Length - 1);
             return result;
+        }
+        /// <summary>
+        /// 取得某月的第一天
+        /// </summary>
+        /// <param name="datetime">要取得月份第一天的时间</param>
+        /// <returns></returns>
+        private DateTime FirstDayOfMonth(DateTime datetime)
+        {
+            return datetime.AddDays(1 - datetime.Day);
+        }
+
+        //// <summary>
+        /// 取得某月的最后一天
+        /// </summary>
+        /// <param name="datetime">要取得月份最后一天的时间</param>
+        /// <returns></returns>
+        private DateTime LastDayOfMonth(DateTime datetime)
+        {
+            return datetime.AddDays(1 - datetime.Day).AddMonths(1).AddDays(-1);
         }
     }
 }

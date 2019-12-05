@@ -5,7 +5,8 @@ using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
 {
-    public class Business_SettlementSubjectDetail
+    public class Business_SettlementSubjectDetail : ICloneable
+
     {
         public Guid VGUID { get; set; }
         public string AccountModeName { get; set; }
@@ -20,5 +21,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string CompanyCodeOther { get; set; }
         public string SettlementVGUID { get; set; }
         public string Remark { get; set; }
+
+        public Business_SettlementSubjectDetail Clone()
+        {
+            return (Business_SettlementSubjectDetail)this.MemberwiseClone();
+        }
+
+        object ICloneable.Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

@@ -382,6 +382,8 @@ function initBorrowTable(companyCode, accountMode) {
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
+        filterable: true,
+        showfilterrow: true,
         theme: "office",
         rendergridrows: function (obj) {
             return obj.data;
@@ -429,6 +431,8 @@ function initBorrowTable(companyCode, accountMode) {
         pageSize: 15,
         //serverProcessing: true,
         pagerButtonsCount: 10,
+        filterable: true,
+        showfilterrow: true,
         source: typeAdapter,
         theme: "office",
         rendergridrows: function (obj) {

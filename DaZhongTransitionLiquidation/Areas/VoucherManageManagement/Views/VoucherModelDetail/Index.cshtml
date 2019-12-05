@@ -49,22 +49,11 @@
         <div class="header_text_div">
             <span class="header_text_span">主信息</span>
         </div>
-        <div class="body_mk" style="height: 100px;">
+        <div class="body_mk" style="height: 80px;">
             <table id="VoucherList" style="width:100%;">
                 <tr style="height:50px">
                     <td style="text-align: right;width: 150px;">模板名称：</td>
-                    <td style="text-align: left;"><input id="ModelName" type="text" style="" class="input_text form-control" /></td></td>
-                    <td style="text-align: right;width: 150px;">会计期：</td>
-                    <td style="text-align: left;"><input id="AccountingPeriod" type="text" autocomplete="off" style="" class="input_text form-control" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn', })" /></td>
-                    <td style="text-align: right;width: 150px;">交易银行：</td>
-                    <td style="text-align: left;"><input id="TradingBank" type="text" style="" class="input_text form-control" /></td>
-                </tr>
-                <tr style="height:50px">
-                    <td style="text-align: right;width: 150px;">交易日期：</td>
-                    <td style="text-align: left;"><input id="TransactionDate" type="text" style="" class="input_text form-control" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn', })" /></td>
-                    <td style="text-align: right;">对方公司：</td>
-                    <td style="text-align: left;"><input id="ReceivingUnit" type="text" style="" class="input_text form-control" /></td>
-                    <td style="text-align: right;"></td>
+                    <td style="text-align: left;"><input id="ModelName" type="text" style="" class="input_text form-control" validatetype="required"/></td>
                     <td style="text-align: left;">
                         <input id="VGUID" name="VGUID" value="@vguid2" class="hide" />
                         <input id="AccountModeCode" name="AccountModeCode" value="@userInfo.AccountModeCode" class="hide" />

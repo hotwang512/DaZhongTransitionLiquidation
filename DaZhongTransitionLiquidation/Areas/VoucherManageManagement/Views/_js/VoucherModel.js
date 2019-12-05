@@ -46,10 +46,6 @@
                 [
                     { name: "checkbox", type: null },
                     { name: 'ModelName', type: 'string' },
-                    { name: 'AccountingPeriod', type: 'date' },
-                    { name: 'TradingBank', type: 'string' },
-                    { name: 'TransactionDate', type: 'date' },
-                    { name: 'ReceivingUnit', type: 'string' },
                     { name: 'AccountModeCode', type: 'string' },
                     { name: 'CompanyCode', type: 'string' },
                     { name: 'VGUID', type: 'string' },
@@ -79,10 +75,6 @@
                 columns: [
                     { text: "", datafield: "checkbox", pinned: true, width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                     { text: '模板名称', datafield: 'ModelName',  align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '会计期', datafield: 'AccountingPeriod',  align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
-                    { text: '交易银行', datafield: 'TradingBank', align: 'center', cellsAlign: 'center' },
-                    { text: '交易日期', datafield: 'TransactionDate',  align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '对方公司', datafield: 'ReceivingUnit',  align: 'center', cellsAlign: 'center' },
                     { text: 'AccountModeCode', datafield: 'AccountModeCode', hidden: true },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },

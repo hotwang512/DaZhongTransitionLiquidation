@@ -98,7 +98,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
             if (cashDataDetail.Count > 0)
             {
-                GetVoucherDetail(db, BVDetailList, cashData, cashDataDetail, guid);
+                GetVoucherDetail(db, BVDetailList, cashData.AccountModeCode,cashData.CompanyCode, cashDataDetail, guid);
             }
             if(voucher != null && BVDetailList.Count > 0)
             {
@@ -106,7 +106,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 db.Insertable(BVDetailList).ExecuteCommand();
             }
         }
-        private void GetVoucherDetail(SqlSugarClient db, List<Business_VoucherDetail> BVDetailList, Business_CashTransaction cashData,List<Business_CashBorrowLoan> cashDataDetail,Guid guid)
+        public static void GetVoucherDetail(SqlSugarClient db, List<Business_VoucherDetail> BVDetailList, string accountModeCode, string companyCode, List<Business_CashBorrowLoan> cashDataDetail,Guid guid)
         {
             var i = 0;
             foreach (var item in cashDataDetail)
@@ -116,6 +116,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 BVDetail.JE_LINE_NUMBER = i++;
                 BVDetail.VGUID = Guid.NewGuid();
                 BVDetail.VoucherVGUID = guid;
+                BVDetail.ModelVGUID = item.VGUID;
                 string seven = null;
                 if (item.Borrow != "" && item.Borrow != null)
                 {
@@ -137,7 +138,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     BVDetail.LoanMoney = item.Money;
                     BVDetail.LoanMoneyCount = item.Money;
                 }
-                BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, cashData.AccountModeCode, cashData.CompanyCode);
+                BVDetail.CompanySection = seven.Split(".")[0];
+                BVDetail.SubjectSection = seven.Split(".")[1];
+                BVDetail.AccountSection = seven.Split(".")[2];
+                BVDetail.CostCenterSection = seven.Split(".")[3];
+                BVDetail.SpareOneSection = seven.Split(".")[4];
+                BVDetail.SpareTwoSection = seven.Split(".")[5];
+                BVDetail.IntercourseSection = seven.Split(".")[6];
+                BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, accountModeCode, companyCode);
                 BVDetailList.Add(BVDetail);
             }
         }

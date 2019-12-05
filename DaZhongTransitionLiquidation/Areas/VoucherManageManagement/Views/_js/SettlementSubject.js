@@ -415,19 +415,18 @@ function initTable(vguid) {
         var data = $('#datatable').jqxGrid('getrowdata', boundIndex);
         guid = data.VGUID;
         isEdit = true;
+        getCompanyCode();
+        getCompanyCodeOther();
         $("#AccountModeCode").val(data.AccountModeCode);
         $("#CompanyCode").val(data.CompanyCode);
         $("#AccountModeCodeOther").val(data.AccountModeCodeOther);
         $("#CompanyCodeOther").val(data.CompanyCodeOther);
         $("#Remark").val(data.Remark);
-        getCompanyCode();
-        getCompanyCodeOther();
-        if (data.Borrow != null && data.Borrow != "") {
-            $("#BorrowTr").show();
-            $("#LoanTr").hide();
-        } else {
-            $("#BorrowTr").hide();
-            $("#LoanTr").show();
+        if (data.Borrow == null) {
+            data.Borrow = "";
+        }
+        if (data.Loan == null) {
+            data.Loan = "";
         }
         initBorrowTable(data.CompanyCode, data.AccountModeCode);
         var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Borrow + '</div>';
@@ -488,6 +487,8 @@ function initBorrowTable(companyCode, accountMode) {
         pageSize: 15,
         //serverProcessing: true,
         pagerButtonsCount: 10,
+        filterable: true,
+        showfilterrow: true,
         source: typeAdapter,
         theme: "office",
         pagermode: 'simple',
@@ -528,11 +529,14 @@ function initBorrowTable(companyCode, accountMode) {
         width: "100%",
         autoheight: false,
         columnsresize: true,
+        filterable: true,
+        showfilterrow: true,
         pageSize: 15,
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
         theme: "office",
+        pagermode: 'simple',
         columnsHeight: 40,
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },

@@ -133,7 +133,7 @@ function dele(selection) {
         success: function (msg) {
             if (msg.IsSuccess) {
                 jqxNotification("删除成功！", null, "success");
-                selector.$grid().jqxDataTable('updateBoundData');
+                $("#jqxTable").jqxDataTable('updateBoundData');
             } else {
                 jqxNotification("删除失败！", null, "error");
             }

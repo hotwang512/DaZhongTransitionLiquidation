@@ -220,6 +220,7 @@ var $page = function () {
                 var year = $("#Year").val();
                 var month = $("#Month").val();
                 var guid = modelVGUID[voucherIndex].VGUID;
+                saveVoucherModel(year, month);
                 getVoucherModel(year, month, guid);
                 //previewVoucher(voucherList[voucherIndex]);
             } else {
@@ -240,7 +241,7 @@ var $page = function () {
                     var year = $("#Year").val();
                     var month = $("#Month").val();
                     var guid = modelVGUID[voucherIndex].VGUID;
-                    saveVoucherModel();
+                    saveVoucherModel(year, month);
                     getVoucherModel(year, month, guid);
                     //previewVoucher(voucherList[voucherIndex]);
                 } else {
@@ -256,7 +257,9 @@ var $page = function () {
         $("#btnFinish").on("click", function () {
             voucherIndex = 0;
             pageIndex = 1;
-            saveVoucherModel();
+            var year = $("#Year").val();
+            var month = $("#Month").val();
+            saveVoucherModel(year, month);
             $("#btnNext").show();
             $("#btnFinish").hide();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
@@ -946,6 +949,7 @@ function getBankInfo() {
         }
     });
 }
+//同步结算凭证
 function createVoucher(year, month) {
     layer.load();
     $.ajax({
@@ -971,6 +975,7 @@ function createVoucher(year, month) {
         }
     })
 }
+//获取模板VGUID
 function getVoucherModelVGUID() {
     $.ajax({
         url: "/VoucherManageManagement/VoucherList/GetVoucherModelVGUID",
@@ -986,6 +991,7 @@ function getVoucherModelVGUID() {
         }
     })
 }
+//根据模板VGUID取凭证数据
 function getVoucherModel(year, month, guid) {
     layer.load();
     $.ajax({
@@ -1004,32 +1010,9 @@ function getVoucherModel(year, month, guid) {
         }
     })
 }
-function createVoucherModel(year, month) {
-    layer.load();
-    $.ajax({
-        url: "/VoucherManageManagement/VoucherList/CreateVoucherModel",
-        data: { year: year, month: month },
-        type: "POST",
-        dataType: "json",
-        success: function (msg) {
-            layer.closeAll('loading');
-            if (msg.IsSuccess == true) {
-                jqxNotification("同步完成！", null, "success");
-                if (tableIndex == 1) {
-                    $("#jqxTable1").jqxDataTable('updateBoundData');
-                    selector.$AddBankChannelDialog().modal("hide");
-                }
-            } else {
-                if (msg.Status == "2") {
-                    jqxNotification("当前账套公司无模板数据！", null, "error");
-                } else if (msg.Status == "3") {
-                    jqxNotification("当前月份无模板数据！", null, "error");
-                }
-            }
-        }
-    })
-}
-function saveVoucherModel() {
+//保存当前凭证数据,并生成凭证
+function saveVoucherModel(year, month) {
+    var vguid = $("#lblVGUID").val();
     var keyList = [];
     var valueList = [];
     for (var i = 0; i < voucherList[0].VoucherData.length; i++) {
@@ -1048,7 +1031,7 @@ function saveVoucherModel() {
     if (keyList.length > 0 && valueList.length > 0) {
         $.ajax({
             url: "/VoucherManageManagement/VoucherList/SaveVoucherModel",
-            data: { key: keyList, value: valueList },
+            data: { key: keyList, value: valueList, year: year, month: month, vguid: vguid },
             type: "POST",
             dataType: "json",
             success: function (msg) {
@@ -1056,7 +1039,9 @@ function saveVoucherModel() {
         })
     }
 }
+//根据模板预览凭证
 function previewVoucher(data) {
+    $("#lblVGUID").val(data.VGUID);
     $("#SubjectTable").remove();
     $("#lblModelName").text(data.ModelName);
     $("#lblAccountingPeriods").text(data.YearMonth);
@@ -1085,12 +1070,17 @@ function previewVoucher(data) {
         if (subjectNameList[6].split(/[\s\n]/).length < 2) {
             companyName = subjectNameList[6].substring(1, subjectNameList[6].length);
         }
+        var moneyList = "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
+                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>"
+        if (data.VoucherStatus == "2" || data.VoucherStatus == "3") {
+            moneyList = "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' readonly /></td>" +
+                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' readonly /></td>"
+        }
         $("#lblCompany").text(companyName);
         list1 += "<tr style='height:40px'>" +
                       "<td style='text-align: left;'>" + "  " + voucher[j].Remark + "</td>" +
                       "<td style='text-align: left;'>" + "  " + subjectName + "</td>" +
-                      "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
-                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
+                      moneyList +
                 "</tr>";
     }
     htmls = "<table id='SubjectTable' style='width:100%;white-space:pre' border='1' cellspacing='0'>" +

@@ -14,6 +14,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public string ModelName { get; set; }
         public string AccountModeCode { get; set; }
         public string CompanyCode { get; set; }
+        public string VoucherStatus { get; set; }
         public List<Business_CashBorrowLoan> VoucherData { get; set; }
     }
 }

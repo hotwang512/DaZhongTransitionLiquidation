@@ -490,6 +490,10 @@ function initBorrowTable(companyCode, accountMode) {
         filterable: true,
         showfilterrow: true,
         source: typeAdapter,
+        virtualmode: false,
+        rendergridrows: function (params) {
+            return params.data;
+        },
         theme: "office",
         pagermode: 'simple',
         columnsHeight: 40,
@@ -531,6 +535,10 @@ function initBorrowTable(companyCode, accountMode) {
         columnsresize: true,
         filterable: true,
         showfilterrow: true,
+        virtualmode: false,
+        rendergridrows: function (params) {
+            return params.data;
+        },
         pageSize: 15,
         //serverProcessing: true,
         pagerButtonsCount: 10,

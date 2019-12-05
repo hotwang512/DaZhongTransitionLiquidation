@@ -904,9 +904,10 @@ var $page = function () {
                 } else {
                     $("#Loan" + i).attr("readonly", "readonly");
                 }
-                tdClick();
+                //tdClick();
             }
         }
+        tdClick();
     }
 
     function getPersonInfo() {

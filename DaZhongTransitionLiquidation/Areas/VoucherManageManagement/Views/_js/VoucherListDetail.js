@@ -841,7 +841,12 @@ var $page = function () {
 
     function createTable(datas) {
         for (var i = 0; i < datas.length; i++) {
-            $("#Remark" + i).val(datas[i].Abstract);
+            if (datas[i].Abstract == null || datas[i].Abstract == "null") {
+                datas[i].Abstract = "";
+                $("#Remark" + i).val("");
+            } else {
+                $("#Remark" + i).val(datas[i].Abstract);
+            }
             $("#SubjectName" + i).val(datas[i].SevenSubjectName);
             var borrowMoney = "";
             var loanMoney = "";

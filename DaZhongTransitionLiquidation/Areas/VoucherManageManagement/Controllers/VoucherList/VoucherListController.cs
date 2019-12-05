@@ -521,7 +521,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 VoucherModelDetails vm = new VoucherModelDetails();
                 vm.VGUID = myData.VGUID;
                 vm.ModelName = myData.ModelName;
-                vm.VoucherDate = DateTime.Now;
+                vm.VoucherDate = lastDay;
                 vm.YearMonth = date;
                 vm.VoucherData = cashData;
                 vm.VoucherStatus = status;
@@ -554,8 +554,8 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                     cashList.Add(cashData);
                 }
                 var isAnyModelList = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.Status == "1" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
-                                   && x.ReceivingUnit == myData.ModelName && x.AccountingPeriod == date).ToList();
-                if (isAnyModelList.Count == 1)
+                                   && x.ReceivingUnit == myData.ModelName + "（模板）" && x.AccountingPeriod == date).ToList();
+                if (isAnyModelList.Count >= 1)
                 {
                     //在所选的会计期下模板已经生成凭证
                     var voucherVGUID = isAnyModelList[0].VGUID;
@@ -626,18 +626,19 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
         {
             var months = month.TryToInt() < 10 ? "0" + month : month;
             var date = (year + "-" + months).TryToDate();
+            var lastDay = LastDayOfMonth(date.TryToDate());
             voucher.AccountingPeriod = date;
             voucher.AccountModeName = myDataOther[0].AccountModeName;
             voucher.CompanyCode = myDataOther[0].CompanyCode;
             voucher.CompanyName = myDataOther[0].CompanyName.ToDBC();
-            var bank = "Z" + myDataOther[0].AccountModeCode + myDataOther[0].CompanyCode + year + month;
+            var bank = "Z" + myDataOther[0].AccountModeCode + myDataOther[0].CompanyCode + year + months;
             //100201转账类2019090001
             var no = CreateNo.GetCreateNo(db, bank);
             voucher.VoucherNo = myDataOther[0].AccountModeCode + myDataOther[0].CompanyCode + "转账类" + no;
             voucher.BatchName = voucher.VoucherNo;
             voucher.DocumentMaker = "";
             voucher.Status = "1";
-            voucher.VoucherDate = DateTime.Now;
+            voucher.VoucherDate = lastDay;
             voucher.VoucherType = "转账类";
             voucher.Automatic = "1";//自动
             voucher.TradingBank = "";

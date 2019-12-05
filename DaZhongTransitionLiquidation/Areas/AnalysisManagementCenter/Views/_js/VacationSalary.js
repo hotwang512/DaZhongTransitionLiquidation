@@ -31,10 +31,6 @@ var $page = function () {
             function () {
                 GetVacationSalary();
             });
-        $("#DateOfYear").on("blur",
-            function () {
-                GetVacationSalary();
-            });
         $("#VacationSalaryDialog_OKBtn").on("click", function () {
             var validateError = 0;
             if (!Validate($("#VacationTypeNew"))) {
@@ -79,150 +75,154 @@ var $page = function () {
             $("#VacationSalaryModalDialog").modal("hide");
         });
     }; //addEvent end
-    function GetVacationSalary() {
-        if ($("#VacationTypeNew").val() != "") {
-            $.ajax({
-                url: "/AnalysisManagementCenter/VacationSalary/GetVacationSalaryDetail",
-                data: {
-                    "VacationTypeID": $("#VacationTypeNew").val(),
-                    "VacationType": $("#VacationTypeNew option:selected").text(),
-                    "DateOfYear": $("#DateOfYear").val()
-                },
-                type: "GET",
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    GetVacationSalaryDetail(data);
-                }
-            });
-        }
-    }
-   
-    function GetVacationSalaryYear() {
+};
+
+function GetVacationSalary() {
+    if ($("#VacationTypeNew").val() != "") {
         $.ajax({
-            url: "/AnalysisManagementCenter/VacationSalary/GetVacationSalaryYear",
-            data: { "VacationType": $("#VacationType").val() },
+            url: "/AnalysisManagementCenter/VacationSalary/GetVacationSalaryDetail",
+            data: {
+                "VacationTypeID": $("#VacationTypeNew").val(),
+                "VacationType": $("#VacationTypeNew option:selected").text(),
+                "DateOfYear": $("#DateOfYear").val()
+            },
             type: "GET",
             dataType: "json",
             async: false,
             success: function (data) {
-                if (data.length > 0) {
-                    $("#tableList").show();
-                    dataArr = data;
-                    GetVacationSalaryList(data);
-                } else {
-                    $("#tableList").hide();
-                }
+                GetVacationSalaryDetail(data);
             }
         });
     }
-    function GetVacationSalaryDetail(data) {
-        var ordersSource =
+}
+
+function GetVacationSalaryYear() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/VacationSalary/GetVacationSalaryYear",
+        data: { "VacationType": $("#VacationType").val() },
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            if (data.length > 0) {
+                $("#tableList").show();
+                dataArr = data;
+                GetVacationSalaryList(data);
+            } else {
+                $("#tableList").hide();
+            }
+        }
+    });
+}
+function GetVacationSalaryDetail(data) {
+    var ordersSource =
+    {
+        dataFields: [
+            { name: 'VacationType', type: 'string' },
+            { name: 'ProjectName', type: 'string' },
+            { name: 'Salary', type: 'string' },
+            { name: 'DateOfYear', type: 'string' },
+            { name: 'Zorder', type: 'string' },
+            { name: 'VGUID', type: 'string' }
+        ],
+        dataType: "json",
+        id: 'VGUID',
+        localdata: data,
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
+        }
+    });
+    $("#table").jqxGrid(
+    {
+        width: "100%",
+        height: "300px",
+        source: dataAdapter,
+        selectionmode: 'singlerow',
+        editable: true,
+        ready: function () {
+        },
+        toolbarHeight: 35,
+        columns: [
+            { text: '工资类型', editable: false, dataField: 'VacationType', width: 100, cellsAlign: 'center', align: 'center' },
+            { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
+            {
+                text: '工资',
+                editable: true,
+                dataField: 'Salary',
+                width: 430,
+                cellsAlign: 'center',
+                align: 'center',
+                cellsformat: 'F2',
+                createeditor: function (row, cellvalue, editor) {
+                    editor.jqxNumberInput({ digits: 3 });
+                }
+            },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true }
+        ]
+    });
+}
+function GetVacationSalaryList(data) {
+    debugger;
+    var datafields = [
+        { name: 'ProjectName', type: 'string' }
+    ];
+    var columns = [
         {
-            dataFields: [
-                { name: 'VacationType', type: 'string' },
-                { name: 'ProjectName', type: 'string' },
-                { name: 'Salary', type: 'string' },
-                { name: 'DateOfYear', type: 'string' },
-                { name: 'Zorder', type: 'string' },
-                { name: 'VGUID', type: 'string' }
-            ],
-            dataType: "json",
-            id: 'VGUID',
-            localdata: data,
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-            }
-        });
-        $("#table").jqxGrid(
+            text: '项目',
+            editable: false,
+            dataField: 'ProjectName',
+            width: 200,
+            cellsAlign: 'center',
+            align: 'center'
+        }
+    ];
+    for (var i = 0; i < data.length; i++) {
+        datafields.push({ name: data[i], type: 'stirng' });
+        columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+    }
+    debugger;
+    var paras = "";
+    for (var k = 0; k < data.length; k++) {
+        paras += "[" + data[k] + "],";
+    }
+    paras = paras.substring(0, paras.length - 1);
+    var url = "/AnalysisManagementCenter/VacationSalary/GetVacationSalaryList";
+    var ordersSource =
+    {
+        dataFields: datafields,
+        dataType: "json",
+        id: 'VGUID',
+        url: url,
+        data: { "VacationType": $("#VacationType").val(), paras: paras },
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
+
+        }
+    });
+    $("#tableList").jqxGrid(
         {
             width: "100%",
-            height: "300px",
+            height: "100%",
             source: dataAdapter,
             selectionmode: 'singlerow',
             editable: true,
+            editmode: 'selectedcell',
             ready: function () {
             },
-            toolbarHeight: 35,
-            columns: [
-                { text: '工资类型', editable: false, dataField: 'VacationType', width: 100, cellsAlign: 'center', align: 'center' },
-                { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
-                {
-                    text: '工资',
-                    editable: true,
-                    dataField: 'Salary',
-                    width: 430,
-                    cellsAlign: 'center',
-                    align: 'center',
-                    cellsformat: 'F2',
-                    createeditor: function (row, cellvalue, editor) {
-                        editor.jqxNumberInput({ digits: 3 });
-                    }
-                },
-                { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ]
+            columns: columns
         });
-    }
-    function GetVacationSalaryList(data) {
-        debugger;
-        var datafields = [
-            { name: 'ProjectName', type: 'string' }
-        ];
-        var columns = [
-            {
-                text: '项目',
-                editable: false,
-                dataField: 'ProjectName',
-                width: 200,
-                cellsAlign: 'center',
-                align: 'center'
-            }
-        ];
-        for (var i = 0; i < data.length; i++) {
-            datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
-        }
-        debugger;
-        var paras = "";
-        for (var k = 0; k < data.length; k++) {
-            paras += "[" + data[k] + "],";
-        }
-        paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/VacationSalary/GetVacationSalaryList";
-        var ordersSource =
-        {
-            dataFields: datafields,
-            dataType: "json",
-            id: 'VGUID',
-            url: url,
-            data: { "VacationType": $("#VacationType").val(), paras: paras},
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-                
-            }
-        });
-        $("#tableList").jqxGrid(
-            {
-                width: "100%",
-                height: "100%",
-                source: dataAdapter,
-                selectionmode: 'singlerow',
-                editable: true,
-                editmode: 'selectedcell',
-                ready: function () {
-                },
-                columns: columns
-            });
-    }
-};
+}
+function pickedFunc() {
+    GetVacationSalary();
+}
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);

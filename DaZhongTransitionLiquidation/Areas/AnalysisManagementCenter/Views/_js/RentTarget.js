@@ -32,10 +32,6 @@ var $page = function () {
             function () {
                 GetRentTarget();
             });
-        $("#DateOfYear").on("blur",
-            function () {
-                GetRentTarget();
-            });
         $("#RentTargetDialog_OKBtn").on("click", function () {
             var validateError = 0;
             if (!Validate($("#VehicleModelNew"))) {
@@ -80,212 +76,216 @@ var $page = function () {
             $("#RentTargetModalDialog").modal("hide");
         });
     }; //addEvent end
-    function GetRentTarget() {
-        if ($("#VehicleModelNew").val() != "") {
-            $.ajax({
-                url: "/AnalysisManagementCenter/RentTarget/GetRentTargetDetail",
-                data: {
-                    "VehicleModel": $("#VehicleModelNew").val(),
-                    "VehicleModelName": $("#VehicleModelNew option:selected").text(),
-                    "DateOfYear": $("#DateOfYear").val()
-                },
-                type: "GET",
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    GetRentTargetDetail(data);
-                }
-            });
-        }
-    }
-    function GetVehicleModelDropDown() {
+};
+
+function GetRentTarget() {
+    if ($("#VehicleModelNew").val() != "") {
         $.ajax({
-            url: "/Systemmanagement/VehicleExtrasFeeSettingDetail/GetVehicleModelDropDown",
-            type: "GET",
-            dataType: "json",
-            async: false,
-            success: function (msg) {
-                uiEngineHelper.bindSelect('#VehicleModel', msg, "Code", "Descrption");
-                $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
-                uiEngineHelper.bindSelect('#VehicleModelNew', msg, "Code", "Descrption");
-                $("#VehicleModelNew").prepend("<option value=\"\" selected='true'>请选择</>");
-            }
-        });
-    }
-    function GetRentTargetYear() {
-        $.ajax({
-            url: "/AnalysisManagementCenter/RentTarget/GetRentTargetYear",
-            data: { "VehicleModel": $("#VehicleModel").val() },
+            url: "/AnalysisManagementCenter/RentTarget/GetRentTargetDetail",
+            data: {
+                "VehicleModel": $("#VehicleModelNew").val(),
+                "VehicleModelName": $("#VehicleModelNew option:selected").text(),
+                "DateOfYear": $("#DateOfYear").val()
+            },
             type: "GET",
             dataType: "json",
             async: false,
             success: function (data) {
-                if (data.length > 0) {
-                    $("#tableList").show();
-                    $("#tableList1").show();
-                    dataArr = data;
-                    GetRentTargetList(data, "SingleBus");
-                } else {
-                    $("#tableList").hide();
-                    $("#tableList1").hide();
-                }
+                GetRentTargetDetail(data);
             }
         });
     }
-    function GetRentTargetDetail(data) {
-        var ordersSource =
+}
+function GetVehicleModelDropDown() {
+    $.ajax({
+        url: "/Systemmanagement/VehicleExtrasFeeSettingDetail/GetVehicleModelDropDown",
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#VehicleModel', msg, "Code", "Descrption");
+            $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
+            uiEngineHelper.bindSelect('#VehicleModelNew', msg, "Code", "Descrption");
+            $("#VehicleModelNew").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
+function GetRentTargetYear() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/RentTarget/GetRentTargetYear",
+        data: { "VehicleModel": $("#VehicleModel").val() },
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            if (data.length > 0) {
+                $("#tableList").show();
+                $("#tableList1").show();
+                dataArr = data;
+                GetRentTargetList(data, "SingleBus");
+            } else {
+                $("#tableList").hide();
+                $("#tableList1").hide();
+            }
+        }
+    });
+}
+function GetRentTargetDetail(data) {
+    var ordersSource =
+    {
+        dataFields: [
+            { name: 'VehicleModel', type: 'string' },
+            { name: 'VehicleModelName', type: 'string' },
+            { name: 'ProjectName', type: 'string' },
+            { name: 'SingleBus', type: 'string' },
+            { name: 'DoubleBus', type: 'string' },
+            { name: 'DateOfYear', type: 'string' },
+            { name: 'Zorder', type: 'string' },
+            { name: 'VGUID', type: 'string' }
+        ],
+        dataType: "json",
+        id: 'VGUID',
+        localdata: data,
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
+        }
+    });
+    var editrow = -1;
+    $("#table").jqxGrid(
+    {
+        width: "100%",
+        height: "300px",
+        source: dataAdapter,
+        selectionmode: 'singlerow',
+        editable: true,
+        ready: function () {
+        },
+        toolbarHeight: 35,
+        columns: [
+            { text: '车型', editable: false, dataField: 'VehicleModelName', width: 100, cellsAlign: 'center', align: 'center' },
+            { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
+            { text: '单班车', editable: true, dataField: 'SingleBus', width: 200, cellsAlign: 'center', align: 'center' },
+            { text: '双班车', editable: true, dataField: 'DoubleBus', width: 200, cellsAlign: 'center', align: 'center' },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true }
+        ]
+    });
+}
+function GetRentTargetList(data, SingleOrDouble) {
+    debugger;
+    var datafields = [
+        { name: 'ProjectName', type: 'string' }
+    ];
+    var columns = [
         {
-            dataFields: [
-                { name: 'VehicleModel', type: 'string' },
-                { name: 'VehicleModelName', type: 'string' },
-                { name: 'ProjectName', type: 'string' },
-                { name: 'SingleBus', type: 'string' },
-                { name: 'DoubleBus', type: 'string' },
-                { name: 'DateOfYear', type: 'string' },
-                { name: 'Zorder', type: 'string' },
-                { name: 'VGUID', type: 'string' }
-            ],
-            dataType: "json",
-            id: 'VGUID',
-            localdata: data,
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-            }
-        });
-        var editrow = -1;
-        $("#table").jqxGrid(
+            text: '项目',
+            editable: false,
+            dataField: 'ProjectName',
+            width: 200,
+            cellsAlign: 'center',
+            align: 'center'
+        }
+    ];
+    for (var i = 0; i < data.length; i++) {
+        datafields.push({ name: data[i], type: 'stirng' });
+        columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+    }
+    debugger;
+    var paras = "";
+    for (var k = 0; k < data.length; k++) {
+        paras += "[" + data[k] + "],";
+    }
+    paras = paras.substring(0, paras.length - 1);
+    var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
+    var ordersSource =
+    {
+        dataFields: datafields,
+        dataType: "json",
+        id: 'VGUID',
+        url: url,
+        data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, SingleOrDouble: SingleOrDouble },
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
+            GetRentTargetList1(dataArr, "DoubleBus");
+        }
+    });
+    $("#tableList").jqxGrid(
         {
             width: "100%",
-            height: "300px",
+            height: "100%",
             source: dataAdapter,
             selectionmode: 'singlerow',
             editable: true,
+            editmode: 'selectedcell',
             ready: function () {
             },
-            toolbarHeight: 35,
-            columns: [
-                { text: '车型', editable: false, dataField: 'VehicleModelName', width: 100, cellsAlign: 'center', align: 'center' },
-                { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
-                { text: '单班车', editable: true, dataField: 'SingleBus', width: 200, cellsAlign: 'center', align: 'center' },
-                { text: '双班车', editable: true, dataField: 'DoubleBus', width: 200, cellsAlign: 'center', align: 'center' },
-                { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ]
+            columns: columns
         });
-    }
-    function GetRentTargetList(data, SingleOrDouble) {
-        debugger;
-        var datafields = [
-            { name: 'ProjectName', type: 'string' }
-        ];
-        var columns = [
-            {
-                text: '项目',
-                editable: false,
-                dataField: 'ProjectName',
-                width: 200,
-                cellsAlign: 'center',
-                align: 'center'
-            }
-        ];
-        for (var i = 0; i < data.length; i++) {
-            datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
-        }
-        debugger;
-        var paras = "";
-        for (var k = 0; k < data.length; k++) {
-            paras += "[" + data[k] + "],";
-        }
-        paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
-        var ordersSource =
+}
+function GetRentTargetList1(data, SingleOrDouble) {
+    debugger;
+    var datafields = [
+        { name: 'ProjectName', type: 'string' }
+    ];
+    var columns = [
         {
-            dataFields: datafields,
-            dataType: "json",
-            id: 'VGUID',
-            url: url,
-            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, SingleOrDouble: SingleOrDouble },
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-                GetRentTargetList1(dataArr, "DoubleBus");
-            }
-        });
-        $("#tableList").jqxGrid(
-            {
-                width: "100%",
-                height: "100%",
-                source: dataAdapter,
-                selectionmode: 'singlerow',
-                editable: true,
-                editmode: 'selectedcell',
-                ready: function () {
-                },
-                columns: columns
-            });
+            text: '项目',
+            editable: false,
+            dataField: 'ProjectName',
+            width: 200,
+            cellsAlign: 'center',
+            align: 'center'
+        }
+    ];
+    for (var i = 0; i < data.length; i++) {
+        datafields.push({ name: data[i], type: 'stirng' });
+        columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
     }
-    function GetRentTargetList1(data, SingleOrDouble) {
-        debugger;
-        var datafields = [
-            { name: 'ProjectName', type: 'string' }
-        ];
-        var columns = [
-            {
-                text: '项目',
-                editable: false,
-                dataField: 'ProjectName',
-                width: 200,
-                cellsAlign: 'center',
-                align: 'center'
-            }
-        ];
-        for (var i = 0; i < data.length; i++) {
-            datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+    debugger;
+    var paras = "";
+    for (var k = 0; k < data.length; k++) {
+        paras += "[" + data[k] + "],";
+    }
+    paras = paras.substring(0, paras.length - 1);
+    var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
+    var ordersSource =
+    {
+        dataFields: datafields,
+        dataType: "json",
+        id: 'VGUID',
+        url: url,
+        data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, SingleOrDouble: SingleOrDouble },
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
         }
-        debugger;
-        var paras = "";
-        for (var k = 0; k < data.length; k++) {
-            paras += "[" + data[k] + "],";
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
         }
-        paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/RentTarget/GetRentTargetList";
-        var ordersSource =
+    });
+    $("#tableList1").jqxGrid(
         {
-            dataFields: datafields,
-            dataType: "json",
-            id: 'VGUID',
-            url: url,
-            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, SingleOrDouble: SingleOrDouble },
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-            }
+            width: "100%",
+            height: "100%",
+            source: dataAdapter,
+            selectionmode: 'singlerow',
+            editable: true,
+            editmode: 'selectedcell',
+            ready: function () {
+            },
+            columns: columns
         });
-        $("#tableList1").jqxGrid(
-            {
-                width: "100%",
-                height: "100%",
-                source: dataAdapter,
-                selectionmode: 'singlerow',
-                editable: true,
-                editmode: 'selectedcell',
-                ready: function () {
-                },
-                columns: columns
-            });
-    }
-};
+}
+function pickedFunc() {
+    GetRentTarget();
+}
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);

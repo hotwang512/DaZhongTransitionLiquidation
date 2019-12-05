@@ -32,10 +32,6 @@ var $page = function () {
             function () {
                 GetFreightAnalysis();
             });
-        $("#DateOfYear").on("blur",
-            function () {
-                GetFreightAnalysis();
-            });
         $("#FreightAnalysisDialog_OKBtn").on("click", function () {
             var validateError = 0;
             if (!Validate($("#VehicleModelNew"))) {
@@ -80,212 +76,216 @@ var $page = function () {
             $("#FreightAnalysisModalDialog").modal("hide");
         });
     }; //addEvent end
-    function GetFreightAnalysis() {
-        if ($("#VehicleModelNew").val() != "") {
-            $.ajax({
-                url: "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisDetail",
-                data: {
-                    "VehicleModel": $("#VehicleModelNew").val(),
-                    "VehicleModelName": $("#VehicleModelNew option:selected").text(),
-                    "DateOfYear": $("#DateOfYear").val()
-                },
-                type: "GET",
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    GetFreightAnalysisDetail(data);
-                }
-            });
-        }
-    }
-    function GetVehicleModelDropDown() {
+};
+
+function GetFreightAnalysis() {
+    if ($("#VehicleModelNew").val() != "") {
         $.ajax({
-            url: "/Systemmanagement/VehicleExtrasFeeSettingDetail/GetVehicleModelDropDown",
-            type: "GET",
-            dataType: "json",
-            async: false,
-            success: function (msg) {
-                uiEngineHelper.bindSelect('#VehicleModel', msg, "Code", "Descrption");
-                $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
-                uiEngineHelper.bindSelect('#VehicleModelNew', msg, "Code", "Descrption");
-                $("#VehicleModelNew").prepend("<option value=\"\" selected='true'>请选择</>");
-            }
-        });
-    }
-    function GetFreightAnalysisYear() {
-        $.ajax({
-            url: "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisYear",
-            data: { "VehicleModel": $("#VehicleModel").val() },
+            url: "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisDetail",
+            data: {
+                "VehicleModel": $("#VehicleModelNew").val(),
+                "VehicleModelName": $("#VehicleModelNew option:selected").text(),
+                "DateOfYear": $("#DateOfYear").val()
+            },
             type: "GET",
             dataType: "json",
             async: false,
             success: function (data) {
-                if (data.length > 0) {
-                    $("#tableList").show();
-                    $("#tableList1").show();
-                    dataArr = data;
-                    GetFreightAnalysisList(data, "DayDetail");
-                } else {
-                    $("#tableList").hide();
-                    $("#tableList1").hide();
-                }
+                GetFreightAnalysisDetail(data);
             }
         });
     }
-    function GetFreightAnalysisDetail(data) {
-        var ordersSource =
+}
+function GetVehicleModelDropDown() {
+    $.ajax({
+        url: "/Systemmanagement/VehicleExtrasFeeSettingDetail/GetVehicleModelDropDown",
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            uiEngineHelper.bindSelect('#VehicleModel', msg, "Code", "Descrption");
+            $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
+            uiEngineHelper.bindSelect('#VehicleModelNew', msg, "Code", "Descrption");
+            $("#VehicleModelNew").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
+function GetFreightAnalysisYear() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisYear",
+        data: { "VehicleModel": $("#VehicleModel").val() },
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            if (data.length > 0) {
+                $("#tableList").show();
+                $("#tableList1").show();
+                dataArr = data;
+                GetFreightAnalysisList(data, "DayDetail");
+            } else {
+                $("#tableList").hide();
+                $("#tableList1").hide();
+            }
+        }
+    });
+}
+function GetFreightAnalysisDetail(data) {
+    var ordersSource =
+    {
+        dataFields: [
+            { name: 'VehicleModel', type: 'string' },
+            { name: 'VehicleModelName', type: 'string' },
+            { name: 'ProjectName', type: 'string' },
+            { name: 'DayDetail', type: 'string' },
+            { name: 'NightDetail', type: 'string' },
+            { name: 'DateOfYear', type: 'string' },
+            { name: 'Zorder', type: 'string' },
+            { name: 'VGUID', type: 'string' }
+        ],
+        dataType: "json",
+        id: 'VGUID',
+        localdata: data,
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
+        }
+    });
+    var editrow = -1;
+    $("#table").jqxGrid(
+    {
+        width: "100%",
+        height: "300px",
+        source: dataAdapter,
+        selectionmode: 'singlerow',
+        editable: true,
+        ready: function () {
+        },
+        toolbarHeight: 35,
+        columns: [
+            { text: '车型', editable: false, dataField: 'VehicleModelName', width: 100, cellsAlign: 'center', align: 'center' },
+            { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
+            { text: '白天', editable: true, dataField: 'DayDetail', width: 200, cellsAlign: 'center', align: 'center' },
+            { text: '夜间', editable: true, dataField: 'NightDetail', width: 200, cellsAlign: 'center', align: 'center' },
+            { text: 'VGUID', datafield: 'VGUID', hidden: true }
+        ]
+    });
+}
+function GetFreightAnalysisList(data, DayOrNight) {
+    debugger;
+    var datafields = [
+        { name: 'ProjectName', type: 'string' }
+    ];
+    var columns = [
         {
-            dataFields: [
-                { name: 'VehicleModel', type: 'string' },
-                { name: 'VehicleModelName', type: 'string' },
-                { name: 'ProjectName', type: 'string' },
-                { name: 'DayDetail', type: 'string' },
-                { name: 'NightDetail', type: 'string' },
-                { name: 'DateOfYear', type: 'string' },
-                { name: 'Zorder', type: 'string' },
-                { name: 'VGUID', type: 'string' }
-            ],
-            dataType: "json",
-            id: 'VGUID',
-            localdata: data,
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-            }
-        });
-        var editrow = -1;
-        $("#table").jqxGrid(
+            text: '项目',
+            editable: false,
+            dataField: 'ProjectName',
+            width: 200,
+            cellsAlign: 'center',
+            align: 'center'
+        }
+    ];
+    for (var i = 0; i < data.length; i++) {
+        datafields.push({ name: data[i], type: 'stirng' });
+        columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+    }
+    debugger;
+    var paras = "";
+    for (var k = 0; k < data.length; k++) {
+        paras += "[" + data[k] + "],";
+    }
+    paras = paras.substring(0, paras.length - 1);
+    var url = "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisList";
+    var ordersSource =
+    {
+        dataFields: datafields,
+        dataType: "json",
+        id: 'VGUID',
+        url: url,
+        data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, DayOrNight: DayOrNight },
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+        }
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
+            GetFreightAnalysisList1(dataArr, "NightDetail");
+        }
+    });
+    $("#tableList").jqxGrid(
         {
             width: "100%",
-            height: "300px",
+            height: "100%",
             source: dataAdapter,
             selectionmode: 'singlerow',
             editable: true,
+            editmode: 'selectedcell',
             ready: function () {
             },
-            toolbarHeight: 35,
-            columns: [
-                { text: '车型', editable: false, dataField: 'VehicleModelName', width: 100, cellsAlign: 'center', align: 'center' },
-                { text: '项目', editable: false, dataField: 'ProjectName', width: 157, cellsAlign: 'center', align: 'center' },
-                { text: '白天', editable: true, dataField: 'DayDetail', width: 200, cellsAlign: 'center', align: 'center' },
-                { text: '夜间', editable: true, dataField: 'NightDetail', width: 200, cellsAlign: 'center', align: 'center' },
-                { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ]
+            columns: columns
         });
-    }
-    function GetFreightAnalysisList(data, DayOrNight) {
-        debugger;
-        var datafields = [
-            { name: 'ProjectName', type: 'string' }
-        ];
-        var columns = [
-            {
-                text: '项目',
-                editable: false,
-                dataField: 'ProjectName',
-                width: 200,
-                cellsAlign: 'center',
-                align: 'center'
-            }
-        ];
-        for (var i = 0; i < data.length; i++) {
-            datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
-        }
-        debugger;
-        var paras = "";
-        for (var k = 0; k < data.length; k++) {
-            paras += "[" + data[k] + "],";
-        }
-        paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisList";
-        var ordersSource =
+}
+function GetFreightAnalysisList1(data, DayOrNight) {
+    debugger;
+    var datafields = [
+        { name: 'ProjectName', type: 'string' }
+    ];
+    var columns = [
         {
-            dataFields: datafields,
-            dataType: "json",
-            id: 'VGUID',
-            url: url,
-            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, DayOrNight: DayOrNight },
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-                GetFreightAnalysisList1(dataArr, "NightDetail");
-            }
-        });
-        $("#tableList").jqxGrid(
-            {
-                width: "100%",
-                height: "100%",
-                source: dataAdapter,
-                selectionmode: 'singlerow',
-                editable: true,
-                editmode: 'selectedcell',
-                ready: function () {
-                },
-                columns: columns
-            });
+            text: '项目',
+            editable: false,
+            dataField: 'ProjectName',
+            width: 200,
+            cellsAlign: 'center',
+            align: 'center'
+        }
+    ];
+    for (var i = 0; i < data.length; i++) {
+        datafields.push({ name: data[i], type: 'stirng' });
+        columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
     }
-    function GetFreightAnalysisList1(data, DayOrNight) {
-        debugger;
-        var datafields = [
-            { name: 'ProjectName', type: 'string' }
-        ];
-        var columns = [
-            {
-                text: '项目',
-                editable: false,
-                dataField: 'ProjectName',
-                width: 200,
-                cellsAlign: 'center',
-                align: 'center'
-            }
-        ];
-        for (var i = 0; i < data.length; i++) {
-            datafields.push({ name: data[i], type: 'stirng' });
-            columns.push({ text: data[i] + "年", datafield: data[i], editable: false, width: 100, align: 'center', cellsAlign: 'center' });
+    debugger;
+    var paras = "";
+    for (var k = 0; k < data.length; k++) {
+        paras += "[" + data[k] + "],";
+    }
+    paras = paras.substring(0, paras.length - 1);
+    var url = "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisList";
+    var ordersSource =
+    {
+        dataFields: datafields,
+        dataType: "json",
+        id: 'VGUID',
+        url: url,
+        data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, DayOrNight: DayOrNight },
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
         }
-        debugger;
-        var paras = "";
-        for (var k = 0; k < data.length; k++) {
-            paras += "[" + data[k] + "],";
+    };
+    var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
+        loadComplete: function () {
         }
-        paras = paras.substring(0, paras.length - 1);
-        var url = "/AnalysisManagementCenter/FreightAnalysis/GetFreightAnalysisList";
-        var ordersSource =
+    });
+    $("#tableList1").jqxGrid(
         {
-            dataFields: datafields,
-            dataType: "json",
-            id: 'VGUID',
-            url: url,
-            data: { "VehicleModel": $("#VehicleModel").val(), paras: paras, DayOrNight: DayOrNight },
-            updateRow: function (rowID, rowData, commit) {
-                commit(true);
-            }
-        };
-        var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
-            loadComplete: function () {
-            }
+            width: "100%",
+            height: "100%",
+            source: dataAdapter,
+            selectionmode: 'singlerow',
+            editable: true,
+            editmode: 'selectedcell',
+            ready: function () {
+            },
+            columns: columns
         });
-        $("#tableList1").jqxGrid(
-            {
-                width: "100%",
-                height: "100%",
-                source: dataAdapter,
-                selectionmode: 'singlerow',
-                editable: true,
-                editmode: 'selectedcell',
-                ready: function () {
-                },
-                columns: columns
-            });
-    }
-};
+}
+function pickedFunc() {
+    GetFreightAnalysis();
+}
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);

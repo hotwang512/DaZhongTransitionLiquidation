@@ -9,6 +9,8 @@ var selector = {
 }; //selector end
 var isEdit = false;
 var vguid = "";
+function pickedFunc() {
+}
 var $page = function () {
     this.init = function () {
         var date = new Date;

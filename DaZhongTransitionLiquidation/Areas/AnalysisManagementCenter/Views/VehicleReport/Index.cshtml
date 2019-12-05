@@ -42,7 +42,7 @@
                 <td class="td_span">月份：</td>
                 <td class="td_input">
                     @*<input id="PLATE_NUMBER" type="text" class="input_text form-control" style="width: 200px">*@
-                    <input id="YearMonth" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn' })" class="input_text form-control" style="width: 200px">
+                    <input id="YearMonth" type="text" onfocus="WdatePicker({  realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn',onpicked:pickedFunc })" class="input_text form-control" style="width: 200px">
                 </td>
                 @if (permission.Generate)
                 {

@@ -18,11 +18,6 @@ var $page = function () {
     }
     //所有事件
     function addEvent() {
-        //保存
-        $("#DateOfYear").on("blur",
-            function () {
-                GetVehicleAmountCompany();
-            });
         $(".menuRight").on("click",
             function () {
                 $("#Comment").val("");
@@ -114,6 +109,7 @@ var $page = function () {
     }; //addEvent end
 };
 function GetVehicleAmountCompany() {
+    layer.load();
     $.ajax({
         url: "/AnalysisManagementCenter/VehicleAmount/GetVehicleAmountCompanyList",
         type: "post",
@@ -185,12 +181,15 @@ function GetVehicleAmountValueList() {
         },
         type: "post",
         success: function (data) {
-            for (var i = 0; i < data.Rows.length; i++) {
-                $("#" + data.Rows[i].CompanyGuid + "_" + data.Rows[i].YearMonth).text(data.Rows[i].LicenseAmount);
-                $("#" + data.Rows[i].CompanyGuid + "_" + data.Rows[i].YearMonth).attr("VGUID", data.Rows[i].VGUID);
-                $("#" + data.Rows[i].CompanyGuid + "_" + data.Rows[i].YearMonth).attr("title", data.Rows[i].Comment);
+            if (data.Rows != null) {
+                for (var i = 0; i < data.Rows.length; i++) {
+                    $("#" + data.Rows[i].CompanyGuid + "_" + data.Rows[i].YearMonth).text(data.Rows[i].LicenseAmount);
+                    $("#" + data.Rows[i].CompanyGuid + "_" + data.Rows[i].YearMonth).attr("VGUID", data.Rows[i].VGUID);
+                    $("#" + data.Rows[i].CompanyGuid + "_" + data.Rows[i].YearMonth).attr("title", data.Rows[i].Comment);
+                }
+                computeSum();
             }
-            computeSum();
+            layer.closeAll('loading');
         }
     });
 }
@@ -478,6 +477,9 @@ function getTbodyTaxiAllSum(tbody, table, collength) {
         }
     }
     return tbody;
+}
+function pickedFunc() {
+    GetVehicleAmountCompany();
 }
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

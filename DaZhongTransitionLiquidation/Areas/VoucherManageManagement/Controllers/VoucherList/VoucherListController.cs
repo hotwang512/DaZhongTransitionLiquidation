@@ -420,24 +420,38 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 var myData = db.Ado.SqlQuery<SettlementSubjectVoucher>(@"select a.*,b.BusinessType,c.BusinessType as BusinessTypeKey from Business_SettlementSubjectDetail as a 
                                         left join Business_SettlementSubject as b on a.SettlementVGUID=b.VGUID
                                         left join Business_SettlementSubject as c on b.ParentVGUID = c.VGUID
-                                        where a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by Borrow desc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
+                                        where (a.Borrow is not null or a.Loan is not null) and  a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by Borrow desc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
                 var month2 = month.TryToInt() < 10 ? "0" + month : month;
                 var yearMonth = year + month2;
                 //查询出所选月份的结算金额
-                var settlementCount = db.SqlQueryable<Business_SettlementCount>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount where YearMonth = '201909' 
+                var settlementCount = db.SqlQueryable<Business_SettlementCount>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount  
                                         group by BusinessType,YearMonth,BELONGTO_COMPANY").Where(x => x.YearMonth == yearMonth).ToList();
                 if (myData.Count > 0 && settlementCount.Count > 0)
                 {
-                    //查出对方公司的数据
-                    var companyInfo = db.Ado.SqlQuery<Business_SevenSection>(@" select * from Business_SevenSection where SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43' and Descrption != @CompanyName
-                                        and OrgID in ('2','36','3','35','4') ", new { CompanyName = UserInfo.CompanyName }).ToList();
-                    foreach (var item in companyInfo)
+                    if(UserInfo.AccountModeCode == "1002" && UserInfo.CompanyCode == "01")
                     {
-                        //查出我方借出到对方的数据
-                        var myDataOther = myData.Where(x => x.AccountModeCodeOther == item.AccountModeCode && x.CompanyCodeOther == item.Code).ToList();
+                        //查出对方公司的数据,生成4张凭证
+                        var companyInfo = db.Ado.SqlQuery<Business_SevenSection>(@" select * from Business_SevenSection where SectionVGUID='A63BD715-C27D-4C47-AB66-550309794D43' and Descrption != @CompanyName
+                                        and OrgID in ('2','36','3','35','4') ", new { CompanyName = UserInfo.CompanyName }).ToList();
+                        foreach (var item in companyInfo)
+                        {
+                            //查出我方借出到对方的数据
+                            var myDataOther = myData.Where(x => x.AccountModeCodeOther == item.AccountModeCode && x.CompanyCodeOther == item.Code).ToList();
+                            if (myDataOther.Count > 0)
+                            {
+                                //myDataOther[0].CompanyNameOther = myDataOther[0].CompanyNameOther + "（结算）";
+                                //根据借贷配置数据生成凭证
+                                GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //根据所选账套,生成各自一张
+                        var myDataOther = myData.Where(x => x.AccountModeCodeOther == "1002" && x.CompanyCodeOther == "01").ToList();
                         if (myDataOther.Count > 0)
                         {
-                            myDataOther[0].CompanyNameOther = myDataOther[0].CompanyNameOther + "（结算）";
+                            //myDataOther[0].CompanyNameOther = myDataOther[0].CompanyNameOther + "（结算）";
                             //根据借贷配置数据生成凭证
                             GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
                         }
@@ -669,8 +683,40 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 BVDetail.JE_LINE_NUMBER = i++;
                 BVDetail.VGUID = Guid.NewGuid();
                 BVDetail.VoucherVGUID = guid;
-                var borrowMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
-                var loanMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyNameOther && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
+                //var borrowMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
+                decimal? Money = 0;
+                if (item.BusinessTypeKey == null && item.BusinessType != null)
+                {
+                    if(item.CompanyNameOther == "财务共享-大众出租")
+                    {
+                        Money = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == item.BusinessType).FirstOrDefault().Account;
+                    }
+                    else
+                    {
+                        Money = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyNameOther && x.BusinessType == item.BusinessType).FirstOrDefault().Account;
+                    }
+                }
+                if (item.BusinessTypeKey != null && item.BusinessType != null)
+                {
+                    if (item.CompanyNameOther == "财务共享-大众出租")
+                    {
+                        var settData = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).ToList();
+                        if (settData.Count == 0)
+                        {
+                            continue;
+                        }
+                        Money = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
+                    }
+                    else
+                    {
+                        var settData = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyNameOther && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).ToList();
+                        if (settData.Count == 0)
+                        {
+                            continue;
+                        }
+                        Money = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyNameOther && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
+                    }     
+                }
                 string seven = null;
                 if (item.Borrow != "" && item.Borrow != null)
                 {
@@ -679,27 +725,30 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                         item.Borrow = item.Borrow.Substring(0, item.Borrow.Length - 1);
                     }
                     seven = item.Borrow;
-                    BVDetail.BorrowMoney = borrowMoney;
+                    BVDetail.BorrowMoney = Money;
                     BVDetail.BorrowMoneyCount = null;
                 }
-                else
+                if (item.Loan != "" && item.Loan != null)
                 {
                     if (item.Loan.Contains("\n"))
                     {
                         item.Loan = item.Loan.Substring(0, item.Loan.Length - 1);
                     }
                     seven = item.Loan;
-                    BVDetail.LoanMoney = loanMoney;
+                    BVDetail.LoanMoney = Money;
                     BVDetail.LoanMoneyCount = null;
                 }
-                BVDetail.CompanySection = seven.Split(".")[0];
-                BVDetail.SubjectSection = seven.Split(".")[1];
-                BVDetail.AccountSection = seven.Split(".")[2];
-                BVDetail.CostCenterSection = seven.Split(".")[3];
-                BVDetail.SpareOneSection = seven.Split(".")[4];
-                BVDetail.SpareTwoSection = seven.Split(".")[5];
-                BVDetail.IntercourseSection = seven.Split(".")[6];
-                BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, myDataOther[0].AccountModeCode, myDataOther[0].CompanyCode);
+                if(seven != "" && seven != null)
+                {
+                    BVDetail.CompanySection = seven.Split(".")[0];
+                    BVDetail.SubjectSection = seven.Split(".")[1];
+                    BVDetail.AccountSection = seven.Split(".")[2];
+                    BVDetail.CostCenterSection = seven.Split(".")[3];
+                    BVDetail.SpareOneSection = seven.Split(".")[4];
+                    BVDetail.SpareTwoSection = seven.Split(".")[5];
+                    BVDetail.IntercourseSection = seven.Split(".")[6];
+                    BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, myDataOther[0].AccountModeCode, myDataOther[0].CompanyCode);
+                }
                 BVDetailList.Add(BVDetail);
             }
         }

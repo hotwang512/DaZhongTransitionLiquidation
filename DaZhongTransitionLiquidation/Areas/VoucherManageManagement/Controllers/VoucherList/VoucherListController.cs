@@ -423,6 +423,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                                         where (a.Borrow is not null or a.Loan is not null) and  a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by Borrow desc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
                 var month2 = month.TryToInt() < 10 ? "0" + month : month;
                 var yearMonth = year + month2;
+                var date = (year +"-"+ month2).TryToDate();
                 //查询出所选月份的结算金额
                 var settlementCount = db.SqlQueryable<Business_SettlementCount>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount  
                                         group by BusinessType,YearMonth,BELONGTO_COMPANY").Where(x => x.YearMonth == yearMonth).ToList();
@@ -435,6 +436,13 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                                         and OrgID in ('2','36','3','35','4') ", new { CompanyName = UserInfo.CompanyName }).ToList();
                         foreach (var item in companyInfo)
                         {
+                            var isAnyVoucher = db.Queryable<Business_VoucherList>().Any(x => x.ReceivingUnit == item.Abbreviation && x.AccountingPeriod == date);
+                            if (isAnyVoucher)
+                            {
+                                resultModel.IsSuccess = false;
+                                resultModel.Status = "4";
+                                return;
+                            }
                             //查出我方借出到对方的数据
                             var myDataOther = myData.Where(x => x.AccountModeCodeOther == item.AccountModeCode && x.CompanyCodeOther == item.Code).ToList();
                             if (myDataOther.Count > 0)
@@ -444,20 +452,31 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                                 GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
                             }
                         }
+                        resultModel.IsSuccess = true;
+                        resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                     }
                     else
                     {
-                        //根据所选账套,生成各自一张
-                        var myDataOther = myData.Where(x => x.AccountModeCodeOther == "1002" && x.CompanyCodeOther == "01").ToList();
-                        if (myDataOther.Count > 0)
+                        var isAnyVoucher = db.Queryable<Business_VoucherList>().Any(x => x.ReceivingUnit == "财务共享-大众出租" && x.AccountingPeriod == date);
+                        if (isAnyVoucher)
                         {
-                            //myDataOther[0].CompanyNameOther = myDataOther[0].CompanyNameOther + "（结算）";
-                            //根据借贷配置数据生成凭证
-                            GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
+                            resultModel.IsSuccess = false;
+                            resultModel.Status = "4";
+                        }
+                        else
+                        {
+                            //根据所选账套,生成各自一张
+                            var myDataOther = myData.Where(x => x.AccountModeCodeOther == "1002" && x.CompanyCodeOther == "01").ToList();
+                            if (myDataOther.Count > 0)
+                            {
+                                //myDataOther[0].CompanyNameOther = myDataOther[0].CompanyNameOther + "（结算）";
+                                //根据借贷配置数据生成凭证
+                                GenerateVoucherList(db, myDataOther, userData, year, month, settlementCount);
+                            }
+                            resultModel.IsSuccess = true;
+                            resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                         }
                     }
-                    resultModel.IsSuccess = true;
-                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
                 }
                 else
                 {
@@ -569,7 +588,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 }
                 var isAnyModelList = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.Status == "1" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
                                    && x.ReceivingUnit == myData.ModelName + "（模板）" && x.AccountingPeriod == date).ToList();
-                if (isAnyModelList.Count >= 1)
+                if (isAnyModelList.Count >= 1 && isAnyModelList[0].Status == "1")
                 {
                     //在所选的会计期下模板已经生成凭证
                     var voucherVGUID = isAnyModelList[0].VGUID;
@@ -588,6 +607,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                                 item.LoanMoney = cashDataOne[0].Money;
                             }
                         }
+                        item.Abstract = cashDataOne[0].Remark;
                     }
                     if(voucherDetail.Count > 0)
                     {
@@ -682,6 +702,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 BVDetail.Abstract = item.Remark;
                 BVDetail.JE_LINE_NUMBER = i++;
                 BVDetail.VGUID = Guid.NewGuid();
+                BVDetail.ModelVGUID = item.VGUID;
                 BVDetail.VoucherVGUID = guid;
                 //var borrowMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
                 decimal? Money = 0;

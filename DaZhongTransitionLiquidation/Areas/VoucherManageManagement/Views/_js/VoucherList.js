@@ -186,13 +186,21 @@ var $page = function () {
         $("#btnCheckStatus").on("click", function () {
             checkOracleData();
         });
+        //获取当前日期
+        var tradeDate = new Date();
+        var year = tradeDate.getFullYear();
+        var month = tradeDate.getMonth();
         //生成--根据结算项目或者模板
         $("#btnCreate").on("click", function () {
+            $("#Year").val(year);
+            $("#Month").val(month);
             createType = "1";
             selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
             selector.$AddBankChannelDialog().modal("show");
         });
         $("#btnCreateModel").on("click", function () {
+            $("#Year").val(year);
+            $("#Month").val(month);
             createType = "2";
             getVoucherModelVGUID();
             selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
@@ -218,15 +226,15 @@ var $page = function () {
                 var borrowCount = $("#BorrowCount").val();
                 var loanCount = $("#LoanCount").val();
                 if (borrowCount == loanCount) {
+                    voucherIndex--;
+                    pageIndex--;
                     var year = $("#Year").val();
                     var month = $("#Month").val();
                     var guid = modelVGUID[voucherIndex].VGUID;
                     saveVoucherModel(year, month);
                     getVoucherModel(year, month, guid);
                     $("#btnNext").show();
-                    $("#btnFinish").hide();
-                    voucherIndex--;
-                    pageIndex--;
+                    $("#btnFinish").show();
                 } else {
                     jqxNotification("借贷金额不平！", null, "error");
                 }
@@ -235,6 +243,9 @@ var $page = function () {
                 voucherIndex = 0;
                 pageIndex = 1;
             }
+            console.log(voucherIndex);
+            console.log(pageIndex);
+            console.log(guid);
         });
         //下一页
         $("#btnNext").on("click", function () {
@@ -258,6 +269,9 @@ var $page = function () {
                     jqxNotification("借贷金额不平！", null, "error");
                 }
             }
+            console.log(voucherIndex);
+            console.log(pageIndex);
+            console.log(guid);
         });
         //完成
         $("#btnFinish").on("click", function () {
@@ -272,7 +286,7 @@ var $page = function () {
                 saveVoucherModel(year, month);
                 //getVoucherModel(year, month, guid);
                 $("#btnNext").show();
-                $("#btnFinish").hide();
+                $("#btnFinish").show();
                 $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
                 $("#ShowDialog").modal("hide");
                 selector.$AddBankChannelDialog().modal("hide");
@@ -988,6 +1002,8 @@ function createVoucher(year, month) {
                     jqxNotification("我方公司借贷配置无数据！", null, "error");
                 } else if (msg.Status == "3") {
                     jqxNotification("当前月份结算汇总无数据！", null, "error");
+                } else if (msg.Status == "4") {
+                    jqxNotification("当前月份凭证已经生成！", null, "error");
                 }
             }
         }
@@ -1105,6 +1121,9 @@ function previewVoucher(data) {
                       "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' readonly /></td>"
         }
         $("#lblCompany").text(companyName);
+        if (voucher[j].Remark == null) {
+            voucher[j].Remark = "";
+        }
         list1 += "<tr style='height:40px'>" +
                       "<td style='text-align: left;'>" + "  " + voucher[j].Remark + "</td>" +
                       "<td style='text-align: left;'>" + "  " + subjectName + "</td>" +

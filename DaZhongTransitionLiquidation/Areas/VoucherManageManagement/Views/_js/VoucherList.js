@@ -287,10 +287,7 @@ var $page = function () {
                 //getVoucherModel(year, month, guid);
                 $("#btnNext").show();
                 $("#btnFinish").show();
-                $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
-                $("#ShowDialog").modal("hide");
-                selector.$AddBankChannelDialog().modal("hide");
-                //previewVoucher(voucherList[voucherIndex]);
+                jqxNotification("保存成功！", null, "success");
             } else {
                 jqxNotification("借贷金额不平！", null, "error");
             }
@@ -1065,6 +1062,10 @@ function saveVoucherModel(year, month) {
         if (loanMoney > 0) {
             keyList.push(key);
             valueList.push(loanMoney);
+        }
+        if (borrowMoney == 0 && loanMoney == 0) {
+            keyList.push(key);
+            valueList.push(0);
         }
     }
     if (keyList.length > 0 && valueList.length > 0) {

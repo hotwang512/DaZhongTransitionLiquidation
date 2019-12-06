@@ -420,7 +420,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 var myData = db.Ado.SqlQuery<SettlementSubjectVoucher>(@"select a.*,b.BusinessType,c.BusinessType as BusinessTypeKey from Business_SettlementSubjectDetail as a 
                                         left join Business_SettlementSubject as b on a.SettlementVGUID=b.VGUID
                                         left join Business_SettlementSubject as c on b.ParentVGUID = c.VGUID
-                                        where (a.Borrow is not null or a.Loan is not null) and  a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by Borrow desc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
+                                        where (a.Borrow is not null or a.Loan is not null) and  a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by c.Sort asc,b.Sort asc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
                 var month2 = month.TryToInt() < 10 ? "0" + month : month;
                 var yearMonth = year + month2;
                 var date = (year +"-"+ month2).TryToDate();
@@ -593,25 +593,36 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                     //在所选的会计期下模板已经生成凭证
                     var voucherVGUID = isAnyModelList[0].VGUID;
                     var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucherVGUID).ToList();
-                    foreach (var item in voucherDetail)
+                    if(cashList.Count == voucherDetail.Count)
                     {
-                        var cashDataOne = cashList.Where(x => x.VGUID == item.ModelVGUID).ToList();
-                        if(cashDataOne.Count == 1)
+                        foreach (var item in voucherDetail)
                         {
-                            if(cashDataOne[0].Borrow !="" && cashDataOne[0].Borrow != null)
+                            var cashDataOne = cashList.Where(x => x.VGUID == item.ModelVGUID).ToList();
+                            if (cashDataOne.Count == 1)
                             {
-                                item.BorrowMoney = cashDataOne[0].Money;
+                                if (cashDataOne[0].Borrow != "" && cashDataOne[0].Borrow != null)
+                                {
+                                    item.BorrowMoney = cashDataOne[0].Money;
+                                }
+                                else
+                                {
+                                    item.LoanMoney = cashDataOne[0].Money;
+                                }
                             }
-                            else
-                            {
-                                item.LoanMoney = cashDataOne[0].Money;
-                            }
+                            item.Abstract = cashDataOne[0].Remark;
                         }
-                        item.Abstract = cashDataOne[0].Remark;
+                        if (voucherDetail.Count > 0)
+                        {
+                            db.Updateable(voucherDetail).ExecuteCommand();
+                        }
                     }
-                    if(voucherDetail.Count > 0)
+                    else
                     {
-                        db.Updateable(voucherDetail).ExecuteCommand();
+                        //针对一张凭证中缺少借贷项的补救措施
+                        db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucherVGUID).ExecuteCommand();
+                        List<Business_VoucherDetail> BVDetailList2 = new List<Business_VoucherDetail>();
+                        CashTransactionController.GetVoucherDetail(db, BVDetailList2, UserInfo.AccountModeCode, UserInfo.CompanyCode, cashList, voucherVGUID);
+                        db.Insertable(BVDetailList2).ExecuteCommand();
                     }
                 }
                 else

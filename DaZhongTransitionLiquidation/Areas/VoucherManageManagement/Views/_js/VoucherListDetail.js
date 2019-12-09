@@ -56,7 +56,7 @@ var $page = function () {
             //addSectionDiv();
             addVoucherListTable();
             $("#hideButton").show();
-            $("#DocumentMaker").val($("#LoginName").val());
+            $//("#DocumentMaker").val($("#LoginName").val());
             if ($("#Status").val() != "1" && $("#Status").val() != "") {
                 $("#Auditor").val($("#LoginName").val());
             }
@@ -707,17 +707,8 @@ var $page = function () {
                 $("#VoucherNo").val(msg.VoucherNo);
                 $("#FinanceDirector").val(msg.FinanceDirector);
                 $("#Bookkeeping").val(msg.Bookkeeping);
-                if (msg.DocumentMaker == "" || msg.DocumentMaker == null) {
-                    $("#DocumentMaker").val($("#LoginName").val());
-                } else {
-                    $("#DocumentMaker").val(msg.DocumentMaker);
-                }
-                if ($("#Status").val() != "1" && $("#Status").val() != "") {
-                    $("#Auditor").val($("#LoginName").val());
-                }
-                if ($("#Status").val() == "3") {
-                    $("#Auditor").val(msg.Auditor);
-                }
+                $("#DocumentMaker").val(msg.DocumentMaker);
+                $("#Auditor").val(msg.Auditor);
                 $("#Cashier").val(msg.Cashier);
                 $("#CompanyCode").val(msg.CompanyCode);
                 $("#AccountModeName").val(msg.AccountModeName);
@@ -850,8 +841,8 @@ var $page = function () {
             $("#SubjectName" + i).val(datas[i].SevenSubjectName);
             var borrowMoney = "";
             var loanMoney = "";
-            if (datas[i].BorrowMoney == "" || datas[i].BorrowMoney == null) {
-                loanMoney = datas[i].LoanMoney == null ? 0 : datas[i].LoanMoney;
+            if (datas[i].BorrowMoney === "" || datas[i].BorrowMoney === null) {
+                loanMoney = datas[i].LoanMoney === null ? 0 : datas[i].LoanMoney;
                 if (loanMoney != null) {
                     loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
                     if (datas.length == 1) {

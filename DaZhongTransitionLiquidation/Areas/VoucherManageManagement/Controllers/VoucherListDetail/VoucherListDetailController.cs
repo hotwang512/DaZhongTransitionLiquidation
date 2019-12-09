@@ -395,6 +395,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 pageCount = pageCount + 1;
             }
+            var borrowCount = dataDetail.Sum(x => x.BorrowMoney.TryToDecimal());
+            var loanCount = dataDetail.Sum(x => x.LoanMoney.TryToDecimal());
             for (int i = 1; i <= pageCount; i++)
             {
                 var excelPath = "/Temp/VoucherReport" + data.VoucherNo + "-" + i + ".xlsx";
@@ -414,8 +416,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     {
                         dt.AddRow();
                     }
-                    cells[6, 15].PutValue(dataDetail[0].BorrowMoneyCount);
-                    cells[6, 18].PutValue(dataDetail[0].LoanMoneyCount);
+                    cells[6, 15].PutValue(borrowCount);
+                    cells[6, 18].PutValue(loanCount);
                 }
                 cells[0, 0].PutValue(data.CompanyName);
                 cells[1, 4].PutValue(data.AccountingPeriod);
@@ -450,6 +452,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     dt.AddRow();
                 }
             }
+            var borrowCount = dataDetail.Sum(x => x.BorrowMoney.TryToDecimal());
+            var loanCount = dataDetail.Sum(x => x.LoanMoney.TryToDecimal());
             string rootPath = System.Web.HttpContext.Current.Server.MapPath("/Template/财务打印样式模板.xlsx");
             string url = System.Web.HttpContext.Current.Server.MapPath("/Temp");
             string fileName = "VoucherReport" + data.VoucherNo + ".xlsx";
@@ -468,8 +472,8 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             cells[7, 10].PutValue(data.Auditor);
             cells[7, 15].PutValue(data.DocumentMaker);
             cells[7, 19].PutValue(data.Cashier);
-            cells[6, 15].PutValue(dataDetail[0].BorrowMoneyCount);
-            cells[6, 18].PutValue(dataDetail[0].LoanMoneyCount);
+            cells[6, 15].PutValue(borrowCount);
+            cells[6, 18].PutValue(loanCount);
             WorkbookDesigner designer = new WorkbookDesigner(wk);
             designer.SetDataSource(dt);
             designer.Process();

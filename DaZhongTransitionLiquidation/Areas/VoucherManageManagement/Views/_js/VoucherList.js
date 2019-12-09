@@ -59,7 +59,7 @@ var $page = function () {
             $("#btnCheckStatus").show();
             $('#jqxTabs').jqxTabs({ selectedItem: 0 })
         }
-        
+
         //加载列表数据
         selector.$btnSearch().unbind("click").on("click", function () {
             if (type == "银行类") {
@@ -95,12 +95,12 @@ var $page = function () {
         $("#btnAdd").on("click", function () {
             if (type == "现金类") {
                 window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=0";
-            }else if (type == "银行类") {
+            } else if (type == "银行类") {
                 window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=1";
             } else if (type == "转账类") {
                 window.location.href = "/VoucherManageManagement/VoucherListDetail/Index?Type=2";
             }
-           
+
             //window.open("/VoucherManageManagement/VoucherListDetail/Index");
         });
         //删除
@@ -215,6 +215,7 @@ var $page = function () {
             var year = $("#Year").val();
             var month = $("#Month").val();
             var guid = "";
+            pageIndex = 1;
             switch (createType) {
                 case "1": createVoucher(year, month); break;
                 case "2": guid = modelVGUID[0].VGUID; getVoucherModel(year, month, guid); break;
@@ -365,7 +366,7 @@ var $page = function () {
     function submit(selection) {
         $.ajax({
             url: "/VoucherManageManagement/VoucherList/UpdataVoucherListInfo",
-            data: { vguids: selection, status:"2" },
+            data: { vguids: selection, status: "2" },
             traditional: true,
             type: "post",
             success: function (msg) {
@@ -404,7 +405,7 @@ var $page = function () {
                         jqxNotification("提交成功！", null, "success");
                         if (tableIndex == 1) {
                             $("#jqxTable1").jqxDataTable('updateBoundData');
-                        } else if(tableIndex == 0)  {
+                        } else if (tableIndex == 0) {
                             $("#jqxTable").jqxDataTable('updateBoundData');
                         } else if (tableIndex == 2) {
                             $("#jqxTable2").jqxDataTable('updateBoundData');
@@ -418,7 +419,7 @@ var $page = function () {
     function initTable() {
         var DateEnd = $("#TransactionDateE").val();
         var DateStar = $("#TransactionDateS").val();
-        var status = $.request.queryString().Status; 
+        var status = $.request.queryString().Status;
         var source =
             {
                 datafields:
@@ -553,7 +554,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                type:"post",
+                type: "post",
                 data: {
                     "Status": status,
                     "ReceivingUnit": $("#ReceivingUnit").val(),
@@ -571,40 +572,40 @@ var $page = function () {
         });
         //创建卡信息列表（主表）
         selector.$grid1().jqxDataTable({
-                pageable: true,
-                width: "100%",
-                height: 400,
-                pageSize: 10,
-                serverProcessing: true,
-                pagerButtonsCount: 10,
-                source: typeAdapter,
-                theme: "office",
-                columnsHeight: 30,
-                columns: [
-                    { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
-                    { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
-                    { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
-                    { text: '交易日期', datafield: 'TransactionDate', width: 120, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
-                    { text: '对方公司', datafield: 'ReceivingUnit', width: 380, align: 'center', cellsAlign: 'center', },
-                    { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '凭证号码', datafield: 'VoucherNo', width: 250, align: 'center', cellsAlign: 'center' },
-                    { text: '我方公司', datafield: 'CompanyName', width: 380, align: 'center', cellsAlign: 'center', },
-                    { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
-                    { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
-                    { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },    
-                    { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },         
-                    //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '交易流水号', datafield: 'Batch', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
-                ]
-            });
+            pageable: true,
+            width: "100%",
+            height: 400,
+            pageSize: 10,
+            serverProcessing: true,
+            pagerButtonsCount: 10,
+            source: typeAdapter,
+            theme: "office",
+            columnsHeight: 30,
+            columns: [
+                { text: "", datafield: "checkbox", width: 35, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
+                { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
+                { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
+                { text: '交易日期', datafield: 'TransactionDate', width: 120, pinned: true, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                { text: '对方公司', datafield: 'ReceivingUnit', width: 380, align: 'center', cellsAlign: 'center', },
+                { text: '借方金额合计', datafield: 'DebitAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '贷方金额合计', datafield: 'CreditAmountTotal', cellsFormat: "d2", width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '凭证号码', datafield: 'VoucherNo', width: 250, align: 'center', cellsAlign: 'center' },
+                { text: '我方公司', datafield: 'CompanyName', width: 380, align: 'center', cellsAlign: 'center', },
+                { text: '会计期', datafield: 'AccountingPeriod', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM" },
+                { text: '币种', datafield: 'Currency', hidden: true, width: 150, align: 'center', cellsAlign: 'center', },
+                { text: '凭证日期', datafield: 'VoucherDate', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd" },
+                { text: '凭证类型', datafield: 'VoucherType', width: 150, align: 'center', cellsAlign: 'center' },
+                //{ text: '财务主管', datafield: 'FinanceDirector', width: 150, align: 'center', cellsAlign: 'center' },
+                //{ text: '记账', datafield: 'Bookkeeping', width: 150, align: 'center', cellsAlign: 'center' },
+                //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '交易流水号', datafield: 'Batch', width: 150, align: 'center', cellsAlign: 'center' },
+                //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
+                { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
+                { text: 'VGUID', datafield: 'VGUID', hidden: true },
+            ]
+        });
         selector.$grid1().on('rowDoubleClick', function (event) {
             // event args.
             var args = event.args;
@@ -780,7 +781,7 @@ var $page = function () {
                 theme: "office",
                 columnsHeight: 30,
                 columns: [
-                    { text: "", datafield: "checkbox", width: 35, hidden: true,pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+                    { text: "", datafield: "checkbox", width: 35, hidden: true, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
                    { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: '批名', datafield: 'BatchName', width: 250, pinned: true, align: 'center', cellsAlign: 'center', cellsRenderer: detailFunc },
                     { text: '交易银行', datafield: 'TradingBank', width: 120, pinned: true, align: 'center', cellsAlign: 'center' },
@@ -850,7 +851,7 @@ var $page = function () {
         $('#jqxTabs').jqxTabs({ width: "99%", height: 450, initTabContent: initWidgets1, selectedItem: 1 });
         tableIndex = 1;
     }
-   
+
     function detailFunc(row, column, value, rowData) {
         var container = "";
         var type = "";
@@ -921,7 +922,7 @@ function syncAssetsData() {
     layer.load();
     $.ajax({
         url: "/VoucherManageManagement/VoucherList/SyncAssetsData",
-        data: { },
+        data: {},
         type: "POST",
         dataType: "json",
         success: function (msg) {
@@ -1010,7 +1011,7 @@ function createVoucher(year, month) {
 function getVoucherModelVGUID() {
     $.ajax({
         url: "/VoucherManageManagement/VoucherList/GetVoucherModelVGUID",
-        data: { },
+        data: {},
         type: "POST",
         dataType: "json",
         success: function (msg) {
@@ -1052,20 +1053,22 @@ function saveVoucherModel(year, month) {
     var keyList = [];
     var valueList = [];
     for (var i = 0; i < voucherList[0].VoucherData.length; i++) {
-        var borrowMoney = $("#Borrow" + i).val();
-        var loanMoney = $("#Loan" + i).val();
+        var borrowMoney = $("#Borrow" + i).val().replace(/,|\s/g, '');
+        var borrowReadyOnly = $("#Borrow" + i).attr("readonly");
+        var loanMoney = $("#Loan" + i).val().replace(/,|\s/g, '');
         var key = $("#Borrow" + i).attr("name");
-        if (borrowMoney > 0) {
-            keyList.push(key);
+        if (borrowMoney == "") {
+            borrowMoney = 0;
+        }
+        if (loanMoney == "") {
+            loanMoney = 0;
+        }
+        keyList.push(key);
+        if (borrowReadyOnly == undefined) {
             valueList.push(borrowMoney);
         }
-        if (loanMoney > 0) {
-            keyList.push(key);
+        else {
             valueList.push(loanMoney);
-        }
-        if (borrowMoney == 0 && loanMoney == 0) {
-            keyList.push(key);
-            valueList.push(0);
         }
     }
     if (keyList.length > 0 && valueList.length > 0) {

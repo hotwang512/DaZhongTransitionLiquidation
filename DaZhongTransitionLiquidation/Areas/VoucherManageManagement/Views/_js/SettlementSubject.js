@@ -34,35 +34,39 @@ var $page = function () {
     function addEvent() {
         initTable();
 
-        $("#datatable").on('rowclick', function (event) {
+        $("#datatable").on('cellclick', function (event) {
             var args = event.args;
             // row's bound index.
-            var boundIndex = args.rowindex;
-            var data = $('#datatable').jqxGrid('getrowdata', boundIndex);
-            guid = data.VGUID;
-            isEdit = true;
-            getCompanyCode(data.AccountModeCode);
-            getCompanyCodeOther(data.AccountModeCodeOther);
-            $("#AccountModeCode").val(data.AccountModeCode);
-            $("#CompanyCode").val(data.CompanyCode);
-            $("#AccountModeCodeOther").val(data.AccountModeCodeOther);
-            $("#CompanyCodeOther").val(data.CompanyCodeOther);
-            $("#Remark").val(data.Remark);
-            if (data.Borrow == null) {
-                data.Borrow = "";
-            }
-            if (data.Loan == null) {
-                data.Loan = "";
+            var dataField = args.datafield;
+            if (dataField == "AccountModeName") {
+                var boundIndex = args.rowindex;
+                var data = $('#datatable').jqxGrid('getrowdata', boundIndex);
+                guid = data.VGUID;
+                isEdit = true;
+                getCompanyCode(data.AccountModeCode);
+                getCompanyCodeOther(data.AccountModeCodeOther);
+                $("#AccountModeCode").val(data.AccountModeCode);
+                $("#CompanyCode").val(data.CompanyCode);
+                $("#AccountModeCodeOther").val(data.AccountModeCodeOther);
+                $("#CompanyCodeOther").val(data.CompanyCodeOther);
+                $("#Remark").val(data.Remark);
+                if (data.Borrow == null) {
+                    data.Borrow = "";
+                }
+                if (data.Loan == null) {
+                    data.Loan = "";
+                }
+
+                initBorrowTable(data.CompanyCode, data.AccountModeCode);
+                var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Borrow + '</div>';
+                $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
+                var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Loan + '</div>';
+                $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
+                $("#myModalLabel_title2").text("编辑借/贷方信息");
+                selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
+                selector.$AddBankChannelDialog().modal("show");
             }
 
-            initBorrowTable(data.CompanyCode, data.AccountModeCode);
-            var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Borrow + '</div>';
-            $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
-            var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + data.Loan + '</div>';
-            $("#jqxdropdownbutton2").jqxDropDownButton('setContent', val2);
-            $("#myModalLabel_title2").text("编辑借/贷方信息");
-            selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
-            selector.$AddBankChannelDialog().modal("show");
         });
         //getCompanyCode();
         //新增
@@ -214,7 +218,9 @@ var $page = function () {
             }
             $.ajax({
                 url: "/VoucherManageManagement/SettlementSubject/DeleteSettlementSubject",
-                data: { vguids: pars },
+                data: {
+                    vguids: pars
+                },
                 type: "post",
                 success: function (msg) {
                     layer.closeAll('loading');

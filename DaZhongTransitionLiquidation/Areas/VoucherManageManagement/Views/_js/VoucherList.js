@@ -199,12 +199,11 @@ var $page = function () {
             selector.$AddBankChannelDialog().modal("show");
         });
         $("#btnCreateModel").on("click", function () {
-            $("#Year").val(year);
-            $("#Month").val(month);
-            createType = "2";
-            getVoucherModelVGUID();
-            selector.$AddBankChannelDialog().modal({ backdrop: "static", keyboard: false });
-            selector.$AddBankChannelDialog().modal("show");
+            $("#YearModel").val(year);
+            $("#MonthModel").val(month);
+            getVoucherModelList();
+            $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
+            $("#ShowDialog").modal("show");
         });
         //弹出框中的取消按钮
         selector.$AddBankChannel_CancelBtn().on("click", function () {
@@ -214,41 +213,9 @@ var $page = function () {
         selector.$AddBankChannel_OKButton().on("click", function () {
             var year = $("#Year").val();
             var month = $("#Month").val();
-            var guid = "";
-            pageIndex = 1;
-            switch (createType) {
-                case "1": createVoucher(year, month); break;
-                case "2": guid = modelVGUID[0].VGUID; getVoucherModel(year, month, guid); break;
-            }
+            createVoucher(year, month);
         });
-        //上一页
-        $("#btnPre").on("click", function () {
-            if (pageIndex >= 1) {
-                var borrowCount = $("#BorrowCount").val();
-                var loanCount = $("#LoanCount").val();
-                if (borrowCount == loanCount) {
-                    voucherIndex--;
-                    pageIndex--;
-                    var year = $("#Year").val();
-                    var month = $("#Month").val();
-                    var guid = modelVGUID[voucherIndex].VGUID;
-                    saveVoucherModel(year, month);
-                    getVoucherModel(year, month, guid);
-                    $("#btnNext").show();
-                    $("#btnFinish").show();
-                } else {
-                    jqxNotification("借贷金额不平！", null, "error");
-                }
-                //previewVoucher(voucherList[voucherIndex]);
-            } else {
-                voucherIndex = 0;
-                pageIndex = 1;
-            }
-            console.log(voucherIndex);
-            console.log(pageIndex);
-            console.log(guid);
-        });
-        //下一页
+        //获取数据源
         $("#btnNext").on("click", function () {
             if (pageIndex <= modelVGUID.length) {
                 var borrowCount = $("#BorrowCount").val();
@@ -259,8 +226,7 @@ var $page = function () {
                     var year = $("#Year").val();
                     var month = $("#Month").val();
                     var guid = modelVGUID[voucherIndex].VGUID;
-                    saveVoucherModel(year, month);
-                    getVoucherModel(year, month, guid);
+                    //saveVoucherModel(year, month);
                     //previewVoucher(voucherList[voucherIndex]);
                     if (pageIndex == modelVGUID.length) {
                         $("#btnNext").hide();
@@ -274,35 +240,38 @@ var $page = function () {
             console.log(pageIndex);
             console.log(guid);
         });
-        //完成
+        //生成
         $("#btnFinish").on("click", function () {
-            var borrowCount = $("#BorrowCount").val();
-            var loanCount = $("#LoanCount").val();
-            if (borrowCount == loanCount) {
-                voucherIndex = 0;
-                pageIndex = 1;
-                var year = $("#Year").val();
-                var month = $("#Month").val();
-                var guid = modelVGUID[voucherIndex].VGUID;
-                saveVoucherModel(year, month);
-                //getVoucherModel(year, month, guid);
-                $("#btnNext").show();
-                $("#btnFinish").show();
-                jqxNotification("保存成功！", null, "success");
+            var selection = [];
+            var indexList = [];
+            var grid = $("#jqxTableModel");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                    indexList.push(index);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要操作的数据！", null, "error");
             } else {
-                jqxNotification("借贷金额不平！", null, "error");
+                WindowConfirmDialog(saveVoucherModel, "您确定要生成选中的数据？", "确认框", "确定", "取消", selection, indexList);
             }
         });
         //取消
         $("#AddNewBankData_CancelBtn").on("click", function () {
-            voucherIndex = 0;
-            pageIndex = 1;
-            $("#btnNext").show();
-            $("#btnFinish").hide();
             $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
             $("#ShowDialog").modal("hide");
-            selector.$AddBankChannelDialog().modal("hide");
         })
+        $('#YearModel').on('change', function (event) {
+            getVoucherModelList();
+        });
+        $('#MonthModel').on('change', function (event) {
+            getVoucherModelList();
+        });
     }; //addEvent end
     //打印
     function print() {
@@ -914,7 +883,7 @@ $(function () {
     page.init();
 });
 var voucherList = null;
-var modelVGUID = null;
+var modelList = null;
 var voucherIndex = 0;
 var pageIndex = 1;
 function syncAssetsData() {
@@ -1007,214 +976,163 @@ function createVoucher(year, month) {
         }
     })
 }
-//获取模板VGUID
-function getVoucherModelVGUID() {
-    $.ajax({
-        url: "/VoucherManageManagement/VoucherList/GetVoucherModelVGUID",
-        data: {},
-        type: "POST",
-        dataType: "json",
-        success: function (msg) {
-            if (msg.length > 0) {
-                modelVGUID = msg;
-                if (modelVGUID.length == 1) {
-                    $("#btnPre").hide();
-                    $("#btnNext").hide();
-                    $("#btnFinish").show();
+//获取模板List
+function getVoucherModelList() {
+    var year = $("#YearModel").val();
+    var month = $("#MonthModel").val();
+    var source =
+        {
+            datafields:
+            [
+                { name: "checkbox", type: null },
+                { name: 'ModelName', type: 'string' },
+                { name: 'AccountModeCode', type: 'string' },
+                { name: 'CompanyCode', type: 'string' },
+                { name: 'Remark', type: 'string' },
+                { name: 'Status', type: 'string' },
+                { name: 'CreateStatus', type: 'string' },
+                { name: 'Creater', type: 'string' },
+                { name: 'CreateTime', type: 'date' },
+                { name: 'VGUID', type: 'string' },
+            ],
+            datatype: "json",
+            id: "VGUID",
+            data: { year: year, month: month },
+            url: "/VoucherManageManagement/VoucherList/GetVoucherModelList"   //获取数据源的路径
+        };
+    var typeAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data) {
+            source.totalrecords = data.TotalRows;
+        }
+    });
+    //创建卡信息列表（主表）
+    $("#jqxTableModel").jqxDataTable({
+        pageable: true,
+        width: "100%",
+        height: 400,
+        pageSize: 10,
+        altRows: true,
+        filterable: true,
+        //filterMode: 'simple',
+        //serverProcessing: true,
+        pagerButtonsCount: 10,
+        source: typeAdapter,
+        theme: "office",
+        columnsHeight: 30,
+        columns: [
+            { text: "", datafield: "checkbox", pinned: true,filterable:false, width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
+            { text: '模板名称', datafield: 'ModelName', width: 500, align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
+            { text: '备注', datafield: 'Remark', width: 500, align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
+            { text: '数据状态', datafield: 'DataStatus', align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '创建状态', datafield: 'CreateStatus', align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
+            { text: '状态', datafield: 'Status', filterable: false, align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '创建人', datafield: 'Creater', filterable: false, align: 'center', cellsAlign: 'center', hidden: true },
+            { text: '创建时间', datafield: 'CreateTime',filterable:false, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:dd", hidden: true },
+            { text: 'AccountModeCode', datafield: 'AccountModeCode', filterable: false, hidden: true },
+            { text: 'CompanyCode', datafield: 'CompanyCode', filterable: false, hidden: true },
+            { text: 'VGUID', datafield: 'VGUID', filterable: false, hidden: true },
+        ]
+    });
+
+    function cellsRendererFunc(row, column, value, rowData) {
+        if (rowData.CreateStatus == "2") {
+            return "";
+        } else {
+            return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";
+        }
+    }
+    function createFun(row, column, value, rowData) {
+        return rowCreate(rowData, column, value)
+    }
+    function rendererFunc() {
+        var checkBox = "<div id='jqx_datatable_checkbox_all' class='jqx_datatable_checkbox_all' style='z-index: 999; margin-left:7px ;margin-top: 7px;'>";
+        checkBox += "</div>";
+        return checkBox;
+    }
+    function renderedFunc(element) {
+        var grid = $("#jqxTableModel");
+        element.jqxCheckBox();
+        element.on('change', function (event) {
+            var checked = element.jqxCheckBox('checked');
+
+            if (checked) {
+                var rows = grid.jqxDataTable('getRows');
+                for (var i = 0; i < rows.length; i++) {
+                    grid.jqxDataTable('selectRow', i);
+                    grid.find(".jqx_datatable_checkbox").attr("checked", "checked")
                 }
             } else {
-                jqxNotification("当前账套公司无模板数据！", null, "error");
+                grid.jqxDataTable('clearSelection');
+                grid.find(".jqx_datatable_checkbox").removeAttr("checked", "checked")
             }
-        }
-    })
-}
-//根据模板VGUID取凭证数据
-function getVoucherModel(year, month, guid) {
-    layer.load();
-    $.ajax({
-        url: "/VoucherManageManagement/VoucherList/GetVoucherModel",
-        data: { year: year, month: month, vguid: guid },
-        type: "POST",
-        dataType: "json",
-        success: function (msg) {
-            layer.closeAll('loading');
-            if (msg.length > 0) {
-                voucherList = msg;
-                previewVoucher(msg[0]);
-            } else {
-                jqxNotification("当前模板无借贷数据！", null, "error");
-            }
-        }
-    })
+        });
+        return true;
+    }
 }
 //保存当前凭证数据,并生成凭证
-function saveVoucherModel(year, month) {
-    var vguid = $("#lblVGUID").val();
-    var keyList = [];
-    var valueList = [];
-    for (var i = 0; i < voucherList[0].VoucherData.length; i++) {
-        var borrowMoney = $("#Borrow" + i).val().replace(/,|\s/g, '');
-        var borrowReadyOnly = $("#Borrow" + i).attr("readonly");
-        var loanMoney = $("#Loan" + i).val().replace(/,|\s/g, '');
-        var key = $("#Borrow" + i).attr("name");
-        if (borrowMoney == "") {
-            borrowMoney = 0;
-        }
-        if (loanMoney == "") {
-            loanMoney = 0;
-        }
-        keyList.push(key);
-        if (borrowReadyOnly == undefined) {
-            valueList.push(borrowMoney);
-        }
-        else {
-            valueList.push(loanMoney);
-        }
+function saveVoucherModel(selection, indexList) {
+    var year = $("#YearModel").val();
+    var month = $("#MonthModel").val();
+    var str = "";
+    for (var i = 0; i < indexList.length; i++) {
+        str += indexList[i] + ",";
     }
-    if (keyList.length > 0 && valueList.length > 0) {
-        $.ajax({
-            url: "/VoucherManageManagement/VoucherList/SaveVoucherModel",
-            data: { key: keyList, value: valueList, year: year, month: month, vguid: vguid },
-            type: "POST",
-            dataType: "json",
-            success: function (msg) {
-                $("#jqxTable1").jqxDataTable('updateBoundData');
-            }
-        })
-    }
-}
-//根据模板预览凭证
-function previewVoucher(data) {
-    $("#lblVGUID").val(data.VGUID);
-    $("#SubjectTable").remove();
-    $("#lblModelName").text(data.ModelName);
-    $("#lblAccountingPeriods").text(data.YearMonth);
-    $("#lblCurrency").text("人民币");
-    var voucherDate = parseInt(data.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
-    $("#lblVoucherDate").text($.convert.toDate(new Date(voucherDate), "yyyy-MM-dd"));
-    var htmls = "";
-    var list1 = "";
-    var subjectName = "";
-    var voucher = data.VoucherData;
-    $("#lblPageIndex").text(pageIndex);
-    $("#lblPageCount").text(modelVGUID.length);
-    for (var j = 0; j < voucher.length; j++) {
-        var borrow = 0;
-        var loan = 0;
-        var moneyList = "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
-                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>"
-        if (voucher[j].Borrow != "" && voucher[j].Borrow != null) {
-            subjectName = voucher[j].Borrow;
-            borrow = voucher[j].Money;
-            moneyList = "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
-                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' readonly /></td>"
-        }
-        if (voucher[j].Loan != "" && voucher[j].Loan != null) {
-            subjectName = voucher[j].Loan;
-            loan = voucher[j].Money;
-            moneyList = "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' readonly /></td>" +
-                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>"
-        }
-        var subjectNameList = subjectName.split(".");
-        var companyName = subjectNameList[6].split(/[\s\n]/)[1];
-        if (subjectNameList[6].split(/[\s\n]/).length < 2) {
-            companyName = subjectNameList[6].substring(1, subjectNameList[6].length);
-        }
-        if (data.VoucherStatus == "2" || data.VoucherStatus == "3") {
-            moneyList = "<td style='text-align: right;'><input id='Borrow" + j + "' value='" + borrow + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow' readonly /></td>" +
-                      "<td style='text-align: right;'><input id='Loan" + j + "' value='" + loan + "' name='" + voucher[j].VGUID + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan' readonly /></td>"
-        }
-        $("#lblCompany").text(companyName);
-        if (voucher[j].Remark == null) {
-            voucher[j].Remark = "";
-        }
-        list1 += "<tr style='height:40px'>" +
-                      "<td style='text-align: left;'>" + "  " + voucher[j].Remark + "</td>" +
-                      "<td style='text-align: left;'>" + "  " + subjectName + "</td>" +
-                      moneyList +
-                "</tr>";
-    }
-    htmls = "<table id='SubjectTable' style='width:100%;white-space:pre' border='1' cellspacing='0'>" +
-                 "<tr style='height:40px'>" +
-                      "<td style='width: 250px;text-align: center;font-size: 18px;'>摘要</td>" +
-                      "<td style='text-align: center;font-size: 18px;'>科目及描述</td>" +
-                      "<td style='width: 150px;text-align: center;font-size: 18px;'>借方金额</td>" +
-                      "<td style='width: 150px;text-align: center;font-size: 18px;'>贷方金额</td>" +
-                "</tr>"
-                   + list1 +
-                "<tr style='height:40px'>" +
-                      "<td style='text-align: center;'>合计</td>" +
-                      "<td style='text-align: center;'></td>" +
-                      "<td style='text-align: right;'><input id='BorrowCount' type='text' style='width: 150px;text-align: right' class='input_text form-control' readonly /></td>" +
-                      "<td style='text-align: right;'><input id='LoanCount' type='text' style='width: 150px;text-align: right' class='input_text form-control' readonly/></td>" +
-               "</tr>"
-    "</table>";
-    $("#VoucherDetail").append(htmls);
-    $("#ShowDialog").modal({ backdrop: "static", keyboard: false });
-    $("#ShowDialog").modal("show");
-    tdClick();
-}
-function tdClick() {
-    $(".money").blur(function (event) {
-        var id = event.target.id;
-        var trIndexs = 0;
-        var idNmae = "";
-        if (id.length == 8 || id.length == 6) {
-            trIndexs = id.substr(id.length - 2, 2);//获取下标
-            idNmae = id.substr(0, id.length - 2);
+    $("#jqxTableModel").jqxDataTable('setColumnProperty', 'CreateStatus', 'cellsRenderer', function (row, column, value, rowData) {
+        if (str.indexOf(row) != -1) {
+            return '<div class="model' + rowData.VGUID + '"><img class="image' + rowData.VGUID + '" src="/_theme/images/loading.gif" style="margin-left: 48px;height: 20px" />';
         } else {
-            trIndexs = id.substr(id.length - 1, 1);//获取下标
-            idNmae = id.substr(0, id.length - 1);
+            return rowCreate(rowData, column, value)
         }
-        var value = $("#" + id).val();
-        if (value != "" && value != 0) {
-            if (idNmae == "Borrow") {
-                //$("#Loan" + trIndexs).attr("readonly", "readonly");
-                value = value.replace(/,/g, '');
-                $("#Borrow" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-            } else {
-                //$("#Borrow" + trIndexs).attr("readonly", "readonly");
-                value = value.replace(/,/g, '');
-                $("#Loan" + trIndexs).val(parseFloat(value).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-            }
-        } else {
-            //if (idNmae == "Borrow") {
-            //    if ($("#Loan" + trIndexs).val() != "") {
-            //        $("#Borrow" + trIndexs).attr("readonly", "readonly");
-            //        $("#Loan" + trIndexs).removeAttr("readonly");
-            //    } else {
-            //        $("#Borrow" + trIndexs).removeAttr("readonly");
-            //        $("#Loan" + trIndexs).removeAttr("readonly");
-            //    }
-            //} else {
-            //    if ($("#Borrow" + trIndexs).val() != "") {
-            //        $("#Loan" + trIndexs).attr("readonly", "readonly");
-            //        $("#Borrow" + trIndexs).removeAttr("readonly");
-            //    } else {
-            //        $("#Borrow" + trIndexs).removeAttr("readonly");
-            //        $("#Loan" + trIndexs).removeAttr("readonly");
-            //    }
-            //}
-        }
-        countMoney();
     });
-    countMoney();
+    var index = 0;
+    saveVM(index, year, month, selection);
+    
 }
-function countMoney() {
-    var borrowCount = 0;
-    var loanCount = 0;
-    for (var i = 0; i < $(".Borrow").length; i++) {
-        if ($(".Borrow")[i].value != "") {
-            var valB = $(".Borrow")[i].value.replace(/,/g, '');
-            borrowCount += parseFloat(valB);
+function saveVM(index, year, month, selection) {
+    $.ajax({
+        url: "/VoucherManageManagement/VoucherList/SaveVoucherModel",
+        data: {
+            year: year, month: month, vguid: selection[index]
+        },
+        type: "POST",
+        async: true,
+        dataType: "json",
+        success: function (msg) {
+            if (msg.IsSuccess == true) {
+                $(".image" + selection[index]).hide();
+                $(".model" + selection[index]).html("<font style='color:green'>√</font>")
+            } else {
+
+            }
+            if (index == selection.length - 1) {
+                return;
+            }
+            index++;
+            saveVM(index, year, month, selection);
         }
+    })
+}
+function rowCreate(rowData, column, value) {
+    var container = "";
+    switch (rowData.CreateStatus) {
+        case "0":
+            container = "<font style='color:black'>" + value + "</font>";
+            if (column == "CreateStatus") {
+                container = "<font style='color:black'></font>";
+            }
+            break;
+        case "1":
+            container = "<font style='color:green'>" + value + "</font>";
+            if (column == "CreateStatus") {
+                container = "<font style='color:green'>已生成</font>";
+            }
+            break;
+        case "2":
+            container = "<font style='color:green'>" + value + "</font>";
+            if (column == "CreateStatus") {
+                container = "<font style='color:green'>已生成</font>";
+            }
+            break;
     }
-    for (var i = 0; i < $(".Loan").length; i++) {
-        if ($(".Loan")[i].value != "") {
-            var valL = $(".Loan")[i].value.replace(/,/g, '');
-            loanCount += parseFloat(valL);
-        }
-    }
-    $("#BorrowCount").val(parseFloat(borrowCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-    $("#LoanCount").val(parseFloat(loanCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+    return container;
 }

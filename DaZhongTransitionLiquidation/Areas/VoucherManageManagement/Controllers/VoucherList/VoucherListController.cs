@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using DaZhongTransitionLiquidation.Controllers;
 using DaZhongTransitionLiquidation.Common.Pub;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.CashTransaction;
+using System.Threading;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherList
 {
@@ -299,7 +300,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                             voucher.FinanceDirector = "";
                             voucher.Status = "2";
                             voucher.VoucherDate = item.ACCOUNTING_DATE;
-                            if (item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行" && item.JE_CATEGORY_NAME != "z.转帐")
+                            if (item.JE_CATEGORY_NAME != "x.现金" && item.JE_CATEGORY_NAME != "y.银行")
                             {
                                 voucher.VoucherType = "转账类";
                             }
@@ -496,141 +497,90 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             return Json(resultModel);
         }
         //获取模板VGUID
-        public JsonResult GetVoucherModelVGUID()//Guid[] vguids
+        public JsonResult GetVoucherModelList(string year, string month, GridParams para)//Guid[] vguids
         {
-            var resultModel = new List<Business_VoucherModel>();
+            var jsonResult = new JsonResultModel<VoucherModelClass>();
             DbBusinessDataService.Command(db =>
             {
-                resultModel = db.Queryable<Business_VoucherModel>().Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode).ToList();
-            });
-            return Json(resultModel);
-        }
-        //根据模板VGUID取凭证数据
-        public JsonResult GetVoucherModel(string year, string month, Guid vguid)//Guid[] vguids
-        {
-            var resultModel = new List<VoucherModelDetails>();
-            DbBusinessDataService.Command(db =>
-            {
+                List<VoucherModelClass> vmcList = new List<VoucherModelClass>();
                 month = month.TryToInt() < 10 ? "0" + month : month;
-                var date = (year + "-" + month).TryToString();
-                var firstDay = FirstDayOfMonth(date.TryToDate());
-                var lastDay = LastDayOfMonth(date.TryToDate());
-                var status = "";
-                //按模板取出数据
-                var myData = db.Queryable<Business_VoucherModel>().Where(x => x.VGUID == vguid).ToList().FirstOrDefault();
-                var isAnyModelList = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.Status == "1" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
-                                   && x.ReceivingUnit == myData.ModelName && x.AccountingPeriod == date.TryToDate()).ToList();
-                if (isAnyModelList.Count == 1)
+                var date = (year + "-" + month).TryToDate();
+                int pageCount = 0;
+                para.pagenum = para.pagenum + 1;
+                var data = db.Queryable<Business_VoucherModel>()
+                .Where(x => x.Status == "1" || x.Status == null)//启用
+                .Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
+                .OrderBy(i => i.ModelName, OrderByType.Asc).ToList();
+                //.ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
+                                  && x.AccountingPeriod == date).ToList();
+                foreach (var item in data)
                 {
-                    status = isAnyModelList[0].Status;
-                }
-                var cashDataList = db.Queryable<Business_CashBorrowLoan>().OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToList();
-                var voucherDetails = db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where AccountingPeriod >= '" + firstDay + "' and AccountingPeriod <= '" + lastDay + "')").ToList();
-                //获取借贷配置
-                var cashData = cashDataList.Where(x => x.PayVGUID == myData.VGUID).ToList();
-                foreach (var cash in cashData)
-                {
-                    var seven = "";
-                    cash.Money = 0;
-                    var moneyData = voucherDetails.Where(x => x.ModelVGUID == cash.VGUID).ToList().FirstOrDefault();
-                    if (cash.Borrow != null && cash.Borrow != "")
+                    VoucherModelClass vmc = new VoucherModelClass();
+                    vmc.VGUID = item.VGUID;
+                    vmc.AccountModeCode = item.AccountModeCode;
+                    vmc.CompanyCode = item.CompanyCode;
+                    vmc.ModelName = item.ModelName;
+                    vmc.Remark = item.Remark;
+                    vmc.Status = item.Status;
+                    vmc.Creater = item.Creater;
+                    vmc.CreateTime = item.CreateTime;
+                    var isAnyList = voucher.Where(x => x.ReceivingUnit == item.ModelName + "（模板）").ToList();
+                    if (isAnyList.Count == 1)
                     {
-                        seven = cash.Borrow;
-                        cash.Borrow = seven + "\n" + GetSevenSubjectName(seven, myData.AccountModeCode, myData.CompanyCode);
-                        if (moneyData != null)
+                        if(isAnyList[0].Status == "1")
                         {
-                            cash.Money = moneyData.BorrowMoney.TryToDecimal();
+                            vmc.CreateStatus = "1";//当前月份已存在模板凭证,待审核
+                        }
+                        else
+                        {
+                            vmc.CreateStatus = "2";//当前月份已存在模板凭证,提交审核
                         }
                     }
-                    if (cash.Loan != null && cash.Loan != "")
+                    else
                     {
-                        seven = cash.Loan;
-                        cash.Loan = seven + "\n" + GetSevenSubjectName(seven, myData.AccountModeCode, myData.CompanyCode);
-                        if (moneyData != null)
-                        {
-                            cash.Money = moneyData.LoanMoney.TryToDecimal();
-                        }
+                        vmc.CreateStatus = "0";//当前月份不存在模板凭证
                     }
+                    vmcList.Add(vmc);
                 }
-                VoucherModelDetails vm = new VoucherModelDetails();
-                vm.VGUID = myData.VGUID;
-                vm.ModelName = myData.ModelName;
-                vm.VoucherDate = lastDay;
-                vm.YearMonth = date;
-                vm.VoucherData = cashData;
-                vm.VoucherStatus = status;
-                resultModel.Add(vm);
+                jsonResult.Rows = vmcList;
+                jsonResult.TotalRows = pageCount;
             });
-            return Json(resultModel);
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
         //保存当前凭证数据,并生成凭证
-        public JsonResult SaveVoucherModel(List<string> key, List<string> value, string year, string month, Guid vguid)//Guid[] vguids
+        public JsonResult SaveVoucherModel(string year, string month, Guid vguid)//Guid[] vguids
         {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var userData = new List<Sys_User>();
             DbService.Command(_db =>
             {
                 userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
             });
-            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
                 //取出模板数据
                 var months = month.TryToInt() < 10 ? "0" + month : month;
                 var date = (year + "-" + months).TryToDate();
                 var myData = db.Queryable<Business_VoucherModel>().Where(x => x.VGUID == vguid).ToList().FirstOrDefault();
-                List<Business_CashBorrowLoan> cashList = new List<Business_CashBorrowLoan>();
-                var cashDataLsit = db.Queryable<Business_CashBorrowLoan>().OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToList();
-                for (int i = 0; i < key.Count; i++)
-                {
-                    var vguidCash = key[i].TryToGuid();
-                    var cashData = cashDataLsit.Where(x => x.VGUID == vguidCash).First();
-                    cashData.Money = value[i].TryToDecimal();
-                    cashList.Add(cashData);
-                }
-                var isAnyModelList = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.Status == "1" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
+                var cashDataLsit = db.Queryable<Business_CashBorrowLoan>().Where(x => x.PayVGUID == vguid).OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToList();
+                var isAnyModelList = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
                                    && x.ReceivingUnit == myData.ModelName + "（模板）" && x.AccountingPeriod == date).ToList();
-                if (isAnyModelList.Count >= 1 && isAnyModelList[0].Status == "1")
+                if (isAnyModelList.Count >= 1)
                 {
-                    //在所选的会计期下模板已经生成凭证
-                    var voucherVGUID = isAnyModelList[0].VGUID;
-                    var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucherVGUID).ToList();
-                    if (cashList.Count == voucherDetail.Count)
+                    if(isAnyModelList[0].Status == "1")
                     {
-                        foreach (var item in voucherDetail)
-                        {
-                            try
-                            {
-                                var cashDataOne = cashList.Where(x => x.VGUID == item.ModelVGUID).ToList();
-                                if (cashDataOne.Count == 1)
-                                {
-                                    if (cashDataOne[0].Borrow != "" && cashDataOne[0].Borrow != null)
-                                    {
-                                        item.BorrowMoney = cashDataOne[0].Money;
-                                    }
-                                    else
-                                    {
-                                        item.LoanMoney = cashDataOne[0].Money;
-                                    }
-                                    item.Abstract = cashDataOne[0].Remark;
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                resultModel.Status = ex.Message;
-                            }
-                        }
-                        if (voucherDetail.Count > 0)
-                        {
-                            db.Updateable(voucherDetail).ExecuteCommand();
-                        }
+                        //在所选的会计期下模板已经生成凭证
+                        var voucherVGUID = isAnyModelList[0].VGUID;
+                        //var voucherDetail = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucherVGUID).ToList();
+                        db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucherVGUID).ExecuteCommand();
+                        List<Business_VoucherDetail> BVDetailList2 = new List<Business_VoucherDetail>();
+                        CashTransactionController.GetVoucherDetail(db, BVDetailList2, UserInfo.AccountModeCode, UserInfo.CompanyCode, cashDataLsit, voucherVGUID);
+                        db.Insertable(BVDetailList2).ExecuteCommand();
                     }
                     else
                     {
-                        //针对一张凭证中缺少借贷项的补救措施
-                        db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == voucherVGUID).ExecuteCommand();
-                        List<Business_VoucherDetail> BVDetailList2 = new List<Business_VoucherDetail>();
-                        CashTransactionController.GetVoucherDetail(db, BVDetailList2, UserInfo.AccountModeCode, UserInfo.CompanyCode, cashList, voucherVGUID);
-                        db.Insertable(BVDetailList2).ExecuteCommand();
+                        //已经存在且已提交审核,不进行操作
                     }
                 }
                 else
@@ -649,16 +599,25 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                     GetVoucherList(db, voucher, myDataOther, guid, userData, year, month);
                     //借贷信息
                     List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
-                    CashTransactionController.GetVoucherDetail(db, BVDetailList, UserInfo.AccountModeCode, UserInfo.CompanyCode, cashList, guid);
+                    CashTransactionController.GetVoucherDetail(db, BVDetailList, UserInfo.AccountModeCode, UserInfo.CompanyCode, cashDataLsit, guid);
                     if (voucher != null && BVDetailList.Count > 0)
                     {
                         db.Insertable(voucher).ExecuteCommand();
                         db.Insertable(BVDetailList).ExecuteCommand();
                     }
                 }
+                resultModel.IsSuccess = true;
+                resultModel.Status = "1";
             });
             return Json(resultModel);
         }
+
+        private void DoSyncVoucherModel(object data)
+        {
+            VoucherModelClass vmc = (VoucherModelClass)data;
+            
+        }
+
         private void GenerateVoucherList(SqlSugarClient db, List<SettlementSubjectVoucher> myDataOther, List<Sys_User> userData, string year, string month, List<Business_SettlementCount> settlementCount)
         {
             db.Ado.UseTran(() =>
@@ -696,7 +655,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             voucher.Automatic = "1";//自动
             voucher.TradingBank = "";
             voucher.ReceivingUnit = myDataOther[0].CompanyNameOther;
-            voucher.TransactionDate = null;
+            voucher.TransactionDate = DateTime.Now;
             voucher.Batch = "";
             voucher.CreateTime = DateTime.Now;
             voucher.VGUID = guid;

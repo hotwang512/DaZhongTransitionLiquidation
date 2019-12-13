@@ -12,7 +12,7 @@ var vguid = "";
 function pickedFunc() {
 }
 var $page = function () {
-    this.init = function () {
+    this.init = function () {;
         var date = new Date;
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
@@ -21,7 +21,8 @@ var $page = function () {
         $("#YearMonth").val(currentDate);
         addEvent();
         var winHeight = document.body.scrollWidth;
-        $("#assetReport").css("width", winHeight - 243);
+        $("#assetReport").css("width", winHeight - 260);
+        $('#tabs').jqxTabs({ width:1500, height: "100%", position: 'top' });
     }
     //所有事件
     function addEvent() {
@@ -39,62 +40,66 @@ var $page = function () {
     }; //addEvent end
     function initPeriodTable() {
         layer.load();
-        getPeriodData(function (datashow) {
-            var datafields = new Array();
-            datafields.push({ name: 'Period', type: 'string' });
-            datafields.push({ name: 'VehicleModel', type: 'string' });
-            datafields.push({ name: 'CompanyName', type: 'string' });
-            datafields.push({ name: 'Quantity', type: 'number' });
-            var source =
-            {
-                localdata: datashow,
-                datafields: datafields,
-                datatype: "json"
-            };
-            debugger;
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            dataAdapter.dataBind();
-            var pivotDataSource = new $.jqx.pivot(dataAdapter,
-            {
-                pivotValuesOnRows: false,
-                totals: { rows: { subtotals: false, grandtotals: false }, columns: { subtotals: false, grandtotals: false } },
-                rows: [{ dataField: 'CompanyName' }, { dataField: 'VehicleModel' }],
-                columns: [{ dataField: 'Period', width: 110, align: 'center' }],
-                values: [
-                    {
-                        dataField: 'Quantity',
-                        'function': 'sum',
-                        text: '总数',
-                        formatSettings: { decimalPlaces: 0, align: 'center' },
-                        isHidden: true,
-                        sortable: false
-                    }
-                ]
-            });
-            selector.$grid().jqxPivotGrid(
-            {
-                source: pivotDataSource,
-                treeStyleRows: true,
-                autoResize: true,
-                selectionEnabled: true
-            });
-            var pivotGrid = selector.$grid().jqxPivotGrid('getInstance');
-            var pivotRows = pivotGrid.getPivotRows();
-            for (var k = 0; k < pivotRows.items.length; k++) {
-                pivotRows.items[k].expand();
+        debugger;
+        getPeriodData(function (mps) {
+            if (mps.length > 0) {
+                debugger;
+                var utils = $.pivotUtilities;
+                var sumOverSum = utils.aggregators["Sum"];
+                selector.$grid().pivot(mps, {
+                    rows: ["CompanyName", "VehicleModel"],
+                    cols: ["Period"],
+                    aggregator: sumOverSum(["Quantity"])
+                });
+                $(".pvtAxisLabel").eq(0).text("月份");
+                $(".pvtAxisLabel").eq(0).css("text-align", "center");
+                $(".pvtAxisLabel").eq(1).text("管理公司");
+                $(".pvtAxisLabel").eq(1).css("text-align", "center");
+                $(".pvtAxisLabel").eq(2).text("车型");
+                $(".pvtAxisLabel").eq(2).css("text-align", "center");
+                $(".pvtRowTotalLabel").css("text-align", "center");
+            } else {
+                jqxNotification("当前年份没有数据！", null, "error");
             }
-            var pivotCols = pivotGrid.getPivotColumns();
-            for (var i = 0; i < pivotCols.items.length; i++) {
-                pivotCols.items[i].expand();
-            }
-            pivotGrid.refresh();
             layer.closeAll('loading');
+            $("#assetReport").show();
+        });
+        getUsePeriodData(function (mps) {
+            if (mps.length > 0) {
+                debugger;
+                var utils = $.pivotUtilities;
+                var sumOverSum = utils.aggregators["Sum"];
+                selector.$grid1().pivot(mps, {
+                    rows: ["CompanyName", "VehicleModel"],
+                    cols: ["Period"],
+                    aggregator: sumOverSum(["Quantity"])
+                });
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(0).text("月份");
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(0).css("text-align", "center");
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(1).text("管理公司");
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(1).css("text-align", "center");
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(2).text("车型");
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(2).css("text-align", "center");
+                $("#jqxBelongToCompanyPeriodTable .pvtRowTotalLabel").css("text-align", "center");
+            }
         });
     }
     var tableValue = "";
     function getPeriodData(callback) {
         $.ajax({
             url: "/AnalysisManagementCenter/OutageReport/GetManageCompanyOutageReport",
+            data: { "YearMonth": $("#YearMonth").val() },
+            datatype: "json",
+            type: "post",
+            success: function (result) {
+                tableValue = result;
+                callback(result);
+            }
+        });
+    }
+    function getUsePeriodData(callback) {
+        $.ajax({
+            url: "/AnalysisManagementCenter/OutageReport/GetUseCompanyOutageReport",
             data: { "YearMonth": $("#YearMonth").val() },
             datatype: "json",
             type: "post",

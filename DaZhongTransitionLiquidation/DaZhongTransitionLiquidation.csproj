@@ -3320,6 +3320,7 @@
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_RentTarget.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_VacationSalary.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_VehicleAmountReport.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\OutageReport.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\VehicleChangeReport.cs" />
     <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\AssetBasicInfoMaintenanceController.cs" />

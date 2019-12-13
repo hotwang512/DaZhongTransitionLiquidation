@@ -6,6 +6,7 @@
     var permission = user.GetCurrentPagePermission();
 }
 @section js{
+    <link href="@Url.CusContent("~/_theme/_js/pivot.css")" rel="stylesheet" />
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivot.js"></script>
     <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotdesigner.js"></script>
@@ -71,8 +72,16 @@
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
     </div>
-    <div id="assetReport" style="width:100%; overflow-x: scroll;">
-        <div id="jqxManageCompanyPeriodTable" class="jqxTable" style="height:300px;background-color: white; float: left;">
+    <div id="assetReport" style="width:100%;overflow-x: scroll;display:none">
+        <div id='tabs'>
+            <ul>
+                <li style="margin-left: 30px;">管理公司</li>
+                <li>所属公司</li>
+            </ul>
+            <div id="jqxManageCompanyPeriodTable" class="jqxTable" style="height:300px;background-color: white; float: left;">
+            </div>
+            <div id="jqxBelongToCompanyPeriodTable" class="jqxTable" style="height:300px;background-color: white; float: left;">
+            </div>
         </div>
     </div>
 </div>

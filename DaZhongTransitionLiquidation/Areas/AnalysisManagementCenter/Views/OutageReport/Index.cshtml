@@ -1,20 +1,24 @@
 ﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
 @{
-    ViewBag.Title = "资产报表/车辆变动报表";
+    ViewBag.Title = "资产报表/停运车统计分析";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var user = ViewBag.User as Sys_User;
     var permission = user.GetCurrentPagePermission();
 }
 @section js{
     <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
-    <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/VehicleReport.js")"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivot.js"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotdesigner.js"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotgrid.js"></script>
+    <script src="~/_theme/_js/jquery-ui-1.8.20.js"></script>
+    <script src="~/_theme/_js/jquery-ui-1.8.20.min.js"></script>
+    <script src="~/_theme/_js/pivot.js"></script>
+    <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/OutageReport.js")"></script>
 }
-
 <style>
     .jqx-pivotgrid-item {
         text-align: center;
     }
-
     .jqx-pivotgrid {
         background-color: white;
     }
@@ -68,9 +72,9 @@
         <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
     </div>
     <div id="assetReport" style="width:100%; overflow-x: scroll;">
-    <div id="jqxManageCompanyPeriodTable" class="jqxTable" style="height:300px;background-color: white; float: left;">
+        <div id="jqxManageCompanyPeriodTable" class="jqxTable" style="height:300px;background-color: white; float: left;">
+        </div>
     </div>
-</div>
 </div>
 <style>
     .input_text {

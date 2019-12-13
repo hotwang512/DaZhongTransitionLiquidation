@@ -155,7 +155,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             voucher.AccountModeName = cashData.AccountModeName;
             voucher.CompanyCode = cashData.CompanyCode;
             voucher.CompanyName = cashData.CompanyName.ToDBC();
-            var bank = "M" + cashData.AccountModeCode + cashData.CompanyCode + cashData.TransactionDate.Value.Year.ToString() + cashData.TransactionDate.Value.Month.ToString();
+            var month = cashData.TransactionDate.Value.Month < 10 ? "0" + cashData.TransactionDate.Value.Month.ToString() : cashData.TransactionDate.Value.Month.ToString();
+            var bank = "M" + cashData.AccountModeCode + cashData.CompanyCode + cashData.TransactionDate.Value.Year.ToString() + month;
             //100201银行类2019090001
             var no = CreateNo.GetCreateNo(db, bank);
             voucher.VoucherNo = cashData.AccountModeCode + cashData.CompanyCode + "现金类" + no;

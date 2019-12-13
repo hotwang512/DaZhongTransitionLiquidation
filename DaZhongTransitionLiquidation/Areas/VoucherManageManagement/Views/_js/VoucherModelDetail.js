@@ -54,10 +54,7 @@ var $page = function () {
                     AccountModeCode: $("#AccountModeCode").val(),
                     CompanyCode: $("#CompanyCode").val(),
                     ModelName: $("#ModelName").val(),
-                    AccountingPeriod: $("#AccountingPeriod").val(),
-                    TradingBank: $("#TradingBank").val(),
-                    TransactionDate: $("#TransactionDate").val(),
-                    ReceivingUnit: $("#ReceivingUnit").val(),
+                    Remark: $("#Remark").val(),
                     VGUID: $("#VGUID").val(),
                 },
                 type: "POST",
@@ -135,6 +132,25 @@ var $page = function () {
 
                     }
                 });
+            }
+        });
+        //删除
+        $("#btnDelete").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要删除的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
     }

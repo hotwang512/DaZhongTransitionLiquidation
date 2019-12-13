@@ -48,11 +48,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         var isAny = db.Queryable<Business_VoucherModel>().Any(x => x.VGUID == sevenSection.VGUID);
                         if (!isAny)
                         {
+                            sevenSection.Creater = UserInfo.LoginName;
+                            sevenSection.CreateTime = DateTime.Now;
+                            sevenSection.Status = "1";
                             db.Insertable(sevenSection).ExecuteCommand();
                         }
                         else
                         {
-                            db.Updateable(sevenSection).ExecuteCommand();
+                            db.Updateable(sevenSection).IgnoreColumns(it => new { it.Creater, it.CreateTime, it.Status }).ExecuteCommand();
                         }
                         resultModel.Status = "1";
                     }

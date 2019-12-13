@@ -31,12 +31,15 @@
                     <button id="btnDelete" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe640;</i><span style="margin-left: 7px; float: left;">删除</span></button>
                 </td>
             }
-            @*<td style="width: 95px;">
-                    <button id="EditIsableTrue" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
+            @if (moduleMenu.Enable)
+            {
+                <td style="width: 95px;">
+                    <button id="btnEditDo" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f1;</i><span style="margin-left: 7px; float: left;">启用</span></button>
                 </td>
                 <td style="width: 95px;">
-                    <button id="EditIsableFalse" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
-                </td>*@
+                    <button id="btnEditDis" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe6f2;</i><span style="margin-left: 7px; float: left;">禁用</span></button>
+                </td>
+            }
         </tr>
     </table>
 }

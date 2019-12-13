@@ -47,5 +47,26 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult EditStatus(List<Guid> vguids, string status)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                db.Ado.UseTran(() =>
+                {
+                    int saveChanges = 1;
+                    foreach (var item in vguids)
+                    {
+                        saveChanges = db.Updateable<Business_VoucherModel>().UpdateColumns(it => new Business_VoucherModel()
+                        {
+                            Status = status,
+                        }).Where(it => it.VGUID == item).ExecuteCommand();
+                    }
+                    resultModel.IsSuccess = saveChanges == 1;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                });
+            });
+            return Json(resultModel);
+        }
     }
 }

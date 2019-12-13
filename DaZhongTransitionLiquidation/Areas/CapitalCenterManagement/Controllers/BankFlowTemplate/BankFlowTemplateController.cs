@@ -755,7 +755,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             {
                 case "现金类": type = "x.现金"; break;
                 case "银行类": type = "y.银行"; break;
-                case "转账类": type = "z.转账"; break;
+                case "转账类": type = "z.转帐"; break;
                 default: break;
             }
             AssetsGeneralLedger_Swap asset = new AssetsGeneralLedger_Swap();
@@ -768,7 +768,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             asset.JE_HEADER_NAME = voucher.VoucherNo;
             asset.JE_HEADER_DESCRIPTION = "";
             asset.JE_SOURCE_NAME = "大众出租财务共享平台";
-            asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转账)
+            asset.JE_CATEGORY_NAME = type;//(x.现金、y.银行、z.转帐)
             asset.ACCOUNTING_DATE = voucher.VoucherDate;
             asset.CURRENCY_CODE = "RMB";//币种
             asset.CURRENCY_CONVERSION_TYPE = "";//币种是RMB时为空

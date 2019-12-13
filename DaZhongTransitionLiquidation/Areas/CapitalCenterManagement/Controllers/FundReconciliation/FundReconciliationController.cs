@@ -99,9 +99,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             return;
                         }
                         number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnOut)-SUM(TurnIn)) as number from Business_BankFlowTemplate where BankAccount = '" + bankAccount + @"'  
-                                 and TransactionDate >='" + initialBalanceData.BalanceDate.Value.AddDays(1) + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
+                                 and TransactionDate > '" + initialBalanceData.BalanceDate + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalanceData.BankBalance + number))
                         {
+                            sevenSection.BalanceDate = (sevenSection.BalanceDate.Value.ToString("yyyy-MM-dd") + " " + DateTime.Now.ToString("HH:mm:ss")).TryToDate();
                             sevenSection.ReconciliantStatus = "对账成功";
                         }
                         else
@@ -115,6 +116,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                                  and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
                         if (bankBalance == (initialBalance + number))
                         {
+                            sevenSection.BalanceDate = (sevenSection.BalanceDate.Value.ToString("yyyy-MM-dd") + " " + DateTime.Now.ToString("HH:mm:ss")).TryToDate();
                             sevenSection.ReconciliantStatus = "对账成功";
                         }
                         else
@@ -129,6 +131,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     else
                     {
                         sevenSection.VGUID = Guid.NewGuid();
+                        sevenSection.ReconciliantDate = DateTime.Now;
                         db.Insertable(sevenSection).ExecuteCommand();
                     } 
                 });

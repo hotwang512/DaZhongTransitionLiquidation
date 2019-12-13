@@ -469,6 +469,7 @@
     <Content Include="_theme\images\Developing.png" />
     <Content Include="_theme\images\error-bg.png" />
     <Content Include="_theme\images\error-btn.png" />
+    <Content Include="_theme\images\loading.gif" />
     <Content Include="_theme\images\Picture.png" />
     <Content Include="_theme\images\Waiting.gif" />
     <Content Include="_theme\jquery-easyui-1.7.0\changelog.txt" />
@@ -3549,6 +3550,7 @@
     <Compile Include="Areas\VoucherManageManagement\Model\SettlementCountList.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\SettlementSubjectVoucher.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\VehicleResult.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\VoucherModelClass.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\VoucherModelDetails.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\v_AssetsGeneralLedger_Swap.cs" />
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />

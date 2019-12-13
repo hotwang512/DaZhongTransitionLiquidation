@@ -3394,7 +3394,7 @@
     <Compile Include="Areas\AssetPurchase\Models\PendingPaymentModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\PendingResultModel.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
-    <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\Business_BusinessTypeSet.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CapitalAllocationDetail\CapitalAllocationDetailController.cs" />
@@ -3654,6 +3654,7 @@
     <Folder Include="Areas\AnalysisManagementCenter\Views\Shared\" />
     <Folder Include="Areas\AssetManagement\Views\AssetsCategory\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
+    <Folder Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\" />
     <Folder Include="Areas\FinancialStatementsManagement\Models\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />

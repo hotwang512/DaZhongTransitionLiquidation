@@ -496,7 +496,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             });
             return Json(resultModel);
         }
-        //获取模板VGUID
+        //获取模板List
         public JsonResult GetVoucherModelList(string year, string month, GridParams para)//Guid[] vguids
         {
             var jsonResult = new JsonResultModel<VoucherModelClass>();
@@ -611,13 +611,6 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             });
             return Json(resultModel);
         }
-
-        private void DoSyncVoucherModel(object data)
-        {
-            VoucherModelClass vmc = (VoucherModelClass)data;
-            
-        }
-
         private void GenerateVoucherList(SqlSugarClient db, List<SettlementSubjectVoucher> myDataOther, List<Sys_User> userData, string year, string month, List<Business_SettlementCount> settlementCount)
         {
             db.Ado.UseTran(() =>

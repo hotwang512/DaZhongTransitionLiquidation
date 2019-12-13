@@ -213,6 +213,7 @@ var $page = function () {
         selector.$AddBankChannel_OKButton().on("click", function () {
             var year = $("#Year").val();
             var month = $("#Month").val();
+            $("#AddBankChannel_OKButton").attr("disabled", "disabled");
             createVoucher(year, month);
         });
         //获取数据源
@@ -973,6 +974,7 @@ function createVoucher(year, month) {
                     jqxNotification("当前月份凭证已经生成！", null, "error");
                 }
             }
+            $("#AddBankChannel_OKButton").removeAttr("disabled");
         }
     })
 }

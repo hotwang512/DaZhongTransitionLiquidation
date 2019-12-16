@@ -11,12 +11,12 @@ var isEdit = false;
 var vguid = "";
 var $page = function () {
     this.init = function () {
-        //var date = new Date;
-        //var year = date.getFullYear();
-        //var month = date.getMonth() + 1;
-        //month = (month < 10 ? "0" + month : month);
-        //var currentDate = (year.toString() + "-" + month.toString());
-        //$("#YearMonth").val(currentDate);
+        var date = new Date;
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        month = (month < 10 ? "0" + month : month);
+        var currentDate = (year.toString() + "-" + month.toString());
+        $("#YearMonth").val(currentDate);
         addEvent();
         GetVehicleModelDropDown();
     }
@@ -65,7 +65,7 @@ var $page = function () {
             });
         });
         //提交
-        $("#btnSubmit").on("click", function () {
+        $("#SubmitAssetReviewDialog_OKBtn").on("click", function () {
             var selection = [];
             //var grid = $("#jqxTable");
             //var checedBoxs = grid.find("#tablejqxTable .jqx_datatable_checkbox:checked");
@@ -88,11 +88,14 @@ var $page = function () {
             });
             if (array.length < 1) {
                 jqxNotification("请选择一条数据！", null, "error");
-            } else {
+            } else if ($("#SubmitYearMonth").val() == "") {
+                jqxNotification("请选择期间！", null, "error");
+            }else
+            {
                 layer.load();
                 $.ajax({
                     url: "/AssetManagement/ReviewAsset/SubmitReviewAsset",
-                    data: { vguids: pars },
+                    data: { vguids: pars,SubmitYearMonth:$("#SubmitYearMonth").val() },
                     //traditional: true,
                     type: "post",
                     success: function (msg) {
@@ -116,6 +119,22 @@ var $page = function () {
                         }
                     }
                 });
+            }}
+        });
+        $("#btnSubmit").on("click", function () {
+            var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+            var pars = [];
+            $(array).each(function (i, v) {
+                try {
+                    var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID");
+                    pars.push(value.value);
+                } catch (e) {
+                }
+            });
+            if (array.length < 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            } else {
+                $("#SubmitAssetReviewDialog").modal("show");
             }
         });
         //关闭

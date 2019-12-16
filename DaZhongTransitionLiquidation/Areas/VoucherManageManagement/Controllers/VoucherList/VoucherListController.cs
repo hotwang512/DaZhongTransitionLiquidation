@@ -429,6 +429,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 //查询出所选月份的结算金额
                 var settlementCount = db.SqlQueryable<Business_SettlementCount>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount  
                                         group by BusinessType,YearMonth,BELONGTO_COMPANY").Where(x => x.YearMonth == yearMonth).ToList();
+                var vouchList = db.Queryable<Business_VoucherList>().Where(x => x.AccountingPeriod == date).ToList();
                 if (myData.Count > 0 && settlementCount.Count > 0)
                 {
                     if (UserInfo.AccountModeCode == "1002" && UserInfo.CompanyCode == "01")
@@ -438,7 +439,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                                         and OrgID in ('2','36','3','35','4') ", new { CompanyName = UserInfo.CompanyName }).ToList();
                         foreach (var item in companyInfo)
                         {
-                            var isAnyVoucher = db.Queryable<Business_VoucherList>().Any(x => x.ReceivingUnit == item.Abbreviation && x.AccountingPeriod == date);
+                            var isAnyVoucher = vouchList.Any(x => x.ReceivingUnit == item.Abbreviation);
                             if (isAnyVoucher)
                             {
                                 resultModel.IsSuccess = false;
@@ -459,7 +460,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                     }
                     else
                     {
-                        var isAnyVoucher = db.Queryable<Business_VoucherList>().Any(x => x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode && x.ReceivingUnit == "财务共享-大众出租" && x.AccountingPeriod == date);
+                        var isAnyVoucher = vouchList.Any(x => x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode && x.ReceivingUnit == "财务共享-大众出租");
                         if (isAnyVoucher)
                         {
                             resultModel.IsSuccess = false;
@@ -667,6 +668,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
         private void GetVoucherDetail(SqlSugarClient db, List<Business_VoucherDetail> BVDetailList, List<SettlementSubjectVoucher> myDataOther, Guid guid, List<Business_SettlementCount> settlementCount)
         {
             var i = 0;
+            var sevenData = db.Queryable<Business_SevenSection>().ToList();
             foreach (var item in myDataOther)
             {
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
@@ -677,7 +679,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 BVDetail.VoucherVGUID = guid;
                 //var borrowMoney = settlementCount.Where(x => x.BELONGTO_COMPANY == item.CompanyName && x.BusinessType == (item.BusinessTypeKey + "-" + item.BusinessType)).FirstOrDefault().Account;
                 decimal? Money = 0;
-                if (item.BusinessTypeKey == null && item.BusinessType != null)
+                if (item.BusinessTypeKey == null && item.BusinessType != null)//目前只针对"经济补偿金"
                 {
                     if (item.CompanyNameOther == "财务共享-大众出租")
                     {
@@ -739,17 +741,16 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                     BVDetail.SpareOneSection = seven.Split(".")[4];
                     BVDetail.SpareTwoSection = seven.Split(".")[5];
                     BVDetail.IntercourseSection = seven.Split(".")[6];
-                    BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, myDataOther[0].AccountModeCode, myDataOther[0].CompanyCode);
+                    BVDetail.SevenSubjectName = seven + "\n" + GetSevenSubjectName(seven, myDataOther[0].AccountModeCode, myDataOther[0].CompanyCode, sevenData);
                 }
                 BVDetailList.Add(BVDetail);
             }
         }
-        public static string GetSevenSubjectName(string subject, string acountModeCode, string companyCode)
+        public static string GetSevenSubjectName(string subject, string acountModeCode, string companyCode,List<Business_SevenSection> data)
         {
             SqlSugarClient db = DbBusinessDataConfig.GetInstance();
             var result = "";
             var seven = subject.Split(".");
-            var data = db.Queryable<Business_SevenSection>().ToList();
             var i = 0;
             var sectionVguid = "";
             var value = "";

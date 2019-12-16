@@ -433,6 +433,7 @@
     <Content Include="Areas\VoucherManageManagement\Views\VoucherModelDetail\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleReport\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\OutageReport\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\FixedAssetsNetValue\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3308,6 +3309,7 @@
     <Compile Include="Areas\AnalysisManagementCenter\AnalysisManagementCenterAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\DriversIncome\DriversIncomeController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\FilialeStatistics\FilialeStatisticsController.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Controllers\FixedAssetsNetValue\FixedAssetsNetValueController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\FreightAnalysis\FreightAnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\OutageReport\OutageReportController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\RentTarget\RentTargetController.cs" />

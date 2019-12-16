@@ -1024,7 +1024,7 @@ function getVoucherModelList() {
         columns: [
             { text: "", datafield: "checkbox", pinned: true,filterable:false, width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
             { text: '模板名称', datafield: 'ModelName', width: 500, align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
-            { text: '备注', datafield: 'Remark', width: 500, align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
+            { text: '备注', datafield: 'Remark', width: 400, align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
             { text: '数据状态', datafield: 'DataStatus', align: 'center', cellsAlign: 'center', hidden: true },
             { text: '创建状态', datafield: 'CreateStatus', align: 'center', cellsAlign: 'center', cellsRenderer: createFun },
             { text: '状态', datafield: 'Status', filterable: false, align: 'center', cellsAlign: 'center', hidden: true },
@@ -1132,7 +1132,7 @@ function rowCreate(rowData, column, value) {
         case "2":
             container = "<font style='color:green'>" + value + "</font>";
             if (column == "CreateStatus") {
-                container = "<font style='color:green'>已生成</font>";
+                container = "<font style='color:green'>已生成且提交审核</font>";
             }
             break;
     }

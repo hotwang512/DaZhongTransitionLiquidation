@@ -207,6 +207,7 @@
   <ItemGroup>
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\DriversIncome.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\FilialeStatistics.js" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\FixedAssetsNetValue.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\FreightAnalysis.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\OutageReport.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\RentTarget.js" />
@@ -3323,6 +3324,7 @@
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_RentTarget.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_VacationSalary.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_VehicleAmountReport.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\FixedAssetsNetValue.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\OutageReport.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\VehicleChangeReport.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\VehicleModelAnalysis.cs" />

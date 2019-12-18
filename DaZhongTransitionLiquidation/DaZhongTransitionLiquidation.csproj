@@ -213,6 +213,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\RentTarget.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VacationSalary.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleAmount.js" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleModelAnalysis.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleReport.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenance.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetBasicInfoMaintenanceDetail.js" />
@@ -435,6 +436,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleReport\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\OutageReport\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\FixedAssetsNetValue\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\VehicleModelAnalysis\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />

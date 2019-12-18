@@ -7,9 +7,12 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Models
 {
     public class VehicleModelAnalysis
     {
-        public string VehicleModel { get; set; }
-        public string Period { get; set; }
+        public string CompanyType { get; set; }
         public string CompanyName { get; set; }
+        public string YearMonth { get; set; }
+        public string CompanyID { get; set; }
+        public string VehicleID { get; set; }
+        public string VehicleModel { get; set; }
         public int Quantity { get; set; }
     }
 }

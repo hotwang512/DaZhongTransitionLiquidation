@@ -14,5 +14,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Models
         public string VehicleID { get; set; }
         public string VehicleModel { get; set; }
         public int Quantity { get; set; }
-    }
+        public int Total { get; set; }
+        public decimal Percent => Convert.ToDecimal(Quantity)  / Convert.ToDecimal(Total) * 100;
+}
 }

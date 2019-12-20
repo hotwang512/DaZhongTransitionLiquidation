@@ -450,9 +450,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetPurchase.Controllers.PurchaseA
                                         .Where(x => x.VehicleModel == item.VehicleModel && x.Status).ToList();
                                     var assetReview = new Business_AssetReview();
                                     assetReview.VGUID = Guid.NewGuid();
-                                    var autoID = "FixedAssetID";
-                                    var no = CreateNo.GetCreateNo(db, autoID);
-                                    assetReview.ASSET_ID = no;
+                                    //var autoID = "FixedAssetID";
+                                    //var no = CreateNo.GetCreateNo(db, autoID);
+                                    //assetReview.ASSET_ID = no;
                                     assetReview.GROUP_ID = fixedAssetsOrder.PurchaseGoods;
                                     assetReview.DESCRIPTION = fixedAssetsOrder.GoodsModel;//item.VehicleModel;
                                     assetReview.ENGINE_NUMBER = item.EngineNumber;

@@ -44,6 +44,9 @@ var $page = function () {
                     case "2":
                         jqxNotification("已提交不允许重复提交！", null, "success");
                         break;
+                    case "3":
+                        jqxNotification(msg.ResultInfo + msg.ResultInfo2, null, "error");
+                        break;
                     }
                 }
             });

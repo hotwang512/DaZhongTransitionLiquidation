@@ -74,7 +74,7 @@ var $page = function () {
             $("#BusinessType").val("");
             $("#ParentMenu").val("");
             $("#hideParentMenu").val("");
-            var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
+            var checkrow = selector.$grid().jqxTreeGrid('getSelection');
             if (checkrow.length == 0) {
                 selector.$AddNewBankDataDialog().modal({ backdrop: "static", keyboard: false });
                 selector.$AddNewBankDataDialog().modal("show");
@@ -101,13 +101,12 @@ var $page = function () {
             $("#BusinessType").val("");
             $("#ParentMenu").val("");
             $("#hideParentMenu").val("");
-            var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
+            var checkrow = selector.$grid().jqxTreeGrid('getSelection');
             if (checkrow.length != 1) {
                 jqxNotification("请选择一个节点！", null, "error");
                 return;
             } else {
                 $("#myModalLabel_title").text("编辑数据");
-                var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
                 var business = checkrow[0].BusinessType;
                 if (checkrow[0].parent != null) {
                     $("#ParentMenu").val(checkrow[0].parent.BusinessType);
@@ -128,7 +127,7 @@ var $page = function () {
         //删除
         selector.$btnDelete().click(function () {
             var selection = [];
-            var checkrow = selector.$grid().jqxTreeGrid('getCheckedRows');
+            var checkrow = selector.$grid().jqxTreeGrid('getSelection');
             for (var i = 0; i < checkrow.length; i++) {
                 var rowdata = checkrow[i];
                 selection.push(rowdata.VGUID);
@@ -365,7 +364,7 @@ function loadGridTree(modules) {
         height: '612px',
         showHeader: false,
         source: dataAdapter,
-        checkboxes: true,
+        checkboxes: false,
         ready: function () {
             $("#moduletree").jqxTreeGrid('expandAll');
         },

@@ -33,28 +33,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var response = new List<Business_SettlementImport>();
             DbBusinessDataService.Command(db =>
             {
-                var responseList = db.Queryable<Business_SettlementImport>()
-                .WhereIF(searchParams.Model != null, i => i.Model.Contains(searchParams.Model))
-                .WhereIF(searchParams.ClassType != null, i => i.ClassType.Contains(searchParams.ClassType))
-                .OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
-                foreach (var item in responseList)
-                {
-                    if (item.BusinessType.Contains("-"))
-                    {
-                        item.Business = item.BusinessType.Split("-")[0];
-                        item.BusinessType = item.BusinessType.Split("-")[1];
-                    }
-                    else
-                    {
-                        item.Business = item.BusinessType;
-                    }
-                    if(item.BusinessType == "小计")
-                    {
-                        continue;
-                    }
-                    response.Add(item);
-                }
-                //jsonResult.TotalRows = pageCount;
+                response = db.SqlQueryable<Business_SettlementImport>(@"select VGUID,Model,ClassType,CarType,CASE WHEN parsename(REPLACE(BusinessType,'-','.'),2) is null THEN '' ELSE parsename(REPLACE(BusinessType,'-','.'),2) END as Business,
+                                Money,parsename(REPLACE(BusinessType,'-','.'),1) as BusinessType,MoneyRow,MoneyColumns,Founder,CreatTime 
+                                from Business_SettlementImport where parsename(REPLACE(BusinessType,'-','.'),1) != '小计'") 
+                            .OrderBy("MoneyRow asc,MoneyColumns asc").ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }

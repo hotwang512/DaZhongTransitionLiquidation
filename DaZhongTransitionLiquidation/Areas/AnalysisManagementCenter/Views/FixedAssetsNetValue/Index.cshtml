@@ -10,6 +10,32 @@
     <script src="@Url.CusContent("~/Areas/AnalysisManagementCenter/Views/_js/FixedAssetsNetValue.js")"></script>
     <script src="@Url.CusContent("/_theme/DatePicker/WdatePicker.js")"></script>
 }
+<style type="text/css">
+    .yellowlight {
+        background-color: #fbff00;
+    }
+    .yellowlight:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .yellowlight:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+        background-color: #fbff00;
+    }
+    .blue {
+        background-color: #8bbcdf;
+    }
+    .blue:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .blue:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+        background-color: #8bbcdf;
+    }
+    .gray {
+        background-color: #a6a5a5;
+    }
+    .gray:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .gray:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+        background-color: #a6a5a5;
+    }
+    .yellow {
+        background-color: #ffd800;
+    }
+    .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+        background-color: #ffd800;
+    }
+</style>
 <table id="hideButton" style="margin-top: 10px;display:block">
     <tr style="height: 50px;">
         @if (permission.New || permission.Edit)

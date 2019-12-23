@@ -90,15 +90,14 @@ var $page = function () {
                 jqxNotification("请选择一条数据！", null, "error");
             } else if ($("#SubmitYearMonth").val() == "") {
                 jqxNotification("请选择期间！", null, "error");
-            }else
-            {
+            } else {
                 layer.load();
                 $.ajax({
                     url: "/AssetManagement/ReviewAsset/SubmitReviewAsset",
-                    data: { vguids: pars,SubmitYearMonth:$("#SubmitYearMonth").val() },
+                    data: { vguids: pars, SubmitYearMonth: $("#SubmitYearMonth").val() },
                     //traditional: true,
                     type: "post",
-                    success: function (msg) {
+                    success: function(msg) {
                         layer.closeAll('loading');
                         switch (msg.Status) {
                         case "0":
@@ -119,7 +118,7 @@ var $page = function () {
                         }
                     }
                 });
-            }}
+            }
         });
         $("#btnSubmit").on("click", function () {
             var array = $("#jqxTable").jqxGrid('getselectedrowindexes');

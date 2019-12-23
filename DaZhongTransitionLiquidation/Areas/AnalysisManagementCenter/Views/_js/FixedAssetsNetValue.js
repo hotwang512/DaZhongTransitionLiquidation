@@ -41,7 +41,6 @@ function parseToInt(str) {
     }
 }
 function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
-    debugger;
     var ordersSource =
     {
         dataFields: [
@@ -58,10 +57,12 @@ function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
         },
         dataType: "json"
     };
-    debugger;
     var dataAdapter = new $.jqx.dataAdapter(ordersSource, {
         loadComplete: function () {
-            debugger;
+            $("#row0table td:first").css("text-align", "left");
+            $("#row4table td:first").css("text-align", "left");
+            $("#row8table td:first").css("text-align", "left");
+            $("#row12table td:first").css("text-align", "left");
         }
     });
     $("#table").jqxDataTable(
@@ -69,17 +70,18 @@ function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
         width: "100%",
         height: "500px",
         source: dataAdapter,
-        editSettings: { saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true },
+        enableHover: false,
         ready: function () {
         },
         columns: [
-            { text: '主分类段', editable: false, dataField: 'MainCategory', width: 150, cellsAlign: 'center', align: 'center' },
+            { text: '主分类段', editable: false, dataField: 'MainCategory', width: 120, cellsAlign: 'center', align: 'center', cellclassname: cellclass },
             {
                 text: '年初数',
                 editable: false,
                 dataField: 'StartPeriod',
                 width: 100,
                 cellsAlign: 'center',
+                cellclassname: cellclass,
                 align: 'center'
             },
             {
@@ -87,7 +89,7 @@ function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
                 editable: true,
                 dataField: 'AddedPeriod',
                 width: 100,
-                cellsAlign: 'center',
+                cellsAlign: 'center', cellclassname: cellclass,
                 align: 'center'
             },
             {
@@ -95,7 +97,7 @@ function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
                 editable: true,
                 dataField: 'ReducePeriod',
                 width: 100,
-                cellsAlign: 'center',
+                cellsAlign: 'center', cellclassname: cellclass,
                 align: 'center'
             },
             {
@@ -103,13 +105,24 @@ function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
                 editable: false,
                 dataField: 'EndPeriod',
                 width: 100,
-                cellsAlign: 'center',
+                cellsAlign: 'center', cellclassname: cellclass,
                 align: 'center'
             },
             { text: 'VGUID', datafield: 'VGUID', hidden: true }
         ]
     });
 }
+function cellclass(rowData, columnfield, value) {
+    if (rowData >= 0 && rowData < 4) {
+        return 'yellowlight';
+    } else if (rowData >= 4 && rowData < 8) {
+        return 'blue';
+    } else if (rowData >= 8 && rowData < 12) {
+        return 'gray';
+    } else if (rowData >= 12 && rowData < 16) {
+        return 'yellow';
+    }
+};
 function pickedFunc() {
     GetFilialeStatisticsDetail();
 }

@@ -1,0 +1,62 @@
+﻿@using DaZhongTransitionLiquidation.Infrastructure.DbEntity
+
+@{
+    ViewBag.Title = "结算标准/结算标准导入(报表)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = ViewBag.User as Sys_User;
+    var moduleMenu = user.GetCurrentPagePermission();
+}
+@section js{
+<link href="@Url.CusContent("~/_theme/_js/pivot.css")" rel="stylesheet" />
+    @*<script src="@Url.CusContent("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.css")"></script>
+        <script src="@Url.CusContent("~/_theme/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>*@
+    <script src="@Url.CusContent("~/_theme/DatePicker/WdatePicker.js")"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivot.js"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotdesigner.js"></script>
+    <script src="~/_theme/jqwidgets-ver5.5.0/jqwidgets/jqxpivotgrid.js"></script>
+<script src="~/_theme/_js/jquery-ui-1.8.20.js"></script>
+<script src="~/_theme/_js/jquery-ui-1.8.20.min.js"></script>
+    <script src="~/_theme/_js/pivot.js"></script>
+
+    <script src="@Url.CusContent("~/Areas/VoucherManageManagement/Views/_js/SettlementImportCount.js")"></script>
+}
+
+<!-- 中部条件 -->
+<div class="mk" style="display:none">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">查询</span></div>
+    </div>
+    <div class="body_mk" style="height: 60px">
+        <table style="margin-top: 20px; width: 845px; margin-left: 20px;">
+            <tr style="height: 45px;">
+                <td class="td_span">模式：</td>
+                <td class="td_input">
+                    <input id="Model" type="text" class="input_text form-control" />
+                </td>
+                <td class="td_span">班型：</td>
+                <td class="td_input">
+                    <input id="ClassType" type="text" class="input_text form-control" />
+                </td>
+                <td>
+                    <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>
+                </td>
+                <td>
+                    <button id="btnReset" type="button" class="buttons"><i class="iconfont btn_icon" style="color: black !important;">&#xe671;</i><span style="margin-left: 7px; float: left;">重置</span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- 中部条件 -->
+<!-- 底部表格 -->
+<div class="mk">
+    <div class="header_mk">
+        <div class="header_icon"></div>
+        <div class="header_text_div"><span class="header_text_span">数据列表</span></div>
+    </div>
+    <div id="pivotTable" style="width:1578px;height:650px;overflow:auto">
+        <div id="SettlementImportTable" style="display:none"></div>
+    </div>
+    
+</div>

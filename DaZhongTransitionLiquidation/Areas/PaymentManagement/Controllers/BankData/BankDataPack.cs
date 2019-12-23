@@ -34,9 +34,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
         /// <summary>
         /// 同步银行流水到银行数据表
         /// </summary>
+        private static object sign = new object();
         public static void SyncBackFlow(DateTime? date)
         {
-            string sql = string.Format(@" select 
+            lock (sign)
+            {
+                string sql = string.Format(@" select 
                                           NEWID() as VGUID,
                                           rb.Bank as ReceiveBank,
                                           rb.BankAccount as ReceiveBankAccount,
@@ -52,31 +55,31 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.BankD
                                           left join [Business_BankFlowTemplate] f on m.BankAccount = f.PayeeAccount or m.BankAccount = f.ReceivableAccount
                                           left join [dbo].[T_ReceiveBank] rb on f.ReceivableAccount=rb.BankAccount or rb.BankAccount = f.PayeeAccount
                                           where f.VGUID is not null and (m.IsShow != '1' or m.IsShow is null) and f.TransactionDate>'{0}'", date.ObjToString("yyyy-MM-dd"));
-            List<T_Bank> bankFlows = new List<T_Bank>();
-            DbBusinessDataService dbBusinessDataService = new DbBusinessDataService();
-            dbBusinessDataService.Command(db =>
-            {
-                bankFlows = db.SqlQueryable<T_Bank>(sql).ToList();
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", sql, bankFlows.ModelToJson()));
-            });
-            if (bankFlows.Count > 0)
-            {
-                foreach (var bankFlow in bankFlows)
+                List<T_Bank> bankFlows = new List<T_Bank>();
+                DbBusinessDataService dbBusinessDataService = new DbBusinessDataService();
+                dbBusinessDataService.Command(db =>
                 {
-                    dbBusinessDataService.Command(db =>
+                    bankFlows = db.SqlQueryable<T_Bank>(sql).ToList();
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", sql, bankFlows.ModelToJson()));
+                });
+                if (bankFlows.Count > 0)
+                {
+                    foreach (var bankFlow in bankFlows)
                     {
-                        var exist = db.Queryable<T_Bank>().Any(c => c.temp1 == bankFlow.temp1);
-                        if (!exist)
+                        dbBusinessDataService.Command(db =>
                         {
-                            bankFlow.VCRTTIME = DateTime.Now;
-                            bankFlow.VCRTUSER = "admin";
-                            db.Insertable(bankFlow).ExecuteCommand();
-                        }
-                    });
+                            var exist = db.Queryable<T_Bank>().Any(c => c.temp1 == bankFlow.temp1);
+                            if (!exist)
+                            {
+                                bankFlow.VCRTTIME = DateTime.Now;
+                                bankFlow.VCRTUSER = "admin";
+                                //LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "监控银行数据：", bankFlow.ModelToJson()));
+                                db.Insertable(bankFlow).ExecuteCommand();
+                            }
+                        });
+                    }
                 }
             }
         }
-
-
     }
 }

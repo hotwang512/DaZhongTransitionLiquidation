@@ -308,6 +308,7 @@
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSettingDetail.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementCount.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementImport.js" />
+    <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementImportCount.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementSubject.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VehicleBusiness.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\VehicleCount.js" />
@@ -439,6 +440,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\FixedAssetsNetValue\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleModelAnalysis\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\AssetsNetValue\Index.cshtml" />
+    <Content Include="Areas\VoucherManageManagement\Views\SettlementImportCount\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3537,6 +3539,7 @@
     <Compile Include="Areas\SystemManagement\Models\v_BankPurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\SystemManagementAreaRegistration.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementCount\SettlementCountController.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementImportCount\SettlementImportCountController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementImport\SettlementImportController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementSubject\SettlementSubjectController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\VehicleBusiness\VehicleBusinessController.cs" />

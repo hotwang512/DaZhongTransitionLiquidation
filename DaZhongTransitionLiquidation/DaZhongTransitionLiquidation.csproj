@@ -305,6 +305,7 @@
     <Content Include="Areas\SystemManagement\Views\_js\TransferSettingList.js" />
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSetting.js" />
     <Content Include="Areas\SystemManagement\Views\_js\VehicleExtrasFeeSettingDetail.js" />
+    <Content Include="Areas\VoucherManageManagement\Views\_js\EliminationTaxCount.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementCount.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementImport.js" />
     <Content Include="Areas\VoucherManageManagement\Views\_js\SettlementImportCount.js" />
@@ -439,6 +440,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\FixedAssetsNetValue\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleModelAnalysis\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\SettlementImportCount\Index.cshtml" />
+    <Content Include="Areas\VoucherManageManagement\Views\EliminationTaxCount\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3408,7 +3410,7 @@
     <Compile Include="Areas\AssetPurchase\Models\PendingPaymentModel.cs" />
     <Compile Include="Areas\AssetPurchase\Models\PendingResultModel.cs" />
     <Compile Include="Areas\CapitalCenterManagement\CapitalCenterManagementAreaRegistration.cs" />
-    <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BankFlowTemplateController.cs" />
+    <Compile Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\BankFlowTemplateController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\BusinessTypeSetController.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\BusinessTypeSet\Business_BusinessTypeSet.cs" />
     <Compile Include="Areas\CapitalCenterManagement\Controllers\CapitalAllocationDetail\CapitalAllocationDetailController.cs" />
@@ -3534,6 +3536,7 @@
     <Compile Include="Areas\SystemManagement\Models\VehicleExtrasFeeSetting.cs" />
     <Compile Include="Areas\SystemManagement\Models\v_BankPurchaseSupplier.cs" />
     <Compile Include="Areas\SystemManagement\SystemManagementAreaRegistration.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Controllers\EliminationTaxCount\EliminationTaxCountController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementCount\SettlementCountController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementImportCount\SettlementImportCountController.cs" />
     <Compile Include="Areas\VoucherManageManagement\Controllers\SettlementImport\SettlementImportController.cs" />
@@ -3669,7 +3672,6 @@
     <Folder Include="Areas\AnalysisManagementCenter\Views\Shared\" />
     <Folder Include="Areas\AssetManagement\Views\AssetsCategory\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
-    <Folder Include="Areas\CapitalCenterManagement\Controllers\BankFlowTemplate\" />
     <Folder Include="Areas\FinancialStatementsManagement\Models\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />
     <Folder Include="Areas\ReportManagement\Models\" />

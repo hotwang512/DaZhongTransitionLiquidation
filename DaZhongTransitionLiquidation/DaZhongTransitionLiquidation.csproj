@@ -205,6 +205,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\AssetsNetValue.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\DriversIncome.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\FilialeStatistics.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\FixedAssetsNetValue.js" />
@@ -439,6 +440,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\OutageReport\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\FixedAssetsNetValue\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleModelAnalysis\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\AssetsNetValue\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\SettlementImportCount\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\EliminationTaxCount\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
@@ -3314,6 +3316,7 @@
     <Compile Include="App_Start\MyUrlHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\AnalysisManagementCenterAreaRegistration.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Controllers\AssetsNetValue\AssetsNetValueController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\DriversIncome\DriversIncomeController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\FilialeStatistics\FilialeStatisticsController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\FixedAssetsNetValue\FixedAssetsNetValueController.cs" />
@@ -3324,6 +3327,7 @@
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleAmountReport\VehicleAmountController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleModelAnalysis\VehicleModelAnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleReport\VehicleReportController.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\AssetsNetValue.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_DriversIncome.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_FilialeStatistics.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\Business_FreightAnalysis.cs" />

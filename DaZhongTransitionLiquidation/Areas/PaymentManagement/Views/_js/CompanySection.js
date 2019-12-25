@@ -1526,62 +1526,156 @@ function settingTaxes(code, companyName, subjectGuid) {
     $("#AddTaxesDialog").modal("show");
     $("#myModalLabel_titles3").text("配置税率-" + companyName);
     setYearMonth(code, accountModeCode);
-    var subjectVGUID = subjectGuid;
+    //var subjectVGUID = subjectGuid;
     initTaxesTable(code);
-    //$('#jqxCompanySetting').jqxGrid('expandallgroups');
-    $('#jqxTaxesSetting').on('bindingComplete', function (event) { $("#jqxTaxesSetting").jqxTreeGrid('expandAll'); });
+    //新增税率
+    $("#btnTaxesAdd").click(function () {
+        $("#TaxesType").val("");
+        $("#TaxRate").val("");
+        $("#ParentMenu").val("");
+        $("#hideParentMenu").val("");
+        var checkrow = $("#jqxTaxesSetting").jqxTreeGrid('getCheckedRows');
+        if (checkrow.length == 0) {
+            $("#AddTaxDataDialog").modal({ backdrop: "static", keyboard: false });
+            $("#AddTaxDataDialog").modal("show");
+            return;
+        }
+        if (checkrow.length > 1) {
+            jqxNotification("请选择一个节点！", null, "error");
+            return;
+        } else {
+            var taxesType = checkrow[0].TaxesType;
+            $("#ParentMenu").val(taxesType);
+            $("#hideParentMenu").val(checkrow[0].VGUID);
+            isEdit = false;
+            vguid = "";
+            $("#myModalLabel_title").text("新增数据");
+            $(".msg").remove();
+            //$("#ModuleName").removeClass("input_Validate");
+            $("#AddTaxDataDialog").modal({ backdrop: "static", keyboard: false });
+            $("#AddTaxDataDialog").modal("show");
+        }
+    });
+    //取消税率
+    $("#AddTaxData_CancelBtn").click(function () {
+        $("#AddTaxDataDialog").modal("hide");
+    })
+    //保存税率
+    $("#AddTaxData_OKButton").click(function () {
+        var validateError = 0;//未通过验证的数量
+        if (!Validate($("#BusinessType"))) {
+            validateError++;
+        }
+        if (!Validate($("#hideParentMenu"))) {
+            validateError++;
+        }
+        var url = "/PaymentManagement/CompanySection/SaveTaxesInfo?isEdit=";
+        if (validateError <= 0) {
+            $.ajax({
+                url: url + isEdit,
+                data: {
+                    "TaxesType": $("#TaxesType").val(),
+                    "TaxRate": $("#TaxRate").val(),
+                    "AccountModeCode": $("#AccountModeCode").val(),
+                    "CompanyCode": $("#CompanyCodeTaxes").val(),
+                    "Year": $("#Year").val(),
+                    "Month": $("#Month").val(),
+                    "VGUID": vguid,
+                    "ParentVGUID": $("#hideParentMenu").val()
+                },
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("保存失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("保存成功！", null, "success");
+                            $("#jqxTaxesSetting").jqxTreeGrid('updateBoundData');
+                            $("#AddTaxDataDialog").modal("hide");
+                            break;
+                        case "2":
+                            jqxNotification("结算项目已存在", null, "error");
+                            break;
+                    }
+
+                }
+            });
+        }
+    })
     //编辑税率
-    $("#jqxTaxesSetting").on("cellEndEdit", function (event) {
+    $("#jqxTaxesSetting").on("rowDoubleClick", function (event) {
         var args = event.args;
         var rowKey = args.key;
         var rowData = args.row;
         var columnDataField = args.dataField;
-        var columnDisplayField = args.displayField;
-        var value = args.value;
+        $("#myModalLabel_title").text("编辑数据");
+        var taxesType = rowData.TaxesType;
+        var taxRate = rowData.TaxRate;
+        if (rowData.parent != null) {
+            $("#ParentMenu").val(rowData.parent.BusinessType);
+            $("#hideParentMenu").val(rowData.parent.VGUID);
+        }
+        $("#TaxesType").val(taxesType);
+        $("#TaxRate").val(taxRate);
+        isEdit = true;
+        vguid = rowData.VGUID;
+        $("#TaxesType").removeClass("input_Validate");
+        $("#TaxRate").removeClass("input_Validate");
+        $("#AddTaxDataDialog").modal({ backdrop: "static", keyboard: false });
+        $("#AddTaxDataDialog").modal("show");
+    });
+    //删除税率
+    $("#btnTaxesDelete").click(function () {
+        var selection = [];
+        var checkrow = $("#jqxTaxesSetting").jqxTreeGrid('getCheckedRows');
+        for (var i = 0; i < checkrow.length; i++) {
+            var rowdata = checkrow[i];
+            selection.push(rowdata.VGUID);
+        }
+        if (selection.length < 1) {
+            jqxNotification("请选择您要删除的数据！", null, "error");
+        } else {
+            WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
+        }
+    })
+    //删除
+    function dele(selection) {
         $.ajax({
-            url: "/PaymentManagement/CompanySection/SaveTaxesInfo?value=" + value + "&type=" + columnDataField,
-            data: {
-                Year: $("#Year").val(),
-                Month: $("#Month").val(),
-                AccountModeCode: accountModeCode,
-                CompanyCode: $("#CompanyCodeTaxes").val(),
-                SubjectVGUID: rowData.KeyVGUID,
-                VGUID: rowData.VGUID
-            },
+            url: "/PaymentManagement/CompanySection/DeleteTaxesInfo",
+            data: { vguids: selection },
+            traditional: true,
             type: "post",
-            dataType: "json",
             success: function (msg) {
                 switch (msg.Status) {
                     case "0":
-                        jqxNotification("保存失败！", null, "error");
+                        jqxNotification("删除失败！", null, "error");
                         break;
                     case "1":
-                        $('#jqxTaxesSetting').jqxTreeGrid('updateBoundData');
-                        //jqxNotification("保存成功！", null, "success");
+                        jqxNotification("删除成功！", null, "success");
+                        $("#jqxTaxesSetting").jqxTreeGrid('updateBoundData');
                         break;
                 }
             }
-        })
-    });
+        });
+    }
 }
 function initTaxesTable(code) {
     var source =
        {
            datafields:
            [
-               { name: "Code", type: 'string' },
-               { name: 'ParentCode', type: 'string' },
-               { name: 'Descrption', type: 'string' },
                { name: 'TaxesType', type: 'string' },
                { name: 'TaxRate', type: 'string' },
                { name: "VGUID", type: 'string' },
-               { name: "KeyVGUID", type: 'string' },
+               { name: "ParentVGUID", type: 'string' },
                { name: 'AccountModeCode', type: 'string' },
                { name: "CompanyCode", type: 'string' },
            ],
            hierarchy: {
-               keyDataField: { name: 'Code' },
-               parentDataField: { name: 'ParentCode' }
+               keyDataField: { name: 'VGUID' },
+               parentDataField: { name: 'ParentVGUID' }
            },
            datatype: "json",
            cache: false,
@@ -1600,19 +1694,8 @@ function initTaxesTable(code) {
         source: typeAdapter,
         theme: "energyblue",
         columnsHeight: 30,
-        checkboxes: false,
+        checkboxes: true,
         filterable: true,
-        editable: true,
-        editSettings: {
-            saveOnPageChange: true,
-            saveOnBlur: true,
-            saveOnSelectionChange: true,
-            cancelOnEsc: true,
-            saveOnEnter: true,
-            editSingleCell: true,
-            editOnDoubleClick: true,
-            editOnF2: true
-        },
         //selectionMode: 'singlecells',
         ready: function () {
             $("#jqxTaxesSetting").jqxTreeGrid('expandAll');
@@ -1620,17 +1703,18 @@ function initTaxesTable(code) {
         //hierarchicalCheckboxes: true,
         columns: [
             //{ text: "", datafield: "checkbox", width: 35, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-            { text: '编码', datafield: 'Code', width: 200, editable: false, align: 'center', cellsAlign: 'left', },
-            { text: '描述', datafield: 'Descrption', width: 400, editable: false, align: 'center', cellsAlign: 'center' },
-            { text: '税种', datafield: 'TaxesType', width: 200, editable: true, align: 'center', cellsAlign: 'center' },
-            { text: '税率', datafield: 'TaxRate', align: 'center', editable: true, cellsAlign: 'center', },
-            { text: 'VGUID', datafield: 'VGUID', hidden: true },
-            { text: 'KeyVGUID', datafield: 'KeyVGUID', hidden: true },
-            { text: 'ParentCode', datafield: 'ParentCode', hidden: true },
-            { text: 'AccountModeCode', datafield: 'AccountModeCode', hidden: true },
-            { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
+            { text: '税种', datafield: 'TaxesType', },
+            { text: '税率', datafield: 'TaxRate', align: 'center', cellsAlign: 'center', },
+            { text: '', datafield: 'VGUID', hidden: true },
+            { text: '', datafield: 'ParentVGUID', hidden: true },
+            { text: '', datafield: 'AccountModeCode', hidden: true },
+            { text: '', datafield: 'CompanyCode', hidden: true },
         ]
     });
+}
+function detailTaxFunc(row, column, value, rowData) {
+    var container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
+    return container;
 }
 function setYearMonth(code, accountModeCode) {
     $.ajax({

@@ -18,5 +18,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string Month { get; set; }
         public Guid VGUID { get; set; }
         public Guid KeyVGUID { get; set; }
+        public string Abbreviation { get; set; }
     }
 }

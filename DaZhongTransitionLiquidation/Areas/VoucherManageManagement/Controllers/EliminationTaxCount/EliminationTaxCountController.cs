@@ -1,4 +1,5 @@
-﻿using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
+﻿using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
 using System;
@@ -30,7 +31,24 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 {
                     yearMonth = searchParams.YearMonth.Replace("-", "");
                 }
-                response = db.SqlQueryable<Business_VehicleUnitList>(@" select g.* from (
+                //查询最新的税率设置(除本部的另外4家)
+                var year = "";
+                var month = "";
+                var taxesInfo = db.Queryable<Business_TaxesInfo>().OrderBy("cast(Year as int) desc,cast(Month as int) desc").ToList();
+                if (taxesInfo.Count > 0)
+                {
+                    year = taxesInfo[0].Year;
+                    month = taxesInfo[0].Month;
+                }
+                var v_TaxesInfo = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID,a.AccountModeCode,a.CompanyCode,c.Abbreviation from Business_SevenSection as a
+                            left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month and a.AccountModeCode=b.AccountModeCode and a.CompanyCode =b.CompanyCode and a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43'
+                            left join Business_SevenSection as c on c.AccountModeCode=b.AccountModeCode and c.Code =b.CompanyCode and c.SectionVGUID = 'A63BD715-C27D-4C47-AB66-550309794D43' 
+                            where a.AccountModeCode!='1002' and (a.Code like '%6403%' or a.Code like '%2221%') and a.Status='1' and TaxRate is not null order by Code", 
+                            new { Year = year, Month = month }).ToList();
+
+                //查询车辆平均天数
+                var vehicleData = db.SqlQueryable<Business_VehicleUnitList>(@"select t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.BELONGTO_COMPANY,t.YearMonth,SUM(MODEL_DAYS) as MODEL_DAYS from (
+                             select g.* from (
                              select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
                              m.BusinessName1 as MODEL_MAJOR, 
                              m.BusinessName2 as MODEL_MINOR,
@@ -57,13 +75,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 							left join Business_ManageModel as c on b.VGUID = c.ParentVGUID
 							where c.BusinessName is not null and c.VehicleAge is not null
 							) as m on a.MODEL_MINOR = m.BusinessName3  and b.VEHICLE_AGE = m.VehicleAge) as g
-                            where    g.GROUP_ID='出租车' and g.OPERATING_STATE='在运' and g.MODEL_MAJOR is not null ")
+                            where g.GROUP_ID='出租车' and g.OPERATING_STATE='在运' and g.MODEL_MAJOR is not null and g.YearMonth=@YearMonth and g.BELONGTO_COMPANY != '财务共享-大众出租') as t 
+                            group by t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.BELONGTO_COMPANY,t.YearMonth ")
                 .WhereIF(searchParams.YearMonth != null, i => i.YearMonth == yearMonth)
-                .WhereIF(searchParams.PLATE_NUMBER != null, i => i.PLATE_NUMBER.Contains(searchParams.PLATE_NUMBER))
-                .WhereIF(searchParams.MODEL_MINOR != null, i => i.MODEL_MINOR.Contains(searchParams.MODEL_MINOR))
-                //.WhereIF(searchParams.MODEL_DAYS != null, i => i.MODEL_DAYS == searchParams.MODEL_DAYS)
                 .OrderBy("MODEL_MAJOR asc,MODEL_MINOR asc,CarType asc").ToList();
-                //jsonResult.TotalRows = pageCount;
             });
             return Json(
                  response,

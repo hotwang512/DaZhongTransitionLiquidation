@@ -53,6 +53,7 @@ var $page = function () {
                     var model = [];
                     var classType = [];
                     var carType = [];
+                    var taxType = ["增值税税金", "城建税税金", "教育费附加", "地方教育费附加"];
                     for (var i = 0; i < mps.length; i++) {
                         if (model.indexOf(mps[i].MODEL_MAJOR) < 0) {
                             model.push(mps[i].MODEL_MAJOR);
@@ -65,7 +66,7 @@ var $page = function () {
                         }
                     }
                     $("#jqxTable").pivot(mps, {
-                        rows: ["BELONGTO_COMPANY"],
+                        rows: ["BELONGTO_COMPANY", "TaxType"],
                         cols: ["MODEL_MAJOR", "MODEL_MINOR", "CarType"],
                         //aggregatorName: "Sum",
                         aggregator: sumOverSum(["MODEL_DAYS"]),
@@ -74,6 +75,7 @@ var $page = function () {
                             MODEL_MAJOR: $.pivotUtilities.sortAs(model),
                             MODEL_MINOR: $.pivotUtilities.sortAs(classType),
                             CarType: $.pivotUtilities.sortAs(carType),
+                            TaxType: $.pivotUtilities.sortAs(taxType),
                         },
                     });
 
@@ -85,6 +87,8 @@ var $page = function () {
                     $("#jqxTable .pvtAxisLabel").eq(2).css("text-align", "center")
                     $("#jqxTable .pvtAxisLabel").eq(3).text("所属公司");
                     $("#jqxTable .pvtAxisLabel").eq(3).css("text-align", "center")
+                    $("#jqxTable .pvtAxisLabel").eq(4).text("税种");
+                    $("#jqxTable .pvtAxisLabel").eq(4).css("text-align", "center")
      
                     $("#jqxTable").show();
                 } else {

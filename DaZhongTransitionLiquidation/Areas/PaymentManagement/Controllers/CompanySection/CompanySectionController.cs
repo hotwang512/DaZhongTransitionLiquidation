@@ -659,9 +659,18 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 var IsSuccess = "0";
                 var result = db.Ado.UseTran(() =>
                 {
+                    double taxRateDec = 0;
+                    if (module.TaxRate.Contains("%"))
+                    {
+                        taxRateDec = Convert.ToDouble(module.TaxRate.Replace("%", "")) * 0.01;
+                    }
+                    else
+                    {
+                        taxRateDec = Convert.ToDouble(module.TaxRate);
+                    }
                     var guid = module.VGUID;
                     var parentVGUID = module.ParentVGUID;
-                    var isAny = db.Queryable<Business_TaxesInfo>().Any(x => x.TaxesType == module.TaxesType && x.ParentVGUID == module.ParentVGUID && x.VGUID != guid);
+                    var isAny = db.Queryable<Business_TaxesInfo>().Any(x => x.TaxesType == module.TaxesType && x.ParentVGUID == module.ParentVGUID && x.AccountModeCode == module.AccountModeCode && x.CompanyCode == module.CompanyCode && x.VGUID != guid);
                     if (isAny)
                     {
                         IsSuccess = "2";
@@ -673,6 +682,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         {
                             TaxesType = module.TaxesType,
                             TaxRate = module.TaxRate,
+                            TaxRateDec= taxRateDec,
                             AccountModeCode = module.AccountModeCode,
                             CompanyCode = module.CompanyCode,
                             ParentVGUID = parentVGUID,
@@ -682,6 +692,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                     }
                     else
                     {
+                        module.TaxRateDec = taxRateDec;
                         db.Insertable(module).ExecuteCommand();
                     }
                 });

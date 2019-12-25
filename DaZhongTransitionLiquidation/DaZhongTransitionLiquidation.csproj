@@ -3572,6 +3572,7 @@
     <Compile Include="Areas\VoucherManageManagement\Model\VoucherModelClass.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\VoucherModelDetails.cs" />
     <Compile Include="Areas\VoucherManageManagement\Model\v_AssetsGeneralLedger_Swap.cs" />
+    <Compile Include="Areas\VoucherManageManagement\Model\v_Business_VehicleUnitList.cs" />
     <Compile Include="Areas\VoucherManageManagement\VoucherManageManagementAreaRegistration.cs" />
     <Compile Include="AutoMapper\Configuration.cs" />
     <Compile Include="AutoMapper\Profiles\AssetInfoProfile.cs" />

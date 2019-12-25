@@ -1528,6 +1528,7 @@ function settingTaxes(code, companyName, subjectGuid) {
     setYearMonth(code, accountModeCode);
     //var subjectVGUID = subjectGuid;
     initTaxesTable(code);
+    $('#jqxTaxesSetting').on('bindingComplete', function (event) { $("#jqxTaxesSetting").jqxTreeGrid('expandAll'); });
     //新增税率
     $("#btnTaxesAdd").click(function () {
         $("#TaxesType").val("");

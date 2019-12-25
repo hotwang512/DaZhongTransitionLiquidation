@@ -13,6 +13,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string Month { get; set; }
         public string TaxesType { get; set; }
         public string TaxRate { get; set; }
+        public double TaxRateDec { get; set; }
         public string AccountModeCode { get; set; }
         public string CompanyCode { get; set; }
         public DateTime? CreateTime { get; set; }

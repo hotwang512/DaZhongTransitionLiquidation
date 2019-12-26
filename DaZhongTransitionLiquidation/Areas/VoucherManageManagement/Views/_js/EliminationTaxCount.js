@@ -66,8 +66,8 @@ var $page = function () {
                         }
                     }
                     $("#jqxTable").pivot(mps, {
-                        rows: ["BELONGTO_COMPANY", "TaxType"],
-                        cols: ["MODEL_MAJOR", "MODEL_MINOR", "CarType"],
+                        rows: ["BELONGTO_COMPANY"],
+                        cols: ["MODEL_MAJOR", "MODEL_MINOR", "CarType", "TaxType"],
                         //aggregatorName: "Sum",
                         aggregator: sumOverSum(["MODEL_DAYS"]),
                         //vals: ["Money"],
@@ -85,9 +85,9 @@ var $page = function () {
                     $("#jqxTable .pvtAxisLabel").eq(1).css("text-align", "center")
                     $("#jqxTable .pvtAxisLabel").eq(2).text("车型");
                     $("#jqxTable .pvtAxisLabel").eq(2).css("text-align", "center")
-                    $("#jqxTable .pvtAxisLabel").eq(3).text("所属公司");
+                    $("#jqxTable .pvtAxisLabel").eq(3).text("税种");
                     $("#jqxTable .pvtAxisLabel").eq(3).css("text-align", "center")
-                    $("#jqxTable .pvtAxisLabel").eq(4).text("税种");
+                    $("#jqxTable .pvtAxisLabel").eq(4).text("所属公司");
                     $("#jqxTable .pvtAxisLabel").eq(4).css("text-align", "center")
      
                     $("#jqxTable").show();

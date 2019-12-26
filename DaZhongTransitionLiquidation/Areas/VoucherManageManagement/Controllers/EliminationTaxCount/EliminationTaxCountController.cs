@@ -80,7 +80,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         vehicle.MODEL_MAJOR = item.MODEL_MAJOR;
                         vehicle.MODEL_MINOR = item.MODEL_MINOR;
                         vehicle.CarType = item.CarType;
-                        vehicle.BELONGTO_COMPANY = item.BELONGTO_COMPANY.Split("-")[1];
+                        vehicle.BELONGTO_COMPANY = item.BELONGTO_COMPANY;
                         vehicle.TaxType = taxTypeList[i];
                         if(i == 0)
                         {

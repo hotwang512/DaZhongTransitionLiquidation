@@ -12,5 +12,6 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model
         public Guid ParentVGUID { get; set; }
         public DateTime? CreateTime { get; set; }
         public string Founder { get; set; }
+        public int Sort { get; set; }
     }
 }

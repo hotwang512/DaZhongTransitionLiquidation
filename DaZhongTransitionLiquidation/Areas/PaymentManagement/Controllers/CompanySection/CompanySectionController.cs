@@ -625,17 +625,14 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         }
         public JsonResult GetTaxesInfo(string companyCode, string accountModeCode,string year,string month)//Guid[] vguids
         {
-            var response = new List<v_TaxesInfo>();
+            var response = new List<Business_TaxesInfo>();
             DbBusinessDataService.Command(db =>
             {
                 if (accountModeCode == null)
                 {
                     accountModeCode = UserInfo.AccountModeCode;
                 }
-                response = db.Ado.SqlQuery<v_TaxesInfo>(@"select a.Code,a.ParentCode,a.Descrption,b.TaxesType,b.TaxRate,a.VGUID as KeyVGUID,b.VGUID from Business_SevenSection as a
-                                    left join Business_TaxesInfo as b on a.VGUID = b.SubjectVGUID and b.Year=@Year and b.Month=@Month and b.AccountModeCode=@AccountModeCode and b.CompanyCode=@CompanyCode 
-                                    where a.SectionVGUID = 'B63BD715-C27D-4C47-AB66-550309794D43' and a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode
-                                    and (a.Code like '%6403%' or a.Code like '%2221%') and a.Status='1' order by Code", new { Year = year, Month = month, AccountModeCode = accountModeCode, CompanyCode = companyCode }).ToList();
+                response = db.Queryable<Business_TaxesInfo>().Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode && x.Year == year && x.Month == month).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -644,62 +641,107 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
             var response = new List<Business_TaxesInfo>();
             DbBusinessDataService.Command(db =>
             {
-                response = db.Queryable<Business_TaxesInfo>().Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode).OrderBy("cast(Year as int) desc,cast(Month as int) desc").ToList();
+                response = db.Queryable<Business_TaxesInfo>().Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == companyCode).OrderBy(x=>x.CreateTime,OrderByType.Desc).ToList();
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SaveTaxesInfo(Business_TaxesInfo taxesInfo,string value,string type)
+        public JsonResult SaveTaxesInfo(Business_TaxesInfo module, bool isEdit)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            if (!isEdit)
+            {
+                module.Founder = UserInfo.LoginName;
+                module.CreateTime = DateTime.Now;
+                module.VGUID = Guid.NewGuid();
+            }
             DbBusinessDataService.Command(db =>
             {
+                var IsSuccess = "0";
                 var result = db.Ado.UseTran(() =>
                 {
-                    if (taxesInfo.VGUID != Guid.Empty && taxesInfo.VGUID != null)
+                    double taxRateDec = 0;
+                    if (module.TaxRate.Contains("%"))
                     {
-                        //taxesInfo.TaxesType = "";
-                        if (type == "TaxesType")
-                        {
-                            db.Updateable<Business_TaxesInfo>().UpdateColumns(it => new Business_TaxesInfo()
-                            {
-                                TaxesType = value,
-                            }).Where(it => it.VGUID == taxesInfo.VGUID).ExecuteCommand();
-                        }
-                        else
-                        {
-                            db.Updateable<Business_TaxesInfo>().UpdateColumns(it => new Business_TaxesInfo()
-                            {
-                                TaxRate = value,
-                            }).Where(it => it.VGUID == taxesInfo.VGUID).ExecuteCommand();
-                        }
+                        taxRateDec = Convert.ToDouble(module.TaxRate.Replace("%", "")) * 0.01;
                     }
                     else
                     {
-                        if (type == "TaxesType")
-                        {
-                            taxesInfo.TaxesType = value;
-                        }
-                        else
-                        {
-                            taxesInfo.TaxRate = value;
-                        }
-                        taxesInfo.VGUID = Guid.NewGuid();
-                        db.Insertable(taxesInfo).ExecuteCommand();
+                        taxRateDec = Convert.ToDouble(module.TaxRate);
                     }
-                    var data = db.Queryable<Business_TaxesInfo>().Where(x => x.VGUID == taxesInfo.VGUID).First();
-                    if (data != null)
+                    var guid = module.VGUID;
+                    var parentVGUID = module.ParentVGUID;
+                    var isAny = db.Queryable<Business_TaxesInfo>().Any(x => x.TaxesType == module.TaxesType && x.ParentVGUID == module.ParentVGUID && x.AccountModeCode == module.AccountModeCode && x.CompanyCode == module.CompanyCode && x.VGUID != guid);
+                    if (isAny)
                     {
-                        if ((data.TaxesType == "" || data.TaxesType == null) && (data.TaxRate == "" || data.TaxRate == null))
+                        IsSuccess = "2";
+                        return;
+                    }
+                    if (isEdit)
+                    {
+                        db.Updateable<Business_TaxesInfo>().UpdateColumns(it => new Business_TaxesInfo()
                         {
-                            db.Deleteable<Business_TaxesInfo>(x => x.VGUID == taxesInfo.VGUID).ExecuteCommand();
-                        }
+                            TaxesType = module.TaxesType,
+                            TaxRate = module.TaxRate,
+                            TaxRateDec= taxRateDec,
+                            AccountModeCode = module.AccountModeCode,
+                            CompanyCode = module.CompanyCode,
+                            ParentVGUID = parentVGUID,
+                            CreateTime = DateTime.Now,
+                            Founder = UserInfo.LoginName
+                        }).Where(it => it.VGUID == guid).ExecuteCommand();
+                    }
+                    else
+                    {
+                        module.TaxRateDec = taxRateDec;
+                        db.Insertable(module).ExecuteCommand();
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;
                 resultModel.ResultInfo = result.ErrorMessage;
                 resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                if (IsSuccess == "2")
+                {
+                    resultModel.Status = IsSuccess;
+                }
             });
             return Json(resultModel);
+        }
+        public JsonResult DeleteTaxesInfo(List<Guid> vguids)//Guid[] vguids
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+
+            DbBusinessDataService.Command(db =>
+            {
+                var data = db.Queryable<Business_TaxesInfo>();
+                foreach (var item in vguids)
+                {
+                    //int saveChanges = 1;
+                    Delete(item);
+                    resultModel.IsSuccess = true;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+            });
+            return Json(resultModel);
+        }
+        public void Delete(Guid vguid)
+        {
+            DbBusinessDataService.Command(db =>
+            {
+                var datas = db.Queryable<Business_TaxesInfo>();
+                var isAnyParent = datas.Where(x => x.ParentVGUID == vguid).ToList();
+                if (isAnyParent.Count > 0)
+                {
+                    foreach (var item in isAnyParent)
+                    {
+                        Delete(item.VGUID);
+                    }
+                    //db.Deleteable<Business_SevenSection>(x => x.ParentCode == code && x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ExecuteCommand();
+                }
+                else
+                {
+                    db.Deleteable<Business_TaxesInfo>(x => x.VGUID == vguid).ExecuteCommand();
+                }
+            });
         }
         public JsonResult GetAccountCompanyInfo(string code)//Guid[] vguids
         {

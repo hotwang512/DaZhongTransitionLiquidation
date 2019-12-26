@@ -634,48 +634,6 @@ var $page = function () {
             $("#SubjectName" + i).val(datas[i].SevenSubjectName);
             var borrowMoney = "";
             var loanMoney = "";
-            if (datas[i].BorrowMoney === "" || datas[i].BorrowMoney === null || datas[i].BorrowMoney == 0) {
-                loanMoney = datas[i].LoanMoney === null ? 0 : datas[i].LoanMoney;
-                if (loanMoney != null) {
-                    loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
-                    if (datas.length == 1) {
-                        //保持借在第一行,贷在下面
-                        $("#Remark" + i).val("");
-                        $("#SubjectName" + i).val("");
-                        $("#Loan1").val(loanMoney);
-                        $("#Borrow1").val("");
-                        $("#Borrow1").attr("readonly", "readonly");
-                        $("#Remark1").val(datas[i].Abstract);
-                        $("#SubjectName1").val(datas[i].SevenSubjectName);
-                    } else {
-                        $("#Loan" + i).val(loanMoney);
-                        $("#Borrow" + i).val("");
-                        $("#Borrow" + i).attr("readonly", "readonly");
-                    }
-                }
-            } else {
-                borrowMoney = datas[i].BorrowMoney == null ? 0 : datas[i].BorrowMoney;;
-                if (borrowMoney != null) {
-                    borrowMoney = parseFloat(borrowMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
-                    $("#Borrow" + i).val(borrowMoney);
-                    $("#Loan" + i).val("");
-                    $("#Loan" + i).attr("readonly", "readonly");
-                }
-            }
-            var bCount = "";
-            if (datas[i].BorrowMoneyCount != null) {
-                bCount = datas[i].BorrowMoneyCount;
-                $("#BorrowCount").val(parseFloat(bCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-            }
-            //bCount = bCount.toString().replace(/,/g, '');
-
-            var lCount = "";
-            if (datas[i].LoanMoneyCount != null) {
-                lCount = datas[i].LoanMoneyCount;
-                $("#LoanCount").val(parseFloat(lCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
-            }
-            //lCount = lCount.toString().replace(/,/g, '');
-
             //多余2条,绑定额外的tr
             if (i > 1) {
                 var trMore = "";
@@ -695,6 +653,52 @@ var $page = function () {
                 }
                 //tdClick();
             }
+            if (datas[i].BorrowMoney === "" || datas[i].BorrowMoney === null || datas[i].BorrowMoney == 0) {
+                loanMoney = datas[i].LoanMoney;
+                if ((loanMoney != null && loanMoney != "") || loanMoney == 0) {
+                    loanMoney = parseFloat(loanMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+                    if (datas.length == 1) {
+                        //保持借在第一行,贷在下面
+                        $("#Remark" + i).val("");
+                        $("#SubjectName" + i).val("");
+                        $("#Loan1").val(loanMoney);
+                        $("#Borrow1").val("");
+                        $("#Borrow1").attr("readonly", "readonly");
+                        $("#Remark1").val(datas[i].Abstract);
+                        $("#SubjectName1").val(datas[i].SevenSubjectName);
+                    } else {
+                        $("#Loan" + i).val(loanMoney);
+                        $("#Borrow" + i).val("");
+                        $("#Borrow" + i).attr("readonly", "readonly");
+                    }
+                } else {
+                    borrowMoney = parseFloat(0).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+                    $("#Borrow" + i).val(borrowMoney);
+                    $("#Loan" + i).val("");
+                    $("#Loan" + i).attr("readonly", "readonly");
+                }
+            } else {
+                borrowMoney = datas[i].BorrowMoney;;
+                if (borrowMoney != null) {
+                    borrowMoney = parseFloat(borrowMoney).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+                    $("#Borrow" + i).val(borrowMoney);
+                    $("#Loan" + i).val("");
+                    $("#Loan" + i).attr("readonly", "readonly");
+                }
+            }
+            var bCount = "";
+            if (datas[i].BorrowMoneyCount != null) {
+                bCount = datas[i].BorrowMoneyCount;
+                $("#BorrowCount").val(parseFloat(bCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            }
+            //bCount = bCount.toString().replace(/,/g, '');
+
+            var lCount = "";
+            if (datas[i].LoanMoneyCount != null) {
+                lCount = datas[i].LoanMoneyCount;
+                $("#LoanCount").val(parseFloat(lCount).toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,'));
+            }
+            //lCount = lCount.toString().replace(/,/g, '');           
         }
         tdClick();
     }

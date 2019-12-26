@@ -25,7 +25,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             var jsonResult = new JsonResultModel<Business_SettlementSubject>();
             DbBusinessDataService.Command(db =>
             {
-                jsonResult.Rows = db.Queryable<Business_SettlementSubject>().ToList();
+                jsonResult.Rows = db.Queryable<Business_SettlementSubject>().OrderBy("Sort asc").ToList();
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

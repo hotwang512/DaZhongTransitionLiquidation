@@ -18,5 +18,6 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Models
         public string CompanyCode { get; set; }
         public DateTime? CreateTime { get; set; }
         public string Founder { get; set; }
+        public string TaxCode { get; set; }
     }
 }

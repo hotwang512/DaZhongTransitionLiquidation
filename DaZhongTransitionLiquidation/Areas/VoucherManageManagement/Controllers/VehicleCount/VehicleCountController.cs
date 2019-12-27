@@ -97,14 +97,14 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         }
         private List<Business_SettlementCount> GetSettlementMANAGEMENT(SqlSugarClient db, string yearMonth, string company)
         {
-            var response = db.Ado.SqlQuery<Business_SettlementCount>(@"select newid() as VGUID,x.MODEL_MAJOR as Model,x.MODEL_MINOR as ClassType,x.CarType,x.YearMonth,x.MANAGEMENT_COMPANY,x.MODEL_DAYS as DAYS,c.Money,CAST((CAST(x.MODEL_DAYS AS int)*c.Money) AS decimal(18,2)) as Account,c.BusinessType,c.MoneyRow,c.MoneyColumns from (                           
+            var response = db.Ado.SqlQuery<Business_SettlementCount>(@"select newid() as VGUID,x.MODEL_MAJOR as Model,x.MODEL_MINOR as ClassType,x.CarType,x.YearMonth,x.MANAGEMENT_COMPANY,x.MODEL_DAYS as DAYS,c.Money,CAST((CAST(x.MODEL_DAYS AS int)*c.Money) AS decimal(18,0)) as Account,c.BusinessType,c.MoneyRow,c.MoneyColumns from (                           
                              select t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.MANAGEMENT_COMPANY,t.YearMonth,SUM(MODEL_DAYS) as MODEL_DAYS from (
                              select g.* from (
                              select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
                              m.BusinessName1 as MODEL_MAJOR, 
                              m.BusinessName2 as MODEL_MINOR,
                              --a.MODEL_MINOR,
-                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,0)) as MODEL_DAYS
                             ,b.MANAGEMENT_COMPANY,
                             b.BELONGTO_COMPANY,b.DESCRIPTION as CarType,b.GROUP_ID,b.OPERATING_STATE from Business_VehicleList as a 
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 
@@ -117,7 +117,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 							    select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
                              m.BusinessName1 as MODEL_MAJOR, 
                              m.BusinessName2 as MODEL_MINOR,
-                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,0)) as MODEL_DAYS
                             ,b.MANAGEMENT_COMPANY,
                             b.BELONGTO_COMPANY,b.DESCRIPTION as CarType,b.GROUP_ID,b.OPERATING_STATE from Business_VehicleList as a 
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 

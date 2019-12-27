@@ -249,7 +249,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetModifyVehicleReview(string MODIFY_TYPE)
+        public JsonResult GetModifyVehicleReview(string MODIFY_TYPE,string YearMonth)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -258,7 +258,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 {
                     List<Api_ModifyVehicleAsset> assetModifyFlowList = new List<Api_ModifyVehicleAsset>();
                     var lastMonthDate = DateTime.Now.AddMonths(-1);
-                    var YearMonth = lastMonthDate.Year.ToString() + lastMonthDate.Month.ToString().PadLeft(2, '0');
+                    //var YearMonth = lastMonthDate.Year.ToString() + lastMonthDate.Month.ToString().PadLeft(2, '0');
+                    YearMonth = YearMonth.Replace("-", "");
                     var apiReaultModify = AssetMaintenanceAPI.GetModifyVehicleAsset(YearMonth);
                     var resultApiModifyModel = apiReaultModify
                         .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
@@ -279,7 +280,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         }
 
                         //var dt = assetModifyFlowList.Where(x => x.OPERATING_STATE == "在运" && x.MODEL_MINOR == "").ToList().TryToDataTable();
-                        AutoSyncAssetsMaintenance.WirterSyncModifyAssetFlow(assetModifyFlowList);
+                        AutoSyncAssetsMaintenance.WirterSyncModifyAssetFlow(assetModifyFlowList, MODIFY_TYPE);
                     }
                 });
                 resultModel.IsSuccess = result.IsSuccess;

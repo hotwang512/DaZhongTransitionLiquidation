@@ -36,42 +36,48 @@
         background-color: #ffd800;
     }
 </style>
-<table id="hideButton" style="margin-top: 10px;display:block">
-    <tr style="height: 50px;">
-        @if (permission.New || permission.Edit)
-        {
-            <td style="width: 95px;">
-                <button id="btnSave" type="button" class="buttons" style=""><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">保存</span></button>
-            </td>
-        }
-    </tr>
-</table>
 <div class="mk">
     <div class="header_mk">
         <div class="header_icon"></div>
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
     </div>
     <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 1000px; margin-left: 20px;">
+        <table style="margin-top: 20px; width: 650px; margin-left: 20px;">
             <tr style="height: 45px;">
                 <td style="width: 50px;text-align: right"><span class="spanText">年份：</span></td>
                 <td style="width: 100px;text-align: center">
                     <input id="DateOfYear" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy', dateFmt: 'yyyy', lang: 'zh-cn', onpicked: pickedFunc })" class="input_text form-control" style="width: 200px" validatetype="required">
                 </td>
                 <td style="width: 50px;text-align: right"><span class="spanText">月份：</span></td>
-                <td style="width: 400px; text-align: center;padding-top:5px">
-                    <label><input name="Month" type="checkbox" value="1" />1月</label>
-                    <label><input name="Month" type="checkbox" value="2" />2月</label>
-                    <label><input name="Month" type="checkbox" value="3" />3月</label>
-                    <label><input name="Month" type="checkbox" value="4" />4月</label>
-                    <label><input name="Month" type="checkbox" value="5" />5月</label>
-                    <label><input name="Month" type="checkbox" value="6" />6月</label>
-                    <label><input name="Month" type="checkbox" value="7" />7月</label>
-                    <label><input name="Month" type="checkbox" value="8" />8月</label>
-                    <label><input name="Month" type="checkbox" value="9" />9月</label>
-                    <label><input name="Month" type="checkbox" value="10" />10月</label>
-                    <label><input name="Month" type="checkbox" value="11" />11月</label>
-                    <label><input name="Month" type="checkbox" value="12" />12月</label>
+                <td style="width: 200px;">
+                    <select id="StartMonth" class="input_text form-control" style="width: 75px;float:left" >
+                        <option value="1">1月</option>
+                        <option value="2">2月</option>
+                        <option value="3">3月</option>
+                        <option value="4">4月</option>
+                        <option value="5">5月</option>
+                        <option value="6">6月</option>
+                        <option value="7">7月</option>
+                        <option value="8">8月</option>
+                        <option value="9">9月</option>
+                        <option value="10">10月</option>
+                        <option value="11">11月</option>
+                        <option value="12">12月</option>
+                    </select><p style="float: left;padding-top:5px">-</p>
+                    <select id="EndMonth" class="input_text form-control" style="width: 75px;float:left" >
+                        <option value="1">1月</option>
+                        <option value="2">2月</option>
+                        <option value="3">3月</option>
+                        <option value="4">4月</option>
+                        <option value="5">5月</option>
+                        <option value="6">6月</option>
+                        <option value="7">7月</option>
+                        <option value="8">8月</option>
+                        <option value="9">9月</option>
+                        <option value="10">10月</option>
+                        <option value="11">11月</option>
+                        <option value="12">12月</option>
+                    </select>
                 </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>

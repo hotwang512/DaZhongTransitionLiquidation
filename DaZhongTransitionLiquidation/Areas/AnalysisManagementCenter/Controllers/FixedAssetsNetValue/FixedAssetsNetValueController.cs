@@ -49,19 +49,34 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                     }
                     //年初数
                     var startPeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(
-                        @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '期初' as PeriodType  FROM dbo.Business_AssetMaintenanceInfo
-                    where LISENSING_DATE < '" + DateOfYear + @"-01-01'
+                        @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '期初' as PeriodType  FROM dbo.AssetsLedger_Swap
+                        where PERIOD_CODE =  '" + lastYear + @"-12'
                     group by ASSET_CATEGORY_MAJOR").ToList();
                     //本期增加
-                    var addedPeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(
-                        @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '增加' as PeriodType  FROM dbo.Business_AssetMaintenanceInfo
-                    where LISENSING_DATE >= '" + minYearMonth + @"' and LISENSING_DATE < '" + maxYearMonth + @"'
-                    group by ASSET_CATEGORY_MAJOR").ToList();
+                    var addedSql = @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '增加' as PeriodType  FROM (select PERIOD_CODE
+                                 , ASSET_CATEGORY_MAJOR
+                                 , ASSET_COST
+		                         , ACCT_DEPRECIATION
+                                 , ASSET_CATEGORY_MINOR
+								 , ASSET_CREATION_DATE
+                                 , row_number() over (partition by ASSET_ID order by CREATE_DATE desc) as id
+                            from dbo.AssetsLedger_Swap) cte
+                                            where cte.id = 1 and ASSET_CREATION_DATE >= '" + minYearMonth +
+                                   @"' and ASSET_CREATION_DATE < '" + maxYearMonth + @"'
+                                            group by ASSET_CATEGORY_MAJOR";
+                    var addedPeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(addedSql).ToList();
                     //本期减少
                     var reducePeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(
-                        @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '减少' as PeriodType  FROM dbo.Business_AssetMaintenanceInfo
-                    where BACK_CAR_DATE >= '" + minYearMonth + @"' and BACK_CAR_DATE < '" + maxYearMonth + @"'
-                    group by ASSET_CATEGORY_MAJOR").ToList();
+                        @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(cast(ASSET_COST as decimal(20,5))) as COST,sum(cast(RETIRE_ACCT_DEPRECIATION as decimal(20,5))) as ACCT, '减少' as PeriodType  FROM (select PERIOD
+                                , ASSET_CATEGORY_MAJOR
+                                , ASSET_COST
+		                        , RETIRE_ACCT_DEPRECIATION
+                                , ASSET_CATEGORY_MINOR
+		                        , RETIRE_DATE
+                                , row_number() over (partition by ASSET_ID order by CREATE_DATE desc) as id
+                        from dbo.AssetsRetirement_Swap) cte
+                                        where cte.id = 1 and RETIRE_DATE >= '" + minYearMonth + @"' and RETIRE_DATE < '" + maxYearMonth + @"'
+                                        group by ASSET_CATEGORY_MAJOR").ToList();
                     var allPeriod = startPeriodList.Union(addedPeriodList).Union(reducePeriodList).ToList();
                     foreach (var item in list.Where(x => x.CalculationType != "合计" && x.CategoryType != "减值" && x.CategoryType != "账面"))
                     {

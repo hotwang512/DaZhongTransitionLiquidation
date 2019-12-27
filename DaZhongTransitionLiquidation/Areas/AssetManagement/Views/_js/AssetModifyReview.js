@@ -76,7 +76,7 @@ var $page = function () {
         layer.load();
         $.ajax({
             url: "/AssetManagement/AssetModifyReview/GetModifyVehicleReview",
-            data: { "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
+            data: { "MODIFY_TYPE": getQueryString("MODIFY_TYPE"), "YearMonth": $("#YearMonth").val() },
             //traditional: true,
             type: "post",
             success: function (msg) {

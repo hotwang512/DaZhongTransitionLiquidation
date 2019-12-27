@@ -38,7 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                              m.BusinessName1 as MODEL_MAJOR, 
                              m.BusinessName2 as MODEL_MINOR,
                              --a.MODEL_MINOR,
-                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,0)) as MODEL_DAYS
                             ,b.MANAGEMENT_COMPANY,
                             b.BELONGTO_COMPANY,b.DESCRIPTION as CarType,b.GROUP_ID,b.OPERATING_STATE from Business_VehicleList as a 
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 
@@ -51,7 +51,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 							    select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
                              m.BusinessName1 as MODEL_MAJOR, 
                              m.BusinessName2 as MODEL_MINOR,
-                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,0)) as MODEL_DAYS
                             ,b.MANAGEMENT_COMPANY,
                             b.BELONGTO_COMPANY,b.DESCRIPTION as CarType,b.GROUP_ID,b.OPERATING_STATE from Business_VehicleList as a 
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 

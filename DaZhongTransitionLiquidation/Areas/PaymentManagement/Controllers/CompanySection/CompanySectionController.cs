@@ -683,6 +683,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             TaxesType = module.TaxesType,
                             TaxRate = module.TaxRate,
                             TaxRateDec= taxRateDec,
+                            TaxCode = module.TaxCode,
                             AccountModeCode = module.AccountModeCode,
                             CompanyCode = module.CompanyCode,
                             ParentVGUID = parentVGUID,

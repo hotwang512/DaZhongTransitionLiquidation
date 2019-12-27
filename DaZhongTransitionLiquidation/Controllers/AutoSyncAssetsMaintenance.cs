@@ -44,22 +44,22 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var resultApiModifyModel = apiReaultModify
                             .JsonToModel<JsonResultListApi<Api_VehicleAssetResult<string, string>>>();
                         //全量获取车辆信息
-                        {
-                            var resultColumn = resultApiModifyModel.data[0].COLUMNS;
-                            var resultData = resultApiModifyModel.data[0].DATA;
-                            foreach (var item in resultData)
-                            {
-                                var nv = new Api_ModifyVehicleAsset();
-                                var t = nv.GetType();
-                                for (var k = 0; k < resultColumn.Count; k++)
-                                {
-                                    var pi = t.GetProperty(resultColumn[k]);
-                                    if (pi != null) pi.SetValue(nv, item[k], null);
-                                }
-                                assetModifyFlowList.Add(nv);
-                            }
-                            WirterSyncModifyAssetFlow(assetModifyFlowList);
-                        }
+                        //{
+                        //    var resultColumn = resultApiModifyModel.data[0].COLUMNS;
+                        //    var resultData = resultApiModifyModel.data[0].DATA;
+                        //    foreach (var item in resultData)
+                        //    {
+                        //        var nv = new Api_ModifyVehicleAsset();
+                        //        var t = nv.GetType();
+                        //        for (var k = 0; k < resultColumn.Count; k++)
+                        //        {
+                        //            var pi = t.GetProperty(resultColumn[k]);
+                        //            if (pi != null) pi.SetValue(nv, item[k], null);
+                        //        }
+                        //        assetModifyFlowList.Add(nv);
+                        //    }
+                        //    WirterSyncModifyAssetFlow(assetModifyFlowList);
+                        //}
                         //退车
                         //去掉退车自动获取 20190917
                         //{
@@ -93,7 +93,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 Thread.Sleep(1000);
             }
         }
-        public static int WirterSyncModifyAssetFlow(List<Api_ModifyVehicleAsset> assetFlowList)
+        public static int WirterSyncModifyAssetFlow(List<Api_ModifyVehicleAsset> assetFlowList, string MODIFY_TYPE)
         {
             //var alist = assetFlowList.GroupBy(x => x.ORIGINALID).ToList();
             //var vlist = assetFlowList.Where(x => x.MODEL_MINOR.IsNullOrEmpty()).ToList();
@@ -112,7 +112,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                 var ssList = _db.Queryable<Business_SevenSection>().Where(x =>
                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").ToList();
                 var modifyVehicleList = _db.Queryable<Business_ModifyVehicle>().Where(x => !x.ISVERIFY).With(SqlWith.TabLockX).ToList();
-                var MODIFY_TYPE = "";
                 var OLDDATA = "";
                 foreach (var item in assetFlowList)
                 {
@@ -135,7 +134,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     ssList.First(x => x.OrgID == item.BELONGTO_COMPANY).Abbreviation;
                             }
                             //判断变更类型 MODIFY_TYPE
-                            if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER)
+                            if (assetMaintenanceInfo.PLATE_NUMBER != item.PLATE_NUMBER && MODIFY_TYPE == "PLATE_NUMBER")
                             {
                                 //车牌号变更
                                 MODIFY_TYPE = "PLATE_NUMBER";
@@ -145,7 +144,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE, OLDDATA));
                                 }
                             }
-                            if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY)
+                            if (assetMaintenanceInfo.BELONGTO_COMPANY != item.BELONGTO_COMPANY && MODIFY_TYPE == "FA_LOC_1")
                             {
                                 //所属公司
                                 MODIFY_TYPE = "FA_LOC_1";
@@ -155,7 +154,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     list.Add(getModel(item, assetMaintenanceInfo, MODIFY_TYPE, OLDDATA));
                                 }
                             }
-                            if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY)
+                            if (assetMaintenanceInfo.MANAGEMENT_COMPANY != item.MANAGEMENT_COMPANY && MODIFY_TYPE == "FA_LOC_2")
                             {
                                 //管理公司
                                 MODIFY_TYPE = "FA_LOC_2";
@@ -224,7 +223,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     item.MODEL_MINOR = "新车停运";
                                 }
                             }
-                            if ((assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR))
+                            if ((assetMaintenanceInfo.MODEL_MINOR != item.MODEL_MINOR || assetMaintenanceInfo.MODEL_MAJOR != item.MODEL_MAJOR) && MODIFY_TYPE == "BUSINESS_MODEL")
                             {
                                 //经营模式
                                 MODIFY_TYPE = "BUSINESS_MODEL";

@@ -6,6 +6,8 @@ var $page = function () {
     this.init = function () {
         var date = new Date();
         $("#DateOfYear").val(date.getFullYear());
+        $("#StartMonth").val(1);
+        $("#EndMonth").val(12);
         GetFixedAssetsNetValueDetail(1,12);
         //$("#DateOfYear").attr("disabled",true);
         //if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
@@ -19,16 +21,7 @@ var $page = function () {
     function addEvent() {
         $("#btnSearch").on("click",
             function () {
-                var minMonth = 1;
-                var maxMonth = 12;
-                var arr = $("input[name='Month']:checked").map(function () {
-                    return parseInt($(this).val());
-                }).get().sort();
-                if (arr.length > 0) {
-                    minMonth = Math.min.apply(null, arr);
-                    maxMonth = Math.max.apply(null, arr);
-                }
-                GetFixedAssetsNetValueDetail(minMonth,maxMonth);
+                GetFixedAssetsNetValueDetail($("#StartMonth").val(), $("#EndMonth").val());
             });
     }; //addEvent end
 };

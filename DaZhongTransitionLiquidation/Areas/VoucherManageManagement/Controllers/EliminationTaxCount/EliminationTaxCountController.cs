@@ -128,7 +128,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 							where c.BusinessName is not null and c.VehicleAge is null
 							) as m on a.MODEL_MINOR = m.BusinessName3 
 							UNION ALL
-							    select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
+							 select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
                              m.BusinessName1 as MODEL_MAJOR, 
                              m.BusinessName2 as MODEL_MINOR,
                              CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,0)) as MODEL_DAYS
@@ -142,15 +142,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 							) as m on a.MODEL_MINOR = m.BusinessName3  and b.VEHICLE_AGE = m.VehicleAge) as g
                             where g.GROUP_ID='出租车' and g.OPERATING_STATE='在运' and g.MODEL_MAJOR is not null and g.YearMonth=@YearMonth and g.BELONGTO_COMPANY != '财务共享-大众出租') as t 
                             group by t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.BELONGTO_COMPANY,t.YearMonth 
-							UNION ALL 
+							    UNION ALL --4家单位各车平均天数,拼接各车合计天数
 							select x.*,'财务共享-大众出租' as 'BELONGTO_COMPANY' from(
 							select t.MODEL_MAJOR,t.MODEL_MINOR,t.CarType,t.YearMonth,SUM(MODEL_DAYS) as MODEL_DAYS from (
                             select g.* from (
-                             select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
-                             m.BusinessName1 as MODEL_MAJOR, 
-                             m.BusinessName2 as MODEL_MINOR,
-                             --a.MODEL_MINOR,
-                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+                            select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
+                            m.BusinessName1 as MODEL_MAJOR, 
+                            m.BusinessName2 as MODEL_MINOR,
+                            --a.MODEL_MINOR,
+                            CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
                             ,b.MANAGEMENT_COMPANY,
                             b.BELONGTO_COMPANY,b.DESCRIPTION as CarType,b.GROUP_ID,b.OPERATING_STATE from Business_VehicleList as a 
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 
@@ -160,10 +160,10 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
 							where c.BusinessName is not null and c.VehicleAge is null
 							) as m on a.MODEL_MINOR = m.BusinessName3 
 							UNION ALL
-							    select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
-                             m.BusinessName1 as MODEL_MAJOR, 
-                             m.BusinessName2 as MODEL_MINOR,
-                             CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
+							select a.VGUID,a.ORIGINALID,a.YearMonth,a.PLATE_NUMBER,
+                            m.BusinessName1 as MODEL_MAJOR, 
+                            m.BusinessName2 as MODEL_MINOR,
+                            CAST(CAST(a.MODEL_DAYS AS decimal(18,2))/30 as decimal(18,2)) as MODEL_DAYS
                             ,b.MANAGEMENT_COMPANY,
                             b.BELONGTO_COMPANY,b.DESCRIPTION as CarType,b.GROUP_ID,b.OPERATING_STATE from Business_VehicleList as a 
                             left join Business_AssetMaintenanceInfo as b on a.PLATE_NUMBER = b.PLATE_NUMBER 

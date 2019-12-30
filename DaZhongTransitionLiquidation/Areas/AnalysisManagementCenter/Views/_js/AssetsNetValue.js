@@ -42,7 +42,7 @@ function GetAssetsNetValueDetail() {
             $(".pvtAxisLabel").eq(0).css("text-align", "center");
             $(".pvtAxisLabel").eq(1).text("主分类段");
             $(".pvtAxisLabel").eq(1).css("text-align", "center");
-            $(".pvtAxisLabel").eq(2).text("此分类段");
+            $(".pvtAxisLabel").eq(2).text("次分类段");
             $(".pvtAxisLabel").eq(2).css("text-align", "center");
             $(".pvtAxisLabel").eq(3).text("车型");
             $(".pvtAxisLabel").eq(3).css("text-align", "center");

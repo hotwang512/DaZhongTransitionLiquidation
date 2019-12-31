@@ -65,6 +65,31 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                     group by PERIOD_CODE
                            , ASSET_CATEGORY_MAJOR
                            , ASSET_CATEGORY_MINOR
+                           , VMODEL
+                    union all
+                    select cte.PERIOD_CODE                                    as YearMonth
+                         , cte.ASSET_CATEGORY_MAJOR                           as MAJOR
+                         , '小计'                                               as MINOR
+                         , VMODEL
+                         , count(1)                                           as ASSETCOUNT
+                         , sum(cast(cte.ASSET_COST as decimal(20, 2)))        as COST
+                         , sum(cast(cte.ACCT_DEPRECIATION as decimal(20, 2))) as ACCT
+                         , 0                                                  as DEVALUE
+                    from
+                    (
+                        select PERIOD_CODE
+                             , ASSET_COST
+                             , ACCT_DEPRECIATION
+                             , ASSET_CATEGORY_MAJOR
+                             , ASSET_CATEGORY_MINOR
+                             , ''                                                                               as VMODEL
+                             , row_number() over (partition by PERIOD_CODE, ASSET_ID order by CREATE_DATE desc) as id
+                        from AssetsLedger_Swap
+                        where PERIOD_CODE like'" + currentYear + @"%'
+                    ) cte
+                    where cte.id = 1
+                    group by PERIOD_CODE
+                           , ASSET_CATEGORY_MAJOR
                            , VMODEL").ToList();
                     jsonResult.Rows = list;
                     jsonResult.TotalRows = list.Count();

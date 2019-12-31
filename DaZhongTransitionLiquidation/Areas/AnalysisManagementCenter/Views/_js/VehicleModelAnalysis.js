@@ -90,6 +90,10 @@ var $page = function () {
                 var pivotGrid = selector.$grid().jqxPivotGrid('getInstance');
                 var pivotRows = pivotGrid.getPivotRows();
                 for (var k = 0; k < pivotRows.items.length; k++) {
+                    for (var n = 0; n < pivotRows.items[k].items.length; n++) {
+                        debugger;
+                        pivotRows.items[k].items[n].expand();
+                    }
                     pivotRows.items[k].expand();
                 }
                 var pivotCols = pivotGrid.getPivotColumns();

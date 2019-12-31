@@ -189,7 +189,7 @@ var $page = function () {
         //获取当前日期
         var tradeDate = new Date();
         var year = tradeDate.getFullYear();
-        var month = tradeDate.getMonth();
+        var month = tradeDate.getMonth() + 1;
         //生成--根据结算项目或者模板
         $("#btnCreate").on("click", function () {
             $("#Year").val(year);

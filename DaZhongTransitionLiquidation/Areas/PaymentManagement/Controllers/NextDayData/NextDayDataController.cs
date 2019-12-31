@@ -14,6 +14,7 @@ using Aspose.Cells;
 using System.Data;
 using System.Text;
 using SyntacticSugar;
+using DaZhongTransitionLiquidation.Controllers;
 
 namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextDayData
 {
@@ -124,7 +125,24 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
             return Json(Subject, JsonRequestBehavior.AllowGet); ;
         }
 
-
+        public JsonResult GetEmailInfo()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command<NextDayDataPack>((db, o) =>
+            {
+                var result = db.Ado.UseTran(() =>
+                {
+                    List<string> fileNames = AutoSyncEmailController.GetEmailAttachments();
+                    if (fileNames.Count > 0)
+                    {
+                        AutoSyncEmailController.ImportFile(fileNames);
+                        resultModel.Status = "1";
+                        resultModel.IsSuccess = true;
+                    }                   
+                });
+            });
+            return Json(resultModel);
+        }
 
         /// <summary>
         /// 导出T+1模板

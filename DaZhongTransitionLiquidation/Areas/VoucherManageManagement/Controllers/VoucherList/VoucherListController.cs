@@ -423,10 +423,20 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                                         left join Business_SettlementSubject as b on a.SettlementVGUID=b.VGUID
                                         left join Business_SettlementSubject as c on b.ParentVGUID = c.VGUID
                                         where (a.Borrow is not null or a.Loan is not null) and  a.AccountModeCode=@AccountModeCode and a.CompanyCode=@CompanyCode order by c.Sort asc,b.Sort asc", new { AccountModeCode = UserInfo.AccountModeCode, CompanyCode = UserInfo.CompanyCode }).ToList();
-                var month2 = month.TryToInt() < 10 ? "0" + month : month;
+                var monthInt = month.TryToInt() - 1;
+                var month2 = "";
+                if (monthInt == 0)
+                {
+                    year = (year.TryToInt() - 1).ToString();
+                    month2 = "12";
+                }
+                else
+                {
+                    month2 = monthInt < 10 ? "0" + monthInt : monthInt.ToString();
+                }
                 var yearMonth = year + month2;
-                var date = (year + "-" + month2).TryToDate();
-                //查询出所选月份的结算金额
+                var date = (year + "-" + month).TryToDate();
+                //查询出所选月份的上一月结算金额
                 var settlementCount = db.SqlQueryable<Business_SettlementCount>(@"select BusinessType,YearMonth,BELONGTO_COMPANY,SUM(Account)*(-1) as Account from Business_SettlementCount  
                                         group by BusinessType,YearMonth,BELONGTO_COMPANY").Where(x => x.YearMonth == yearMonth).ToList();
                 var vouchList = db.Queryable<Business_VoucherList>().Where(x => x.AccountingPeriod == date).ToList();

@@ -123,7 +123,22 @@ var $page = function () {
             loadSubject(Channel, "");
         });
 
+        //拉取邮件
+        $("#btnEmail").on("click", function () {
+            $.ajax({
+                url: "/PaymentManagement/NextDayData/GetEmailInfo",
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.Status == "0") {
+                        jqxNotification("未拉取到邮件！", null, "error");
+                    } else {
+                        jqxNotification("邮件拉取成功！", null, "success");
+                    }
+                }
 
+            });
+        });
 
         //弹出框中取消按钮
         selector.$add_CancelBtn().on("click", function () {

@@ -42,7 +42,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 ImportFile(fileNames);
             }
         }
-        private static List<string> GetEmailAttachments()
+        public static List<string> GetEmailAttachments()
         {
             List<string> fileNames = new List<string>();
             try
@@ -87,7 +87,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             return fileNames;
         }
 
-        private static void ImportFile(List<string> fileNames)
+        public static void ImportFile(List<string> fileNames)
         {
             NextDayDataPack nextDayDataPack = new NextDayDataPack();
             foreach (var fileName in fileNames)

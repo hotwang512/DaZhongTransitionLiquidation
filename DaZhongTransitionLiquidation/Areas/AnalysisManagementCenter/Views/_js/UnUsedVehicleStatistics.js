@@ -36,7 +36,6 @@ var $page = function () {
     }; //addEvent end
     function initPeriodTable() {
         layer.load();
-        debugger;
         getPeriodData(function (mps) {
             if (mps.length > 0) {
                 var datafields = new Array();
@@ -55,7 +54,6 @@ var $page = function () {
                     datafields: datafields,
                     datatype: "json"
                 };
-                debugger;
                 var dataAdapter = new $.jqx.dataAdapter(source);
                 dataAdapter.dataBind();
                 var pivotDataSource = new $.jqx.pivot(dataAdapter,
@@ -98,6 +96,11 @@ var $page = function () {
                 var pivotRows = pivotGrid.getPivotRows();
                 for (var k = 0; k < pivotRows.items.length; k++) {
                     pivotRows.items[k].expand();
+                    debugger;
+                    for (var n = 0; n < pivotRows.items[k].items.length; n++) {
+                        debugger;
+                        pivotRows.items[k].items[n].expand();
+                    }
                 }
                 var pivotCols = pivotGrid.getPivotColumns();
                 for (var i = 0; i < pivotCols.items.length; i++) {

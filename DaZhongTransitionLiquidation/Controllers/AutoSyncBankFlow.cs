@@ -56,7 +56,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                             bankFlowList = ShanghaiBankAPI.GetShangHaiBankTradingFlow(item.BankAccount);
                             if (bankFlowList.Count > 0)
                             {
-                                success = WirterSyncBankFlow(bankFlowList);
+                                success = WirterSyncBankFlow(bankFlowList, "admin");
                             }
                         }
                     }
@@ -94,7 +94,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 bankFlowList = ShanghaiBankAPI.GetShangHaiBankYesterdayTradingFlow(item.BankAccount);
                                 if (bankFlowList.Count > 0)
                                 {
-                                    success = WirterSyncBankFlow(bankFlowList);
+                                    success = WirterSyncBankFlow(bankFlowList, "admin");
                                 }
                             }
                         }
@@ -137,7 +137,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             //按交易日期排序取最小值
                             bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
-                            success = WirterSyncBankFlow(bankFlowList);
+                            success = WirterSyncBankFlow(bankFlowList, "admin");
                             //同步银行流水到银行数据表
                             BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                         }
@@ -206,9 +206,9 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
-                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-10) && x.VoucherType== "银行类" && x.Status == "1" && (x.DebitAmountTotal == null || x.CreditAmountTotal == null)).ToList();
+                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-10) && x.VoucherType == "银行类" && x.Status == "1" && (x.DebitAmountTotal == null || x.CreditAmountTotal == null)).ToList();
                         //var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == "80e0f344-4fc3-4a89-8580-bc838c62df06".TryToGuid()).ToList();
-                        var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-10,GETDATE()) and VoucherType='银行类' and Status='1' and (DebitAmountTotal is null or CreditAmountTotal is null) )").OrderBy(x=>x.BorrowMoney, OrderByType.Desc).ToList();
+                        var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-10,GETDATE()) and VoucherType='银行类' and Status='1' and (DebitAmountTotal is null or CreditAmountTotal is null) )").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
                         var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
@@ -222,12 +222,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = voucherMonth, Channel = "" }).ToList();
                             }
-                            var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x=>x.ReceivableAccount).ToList();
-                            if(voucherDetail.Count < 2)
+                            var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x => x.ReceivableAccount).ToList();
+                            if (voucherDetail.Count < 2)
                             {
                                 continue;
                             }
-                            if(item.CreditAmountTotal == item.DebitAmountTotal && item.CreditAmountTotal != 0 && item.DebitAmountTotal != 0)
+                            if (item.CreditAmountTotal == item.DebitAmountTotal && item.CreditAmountTotal != 0 && item.DebitAmountTotal != 0)
                             {
                                 continue;
                             }
@@ -242,7 +242,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 //一借一贷
                                 var borrowMoney = voucherDetail[0].BorrowMoney;
                                 var loanMoney = voucherDetail[0].LoanMoney;
-                                if((borrowMoney != 0 && loanMoney == null) || (borrowMoney != 0 && loanMoney == 0))
+                                if ((borrowMoney != 0 && loanMoney == null) || (borrowMoney != 0 && loanMoney == 0))
                                 {
                                     voucherDetail[1].LoanMoney = borrowMoney;
                                     voucherDetail[1].LoanMoneyCount = borrowMoney;
@@ -281,15 +281,15 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             continue;
                                         }
                                         //贷配置明细
-                                        var subject = it.CompanySection+"."+it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
+                                        var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
                                         var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
-                                        if(paySetting == null)
+                                        if (paySetting == null)
                                         {
                                             continue;
                                         }
                                         //从金额报表中按配置获取金额
-                                        if(paySetting.Channel == "898319841215600")
+                                        if (paySetting.Channel == "898319841215600")
                                         {
                                             //自助发票机另外处理
                                             continue;
@@ -300,7 +300,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             it.LoanMoney = 0;
                                             switch (paySetting.TransferType)
                                             {
-                                                case "银行收款": it.LoanMoney = amountReport.Sum(x=>x.ActualAmountTotal); break;
+                                                case "银行收款": it.LoanMoney = amountReport.Sum(x => x.ActualAmountTotal); break;
                                                 case "营收缴款": it.LoanMoney = amountReport.Sum(x => x.PaymentAmountTotal); break;
                                                 case "手续费": it.LoanMoney = amountReport.Sum(x => x.CompanyBearsFeesTotal); break;
                                                 default:
@@ -310,12 +310,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             _db.Updateable(it).ExecuteCommand();
                                             //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                                         }
-                                       
+
                                     }
                                     else
                                     {
                                         //借配置明细
-                                        if(it.BorrowMoney == null || it.BorrowMoney == 0)
+                                        if (it.BorrowMoney == null || it.BorrowMoney == 0)
                                         {
                                             var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                             var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
@@ -350,7 +350,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 }
                                 item.CreditAmountTotal = creditAmountTotal;
                                 item.DebitAmountTotal = debitAmountTotal;
-                                if(item.CreditAmountTotal == item.DebitAmountTotal)
+                                if (item.CreditAmountTotal == item.DebitAmountTotal)
                                 {
                                     _db.Updateable(item).ExecuteCommand();
                                 }
@@ -402,7 +402,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 Thread.Sleep((int)(24 * 1000 * 60 * 60));
             }
         }
-        private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData,List<Business_CompanyBankInfo> bankAccount)
+        private static List<Business_BankFlowTemplate> GetBankData(SqlSugarClient _db, List<BankAndEnterprise_Swap> bankData, List<Business_BankFlowTemplate> bankFlowList, List<Business_BankFlowTemplate> bankFlowData, List<Business_CompanyBankInfo> bankAccount)
         {
             foreach (var details in bankData)
             {
@@ -454,79 +454,83 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
             return bankFlowList;
         }
-        public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList)
+        private static object sign = new object();
+        public static int WirterSyncBankFlow(List<Business_BankFlowTemplate> bankFlowList, string loginName)
         {
-            int success = 0;
-            using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
+            MvcApplication.IsWirterSyncBankFlow = true;
+            lock (sign)
             {
-                var bankData = _db.Queryable<Business_CompanyBankInfo>().ToList();
-                List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
-                var sevenData = _db.Queryable<Business_SevenSection>().ToList();
-                foreach (var item in bankFlowList)
+                int success = 0;
+                using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                 {
-                    var companyBankData = new Business_CompanyBankInfo();
-                    if (item.TradingBank == "上海银行")
+                    var bankData = _db.Queryable<Business_CompanyBankInfo>().ToList();
+                    var bankFlow = _db.Queryable<Business_BankFlowTemplate>().ToList();
+                    List<Business_BankFlowTemplate> bankFlowLists = new List<Business_BankFlowTemplate>();
+                    var sevenData = _db.Queryable<Business_SevenSection>().ToList();
+                    foreach (var item in bankFlowList)
                     {
-                        companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
-                    }
-                    else
-                    {
-                        companyBankData = _db.Queryable<Business_CompanyBankInfo>().Single(x => x.BankAccount == item.BankAccount);
-                    }
-                    if (companyBankData == null)
-                    {
-                        continue;
-                    }
-                    var paymentUnitInstitution = bankData.Where(x => x.BankAccount == item.BankAccount).First().BankName;
-                    item.PaymentUnitInstitution = paymentUnitInstitution;
-                    var accountModeName = sevenData.Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
-                    var companyName = sevenData.Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.CompanyCode && x.AccountModeCode == companyBankData.AccountModeCode).Descrption;
-                    var isAny = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
-                    if (isAny.Count > 0)
-                    {
+                        var companyBankData = new Business_CompanyBankInfo();
+                        if (item.TradingBank == "上海银行")
+                        {
+                            companyBankData = bankData.Single(x => x.OpeningDirectBank == true && x.BankAccount == item.BankAccount);
+                        }
+                        else
+                        {
+                            companyBankData = bankData.Single(x => x.BankAccount == item.BankAccount);
+                        }
+                        if (companyBankData == null)
+                        {
+                            continue;
+                        }
+                        var paymentUnitInstitution = bankData.Where(x => x.BankAccount == item.BankAccount).First().BankName;
+                        item.PaymentUnitInstitution = paymentUnitInstitution;
+                        var accountModeName = sevenData.Single(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.AccountModeCode).Descrption;
+                        var companyName = sevenData.Single(x => x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43" && x.Code == companyBankData.CompanyCode && x.AccountModeCode == companyBankData.AccountModeCode).Descrption;
+                        var isAny = bankFlow.Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ToList();
+                        if (isAny.Count > 0)
+                        {
+                            //if (item.Batch == "FT19285060551795" || item.Batch == "FT19285065481068")
+                            //{
+                            //    bankFlowLists.Add(item);
+                            //}
+                            item.AccountModeCode = companyBankData.AccountModeCode;
+                            item.AccountModeName = accountModeName;
+                            item.CompanyCode = companyBankData.CompanyCode;
+                            item.CompanyName = companyName;
+                            item.CreatePerson = loginName;
+                            _db.Updateable(item).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
+                            continue;
+                        }
                         item.AccountModeCode = companyBankData.AccountModeCode;
                         item.AccountModeName = accountModeName;
                         item.CompanyCode = companyBankData.CompanyCode;
                         item.CompanyName = companyName;
-                        //if (item.Batch == "FT19285060551795" || item.Batch == "FT19285065481068")
-                        //{
-                        //    bankFlowLists.Add(item);
-                        //}
-                        _db.Updateable(item).IgnoreColumns(it => it == "CreateTime").Where(x => x.Batch == item.Batch && x.BankAccount == item.BankAccount).ExecuteCommand();
-                        continue;
+                        item.CreateTime = DateTime.Now;
+                        item.CreatePerson = "admin";
+                        bankFlowLists.Add(item);
                     }
-                    item.AccountModeCode = companyBankData.AccountModeCode;
-                    item.AccountModeName = accountModeName;
-                    item.CompanyCode = companyBankData.CompanyCode;
-                    item.CompanyName = companyName;
-                    item.CreateTime = DateTime.Now;
-                    item.CreatePerson = "admin";
-                    bankFlowLists.Add(item);
-                }
-                var userData = new List<Sys_User>();
-                //using (SqlSugarClient db = DbConfig.GetInstance())
-                //{
-                //    userData = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
-                //}
-                if (bankFlowLists.Count > 0)
-                {
-                    try
+                    var userData = new List<Sys_User>();
+                    if (bankFlowLists.Count > 0)
                     {
-                        _db.Ado.BeginTran();
-                        success = _db.Insertable(bankFlowLists).ExecuteCommand();
-                        //根据流水自动生成凭证
-                        BankFlowTemplateController.GenerateVoucherList(_db, bankFlowLists, "admin", userData);
-                        _db.Ado.CommitTran();
-                    }
-                    catch (Exception ex)
-                    {
-                        _db.Ado.RollbackTran();
-                        throw ex;
+                        try
+                        {
+                            _db.Ado.BeginTran();
+                            success = _db.Insertable(bankFlowLists).ExecuteCommand();
+                            //根据流水自动生成凭证
+                            BankFlowTemplateController.GenerateVoucherList(_db, bankFlowLists, "admin", userData);
+                            _db.Ado.CommitTran();
+                        }
+                        catch (Exception ex)
+                        {
+                            _db.Ado.RollbackTran();
+                            throw ex;
+                        }
                     }
                 }
+                MvcApplication.IsWirterSyncBankFlow = false;
+                BankDataPack.SyncBackFlowAndReconciliation();
+                return success;
             }
-            BankDataPack.SyncBackFlowAndReconciliation();
-            return success;
         }
         public static void AutoBankTransferResult()
         {
@@ -570,7 +574,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             var data1 = db.Queryable<Business_FixedAssetsOrder>().ToList();
             var data2 = db.Queryable<Business_IntangibleAssetsOrder>().ToList();
             var data3 = db.Queryable<Business_TaxFeeOrder>().ToList();
-            var data4 = db.Queryable<Business_FundClearingOrder>().ToList(); 
+            var data4 = db.Queryable<Business_FundClearingOrder>().ToList();
             try
             {
                 WebClient wc = new WebClient();

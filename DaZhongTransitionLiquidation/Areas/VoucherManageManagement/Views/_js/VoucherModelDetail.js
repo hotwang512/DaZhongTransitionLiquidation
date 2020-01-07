@@ -101,7 +101,7 @@ var $page = function () {
             var validateError = 0;//未通过验证的数量
             var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
             var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
-            var channelName = $("#txtChannelName  option:selected").text();
+            //var channelName = $("#txtChannelName  option:selected").text();
             if (validateError <= 0) {
                 $.ajax({
                     url: "/CapitalCenterManagement/CashTransactionDetail/SaveCashBorrowLoan?isEdit=" + isEdit,

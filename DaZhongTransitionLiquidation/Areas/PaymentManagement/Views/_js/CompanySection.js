@@ -179,7 +179,7 @@ var $page = function () {
                     }
                 }
             }
-           
+            layer.load();
             $.ajax({
                 url: "/PaymentManagement/CompanySection/SaveSectionSetting",
                 //data: { vguids: selection },
@@ -187,6 +187,7 @@ var $page = function () {
                 traditional: true,
                 type: "post",
                 success: function (msg) {
+                    layer.closeAll('loading');
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("操作失败！", null, "error");
@@ -218,6 +219,7 @@ var $page = function () {
                     vguid.push(data[i].VGUID);
                 }
             }
+            layer.load();
             $.ajax({
                 url: "/PaymentManagement/CompanySection/SaveAccoutSetting",
                 //data: { vguids: selection },
@@ -225,6 +227,7 @@ var $page = function () {
                 traditional: true,
                 type: "post",
                 success: function (msg) {
+                    layer.closeAll('loading');
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("操作失败！", null, "error");
@@ -274,7 +277,9 @@ var $page = function () {
                 default:
 
             }
+            
             if (validateError <= 0) {
+                layer.load();
                 $.ajax({
                     url: url + isEdit,
                     data: {
@@ -291,6 +296,7 @@ var $page = function () {
                     type: "post",
                     dataType: "json",
                     success: function (msg) {
+                        layer.closeAll('loading');
                         switch (msg.Status) {
                             case "0":
                                 jqxNotification("保存失败！", null, "error");

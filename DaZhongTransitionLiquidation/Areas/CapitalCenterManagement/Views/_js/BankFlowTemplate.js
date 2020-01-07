@@ -39,12 +39,14 @@ var $page = function () {
     function addEvent() {
         getBankInfo();
         $("#btnSync").on("click", function () {
+            layer.load();
             $.ajax({
                 url: "/CapitalCenterManagement/BankFlowTemplate/SyncCurrentDayBankData",
                 data: {},
                 type: "post",
                 dataType: "json",
                 success: function (msg) {
+                    layer.closeAll('loading');
                     switch (msg.Status) {
                         case "0":
                             jqxNotification("同步失败！", null, "error");
@@ -52,6 +54,9 @@ var $page = function () {
                         case "1":
                             jqxNotification("同步成功！", null, "success");
                             selector.$grid().jqxDataTable('updateBoundData');
+                            break;
+                        case "2":
+                            jqxNotification("同步服务正在被调用,请稍作等待！", null, "error");
                             break;
                     }
                 }
@@ -73,6 +78,9 @@ var $page = function () {
                         case "1":
                             jqxNotification("同步成功！", null, "success");
                             selector.$grid().jqxDataTable('updateBoundData');
+                            break;
+                        case "2":
+                            jqxNotification("同步服务正在被调用,请稍作等待！", null, "error");
                             break;
                     }
                 }

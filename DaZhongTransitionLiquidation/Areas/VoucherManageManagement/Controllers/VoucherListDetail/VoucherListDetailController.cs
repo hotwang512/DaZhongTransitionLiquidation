@@ -115,14 +115,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     if (guid == Guid.Empty)
                     {
                         guid = Guid.NewGuid();
-                        var bank = "B" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
+                        var month = voucher.VoucherDate.Value.Month < 10 ? "0" + voucher.VoucherDate.Value.Month.ToString() : voucher.VoucherDate.Value.Month.ToString();
+                        var bank = "B" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + month;
                         if (voucherType == "现金类")
                         {
-                            bank = "M" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
+                            bank = "M" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + month;
                         }
                         if (voucherType == "转账类")
                         {
-                            bank = "Z" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + voucher.VoucherDate.Value.Month.ToString();
+                            bank = "Z" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + month;
                         }
                         var no = CreateNo.GetCreateNo(db, bank);
                         voucherList.VoucherNo = UserInfo.AccountModeCode + UserInfo.CompanyCode + voucherType + no;

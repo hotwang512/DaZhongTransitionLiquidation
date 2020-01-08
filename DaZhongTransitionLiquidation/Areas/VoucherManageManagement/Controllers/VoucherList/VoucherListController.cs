@@ -523,8 +523,9 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 .Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy(i => i.ModelName, OrderByType.Asc).ToList();
                 //.ToPageList(para.pagenum, para.pagesize, ref pageCount);
-                var voucher = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
-                                  && x.AccountingPeriod == date).ToList();
+                var voucher = db.Queryable<Business_VoucherList>("t")
+                              .Where(x => x.VoucherType == "转账类" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode)
+                              .Where("CONVERT(VarChar(7), t.AccountingPeriod, 120) = '"+ date.ToString("yyyy-MM") + "'").ToList();    
                 foreach (var item in data)
                 {
                     VoucherModelClass vmc = new VoucherModelClass();

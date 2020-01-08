@@ -55,6 +55,7 @@ var $page = function () {
         } else {
             addVoucherListTable();
             $("#hideButton").show();
+            $("#AddNewBankData_GoBackBtn").hide();
             $//("#DocumentMaker").val($("#LoginName").val());
             if ($("#Status").val() != "1" && $("#Status").val() != "") {
                 $("#Auditor").val($("#LoginName").val());
@@ -214,7 +215,6 @@ var $page = function () {
                 //$("#CompanyCode").removeAttr("disabled");
                 $.ajax({
                     url: "/VoucherManageManagement/VoucherListDetail/SaveVoucherListDetail",
-                    //data: { vguids: selection },
                     data: {
                         "VGUID": $("#VGUID").val(),
                         "AccountModeName": $("#AccountModeName").val(),
@@ -255,6 +255,8 @@ var $page = function () {
         })
         //预览
         $("#Preview").on("click", function () {
+            //var borrowCount = Number($("#BorrowCount").val());
+            //var loanCount = Number($("#LoanCount").val());
             var borrowCount = $("#BorrowCount").val();
             var loanCount = $("#LoanCount").val();
             var documentMaker = $("#DocumentMaker").val();
@@ -1056,6 +1058,7 @@ function tdClick() {
     $(".subjectbtn").click(function (event) {
         var id = event.target.id;
         var trIndexs = 0;
+        $("#CompanySection").val($("#LoginCompanyCode").val());
         if (id.length == 9) {
             trIndexs = id.substr(id.length - 2, 2);//获取下标
         } else {

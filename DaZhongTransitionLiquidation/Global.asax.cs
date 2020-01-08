@@ -45,5 +45,7 @@ namespace DaZhongTransitionLiquidation
             //资产变更
             AutoSyncAssetsMaintenance.AutoSyncSeavice();
         }
+
+        public static bool IsWirterSyncBankFlow = false;
     }
 }

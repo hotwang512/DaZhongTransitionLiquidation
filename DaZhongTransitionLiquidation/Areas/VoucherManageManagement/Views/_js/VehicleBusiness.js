@@ -18,9 +18,11 @@ var $page = function () {
 
     //所有事件
     function addEvent() {
+        debugger
         var myDate = new Date();
-        var myMonth = $.convert.toDate(addMonth(myDate, -1), "yyyy-MM");
-        $("#YearMonth").val(myMonth);
+        // var myMonth = $.convert.toDate(addMonth(myDate, -1), "yyyy-MM");
+        var month2 = (myDate.getMonth() + 1) < 10 ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+        $("#YearMonth").val(myDate.getFullYear() + "-" + month2);
         var month = $("#YearMonth").val();
         //加载列表数据
         initTable(month);
@@ -145,3 +147,28 @@ $(function () {
     var page = new $page();
     page.init();
 });
+function addMonth(date, num) {
+    num = parseInt(num);
+    var sDate = dateToDate(date);
+
+    var sYear = sDate.getFullYear();
+    var sMonth = sDate.getMonth() + 1;
+    var sDay = sDate.getDate();
+
+    var eYear = sYear;
+    var eMonth = sMonth + num;
+    var eDay = sDay;
+    while (eMonth > 12) {
+        eYear++;
+        eMonth -= 12;
+    }
+
+    var eDate = new Date(eYear, eMonth - 1, eDay);
+
+    while (eDate.getMonth() != eMonth - 1) {
+        eDay--;
+        eDate = new Date(eYear, eMonth - 1, eDay);
+    }
+
+    return eDate;
+};

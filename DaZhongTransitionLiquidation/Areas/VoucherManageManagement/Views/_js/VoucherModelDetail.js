@@ -98,41 +98,38 @@ var $page = function () {
         });
         //弹出框中的保存按钮
         selector.$AddBankChannel_OKButton().on("click", function () {
-            var validateError = 0;//未通过验证的数量
             var borrow = $("#dropDownButtonContentjqxdropdownbutton1")[0].innerText;
             var loan = $("#dropDownButtonContentjqxdropdownbutton2")[0].innerText;
             //var channelName = $("#txtChannelName  option:selected").text();
-            if (validateError <= 0) {
-                $.ajax({
-                    url: "/CapitalCenterManagement/CashTransactionDetail/SaveCashBorrowLoan?isEdit=" + isEdit,
-                    data: {
-                        Borrow: borrow,
-                        Loan: loan,
-                        VGUID: vguid,
-                        PayVGUID: payVGUID,
-                        Remark: $("#Remark").val(),
-                        Money: $("#Money2").val(),
-                    },
-                    type: "post",
-                    dataType: "json",
-                    success: function (msg) {
-                        switch (msg.Status) {
-                            case "0":
-                                //jqxNotification("保存失败！", null, "error");
-                                break;
-                            case "1":
-                                //jqxNotification("保存成功！", null, "success");
-                                selector.$grid().jqxDataTable('updateBoundData');
-                                selector.$AddBankChannelDialog().modal("hide");
-                                break;
-                            case "2":
-                                //jqxNotification("当前月份该配置已经存在！", null, "error");
-                                break;
-                        }
-
+            $.ajax({
+                url: "/CapitalCenterManagement/CashTransactionDetail/SaveCashBorrowLoan?isEdit=" + isEdit,
+                data: {
+                    Borrow: borrow,
+                    Loan: loan,
+                    VGUID: vguid,
+                    PayVGUID: payVGUID,
+                    Remark: $("#Remark").val(),
+                    Money: $("#Money2").val(),
+                },
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            //jqxNotification("保存失败！", null, "error");
+                            break;
+                        case "1":
+                            //jqxNotification("保存成功！", null, "success");
+                            selector.$grid().jqxDataTable('updateBoundData');
+                            selector.$AddBankChannelDialog().modal("hide");
+                            break;
+                        case "2":
+                            //jqxNotification("当前月份该配置已经存在！", null, "error");
+                            break;
                     }
-                });
-            }
+
+                }
+            });
         });
         //删除
         $("#btnDelete").on("click", function () {

@@ -15,9 +15,7 @@ var $page = function () {
     this.init = function () {;
         var date = new Date;
         var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        month = (month < 10 ? "0" + month : month);
-        var currentDate = (year.toString() + "-" + month.toString());
+        var currentDate = (year.toString());
         $("#YearMonth").val(currentDate);
         addEvent();
         var winHeight = document.body.scrollWidth;

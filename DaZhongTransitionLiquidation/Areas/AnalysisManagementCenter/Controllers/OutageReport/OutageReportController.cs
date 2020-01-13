@@ -24,9 +24,6 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
         }
         public JsonResult GetManageCompanyOutageReport(string YearMonth, GridParams para)
         {
-            
-            var currentYearDate = YearMonth.TryToDate().Year.ToString();
-            
             var _db = DbBigDataConfig.GetInstance();
             var sqlStr = @"select Period
 	                 ,abbr.Name as VehicleModel
@@ -39,7 +36,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                         on Cab.OrganizationID = Organization.OrganizationId
                     left join DZSrc.VehicleAbbreviation_D abbr
                         on abbr.VehicleAbbreviationId = Cab_Work_Info.VehicleAbbreviationId
-                where Period like '" + currentYearDate + @"%'
+                where Period like '" + YearMonth + @"%'
                       and Cab_Work_Info.OrganizationId in ( 53, 54, 55, 198, 451 )
                       and Cab_Work_Info.OperationStatus = 0";
             var data = _db.SqlQueryable<Models.OutageReport>(sqlStr).ToList();
@@ -47,9 +44,6 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
         }
         public JsonResult GetUseCompanyOutageReport(string YearMonth, GridParams para)
         {
-
-            var currentYearDate = YearMonth.TryToDate().Year.ToString();
-
             var _db = DbBigDataConfig.GetInstance();
             var sqlStr = @"select Period
 	                 ,abbr.Name as VehicleModel
@@ -62,7 +56,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                         on Cab.OrganizationID = Organization.OrganizationId
                     left join DZSrc.VehicleAbbreviation_D abbr
                         on abbr.VehicleAbbreviationId = Cab_Work_Info.VehicleAbbreviationId
-                where Period like '" + currentYearDate + @"%'
+                where Period like '" + YearMonth + @"%'
                       --and Cab_Work_Info.CabOriginalId in ( 53, 54, 55, 198, 451 )
                       and Cab_Work_Info.OperationStatus = 0";
             var data = _db.SqlQueryable<Models.OutageReport>(sqlStr).ToList();

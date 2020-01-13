@@ -214,6 +214,7 @@
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\RentTarget.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\UnUsedVehicleStatistics.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VacationSalary.js" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleAgeReport.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleAmount.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleModelAnalysis.js" />
     <Content Include="Areas\AnalysisManagementCenter\Views\_js\VehicleReport.js" />
@@ -445,6 +446,7 @@
     <Content Include="Areas\VoucherManageManagement\Views\SettlementImportCount\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\UnUsedVehicleStatistics\Index.cshtml" />
     <Content Include="Areas\VoucherManageManagement\Views\EliminationTaxCount\Index.cshtml" />
+    <Content Include="Areas\AnalysisManagementCenter\Views\VehicleAgeReport\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3327,6 +3329,7 @@
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\RentTarget\RentTargetController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\UnUsedVehicleStatistics\UnUsedVehicleStatisticsController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VacationSalary\VacationSalaryController.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleAgeReport\VehicleAgeReportController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleAmountReport\VehicleAmountController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleModelAnalysis\VehicleModelAnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Controllers\VehicleReport\VehicleReportController.cs" />
@@ -3341,6 +3344,7 @@
     <Compile Include="Areas\AnalysisManagementCenter\Models\LicenseAmountModel.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\OutageReport.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\UnUsedVehicleStatistics.cs" />
+    <Compile Include="Areas\AnalysisManagementCenter\Models\VehicleAgeReport.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\VehicleChangeReport.cs" />
     <Compile Include="Areas\AnalysisManagementCenter\Models\VehicleModelAnalysis.cs" />
     <Compile Include="Areas\AssetManagement\AssetManagementAreaRegistration.cs" />

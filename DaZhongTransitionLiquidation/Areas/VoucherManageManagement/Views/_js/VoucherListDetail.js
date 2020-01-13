@@ -255,10 +255,10 @@ var $page = function () {
         })
         //预览
         $("#Preview").on("click", function () {
-            //var borrowCount = Number($("#BorrowCount").val());
-            //var loanCount = Number($("#LoanCount").val());
-            var borrowCount = $("#BorrowCount").val();
-            var loanCount = $("#LoanCount").val();
+            var borrowCount = Number($("#BorrowCount").val());
+            var loanCount = Number($("#LoanCount").val());
+            //var borrowCount = $("#BorrowCount").val();
+            //var loanCount = $("#LoanCount").val();
             var documentMaker = $("#DocumentMaker").val();
             var auditor = $("#Auditor").val();
             if (borrowCount != loanCount) {

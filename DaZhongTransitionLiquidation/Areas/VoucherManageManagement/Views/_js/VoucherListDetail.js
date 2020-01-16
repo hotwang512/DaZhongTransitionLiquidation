@@ -255,8 +255,8 @@ var $page = function () {
         })
         //预览
         $("#Preview").on("click", function () {
-            var borrowCount = Number($("#BorrowCount").val());
-            var loanCount = Number($("#LoanCount").val());
+            var borrowCount = Number($("#BorrowCount").val().replace(/,/g, ''));
+            var loanCount = Number($("#LoanCount").val().replace(/,/g, ''));
             //var borrowCount = $("#BorrowCount").val();
             //var loanCount = $("#LoanCount").val();
             var documentMaker = $("#DocumentMaker").val();
@@ -344,8 +344,8 @@ var $page = function () {
                         "<tr style='height:40px'>" +
                               "<td style='text-align: center;'>合计</td>" +
                               "<td style='text-align: center;'></td>" +
-                              "<td style='text-align: right;'>" + borrowCount + "  " + "</td>" +
-                              "<td style='text-align: right;'>" + loanCount + "  " + "</td>" +
+                              "<td style='text-align: right;'>" + $("#BorrowCount").val() + "  " + "</td>" +
+                              "<td style='text-align: right;'>" + $("#LoanCount").val() + "  " + "</td>" +
                        "</tr>"
             "</table>";
             $("#VoucherDetail").append(htmls);

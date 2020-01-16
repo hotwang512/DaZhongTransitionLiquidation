@@ -207,8 +207,9 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
                         var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-10) && x.VoucherType == "银行类" && x.Status == "1" && (x.DebitAmountTotal == null || x.CreditAmountTotal == null)).ToList();
-                        //var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == "80e0f344-4fc3-4a89-8580-bc838c62df06".TryToGuid()).ToList();
+                        //var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == "26166bee-10ab-4c07-80b3-bd93d69a3a1f".TryToGuid()).ToList();
                         var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-10,GETDATE()) and VoucherType='银行类' and Status='1' and (DebitAmountTotal is null or CreditAmountTotal is null) )").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                        //var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='26166bee-10ab-4c07-80b3-bd93d69a3a1f'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
                         var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");

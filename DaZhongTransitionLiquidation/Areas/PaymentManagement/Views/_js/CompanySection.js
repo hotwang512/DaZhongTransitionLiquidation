@@ -184,7 +184,7 @@ var $page = function () {
                 url: "/PaymentManagement/CompanySection/SaveSectionSetting",
                 //data: { vguids: selection },
                 data: { code: code, otherCode: otherCode, type: type, companyCode: companyCode, accountModeCode: accountModeCode },
-                traditional: true,
+                //traditional: true,
                 type: "post",
                 success: function (msg) {
                     layer.closeAll('loading');

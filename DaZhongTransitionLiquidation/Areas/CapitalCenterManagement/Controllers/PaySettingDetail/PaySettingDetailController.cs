@@ -93,10 +93,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         }
         public JsonResult GetPaySettingList(Guid PayVGUID)
         {
-            var jsonResult = new JsonResultModel<V_BankChannelMapping>();
+            var jsonResult = new JsonResultModel<V_Business_PaySetting>();
             DbBusinessDataService.Command(db =>
             {
-                jsonResult.Rows = db.Queryable<V_BankChannelMapping>().Where(x => x.VGUID == PayVGUID).ToList();
+                jsonResult.Rows = db.Queryable<V_Business_PaySetting>().Where(x => x.VGUID == PayVGUID).ToList();
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }

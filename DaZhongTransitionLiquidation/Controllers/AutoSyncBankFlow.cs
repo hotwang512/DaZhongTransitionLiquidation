@@ -551,7 +551,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                     var orderList = db.Queryable<Business_OrderListDraft>().Where(x => x.Status == "2" && ((x.BankStatus != "0000" && x.BankStatus != "0003" && x.BankStatus != "0005") || x.BankStatus == null)).ToList();
                     if (orderList != null)
                     {
-                        List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>();
+                        List<Business_OrderListDraft> changeOrderList = new List<Business_OrderListDraft>(); 
                         foreach (var item in orderList)
                         {
                             if (item.OSNO != null && item.OSNO != "")

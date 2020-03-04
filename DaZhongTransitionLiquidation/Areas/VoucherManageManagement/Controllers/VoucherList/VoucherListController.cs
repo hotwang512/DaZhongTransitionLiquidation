@@ -60,7 +60,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 .WhereIF(searchParams.TradingBank != null, i => i.TradingBank == tradingBank)
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateE)
                 .Where(i => i.AccountModeName == UserInfo.AccountModeName && i.CompanyCode == UserInfo.CompanyCode)
-                .OrderBy("CreateTime desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                .OrderBy("VoucherNo desc,CreateTime desc").ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

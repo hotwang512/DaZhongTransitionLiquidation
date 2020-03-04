@@ -1254,18 +1254,30 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
         }
         public void DeleteIndexes(SqlSugarClient db)
         {
-            db.Ado.SqlQuery<dynamic>(@"DROP INDEX [IX_Business_SubjectSettingInfo] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
-            db.Ado.SqlQuery<dynamic>(@"DROP INDEX [IX_Business_SubjectSettingInfo_1] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
-            db.Ado.SqlQuery<dynamic>(@"DROP INDEX [IX_Business_SubjectSettingInfo_2] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
-            db.Ado.SqlQuery<dynamic>(@"DROP INDEX [PK_Business_SubjectSettingInfo] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
-            db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo] ON [dbo].[Business_SubjectSettingInfo] 
-                    ([SubjectCode] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] GO");
-            db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo_1] ON [dbo].[Business_SubjectSettingInfo] 
-                    ([SubjectVGUID] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] GO");
-            db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo_2] ON [dbo].[Business_SubjectSettingInfo] 
-                    ([AccountModeCode] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] GO");
-            db.Ado.SqlQuery<dynamic>(@"CREATE TABLE [dbo].[Business_SubjectSettingInfo] ADD  CONSTRAINT [PK_Business_SubjectSettingInfo] PRIMARY KEY CLUSTERED 
-                    ([VGUID] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] GO");
+            try
+            {
+                db.Ado.SqlQuery<dynamic>(@"DROP INDEX [IX_Business_SubjectSettingInfo] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
+                db.Ado.SqlQuery<dynamic>(@"DROP INDEX [IX_Business_SubjectSettingInfo_1] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
+                db.Ado.SqlQuery<dynamic>(@"DROP INDEX [IX_Business_SubjectSettingInfo_2] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
+                //db.Ado.SqlQuery<dynamic>(@"DROP INDEX [PK_Business_SubjectSettingInfo] ON [Business_SubjectSettingInfo] WITH ( ONLINE = OFF )");
+                db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo] ON [dbo].[Business_SubjectSettingInfo] 
+                    ([SubjectCode] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] ");
+                db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo_1] ON [dbo].[Business_SubjectSettingInfo] 
+                    ([SubjectVGUID] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] ");
+                db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo_2] ON [dbo].[Business_SubjectSettingInfo] 
+                    ([AccountModeCode] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] ");
+            }
+            catch (Exception)
+            {
+                db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo] ON [dbo].[Business_SubjectSettingInfo] 
+                    ([SubjectCode] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] ");
+                db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo_1] ON [dbo].[Business_SubjectSettingInfo] 
+                    ([SubjectVGUID] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] ");
+                db.Ado.SqlQuery<dynamic>(@"CREATE NONCLUSTERED INDEX [IX_Business_SubjectSettingInfo_2] ON [dbo].[Business_SubjectSettingInfo] 
+                    ([AccountModeCode] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] ");
+                //db.Ado.SqlQuery<dynamic>(@"CREATE TABLE [dbo].[Business_SubjectSettingInfo] ADD  CONSTRAINT [PK_Business_SubjectSettingInfo] PRIMARY KEY CLUSTERED 
+                //        ([VGUID] ASC)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY] GO");
+            }
         }
         public JsonResult UpdataSyncStatus(Guid vguids, bool ischeck)//Guid[] vguids
         {

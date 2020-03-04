@@ -117,11 +117,11 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                         guid = Guid.NewGuid();
                         var month = "";
                         month = voucher.VoucherDate.Value.Month < 10 ? "0" + voucher.VoucherDate.Value.Month.ToString() : voucher.VoucherDate.Value.Month.ToString();
-                        if (voucher.VoucherDate.Value.Year == 2020 && voucher.VoucherDate.Value.Month == 1)
-                        {
-                            //上个版本的错误,造成1月凭证生成格式有误,暂时如此,2月开始格式正常
-                            month = voucher.VoucherDate.Value.Month < 10 ? voucher.VoucherDate.Value.Month.ToString() : voucher.VoucherDate.Value.Month.ToString();
-                        }
+                        //if (voucher.VoucherDate.Value.Year == 2020 && voucher.VoucherDate.Value.Month == 1)
+                        //{
+                        //    //上个版本的错误,造成1月凭证生成格式有误,暂时如此,2月开始格式正常
+                        //    month = voucher.VoucherDate.Value.Month < 10 ? voucher.VoucherDate.Value.Month.ToString() : voucher.VoucherDate.Value.Month.ToString();
+                        //}
                         var bank = "B" + UserInfo.AccountModeCode + UserInfo.CompanyCode + voucher.VoucherDate.Value.Year.ToString() + month;
                         if (voucherType == "现金类")
                         {

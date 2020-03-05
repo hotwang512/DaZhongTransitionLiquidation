@@ -38,7 +38,7 @@ var $page = function () {
         initTable();
         getCompanyCode();
         getPaySettingList();
-        initBorrowTable(companyCode, accountMode);
+        //initBorrowTable(companyCode, accountMode);
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
@@ -451,6 +451,8 @@ function initBorrowTable(companyCode, accountMode) {
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
+        filterable: true,
+        showfilterrow: true,
         theme: "office",
         rendergridrows: function (obj) {
             return obj.data;
@@ -499,6 +501,8 @@ function initBorrowTable(companyCode, accountMode) {
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
+        filterable: true,
+        showfilterrow: true,
         theme: "office",
         rendergridrows: function (obj) {
             return obj.data;

@@ -206,22 +206,28 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
-                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-30) && x.VoucherType == "银行类" && x.Status == "1" && (x.DebitAmountTotal == null || x.CreditAmountTotal == null)).ToList();
-                        //var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == "26166bee-10ab-4c07-80b3-bd93d69a3a1f".TryToGuid()).ToList();
-                        var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-30,GETDATE()) and VoucherType='银行类' and Status='1' and (DebitAmountTotal is null or CreditAmountTotal is null) )").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
-                        //var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='26166bee-10ab-4c07-80b3-bd93d69a3a1f'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-20) && x.VoucherType == "银行类" && x.Status == "1" ).ToList();
+                        //var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == "cb648143-a646-482f-801b-476b97caec23".TryToGuid()).ToList();
+                        var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-20,GETDATE()) and VoucherType='银行类' and Status='1'  )").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                        //var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='cb648143-a646-482f-801b-476b97caec23'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
                         var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
-                        var bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
+                        var bankFlowList1 = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
                         var sevenData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                        List<usp_RevenueAmountReport> bankFlowList = new List<usp_RevenueAmountReport>();
                         foreach (var item in voucherData)
                         {
                             //跨月时获取前月的对账数据
                             var voucherMonth = item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM");
                             if (voucherMonth != month)
                             {
-                                bankFlowList = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = voucherMonth, Channel = "" }).ToList();
+                                var bankFlowList2 = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = voucherMonth, Channel = "" }).ToList();
+                                bankFlowList = bankFlowList2;
+                            }
+                            else
+                            {
+                                bankFlowList = bankFlowList1;
                             }
                             var voucherDetail = voucherDetails.Where(x => x.VoucherVGUID == item.VGUID).OrderByDescending(x => x.ReceivableAccount).ToList();
                             if (voucherDetail.Count < 2)

@@ -38,7 +38,7 @@ var $page = function () {
         initTable();
         getCompanyCode();
         getPaySettingList();
-        //initBorrowTable(companyCode, accountMode);
+        initBorrowTable(companyCode, accountMode);
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });

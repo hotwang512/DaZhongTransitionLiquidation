@@ -108,7 +108,7 @@ var $page = function () {
                     Loan: loan,
                     VGUID: vguid,
                     PayVGUID: payVGUID,
-                    Remark: $("#Remark").val(),
+                    Remark: $("#Remark2").val(),
                     Money: $("#Money2").val(),
                 },
                 type: "post",
@@ -290,7 +290,7 @@ function add(type) {
     }
     $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
     $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
-    $("#Remark").val("");
+    $("#Remark2").val("");
     $("#Month").val("");
     isEdit = false;
     vguid = "";
@@ -300,12 +300,12 @@ function add(type) {
     //initBorrowTable(companyCode, accountMode);
 }
 function edit(guid2, Borrow, Loan, Remark, Money) {
-    $("#Remark").val("");
+    $("#Remark2").val("");
     $("#Money2").val("");
     isEdit = true;
     vguid = guid2;
     $("#myModalLabel_title").text("编辑借/贷方信息");
-    $("#Remark").val(Remark);
+    $("#Remark2").val(Remark);
     $("#Money2").val(Money);
     //initBorrowTable(CompanyCode, accountMode);
     if (Remark == null || Remark == "null") {

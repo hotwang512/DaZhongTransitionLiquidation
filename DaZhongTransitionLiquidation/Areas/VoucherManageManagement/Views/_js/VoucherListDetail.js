@@ -514,7 +514,10 @@ var $page = function () {
                 }
             });
         });
-        
+        //获取借贷配置
+        $("#GetSetting").on("click", function () {
+            WindowConfirmDialog(getSettingFun, "您确定要覆盖已有的借贷数据嘛？", "确认框", "确定", "取消", "");
+        });
     }; //addEvent end
 
     function addVoucherListTable() {
@@ -582,6 +585,7 @@ var $page = function () {
                     $("#hideButton").show();
                     $("#btnUp").show();
                     $("#AttachmentHide").show();
+                    $("#GetSetting").show();
                     $("#AddNewBankData_GoBackBtn").hide();
                 } else {
                     $("#btnSave").hide();
@@ -726,6 +730,27 @@ var $page = function () {
                         case "出纳": $("#Cashier").val(msg[i].LoginName); break;
                         default: break;
                     }
+                }
+            }
+        });
+    }
+
+    function getSettingFun() {
+        var vguid = $("#VGUID").val();
+        layer.load();
+        $.ajax({
+            url: "/VoucherManageManagement/VoucherListDetail/GetSettingData",
+            data: { vguids: vguid },
+            //async: false,
+            type: "post",
+            success: function (msg) {
+                layer.closeAll('loading');
+                if (msg.Status == "1") {
+                    //jqxNotification("获取借贷配置成功！", null, "success");
+                    location.reload();
+                }
+                else if (msg.Status == "2") {
+                    jqxNotification("账号下不存在配置！", null, "error");
                 }
             }
         });

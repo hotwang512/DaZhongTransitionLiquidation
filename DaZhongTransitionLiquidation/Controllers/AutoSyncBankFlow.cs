@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -189,14 +190,16 @@ namespace DaZhongTransitionLiquidation.Controllers
         }
         public static void AutoGetVoucherMoneySeavice()
         {
-            Thread LogThread = new Thread(new ThreadStart(DoGetVoucherMoney));
+            ParameterizedThreadStart Para = new ParameterizedThreadStart(DoGetVoucherMoney);
+            Thread LogThread = new Thread(Para);
             //设置线程为后台线程,那样进程里就不会有未关闭的程序了  
             LogThread.IsBackground = true;
-            LogThread.Start();//起线程  
+            LogThread.Start(Guid.Empty);//起线程  
         }
-        public static void DoGetVoucherMoney()
+        public static void DoGetVoucherMoney(object vguid)
         {
-            while (true)
+            var execute = true;
+            while (execute)
             {
                 var success = 0;
                 try
@@ -206,10 +209,20 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
-                        var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-20) && x.VoucherType == "银行类" && x.Status == "1" ).ToList();
-                        //var voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == "cb648143-a646-482f-801b-476b97caec23".TryToGuid()).ToList();
-                        var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-20,GETDATE()) and VoucherType='银行类' and Status='1'  )").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
-                        //var voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='cb648143-a646-482f-801b-476b97caec23'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                        List<Business_VoucherList> voucherData = new List<Business_VoucherList>();
+                        List<Business_VoucherDetail> voucherDetails = new List<Business_VoucherDetail>();
+                        if (vguid.TryToGuid() == Guid.Empty)
+                        {
+                            execute = true;
+                            voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VoucherDate >= day.AddDays(-20) && x.VoucherType == "银行类" && x.Status == "1").ToList();
+                            voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID in (select VGUID from Business_VoucherList where VoucherDate >= DATEADD(dd,-20,GETDATE()) and VoucherType='银行类' and Status='1'  )").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                        }
+                        else
+                        {
+                            execute = false;
+                            voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == vguid.TryToGuid()).ToList();
+                            voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='"+ vguid + "'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                        }
                         var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
@@ -369,7 +382,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
                 }
-                Thread.Sleep((int)(1 * 1000 * 60 * 60));
+                if(execute == true)
+                {
+                    Thread.Sleep((int)(1 * 1000 * 60 * 60));
+                }
             }
         }
         public static void AutoTransferVoucherSeavice()

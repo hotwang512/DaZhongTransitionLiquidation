@@ -16,6 +16,10 @@ using Aspose.Cells;
 using Aspose.Pdf;
 using DaZhongTransitionLiquidation.Controllers;
 using System.Collections.Generic;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BankFlowTemplate;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity;
+using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement;
 
 namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers.VoucherListDetail
 {
@@ -328,6 +332,102 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 result = db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
             });
             return Json(result, JsonRequestBehavior.AllowGet); ;
+        }
+        public JsonResult GetSettingData(Guid vguids)
+        {
+            var resultModel = new ResultModel<string, string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                var voucherData = db.Queryable<Business_VoucherList>().Where(x => x.VGUID == vguids).ToList().FirstOrDefault();
+                var voucherDetailData = db.Queryable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguids).ToList();
+                var bankFlowData = db.Queryable<Business_BankFlowTemplate>().Where(x => x.Batch == voucherData.Batch).ToList().FirstOrDefault();
+                var receivableAccount = bankFlowData.ReceivableAccount;
+                var paySettingData = db.Queryable<Business_PaySetting>().Where(x => x.BankAccount == receivableAccount).ToList();
+                if (paySettingData.Count == 1)
+                {
+                    //账号下存在收款业务配置
+                    var payGuid = paySettingData[0].VGUID.TryToString();
+                    var borrowLoadData = db.Queryable<Business_PaySettingDetail>().Where(x => x.PayVGUID == payGuid && x.AccountModeCode == bankFlowData.AccountModeCode && x.CompanyCode == bankFlowData.CompanyCode).OrderBy("Borrow desc").ToList();
+                    if(voucherDetailData.Count != borrowLoadData.Count)
+                    {
+                        GetSubjectSet(db, vguids, borrowLoadData, bankFlowData, voucherData, voucherDetailData);
+                        AutoSyncBankFlow.DoGetVoucherMoney(vguids);
+                    }
+                    else
+                    {
+                        AutoSyncBankFlow.DoGetVoucherMoney(vguids);
+                    }
+                    resultModel.Status = "1";
+                }
+                else
+                {
+                    resultModel.Status = "2";
+                }
+            });
+            return Json(resultModel, JsonRequestBehavior.AllowGet); ;
+        }
+        private void GetSubjectSet(SqlSugarClient db, Guid vguids, List<Business_PaySettingDetail> borrowLoadData, Business_BankFlowTemplate item, Business_VoucherList voucherData,List<Business_VoucherDetail> voucherDetailData)
+        {
+            var subject = "";
+            List<Business_VoucherDetail> BVDetailList = new List<Business_VoucherDetail>();
+            foreach (var it in borrowLoadData)
+            {
+                Business_VoucherDetail BVDetail2 = new Business_VoucherDetail();
+                //收款业务
+                if(it.Loan == null && it.Borrow != null)
+                {
+                    subject = it.Borrow;
+                    BVDetail2.BorrowMoney = 0;
+                    BVDetail2.ReceivableAccount = null;
+                    if (it.TransferType != "手续费")
+                    {
+                        BVDetail2.BorrowMoney = item.TurnOut;
+                    }
+                }
+                else if(it.Loan != null && it.Borrow == null)
+                {
+                    subject = it.Loan;
+                    BVDetail2.LoanMoney = 0;
+                    BVDetail2.ReceivableAccount = item.ReceivableAccount;//对方账号,用于轮循贷方明细找到对应金额
+                }
+                if (subject != "" && subject != null)
+                {
+                    if (subject.Contains("\n"))
+                    {
+                        subject = subject.Substring(0, subject.Length - 1);
+                    }
+                    var seven = subject.Split(".");
+                    BVDetail2.CompanySection = seven[0];
+                    BVDetail2.SubjectSection = seven[1];
+                    BVDetail2.AccountSection = seven[2];
+                    BVDetail2.CostCenterSection = seven[3];
+                    BVDetail2.SpareOneSection = seven[4];
+                    BVDetail2.SpareTwoSection = seven[5];
+                    BVDetail2.IntercourseSection = seven[6];
+                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                    BVDetail2.SevenSubjectName = subject + "\n" + BankFlowTemplateController.GetSevenSubjectName(subject, item.AccountModeCode, item.CompanyCode);
+                }
+                if (borrowLoadData.Count == 2)
+                {
+                    //一借一贷,借贷相平
+                    BVDetail2.LoanMoney = item.TurnOut;
+                    BVDetail2.LoanMoneyCount = item.TurnOut;
+                    voucherData.CreditAmountTotal = item.TurnOut;
+                    voucherData.DebitAmountTotal = item.TurnOut;
+                }
+                BVDetail2.Abstract = it.Remark;
+                BVDetail2.VGUID = Guid.NewGuid();
+                BVDetail2.VoucherVGUID = vguids;
+                BVDetailList.Add(BVDetail2);
+            }
+            var result = db.Ado.UseTran(() =>
+            {
+                voucherData.CreditAmountTotal = 0;
+                voucherData.DebitAmountTotal = 0;
+                db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == vguids).ExecuteCommand();
+                db.Updateable(voucherData).ExecuteCommand();
+                db.Insertable(BVDetailList).ExecuteCommand();
+            });
         }
         public JsonResult PrintVoucherList(List<Guid> vguids)
         {

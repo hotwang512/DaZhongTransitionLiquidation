@@ -38,7 +38,8 @@ var $page = function () {
         initTable();
         getCompanyCode();
         getPaySettingList();
-        initBorrowTable(companyCode, accountMode);
+        initBorrowTable1(companyCode, accountMode);
+        initBorrowTable2(companyCode, accountMode);
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
         });
@@ -325,8 +326,9 @@ var $page = function () {
         });
     }
 };
-
+var types = "";
 function add(type) {
+    types = type;
     if (type == "B") {
         $("#BorrowTr").show();
         $("#LoanTr").hide();       
@@ -411,7 +413,7 @@ function getCompanyCode() {
     });
     companyCode = $("#CompanyCode").val();
 }
-function initBorrowTable(companyCode, accountMode) {
+function initBorrowTable1(companyCode, accountMode) {
     var source = {
         datafields:
         [
@@ -490,7 +492,36 @@ function initBorrowTable(companyCode, accountMode) {
         var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + row['BusinessCode'] + '</div>';
         $("#jqxdropdownbutton1").jqxDropDownButton('setContent', dropDownContent);
     });
-
+}
+function initBorrowTable2(companyCode, accountMode) {
+    var source = {
+        datafields:
+        [
+            { name: 'BusinessCode', type: 'string' },
+            { name: 'Company', type: 'string' },
+            { name: 'CompanyCode', type: 'string' },
+            { name: 'AccountingCode', type: 'string' },
+            { name: 'CostCenterCode', type: 'string' },
+            { name: 'SpareOneCode', type: 'string' },
+            { name: 'SpareTwoCode', type: 'string' },
+            { name: 'IntercourseCode', type: 'string' },
+            { name: 'Accounting', type: 'string' },
+            { name: 'CostCenter', type: 'string' },
+            { name: 'SpareOne', type: 'string' },
+            { name: 'SpareTwo', type: 'string' },
+            { name: 'Intercourse', type: 'string' },
+            { name: 'SubjectCode', type: 'string' },
+            { name: 'SubjectVGUID', type: 'string' },
+            { name: 'Checked', type: 'string' },
+            { name: 'Balance', type: 'number' },
+        ],
+        datatype: "json",
+        cache: false,
+        id: "SectionVGUID",
+        data: { companyCode: companyCode, accountModeCode: accountMode },
+        url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径
+    };
+    var typeAdapter = new $.jqx.dataAdapter(source);
     $("#grid2").jqxGrid({
         pageable: true,
         width: "100%",
@@ -545,7 +576,11 @@ function companyChange() {
     $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
     $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     companyCode = $("#CompanyCode").val();
-    initBorrowTable(companyCode, accountMode);
+    if (types == "B") {
+        initBorrowTable1(companyCode, accountMode);
+    } else {
+        initBorrowTable2(companyCode, accountMode);
+    }
 }
 function getPaySettingList() {
     $.ajax({

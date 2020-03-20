@@ -511,6 +511,7 @@ function getCashManagerDetail() {
             $("#AccountingPeriod").val(date1);
             $("#TransactionDate").text(date2);
             $("#ModelName").val(msg.ModelName);
+            $("#Remark").val(msg.Remark);
             $("#TradingBank").val(msg.TradingBank);
             $("#ReceivingUnit").val(msg.ReceivingUnit);
             $("#VGUID").val(msg.VGUID);

@@ -45,6 +45,7 @@ var $page = function () {
         //重置按钮事件
         selector.$btnReset().on("click", function () {
             selector.$txtDatedTime().val("");
+            $("#txtChannel").val("");
         });
 
         selector.$txtBankAccountName_Dialog().on("change", function () {

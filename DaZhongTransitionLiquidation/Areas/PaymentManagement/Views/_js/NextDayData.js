@@ -11,6 +11,7 @@
     $txtPaymentForm: function () { return $("#txtPaymentForm") },
     $txtPaymentTo: function () { return $("#txtPaymentTo") },
     $txtChannel: function () { return $("#txtChannel") },
+    $txtChannel2: function () { return $("#txtChannel2") },
     //按钮
     $btnAdd: function () { return $("#btnAdd") },
     $btnSearch: function () { return $("#btnSearch") },
@@ -57,6 +58,7 @@ var $page = function () {
             selector.$txtPaymentForm().val("");
             selector.$txtPaymentTo().val("");
             selector.$txtChannel().val("");
+            selector.$txtChannel2().val("");
         });
         //点击新增
         selector.$btnAdd().on("click", function () {

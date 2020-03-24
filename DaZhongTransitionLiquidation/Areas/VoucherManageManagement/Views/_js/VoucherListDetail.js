@@ -141,7 +141,7 @@ var $page = function () {
             //$("#hidSubjectSection_" + z1 + "_" + z2).val(row.Code);
             //$("#AddCompanyDialog").modal("hide");
             //var code = $("#CompanySection_" + z1 + "_" + z2).val();
-            if (row.ParentCode == "" || row.ParentCode == null || row.Remark == "1") {
+            if (row.records != null) {
                 jqxNotification("请选择已配置信息节点！", null, "error");
                 return;
             }

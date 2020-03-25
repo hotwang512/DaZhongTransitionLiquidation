@@ -441,6 +441,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     var data = db.Ado.SqlQuery<PrintVoucherList>(@"select CONVERT(varchar(100), a.AccountingPeriod, 23) as AccountingPeriod,CONVERT(varchar(100), a.VoucherDate, 23) as VoucherDate,a.BatchName,a.VoucherNo,a.CompanyName,
                             a.FinanceDirector,a.Bookkeeping,a.Auditor,a.DocumentMaker,a.Cashier,a.Status  from 
                             Business_VoucherList as a where a.VGUID = @VGUID ", new { VGUID = item }).ToList().FirstOrDefault();
+                    if(data == null)
+                    {
+                        resultModel.Status = "3";
+                        resultModel.ResultInfo = "找不到数据,请先保存";
+                        return;
+                    }
                     var pdfPath = "/Temp/NewVoucherReport" + data.VoucherNo + ".pdf";
                     var isAny = System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(pdfPath));
                     if (isAny && data.Status == "3")

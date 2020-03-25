@@ -508,9 +508,13 @@ var $page = function () {
                 type: "post",
                 success: function (msg) {
                     layer.closeAll('loading');
-                    if (msg.ResultInfo != null) {
-                        window.open(msg.ResultInfo);
-                    } 
+                    if (msg.Status == "3") {
+                        jqxNotification(msg.ResultInfo, null, "error");
+                    } else {
+                        if (msg.ResultInfo != null) {
+                            window.open(msg.ResultInfo);
+                        }
+                    }
                 }
             });
         });

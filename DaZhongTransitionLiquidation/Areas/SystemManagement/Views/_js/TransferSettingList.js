@@ -7,7 +7,7 @@ var selector = {
     $btnReset: function () { return $("#btnReset") },
 
     $txtBankName: function () { return $("#txtBankName") },
-    $txtChannelName: function () { return $("#txtChannelName") },
+    $txtChannel: function () { return $("#txtChannel") },
 
     $AddBankChannelDialog: function () { return $("#AddBankChannelDialog") },
     $AddBankChannel_OKButton: function () { return $("#AddBankChannel_OKButton") },
@@ -42,8 +42,7 @@ var $page = function () {
 
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            selector.$txtChannelName().val("");
-            selector.$txtBankName().val("");
+            selector.$txtChannel().val("");
         });
         selector.$btnAdd().on("click", function () {
             add();
@@ -195,7 +194,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "Vguid",
-                data: { "Month": $("#txtMonth").val(), "Channel": selector.$txtChannelName().val() },
+                data: { "Channel": selector.$txtChannel().val() },
                 url: "/SystemManagement/TransferSettingList/GetTransferSettingList"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

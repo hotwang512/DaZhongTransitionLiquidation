@@ -1,4 +1,5 @@
 ﻿var status = $.request.queryString().Status;
+$(".input_text").attr("autocomplete", "new-password");
 var $page = function () {
 
     this.init = function () {

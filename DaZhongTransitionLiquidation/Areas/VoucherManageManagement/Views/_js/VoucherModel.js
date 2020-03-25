@@ -1,4 +1,5 @@
-﻿var $page = function () {
+﻿$(".input_text").attr("autocomplete", "new-password");
+var $page = function () {
 
     this.init = function () {
         addEvent();

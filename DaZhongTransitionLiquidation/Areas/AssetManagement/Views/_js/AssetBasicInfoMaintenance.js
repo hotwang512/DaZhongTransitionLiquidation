@@ -43,7 +43,8 @@ var $page = function () {
         $("#btnDelete").on("click", function () {
             var selection = [];
             var grid = $("#jqxTable");
-            var checedBoxs = grid.find("#tablejqxTable .jqx_datatable_checkbox:checked");
+            debugger;
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
             checedBoxs.each(function () {
                 var th = $(this);
                 if (th.is(":checked")) {

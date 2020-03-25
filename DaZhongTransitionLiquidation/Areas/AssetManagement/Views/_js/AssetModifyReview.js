@@ -33,7 +33,22 @@ var $page = function () {
             if ($("#YearMonth").val() == "") {
                 jqxNotification("请选择您要提交的月份！", null, "error");
             } else {
-                WindowConfirmDialog(submit, "您确定要提交的" + $("#YearMonth").val() + "月份的数据？", "确认框", "确定", "取消", selection);
+                var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+                var pars = [];
+                $(array).each(function (i, v) {
+                    try {
+                        debugger;
+                        var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID").value;
+                        pars.push(value);
+                    } catch (e) {
+                    }
+                });
+                if (array.length < 1) {
+                    jqxNotification("请选择您要提交的数据！", null, "error");
+                } else {
+                    WindowConfirmDialog(submit, "您确定要提交的" + $("#YearMonth").val() + "月份的数据？", "确认框", "确定", "取消", pars);
+                }
+                
             }
         });
         //关闭
@@ -43,35 +58,21 @@ var $page = function () {
             }
         );
     }; //addEvent end
-    $("#btnSubmit").on("click", function () {
-        //var selection = [];
-        //var grid = $("#jqxTable");
-        //debugger;
-        //var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
-        //checedBoxs.each(function () {
-        //    var th = $(this);
-        //    if (th.is(":checked")) {
-        //        var index = th.attr("index");
-        //        var data = grid.jqxDataTable('getRows')[index];
-        //        selection.push(data.VGUID);
-        //    }
-        //});
-        var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
-        var pars = [];
-        $(array).each(function (i, v) {
-            try {
-                debugger;
-                var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID").value;
-                pars.push(value);
-            } catch (e) {
-            }
-        });
-        if (array.length < 1) {
-            jqxNotification("请选择您要提交的数据！", null, "error");
-        } else {
-            WindowConfirmDialog(submit, "您确定要提交选中的数据？", "确认框", "确定", "取消", pars);
-        }
-    });
+    //$("#btnSubmit").on("click", function () {
+    //    //var selection = [];
+    //    //var grid = $("#jqxTable");
+    //    //debugger;
+    //    //var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+    //    //checedBoxs.each(function () {
+    //    //    var th = $(this);
+    //    //    if (th.is(":checked")) {
+    //    //        var index = th.attr("index");
+    //    //        var data = grid.jqxDataTable('getRows')[index];
+    //    //        selection.push(data.VGUID);
+    //    //    }
+    //    //});
+        
+    //});
     $("#btnGetModify").on("click", function () {
         layer.load();
         $.ajax({
@@ -86,7 +87,7 @@ var $page = function () {
                     break;
                 case "1":
                     jqxNotification("获取成功！", null, "success");
-                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    $("#jqxTable").jqxGrid('updateBoundData');
                     initTable();
                     break;
                 }
@@ -111,7 +112,7 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("审核成功！", null, "success");
-                        $("#jqxTable").jqxDataTable('updateBoundData');
+                        $("#jqxTable").jqxGrid('updateBoundData');
                         break;
                 }
             }

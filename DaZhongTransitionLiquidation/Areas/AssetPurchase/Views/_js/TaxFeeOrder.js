@@ -8,6 +8,7 @@ var selector = {
 }; //selector end
 var isEdit = false;
 var vguid = "";
+$(".input_text").attr("autocomplete", "new-password");
 var $page = function () {
     this.init = function () {
         initSelectVehicleModel();

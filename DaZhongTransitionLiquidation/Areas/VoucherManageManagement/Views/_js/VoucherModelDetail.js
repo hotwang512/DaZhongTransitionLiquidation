@@ -127,7 +127,6 @@ var $page = function () {
                             //jqxNotification("当前月份该配置已经存在！", null, "error");
                             break;
                     }
-
                 }
             });
         });
@@ -292,7 +291,7 @@ function add(type) {
     }
     $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
     $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
-    $("#Remark").val("");
+    $("#Remark1").val("");
     $("#Month").val("");
     isEdit = false;
     vguid = "";
@@ -302,7 +301,7 @@ function add(type) {
     //initBorrowTable(companyCode, accountMode);
 }
 function edit(guid2, Borrow, Loan, Remark, Money) {
-    $("#Remark").val("");
+    $("#Remark1").val("");
     $("#Money2").val("");
     isEdit = true;
     vguid = guid2;
@@ -311,7 +310,7 @@ function edit(guid2, Borrow, Loan, Remark, Money) {
     $("#Money2").val(Money);
     //initBorrowTable(CompanyCode, accountMode);
     if (Remark == null || Remark == "null") {
-        $("#Remark").val("");
+        $("#Remark1").val("");
     }
     if (Borrow != null && Borrow != "") {
         $("#BorrowTr").show();
@@ -511,6 +510,7 @@ function getCashManagerDetail() {
             $("#AccountingPeriod").val(date1);
             $("#TransactionDate").text(date2);
             $("#ModelName").val(msg.ModelName);
+            $("#Remark").val(msg.Remark);
             $("#TradingBank").val(msg.TradingBank);
             $("#ReceivingUnit").val(msg.ReceivingUnit);
             $("#VGUID").val(msg.VGUID);

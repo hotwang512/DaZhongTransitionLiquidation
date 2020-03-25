@@ -47,6 +47,7 @@ var $page = function () {
         //重置
         selector.$btnReset().on("click", function () {
             selector.$txtMonth().val("");
+            selector.$txtChannel().val("");
         });
         //导出
         selector.$btnExport().on("click", function () {

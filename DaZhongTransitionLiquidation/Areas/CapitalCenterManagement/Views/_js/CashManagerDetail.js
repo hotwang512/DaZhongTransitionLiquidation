@@ -203,6 +203,13 @@ var $page = function () {
                 WindowConfirmDialog(dele, "您确定要删除选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        //清除借贷信息
+        $("#Remove1").on("click", function () {
+            $("#jqxdropdownbutton1").jqxDropDownButton('setContent', "");
+        })
+        $("#Remove2").on("click", function () {
+            $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
+        })
     }
     function initTable() {
         var source =
@@ -345,6 +352,7 @@ function add(type) {
     $("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     $("#Remark").val("");
     $("#Month").val("");
+    $("#Money2").val("");
     isEdit = false;
     vguid = "";
     $("#myModalLabel_title").text("新增借/贷方信息");

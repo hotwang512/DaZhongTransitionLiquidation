@@ -130,6 +130,7 @@ var $page = function () {
                     { name: 'CreateTime', type: 'date' },
                     { name: 'CreatePerson', type: 'string' },
                     { name: 'VGUID', type: 'string' },
+                    { name: 'Status', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -171,10 +172,11 @@ var $page = function () {
                     { text: '凭证科目', hidden: true, datafield: 'VoucherSubjectName', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: '凭证摘要', hidden: true, datafield: 'VoucherSummary', width: 300, align: 'center', cellsAlign: 'center' },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
+                    { text: 'Status', datafield: 'Status', hidden: true },
                 ]
             });
         function detailFunc(row, column, value, rowData) {
-            var container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
+            var container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.Status + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Batch + "</a>";
             return container;
         }
     }
@@ -198,8 +200,8 @@ function getBankInfo() {
         }
     });
 }
-function link(VGUID) {
-    window.location.href = "/CapitalCenterManagement/CashTransactionDetail/Index?VGUID=" + VGUID;
+function link(VGUID,status) {
+    window.location.href = "/CapitalCenterManagement/CashTransactionDetail/Index?VGUID=" + VGUID + "&Status=" + status;
 }
 //提交
 function submit(selection) {

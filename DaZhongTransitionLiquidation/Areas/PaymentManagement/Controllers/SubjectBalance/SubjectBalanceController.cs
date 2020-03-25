@@ -58,8 +58,8 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         
                         set @AccountModeCode='{0}'
                         set @CompanyCode='{1}'
-                        set @Year=''
-                        set @Month=''
+                        set @Year='{2}'
+                        set @Month='{3}'
                         
                         ;with cte as(
                         select a.AccountModeCode,a.SubjectCode,b.Descrption as Accounting,AccountingCode,c.Descrption as CostCenter,CostCenterCode,d.Descrption as SpareOne
@@ -93,7 +93,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Subje
                         full join cte1 e on a.AccountingCodes=e.IntercourseCodes and a.CompanyCode=e.CompanyCode
                         left join Business_SubjectBalance as f on f.Code = a.SubjectCode+'.'+(convert(varchar(200),a.CompanyCode)+'.'+isnull(a.AccountingCode,'a')+'.'+isnull(b.CostCenterCode,'b')+'.'+isnull(c.SpareOneCode,'c')+'.'+isnull(d.SpareTwoCode,'d')+'.'+isnull(e.IntercourseCode,'e'))
                         and f.Year = @Year and f.Month = @Month and f.AccountModeCode = @AccountModeCode and f.CompanyCode = @CompanyCode
-                        where a.AccountingCodes=1 ", accountModeCode, companyCode);
+                        where a.AccountingCodes=1 ", accountModeCode, companyCode, year, month);
                 var data = db.Ado.SqlQuery<v_Business_SubjectSettingInfo>(sql);
 
 

@@ -1,4 +1,5 @@
-﻿var selector = {
+﻿$(".input_text").attr("autocomplete", "new-password");
+var selector = {
     //表格
     $grid: function () { return $("#datatable") },
     //查询条件

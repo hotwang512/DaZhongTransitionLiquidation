@@ -1,4 +1,5 @@
-﻿//所有元素选择器
+﻿$(".input_text").attr("autocomplete", "new-password");
+//所有元素选择器
 var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
@@ -141,7 +142,7 @@ var $page = function () {
             //$("#hidSubjectSection_" + z1 + "_" + z2).val(row.Code);
             //$("#AddCompanyDialog").modal("hide");
             //var code = $("#CompanySection_" + z1 + "_" + z2).val();
-            if (row.ParentCode == "" || row.ParentCode == null || row.Remark == "1") {
+            if (row.records != null) {
                 jqxNotification("请选择已配置信息节点！", null, "error");
                 return;
             }
@@ -508,9 +509,13 @@ var $page = function () {
                 type: "post",
                 success: function (msg) {
                     layer.closeAll('loading');
-                    if (msg.ResultInfo != null) {
-                        window.open(msg.ResultInfo);
-                    } 
+                    if (msg.Status == "3") {
+                        jqxNotification(msg.ResultInfo, null, "error");
+                    } else {
+                        if (msg.ResultInfo != null) {
+                            window.open(msg.ResultInfo);
+                        }
+                    }
                 }
             });
         });

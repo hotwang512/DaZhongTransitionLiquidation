@@ -255,6 +255,7 @@ var $page = function () {
             //selector.$drdLevel().val("1");
             //selector.$drdLevel().change();
             selector.$txtChannel().val("");
+            selector.$txtStatus().val("");
             //selector.$departmentVguid().val("");
             ////selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
         });

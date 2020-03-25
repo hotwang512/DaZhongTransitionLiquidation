@@ -444,7 +444,6 @@ var $page = function () {
             index = event.args.item;
             console.log(index);
             expandVGUID = [];
-            loadTable();
             //$("#jqxTable2").jqxTreeGrid('updateBoundData'); 
             if (index == 2) {
                 $("#hideCompany").show();
@@ -478,6 +477,7 @@ var $page = function () {
             if (index == 0) {
                 $("#ACChange").hide();
             }
+            loadTable();
         });
         //改变一级节点值
         $('#txtFirstSubjects').on('change', function (event) {

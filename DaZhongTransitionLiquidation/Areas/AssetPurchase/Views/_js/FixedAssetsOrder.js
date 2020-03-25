@@ -9,6 +9,7 @@ var selector = {
 var isEdit = false;
 var vguid = "";
 var orderType = "";
+$(".input_text").attr("autocomplete", "new-password");
 var $page = function () {
     this.init = function () {
         orderType = $.request.queryString().OrderType;

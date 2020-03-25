@@ -137,4 +137,5 @@ function closeLoading() {
 
 $(function() {
     $(".input_text").attr("autocomplete", "new-password");
+    //$(".input_text").attr("autocomplete", "off");
 });

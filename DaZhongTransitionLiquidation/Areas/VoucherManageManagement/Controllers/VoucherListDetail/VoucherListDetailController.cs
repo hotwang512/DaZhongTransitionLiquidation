@@ -364,7 +364,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     resultModel.Status = "2";
                 }
             });
-            return Json(resultModel, JsonRequestBehavior.AllowGet); ;
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
         private void GetSubjectSet(SqlSugarClient db, Guid vguids, List<Business_PaySettingDetail> borrowLoadData, Business_BankFlowTemplate item, Business_VoucherList voucherData,List<Business_VoucherDetail> voucherDetailData)
         {

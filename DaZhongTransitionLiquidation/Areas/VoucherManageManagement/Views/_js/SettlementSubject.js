@@ -1,4 +1,5 @@
-﻿//所有元素选择器
+﻿$(".input_text").attr("autocomplete", "new-password");
+//所有元素选择器
 var selector = {
     $grid: function () { return $("#moduletree") },
     $btnAdd: function () { return $("#btnAdd") },
@@ -283,6 +284,28 @@ var $page = function () {
                 }
             });
         });
+        //删除
+        function dele(selection) {
+            var guid = selection[0];
+            $.ajax({
+                url: "/VoucherManageManagement/SettlementSubject/DeleteBusiness",
+                data: { vguid: guid },
+                //traditional: true,
+                type: "post",
+                success: function (msg) {
+                    switch (msg.Status) {
+                        case "0":
+                            jqxNotification("删除失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("删除成功！", null, "success");
+                            //selector.$grid().jqxTreeGrid('updateBoundData');
+                            pageload();
+                            break;
+                    }
+                }
+            });
+        }
     }
 }
 
@@ -307,27 +330,7 @@ function add(type) {
     selector.$AddBankChannelDialog().modal("show");
     initBorrowTable(companyCode, accountMode);
 }
-//删除
-function dele(selection) {
-    $.ajax({
-        url: "/CapitalCenterManagement/BusinessTypeSet/DeleteBusiness",
-        data: { vguids: selection },
-        traditional: true,
-        type: "post",
-        success: function (msg) {
-            switch (msg.Status) {
-                case "0":
-                    jqxNotification("删除失败！", null, "error");
-                    break;
-                case "1":
-                    jqxNotification("删除成功！", null, "success");
-                    //selector.$grid().jqxTreeGrid('updateBoundData');
-                    pageload();
-                    break;
-            }
-        }
-    });
-}
+
 
 function getModules(callback) {
     $.ajax({

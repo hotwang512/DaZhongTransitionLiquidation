@@ -85,20 +85,16 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult DeleteBusiness(List<Guid> vguids)//Guid[] vguids
+        public JsonResult DeleteBusiness(Guid vguid)//Guid[] vguids
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
 
             DbBusinessDataService.Command(db =>
             {
-                var data = db.Queryable<Business_SettlementSubject>();
-                foreach (var item in vguids)
-                {
-                    //int saveChanges = 1;
-                    Delete(item);
-                    resultModel.IsSuccess = true;
-                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
-                }
+                //var data = db.Queryable<Business_SettlementSubject>().Where(x=>x.VGUID == vguid).First();
+                Delete(vguid);
+                resultModel.IsSuccess = true;
+                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
             });
             return Json(resultModel);
         }

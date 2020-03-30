@@ -575,6 +575,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                             default:
                                 break;
                         }
+                        return;
                     }
                     if (isEdit)
                     {

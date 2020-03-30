@@ -1,4 +1,5 @@
-﻿//所有元素选择器
+﻿$(".input_text").attr("autocomplete", "new-password");
+//所有元素选择器
 var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnAdd: function () { return $("#btnAdd") },
@@ -330,6 +331,7 @@ var $page = function () {
             $("#BankName").val("");
             $("#BankAccount").val("");
             $("#BankAccountName").val("");
+            $("#InitialBalance").val("");
             $("#BankName").removeClass("input_Validate");
             $("#BankAccount").removeClass("input_Validate");
             $("#BankAccountName").removeClass("input_Validate");
@@ -1239,8 +1241,8 @@ var $page = function () {
                     case "1":
                         jqxNotification("删除成功！", null, "success");
                         $("#jqxCompanySetting").jqxGrid('updateBoundData');
-                        $('#jqxCompanySetting').jqxGrid('addgroup', 'BankName');
                         $("#jqxTable1").jqxDataTable('updateBoundData');
+                        $('#jqxCompanySetting').jqxGrid('addgroup', 'BankName');
                         break;
                 }
             }
@@ -1605,6 +1607,7 @@ function settingTaxes(code, companyName, subjectGuid) {
                             jqxNotification("保存成功！", null, "success");
                             $("#jqxTaxesSetting").jqxTreeGrid('updateBoundData');
                             $("#AddTaxDataDialog").modal("hide");
+                            $("#jqxTable1").jqxDataTable('updateBoundData');
                             break;
                         case "2":
                             jqxNotification("结算项目已存在", null, "error");
@@ -1615,33 +1618,37 @@ function settingTaxes(code, companyName, subjectGuid) {
             });
         }
     })
+
+    $("#jqxTaxesSetting").on("rowCheck", function (event) {
+
+    })
     //编辑税率
-    $("#jqxTaxesSetting").on("rowClick", function (event) {
+    $("#jqxTaxesSetting").on("rowSelect", function (event) {
         var args = event.args;
         var rowKey = args.key;
         var rowData = args.row;
         var columnDataField = args.dataField;
-        if (columnDataField == "TaxesType") {
-            $("#TaxCode").val("");
-            $("#ParentMenu").val("");
-            $("#hideParentMenu").val("");
-            $("#myModalLabel_title").text("编辑数据");
-            var taxesType = rowData.TaxesType;
-            var taxRate = rowData.TaxRate;
-            if (rowData.parent != null) {
-                $("#ParentMenu").val(rowData.parent.BusinessType);
-                $("#hideParentMenu").val(rowData.parent.VGUID);
-            }
-            $("#TaxesType").val(taxesType);
-            $("#TaxRate").val(taxRate);
-            $("#TaxCode").val(rowData.TaxCode);
-            isEdit = true;
-            vguid = rowData.VGUID;
-            $("#TaxesType").removeClass("input_Validate");
-            $("#TaxRate").removeClass("input_Validate");
-            $("#AddTaxDataDialog").modal({ backdrop: "static", keyboard: false });
-            $("#AddTaxDataDialog").modal("show");
+        $("#TaxCode").val("");
+        $("#ParentMenu").val("");
+        $("#hideParentMenu").val("");
+        $("#myModalLabel_title").text("编辑数据");
+        var taxesType = rowData.TaxesType;
+        var taxRate = rowData.TaxRate;
+        if (rowData.parent != null) {
+            $("#ParentMenu").val(rowData.parent.BusinessType);
+            $("#hideParentMenu").val(rowData.parent.VGUID);
         }
+        $("#TaxesType").val(taxesType);
+        $("#TaxRate").val(taxRate);
+        $("#TaxCode").val(rowData.TaxCode);
+        isEdit = true;
+        vguid = rowData.VGUID;
+        $("#TaxesType").removeClass("input_Validate");
+        $("#TaxRate").removeClass("input_Validate");
+        $("#AddTaxDataDialog").modal({ backdrop: "static", keyboard: false });
+        $("#AddTaxDataDialog").modal("show");
+        //if (columnDataField == "TaxesType") {    
+        //}
     });
     //删除税率
     $("#btnTaxesDelete").click(function () {
@@ -1672,6 +1679,7 @@ function settingTaxes(code, companyName, subjectGuid) {
                     case "1":
                         jqxNotification("删除成功！", null, "success");
                         $("#jqxTaxesSetting").jqxTreeGrid('updateBoundData');
+                        $("#jqxTable1").jqxDataTable('updateBoundData');
                         break;
                 }
             }
@@ -1749,7 +1757,7 @@ function setYearMonth(code, accountModeCode) {
         async: false,
         dataType: "json",
         success: function (msg) {
-            if (msg != null) {
+            if (msg.length > 0) {
                 $("#Year").val(msg[0].Year);
                 $("#Month").val(msg[0].Month);
             }
@@ -1815,13 +1823,11 @@ function settingAccount(code) {
         ]
     });
 }
-
 function detailFunc(row, column, value, rowData) {
     var container = "";
     container = "<a href='#' onclick=edit('" + rowData.VGUID + "','" + rowData.Code + "','" + rowData.Descrption + "','" + rowData.Remark + "','" + rowData.ParentCode + "','" + rowData.OrgID + "','" + rowData.Abbreviation + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
     return container;
 }
-
 function editBankFunc(row, columnfield, value, defaulthtml, columnproperties) {
     var container = "";
     container = "<div style=\"text-decoration: underline;text-align: center;margin-top: 4px;color: #333;\">" + value + "</div>";
@@ -1832,7 +1838,6 @@ function editTaxesFunc(row, column, value, rowData) {
     container = "<a href='#' style=\"text-decoration: underline;color: #333;\">" + rowData.Code + "</a>";
     return container;
 }
-
 function cellsRendererFunc(row, column, value, rowData) {
     return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\" style=\"margin:auto;width: 17px;height: 17px;\" />";
 }
@@ -1990,6 +1995,8 @@ function initBorrowTable(companyCode, accountModeCode) {
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,
+        filterable: true,
+        showfilterrow: true,
         theme: "office",
         rendergridrows: function (obj) {
             return obj.data;
@@ -2035,6 +2042,8 @@ function initBorrowTable(companyCode, accountModeCode) {
         height: 350,
         columnsresize: true,
         pageSize: 15,
+        filterable: true,
+        showfilterrow: true,
         //serverProcessing: true,
         pagerButtonsCount: 10,
         source: typeAdapter,

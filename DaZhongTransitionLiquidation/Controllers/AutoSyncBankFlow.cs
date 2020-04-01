@@ -117,6 +117,7 @@ namespace DaZhongTransitionLiquidation.Controllers
         }
         public static void DoSyncBankCBCBCM()
         {
+            var index = 0;
             while (true)
             {
                 //同步交行&建行交易流水
@@ -146,10 +147,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "同步中间表银行流水" + DateTime.Now.ToString("yyyy-MM-dd"), ex.ToString()));
                 }
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "记录<同步中间表银行流水>执行次数" + DateTime.Now.ToString("yyyy-MM-dd"), index++));
                 double timeSpan = ConfigSugar.GetAppString("TimeSpan").TryToInt();
                 Thread.Sleep((int)(timeSpan * 1000 * 60 * 60));
+                //Thread.Sleep(2000);
             }
         }
         public static void AutoVehicleSeavice()
@@ -209,6 +212,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
+                        //测试 vguid = "db5ab953-dfd3-4751-8cfd-7e945bc2eca8";
                         List<Business_VoucherList> voucherData = new List<Business_VoucherList>();
                         List<Business_VoucherDetail> voucherDetails = new List<Business_VoucherDetail>();
                         if (vguid.TryToGuid() == Guid.Empty)
@@ -266,6 +270,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 {
                                     voucherDetail[1].LoanMoney = borrowMoney;
                                     voucherDetail[1].LoanMoneyCount = borrowMoney;
+                                    //voucherDetail[1].VMDFTIME = DateTime.Now;
                                     item.CreditAmountTotal = borrowMoney;
                                     item.DebitAmountTotal = borrowMoney;
                                     _db.Updateable(voucherDetail[1]).ExecuteCommand();
@@ -380,7 +385,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", success, ex.ToString()));
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "同步银行流水生成凭证", ex.ToString()));
                 }
                 if(execute == true)
                 {

@@ -771,7 +771,7 @@ var $page = function () {
                     //{ text: '审核', datafield: 'Auditor', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '制单', datafield: 'DocumentMaker', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '交易流水号', datafield: 'Batch', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '出纳', datafield: 'Cashier', width: 150, align: 'center', cellsAlign: 'center' },
+                    { text: '错误信息', datafield: 'OracleMessage', width: 250, align: 'center', cellsAlign: 'center' },
                     { text: '状态', datafield: 'Status', width: 150, align: 'center', cellsAlign: 'center', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
                 ]

@@ -32,14 +32,16 @@ namespace DaZhongTransitionLiquidation
             var ExecutionOrNot = ConfigSugar.GetAppString("Execution").TryToBoolean();
             if (ExecutionOrNot)
             {
+                AutoSyncBankFlow.AutoSyncBankSeavice();
+
                 AutoSyncBankFlow.AutoSyncSeavice();
                 AutoSyncBankFlow.AutoSyncYesterdaySeavice();
                 AutoSyncBankFlow.AutoBankTransferResult();
-                AutoSyncBankFlow.AutoSyncBankSeavice();
-                //AutoSyncAssetsMaintenance.AutoSyncSeavice();
                 AutoSyncBankFlow.AutoVehicleSeavice();
                 AutoSyncEmailController.AutoSyncEmailSeavice();
                 AutoSyncBankFlow.AutoGetVoucherMoneySeavice();
+
+                //AutoSyncAssetsMaintenance.AutoSyncSeavice();
                 //AutoSyncBankFlow.AutoTransferVoucherSeavice();
             }
             //资产变更

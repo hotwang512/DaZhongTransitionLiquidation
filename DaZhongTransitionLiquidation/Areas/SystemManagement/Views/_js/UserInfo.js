@@ -50,7 +50,7 @@ var $page = function () {
     //重置按钮事件
     selector.$btnReset().on('click', function () {
         selector.$txtLoginName().val("");
-        selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
+        //selector.$pushPeopleDropDownButton().jqxDropDownButton('setContent', "");
         selector.$drdRole().val("");
         selector.$drdStatus().val("1");
         selector.$departmentVguid().val("");

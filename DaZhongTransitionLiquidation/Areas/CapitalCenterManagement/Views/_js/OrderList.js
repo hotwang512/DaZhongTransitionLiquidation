@@ -1,4 +1,5 @@
-﻿//所有元素选择器
+﻿$(".input_text").attr("autocomplete", "new-password");
+//所有元素选择器
 var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },
@@ -26,8 +27,8 @@ var $page = function () {
 
         //重置按钮事件
         selector.$btnReset().on("click", function () {
-            $("#BusinessType").val("");
-            //$("#TransactionDate").val("");
+            $("#CollectionCompany").jqxDropDownList('val', '0000');
+            $("#BusinessProject").val("");
             //$("#TransactionDateEnd").val("");
             //$("#PaymentUnit").val("");
         });
@@ -160,6 +161,10 @@ var $page = function () {
 
     function initTable() {
         //var DateEnd = $("#TransactionDateEnd").val();  "AccountingPeriod": $("#AccountingPeriod").val("")
+        var collect = $("#CollectionCompany").val();
+        if (collect == "0000") {
+            collect = "";
+        }
         var source =
             {
                 datafields:
@@ -188,7 +193,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 //id: "VGUID",
-                data: { "status": status, "BusinessProject": $("#BusinessProject").val(), "CollectionCompany": $("#CollectionCompany").val() },
+                data: { "status": status, "BusinessProject": $("#BusinessProject").val(), "CollectionCompany": collect },
                 url: "/CapitalCenterManagement/OrderList/GetOrderListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -290,7 +295,7 @@ var $page = function () {
             filterable: true, selectedIndex: 0, source: dataAdapter, displayMember: "PurchaseGoods", valueMember: "VGUID",
             itemHeight: '30px', height: '20px', width: '176px', placeHolder: "请选择"
         });
-        $("#CollectionCompany").jqxDropDownList('insertAt', { label: '请选择', value: '' }, 0);
+        $("#CollectionCompany").jqxDropDownList('insertAt', { label: '请选择', value: '0000' }, 0);
     }
     function cellsRendererFunc(row, column, value, rowData) {
         return "<input class=\"jqx_datatable_checkbox\" index=\"" + row + "\" type=\"checkbox\"  style=\"margin:auto;width: 17px;height: 17px;\" />";

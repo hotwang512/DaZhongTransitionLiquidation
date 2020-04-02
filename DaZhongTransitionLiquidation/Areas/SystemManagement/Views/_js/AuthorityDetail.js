@@ -1,4 +1,4 @@
-﻿
+﻿$(".input_text").attr("autocomplete", "new-password");
 //所有元素选择器
 var selector = {
 

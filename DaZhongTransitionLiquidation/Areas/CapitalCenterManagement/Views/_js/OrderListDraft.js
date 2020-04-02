@@ -1,4 +1,5 @@
-﻿//所有元素选择器
+﻿$(".input_text").attr("autocomplete", "new-password");
+//所有元素选择器
 var selector = {
     $grid: function () { return $("#jqxTable") },
     $btnSearch: function () { return $("#btnSearch") },

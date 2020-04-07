@@ -496,6 +496,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                     assetModifyLastFlowList = assetModifyLastFlowList.Where(x =>
                         x.BELONGTO_COMPANY != "37" && x.MANAGEMENT_COMPANY != "197" && x.MANAGEMENT_COMPANY != "480").ToList();
                     var allFlowList = assetModifyCurrentFlowList.Union(assetModifyLastFlowList);
+                    var dt = assetModifyCurrentFlowList.TryToDataTable();
                     //车型
                     var vehicleModelList = allFlowList.GroupBy(x => x.VEHICLE_SHORTNAME).Where(x => x.Key != null).Select(x => x.Key).OrderBy(x => x).ToList();
                     foreach (var item in vehicleModelList)

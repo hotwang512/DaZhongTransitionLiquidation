@@ -60,7 +60,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
+                        from
+                        (
+                            select distinct
+                                   OriginalId
+                                 , License
+                                 , LicenseDate
+                                 , RetireDate
+                                 , OrganizationID
+                                 , Name
+                                 , VehicleAbbreviationId
+                                 , UsageId
+                                 , VehicleCategoryId
+                                 , OwnOrganizationId
+                                 , UsageOrganizationId
+                            from Cab.Cab_Base_Info_D
+                        )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.UsageOrganizationId
@@ -80,7 +95,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
+                        from
+                        (
+                            select distinct
+                                   OriginalId
+                                 , License
+                                 , LicenseDate
+                                 , RetireDate
+                                 , OrganizationID
+                                 , Name
+                                 , VehicleAbbreviationId
+                                 , UsageId
+                                 , VehicleCategoryId
+                                 , OwnOrganizationId
+                                 , UsageOrganizationId
+                            from Cab.Cab_Base_Info_D
+                        )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
@@ -100,7 +130,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
+                        from
+                        (
+                            select distinct
+                                   OriginalId
+                                 , License
+                                 , LicenseDate
+                                 , RetireDate
+                                 , OrganizationID
+                                 , Name
+                                 , VehicleAbbreviationId
+                                 , UsageId
+                                 , VehicleCategoryId
+                                 , OwnOrganizationId
+                                 , UsageOrganizationId
+                            from Cab.Cab_Base_Info_D
+                        )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.UsageOrganizationId
@@ -119,7 +164,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
+                        from
+                        (
+                            select distinct
+                                   OriginalId
+                                 , License
+                                 , LicenseDate
+                                 , RetireDate
+                                 , OrganizationID
+                                 , Name
+                                 , VehicleAbbreviationId
+                                 , UsageId
+                                 , VehicleCategoryId
+                                 , OwnOrganizationId
+                                 , UsageOrganizationId
+                            from Cab.Cab_Base_Info_D
+                        )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
@@ -137,9 +197,23 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                  , info.UsageOrganizationId     as CompanyID
                                  , abbr.VehicleAbbreviationId as VehicleID
                                  , abbr.Name                  as VehicleModel
-                                
                                  , count(1)                   as Quantity
-                            from Cab.Cab_Base_Info_D                  info
+                                from
+                                (
+                                    select distinct
+                                           OriginalId
+                                         , License
+                                         , LicenseDate
+                                         , RetireDate
+                                         , OrganizationID
+                                         , Name
+                                         , VehicleAbbreviationId
+                                         , UsageId
+                                         , VehicleCategoryId
+                                         , OwnOrganizationId
+                                         , UsageOrganizationId
+                                    from Cab.Cab_Base_Info_D
+                                )                                         info
                                 left join DZSrc.VehicleAbbreviation_D abbr
                                     on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.UsageOrganizationId
@@ -158,7 +232,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                  , abbr.VehicleAbbreviationId as VehicleID
                                  , abbr.Name                  as VehicleModel
                                  , count(1)                   as Quantity
-                            from Cab.Cab_Base_Info_D                  info
+                                from
+                                (
+                                    select distinct
+                                           OriginalId
+                                         , License
+                                         , LicenseDate
+                                         , RetireDate
+                                         , OrganizationID
+                                         , Name
+                                         , VehicleAbbreviationId
+                                         , UsageId
+                                         , VehicleCategoryId
+                                         , OwnOrganizationId
+                                         , UsageOrganizationId
+                                    from Cab.Cab_Base_Info_D
+                                )                                         info
                                 left join DZSrc.VehicleAbbreviation_D abbr
                                     on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
@@ -177,7 +266,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
+                        from
+                        (
+                            select distinct
+                                   OriginalId
+                                 , License
+                                 , LicenseDate
+                                 , RetireDate
+                                 , OrganizationID
+                                 , Name
+                                 , VehicleAbbreviationId
+                                 , UsageId
+                                 , VehicleCategoryId
+                                 , OwnOrganizationId
+                                 , UsageOrganizationId
+                            from Cab.Cab_Base_Info_D
+                        )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.UsageOrganizationId
@@ -197,7 +301,22 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
-                        from Cab.Cab_Base_Info_D                  info
+                        from
+                        (
+                            select distinct
+                                   OriginalId
+                                 , License
+                                 , LicenseDate
+                                 , RetireDate
+                                 , OrganizationID
+                                 , Name
+                                 , VehicleAbbreviationId
+                                 , UsageId
+                                 , VehicleCategoryId
+                                 , OwnOrganizationId
+                                 , UsageOrganizationId
+                            from Cab.Cab_Base_Info_D
+                        )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
 								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId

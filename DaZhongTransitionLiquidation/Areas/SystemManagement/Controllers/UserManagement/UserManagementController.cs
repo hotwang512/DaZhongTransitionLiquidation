@@ -12,6 +12,9 @@ using SyntacticSugar;
 using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Areas.SystemManagement.Models;
 using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers.BusinessTypeSet;
+using DaZhongTransitionLiquidation.Controllers;
+using System.Net;
+using DaZhongTransitionLiquidation.Common;
 
 namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserManagement
 {
@@ -249,14 +252,52 @@ namespace DaZhongTransitionLiquidation.Areas.SystemManagement.Controllers.UserMa
                     resultModel.Status = "2";
                     return;
                 }
-                userInfo.ChangeDate = DateTime.Now;
-                userInfo.ChangeUser = UserInfo.LoginName;
-                resultModel.IsSuccess = db.Updateable(userInfo).UpdateColumns(i => new { i.Password, i.ChangeUser, i.ChangeDate }).ExecuteCommand() > 0;
-                resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                //修改密码同步至大众平台
+                var isAsync = AsyncPassword(UserInfo.LoginName, oldPassword, userInfo.Password);
+                if (isAsync)
+                {
+                    userInfo.ChangeDate = DateTime.Now;
+                    userInfo.ChangeUser = UserInfo.LoginName;
+                    resultModel.IsSuccess = db.Updateable(userInfo).UpdateColumns(i => new { i.Password, i.ChangeUser, i.ChangeDate }).ExecuteCommand() > 0;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
+                else
+                {
+                    resultModel.IsSuccess = false;
+                    resultModel.Status = resultModel.IsSuccess ? "1" : "0";
+                }
             });
             return Json(resultModel);
         }
-
+        private static bool AsyncPassword(string loginName, string oldPassword, string password)
+        {
+            var isSuccess = false;
+            var url = ConfigSugar.GetAppString("GetResetPassword");
+            var data = "{" +
+                            "\"loginName\":\"{loginName}\",".Replace("{loginName}", loginName) +
+                            "\"oldPwd\":\"{oldPwd}\",".Replace("{oldPwd}", LoginController.md5(oldPassword)) +
+                            "\"newPwd\":\"{newPwd}\"".Replace("{newPwd}", password) +
+                            "}";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Clear();
+                wc.Headers.Add("Content-Type", "application/json;charset=utf-8");
+                wc.Encoding = System.Text.Encoding.UTF8;
+                var resultData = wc.UploadString(new Uri(url), data);
+                var modelData = resultData.JsonToModel<DZLoginInfo>();
+                if (modelData.success)
+                {
+                    isSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "修改密码同步至大众平台报错", ex.ToString()));
+                throw;
+            }
+            return isSuccess;
+        }
         /// <summary>
         /// 重置密码
         /// </summary>

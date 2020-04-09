@@ -46,6 +46,9 @@ function Validate(selecter) {
                             break;
                         case "length":
                             break;
+                        case "pwdLength":
+                            isValidateSuccess = validate_PwdLength(selecter);
+                            break;
                         case "english":
                             isValidateSuccess = validate_EN(selecter);
                             break;
@@ -78,6 +81,9 @@ function Validate(selecter) {
                     isValidateSuccess = validate_IdCard(selecter);
                     break;
                 case "length":
+                    break;
+                case "pwdLength":
+                    isValidateSuccess = validate_PwdLength(selecter);
                     break;
                 case "english":
                     isValidateSuccess = validate_EN(selecter);
@@ -285,7 +291,31 @@ function validate_EN(selecter) {
     }
     return isValidateSuccess;
 }
-
+//密码长度
+function validate_PwdLength(selecter) {
+    var isValidateSuccess = true;
+    var pwdVal = $(selecter).val();
+    if (pwdVal.length == 6) {
+        isValidateSuccess = true;
+        if ($(selecter).hasClass("input_Validate")) {
+            $(selecter).removeClass("input_Validate");
+            $(selecter).next(".msg").remove();
+        }
+    } else {
+        if (!$(selecter).hasClass("input_Validate")) {
+            $(selecter).addClass("input_Validate");
+            var width = $(selecter).css("width");
+            $(selecter).after("<div class=\"msg\" style=\"margin-left:" + width + "; width:150px;\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">请输入6位密码！</div></div>");
+        }
+        else {
+            $(selecter).next(".msg").remove();
+            var width = $(selecter).css("width");
+            $(selecter).after("<div class=\"msg\" style=\"margin-left:" + width + ";width:150px;\"><img class=\"messg_icon\" src=\"/_theme/Validate/img/triangle_left.png\" /><div class=\"messg_Validate\">请输入6位密码！</div></div>");
+        }
+        isValidateSuccess = false;
+    } 
+    return isValidateSuccess;
+}
 //验证长度
 function validate_Length(selecter) {
 

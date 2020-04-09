@@ -40,6 +40,11 @@ var $page = function () {
         initTable2();
         initInput();
 
+        var guid = $.request.queryString().Vguid;
+        if (guid != "" && guid != null) {
+            $("#Password").attr("readonly", "readonly");
+        }
+
         $("#jqxTable2").on('cellendedit', function (event) {
             var data = $('#jqxTable2').jqxGrid('getboundrows');
             for (var i = 0; i < data.length; i++) {

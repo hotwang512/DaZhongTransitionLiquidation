@@ -56,6 +56,10 @@ $("#changePwd_OKButton").on("click", function () {
         validateError++;
     }
     if (validateError == 0) {
+        if ($("#txtNewPwd").val() == $("#txtOldPwd").val()) {
+            jqxNotification("新密码与旧密码不能一致！", null, "error");
+            return;
+        }
         if ($("#txtNewPwd").val() != $("#txtNewPwdAgain").val()) {
             jqxNotification("两次输入的密码不一致！", null, "error");
         } else {
@@ -67,6 +71,7 @@ $("#changePwd_OKButton").on("click", function () {
                     Vguid: $("#aChangePwd").attr("vguid")
                 },
                 type: "post",
+                async:false,
                 dataType: "json",
                 success: function (msg) {
                     switch (msg.Status) {

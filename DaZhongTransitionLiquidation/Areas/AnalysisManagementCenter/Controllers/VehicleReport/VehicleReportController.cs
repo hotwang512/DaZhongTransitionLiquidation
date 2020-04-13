@@ -88,10 +88,10 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                , abbr.Name
                         union all
                         select PeriodType                 = '期初'
-                             , Sort                = 1
+                             , Sort                     = 1
                              , CompanyType                = '所属公司'
-                             , left(replace(org.Name,'上海',''),4) as CompanyName
-                             , info.OwnOrganizationId     as CompanyID
+			                 , replace(replace(replace(replace(replace(org.Name,'（集团）股份有限公司',''),'汽车客运有限公司',''),'出租汽车有限公司',''),'管理有限公司',''),'上海','') as CompanyName
+                             , info.AssetOwnerId     as CompanyID
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
@@ -105,19 +105,18 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                  , OrganizationID
                                  , Name
                                  , VehicleAbbreviationId
-                                 , UsageId
-                                 , VehicleCategoryId
-		                         , (case when OwnOrganizationId = '53' and OwnerId = '8' then '231' else OwnOrganizationId end) as OwnOrganizationId
-		                         , (case when UsageOrganizationId = '53' and OwnerId = '8' then '231' else UsageOrganizationId end) as UsageOrganizationId
+                                , UsageId
+                                , AssetOwnerId
+                                , UsageOrganizationId
                             from Cab.Cab_Base_Info_D
                         )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
+								left join DZSrc.Owner_D org on org.ID = info.AssetOwnerId
                         where info.LicenseDate < '" + YearMonthDate + @"'
                               and (info.RetireDate is null or info.RetireDate between '" + YearMonthDate + @"' and '" + currentDay + @"')
-							  and info.OwnOrganizationId in(53, 54, 55, 198, 35 , 11749 , 432 , 521,231,451)
-                        group by info.OwnOrganizationId
+							  and info.UsageOrganizationId in(53, 54, 55, 198, 451)
+                        group by info.AssetOwnerId
                                , org.Name
                                , abbr.VehicleAbbreviationId
                                , abbr.Name
@@ -148,7 +147,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                         )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-								left join DZSrc.Organization_D org on org.OrganizationId = info.UsageOrganizationId
+							left join DZSrc.Organization_D org on org.OrganizationId = info.UsageOrganizationId
                         where info.LicenseDate between '" + YearMonthDate + @"' and '" + nextDateStr + @"'
 							  and info.UsageOrganizationId in(53, 54, 55, 198, 35 , 11749 , 432 , 521,231,451)
                         group by info.UsageOrganizationId
@@ -159,8 +158,8 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                             select PeriodType             = '增加'
                              , Sort                       = 2
                              , CompanyType                = '所属公司'
-                             , left(replace(org.Name,'上海',''),4) as CompanyName
-                             , info.OwnOrganizationId     as CompanyID
+                             , replace(replace(replace(replace(replace(org.Name,'（集团）股份有限公司',''),'汽车客运有限公司',''),'出租汽车有限公司',''),'管理有限公司',''),'上海','') as CompanyName
+                             , info.AssetOwnerId     as CompanyID
                              , abbr.VehicleAbbreviationId as VehicleID
                              , abbr.Name                  as VehicleModel
                              , count(1)                   as Quantity
@@ -176,16 +175,16 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                  , VehicleAbbreviationId
                                  , UsageId
                                  , VehicleCategoryId
-		                         , (case when OwnOrganizationId = '53' and OwnerId = '8' then '231' else OwnOrganizationId end) as OwnOrganizationId
-		                         , (case when UsageOrganizationId = '53' and OwnerId = '8' then '231' else UsageOrganizationId end) as UsageOrganizationId
+                                , AssetOwnerId
+                                , UsageOrganizationId
                             from Cab.Cab_Base_Info_D
                         )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
+								left join DZSrc.Owner_D org on org.ID = info.AssetOwnerId
                         where info.LicenseDate between '" + YearMonthDate + @"' and '" + nextDateStr + @"'
-							  and info.OwnOrganizationId in(53, 54, 55, 198, 35 , 11749 , 432 , 521,231,451)
-                        group by info.OwnOrganizationId
+							    and info.UsageOrganizationId in(53, 54, 55, 198, 451)
+                        group by info.AssetOwnerId
                                , org.Name
                                , abbr.VehicleAbbreviationId
                                , abbr.Name
@@ -227,8 +226,8 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                             select PeriodType                 = '减少'
                                  , Sort                       = 3
                                  , CompanyType                = '所属公司'
-                                , left(replace(org.Name,'上海',''),4) as CompanyName
-                                 , info.OwnOrganizationId     as CompanyID
+                                 , replace(replace(replace(replace(replace(org.Name,'（集团）股份有限公司',''),'汽车客运有限公司',''),'出租汽车有限公司',''),'管理有限公司',''),'上海','') as CompanyName
+                                 , info.AssetOwnerId     as CompanyID
                                  , abbr.VehicleAbbreviationId as VehicleID
                                  , abbr.Name                  as VehicleModel
                                  , count(1)                   as Quantity
@@ -243,17 +242,17 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                          , Name
                                          , VehicleAbbreviationId
                                          , UsageId
+                                         , AssetOwnerId
                                          , VehicleCategoryId
-		                                 , (case when OwnOrganizationId = '53' and OwnerId = '8' then '231' else OwnOrganizationId end) as OwnOrganizationId
-		                                 , (case when UsageOrganizationId = '53' and OwnerId = '8' then '231' else UsageOrganizationId end) as UsageOrganizationId
+		                                 , UsageOrganizationId
                                     from Cab.Cab_Base_Info_D
                                 )                                         info
                                 left join DZSrc.VehicleAbbreviation_D abbr
                                     on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
+		                        left join DZSrc.Owner_D org on org.ID = info.AssetOwnerId
                             where info.RetireDate between '" + YearMonthDate + @"' and '" + nextDateStr + @"'
-							  and info.OwnOrganizationId in(53, 54, 55, 198, 35 , 11749 , 432 , 521,231,451)
-                            group by info.OwnOrganizationId
+							  and info.UsageOrganizationId in(53, 54, 55, 198, 451)
+                            group by info.AssetOwnerId
                                    , org.Name
                                    , abbr.VehicleAbbreviationId
                                    , abbr.Name
@@ -294,36 +293,35 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                , abbr.Name
                         union all
                         select PeriodType                 = '期末'
-                             , Sort                       = 4
-                             , CompanyType                = '所属公司'
-                             , left(replace(org.Name,'上海',''),4) as CompanyName
-                             , info.OwnOrganizationId     as CompanyID
-                             , abbr.VehicleAbbreviationId as VehicleID
-                             , abbr.Name                  as VehicleModel
-                             , count(1)                   as Quantity
+                                , Sort                       = 4
+                                , CompanyType                = '所属公司'
+                                , replace(replace(replace(replace(replace(org.Name,'（集团）股份有限公司',''),'汽车客运有限公司',''),'出租汽车有限公司',''),'管理有限公司',''),'上海','') as CompanyName
+                                , info.AssetOwnerId     as CompanyID
+                                , abbr.VehicleAbbreviationId as VehicleID
+                                , abbr.Name                  as VehicleModel
+                                , count(1)                   as Quantity
                         from
                         (
                             select distinct
-                                   OriginalId
-                                 , License
-                                 , LicenseDate
-                                 , RetireDate
-                                 , OrganizationID
-                                 , Name
-                                 , VehicleAbbreviationId
-                                 , UsageId
-                                 , VehicleCategoryId
-		                         , (case when OwnOrganizationId = '53' and OwnerId = '8' then '231' else OwnOrganizationId end) as OwnOrganizationId
-		                         , (case when UsageOrganizationId = '53' and OwnerId = '8' then '231' else UsageOrganizationId end) as UsageOrganizationId
+                                    OriginalId
+                                    , License
+                                    , LicenseDate
+                                    , RetireDate
+                                    , OrganizationID
+                                    , Name
+                                    , VehicleAbbreviationId
+                                    , UsageId
+                                    , AssetOwnerId
+                                    , UsageOrganizationId
                             from Cab.Cab_Base_Info_D
                         )                                         info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-								left join DZSrc.Organization_D org on org.OrganizationId = info.OwnOrganizationId
+		                    left join DZSrc.Owner_D org on org.ID = info.AssetOwnerId
                         where info.LicenseDate < '" + nextMonthDate + @"'
                               and (info.RetireDate is null or info.RetireDate between '" + nextMonthDate + @"' and'" + currentDay + @"')
-							  and info.OwnOrganizationId in(53, 54, 55, 198, 35 , 11749 , 432 , 521, 231,451)
-                        group by info.OwnOrganizationId
+							  and info.UsageOrganizationId in(53, 54, 55, 198, 451)
+                        group by info.AssetOwnerId
                                , org.Name
                                , abbr.VehicleAbbreviationId
                                , abbr.Name)

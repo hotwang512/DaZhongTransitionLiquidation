@@ -56,7 +56,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                     left join DZSrc.VehicleAbbreviation_D abbr
                         on abbr.VehicleAbbreviationId = Cab_Work_Info.VehicleAbbreviationId
                 where Period like '" + YearMonth + @"%'
-                      --and Cab_Work_Info.CabOriginalId in ( 53, 54, 55, 198, 451 )
+                      and Cab_Work_Info.OrganizationId in ( 53, 54, 55, 198, 451 )
                       and Cab_Work_Info.OperationStatus = 0";
             var data = _db.SqlQueryable<Models.OutageReport>(sqlStr).ToList();
             return Json(data, JsonRequestBehavior.AllowGet);

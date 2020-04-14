@@ -74,7 +74,7 @@ var $page = function () {
                 });
                 $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(0).text("月份");
                 $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(0).css("text-align", "center");
-                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(1).text("管理公司");
+                $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(1).text("所属公司");
                 $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(1).css("text-align", "center");
                 $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(2).text("车型");
                 $("#jqxBelongToCompanyPeriodTable .pvtAxisLabel").eq(2).css("text-align", "center");

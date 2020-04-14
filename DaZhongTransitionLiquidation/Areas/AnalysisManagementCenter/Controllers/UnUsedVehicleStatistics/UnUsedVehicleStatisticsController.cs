@@ -50,28 +50,21 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                            , Organization.Name";
             var data = _db.SqlQueryable<Models.UnUsedVehicleStatistics>(sqlStr).ToList();
             var sqlStr1 = @"select Period
-                             , '营运公司' as OrganizationType
-                             , '资产公司' as CompanyType
-	                         , Cab_Work_Info.OrganizationId as CompanyCode
-                             , Organization.Name            as CompanyName
-                             , count(1)                     as Quantity
-                             , sum(   case Cab_Work_Info.OperationStatus
-                                          when 0 then
-                                              1
-                                          else
-                                              0
-                                      end
-                                  )                         as StopVehicleQuantity
-                        from Cab.Cab_Work_Info_ByPeriod_FH Cab_Work_Info
-                            left join Cab.Cab_Base_Info_D  Cab
-                                on Cab_Work_Info.CabId = Cab.CabId
-                            left join DZSrc.Organization_D Organization
-                                on Cab.OrganizationID = Organization.OrganizationId
+                            , '营运公司' as OrganizationType
+                            , '资产公司' as CompanyType
+	                        , Cab.AssetOwnerId as CompanyCode
+                            , org.Name            as CompanyName
+                            , count(1)                     as Quantity
+                            , sum( case Cab_Work_Info.OperationStatus when 0 then 1 else 0 end ) as StopVehicleQuantity
+                    from Cab.Cab_Work_Info_ByPeriod_FH Cab_Work_Info
+                        left join Cab.Cab_Base_Info_D  Cab
+                            on Cab_Work_Info.CabId = Cab.CabId
+                        left join DZSrc.Owner_D org on org.ID = Cab.AssetOwnerId
                         where Period like '" + Year + @"%'
                               and Cab_Work_Info.OrganizationId in ( 53, 54, 55 )
                         group by Cab_Work_Info.Period
-                               , Cab_Work_Info.OrganizationId
-                               , Organization.Name";
+                               , Cab.AssetOwnerId
+                               , org.Name";
             var data1 = _db.SqlQueryable<Models.UnUsedVehicleStatistics>(sqlStr1).ToList();
             var unUsedVehicleStatisticsList = data.Union(data1);
             var db = DbBusinessDataConfig.GetInstance();

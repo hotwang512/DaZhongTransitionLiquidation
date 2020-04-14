@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SyntacticSugar;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace DaZhongTransitionLiquidation.Common
@@ -44,6 +46,23 @@ namespace DaZhongTransitionLiquidation.Common
             lock (ExceptionStringQueue)
             {
                 ExceptionStringQueue.Enqueue(exceptionText);//错误消息进队列
+            }
+        }
+
+        public static void SaveEmailCount(int count)
+        {
+            string str = System.AppDomain.CurrentDomain.BaseDirectory + "\\App_Data\\EmailCount.txt";
+            var isAny = FileSugar.IsExistFile(str.TryToString());
+            if (!isAny)
+            {
+                FileSugar.CreateFile(str.TryToString());
+                FileSugar.AppendText(str.TryToString(), count.TryToString());
+
+            }
+            else
+            {
+                FileSugar.ClearFile(str.TryToString());
+                FileSugar.AppendText(str.TryToString(), count.TryToString());
             }
         }
     }

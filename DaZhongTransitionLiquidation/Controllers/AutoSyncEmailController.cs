@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -27,11 +28,8 @@ namespace DaZhongTransitionLiquidation.Controllers
             string syncTime = ConfigSugar.GetAppString("Email_SyncTime");
             while (true)
             {
-                if (DateTime.Now.ToString("HH:mm:ss") == syncTime)
-                {
-                    ExceSyncEmail();
-                }
-                Thread.Sleep(1000);
+                ExceSyncEmail();
+                Thread.Sleep(2000*60*60);
             }
         }
         public static void ExceSyncEmail()
@@ -56,11 +54,19 @@ namespace DaZhongTransitionLiquidation.Controllers
                     pop3Client.Connect(ConfigSugar.GetAppString("Email_Server"), ConfigSugar.GetAppInt("Email_Port"), ConfigSugar.GetAppBool("Email_SSl"));
                     pop3Client.Authenticate(ConfigSugar.GetAppString("Email_UserName"), ConfigSugar.GetAppString("Email_Password"));
                     int count = pop3Client.GetMessageCount();
-
-                    for (int i = count; i >= 1; i -= 1)
+                    //获取文件中的邮件数
+                    var emailCount = 0;
+                    var filePath = AppDomain.CurrentDomain.BaseDirectory + "\\App_Data\\EmailCount.txt";
+                    if (FileSugar.IsExistFile(filePath))
+                    { 
+                        var str = FileSugar.GetFileSream(filePath);
+                        emailCount = Encoding.UTF8.GetString(str).TryToInt();
+                    }
+                    LogHelper.SaveEmailCount(count);
+                    for (int i = count; i > emailCount; i -= 1)
                     {
                         Message message = pop3Client.GetMessage(i);
-                        if (message.Headers.DateSent > DateTime.Today && message.Headers.From.Address == bankSendMail)
+                        if (message.Headers.From.Address == bankSendMail)
                         {
                             List<MessagePart> attachments = message.FindAllAttachments();
                             if (attachments != null && attachments.Count > 0)
@@ -71,10 +77,6 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 messagePart.Save(file);
                                 fileNames.Add(fileName);
                             }
-                        }
-                        if (message.Headers.DateSent < DateTime.Today)
-                        {
-                            break;
                         }
                     }
                 }

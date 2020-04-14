@@ -5,6 +5,8 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using DaZhongTransitionLiquidation.Controllers;
 using SyntacticSugar;
+using DaZhongTransitionLiquidation.Common;
+using System;
 
 namespace DaZhongTransitionLiquidation
 {
@@ -12,6 +14,10 @@ namespace DaZhongTransitionLiquidation
     {
         protected void Application_Start()
         {
+            AreaRegistration.RegisterAllAreas();
+            log4net.Config.XmlConfigurator.Configure();
+            LogHelper.WriteLog(string.Format("Liquidation 站点启动，时间：{0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+
             //GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -46,6 +52,11 @@ namespace DaZhongTransitionLiquidation
             }
             //资产变更
             AutoSyncAssetsMaintenance.AutoSyncSeavice();
+        }
+
+        public void Application_End(object sender, EventArgs e)
+        {
+            LogHelper.WriteLog(string.Format("Liquidation 站点停止，时间：{0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
         }
 
         public static bool IsWirterSyncBankFlow = false;

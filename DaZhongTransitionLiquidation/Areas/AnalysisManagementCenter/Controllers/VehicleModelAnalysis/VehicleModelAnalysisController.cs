@@ -25,7 +25,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
         public JsonResult GetManageCompanyVehicleModelAnalysis(string Year, GridParams para)
         {
 
-            var lastYearDate = (Year.TryToInt() - 1).ToString() + "-12-01" ;
+            var lastYearDate = (Year.TryToInt() - 1).ToString() + "-12-31" ;
             var currentYearDate = (Year.TryToInt() + 1) + "-01-01" ;
             var _db = DbBigDataConfig.GetInstance();
             var sqlStr = @"select CompanyType = '管理公司'                                       
@@ -35,9 +35,9 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , abbr.VehicleAbbreviationId                                        as VehicleID
                              , abbr.Name                                                         as VehicleModel
                              , count(1)                                                          as Quantity
-                             , (select count(1) from Cab.Cab_Base_Info_D where LicenseDate > '" + lastYearDate + @"' and LicenseDate < '" + currentYearDate + @"'and UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as Total
-                             , cast(count(1) * 100 / (select count(1) from Cab.Cab_Base_Info_D where LicenseDate > '" + lastYearDate + @"'and LicenseDate <  '" + currentYearDate + @"'and UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as decimal(18,6)) as [Percent]
-                        from Cab.Cab_Base_Info_D                  info
+                             , (select count(1) from  (SELECT distinct UsageOrganizationId,License,LicenseDate,VehicleAbbreviationId FROM Cab.Cab_Base_Info_D) info where LicenseDate > '" + lastYearDate + @"' and LicenseDate < '" + currentYearDate + @"'and UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as Total
+                             , cast(count(1) * 100 / (select count(1) from (SELECT distinct UsageOrganizationId,License,LicenseDate,VehicleAbbreviationId FROM Cab.Cab_Base_Info_D) info where LicenseDate > '" + lastYearDate + @"'and LicenseDate <  '" + currentYearDate + @"'and UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as decimal(18,6)) as [Percent]
+                        from (SELECT distinct UsageOrganizationId,License,LicenseDate,VehicleAbbreviationId FROM Cab.Cab_Base_Info_D) info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
                             left join DZSrc.Organization_D        org
@@ -54,22 +54,21 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
 		                 select CompanyType = '所属公司'
                              , org.Name                                                          as CompanyName
                              , datename(yyyy, info.LicenseDate) + datename(mm, info.LicenseDate) as YearMonth
-                             , info.OwnOrganizationId                                          as CompanyID
+                             , info.AssetOwnerId                                          as CompanyID
                              , abbr.VehicleAbbreviationId                                        as VehicleID
                              , abbr.Name                                                         as VehicleModel
                              , count(1)                                                          as Quantity
-                             , (select count(1) from Cab.Cab_Base_Info_D where LicenseDate > '" + lastYearDate + @"' and LicenseDate < '" + currentYearDate + @"'and OwnOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as Total
-                             , cast(count(1) * 100 / (select count(1) from Cab.Cab_Base_Info_D where LicenseDate > '" + lastYearDate + @"'and LicenseDate <  '" + currentYearDate + @"'and OwnOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as decimal(18,6)) as [Percent]
-                        from Cab.Cab_Base_Info_D                  info
+                             , (select count(1) from  (SELECT distinct UsageOrganizationId,License,LicenseDate,VehicleAbbreviationId FROM Cab.Cab_Base_Info_D) info where LicenseDate > '" + lastYearDate + @"' and LicenseDate < '" + currentYearDate + @"'and UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as Total
+                             , cast(count(1) * 100 / (select count(1) from  (SELECT distinct UsageOrganizationId,License,LicenseDate,VehicleAbbreviationId FROM Cab.Cab_Base_Info_D) info where LicenseDate > '" + lastYearDate + @"'and LicenseDate <  '" + currentYearDate + @"'and UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )) as decimal(18,6)) as [Percent]
+                        from (SELECT distinct UsageOrganizationId,AssetOwnerId,License,LicenseDate,VehicleAbbreviationId FROM Cab.Cab_Base_Info_D) info
                             left join DZSrc.VehicleAbbreviation_D abbr
                                 on abbr.VehicleAbbreviationId = info.VehicleAbbreviationId
-                            left join DZSrc.Organization_D        org
-                                on org.OrganizationId = info.OwnOrganizationId
+                            left join DZSrc.Owner_D org on org.ID = info.AssetOwnerId
                         where info.LicenseDate > '" + lastYearDate + @"'
                               and info.LicenseDate < '" + currentYearDate + @"'
-                              and info.OwnOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )
+                              and info.UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )
                         group by datename(yyyy, info.LicenseDate) + datename(mm, info.LicenseDate)
-                               , info.OwnOrganizationId
+                               , info.AssetOwnerId
                                , org.Name
                                , abbr.VehicleAbbreviationId
                                , abbr.Name";

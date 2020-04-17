@@ -37,7 +37,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             List<string> fileNames = GetEmailAttachments();
             if (fileNames.Count > 0)
             {
-                ImportFile(fileNames);
+                //ImportFile(fileNames);
             }
         }
         public static List<string> GetEmailAttachments()
@@ -62,6 +62,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var str = FileSugar.GetFileSream(filePath);
                         emailCount = Encoding.UTF8.GetString(str).TryToInt();
                     }
+                    //获取最新的邮件数存入文件中
                     LogHelper.SaveEmailCount(count);
                     for (int i = count; i > emailCount; i -= 1)
                     {
@@ -76,15 +77,15 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 FileInfo file = new FileInfo(Path.Combine(fileFolder, fileName));
                                 messagePart.Save(file);
                                 fileNames.Add(fileName);
-                            }
+                            }   
                         }
                     }
                 }
-                LogHelper.WriteLog(string.Format("读取邮件成功:邮件数量：{0}", fileNames.Count));
+                LogHelper.WriteLog(string.Format("读取邮件成功:邮件数量：{0},{1}", fileNames.Count, fileNames));
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog(string.Format("读取邮件错误:{0}", ex.ToString()));
+                LogHelper.WriteLog(string.Format("读取邮件错误:{0},{1}", ex.ToString(), fileNames));
             }
             return fileNames;
         }

@@ -37,7 +37,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             List<string> fileNames = GetEmailAttachments();
             if (fileNames.Count > 0)
             {
-                //ImportFile(fileNames);
+                ImportFile(fileNames);
             }
         }
         public static List<string> GetEmailAttachments()

@@ -182,6 +182,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 Directory.CreateDirectory(fileDirectory);
             }
             string filePath = Path.Combine(fileDirectory, fileName);
+            var isAny = FileSugar.IsExistFile(filePath.TryToString());
+            if (isAny)
+            {
+                //上传文件存在重名,删除旧文件
+                FileSugar.DeleteFile(filePath.TryToString());
+            }
             file.SaveAs(filePath);
             return Content(fileName);
 

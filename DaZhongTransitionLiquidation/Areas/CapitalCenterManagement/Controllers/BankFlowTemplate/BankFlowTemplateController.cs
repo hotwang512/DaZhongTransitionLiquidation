@@ -193,26 +193,28 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     //按交易日期排序取最小值
                     bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
+                    int bankIndex = 0;
                     if (bankFlowList.Count > 0)
                     {
-                        db.Insertable(bankFlowList).ExecuteCommand();
-                        //根据流水自动生成凭证
-                        var userData = new List<Sys_User>();
-                        //DbService.Command(_db =>
-                        //{
-                        //    userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
-                        //});
-                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
-                        //同步银行流水到银行数据表
-                        BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
+                        db.Ado.UseTran(() =>
+                        {
+                            bankIndex = db.Insertable(bankFlowList).ExecuteCommand();
+                            //根据流水自动生成凭证
+                            var userData = new List<Sys_User>();
+                            GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
+                            //同步银行流水到银行数据表
+                            BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
+                        });
                     }
                     data.IsSuccess = true;
+                    LogHelper.WriteLog(string.Format("导入交行流水数量：{0}", bankIndex));
                 }
                 else
                 {
                     data.IsSuccess = false;
-                    data.ResultInfo = "导入文件数据不正确！";
+                    data.ResultInfo = "导入文件数据不正确！"; 
                 }
+                LogHelper.WriteLog(string.Format("导入交行流水状态：{0}", data.IsSuccess));
             });
             return base.Json(data, JsonRequestBehavior.AllowGet);
         }

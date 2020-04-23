@@ -19,7 +19,7 @@ namespace DaZhongTransitionLiquidation
             LogHelper.WriteLog(string.Format("Liquidation 站点启动，时间：{0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
 
             //GlobalConfiguration.Configure(WebApiConfig.Register);
-            AreaRegistration.RegisterAllAreas();
+            //AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             #region 依赖注入

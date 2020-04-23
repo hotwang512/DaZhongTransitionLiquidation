@@ -115,7 +115,7 @@ var $page = function () {
                         initTable();
                     }
                     else {
-                        jqxNotification("导入失败！" + result.ResultInfo, null, "success");
+                        jqxNotification("上传失败！" + result.ResultInfo, null, "error");
                     }
                     layer.closeAll('loading');
                 });
@@ -136,7 +136,7 @@ var $page = function () {
                         initTable();
                     }
                     else {
-                        jqxNotification("导入失败！" + result.ResultInfo, null, "success");
+                        jqxNotification("上传失败！" + result.ResultInfo, null, "error");
                     }
                     layer.closeAll('loading');
                 });

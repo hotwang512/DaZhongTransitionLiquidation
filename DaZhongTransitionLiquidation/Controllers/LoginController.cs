@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using DaZhongTransitionLiquidation.Infrastructure.ViewEntity;
 using System.Linq;
 using SqlSugar;
+using System.Reflection;
 
 namespace DaZhongTransitionLiquidation.Controllers
 {
@@ -30,6 +31,7 @@ namespace DaZhongTransitionLiquidation.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             return View();
         }
 

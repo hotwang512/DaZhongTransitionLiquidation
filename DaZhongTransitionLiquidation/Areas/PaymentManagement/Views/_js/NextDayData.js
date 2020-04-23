@@ -136,6 +136,7 @@ var $page = function () {
                         jqxNotification("未拉取到邮件！", null, "error");
                     } else {
                         jqxNotification("邮件拉取成功！", null, "success");
+                        initTable();
                     }
                 }
 

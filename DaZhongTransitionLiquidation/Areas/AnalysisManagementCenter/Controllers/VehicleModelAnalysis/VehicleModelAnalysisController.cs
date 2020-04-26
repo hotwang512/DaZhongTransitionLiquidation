@@ -44,7 +44,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                 on org.OrganizationId = info.UsageOrganizationId
                         where info.LicenseDate > '" + lastYearDate + @"'
                               and info.LicenseDate < '"+ currentYearDate + @"'
-                              and info.UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )
+                              and info.UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 ,451 )
                         group by datename(yyyy, info.LicenseDate) + datename(mm, info.LicenseDate)
                                , info.UsageOrganizationId
                                , org.Name
@@ -66,7 +66,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                             left join DZSrc.Owner_D org on org.ID = info.AssetOwnerId
                         where info.LicenseDate > '" + lastYearDate + @"'
                               and info.LicenseDate < '" + currentYearDate + @"'
-                              and info.UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 )
+                              and info.UsageOrganizationId in ( 53, 54, 55, 198, 35, 11749, 432, 521 ,451 )
                         group by datename(yyyy, info.LicenseDate) + datename(mm, info.LicenseDate)
                                , info.AssetOwnerId
                                , org.Name

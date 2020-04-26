@@ -492,9 +492,9 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetRe
                         assetModifyLastFlowList.Add(nv);
                     }
                     assetModifyCurrentFlowList = assetModifyCurrentFlowList.Where(x =>
-                        x.BELONGTO_COMPANY != "37" && x.MANAGEMENT_COMPANY != "197" && x.MANAGEMENT_COMPANY != "480").ToList();
+                        x.BELONGTO_COMPANY != "37" && x.MANAGEMENT_COMPANY != "197" && x.MANAGEMENT_COMPANY != "480" && x.VEHICLE_STATE == "在役").ToList();
                     assetModifyLastFlowList = assetModifyLastFlowList.Where(x =>
-                        x.BELONGTO_COMPANY != "37" && x.MANAGEMENT_COMPANY != "197" && x.MANAGEMENT_COMPANY != "480").ToList();
+                        x.BELONGTO_COMPANY != "37" && x.MANAGEMENT_COMPANY != "197" && x.MANAGEMENT_COMPANY != "480" && x.VEHICLE_STATE == "在役").ToList();
                     var allFlowList = assetModifyCurrentFlowList.Union(assetModifyLastFlowList);
                     var dt = assetModifyCurrentFlowList.TryToDataTable();
                     //车型

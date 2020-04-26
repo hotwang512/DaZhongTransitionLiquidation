@@ -14,7 +14,8 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Models
         public string ASSETCOUNT { get; set; }
         public decimal COST { get; set; }
         public decimal ACCT { get; set; }
-        public decimal DEVALUE { get; set; }
+        public decimal PTD { get; set; }
+        public decimal YTD { get; set; }
 
         public decimal NETALUE
         {

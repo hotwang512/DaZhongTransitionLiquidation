@@ -22,18 +22,15 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
         {
             return View();
         }
-        public JsonResult GetAssetsNetValueDetail(string DateOfYear, string minMonth, string maxMonth, GridParams para)
+        public JsonResult GetAssetsNetValueDetail(string DateOfYear, string Month, GridParams para)
         {
             var jsonResult = new JsonResultModel<Models.AssetsNetValue>();
             DbBusinessDataService.Command(db =>
             {
-                var currentYear = DateOfYear.TryToInt();
-                var nextYear = (currentYear + 1).ToString();
-                var minYearMonth = DateOfYear + "-01-01";
-                var maxYearMonth = (nextYear + "-01-01").TryToDate().ToString("yyyy-MM-dd");
+                var currentYearMonth = DateOfYear.TryToInt() + "-" + Month;
                 if (DateOfYear != "")
                 {
-                    var list = db.SqlQueryable<Models.AssetsNetValue>(
+                    var sql =
                         @"select cte.PERIOD_CODE                              as YearMonth
                          , cte.ASSET_CATEGORY_MAJOR                           as MAJOR
                          , cte.ASSET_CATEGORY_MINOR                           as MINOR
@@ -41,7 +38,8 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                          , count(1)                                           as ASSETCOUNT
                          , sum(cast(cte.ASSET_COST as decimal(20, 2)))        as COST
                          , sum(cast(cte.ACCT_DEPRECIATION as decimal(20, 2))) as ACCT
-                         , 0                                                  as DEVALUE
+                         , sum(cast(cte.PTD_DEPRECIATION as decimal(20, 2))) as PTD
+                         , sum(cast(cte.YTD_DEPRECIATION as decimal(20, 2))) as YTD
                     from
                     (
                         select PERIOD_CODE
@@ -49,6 +47,8 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , ACCT_DEPRECIATION
                              , ASSET_CATEGORY_MAJOR
                              , ASSET_CATEGORY_MINOR
+							 , PTD_DEPRECIATION
+							 , YTD_DEPRECIATION
                              , case
                                    when DESCRIPTION like '途安%'
                                         or DESCRIPTION like '桑塔纳%'
@@ -59,7 +59,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                                end                                                                              as VMODEL
                              , row_number() over (partition by PERIOD_CODE, ASSET_ID order by CREATE_DATE desc) as id
                         from AssetsLedger_Swap
-                        where PERIOD_CODE like '" + currentYear + @"%'
+                        where PERIOD_CODE = '" + currentYearMonth + @"'
                     ) cte
                     where cte.id = 1
                     group by PERIOD_CODE
@@ -74,7 +74,8 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                          , count(1)                                           as ASSETCOUNT
                          , sum(cast(cte.ASSET_COST as decimal(20, 2)))        as COST
                          , sum(cast(cte.ACCT_DEPRECIATION as decimal(20, 2))) as ACCT
-                         , 0                                                  as DEVALUE
+                         , sum(cast(cte.PTD_DEPRECIATION as decimal(20, 2))) as PTD
+                         , sum(cast(cte.YTD_DEPRECIATION as decimal(20, 2))) as YTD
                     from
                     (
                         select PERIOD_CODE
@@ -82,15 +83,18 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                              , ACCT_DEPRECIATION
                              , ASSET_CATEGORY_MAJOR
                              , ASSET_CATEGORY_MINOR
+							 , PTD_DEPRECIATION
+							 , YTD_DEPRECIATION
                              , ''                                                                               as VMODEL
                              , row_number() over (partition by PERIOD_CODE, ASSET_ID order by CREATE_DATE desc) as id
                         from AssetsLedger_Swap
-                        where PERIOD_CODE like'" + currentYear + @"%'
+                        where PERIOD_CODE = '" + currentYearMonth + @"'
                     ) cte
                     where cte.id = 1
                     group by PERIOD_CODE
                            , ASSET_CATEGORY_MAJOR
-                           , VMODEL").ToList();
+                           , VMODEL";
+                    var list = db.SqlQueryable<Models.AssetsNetValue>(sql).ToList();
                     jsonResult.Rows = list;
                     jsonResult.TotalRows = list.Count();
                 }

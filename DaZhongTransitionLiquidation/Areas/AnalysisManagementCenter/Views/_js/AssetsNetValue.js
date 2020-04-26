@@ -34,7 +34,7 @@ function GetAssetsNetValueDetail() {
             var utils = $.pivotUtilities;
             var sumOverSum = utils.aggregators["Sum"];
             $("#table").pivot(mps, {
-                rows: ["YearMonth", "MAJOR", "MINOR", "VMODEL", "ASSETCOUNT", "COST", "ACCT", "DEVALUE", "NETALUE"],
+                rows: ["YearMonth", "MAJOR", "MINOR", "VMODEL", "ASSETCOUNT", "COST", "ACCT", "PTD", "YTD", "NETALUE"],
                 cols: [],
                 aggregator: sumOverSum(["COST"])
             });
@@ -52,16 +52,18 @@ function GetAssetsNetValueDetail() {
             $(".pvtAxisLabel").eq(5).css("text-align", "center");
             $(".pvtAxisLabel").eq(6).text("累计折旧");
             $(".pvtAxisLabel").eq(6).css("text-align", "center");
-            $(".pvtAxisLabel").eq(7).text("减值准备");
+            $(".pvtAxisLabel").eq(7).text("本月折旧");
             $(".pvtAxisLabel").eq(7).css("text-align", "center");
-            $(".pvtAxisLabel").eq(8).text("账面净值");
+            $(".pvtAxisLabel").eq(8).text("本年折旧");
             $(".pvtAxisLabel").eq(8).css("text-align", "center");
+            $(".pvtAxisLabel").eq(9).text("账面净值");
+            $(".pvtAxisLabel").eq(9).css("text-align", "center");
             $(".pvtRowTotalLabel").css("text-align", "center");
             $(".pvtTotal").hide();
             $(".pvtTotalLabel ").hide();
             $(".pvtGrandTotal ").hide();
         } else {
-            jqxNotification("当前年份没有数据！", null, "error");
+            jqxNotification("当前月份没有数据！", null, "error");
         }
         layer.closeAll('loading');
         $("#assetReport").show();
@@ -72,7 +74,7 @@ var tableValue = "";
 function getPeriodData(callback) {
     $.ajax({
         url: "/AnalysisManagementCenter/AssetsNetValue/GetAssetsNetValueDetail",
-        data: { "DateOfYear": $("#DateOfYear").val() },
+        data: { "DateOfYear": $("#DateOfYear").val(), "Month": $("#Month").val() },
         datatype: "json",
         type: "post",
         success: function (result) {

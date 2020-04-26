@@ -82,6 +82,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     var initialBalanceData = db.Queryable<Business_FundReconciliation>().Where(x=>x.ReconciliantStatus == "对账成功" && x.CompanyCode == companyCode 
                                               && x.BankAccount == bankAccount).OrderBy("BalanceDate desc").First();//当前公司银行账号下最新一条数据
                     decimal number = 0;
+                    decimal sysBalance = 0;
+                    var balanceDateStar = initialBalanceData.BalanceDate.Value.AddDays(1);//开始日期
                     if (initialBalanceData != null)
                     {
                         if (initialBalanceData.BalanceDate != null)
@@ -99,8 +101,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             return;
                         }
                         number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnOut)-SUM(TurnIn)) as number from Business_BankFlowTemplate where BankAccount = '" + bankAccount + @"'  
-                                 and TransactionDate > '" + initialBalanceData.BalanceDate + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
-                        if (bankBalance == (initialBalanceData.BankBalance + number))
+                                 and TransactionDate >= '" + balanceDateStar + "' and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
+                        sysBalance = initialBalanceData.BankBalance.TryToDecimal() + number;
+                        if (bankBalance == sysBalance)
                         {
                             sevenSection.BalanceDate = (sevenSection.BalanceDate.Value.ToString("yyyy-MM-dd") + " " + DateTime.Now.ToString("HH:mm:ss")).TryToDate();
                             sevenSection.ReconciliantStatus = "对账成功";
@@ -114,7 +117,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     {
                         number = db.Ado.SqlQuery<decimal>(@"select (SUM(TurnOut)-SUM(TurnIn)) as number from Business_BankFlowTemplate where BankAccount ='" + bankAccount + @"'  
                                  and TransactionDate<='" + balanceDateEnd + "' ").FirstOrDefault();
-                        if (bankBalance == (initialBalance + number))
+                        sysBalance = initialBalance.TryToDecimal() + number;
+                        if (bankBalance == sysBalance)
                         {
                             sevenSection.BalanceDate = (sevenSection.BalanceDate.Value.ToString("yyyy-MM-dd") + " " + DateTime.Now.ToString("HH:mm:ss")).TryToDate();
                             sevenSection.ReconciliantStatus = "对账成功";
@@ -126,11 +130,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     }
                     if (isEdit)
                     {
+                        sevenSection.SysBalance = sysBalance;
                         db.Updateable(sevenSection).ExecuteCommand();
                     }
                     else
                     {
                         sevenSection.VGUID = Guid.NewGuid();
+                        sevenSection.SysBalance = sysBalance;
                         sevenSection.ReconciliantDate = DateTime.Now;
                         db.Insertable(sevenSection).ExecuteCommand();
                     } 

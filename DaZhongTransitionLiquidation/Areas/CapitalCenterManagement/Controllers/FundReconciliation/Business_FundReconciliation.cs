@@ -15,6 +15,12 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         /// </summary> 
         public decimal? BankBalance { get; set; }
         /// <summary>
+        /// Desc:系统余额
+        /// Default:
+        /// Nullable:True
+        /// </summary> 
+        public decimal? SysBalance { get; set; }
+        /// <summary>
         /// Desc:余额日期
         /// Default:
         /// Nullable:True

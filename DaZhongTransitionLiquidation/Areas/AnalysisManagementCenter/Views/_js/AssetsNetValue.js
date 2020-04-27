@@ -6,6 +6,8 @@ var $page = function () {
     this.init = function () {
         var date = new Date();
         $("#DateOfYear").val(date.getFullYear());
+        initiSelectManageCompany();
+        initiSelectAssetOwnerCompany();
         GetAssetsNetValueDetail();
         addEvent();
     }
@@ -24,6 +26,33 @@ function parseToInt(str) {
     } else {
         return 0;
     }
+}
+function initiSelectManageCompany() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/AssetsNetValue/GetManageCompany",
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            uiEngineHelper.bindSelect('#MamageCompany', msg, "Abbreviation", "Abbreviation");
+            $("#MamageCompany").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
+
+function initiSelectAssetOwnerCompany() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/AssetsNetValue/GetAssetOwnerCompany",
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            uiEngineHelper.bindSelect('#AssetOwnerCompany', msg, "Abbreviation", "Abbreviation");
+            $("#AssetOwnerCompany").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
 }
 function GetAssetsNetValueDetail() {
     layer.load();
@@ -74,7 +103,7 @@ var tableValue = "";
 function getPeriodData(callback) {
     $.ajax({
         url: "/AnalysisManagementCenter/AssetsNetValue/GetAssetsNetValueDetail",
-        data: { "DateOfYear": $("#DateOfYear").val(), "Month": $("#Month").val() },
+        data: { "DateOfYear": $("#DateOfYear").val(), "Month": $("#Month").val(), "ManageCompany": $("#ManageCompany").val(), "AssetOwnerCompany": $("#AssetOwnerCompany").val() },
         datatype: "json",
         type: "post",
         success: function (result) {

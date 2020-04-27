@@ -42,14 +42,14 @@
         <div class="header_text_div"><span class="header_text_span">查询</span></div>
     </div>
     <div class="body_mk" style="height: 60px;">
-        <table style="margin-top: 20px; width: 650px; margin-left: 20px;">
+        <table style="margin-top: 20px; width: 1050px; margin-left: 20px;">
             <tr style="height: 45px;">
                 <td style="width: 50px;text-align: right"><span class="spanText">年份：</span></td>
-                <td style="width: 100px;text-align: center">
-                    <input id="DateOfYear" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy', dateFmt: 'yyyy', lang: 'zh-cn', onpicked: pickedFunc })" class="input_text form-control" style="width: 200px" validatetype="required">
+                <td style="width: 75px;text-align: center">
+                    <input id="DateOfYear" type="text" onfocus="WdatePicker({ realDateFmt: 'yyyy', dateFmt: 'yyyy', lang: 'zh-cn', onpicked: pickedFunc })" class="input_text form-control" style="width: 75px" validatetype="required">
                 </td>
                 <td style="width: 50px;text-align: right"><span class="spanText">月份：</span></td>
-                <td style="width: 200px;">
+                <td style="width: 160px;">
                     <select id="StartMonth" class="input_text form-control" style="width: 75px; float: left;"disabled >
                         <option value="1">1月</option>
                         <option value="2">2月</option>
@@ -78,6 +78,14 @@
                         <option value="11">11月</option>
                         <option value="12">12月</option>
                     </select>
+                </td>
+                <td style="width: 80px;text-align: right"><span class="spanText">管理公司：</span></td>
+                <td style="width: 120px;text-align: center">
+                    <select id="ManageCompany" class="input_text form-control" style="width: 180px; float: left"></select>
+                </td>
+                <td style="width: 80px;text-align: right"><span class="spanText">资产公司：</span></td>
+                <td style="width: 120px;text-align: center">
+                    <select id="AssetOwnerCompany" class="input_text form-control" style="width: 180px; float: left"></select>
                 </td>
                 <td style="width: 95px;">
                     <button id="btnSearch" type="button" class="buttons"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">查询</span></button>

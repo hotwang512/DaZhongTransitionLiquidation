@@ -35,8 +35,8 @@ function initiSelectManageCompany() {
         async: false,
         success: function (msg) {
             debugger;
-            uiEngineHelper.bindSelect('#MamageCompany', msg, "Abbreviation", "Abbreviation");
-            $("#MamageCompany").prepend("<option value=\"\" selected='true'>请选择</>");
+            uiEngineHelper.bindSelect('#ManageCompany', msg, "Abbreviation", "Abbreviation");
+            $("#ManageCompany").prepend("<option value=\"\" selected='true'>请选择</>");
         }
     });
 }
@@ -101,6 +101,7 @@ function GetAssetsNetValueDetail() {
 
 var tableValue = "";
 function getPeriodData(callback) {
+    debugger;
     $.ajax({
         url: "/AnalysisManagementCenter/AssetsNetValue/GetAssetsNetValueDetail",
         data: { "DateOfYear": $("#DateOfYear").val(), "Month": $("#Month").val(), "ManageCompany": $("#ManageCompany").val(), "AssetOwnerCompany": $("#AssetOwnerCompany").val() },

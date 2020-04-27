@@ -28,7 +28,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
             var list = new List<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
             {
-                var intArray = new[] { "53", "54", "55", "56" };
+                var intArray = new[] { "53", "54", "55" };
                 var intList = intArray.ToList();
                 list = db.Queryable<Business_SevenSection>().Where(x =>
                     x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").In("OrgID", intList).ToList();

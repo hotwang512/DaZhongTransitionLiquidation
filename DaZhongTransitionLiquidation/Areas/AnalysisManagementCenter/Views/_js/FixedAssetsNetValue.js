@@ -8,6 +8,8 @@ var $page = function () {
         $("#DateOfYear").val(date.getFullYear());
         $("#StartMonth").val(1);
         $("#EndMonth").val(12);
+        initiSelectManageCompany();
+        initiSelectAssetOwnerCompany();
         GetFixedAssetsNetValueDetail(1,12);
         //$("#DateOfYear").attr("disabled",true);
         //if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
@@ -33,6 +35,33 @@ function parseToInt(str) {
         return 0;
     }
 }
+function initiSelectManageCompany() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/FixedAssetsNetValue/GetManageCompany",
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            uiEngineHelper.bindSelect('#ManageCompany', msg, "Abbreviation", "Abbreviation");
+            $("#ManageCompany").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
+
+function initiSelectAssetOwnerCompany() {
+    $.ajax({
+        url: "/AnalysisManagementCenter/FixedAssetsNetValue/GetAssetOwnerCompany",
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            uiEngineHelper.bindSelect('#AssetOwnerCompany', msg, "Abbreviation", "Abbreviation");
+            $("#AssetOwnerCompany").prepend("<option value=\"\" selected='true'>请选择</>");
+        }
+    });
+}
 function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
     var ordersSource =
     {
@@ -46,7 +75,7 @@ function GetFixedAssetsNetValueDetail(minMonth,maxMonth) {
         ],
         url: "/AnalysisManagementCenter/FixedAssetsNetValue/GetFixedAssetsNetValueDetail",
         data: {
-            "DateOfYear": $("#DateOfYear").val(), "minMonth": minMonth, "maxMonth": maxMonth
+            "DateOfYear": $("#DateOfYear").val(), "minMonth": minMonth, "maxMonth": maxMonth, "ManageCompany": $("#ManageCompany").val(), "AssetOwnerCompany": $("#AssetOwnerCompany").val()
         },
         dataType: "json"
     };

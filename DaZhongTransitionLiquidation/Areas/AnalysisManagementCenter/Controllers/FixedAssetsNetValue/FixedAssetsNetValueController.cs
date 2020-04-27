@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Models;
+using DaZhongTransitionLiquidation.Areas.PaymentManagement.Models;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.DbEntity;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
@@ -22,11 +23,44 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
         {
             return View();
         }
-        public JsonResult GetFixedAssetsNetValueDetail(string DateOfYear, string minMonth, string maxMonth, GridParams para)
+        public JsonResult GetManageCompany()
         {
-            var jsonResult = new JsonResultModel<Models.FixedAssetsNetValue>();
+            var list = new List<Business_SevenSection>();
             DbBusinessDataService.Command(db =>
             {
+                var intArray = new[] { "53", "54", "55" };
+                var intList = intArray.ToList();
+                list = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").In("OrgID", intList).ToList();
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetAssetOwnerCompany()
+        {
+            var list = new List<Business_SevenSection>();
+            DbBusinessDataService.Command(db =>
+            {
+                var intArray = new[] { "2", "3", "35", "36", "4" };
+                var intList = intArray.ToList();
+                list = db.Queryable<Business_SevenSection>().Where(x =>
+                    x.SectionVGUID == "A63BD715-C27D-4C47-AB66-550309794D43").In("OrgID", intList).ToList();
+            });
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetFixedAssetsNetValueDetail(string DateOfYear, string minMonth, string maxMonth, string ManageCompany, string AssetOwnerCompany, GridParams para)
+        {
+            var jsonResult = new JsonResultModel<Models.FixedAssetsNetValue>();
+            var sqlWhere = "";
+            DbBusinessDataService.Command(db =>
+            {
+                if (!ManageCompany.IsNullOrEmpty())
+                {
+                    sqlWhere += "and FA_LOC_2 ='" + ManageCompany + "' ";
+                }
+                if (!AssetOwnerCompany.IsNullOrEmpty())
+                {
+                    sqlWhere += "and FA_LOC_1 ='" + AssetOwnerCompany + "'";
+                }
                 var currentYear = DateOfYear.TryToInt();
                 var lastYear = (currentYear - 1).ToString();
                 var nextYear = (currentYear + 1).ToString();
@@ -50,7 +84,7 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
                     //年初数
                     var startPeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(
                         @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '期初' as PeriodType  FROM dbo.AssetsLedger_Swap
-                        where PERIOD_CODE =  '" + lastYear + @"-12'
+                        where PERIOD_CODE =  '" + lastYear + @"-12' " + sqlWhere + @"
                     group by ASSET_CATEGORY_MAJOR").ToList();
                     //本期增加
                     var addedSql = @"SELECT ASSET_CATEGORY_MAJOR as MAJOR,sum(ASSET_COST) as COST,sum(ACCT_DEPRECIATION) as ACCT, '增加' as PeriodType  FROM (select PERIOD_CODE
@@ -59,10 +93,12 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
 		                         , ACCT_DEPRECIATION
                                  , ASSET_CATEGORY_MINOR
 								 , ASSET_CREATION_DATE
+								 , FA_LOC_1
+								 , FA_LOC_2
                                  , row_number() over (partition by ASSET_ID order by CREATE_DATE desc) as id
                             from dbo.AssetsLedger_Swap) cte
                                             where cte.id = 1 and ASSET_CREATION_DATE >= '" + minYearMonth +
-                                   @"' and ASSET_CREATION_DATE < '" + maxYearMonth + @"'
+                                   @"' and ASSET_CREATION_DATE < '" + maxYearMonth + @"'" + sqlWhere + @"
                                             group by ASSET_CATEGORY_MAJOR";
                     var addedPeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(addedSql).ToList();
                     //本期减少
@@ -73,10 +109,12 @@ namespace DaZhongTransitionLiquidation.Areas.AnalysisManagementCenter.Controller
 		                        , RETIRE_ACCT_DEPRECIATION
                                 , ASSET_CATEGORY_MINOR
 		                        , RETIRE_DATE
+								 , BELONGTO_COMPANY as FA_LOC_1
+								 , MANAGEMENT_COMPANY as FA_LOC_2
                                 , row_number() over (partition by ASSET_ID order by CREATE_DATE desc) as id
-                        from dbo.AssetsRetirement_Swap) cte
+                        from (select swap.*,info.MANAGEMENT_COMPANY,info.BELONGTO_COMPANY from dbo.AssetsRetirement_Swap swap left join dbo.Business_AssetMaintenanceInfo info on swap.ASSET_ID = info.ASSET_ID) a ) cte
                                         where cte.id = 1 and RETIRE_DATE >= '" + minYearMonth +
-                        @"' and RETIRE_DATE < '" + maxYearMonth + @"'
+                        @"' and RETIRE_DATE < '" + maxYearMonth + @"'" + sqlWhere + @"
                                         group by ASSET_CATEGORY_MAJOR";
                     var reducePeriodList = db.SqlQueryable<FixedAssetsNetValueModel>(reduceSql).ToList();
                     var allPeriod = startPeriodList.Union(addedPeriodList).Union(reducePeriodList).ToList();

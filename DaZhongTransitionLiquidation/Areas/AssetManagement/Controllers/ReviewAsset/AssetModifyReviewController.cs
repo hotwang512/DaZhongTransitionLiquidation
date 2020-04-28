@@ -101,10 +101,13 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                        mi.MODEL_MINOR AS MODEL_MINOR_M,
                        mi.MANAGEMENT_COMPANY AS MANAGEMENT_COMPANY_M,
                        mi.BELONGTO_COMPANY AS BELONGTO_COMPANY_M,
+                       mi.ORGANIZATION_NUM AS FA_LOC_3,
                        mi.START_VEHICLE_DATE AS PERIOD,
                        mi.DESCRIPTION AS DESCRIPTION,
 					   mi.BOOK_TYPE_CODE,
-                       mi.ASSET_ID AS ASSET_ID
+                       mi.ASSET_ID AS ASSET_ID,
+                       mv.BELONGTO_COMPANY AS FA_LOC_1,
+                       mv.MANAGEMENT_COMPANY AS FA_LOC_2
                     FROM Business_ModifyVehicle mv
                     LEFT JOIN Business_AssetMaintenanceInfo mi
                         ON mv.ORIGINALID = mi.ORIGINALID").Where(x => vguids.Contains(x.VGUID) && x.MODIFY_TYPE == MODIFY_TYPE).ToList();
@@ -147,12 +150,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             {
                                 //先更新资产维护表，再写入Oracle 中间表
                                 db.Updateable<Business_AssetMaintenanceInfo>()
-                                    .UpdateColumns(x => new Business_AssetMaintenanceInfo { BELONGTO_COMPANY = item.BELONGTO_COMPANY }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                    .UpdateColumns(x => new Business_AssetMaintenanceInfo { BELONGTO_COMPANY = item.FA_LOC_1 }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.TRANSACTION_ID =Guid.NewGuid();
-                                assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY;
+                                assetSwapModel.FA_LOC_1 = item.FA_LOC_1;
+                                assetSwapModel.FA_LOC_2 = item.MANAGEMENT_COMPANY_M;
+                                assetSwapModel.FA_LOC_3 = item.FA_LOC_3;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                                 assetSwapModel.CREATE_DATE = DateTime.Now;
@@ -176,12 +181,14 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                             {
                                 //先更新资产维护表，再写入Oracle 中间表
                                 db.Updateable<Business_AssetMaintenanceInfo>()
-                                    .UpdateColumns(x => new Business_AssetMaintenanceInfo { MANAGEMENT_COMPANY = item.MANAGEMENT_COMPANY }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
+                                    .UpdateColumns(x => new Business_AssetMaintenanceInfo { MANAGEMENT_COMPANY = item.FA_LOC_2 }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 db.Updateable<Business_ModifyVehicle>()
                                     .UpdateColumns(x => new Business_ModifyVehicle { ISVERIFY = true }).Where(i => i.ORIGINALID == item.ORIGINALID).ExecuteCommand();
                                 var assetSwapModel = new AssetMaintenanceInfo_Swap();
                                 assetSwapModel.TRANSACTION_ID =Guid.NewGuid();
-                                assetSwapModel.FA_LOC_1 = item.MANAGEMENT_COMPANY;
+                                assetSwapModel.FA_LOC_1 = item.BELONGTO_COMPANY_M;
+                                assetSwapModel.FA_LOC_2 = item.FA_LOC_2;
+                                assetSwapModel.FA_LOC_3 = item.FA_LOC_3;
                                 //传入订单选择的部门
                                 assetSwapModel.LAST_UPDATE_DATE = DateTime.Now;
                                 assetSwapModel.CREATE_DATE = DateTime.Now;
@@ -213,7 +220,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                     .Where(x => x.ORIGINALID == item.ORIGINALID).First();
                                 if (info.ASSET_CATEGORY_MINOR != item.ASSET_CATEGORY_MINOR)
                                 {
-                                    assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MINOR;
+                                    assetSwapModel.ASSET_CATEGORY_MAJOR = item.ASSET_CATEGORY_MAJOR;
                                     assetSwapModel.ASSET_CATEGORY_MINOR = item.ASSET_CATEGORY_MINOR;
                                 }
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;

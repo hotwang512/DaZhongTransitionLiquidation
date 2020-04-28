@@ -158,5 +158,8 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string PERIOD { get; set; }
         public string DESCRIPTION { get; set; }
         public string BOOK_TYPE_CODE { get; set; }
+        public string FA_LOC_1 { get; set; }
+        public string FA_LOC_2 { get; set; }
+        public string FA_LOC_3 { get; set; }
     }
 }

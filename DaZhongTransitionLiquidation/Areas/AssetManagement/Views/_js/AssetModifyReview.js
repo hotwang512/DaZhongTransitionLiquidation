@@ -171,7 +171,7 @@ var $page = function () {
                     { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
                     { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: false }
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
             ];
         } else if (mtype == "FA_LOC_1") {
             columns = [

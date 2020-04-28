@@ -100,16 +100,13 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
                     if (bankFlowList.Count > 0)
                     {
-                        db.Insertable(bankFlowList).ExecuteCommand();
-                        //根据流水自动生成凭证
-                        var userData = new List<Sys_User>();
-                        DbService.Command(_db =>
+                        db.Ado.UseTran(() =>
                         {
-                            userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                            db.Insertable(bankFlowList).ExecuteCommand();
+                            //根据流水自动生成凭证
+                            var userData = new List<Sys_User>();
+                            GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
                         });
-                        GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
-                        //同步银行流水到银行数据表
-                        BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                     }
                     data.IsSuccess = true;
                 }
@@ -119,6 +116,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     data.ResultInfo = "导入文件数据不正确！";
                 }
             });
+            if (data.IsSuccess)
+            {
+                //同步银行流水到银行数据表
+                BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
+            }
             return base.Json(data, JsonRequestBehavior.AllowGet);
         }
         public ActionResult ImportDataBCM(string fileName)
@@ -149,8 +151,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         var isAny = bankFlowData.Where(x => x.Batch == datatable.Rows[i]["核心流水号"].ToString() && x.TradingBank == "交通银行" && x.BankAccount == bankAccount.ObjToString()).ToList();
                         if (isAny.Count == 1)
                         {
-                            isAny[0].PaymentUnitInstitution = bankData.Where(x => x.BankAccount == bankAccount.ToString()).FirstOrDefault().BankName;
-                            db.Updateable(isAny[0]).IgnoreColumns(it => it == "CreateTime").ExecuteCommand();
+                            //isAny[0].PaymentUnitInstitution = bankData.Where(x => x.BankAccount == bankAccount.ToString()).FirstOrDefault().BankName;
+                            //db.Updateable(isAny[0]).IgnoreColumns(it => it == "CreateTime").ExecuteCommand();
                             continue;
                         }
                         var companyBankData = bankData.Single(x => x.BankAccount == bankAccount.ObjToString());
@@ -202,8 +204,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             //根据流水自动生成凭证
                             var userData = new List<Sys_User>();
                             GenerateVoucherList(db, bankFlowList, UserInfo.LoginName, userData);
-                            //同步银行流水到银行数据表
-                            BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
                         });
                     }
                     data.IsSuccess = true;
@@ -212,9 +212,14 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 else
                 {
                     data.IsSuccess = false;
-                    data.ResultInfo = "导入文件数据不正确！"; 
+                    data.ResultInfo = "导入文件数据不正确！";
                 }
                 LogHelper.WriteLog(string.Format("导入交行流水状态：{0}", data.IsSuccess));
+                if (data.IsSuccess)
+                {
+                    //同步银行流水到银行数据表
+                    //BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
+                }
             });
             return base.Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -231,7 +236,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 .WhereIF(searchParams.TransactionDate != null, i => i.TransactionDate >= searchParams.TransactionDate && i.TransactionDate <= transactionDateEnd)
                 .WhereIF(searchParams.ReceivingUnit != null, i => i.ReceivingUnit.Contains(searchParams.ReceivingUnit))
                 .WhereIF(UserInfo.LoginName != "admin", x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
-                .Where(x=>x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
+                .Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode)
                 .OrderBy(i => i.TransactionDate, OrderByType.Desc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 jsonResult.TotalRows = pageCount;
             });
@@ -281,7 +286,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             DbBusinessDataService.Command(db =>
             {
                 resultModel = new ResultModel<string>() { IsSuccess = true, Status = "1" };
-                if(MvcApplication.IsWirterSyncBankFlow == true)
+                if (MvcApplication.IsWirterSyncBankFlow == true)
                 {
                     resultModel.IsSuccess = false;
                     resultModel.Status = "2";
@@ -387,7 +392,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.CompanyName = item.PaymentUnit.ToDBC();
                 //var voucherName = GetVoucherName(item.AccountModeName, item.CompanyCode);
                 var month = item.TransactionDate.Value.Month < 10 ? "0" + item.TransactionDate.Value.Month.ToString() : item.TransactionDate.Value.Month.ToString();
-                var bank = "B" + item.AccountModeCode + item.CompanyCode+ item.TransactionDate.Value.Year.ToString()+ month;
+                var bank = "B" + item.AccountModeCode + item.CompanyCode + item.TransactionDate.Value.Year.ToString() + month;
                 //100201银行类2019090001
                 var no = CreateNo.GetCreateNo(db, bank);
                 //var no = "";
@@ -410,7 +415,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     switch (user.Role)
                     {
-                        case "财务经理":voucher.FinanceDirector = user.LoginName;break;
+                        case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                         case "财务主管": voucher.Bookkeeping = user.LoginName; break;
                         //case "审核岗": voucher.Auditor = user.LoginName; break;
                         case "出纳": voucher.Cashier = user.LoginName; break;
@@ -442,7 +447,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     BVDetail.LoanMoneyCount = 0;
                     subject = sevenSubject.Borrow;
                     var bankChannelOne = bankChannel.Where(it => it.BankAccount == item.ReceivableAccount).ToList().FirstOrDefault();
-                    if(bankChannelOne != null)
+                    if (bankChannelOne != null)
                     {
                         //对方账号下借贷配置信息
                         var loadData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null && j.AccountModeCode == item.AccountModeCode && j.CompanyCode == item.CompanyCode).ToList();
@@ -491,7 +496,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     }
                     else//if ((loadData.Count == 1 || loadData.Count == 0) && borrowData.Count == 1)
                     {
-                        
+
                     }
                 }
                 if (subject != "" && subject != null)
@@ -736,7 +741,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
             asset.ACCOUNTED_CR = BVDetail.LoanMoney.TryToString();
             assetList.Add(asset);
         }
-        public static string GetVoucherName(string accountModeName,string companyCode)
+        public static string GetVoucherName(string accountModeName, string companyCode)
         {
             using (SqlSugarClient db = DbBusinessDataConfig.GetInstance())
             {

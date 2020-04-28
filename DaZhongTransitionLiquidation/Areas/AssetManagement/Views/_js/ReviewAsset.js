@@ -17,6 +17,29 @@ var $page = function () {
         month = (month < 10 ? "0" + month : month);
         var currentDate = (year.toString() + "-" + month.toString());
         $("#YearMonth").val(currentDate);
+        var arr = [];
+        var d = new Date;
+        d.setMonth(d.getMonth() + 1);
+        for (var i = 0; i < 3; i++) {
+            debugger;
+            d.setMonth(d.getMonth() - i);
+            var y = d.getFullYear();
+            var m = d.getMonth();
+            m = (m < 10 ? "0" + m : m);
+            arr.push(y.toString() + "-" + m.toString());
+        }
+        debugger;
+        if (arr.length == 0) {
+            arr.push("Default");
+        }
+        var dataAdapter = new $.jqx.dataAdapter(arr);
+        $("#SubmitYearMonth").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 198, height: 33 });
+        $("#SubmitYearMonth").jqxComboBox({ itemHeight: 33 });
+        $("#SubmitYearMonth input").click(function () {
+            $("#SubmitYearMonth").jqxComboBox('clearSelection');
+        })
+        $("#dropdownlistWrapperSubmitYearMonth Input")[0].style.paddingLeft = "10px";
+
         addEvent();
         GetVehicleModelDropDown();
     }
@@ -67,16 +90,6 @@ var $page = function () {
         //提交
         $("#SubmitAssetReviewDialog_OKBtn").on("click", function () {
             var selection = [];
-            //var grid = $("#jqxTable");
-            //var checedBoxs = grid.find("#tablejqxTable .jqx_datatable_checkbox:checked");
-            //checedBoxs.each(function () {
-            //    var th = $(this);
-            //    if (th.is(":checked")) {
-            //        var index = th.attr("index");
-            //        var data = grid.jqxDataTable('getRows')[index];
-            //        selection.push(data.VGUID);
-            //    }
-            //});
             var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
             var pars = [];
             $(array).each(function (i, v) {
@@ -140,6 +153,11 @@ var $page = function () {
         $("#AssetReviewDialog_CancelBtn").on("click",
             function () {
                 $("#AssetReviewDialog").modal("hide");
+            }
+        );
+        $("#SubmitAssetReviewDialog_CancelBtn").on("click",
+            function () {
+                $("#SubmitAssetReviewDialog").modal("hide");
             }
         );
         selector.$btnVerify().on("click",

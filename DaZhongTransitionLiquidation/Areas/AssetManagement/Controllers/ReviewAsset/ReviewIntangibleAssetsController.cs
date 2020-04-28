@@ -50,7 +50,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SubmitIntangibleAssets(List<Guid> vguids)
+        public JsonResult SubmitIntangibleAssets(List<Guid> vguids ,string YearMonth)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -149,7 +149,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                         assetSwapModel.AMORTIZATION_FLAG = assetInfo.AMORTIZATION_FLAG;
                         assetSwapModel.YTD_DEPRECIATION = assetInfo.YTD_DEPRECIATION;
                         assetSwapModel.ACCT_DEPRECIATION = assetInfo.ACCT_DEPRECIATION;
-                        assetSwapModel.PERIOD = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                        assetSwapModel.PERIOD = YearMonth;//DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0');
                         assetSwapModel.FA_LOC_1 = assetInfo.BELONGTO_COMPANY;
                         //传入订单选择的部门
                         assetSwapModel.FA_LOC_2 = assetInfo.MANAGEMENT_COMPANY;

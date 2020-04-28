@@ -16,6 +16,28 @@ var $page = function () {
             editable = true;
         }
         addEvent();
+        var arr = [];
+        var d = new Date;
+        d.setMonth(d.getMonth() + 1);
+        for (var i = 0; i < 3; i++) {
+            debugger;
+            d.setMonth(d.getMonth() - i);
+            var y = d.getFullYear();
+            var m = d.getMonth();
+            m = (m < 10 ? "0" + m : m);
+            arr.push(y.toString() + "-" + m.toString());
+        }
+        debugger;
+        if (arr.length == 0) {
+            arr.push("Default");
+        }
+        var dataAdapter = new $.jqx.dataAdapter(arr);
+        $("#SubmitYearMonth").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 198, height: 33 });
+        $("#SubmitYearMonth").jqxComboBox({ itemHeight: 33 });
+        $("#SubmitYearMonth input").click(function () {
+            $("#SubmitYearMonth").jqxComboBox('clearSelection');
+        })
+        $("#dropdownlistWrapperSubmitYearMonth Input")[0].style.paddingLeft = "10px";
     }
     //所有事件
     function addEvent() {
@@ -43,26 +65,44 @@ var $page = function () {
             if (array.length < 1) {
                 jqxNotification("请选择一条数据！", null, "error");
             } else {
+                $("#SubmitAssetReviewDialog").modal("show");
+            }
+        });
+
+        $("#SubmitAssetReviewDialog_OKBtn").on("click", function () {
+            var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+            var pars = [];
+            $(array).each(function (i, v) {
+                try {
+                    var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID");
+                    pars.push(value.value);
+                } catch (e) {
+                }
+            });
+            if (array.length < 1) {
+                jqxNotification("请选择一条数据！", null, "error");
+            } else {
+                layer.load();
                 layer.load();
                 $.ajax({
                     url: "/AssetManagement/ReviewOfficeAsset/SubmitReviewAsset",
-                    data: { vguids: pars },
+                    data: { vguids: pars , YearMonth: $("#SubmitYearMonth").val() },
                     //traditional: true,
                     type: "post",
                     success: function (msg) {
                         layer.closeAll('loading');
                         switch (msg.Status) {
-                            case "0":
-                                jqxNotification("审核失败！", null, "error");
-                                break;
-                            case "1":
-                                jqxNotification("审核成功！", null, "success");
-                                $("#jqxTable").jqxGrid('updateBoundData');
-                                $('#jqxTable').jqxGrid('clearselection');
-                                break;
-                            case "2":
-                                jqxNotification(msg.ResultInfo, null, "error");
-                                break;
+                        case "0":
+                            jqxNotification("审核失败！", null, "error");
+                            break;
+                        case "1":
+                            jqxNotification("审核成功！", null, "success");
+                            $("#jqxTable").jqxGrid('updateBoundData');
+                            $('#jqxTable').jqxGrid('clearselection');
+                            break;
+                        case "2":
+                            jqxNotification(msg.ResultInfo, null, "error");
+                            break;
                         }
                     }
                 });
@@ -72,6 +112,12 @@ var $page = function () {
         $("#AssetReviewDialog_CancelBtn").on("click",
             function () {
                 $("#AssetReviewDialog").modal("hide");
+            }
+        );
+
+        $("#SubmitAssetReviewDialog_CancelBtn").on("click",
+            function () {
+                $("#SubmitAssetReviewDialog").modal("hide");
             }
         );
         //selector.$btnVerify().on("click",

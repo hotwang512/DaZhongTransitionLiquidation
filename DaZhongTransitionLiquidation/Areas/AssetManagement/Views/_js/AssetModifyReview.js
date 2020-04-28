@@ -11,6 +11,32 @@ var vguid = "";
 var $page = function () {
     this.init = function () {
         addEvent();
+        var arr =[];
+        var d = new Date;
+        d.setMonth(d.getMonth() +1);
+        for(var i = 0; i < 3; i++) {
+            debugger;
+            d.setMonth(d.getMonth() -i);
+            var y = d.getFullYear();
+            var m = d.getMonth();
+            m = (m < 10 ? "0" +m: m);
+            arr.push(y.toString() + "-" +m.toString());
+        }
+        debugger;
+        if (arr.length == 0) {
+            arr.push("Default");
+        }
+        var dataAdapter = new $.jqx.dataAdapter(arr);
+        $("#SubmitYearMonth").jqxComboBox({
+            selectedIndex: 0, source: dataAdapter, width : 198, height: 33
+        });
+        $("#SubmitYearMonth").jqxComboBox({
+            itemHeight: 33
+        });
+        $("#SubmitYearMonth input").click(function () {
+            $("#SubmitYearMonth").jqxComboBox('clearSelection');
+        })
+        $("#dropdownlistWrapperSubmitYearMonth Input")[0].style.paddingLeft = "10px";
     };
 
     //var status = $.request.queryString().Status;
@@ -30,8 +56,25 @@ var $page = function () {
         });
         //提交
         $("#btnSubmit").on("click", function () {
-            if ($("#YearMonth").val() == "") {
-                jqxNotification("请选择您要提交的月份！", null, "error");
+            var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
+            var pars = [];
+            $(array).each(function (i, v) {
+                try {
+                    debugger;
+                    var value = $("#jqxTable").jqxGrid('getcell', v, "VGUID").value;
+                    pars.push(value);
+                } catch (e) {
+                }
+            });
+            if (array.length < 1) {
+                jqxNotification("请选择您要提交的数据！", null, "error");
+            } else {
+                $("#SubmitAssetReviewDialog").modal("show");
+            }
+        });
+        $("#SubmitAssetReviewDialog_OKBtn").on("click", function () {
+            if ($("#SubmitYearMonth").val() == "") {
+                jqxNotification("请选择期间！", null, "error");
             } else {
                 var array = $("#jqxTable").jqxGrid('getselectedrowindexes');
                 var pars = [];
@@ -46,15 +89,19 @@ var $page = function () {
                 if (array.length < 1) {
                     jqxNotification("请选择您要提交的数据！", null, "error");
                 } else {
-                    WindowConfirmDialog(submit, "您确定要提交的" + $("#YearMonth").val() + "月份的数据？", "确认框", "确定", "取消", pars);
+                    WindowConfirmDialog(submit, "您确定要提交的" + $("#SubmitYearMonth").val() + "月份的数据？", "确认框", "确定", "取消", pars);
                 }
-                
             }
         });
         //关闭
         $("#AssetReviewDialog_CancelBtn").on("click",
             function () {
                 $("#AssetReviewDialog").modal("hide");
+            }
+        );
+        $("#SubmitAssetReviewDialog_CancelBtn").on("click",
+            function () {
+                $("#SubmitAssetReviewDialog").modal("hide");
             }
         );
     }; //addEvent end
@@ -101,7 +148,7 @@ var $page = function () {
         layer.load();
         $.ajax({
             url: "/AssetManagement/AssetModifyReview/SubmitModifyVehicleReview",
-            data: { "vguids": selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
+            data: { "vguids": selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE"), "YearMonth": $("#SubmitYearMonth").val() },
             //traditional: true,
             type: "post",
             success: function (msg) {
@@ -112,6 +159,7 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("审核成功！", null, "success");
+                        $("#SubmitAssetReviewDialog").hide();
                         $("#jqxTable").jqxGrid('updateBoundData');
                         break;
                 }

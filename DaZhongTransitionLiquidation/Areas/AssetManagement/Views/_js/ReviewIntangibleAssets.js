@@ -11,6 +11,28 @@ var vguid = "";
 var $page = function () {
     this.init = function () {
         addEvent();
+        var arr = [];
+        var d = new Date;
+        d.setMonth(d.getMonth() + 1);
+        for (var i = 0; i < 3; i++) {
+            debugger;
+            d.setMonth(d.getMonth() - i);
+            var y = d.getFullYear();
+            var m = d.getMonth();
+            m = (m < 10 ? "0" + m : m);
+            arr.push(y.toString() + "-" + m.toString());
+        }
+        debugger;
+        if (arr.length == 0) {
+            arr.push("Default");
+        }
+        var dataAdapter = new $.jqx.dataAdapter(arr);
+        $("#SubmitYearMonth").jqxComboBox({ selectedIndex: 0, source: dataAdapter, width: 198, height: 33 });
+        $("#SubmitYearMonth").jqxComboBox({ itemHeight: 33 });
+        $("#SubmitYearMonth input").click(function () {
+            $("#SubmitYearMonth").jqxComboBox('clearSelection');
+        })
+        $("#dropdownlistWrapperSubmitYearMonth Input")[0].style.paddingLeft = "10px";
     }
     //所有事件
     function addEvent() {
@@ -46,9 +68,32 @@ var $page = function () {
             if (selection.length < 1) {
                 jqxNotification("请选择数据！", null, "error");
             } else {
+                $("#SubmitAssetReviewDialog").modal("show");
+            }
+        });
+        $("#SubmitAssetReviewDialog_OKBtn").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择数据！", null, "error");
+            } else {
                 SubmitTaxFeeOrder(selection);
             }
         });
+        $("#SubmitAssetReviewDialog_CancelBtn").on("click",
+            function () {
+                $("#SubmitAssetReviewDialog").modal("hide");
+            }
+        );
     }; //addEvent end
     function SubmitTaxFeeOrder(selection) {
         $.ajax({

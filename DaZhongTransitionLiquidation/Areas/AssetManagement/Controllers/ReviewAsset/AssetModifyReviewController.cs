@@ -88,7 +88,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                 MaxJsonLength = Int32.MaxValue
             };
         }
-        public JsonResult SubmitModifyVehicleReview(List<Guid> vguids, string MODIFY_TYPE)
+        public JsonResult SubmitModifyVehicleReview(List<Guid> vguids, string MODIFY_TYPE, string YearMonth)
         {
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
@@ -138,7 +138,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
-                                assetSwapModel.PERIOD = item.PERIOD;
+                                assetSwapModel.PERIOD = YearMonth;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapModel.CHECK_STATE = false;
                                 assetSwapModel.PROCESS_TYPE = "PLATE_NUMBER";
@@ -169,7 +169,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
-                                assetSwapModel.PERIOD = item.PERIOD;
+                                assetSwapModel.PERIOD = YearMonth;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapModel.CHECK_STATE = false;
                                 assetSwapModel.PROCESS_TYPE = "FA_LOC_1";
@@ -200,7 +200,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR_M;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR_M;
-                                assetSwapModel.PERIOD = item.PERIOD;
+                                assetSwapModel.PERIOD = YearMonth;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapModel.CHECK_STATE = false;
                                 assetSwapModel.PROCESS_TYPE = "FA_LOC_2";
@@ -237,7 +237,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.VEHICLE_TYPE = item.DESCRIPTION;
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
-                                assetSwapModel.PERIOD = item.PERIOD;
+                                assetSwapModel.PERIOD = YearMonth;
                                 assetSwapModel.BOOK_TYPE_CODE = item.BOOK_TYPE_CODE;
                                 assetSwapModel.CHECK_STATE = false;
                                 assetSwapModel.PROCESS_TYPE = "BUSINESS_MODEL";

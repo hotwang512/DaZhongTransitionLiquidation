@@ -282,7 +282,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
             });
             return Json(jsonResult.Rows, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult SubmitReviewAsset(List<Guid> vguids)
+        public JsonResult SubmitReviewAsset(List<Guid> vguids,string YearMonth)
         {
             var resultModel = new ResultModel<string, List<AssetDifference>>() { IsSuccess = false, Status = "0" };
             var cache = CacheManager<Sys_User>.GetInstance();
@@ -334,7 +334,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                 assetSwapModel.MODEL_MAJOR = item.MODEL_MAJOR;
                                 assetSwapModel.MODEL_MINOR = item.MODEL_MINOR;
                                 assetSwapModel.ASSET_CREATION_DATE = item.LISENSING_DATE;
-                                assetSwapModel.PERIOD = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0');
+                                assetSwapModel.PERIOD = YearMonth;//DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0');
                                 assetSwapList.Add(assetSwapModel);
                             }
                             db.Insertable<AssetMaintenanceInfo_Swap>(assetSwapList).ExecuteCommand();

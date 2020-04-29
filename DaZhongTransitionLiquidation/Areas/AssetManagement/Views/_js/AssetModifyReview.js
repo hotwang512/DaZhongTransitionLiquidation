@@ -14,13 +14,16 @@ var $page = function () {
         var arr =[];
         var d = new Date;
         d.setMonth(d.getMonth() +1);
-        for(var i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++) {
             debugger;
-            d.setMonth(d.getMonth() -i);
+            var m = d.getMonth() - i;
             var y = d.getFullYear();
-            var m = d.getMonth();
-            m = (m < 10 ? "0" +m: m);
-            arr.push(y.toString() + "-" +m.toString());
+            if (m <= 0) {
+                m = m + 12;
+                y = y - 1;
+            }
+            m = (m < 10 ? "0" + m : m);
+            arr.push(y.toString() + "-" + m.toString());
         }
         debugger;
         if (arr.length == 0) {

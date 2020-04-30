@@ -27,7 +27,6 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
         // GET: AssetManagement/ReviewAsset
         public ActionResult Index()
         {
-            ViewBag.CurrentModulePermission = GetRoleModuleInfo("eaf2caac-98f9-459c-939b-faf6468c5c64");
             return View();
         }
         public JsonResult GetReviewAssetListDatas(Business_ModifyVehicle searchParams, GridParams para)

@@ -155,6 +155,38 @@ namespace DaZhongTransitionLiquidation.Controllers
                 //Thread.Sleep(2000);
             }
         }
+        public static void DoSyncBankCBCBCM2()
+        {
+            //同步交行&建行交易流水
+            List<Business_BankFlowTemplate> bankFlowList = new List<Business_BankFlowTemplate>();
+            var success = 0;
+            try
+            {
+                using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
+                {
+                    var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-10)).ToList();
+                    //var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE >= "2019-09-02".TryToDate() && x.LAST_UPDATE_DATE < "2019-09-04".TryToDate()).ToList();
+                    //查询公司段中已启用的公司的银行信息
+                    var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
+                                            as b on a.AccountModeCode = b.AccountModeCode and a.CompanyCode = b.Code  where b.Status='1' 
+                                            and b.SectionVGUID ='A63BD715-C27D-4C47-AB66-550309794D43'").ToList();
+                    var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x => x.TradingBank != "上海银行").ToList();
+                    bankFlowList = GetBankData(_db, bankData, bankFlowList, bankFlowData, bankAccount);
+                    if (bankFlowList.Count > 0)
+                    {
+                        //按交易日期排序取最小值
+                        bankFlowList = bankFlowList.OrderBy(c => c.TransactionDate).ToList();
+                        success = WirterSyncBankFlow(bankFlowList, "admin");
+                        //同步银行流水到银行数据表
+                        BankDataPack.SyncBackFlow(bankFlowList[0].TransactionDate.GetValueOrDefault().AddDays(-1));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "同步中间表银行流水" + DateTime.Now.ToString("yyyy-MM-dd"), ex.ToString()));
+            }
+        }
         public static void AutoVehicleSeavice()
         {
             Thread LogThread = new Thread(new ThreadStart(DoVehicleBusiness));

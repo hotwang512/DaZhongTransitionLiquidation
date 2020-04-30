@@ -310,7 +310,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         AutoSyncBankFlow.WirterSyncBankFlow(newBankFlowList, UserInfo.LoginName);
                     }
                     //同步建设银行流水
-                    AutoSyncBankFlow.DoSyncBankCBCBCM();
+                    AutoSyncBankFlow.DoSyncBankCBCBCM2();
                 }
             });
             return Json(resultModel, JsonRequestBehavior.AllowGet);

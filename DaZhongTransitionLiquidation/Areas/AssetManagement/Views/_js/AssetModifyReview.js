@@ -162,7 +162,7 @@ var $page = function () {
                         break;
                     case "1":
                         jqxNotification("审核成功！", null, "success");
-                        $("#SubmitAssetReviewDialog").hide();
+                        $("#SubmitAssetReviewDialog").modal("hide");
                         $("#jqxTable").jqxGrid('updateBoundData');
                         break;
                 }

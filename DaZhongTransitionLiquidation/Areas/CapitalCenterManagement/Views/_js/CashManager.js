@@ -19,6 +19,7 @@ var $page = function () {
         if (status == "1") {
             $("#btnUp").show();
             $("#btnAddTd").show();
+            $("#btnObsolete").show();
         }
         if (status == "2") {
             $("#btnCheck").show();
@@ -26,10 +27,7 @@ var $page = function () {
         }
         if (status == "3") {
             $("#btnCash").show();
-        }
-        if (status == "4") {
-            $("#cashTable").hide();
-            $("#jqxTable").jqxDataTable({ height: "480px" });
+            $(".newspan").show();
         }
         selector.$btnSearch().unbind("click").on("click", function () {
             initTable();
@@ -41,6 +39,17 @@ var $page = function () {
         });
         $("#btnAdd").on("click", function () {
             window.location.href = "/CapitalCenterManagement/CashManagerDetail/Index";
+        })
+        //切换状态
+        $('#NewStatus').on('change', function (event) {
+            status = $("#NewStatus").val();
+            if (status == "4" || status == "5") {
+                $("#cashTable").hide();
+                $("#jqxTable").jqxDataTable({ height: "480px" });
+            } else {
+                $("#cashTable").show();
+                $("#jqxTable").jqxDataTable({ height: 400 });
+            }
         })
         //提交
         $("#btnUp").on("click", function () {
@@ -118,9 +127,31 @@ var $page = function () {
                 WindowConfirmDialog(cash, "您确定要修改选中的数据？", "确认框", "确定", "取消", selection);
             }
         });
+        //作废
+        $("#btnObsolete").on("click", function () {
+            var selection = [];
+            var grid = $("#jqxTable");
+            var checedBoxs = grid.find(".jqx_datatable_checkbox:checked");
+            checedBoxs.each(function () {
+                var th = $(this);
+                if (th.is(":checked")) {
+                    var index = th.attr("index");
+                    var data = grid.jqxDataTable('getRows')[index];
+                    selection.push(data.VGUID);
+                }
+            });
+            if (selection.length < 1) {
+                jqxNotification("请选择您要修改的数据！", null, "error");
+            } else {
+                WindowConfirmDialog(obsolete, "您确定要作废选中的数据？", "确认框", "确定", "取消", selection);
+            }
+        });
     }
 
     function initTable() {
+        if (status == "3") {
+            status = $("#NewStatus").val();
+        }
         var source =
             {
                 datafields:
@@ -293,6 +324,26 @@ function cash(selection) {
                     break;
                 case "1":
                     jqxNotification("提现成功！", null, "success");
+                    $("#jqxTable").jqxDataTable('updateBoundData');
+                    break;
+            }
+        }
+    });
+}
+//作废
+function obsolete(selection) {
+    $.ajax({
+        url: "/CapitalCenterManagement/CashManager/UpdataCashManager",
+        data: { vguids: selection, status: "5" },
+        traditional: true,
+        type: "post",
+        success: function (msg) {
+            switch (msg.Status) {
+                case "0":
+                    jqxNotification("作废失败！", null, "error");
+                    break;
+                case "1":
+                    jqxNotification("作废成功！", null, "success");
                     $("#jqxTable").jqxDataTable('updateBoundData');
                     break;
             }

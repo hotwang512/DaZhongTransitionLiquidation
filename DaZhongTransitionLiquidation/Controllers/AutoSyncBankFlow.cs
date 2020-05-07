@@ -184,7 +184,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "同步中间表银行流水" + DateTime.Now.ToString("yyyy-MM-dd"), ex.ToString()));
+                LogHelper.WriteLog(string.Format("Data:{0},result:{1}", "手动同步中间表银行流水" + DateTime.Now.ToString("yyyy-MM-dd"), ex.ToString()));
             }
         }
         public static void AutoVehicleSeavice()

@@ -81,33 +81,51 @@
         margin-left: 12px !important;
         border: 1px solid #ccc !important;
     }
-    #VoucherListTable input{
-                border-left:none !important;border-top:none !important;border-right:none !important;border-bottom-color:black;border-radius: inherit;
-                height:58px;
-            }
-    #ShowSevenSubject .input_text{
+
+     .removebtn {
+        width: 50px;
+        color: red !important;
+        font-weight: bold;
+        font-size: 40px;
+    }
+
+    #VoucherListTable input {
+        border-left: none !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-bottom-color: black;
+        border-radius: inherit;
+        height: 58px;
+    }
+
+    #ShowSevenSubject .input_text {
         width: 435px !important;
     }
+
     textarea.form-control {
-    height: auto;
-    border-left: none !important;
-    border-top: none !important;
-    border-right: none !important;
-    border-bottom-color: black !important;
-    border-radius: inherit;
-}
-    .subjectArea{
-        border:none;
+        height: auto;
+        border-left: none !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-bottom-color: black !important;
+        border-radius: inherit;
     }
-    #BorrowCount,#LoanCount{
-        height:46px !important;
+
+    .subjectArea {
         border: none;
     }
-    #VoucherTable{
+
+    #BorrowCount, #LoanCount {
+        height: 46px !important;
+        border: none;
+    }
+
+    #VoucherTable {
         border: 1px solid #ccc;
     }
-    .subjectbtn{
-        height:58px;
+
+    .subjectbtn {
+        height: 58px;
     }
 </style>
 <table id="hideButton" style="margin-top: 10px;">
@@ -143,11 +161,11 @@
                 <td style="text-align: right;width: 100px;">账簿名称:</td>
                 <td style="text-align: left;"><input id="AccountModeName" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" value="@accountModeName" validatetype="required" /></td>
                 <td style="text-align: right;width: 90px;">会计期:@*公司名称：*@</td>
-                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 120px;" class="input_text form-control"  onfocus="WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn', minDate: '@lastYearMonth', maxDate: '@nowYearMonth' })" /></td>
+                <td style="text-align: left;"><input id="AccountingPeriod" type="text" style="width: 120px;" class="input_text form-control" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM', dateFmt: 'yyyy-MM', lang: 'zh-cn', minDate: '@lastYearMonth', maxDate: '@nowYearMonth' })" /></td>
                 <td style="text-align: right;width: 90px;">凭证类型:</td>
                 <td style="text-align: left;"><input id="VoucherType" type="text" style="width: 120px;" class="input_text form-control" readonly="readonly" value="现金类" validatetype="required" /></td>
                 <td style="text-align: right;width: 90px;">凭证日期:</td>
-                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 150px;" class="input_text form-control"  onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn', minDate: '@lastYearMonth', maxDate: '@nowYearMonth' })" /></td>
+                <td style="text-align: left;"><input id="VoucherDate" type="text" style="width: 150px;" class="input_text form-control" onfocus="WdatePicker({ realDateFmt: 'yyyy-MM-dd', dateFmt: 'yyyy-MM-dd', lang: 'zh-cn', minDate: '@lastYearMonth', maxDate: '@nowYearMonth' })" /></td>
                 <td style="text-align: right;width: 90px;">批名:</td>
                 <td style="text-align: left;"><input id="BatchName" type="text" style="width: 150px;" class="input_text form-control" readonly="readonly" /></td>
                 <td style="text-align: right;width: 90px;">凭证号码:</td>
@@ -179,11 +197,11 @@
     </div>
     @*<div class="body_mk" style="height: 500px;">
         </div>*@
-        <button id="btnAddDetail" type="button" class="buttons" style="margin-top: 2px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
-        <div id="VoucherListTable" style="height:210px;overflow-y:auto ">
+    <button id="btnAddDetail" type="button" class="buttons" style="margin-top: 2px;"><i class="iconfont btn_icon" style="color: black !important;">&#xe634;</i><span style="margin-left: 7px; float: left;">新增</span></button>
+    <div id="VoucherListTable" style="height:210px;overflow-y:auto ">
 
-        </div>      
     </div>
+</div>
 
 <div class="mk">
     <div class="header_mk">
@@ -387,7 +405,7 @@
                     <tr style="height:40px">
                         <td style="text-align: right;font-size: 14px;">科目段：</td>
                         <td style="text-align: left;font-size: 14px;">
-                            <input id="SubjectSection" type="text" style="width: 200px;" class="input_text form-control"  readonly="readonly" />
+                            <input id="SubjectSection" type="text" style="width: 200px;" class="input_text form-control" readonly="readonly" />
                             <input id="hidSubjectSection" name="hidSubjectSection" class="hide" />
                             <button id="btnSearch" type="button" class="buttons" style="margin-left: 10px;" onclick="searchSubject()"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>
                         </td>

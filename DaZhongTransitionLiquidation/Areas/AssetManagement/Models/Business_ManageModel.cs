@@ -53,6 +53,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Models
         public string Founder { get; set; }
         public string CategoryMajor { get; set; }
         public string CategoryMinor { get; set; }
+        public string VehicleModel { get; set; }
         public int LevelNum { get; set; }
         public Guid AssetsCategoryVGUID { get; set; }
     }

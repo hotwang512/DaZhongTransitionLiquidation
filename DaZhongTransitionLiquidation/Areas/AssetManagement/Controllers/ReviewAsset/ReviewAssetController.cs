@@ -181,7 +181,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.ReviewA
                                         //计算出车龄，并根据车龄判断经营模式子类
                                         //reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
                                         var level3  = manageModelList
-                                            .Where(x => x.LevelNum == 2 && x.BusinessName == reviewItem.MODEL_MINOR && x.VehicleAge > months)
+                                            .Where(x => x.LevelNum == 2 && x.BusinessName == reviewItem.MODEL_MINOR && x.VehicleAge > months && x.VehicleModel == reviewItem.VEHICLE_SHORTNAME)
                                             .OrderBy(x => x.VehicleAge).First();
                                         minorModel = manageModelList.First(x => x.VGUID == level3.ParentVGUID);
                                         reviewItem.MODEL_MINOR = minorModel.BusinessName;

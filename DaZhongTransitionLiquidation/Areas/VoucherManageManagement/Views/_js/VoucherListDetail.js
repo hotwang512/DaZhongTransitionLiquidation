@@ -93,7 +93,7 @@ var $page = function () {
                              "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style=''>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                              "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
-                             "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
+                             "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' class='buttons subjectbtn removebtn' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
             if (subjectName0 == "" && subjectName1 != "") {
                 $("#closeTr1").before(trMore);
@@ -654,7 +654,7 @@ var $page = function () {
                                  "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style=' '>编辑</button></td>" +
                                  "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                                  "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
-                                 "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' onclick='removeSubjectTr(this)'>×</button></td>" +
+                                 "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button'  class='buttons subjectbtn removebtn' onclick='removeSubjectTr(this)'>×</button></td>" +
                           "</tr>"
                 $("#countTr").before(trMore);
                 if (borrowMoney == "" || borrowMoney == null) {

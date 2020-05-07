@@ -1,4 +1,5 @@
-﻿var status = $.request.queryString().Status;
+﻿$(".input_text").attr("autocomplete", "new-password");
+var status = $.request.queryString().Status;
 var $page = function () {
 
     this.init = function () {
@@ -201,7 +202,7 @@ function getBankInfo() {
     });
 }
 function link(VGUID,status) {
-    window.location.href = "/CapitalCenterManagement/CashTransactionDetail/Index?VGUID=" + VGUID + "&Status=" + status;
+    window.location.href = "/CapitalCenterManagement/CashTransactionDetail/Index?Status=" + status + "&VGUID=" + VGUID;
 }
 //提交
 function submit(selection) {

@@ -142,6 +142,7 @@ var $page = function () {
                     { name: 'AccountModeCode', type: 'string' },
                     { name: 'CompanyCode', type: 'string' },
                     { name: 'VGUID', type: 'string' },
+                    { name: 'Status', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -182,11 +183,12 @@ var $page = function () {
                     { text: 'AccountModeCode', datafield: 'AccountModeCode', hidden: true },
                     { text: 'CompanyCode', datafield: 'CompanyCode', hidden: true },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true },
+                    { text: 'Status', datafield: 'Status', hidden: true },
                 ]
             });
     }
     function detailFunc(row, column, value, rowData) {
-        var container = "<a href='#' onclick=link('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">" + rowData.No + "</a>";
+        var container = "<a href='#' onclick=link('" + rowData.VGUID + "','" + rowData.Status + "') style=\"text-decoration: underline;color: #333;\">" + rowData.No + "</a>";
         return container;
     }
 };
@@ -196,8 +198,8 @@ $(function () {
     page.init();
 });
 
-function link(VGUID) {
-    window.location.href = "/CapitalCenterManagement/CashManagerDetail/Index?VGUID=" + VGUID;
+function link(VGUID, Status) {
+    window.location.href = "/CapitalCenterManagement/CashManagerDetail/Index?Type=" + Status + "&VGUID=" + VGUID;
 }
 
 function getBankInfo() {
@@ -278,7 +280,7 @@ function goBack(selection) {
     });
 }
 //提现
-function submit(selection) {
+function cash(selection) {
     $.ajax({
         url: "/CapitalCenterManagement/CashManager/UpdataCashManager",
         data: { vguids: selection, status: "4" },

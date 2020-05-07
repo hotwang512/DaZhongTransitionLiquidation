@@ -61,15 +61,10 @@ var $page = function () {
                     $("#SubjectVehicleAge").hide();
                 }
                 var code = checkrow[0].Code;
-                if ($("#FirstMenu").val() == "1") {
-                    $("#SubjectCode").hide();//父级菜单
-                    $("#FirstMenu").val("");
-                } else {
-                    $("#SubjectCode").show();
-                    $("#hideParentMenu").val(parentVguid);
-                    $("#ParentMenu").val(hideParentMenu);
-                    $("#ModuleCode").val(code);
-                }
+                $("#SubjectCode").show();
+                $("#hideParentMenu").val(parentVguid);
+                $("#ParentMenu").val(hideParentMenu);
+                $("#ModuleCode").val(code);
             }
 
             $("#ModuleName").val("");
@@ -128,6 +123,11 @@ var $page = function () {
             }
             var url = "/AssetManagement/ManageModel/SaveBusiness?isEdit=";
             if (validateError <= 0) {
+                if ($("#FirstMenu").val() == 1) {
+                    currentlevel = 0;
+                } else if (!isEdit) {
+                    currentlevel = parseInt(currentlevel) + 1;
+                }
                 $.ajax({
                     url: url + isEdit,
                     data: {
@@ -179,6 +179,7 @@ var $page = function () {
             $.ajax({
                 url: url,
                 data: {
+                    "VGUID": $("#EditVguid").val(),
                     "GoodsModelCode": $("#GoodsModel").val(),
                     "GoodsModel": $("#GoodsModel option:selected").text(),
                     "CategoryMajor": $("#CategoryMajor").val(),
@@ -444,6 +445,7 @@ function editAsstsModel(VGUID, CategoryMajor, AssetsCategoryVGUID) {
 function editCategory(VGUID, CategoryMajor, AssetsCategoryVGUID, GoodsModelCode) {
     debugger;
     if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
+        $("#EditVguid").val(VGUID);
         if (CategoryMajor != "null") {
             $("#CategoryMajor").val(CategoryMajor);
             $("#CategoryMinor").val(AssetsCategoryVGUID);

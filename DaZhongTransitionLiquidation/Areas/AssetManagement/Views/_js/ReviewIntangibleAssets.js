@@ -16,9 +16,12 @@ var $page = function () {
         d.setMonth(d.getMonth() + 1);
         for (var i = 0; i < 3; i++) {
             debugger;
-            d.setMonth(d.getMonth() - i);
+            var m = d.getMonth() - i;
             var y = d.getFullYear();
-            var m = d.getMonth();
+            if (m <= 0) {
+                m = m + 12;
+                y = y - 1;
+            }
             m = (m < 10 ? "0" + m : m);
             arr.push(y.toString() + "-" + m.toString());
         }

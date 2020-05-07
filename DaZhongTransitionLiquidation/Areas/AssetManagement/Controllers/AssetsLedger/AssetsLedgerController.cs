@@ -261,7 +261,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers.AssetsL
             var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
             DbBusinessDataService.Command(db =>
             {
-                var ledgerCount = db.Queryable<AssetsLedger_Swap>().Count();
+                var ledgerCount = db.Queryable<AssetsLedger_Swap>().PartitionBy(x => x.ASSET_ID).Count();
                 var assetInfoCount = db.Queryable<Business_AssetMaintenanceInfo>().Count();
                 if (ledgerCount == assetInfoCount)
                 {

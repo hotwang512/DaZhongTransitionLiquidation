@@ -224,6 +224,7 @@
     <Content Include="Areas\AssetManagement\Views\_js\AssetException.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetModifyReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\AssetReport.js" />
+    <Content Include="Areas\AssetManagement\Views\_js\AssetsCategoryModifyReview.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeIncome.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposenetValue.js" />
     <Content Include="Areas\AssetManagement\Views\_js\DisposeProfitLoss.js" />
@@ -449,6 +450,7 @@
     <Content Include="Areas\VoucherManageManagement\Views\EliminationTaxCount\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleAgeReport\Index.cshtml" />
     <Content Include="Areas\AnalysisManagementCenter\Views\VehicleBenefit\Index.cshtml" />
+    <Content Include="Areas\AssetManagement\Views\AssetsCategoryModifyReview\Index.cshtml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
@@ -3367,6 +3369,7 @@
     <Compile Include="Areas\AssetManagement\Controllers\ManageModelController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\PurchaseItem\PurchaseItemController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetModifyReviewController.cs" />
+    <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetsCategoryModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\AssetsRetirementReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\OBDModifyReviewController.cs" />
     <Compile Include="Areas\AssetManagement\Controllers\ReviewAsset\ReviewAssetController.cs" />
@@ -3688,7 +3691,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\AnalysisManagementCenter\Views\Shared\" />
-    <Folder Include="Areas\AssetManagement\Views\AssetsCategory\" />
     <Folder Include="Areas\AssetManagement\Views\Shared\" />
     <Folder Include="Areas\FinancialStatementsManagement\Models\" />
     <Folder Include="Areas\PaymentManagement\Views\AccountModeSection\" />

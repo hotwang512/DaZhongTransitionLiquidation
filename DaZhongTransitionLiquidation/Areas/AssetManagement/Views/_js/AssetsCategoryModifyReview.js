@@ -11,9 +11,9 @@ var vguid = "";
 var $page = function () {
     this.init = function () {
         addEvent();
-        var arr =[];
+        var arr = [];
         var d = new Date;
-        d.setMonth(d.getMonth() +1);
+        d.setMonth(d.getMonth() + 1);
         for (var i = 0; i < 3; i++) {
             debugger;
             var m = d.getMonth() - i;
@@ -31,7 +31,7 @@ var $page = function () {
         }
         var dataAdapter = new $.jqx.dataAdapter(arr);
         $("#SubmitYearMonth").jqxComboBox({
-            selectedIndex: 0, source: dataAdapter, width : 198, height: 33
+            selectedIndex: 0, source: dataAdapter, width: 198, height: 33
         });
         $("#SubmitYearMonth").jqxComboBox({
             itemHeight: 33
@@ -121,25 +121,24 @@ var $page = function () {
     //    //        selection.push(data.VGUID);
     //    //    }
     //    //});
-        
+
     //});
     $("#btnGetModify").on("click", function () {
         layer.load();
         $.ajax({
-            url: "/AssetManagement/AssetModifyReview/GetModifyVehicleReview",
-            data: { "MODIFY_TYPE": getQueryString("MODIFY_TYPE"), "YearMonth": $("#YearMonth").val() },
+            url: "/AssetManagement/AssetsCategoryModifyReview/GetModifyVehicleReview",
             //traditional: true,
             type: "post",
             success: function (msg) {
                 switch (msg.Status) {
-                case "0":
-                    jqxNotification("获取失败！", null, "error");
-                    break;
-                case "1":
-                    jqxNotification("获取成功！", null, "success");
-                    $("#jqxTable").jqxGrid('updateBoundData');
-                    initTable();
-                    break;
+                    case "0":
+                        jqxNotification("获取失败！", null, "error");
+                        break;
+                    case "1":
+                        jqxNotification("获取成功！", null, "success");
+                        $("#jqxTable").jqxGrid('updateBoundData');
+                        initTable();
+                        break;
                 }
                 layer.closeAll('loading');
             }
@@ -150,8 +149,8 @@ var $page = function () {
         debugger;
         layer.load();
         $.ajax({
-            url: "/AssetManagement/AssetModifyReview/SubmitModifyVehicleReview",
-            data: { "vguids": selection, "MODIFY_TYPE": getQueryString("MODIFY_TYPE"), "YearMonth": $("#SubmitYearMonth").val() },
+            url: "/AssetManagement/AssetsCategoryModifyReview/SubmitModifyVehicleReview",
+            data: { "vguids": selection,"YearMonth": $("#SubmitYearMonth").val() },
             //traditional: true,
             type: "post",
             success: function (msg) {
@@ -170,47 +169,7 @@ var $page = function () {
         });
     }
     function initTable() {
-        var mtype = getQueryString("MODIFY_TYPE");
-        var columns = [];
-        if (mtype == "PLATE_NUMBER") {
-            columns = [
-                    //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    {
-                        text: '变更前车牌号', datafield: 'OLDDATA', width: 150, align: 'center', cellsAlign: 'center',
-                        aggregates: ['count',
-                            {
-                                function (aggregatedValue, currentValue) {
-                                    return aggregatedValue + 1;
-                                }
-                            }
-                        ]
-                    },
-                    { text: '变更后车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ];
-        } else if (mtype == "BUSINESS_MODEL") {
-            columns = [
-                    //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    {
-                        text: '变更前经营模式主类', datafield: 'MODEL_MAJOR_M', width: 260, align: 'center', cellsAlign: 'center',
-                        aggregates: ['count',
-                            {
-                                function (aggregatedValue, currentValue) {
-                                    return aggregatedValue + 1;
-                                }
-                            }
-                        ]
-                    },
-                    { text: '变更前经营模式子类', datafield: 'MODEL_MINOR_M', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '变更后经营模式主类', datafield: 'MODEL_MAJOR', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '变更后模式子类', datafield: 'MODEL_MINOR', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '变更前资产类型', width: 170, align: 'center', cellsAlign: 'center', cellsrenderer: cellstyperenderer },
+        var columns = [
                     { text: '变更前资产主类', datafield: 'ASSET_CATEGORY_MAJOR_M', width: 120, align: 'center', cellsAlign: 'center' },
                     { text: '变更前资产子类', datafield: 'ASSET_CATEGORY_MINOR_M', width: 120, align: 'center', cellsAlign: 'center' },
                     { text: '变更后资产主类', datafield: 'ASSET_CATEGORY_MAJOR', width: 120, align: 'center', cellsAlign: 'center' },
@@ -223,52 +182,7 @@ var $page = function () {
                     { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
                     { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
                     { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ];
-        } else if (mtype == "FA_LOC_1") {
-            columns = [
-                    //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    {
-                        text: '变更前所属公司', datafield: 'OLDDATA', width: 150, align: 'center', cellsAlign: 'center',
-                        aggregates: ['count',
-                            {
-                                function (aggregatedValue, currentValue) {
-                                    return aggregatedValue + 1;
-                                }
-                            }
-                        ]
-                    },
-                    //{ text: '管理公司', datafield: 'MANAGEMENT_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '变更后所属公司', datafield: 'BELONGTO_COMPANY', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ];
-        } else if (mtype == "FA_LOC_2") {
-            columns = [
-                    //{ text: "", datafield: "checkbox", width: 35, pinned: true, hidden: false, align: 'center', cellsAlign: 'center', cellsRenderer: cellsRendererFunc, renderer: rendererFunc, rendered: renderedFunc, autoRowHeight: false },
-                    {
-                        text: '变更前管理公司', datafield: 'OLDDATA', width: 150, align: 'center', cellsAlign: 'center',
-                        aggregates: ['count',
-                            {
-                                function (aggregatedValue, currentValue) {
-                                    return aggregatedValue + 1;
-                                }
-                            }
-                        ]
-                    },
-                    { text: '变更后管理公司', datafield: 'MANAGEMENT_COMPANY', width: 150, align: 'center', cellsAlign: 'center' },
-                    //{ text: '资产所属公司', datafield: 'BELONGTO_COMPANY', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '资产说明', datafield: 'DESCRIPTION', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '车牌号', datafield: 'PLATE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '发动机号', datafield: 'ENGINE_NUMBER', width: 100, align: 'center', cellsAlign: 'center' },
-                    { text: '车架号', datafield: 'CHASSIS_NUMBER', width: 150, align: 'center', cellsAlign: 'center' },
-                    { text: '创建日期', datafield: 'CREATE_DATE', width: 150, align: 'center', cellsAlign: 'center', datatype: 'date', cellsformat: "yyyy-MM-dd HH:mm:ss" },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
-            ];
-        }
+        ];
         var source =
             {
                 datafields:
@@ -306,7 +220,7 @@ var $page = function () {
                 datatype: "json",
                 id: "VGUID",
                 data: { PLATE_NUMBER: $("#PLATE_NUMBER").val(), VEHICLE_SHORTNAME: $("#VEHICLE_SHORTNAME").val(), ENGINE_NUMBER: $("#ENGINE_NUMBER").val(), CHASSIS_NUMBER: $("#CHASSIS_NUMBER").val(), "MODIFY_TYPE": getQueryString("MODIFY_TYPE") },
-                url: "/AssetManagement/AssetModifyReview/GetReviewAssetListDatas"   //获取数据源的路径
+                url: "/AssetManagement/AssetsCategoryModifyReview/GetReviewAssetListDatas"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
             downloadComplete: function (data) {
@@ -335,20 +249,20 @@ var $page = function () {
     function cellsrenderer(row, column, value, rowData) {
         debugger;
         switch (rowData.MODIFY_TYPE) {
-        case "PLATE_NUMBER":
-            return '<span style="margin: 4px; margin-top:8px;">' + rowData.PLATE_NUMBER_M + '</span>';
-            break;
-        case "FA_LOC_1":
-            return '<span style="margin: 4px; margin-top:8px;">' + rowData.BELONGTO_COMPANY_M + '</span>';
-            break;
-        case "FA_LOC_2":
-            return '<span style="margin: 4px; margin-top:8px;">' + rowData.MANAGEMENT_COMPANY_M + '</span>';
-            break;
-        case "BUSINESS_MODEL":
-            return '<span style="margin: 4px; margin-top:8px;">' + rowData.MODEL_MAJOR_M + "-" + rowData.MODEL_MINOR_M + '</span>';
-            break;
-        default:
-            return '<span style="margin: 4px; margin-top:8px;"></span>';
+            case "PLATE_NUMBER":
+                return '<span style="margin: 4px; margin-top:8px;">' + rowData.PLATE_NUMBER_M + '</span>';
+                break;
+            case "FA_LOC_1":
+                return '<span style="margin: 4px; margin-top:8px;">' + rowData.BELONGTO_COMPANY_M + '</span>';
+                break;
+            case "FA_LOC_2":
+                return '<span style="margin: 4px; margin-top:8px;">' + rowData.MANAGEMENT_COMPANY_M + '</span>';
+                break;
+            case "BUSINESS_MODEL":
+                return '<span style="margin: 4px; margin-top:8px;">' + rowData.MODEL_MAJOR_M + "-" + rowData.MODEL_MINOR_M + '</span>';
+                break;
+            default:
+                return '<span style="margin: 4px; margin-top:8px;"></span>';
         }
     }
     function cellstyperenderer(row, column, value, rowData) {

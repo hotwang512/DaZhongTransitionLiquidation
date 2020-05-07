@@ -105,6 +105,7 @@ namespace DaZhongTransitionLiquidation.Areas.AssetManagement.Controllers
                         {
                             BusinessName = module.BusinessName,
                             VehicleAge = module.VehicleAge,
+                            VehicleModel = module.VehicleModel,
                             ParentVGUID = parentVGUID,
                             CreateTime = DateTime.Now,
                             LevelNum = module.LevelNum,

@@ -26,6 +26,7 @@ var $page = function () {
         pageload();
         initSelectAssetMajor();
         initSelectGoodsModel();
+        initSelectVehicleModel();
         addEvent();
         if ($("#EditPermission").val() == "True" || $("#NewPermission").val() == "True") {
             $("#AddAssetsModelButton").show();
@@ -57,8 +58,10 @@ var $page = function () {
                     //显示车龄
                     $("#VehicleAge").val("");
                     $("#SubjectVehicleAge").show();
+                    $("#SubjectVehicleModel").show();
                 } else {
                     $("#SubjectVehicleAge").hide();
+                    $("#SubjectVehicleModel").hide();
                 }
                 var code = checkrow[0].Code;
                 $("#SubjectCode").show();
@@ -134,6 +137,7 @@ var $page = function () {
                         "Code": $("#ModuleCode").val(),
                         "BusinessName": $("#ModuleName").val(),
                         "VehicleAge": $("#VehicleAge").val(),
+                        "VehicleModel": $("#VehicleModel").val(),
                         "VGUID": vguid,
                         "LevelNum": currentlevel,
                         "ParentVGUID": $("#hideParentMenu").val()
@@ -258,6 +262,7 @@ function loadGridTree(modules) {
                     { name: 'BusinessName', type: 'string' },
                     { name: 'ParentVGUID', type: 'string' },
                     { name: 'VehicleAge', type: 'number' },
+                    { name: 'VehicleModel', type: 'string' },
                     { name: 'CategoryMajor', type: 'string' },
                     { name: 'CategoryMinor', type: 'string' },
                     { name: 'AssetsCategoryVGUID', type: 'string' },
@@ -272,7 +277,7 @@ function loadGridTree(modules) {
                 localData: modules
             };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    var width = selector.$grid().width() - 330;
+    var width = selector.$grid().width() - 430;
     selector.$grid().jqxTreeGrid({
         width: selector.$grid().width() - 2,
         height:400,
@@ -285,6 +290,7 @@ function loadGridTree(modules) {
         columns: [
           { text: '业务名称', dataField: 'BusinessName', width: "260", cellsRenderer: detailFuncs },
           { text: '车龄', dataField: 'VehicleAge', width: "50" },
+          { text: '车型', dataField: 'VehicleModel', width: "100" },
           { text: '资产类别', width: width, cellsRenderer: detailsCategoryFuncs },
           { text: '', dataField: 'ParentVGUID', hidden: true },
           { text: '', dataField: 'VGUID', hidden: true }
@@ -305,6 +311,8 @@ function detailFuncs(row, column, value, rowData) {
                 "','" +
                 rowData.VehicleAge +
                 "','" +
+                rowData.VehicleModel +
+                "','" +
                 rowData.ParentVGUID +
                 "') style=\"text-decoration: underline;color: #333;\">" +
                 rowData.BusinessName +
@@ -319,6 +327,8 @@ function detailFuncs(row, column, value, rowData) {
                 rowData.BusinessName +
                 "','" +
                 rowData.VehicleAge +
+                "','" +
+                rowData.VehicleModel +
                 "','" +
                 rowData.ParentVGUID +
                 "','" +
@@ -350,12 +360,13 @@ function delCategoryFuncs(row, column, value, rowData) {
     container = "<a href='#' onclick=delCategory('" + rowData.VGUID + "') style=\"text-decoration: underline;color: #333;\">删除</a>";
     return container;
 }
-function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessName) {
+function edit(guid,level, BusinessName,VehicleAge,VehicleModel, ParentVGUID, parentBusinessName) {
     isEdit = true;
     currentlevel = level;
     vguid = guid;
     $("#ModuleName").val(BusinessName);
     $("#VehicleAge").val(VehicleAge);
+    $("#VehicleModel").val(VehicleModel);
     $("#myModalLabel_title").text("编辑数据");
     //$("#AddNewManageModelDialog table tr").eq(1).hide();
     $(".msg").remove();
@@ -377,8 +388,10 @@ function edit(guid,level, BusinessName,VehicleAge, ParentVGUID, parentBusinessNa
     if (level == 2) {
         //显示车龄
         $("#SubjectVehicleAge").show();
+        $("#SubjectVehicleModel").show();
     } else {
         $("#SubjectVehicleAge").hide();
+        $("#SubjectVehicleModel").hide();
     }
 }
 function initAssetsCategoryTable(VGUID) {
@@ -533,6 +546,23 @@ function initSelectGoodsModel() {
             if (msg.length > 0) {
                 uiEngineHelper.bindSelect('#GoodsModel', msg, "Code", "Descrption");
                 $("#GoodsModel").prepend("<option value=\"\" selected='true'>请选择</>");
+            }
+        }
+    });
+}
+function initSelectVehicleModel() {
+    //物品类型
+    $.ajax({
+        url: "/AssetPurchase/FixedAssetsOrderDetail/GetGoodsModelDropDown",
+        data: { "Goods": "出租车" },
+        type: "POST",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            debugger;
+            if (msg.length > 0) {
+                uiEngineHelper.bindSelect('#VehicleModel', msg, "Descrption", "Descrption");
+                $("#VehicleModel").prepend("<option value=\"\" selected='true'>请选择</>");
             }
         }
     });

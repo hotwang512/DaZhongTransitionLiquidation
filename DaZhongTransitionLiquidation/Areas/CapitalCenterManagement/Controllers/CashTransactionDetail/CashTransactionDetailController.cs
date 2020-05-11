@@ -38,7 +38,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 var cashData = db.SqlQueryable<Business_CashManagerInfo>(@"select * from Business_CashManagerInfo where CheckNo in (select VoucherSubject from Business_BankFlowTemplate 
                                     where TradingBank='交通银行' and ReceivingUnit='现金')")
                                     .OrderBy("No asc").ToList();
-                cashData = cashData.Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode).ToList();
+                cashData = cashData.Where(x => x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode == UserInfo.CompanyCode && x.Status == "3").ToList();
                 if (data.Count > 0)
                 {
                     var userBalance = data.First().UseBalance;//第一笔流水可用余额

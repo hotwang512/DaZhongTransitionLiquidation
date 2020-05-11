@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 
 namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.ReconciliationReport
@@ -161,6 +162,7 @@ namespace DaZhongTransitionLiquidation.Areas.ReportManagement.Controllers.Reconc
                 try
                 {
                     WebClient wc = new WebClient();
+                    wc.Encoding = Encoding.UTF8;
                     string result = wc.UploadString(ConfigSugar.GetAppString("RevenueSystemTotalPath"), data);
                     object obj = result.JsonToModel<object>();
                     bool success = Convert.ToBoolean(((Dictionary<string, object>)obj)["success"]);

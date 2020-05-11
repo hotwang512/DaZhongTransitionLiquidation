@@ -126,8 +126,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
                 catch (Exception ex)
                 {
+                    LogHelper.WriteLog(string.Format("Data:{0},result:{1},error:{2}", data, messageDate, ex.ToString()));
                     JObject Json = JObject.Parse(messageDate);
-                    LogHelper.WriteLog(string.Format("Data:{0},result:{1}", data, ex.ToString()));
                     resultModel.ResultInfo = Json["message"].ToString();
                     resultModel.Status = "0";
                     return;

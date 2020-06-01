@@ -50,8 +50,8 @@ var $page = function () {
         var guid = $.request.queryString().VGUID;
         $("#VGUID").val(guid)
         if (guid != "" && guid != null) {
-            getVoucherDetail();
             addVoucherListTable();
+            getVoucherDetail();
             $("#VoucherType").attr("disabled", "disableds");
         } else {
             addVoucherListTable();
@@ -93,7 +93,7 @@ var $page = function () {
                              "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'></textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style=''>编辑</button></td>" +
                              "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                              "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
-                             "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' class='buttons subjectbtn removebtn' onclick='removeSubjectTr(this)'>×</button></td>" +
+                             "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button' class='buttons  removebtn' style='height: 58px;' onclick='removeSubjectTr(this)'>×</button></td>" +
                       "</tr>"
             if (subjectName0 == "" && subjectName1 != "") {
                 $("#closeTr1").before(trMore);
@@ -596,18 +596,25 @@ var $page = function () {
                     $("#btnSave").hide();
                     $("#btnUp").hide();
                     $("#AddNewBankData_GoBackBtn").hide();
+                    setTimeout(function () {
+                        //$(".subjectbtn").attr('disabled', 'disabled');
+                        $(".subjectbtn").hide();
+                    }, 100);
                 }
                 if ($("#Status").val() == "2") {
                     $("#btnUp").show();
                     $("#btnUp").text("审核");
                     $("#AddNewBankData_GoBackBtn").show();
-
                 }
                 if ($("#Status").val() == "4") {
                     $("#hideButton").show();
                     $("#btnUp").show();
                     $("#btnSave").show();
                     $("#AddNewBankData_GoBackBtn").hide();
+                    setTimeout(function () {
+                        //$(".subjectbtn").removeAttr('disabled');
+                        $(".subjectbtn").show();
+                    }, 400); 
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
@@ -654,7 +661,7 @@ var $page = function () {
                                  "<td style='text-align: center;'><textarea id='SubjectName" + trIndex + "' readonly='readonly' class='subjectArea' style='width: 875px; height: 58px;text-indent: 15px;'>" + datas[i].SevenSubjectName + "</textarea> <button id='btnEdit" + trIndex + "' type='button' class='buttons subjectbtn' style=' '>编辑</button></td>" +
                                  "<td style='text-align: right;'><input id='Borrow" + trIndex + "' type='text' value='" + borrowMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Borrow'/></td>" +
                                  "<td style='text-align: right;'><input id='Loan" + trIndex + "' type='text' value='" + loanMoney + "' style='width: 150px;text-align: right' class='input_text form-control money Loan'/></td>" +
-                                 "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button'  class='buttons subjectbtn removebtn' onclick='removeSubjectTr(this)'>×</button></td>" +
+                                 "<td style='text-align: center;'><button id='Remove" + trIndex + "' type='button'  class='buttons  removebtn' style='height: 58px;' onclick='removeSubjectTr(this)'>×</button></td>" +
                           "</tr>"
                 $("#countTr").before(trMore);
                 if (borrowMoney == "" || borrowMoney == null) {

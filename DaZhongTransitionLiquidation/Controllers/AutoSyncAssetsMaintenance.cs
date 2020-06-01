@@ -185,13 +185,32 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 //如果经营模式第三级有多个
                                 if (minor.Count > 1)
                                 {
-                                    //计算出车龄，并根据车龄判断经营模式子类
-                                    //reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
-                                    var level3 = manageModelList
-                                        .Where(x => x.LevelNum == 2 && x.BusinessName == item.MODEL_MINOR && x.VehicleAge > months && x.VehicleModel == assetMaintenanceInfo.VEHICLE_SHORTNAME)
-                                        .OrderBy(x => x.VehicleAge).First();
-                                    minorModel = manageModelList.First(x => x.VGUID == level3.ParentVGUID);
-                                    item.MODEL_MINOR = minorModel.BusinessName;
+                                    try
+                                    {
+                                        Business_ManageModel level3 = null;
+                                        //计算出车龄，并根据车龄判断经营模式子类
+                                        //reviewItem.MODEL_MINOR = manageModelList.Where(x => x.VGUID == minor.ParentVGUID && x.VehicleAge > months).OrderBy(x => x.VehicleAge).First().BusinessName;
+                                        var levelList = manageModelList
+                                            .Where(x => x.LevelNum == 2 && x.BusinessName == item.MODEL_MINOR && x.VehicleAge > months && x.VehicleModel == assetMaintenanceInfo.VEHICLE_SHORTNAME)
+                                            .OrderBy(x => x.VehicleAge).ToList();
+                                        if(levelList.Count > 0)
+                                        {
+                                            level3 = levelList.FirstOrDefault();
+                                        }
+                                        else
+                                        {
+                                            level3 = manageModelList
+                                            .Where(x => x.LevelNum == 2 && x.BusinessName == item.MODEL_MINOR && x.VehicleAge > months)
+                                            .OrderBy(x => x.VehicleAge).First();
+                                        }
+                                        minorModel = manageModelList.First(x => x.VGUID == level3.ParentVGUID);
+                                        item.MODEL_MINOR = minorModel.BusinessName;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        LogHelper.WriteLog(string.Format("BusinessName:{0},VehicleAge:{1},VehicleModel:{2}", item.MODEL_MINOR, months, assetMaintenanceInfo.VEHICLE_SHORTNAME));
+                                        continue;
+                                    }
                                 }
                                 else if (minor.Count == 1)
                                 {
@@ -234,9 +253,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                                 }
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception ex)
                         {
-                            throw;
+                            success = 0;
+                            LogHelper.WriteLog(string.Format("Data:{0},result:{1},errorInfo:{2}", "获取资产变更数据-经营模式匹配报错:", ex.ToString(),item.ModelToJson()));
+                            continue;
                         }
                     }
                 }

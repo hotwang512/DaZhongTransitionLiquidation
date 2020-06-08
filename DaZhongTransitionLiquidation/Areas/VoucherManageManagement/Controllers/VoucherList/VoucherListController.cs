@@ -567,7 +567,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             var userData = new List<Sys_User>();
             DbService.Command(_db =>
             {
-                userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
+                userData = _db.SqlQueryable<Sys_User>(@"select a.LoginName,b.Role,a.RoleStation from Sys_User as a left join Sys_Role as b on a.Role = b.Vguid").ToList();
             });
             DbBusinessDataService.Command(db =>
             {
@@ -666,7 +666,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             voucher.VGUID = guid;
             foreach (var user in userData)
             {
-                switch (user.Role)
+                switch (user.RoleStation)
                 {
                     case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                     case "财务主管": voucher.Bookkeeping = user.LoginName; break;

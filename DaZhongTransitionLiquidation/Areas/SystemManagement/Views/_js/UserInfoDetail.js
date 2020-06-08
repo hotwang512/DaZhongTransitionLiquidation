@@ -72,6 +72,7 @@ var $page = function () {
                 selector.$remark_Input().val(msg.Remark);
                 selector.$departmentVguid().val(msg.Department);
                 $("#Password").val(msg.Password);
+                $("#RoleStation").val(msg.RoleStation);
                 var department = selector.$departmentVguid().val();
                 //if (department != "") {
                 //    selector.$pushTree().jqxTree('selectItem', $("#" + department)[0]);

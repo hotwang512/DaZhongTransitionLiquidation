@@ -413,7 +413,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 voucher.VGUID = guid;
                 foreach (var user in userData)
                 {
-                    switch (user.Role)
+                    switch (user.RoleStation)
                     {
                         case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                         case "财务主管": voucher.Bookkeeping = user.LoginName; break;

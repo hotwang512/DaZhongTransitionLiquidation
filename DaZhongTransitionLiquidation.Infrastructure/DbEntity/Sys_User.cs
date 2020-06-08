@@ -144,6 +144,7 @@ namespace DaZhongTransitionLiquidation.Infrastructure.DbEntity
         public string AccountModeName { get; set; }
         public string Token { get; set; }
         public string Name { get; set; }
+        public string RoleStation { get; set; }
 
         public List<V_Sys_Role_ModuleMenu> Permission { get; set; } = new List<V_Sys_Role_ModuleMenu>();
 

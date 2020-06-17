@@ -90,9 +90,9 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                     decimal number = 0;
                     decimal sysBalance = 0;
                     //var balanceDateStar = initialBalanceData.BalanceDate.Value.Date.AddDays(1);//开始日期
-                    var balanceDateStar = initialBalanceData.BalanceDate.Value;//开始日期
                     if (initialBalanceData != null)
                     {
+                        var balanceDateStar = initialBalanceData.BalanceDate.Value;//开始日期
                         if (initialBalanceData.BalanceDate != null)
                         {
                             //对账,日期只能后延

@@ -335,7 +335,7 @@ var $page = function () {
             $("#BankName").removeClass("input_Validate");
             $("#BankAccount").removeClass("input_Validate");
             $("#BankAccountName").removeClass("input_Validate");
-            initBorrowTable(companyCode, accountModeCode)
+            //initBorrowTable(companyCode, accountModeCode);
             $("#AddCompanyBankDataDialog").modal({ backdrop: "static", keyboard: false });
             $("#AddCompanyBankDataDialog").modal("show");
         })
@@ -474,7 +474,8 @@ var $page = function () {
                 $("#CompanyCode").hide();
                 $("#AccountModeCode").show();
                 $("#ACChange").show();
-                $("#hideCompany").hide()
+                $("#hideCompany").hide();
+                initBorrowTable(companyCode, accountModeCode);
             }
             if (index == 0) {
                 $("#ACChange").hide();
@@ -1925,7 +1926,7 @@ function editBank(guid, companyCode, bankName, bankAccount, bankAccountName, acc
     $("#BankName").removeClass("input_Validate");
     $("#BankAccount").removeClass("input_Validate");
     $("#BankAccountName").removeClass("input_Validate");
-    initBorrowTable(companyCode, accountModeCode);
+    //initBorrowTable(companyCode, accountModeCode);
     var val = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + borrow + '</div>';
     $("#jqxdropdownbutton1").jqxDropDownButton('setContent', val);
     var val2 = '<div style="position: relative; margin-left: 3px; margin-top: 6px;">' + loan + '</div>';
@@ -1978,7 +1979,7 @@ function initBorrowTable(companyCode, accountModeCode) {
             { name: 'Balance', type: 'number' },
         ],
         datatype: "json",
-        cache: false,
+        cache: true,
         id: "SectionVGUID",
         data: { companyCode: companyCode, accountModeCode: accountModeCode },
         url: "/PaymentManagement/SubjectBalance/GetSubjectBalance"    //获取数据源的路径

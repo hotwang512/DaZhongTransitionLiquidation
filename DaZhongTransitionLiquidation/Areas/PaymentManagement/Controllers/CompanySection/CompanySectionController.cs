@@ -566,7 +566,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         return;
                     }
                     var isAnyAccount = data.Any(x => x.AccountType == cBank.AccountType && x.CompanyCode == cBank.CompanyCode && x.AccountModeCode == cBank.AccountModeCode && x.VGUID != cBank.VGUID);
-                    if (isAnyAccount)
+                    if (isAnyAccount && cBank.AccountType != "一般户")
                     {
                         switch (cBank.AccountType)
                         {

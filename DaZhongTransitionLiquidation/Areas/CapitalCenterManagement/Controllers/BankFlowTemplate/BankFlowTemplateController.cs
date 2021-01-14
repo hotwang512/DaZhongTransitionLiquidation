@@ -450,7 +450,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                     if (bankChannelOne != null)
                     {
                         //对方账号下借贷配置信息
-                        var loadData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null && j.AccountModeCode == item.AccountModeCode && j.CompanyCode == item.CompanyCode).ToList();
+                        //var loadData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null && j.AccountModeCode == item.AccountModeCode && j.CompanyCode == item.CompanyCode).ToList();
                         var borrowData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null && j.AccountModeCode == item.AccountModeCode && j.CompanyCode == item.CompanyCode).ToList();
                         if (borrowData.Count >= 1)
                         {
@@ -459,7 +459,10 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                             {
                                 index++;
                                 Business_VoucherDetail BVDetail3 = new Business_VoucherDetail();
-                                subject = borrow.Borrow;
+                                if(borrowData.Count > 1)
+                                {
+                                    subject = borrow.Borrow;//多借情况取配置表,一借情况直接取银行设置表
+                                }
                                 if (subject != "" && subject != null)
                                 {
                                     if (subject.Contains("\n"))

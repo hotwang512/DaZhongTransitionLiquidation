@@ -127,7 +127,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
-                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-10)).ToList();
+                        var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-20)).ToList();
                         //var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE >= "2019-09-02".TryToDate() && x.LAST_UPDATE_DATE < "2019-09-04".TryToDate()).ToList();
                         //查询公司段中已启用的公司的银行信息
                         var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
@@ -164,7 +164,7 @@ namespace DaZhongTransitionLiquidation.Controllers
             {
                 using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                 {
-                    var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-10)).ToList();
+                    var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE > DateTime.Now.AddDays(-20)).ToList();
                     //var bankData = _db.Queryable<BankAndEnterprise_Swap>().Where(x => x.ATTRIBUTE4 != "上海银行" && x.LAST_UPDATE_DATE >= "2019-09-02".TryToDate() && x.LAST_UPDATE_DATE < "2019-09-04".TryToDate()).ToList();
                     //查询公司段中已启用的公司的银行信息
                     var bankAccount = _db.SqlQueryable<Business_CompanyBankInfo>(@"select a.* from Business_CompanyBankInfo as a left join Business_SevenSection
@@ -244,7 +244,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
-                        //测试 vguid = "db5ab953-dfd3-4751-8cfd-7e945bc2eca8";
+                        //vguid = "b4e2abce-b9bd-4ee4-a878-3540eb1d7d77";
                         List<Business_VoucherList> voucherData = new List<Business_VoucherList>();
                         List<Business_VoucherDetail> voucherDetails = new List<Business_VoucherDetail>();
                         if (vguid.TryToGuid() == Guid.Empty)

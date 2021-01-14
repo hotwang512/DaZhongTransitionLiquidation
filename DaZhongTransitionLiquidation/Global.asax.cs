@@ -51,7 +51,7 @@ namespace DaZhongTransitionLiquidation
                 //AutoSyncBankFlow.AutoTransferVoucherSeavice();
             }
             //资产变更
-            //AutoSyncAssetsMaintenance.AutoSyncSeavice();
+            AutoSyncAssetsMaintenance.AutoSyncSeavice();
         }
 
         public void Application_End(object sender, EventArgs e)

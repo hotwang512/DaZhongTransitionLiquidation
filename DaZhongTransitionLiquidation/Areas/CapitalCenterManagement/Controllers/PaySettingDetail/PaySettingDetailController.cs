@@ -22,6 +22,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.Channel = GetChannel();
+            ViewBag.TransferCompany = GetTransferCompany();
             return View();
         }
         public List<T_Channel> GetChannel()
@@ -31,6 +32,16 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             {
                 result = db.Queryable<T_Channel>().ToList();
 
+            });
+            return result;
+        }
+        public List<Master_Organization> GetTransferCompany()
+        {
+            var result = new List<Master_Organization>();
+            DbService.Command(db =>
+            {
+                Guid guid = new Guid("1053fdca-ebd7-478c-9c40-1f0dd8f63b7d");
+                result = db.Queryable<Master_Organization>().Where(x=>x.ParentVguid == guid).ToList();
             });
             return result;
         }

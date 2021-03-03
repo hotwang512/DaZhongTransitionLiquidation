@@ -145,11 +145,20 @@
                             <td style="width: 150px;">
                                 <select id="TransferCompany" class="input_text form-control">
                                     <option></option>
+                                    @{
+                                        foreach (var item in ViewBag.TransferCompany)
+                                        {
+                                            <option value="@item.OrganizationName">@item.OrganizationName</option>
+                                        }
+                                    }
+
+                                    @*<option></option>
                                     <option value="浦东公司">浦东公司</option>
                                     <option value="市南公司">市南公司</option>
                                     <option value="大众新亚">大众新亚</option>
                                     <option value="九分公司">九分公司</option>
                                     <option value="大众星光">大众星光</option>
+                                    <option value="第一服务中心">大众星光</option>*@
                                 </select>
                             </td>
                         </tr>

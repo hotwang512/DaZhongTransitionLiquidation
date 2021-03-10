@@ -415,13 +415,15 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     switch (user.RoleStation)
                     {
-                        case "财务经理": voucher.FinanceDirector = user.LoginName; break;
+                        //case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                         case "财务主管": voucher.Bookkeeping = user.LoginName; break;
                         //case "审核岗": voucher.Auditor = user.LoginName; break;
                         case "出纳": voucher.Cashier = user.LoginName; break;
                         default: break;
                     }
                 }
+                //财务经理改用财务主管名字
+                voucher.FinanceDirector = voucher.Bookkeeping;
                 //科目信息
                 Business_VoucherDetail BVDetail = new Business_VoucherDetail();
                 BVDetail.Abstract = item.Remark;

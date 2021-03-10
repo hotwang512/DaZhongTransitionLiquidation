@@ -259,13 +259,15 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     {
                         switch (user.RoleStation)
                         {
-                            case "财务经理": voucher.FinanceDirector = user.LoginName; break;
+                            //case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                             case "财务主管": voucher.Bookkeeping = user.LoginName; break;
                             //case "审核岗": voucher.Auditor = user.LoginName; break;
                             case "出纳": voucher.Cashier = user.LoginName; break;
                             default: break;
                         }
                     }
+                    //财务经理改用财务主管名字
+                    voucher.FinanceDirector = voucher.Bookkeeping;
                     //voucher.DocumentMaker = UserInfo.LoginName;
                     db.Updateable(voucher).ExecuteCommand();
                 }

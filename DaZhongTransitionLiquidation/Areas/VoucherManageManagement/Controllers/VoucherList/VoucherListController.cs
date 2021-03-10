@@ -668,13 +668,15 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
             {
                 switch (user.RoleStation)
                 {
-                    case "财务经理": voucher.FinanceDirector = user.LoginName; break;
+                    //case "财务经理": voucher.FinanceDirector = user.LoginName; break;
                     case "财务主管": voucher.Bookkeeping = user.LoginName; break;
                     //case "审核岗": voucher.Auditor = user.LoginName; break;
                     case "出纳": voucher.Cashier = user.LoginName; break;
                     default: break;
                 }
             }
+            //财务经理改用财务主管名字
+            voucher.FinanceDirector = voucher.Bookkeeping;
         }
         private void GetVoucherDetail(SqlSugarClient db, List<Business_VoucherDetail> BVDetailList, List<SettlementSubjectVoucher> myDataOther, Guid guid, List<Business_SettlementCount> settlementCount)
         {

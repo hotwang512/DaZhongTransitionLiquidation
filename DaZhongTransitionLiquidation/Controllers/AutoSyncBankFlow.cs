@@ -283,8 +283,9 @@ namespace DaZhongTransitionLiquidation.Controllers
                             {
                                 continue;
                             }
-                            if (item.CreditAmountTotal == item.DebitAmountTotal && item.CreditAmountTotal != 0 && item.DebitAmountTotal != 0)
+                            if (item.CreditAmountTotal == item.DebitAmountTotal && item.CreditAmountTotal != 0 && item.DebitAmountTotal != 0 && vguid.TryToGuid() == Guid.Empty)
                             {
+                                //vguid有值,单张凭证刷新无需此判断
                                 continue;
                             }
                             var accountModeCode = "";
@@ -367,7 +368,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             _db.Updateable(it).ExecuteCommand();
                                             //BVDetail2.LoanMoneyCount = amountReport[0].ActualAmountTotal + amountReport[0].PaymentAmountTotal + amountReport[0].CompanyBearsFeesTotal;
                                         }
-
+                                        else
+                                        {
+                                            it.LoanMoney = 0;
+                                            _db.Updateable(it).ExecuteCommand();
+                                        }
                                     }
                                     else
                                     {
@@ -395,6 +400,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                         break;
                                                 }
                                                 debitAmountTotal = debitAmountTotal + it.BorrowMoney;
+                                                _db.Updateable(it).ExecuteCommand();
+                                            }
+                                            else
+                                            {
+                                                it.BorrowMoney = 0;
                                                 _db.Updateable(it).ExecuteCommand();
                                             }
                                         }

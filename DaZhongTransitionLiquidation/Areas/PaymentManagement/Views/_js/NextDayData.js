@@ -32,6 +32,8 @@
     $EditPermission: function () { return $("#EditPermission") },
     $uploadFileHuiDouQuan: function () { return $("#uploadFileHuiDouQuan") },
     $btnImportHuiDouQuan: function () { return $("#btnImportHuiDouQuan") },
+    $uploadFileExcel: function () { return $("#uploadFileExcel") },
+    $btnImportExcel: function () { return $("#btnImportExcel") },
     $btnImportSelfServicePaymentMachine: function () { return $("#btnImportSelfServicePaymentMachine") },
     $uploadSelfServicePaymentMachine: function () { return $("#uploadSelfServicePaymentMachine") }
 };
@@ -123,6 +125,27 @@ var $page = function () {
 
             var Channel = selector.$txtChannel_Dialog().val();
             loadSubject(Channel, "");
+        });
+        //上传文件Excel
+        selector.$btnImportExcel().on("click", function () {
+            selector.$uploadFileExcel().val("");
+            selector.$uploadFileExcel().click();
+        });
+        
+        selector.$uploadFileExcel().on('change', function () {
+            layer.load();
+            uploadFile(this.files[0], function (fileName) {
+                runImportDataExcel(fileName, function (result) {
+                    if (result.IsSuccess == true) {
+                        jqxNotification("导入完成！", null, "success");
+                        initTable();
+                    }
+                    else {
+                        jqxNotification("导入失败！" + result.ResultInfo, null, "success");
+                    }
+                    layer.closeAll('loading');
+                });
+            })
         });
 
         //拉取邮件
@@ -375,6 +398,24 @@ function uploadFile(fileData, callback) {
 function runImportDataHuiDouQuan(fileName, callback) {
     $.ajax({
         url: '/PaymentManagement/NextDayData/ImportDataHuiDouQuan',
+        type: 'post',
+        data: { fileName: fileName },//这里上传的数据使用了formData 对象
+        success: function (result) {
+            if (callback) {
+                callback(result);
+            }
+        },
+        error: function (xmlhttprequest, textstatus, errorthrow) {
+            jqxNotification("导入错误！", null, "error");
+            layer.closeAll('loading');
+        }
+
+    });
+}
+//执行导入Excel
+function runImportDataExcel(fileName, callback) {
+    $.ajax({
+        url: '/PaymentManagement/NextDayData/ImportDataExcel',
         type: 'post',
         data: { fileName: fileName },//这里上传的数据使用了formData 对象
         success: function (result) {

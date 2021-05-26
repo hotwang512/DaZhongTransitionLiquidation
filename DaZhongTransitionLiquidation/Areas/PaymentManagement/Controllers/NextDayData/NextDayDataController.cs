@@ -205,7 +205,16 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
             return base.Json(data, JsonRequestBehavior.AllowGet);
         }
 
-
+        public ActionResult ImportDataExcel(string fileName)
+        {
+            ResultModel<string> data = new ResultModel<string>
+            {
+                IsSuccess = true,
+                Status = "0"
+            };
+            data = new NextDayDataPack().ImportDataExcel(fileName, UserInfo.LoginName);
+            return base.Json(data, JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
         /// 根据字段索引获取字符行中的字段数据

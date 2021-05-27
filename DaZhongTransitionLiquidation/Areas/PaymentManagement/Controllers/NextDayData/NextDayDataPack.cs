@@ -183,6 +183,13 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                         var timeStr = time.ToString("HH:mm:ss");
                         var dateTime = (dateStr + " " + timeStr).ObjToDate();
 
+                        var subjectDeposit2 = subjectData.Any(c => c.SubjectId == subjectId);
+                        if (!subjectDeposit2)
+                        {
+                            //二级渠道找不到
+                            continue;
+                        }
+
                         Business_T1Data_Information t1Data = new Business_T1Data_Information();
                         Business_T1Data_Information_2 t1Data_2 = new Business_T1Data_Information_2();
                         t1Data_2.Vguid = t1Data.Vguid = Guid.NewGuid();

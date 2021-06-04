@@ -87,20 +87,61 @@
 <div class="container">
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddBankChannelDialog">
         <div class="modal-dialog modal-sm" style="width: 100%; padding-right: 20px; margin-top: 100px;">
-            <div class="modal-content" style="width: 400px; margin-left: auto; margin-right: auto;">
+            <div class="modal-content" style="width: 450px; margin-left: auto; margin-right: auto;">
                 <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel_title" style="color: #555; font-family: Calibri;">新增借/贷方信息</h4>
                 </div>
                 <div class="modal-body" style="width: 100%;">
                     <table style="width: 100%;">
-                        <tr style="height: 45px;">
-                            <td style="text-align: left"><span class="spanText">公司</span></td>
+                        <tr style="height: 40px;">
+                            <td style="text-align: right;font-size: 14px;"><span class="">公司：</span></td>
                             <td style="">
-                                <select id="CompanyCode" class="input_text form-control" style="" onchange="companyChange()" disabled></select>
+                                <select id="CompanyCode" class="input_text form-control" style="" @*onchange="companyChange()"*@ disabled></select>
                             </td>
                         </tr>
-                        <tr id="BorrowTr" style="height: 45px;display:none">
+                        <tr style="height:40px">
+                            <td style="text-align: right;font-size: 14px;">科目段：</td>
+                            <td style="text-align: left;font-size: 14px;">
+                                <input id="SubjectSection" type="text" style="width: 210px;" class="input_text form-control" readonly="readonly" />
+                                <input id="hidSubjectSection" name="hidSubjectSection" class="hide" />
+                                <button id="btnSearch" type="button" class="buttons" style="margin-left: 10px;" onclick="searchSubject()"><i class="iconfont btn_icon">&#xe679;</i><span style="margin-left: 7px; float: left;">选择</span></button>
+                            </td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td style="text-align: right;font-size: 14px;">核算段：</td>
+                            <td style="text-align: left;font-size: 14px;">
+                                <select id="AccountSection" class="input_text form-control"></select>
+                            </td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td style="text-align: right;font-size: 14px;">成本中心：</td>
+                            <td style="text-align: left;font-size: 14px;">
+                                <select id="CostCenterSection" class="input_text form-control"></select>
+                            </td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td style="text-align: right;font-size: 14px;">备用1：</td>
+                            <td style="text-align: left;font-size: 14px;">
+                                <select id="SpareOneSection" class="input_text form-control"></select>
+                            </td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td style="text-align: right;font-size: 14px;">备用2：</td>
+                            <td style="text-align: left;font-size: 14px;">
+                                <select id="SpareTwoSection" class="input_text form-control"></select>
+                            </td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td style="text-align: right;font-size: 14px;">往来段：</td>
+                            <td style="text-align: left;font-size: 14px;">
+                                <select id="IntercourseSection" class="input_text form-control"></select>
+                                <input id="hidbtnIndex" name="hidbtnIndex" class="hide" />
+                                <input id="hidborrow" name="hidborrow" class="hide" />
+                                <input id="hidloan" name="hidloan" class="hide" />
+                            </td>
+                        </tr>
+                        @*<tr id="BorrowTr" style="height: 45px;display:none">
                             <td style="width: 90px;text-align: left"><span class="spanText">借</span></td>
                             <td>
                                 <div id='jqxWidget1'>
@@ -123,14 +164,14 @@
                                 </div>
                                 <button id="Remove2" type="button" style="float: right;margin-top: -28px;">清除</button>
                             </td>
-                        </tr>
+                        </tr>*@
                         <tr style="height: 45px;">
-                            <td style="text-align: left"><span class="spanText">摘要</span></td>
+                            <td style="text-align: right;font-size: 14px;"><span class="">摘要：</span></td>
                             <td style="">
                                 <textarea id="Remark1" class="input_text form-control" style="width: 213px !important;"></textarea>
                             </td>
                         </tr>
-                        <tr style="height: 45px;display:none">
+                        <tr style="height: 40px;display:none">
                             <td style="text-align: left"><span class="spanText">金额</span></td>
                             <td style="">
                                 <input id="Money2" type="text" style="width: 213px !important;" class="input_text form-control" />
@@ -147,3 +188,16 @@
     </div>
 </div>
 
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="AddSubjectDialog">
+    <div class="modal-dialog modal-sm" style="width: 100%; padding-left: 1000px; margin-top: 100px;">
+        <div class="modal-content" style="width: 500px; margin-left: auto; margin-right: auto;">
+            <div class="modal-header" style="width: 100%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel_titles2" style="color: #555; font-family: Calibri;">选择科目段</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <div id="jqxSubjectSection" class="jqxTable" style=""></div>
+            </div>
+        </div>
+    </div>
+</div>

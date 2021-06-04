@@ -49,6 +49,12 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                     //response = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.ToString() && x.Code == UserInfo.AccountModeCode
                     //            && x.Block == "1" && x.IsCheck == true).OrderBy("Code asc").ToList();
                 }
+                else if(name == "B")
+                {
+                    response = db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43" && x.AccountModeCode == UserInfo.AccountModeCode && x.CompanyCode== companyCode && x.Code == subjectCode && x.Status == "1").OrderBy("Code asc").ToList();
+                    //response = db.Queryable<Business_UserCompanySet>().Where(x => x.UserVGUID == UserInfo.Vguid.ToString() && x.Code == UserInfo.AccountModeCode
+                    //            && x.Block == "1" && x.IsCheck == true).OrderBy("Code asc").ToList();
+                }
                 else
                 {
                     var sVGUID = "";

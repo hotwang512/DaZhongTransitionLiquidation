@@ -333,18 +333,32 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     if (it.ReceivableAccount != "" && it.ReceivableAccount != null)
                                     {
                                         receivableAccount = it.ReceivableAccount;
-                                        if (it.LoanMoney != 0 && it.LoanMoney != null && loanMoneyCount == borrowMoneyCount)
-                                        {
-                                            creditAmountTotal = creditAmountTotal + it.LoanMoney;
-                                            continue;
-                                        }
+                                        //if (it.LoanMoney != 0 && it.LoanMoney != null && loanMoneyCount == borrowMoneyCount)
+                                        //{
+                                        //    creditAmountTotal = creditAmountTotal + it.LoanMoney;
+                                        //    continue;
+                                        //}
                                         //贷配置明细
                                         var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
                                         var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
                                         if (paySetting == null)
                                         {
-                                            continue;
+                                            //通过描述信息寻找配置表中已修改的贷方信息
+                                            paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Remark == it.Abstract).FirstOrDefault();
+                                            if (paySetting != null)
+                                            {
+                                                var seven = paySetting.Loan.Split(".");
+                                                it.CompanySection = seven[0];
+                                                it.SubjectSection = seven[1];
+                                                it.AccountSection = seven[2];
+                                                it.CostCenterSection = seven[3];
+                                                it.SpareOneSection = seven[4];
+                                                it.SpareTwoSection = seven[5];
+                                                it.IntercourseSection = seven[6];
+                                                //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                                it.SevenSubjectName = paySetting.Loan + "\n" + BankFlowTemplateController.GetSevenSubjectName(paySetting.Loan, accountModeCode, item.CompanyCode);
+                                            }
                                         }
                                         //从金额报表中按配置获取金额
                                         if (paySetting.Channel == "898319841215600")
@@ -376,12 +390,30 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     }
                                     else
                                     {
-                                        //借配置明细
-                                        if (it.BorrowMoney == null || it.BorrowMoney == 0)
+                                        //借配置明细,1==1有借贷配置变更需要刷新
+                                        if (it.BorrowMoney == null || it.BorrowMoney == 0 || 1==1)
                                         {
                                             var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                             var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
                                             var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
+                                            if(paySetting == null)
+                                            {
+                                                //通过描述信息寻找配置表中已修改的借方信息
+                                                paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Remark == it.Abstract).FirstOrDefault();
+                                                if(paySetting != null)
+                                                {
+                                                    var seven = paySetting.Borrow.Split(".");
+                                                    it.CompanySection = seven[0];
+                                                    it.SubjectSection = seven[1];
+                                                    it.AccountSection = seven[2];
+                                                    it.CostCenterSection = seven[3];
+                                                    it.SpareOneSection = seven[4];
+                                                    it.SpareTwoSection = seven[5];
+                                                    it.IntercourseSection = seven[6];
+                                                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                                    it.SevenSubjectName = paySetting.Borrow + "\n" + BankFlowTemplateController.GetSevenSubjectName(paySetting.Borrow, accountModeCode, item.CompanyCode);
+                                                }
+                                            }
                                             if (paySetting.Channel == "898319841215600")
                                             {
                                                 //自助发票机另外处理

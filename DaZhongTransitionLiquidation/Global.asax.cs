@@ -44,8 +44,9 @@ namespace DaZhongTransitionLiquidation
                 AutoSyncBankFlow.AutoSyncYesterdaySeavice();
                 AutoSyncBankFlow.AutoBankTransferResult();
                 AutoSyncBankFlow.AutoVehicleSeavice();
-                AutoSyncEmailController.AutoSyncEmailSeavice();
                 AutoSyncBankFlow.AutoGetVoucherMoneySeavice();
+                AutoSyncEmailController.AutoSyncEmailSeavice();
+
 
                 //AutoSyncAssetsMaintenance.AutoSyncSeavice();
                 //AutoSyncBankFlow.AutoTransferVoucherSeavice();

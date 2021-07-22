@@ -2,6 +2,7 @@
 var vguid = "";
 var payVGUID = "";
 var isEdit = "";
+var SType = "";
 var AccountSection = null;
 var CostCenterSection = null;
 var SpareOneSection = null;
@@ -189,6 +190,7 @@ var $page = function () {
             IntercourseSection = loadCompanyCode("G", code, row.Code);
             //var str = "_" + z1 + "_" + z2;
             loadSelectFun(str);
+            
             $("#AddSubjectDialog").modal("hide");
         });
     }
@@ -343,7 +345,6 @@ var $page = function () {
     }
 };
 
-var SType = "";
 function add(type) {
     SType = type;
     $("#hidborrow").val("");
@@ -376,6 +377,8 @@ function add(type) {
 function edit(guid2, Borrow, Loan, Remark, Money) {
     $("#Remark1").val("");
     $("#Money2").val("");
+    $("#hidborrow").val("");
+    $("#hidloan").val("");
     isEdit = true;
     vguid = guid2;
     $("#myModalLabel_title").text("编辑借/贷方信息");
@@ -390,11 +393,12 @@ function edit(guid2, Borrow, Loan, Remark, Money) {
         //$("#BorrowTr").show();
         //$("#LoanTr").hide();
         sevenStr = Borrow.split(".");
-
+        SType = "B";
     } else {
         //$("#BorrowTr").hide();
         //$("#LoanTr").show();
         sevenStr = Loan.split(".");
+        SType = "L";
     }
     code = $("#CompanyCode").val();
     SubjectSection = loadCompanyCode("B", code, sevenStr[1]);

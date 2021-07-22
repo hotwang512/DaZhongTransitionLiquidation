@@ -241,6 +241,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 {
                     using (SqlSugarClient _db = DbBusinessDataConfig.GetInstance())
                     {
+
                         //一小时查一次,获取当天每笔凭证的贷方金额
                         var day = DateTime.Now.ToString("yyyy-MM-dd").TryToDate();
                         //测试 day = "2019-08-26".TryToDate();
@@ -264,6 +265,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         var month = DateTime.Now.ToString("yyyy-MM");
                         var bankFlowList1 = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
                         var sevenData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                        var subjectData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
                         List<usp_RevenueAmountReport> bankFlowList = new List<usp_RevenueAmountReport>();
                         foreach (var item in voucherData)
                         {
@@ -344,8 +346,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                                         var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
                                         if (paySetting == null)
                                         {
-                                            //通过描述信息寻找配置表中已修改的贷方信息
-                                            paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Remark == it.Abstract).FirstOrDefault();
+                                            //通过凭证表中payVGUID寻找配置表中已修改的贷方信息
+                                            paySetting = accountDetail.Where(x => x.VGUID == it.PayVGUID).FirstOrDefault();
                                             if (paySetting != null)
                                             {
                                                 var seven = paySetting.Loan.Split(".");
@@ -356,7 +358,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                 it.SpareOneSection = seven[4];
                                                 it.SpareTwoSection = seven[5];
                                                 it.IntercourseSection = seven[6];
-                                                //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                                it.SubjectSectionName = subjectData.Where(x=>x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Code == seven[1]).FirstOrDefault().Descrption;
                                                 it.SevenSubjectName = paySetting.Loan + "\n" + BankFlowTemplateController.GetSevenSubjectName(paySetting.Loan, accountModeCode, item.CompanyCode);
                                             }
                                         }
@@ -398,8 +400,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
                                             if(paySetting == null)
                                             {
-                                                //通过描述信息寻找配置表中已修改的借方信息
-                                                paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Remark == it.Abstract).FirstOrDefault();
+                                                //通过凭证表中payVGUID寻找配置表中已修改的借方信息
+                                                paySetting = accountDetail.Where(x => x.VGUID == it.PayVGUID).FirstOrDefault();
                                                 if(paySetting != null)
                                                 {
                                                     var seven = paySetting.Borrow.Split(".");
@@ -410,7 +412,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                                     it.SpareOneSection = seven[4];
                                                     it.SpareTwoSection = seven[5];
                                                     it.IntercourseSection = seven[6];
-                                                    //BVDetail.SubjectSectionName = item.SubjectSectionName;
+                                                    it.SubjectSectionName = subjectData.Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Code == seven[1]).FirstOrDefault().Descrption; ;
                                                     it.SevenSubjectName = paySetting.Borrow + "\n" + BankFlowTemplateController.GetSevenSubjectName(paySetting.Borrow, accountModeCode, item.CompanyCode);
                                                 }
                                             }
@@ -467,6 +469,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                 }
             }
         }
+
         public static void AutoTransferVoucherSeavice()
         {
             Thread LogThread = new Thread(new ThreadStart(DoTransferVoucher));

@@ -10,6 +10,7 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
         public Guid VGUID { get; set; }
         public Guid VoucherVGUID { get; set; }
         public Guid ModelVGUID { get; set; }
+        public Guid PayVGUID { get; set; }
         public string Abstract { get; set; }
         public string CompanySection { get; set; }
         public string SubjectSection { get; set; }

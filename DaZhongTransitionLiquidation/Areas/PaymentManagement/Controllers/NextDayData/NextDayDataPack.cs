@@ -562,7 +562,11 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
                 {
                     startIndex++;
                 }
-                startIndex += fileLineDataRule[j].Length;
+                if(fileLineDataRule != null)
+                {
+                    startIndex += fileLineDataRule[j].Length;
+                }
+                
             }
 
             byte[] bytes = System.Text.Encoding.Default.GetBytes(line);
@@ -572,8 +576,12 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.NextD
             {
                 startIndex++;
             }
-
-            int endIndex = startIndex + fileLineDataRule[fieldIndex].Length;
+            int endIndex = 0;
+            if (fileLineDataRule != null)
+            {
+                endIndex = startIndex + fileLineDataRule[fieldIndex].Length;
+            }
+            
             if (endIndex > bytes.Length)
             {
                 endIndex = bytes.Length;

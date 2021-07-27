@@ -266,7 +266,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                             voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == vguid.TryToGuid()).ToList();
                             voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='" + vguid + "'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
                             //清空原有借贷配置重新生成
-                            //CreatNewSetting(_db, voucherDetails, accountInfo, accountDetail, vguid);
+                            CreatNewSetting(_db, voucherDetails, accountInfo, accountDetail, vguid,voucherData,sevenData,subjectData);
+                            voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='" + vguid + "'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
                         }
                         List<usp_RevenueAmountReport> bankFlowList = new List<usp_RevenueAmountReport>();
                         foreach (var item in voucherData)
@@ -337,32 +338,18 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     if (it.ReceivableAccount != "" && it.ReceivableAccount != null)
                                     {
                                         receivableAccount = it.ReceivableAccount;
-                                        //if (it.LoanMoney != 0 && it.LoanMoney != null && loanMoneyCount == borrowMoneyCount)
-                                        //{
-                                        //    creditAmountTotal = creditAmountTotal + it.LoanMoney;
-                                        //    continue;
-                                        //}
+                                        if (it.LoanMoney != 0 && it.LoanMoney != null && loanMoneyCount == borrowMoneyCount)
+                                        {
+                                            creditAmountTotal = creditAmountTotal + it.LoanMoney;
+                                            continue;
+                                        }
                                         //贷配置明细
                                         var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                         var payVGUID = accountInfo.Where(x => x.BankAccount == it.ReceivableAccount).FirstOrDefault().VGUID.TryToString();
-                                        var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
+                                        var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Loan == subject && x.AccountModeCode == accountModeCode).FirstOrDefault();
                                         if (paySetting == null)
                                         {
-                                            //通过凭证表中payVGUID寻找配置表中已修改的贷方信息
-                                            paySetting = accountDetail.Where(x => x.VGUID == it.PayVGUID).FirstOrDefault();
-                                            if (paySetting != null)
-                                            {
-                                                var seven = paySetting.Loan.Split(".");
-                                                it.CompanySection = seven[0];
-                                                it.SubjectSection = seven[1];
-                                                it.AccountSection = seven[2];
-                                                it.CostCenterSection = seven[3];
-                                                it.SpareOneSection = seven[4];
-                                                it.SpareTwoSection = seven[5];
-                                                it.IntercourseSection = seven[6];
-                                                it.SubjectSectionName = subjectData.Where(x=>x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Code == seven[1]).FirstOrDefault().Descrption;
-                                                it.SevenSubjectName = paySetting.Loan + "\n" + BankFlowTemplateController.GetSevenSubjectName(paySetting.Loan, accountModeCode, item.CompanyCode);
-                                            }
+                                            continue;
                                         }
                                         //从金额报表中按配置获取金额
                                         if (paySetting.Channel == "898319841215600")
@@ -399,24 +386,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                                         {
                                             var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                             var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
-                                            var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject && x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode).FirstOrDefault();
+                                            var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID && x.Borrow == subject && x.AccountModeCode == accountModeCode).FirstOrDefault();
                                             if(paySetting == null)
                                             {
-                                                //通过凭证表中payVGUID寻找配置表中已修改的借方信息
-                                                paySetting = accountDetail.Where(x => x.VGUID == it.PayVGUID).FirstOrDefault();
-                                                if(paySetting != null)
-                                                {
-                                                    var seven = paySetting.Borrow.Split(".");
-                                                    it.CompanySection = seven[0];
-                                                    it.SubjectSection = seven[1];
-                                                    it.AccountSection = seven[2];
-                                                    it.CostCenterSection = seven[3];
-                                                    it.SpareOneSection = seven[4];
-                                                    it.SpareTwoSection = seven[5];
-                                                    it.IntercourseSection = seven[6];
-                                                    it.SubjectSectionName = subjectData.Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Code == seven[1]).FirstOrDefault().Descrption; ;
-                                                    it.SevenSubjectName = paySetting.Borrow + "\n" + BankFlowTemplateController.GetSevenSubjectName(paySetting.Borrow, accountModeCode, item.CompanyCode);
-                                                }
+                                                continue;
                                             }
                                             if (paySetting.Channel == "898319841215600")
                                             {
@@ -472,9 +445,67 @@ namespace DaZhongTransitionLiquidation.Controllers
             }
         }
 
-        private static void CreatNewSetting(SqlSugarClient _db, List<Business_VoucherDetail> voucherDetails, List<V_Business_PaySetting> accountInfo, List<Business_PaySettingDetail> accountDetail, object vguid)
+        private static void CreatNewSetting(SqlSugarClient _db, List<Business_VoucherDetail> voucherDetails, List<V_Business_PaySetting> accountInfo, List<Business_PaySettingDetail> accountDetail, 
+                object vguid,List<Business_VoucherList> VoucherList,List<Business_SevenSection> sevenData,List<Business_SevenSection> subjectData)
         {
-            var ReceivableAccount = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='" + vguid + "'");
+            var companyCode = VoucherList[0].CompanyCode;
+            var accountModeCode = "";
+            var accountModeData = sevenData.Where(x => x.Descrption == VoucherList[0].AccountModeName).First();
+            if (accountModeData != null)
+            {
+                accountModeCode = accountModeData.Code;
+            }
+            var receivableAccount = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='" + vguid + "' and t.ReceivableAccount is not null").First().ReceivableAccount;
+            //获取借贷配置信息
+            var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
+            var paySetting = accountDetail.Where(x => x.PayVGUID == payVGUID  && x.AccountModeCode == accountModeCode).ToList();
+            var guid = vguid.TryToGuid();
+            //添加新的借贷
+            List<Business_VoucherDetail> VoucherDetailList = new List<Business_VoucherDetail>();
+            foreach (var item in paySetting)
+            {
+                Business_VoucherDetail it = new Business_VoucherDetail();
+                it.BorrowMoney = 0;
+                it.BorrowMoneyCount = 0;
+                it.Abstract = item.Remark;
+                it.VGUID = Guid.NewGuid();
+                it.PayVGUID = item.VGUID;
+                it.VoucherVGUID = guid;
+                if (item.Borrow != null && item.Borrow != "")
+                {
+                    var seven = item.Borrow.Split(".");
+                    it.CompanySection = seven[0];
+                    it.SubjectSection = seven[1];
+                    it.AccountSection = seven[2];
+                    it.CostCenterSection = seven[3];
+                    it.SpareOneSection = seven[4];
+                    it.SpareTwoSection = seven[5];
+                    it.IntercourseSection = seven[6];
+                    it.SubjectSectionName = subjectData.Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Code == seven[1]).FirstOrDefault().Descrption; ;
+                    it.SevenSubjectName = item.Borrow + "\n" + BankFlowTemplateController.GetSevenSubjectName(item.Borrow, accountModeCode, item.CompanyCode);
+                }
+                else if(item.Loan != null && item.Loan != "")
+                {
+                    var seven = item.Loan.Split(".");
+                    it.CompanySection = seven[0];
+                    it.SubjectSection = seven[1];
+                    it.AccountSection = seven[2];
+                    it.CostCenterSection = seven[3];
+                    it.SpareOneSection = seven[4];
+                    it.SpareTwoSection = seven[5];
+                    it.IntercourseSection = seven[6];
+                    it.SubjectSectionName = subjectData.Where(x => x.AccountModeCode == accountModeCode && x.CompanyCode == item.CompanyCode && x.Code == seven[1]).FirstOrDefault().Descrption; ;
+                    it.SevenSubjectName = item.Loan + "\n" + BankFlowTemplateController.GetSevenSubjectName(item.Loan, accountModeCode, item.CompanyCode);
+                    it.ReceivableAccount = receivableAccount;
+                }
+                VoucherDetailList.Add(it);
+            }
+            if(VoucherDetailList.Count > 0)
+            {
+                //删除凭证原有借贷并新增
+                _db.Deleteable<Business_VoucherDetail>().Where(x => x.VoucherVGUID == guid).ExecuteCommand();
+                _db.Insertable(VoucherDetailList).ExecuteCommand();
+            }
         }
 
         public static void AutoTransferVoucherSeavice()

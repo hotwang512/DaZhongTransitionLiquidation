@@ -454,6 +454,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                         //对方账号下借贷配置信息
                         //var loadData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Loan != null && j.AccountModeCode == item.AccountModeCode && j.CompanyCode == item.CompanyCode).ToList();
                         var borrowData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null && j.AccountModeCode == item.AccountModeCode && j.CompanyCode == item.CompanyCode).ToList();
+                        if(bankChannelOne.VGUID.ToString() == "15b8e49e-eb98-4b0d-9ab1-abfa3788ccd2")
+                        {
+                            //杉德配置临时方案
+                            borrowData = paySetting.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null && j.AccountModeCode == item.AccountModeCode).ToList();
+                        }
                         if (borrowData.Count >= 1)
                         {
                             var index = 0;
@@ -645,6 +650,11 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement
                 {
                     //对方账号下贷方配置（多贷）
                     var loanData = borrowLoadData.Where(x => x.Loan != null && x.AccountModeCode == item.AccountModeCode && x.CompanyCode == item.CompanyCode).ToList();
+                    if (bankChannelOne.VGUID.ToString() == "15b8e49e-eb98-4b0d-9ab1-abfa3788ccd2")
+                    {
+                        //杉德配置临时方案
+                        loanData = borrowLoadData.Where(j => j.PayVGUID == bankChannelOne.VGUID.ToString() && j.Borrow != null && j.AccountModeCode == item.AccountModeCode).ToList();
+                    }
                     foreach (var it in loanData)
                     {
                         Business_VoucherDetail BVDetail2 = new Business_VoucherDetail();

@@ -219,8 +219,8 @@ var $page = function () {
                     data: {
                         "VGUID": $("#VGUID").val(),
                         "AccountModeName": $("#AccountModeName").val(),
-                        "CompanyCode": CompanySection,
-                        "CompanyName": companyName,
+                        "CompanyCode": "01",
+                        "CompanyName": $("#LoginCompanyName").val(),
                         "VoucherType": $("#VoucherType").val(),
                         "AccountingPeriod": $("#AccountingPeriod").val(),
                         "BatchName": $("#BatchName").val(),

@@ -110,15 +110,24 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
             });
             return Json(resultModel);
         }
-        public JsonResult GetCashBorrowLoan(Guid PayVGUID, GridParams para)
+        public JsonResult GetCashBorrowLoan(Guid PayVGUID, int sort, GridParams para)
         {
             var jsonResult = new JsonResultModel<Business_CashBorrowLoan>();
             DbBusinessDataService.Command(db =>
             {
                 int pageCount = 0;
                 para.pagenum = para.pagenum + 1;
-                jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID)
-                .OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                if (sort == 1)
+                {
+                    jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID)
+                        .OrderBy(i => i.Sort, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                }
+                else
+                {
+                    jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID)
+                        .OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
+                }
+
                 jsonResult.TotalRows = pageCount;
             });
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
@@ -156,6 +165,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                             PayVGUID = bankChannel.PayVGUID,
                             Remark = bankChannel.Remark,
                             Money = bankChannel.Money,
+                            Sort = bankChannel.Sort,
                             VMDFTIME = DateTime.Now,
                             VMDFUSER = UserInfo.LoginName,
                         }).Where(it => it.VGUID == bankChannel.VGUID).ExecuteCommand();

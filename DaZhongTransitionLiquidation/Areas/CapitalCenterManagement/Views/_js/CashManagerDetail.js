@@ -227,7 +227,7 @@ var $page = function () {
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PayVGUID": payVGUID },
+                data: { "PayVGUID": payVGUID,"sort":0 },
                 url: "/CapitalCenterManagement/CashTransactionDetail/GetCashBorrowLoan"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {

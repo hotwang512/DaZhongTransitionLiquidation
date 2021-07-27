@@ -248,6 +248,12 @@ namespace DaZhongTransitionLiquidation.Controllers
                         //vguid = "b4e2abce-b9bd-4ee4-a878-3540eb1d7d77";
                         List<Business_VoucherList> voucherData = new List<Business_VoucherList>();
                         List<Business_VoucherDetail> voucherDetails = new List<Business_VoucherDetail>();
+                        var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
+                        var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
+                        var month = DateTime.Now.ToString("yyyy-MM");
+                        var bankFlowList1 = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
+                        var sevenData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                        var subjectData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
                         if (vguid.TryToGuid() == Guid.Empty)
                         {
                             execute = true;
@@ -258,14 +264,10 @@ namespace DaZhongTransitionLiquidation.Controllers
                         {
                             execute = false;
                             voucherData = _db.Queryable<Business_VoucherList>().Where(x => x.VGUID == vguid.TryToGuid()).ToList();
-                            voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='"+ vguid + "'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                            voucherDetails = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='" + vguid + "'").OrderBy(x => x.BorrowMoney, OrderByType.Desc).ToList();
+                            //清空原有借贷配置重新生成
+                            //CreatNewSetting(_db, voucherDetails, accountInfo, accountDetail, vguid);
                         }
-                        var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
-                        var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
-                        var month = DateTime.Now.ToString("yyyy-MM");
-                        var bankFlowList1 = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
-                        var sevenData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
-                        var subjectData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
                         List<usp_RevenueAmountReport> bankFlowList = new List<usp_RevenueAmountReport>();
                         foreach (var item in voucherData)
                         {
@@ -468,6 +470,11 @@ namespace DaZhongTransitionLiquidation.Controllers
                     Thread.Sleep((int)(1 * 1000 * 60 * 60));
                 }
             }
+        }
+
+        private static void CreatNewSetting(SqlSugarClient _db, List<Business_VoucherDetail> voucherDetails, List<V_Business_PaySetting> accountInfo, List<Business_PaySettingDetail> accountDetail, object vguid)
+        {
+            var ReceivableAccount = _db.Queryable<Business_VoucherDetail>("t").Where("t.VoucherVGUID ='" + vguid + "'");
         }
 
         public static void AutoTransferVoucherSeavice()

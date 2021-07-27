@@ -120,6 +120,7 @@ var $page = function () {
                     PayVGUID: payVGUID,
                     Remark: $("#Remark1").val(),
                     Money: $("#Money2").val(),
+                    Sort: $("#Sort").val()
                 },
                 type: "post",
                 dataType: "json",
@@ -228,10 +229,11 @@ var $page = function () {
                     { name: 'PayVGUID', type: 'string' },
                     { name: 'Remark', type: 'string' },
                     { name: 'Money', type: 'number' },
+                    { name: 'Sort', type: 'number' }
                 ],
                 datatype: "json",
                 id: "VGUID",
-                data: { "PayVGUID": payVGUID },
+                data: { "PayVGUID": payVGUID, "sort": 1 },
                 url: "/CapitalCenterManagement/CashTransactionDetail/GetCashBorrowLoan"   //获取数据源的路径
             };
         var typeAdapter = new $.jqx.dataAdapter(source, {
@@ -259,7 +261,8 @@ var $page = function () {
                     { text: '金额', datafield: 'Money', cellsFormat: "d2", align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '公司', datafield: 'CompanyCode', hidden: true },
                     { text: 'PayVGUID', datafield: 'PayVGUID', hidden: true, cellsRenderer: setVGUID },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
+                    { text: 'Sort', datafield: 'Sort', hidden: true }
                 ]
             });
 
@@ -275,6 +278,7 @@ var $page = function () {
                 + borrow + "','"
                 + loan + "','"
                 + rowData.Remark + "','"
+                + rowData.Sort + "','"
                 + rowData.Money + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Borrow + "</a>";
         }
         return container;
@@ -290,6 +294,7 @@ var $page = function () {
                 + borrow + "','"
                 + loan + "','"
                 + rowData.Remark + "','"
+                + rowData.Sort + "','"
                 + rowData.Money + "') style=\"text-decoration: underline;color: #333;\">" + rowData.Loan + "</a>";
         }
         return container;
@@ -360,6 +365,7 @@ function add(type) {
     //$("#jqxdropdownbutton2").jqxDropDownButton('setContent', "");
     $("#Remark1").val("");
     $("#Month").val("");
+    $("#Sort").val("");
     $("#SubjectSection").val("");
     $("#hidSubjectSection").val("");
     $("#AccountSection").val("");
@@ -374,7 +380,7 @@ function add(type) {
     selector.$AddBankChannelDialog().modal("show");
     //initBorrowTable(companyCode, accountMode);
 }
-function edit(guid2, Borrow, Loan, Remark, Money) {
+function edit(guid2, Borrow, Loan, Remark, Sort, Money) {
     $("#Remark1").val("");
     $("#Money2").val("");
     $("#hidborrow").val("");
@@ -384,6 +390,7 @@ function edit(guid2, Borrow, Loan, Remark, Money) {
     $("#myModalLabel_title").text("编辑借/贷方信息");
     $("#Remark1").val(Remark);
     $("#Money2").val(Money);
+    $("#Sort").val(Sort);
     //initBorrowTable(CompanyCode, accountMode);
     if (Remark == null || Remark == "null") {
         $("#Remark1").val("");

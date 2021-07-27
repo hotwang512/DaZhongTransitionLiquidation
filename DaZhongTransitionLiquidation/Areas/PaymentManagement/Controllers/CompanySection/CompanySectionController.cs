@@ -72,7 +72,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                         {
                             item.IsTaxes = false;
                         }
-                    }
+                    }                
                 }
                 jsonResult.TotalRows = pageCount;
             });
@@ -620,7 +620,7 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     accountModeCode = UserInfo.AccountModeCode;
                 }
-                response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code && x.AccountModeCode == accountModeCode).ToList();
+                response = db.Queryable<Business_CompanyBankInfo>().Where(x=>x.CompanyCode == code && x.AccountModeCode == accountModeCode).ToList();                
             });
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -1289,6 +1289,42 @@ namespace DaZhongTransitionLiquidation.Areas.PaymentManagement.Controllers.Compa
                 {
                     Sync = ischeck,
                 }).Where(it => it.VGUID == vguids).ExecuteCommand();
+            });
+            return Json(resultModel);
+        }
+        public JsonResult SyncDataByDaZhong01()
+        {
+            var resultModel = new ResultModel<string>() { IsSuccess = false, Status = "0" };
+            DbBusinessDataService.Command(db =>
+            {
+                //新公司同步各科目数据
+                List<Business_SevenSection> ssiList = new List<Business_SevenSection>();
+                var seveList = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID != 'A63BD715-C27D-4C47-AB66-550309794D43' and SectionVGUID != 'B63BD715-C27D-4C47-AB66-550309794D43' 
+                                and AccountModeCode = '1002' and CompanyCode='01' ").ToList();
+                var seveList2 = db.SqlQueryable<Business_SevenSection>(@"select * from Business_SevenSection where SectionVGUID != 'A63BD715-C27D-4C47-AB66-550309794D43' and SectionVGUID != 'B63BD715-C27D-4C47-AB66-550309794D43'
+                                and AccountModeCode = '1002' and CompanyCode='06' ").ToList();
+                foreach (var item in seveList)
+                {
+                    var isAny = seveList2.Any(x => x.Code == item.Code);
+                    if (isAny)
+                    {
+                        continue;
+                    }
+                    item.VGUID = Guid.NewGuid();
+                    item.CompanyCode = "06";
+                }
+                ssiList = seveList.Where(x => x.CompanyCode == "06").ToList();
+                //db.Insertable(ssiList).ExecuteCommand();
+                //新公司同步科目段设置
+                List<Business_SubjectSettingInfo> ssiList2 = new List<Business_SubjectSettingInfo>();
+                var data = db.Queryable<Business_SubjectSettingInfo>().Where(x => x.AccountModeCode == "1002" && x.SubjectCode == "01" && x.SubjectVGUID == "B63BD715-C27D-4C47-AB66-550309794D43").ToList();
+                foreach (var item in data)
+                {
+                    item.VGUID = Guid.NewGuid();
+                    item.SubjectCode = "06";
+                }
+                ssiList2 = data;
+                //db.Insertable(ssiList).ExecuteCommand();
             });
             return Json(resultModel);
         }

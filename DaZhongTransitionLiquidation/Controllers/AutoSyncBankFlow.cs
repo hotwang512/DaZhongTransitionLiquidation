@@ -357,7 +357,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             //自助发票机另外处理
                                             continue;
                                         }
-                                        var amountReport = bankFlowList.Where(x => x.OrganizationName == paySetting.TransferCompany && x.Channel_Id == paySetting.Channel && x.RevenueDate == item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM-dd")).ToList();
+                                        var amountReport = bankFlowList.Where(x => x.OrgVGUID == paySetting.OrgVGUID && x.Channel_Id == paySetting.Channel && x.RevenueDate == item.VoucherDate.TryToDate().AddDays(-1).ToString("yyyy-MM-dd")).ToList();
                                         if (amountReport.Count > 0 && paySetting.TransferType != null)
                                         {
                                             it.LoanMoney = 0;

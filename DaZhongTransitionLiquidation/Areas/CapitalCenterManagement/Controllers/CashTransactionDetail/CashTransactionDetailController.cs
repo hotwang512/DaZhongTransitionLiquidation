@@ -119,7 +119,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 if (sort == 1)
                 {
-                    jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID)
+                    jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID).OrderBy(i => i.VCRTTIME, OrderByType.Asc)
                         .OrderBy(i => i.Sort, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 }
                 else
@@ -151,6 +151,8 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 bankChannel.VCRTUSER = UserInfo.LoginName;
                 bankChannel.VCRTTIME = DateTime.Now;
                 bankChannel.VGUID = Guid.NewGuid();
+                //新增时重新排序
+
             }
             DbBusinessDataService.Command(db =>
             {

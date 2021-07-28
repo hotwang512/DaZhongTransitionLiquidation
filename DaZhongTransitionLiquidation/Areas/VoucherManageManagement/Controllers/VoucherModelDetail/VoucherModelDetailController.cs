@@ -1,6 +1,8 @@
-﻿using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
+﻿using DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model;
+using DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Model;
 using DaZhongTransitionLiquidation.Infrastructure.Dao;
 using DaZhongTransitionLiquidation.Infrastructure.UserDefinedEntity;
+using SqlSugar;
 using SyntacticSugar;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,25 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
             {
                 //主信息
                 orderList = db.Queryable<Business_VoucherModel>().Single(x => x.VGUID == vguid);
+
+                //var vguidList = db.SqlQueryable<List<Guid>>(@"select VGUID from Business_VoucherModel").ToList();
+                //List<Business_CashBorrowLoan> cblList = new List<Business_CashBorrowLoan>();
+                //foreach (var item in vguidList[0])
+                //{
+                //    var vm = db.Queryable<Business_CashBorrowLoan>().Where(x => x.PayVGUID == item).OrderBy(x=>x.VCRTTIME,OrderByType.Asc).ToList();
+                //    int j = 0;
+                //    for (int i = 0; i < vm.Count; i++)
+                //    {
+                //        Business_CashBorrowLoan cbl = new Business_CashBorrowLoan();
+                //        vm[i].Sort = j;
+                //        j += 10;
+                //        cblList.Add(cbl);
+                //    }
+                //}
+                //if(cblList.Count > 0)
+                //{
+
+                //}
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }

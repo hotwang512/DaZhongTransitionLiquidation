@@ -129,6 +129,7 @@ var $page = function () {
                         PayVGUID: payVGUID,
                         Remark: $("#Remark").val(),
                         Money: $("#Money").val(),
+                        Sort: 0
                     },
                     type: "post",
                     dataType: "json",

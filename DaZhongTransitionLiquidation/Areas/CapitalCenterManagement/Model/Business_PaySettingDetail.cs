@@ -25,5 +25,6 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Model
         public string VCRTUSER { get; set; }
         public decimal? Money { get; set; }
         public string Remark { get; set; }
+        public Guid OrgVGUID { get; set; }
     }
 }

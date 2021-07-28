@@ -187,7 +187,7 @@ var $page = function () {
                     var SpareOneSection = subjectName[4];
                     var SpareTwoSection = subjectName[5];
                     var IntercourseSection = subjectName[6].split(/[\s\n]/)[0];
-                    var companyName = subjectName[6].split(/[\s\n]/)[1];
+                    //var companyName = subjectName[6].split(/[\s\n]/)[1];
                     var borrowMoney = 0;
                     var loanMoney = 0;
                     borrowMoney = $("#Borrow" + i).val().replace(/,/g, '');
@@ -219,7 +219,7 @@ var $page = function () {
                     data: {
                         "VGUID": $("#VGUID").val(),
                         "AccountModeName": $("#AccountModeName").val(),
-                        "CompanyCode": "01",
+                        "CompanyCode": $("#LoginCompanyCode").val(),
                         "CompanyName": $("#LoginCompanyName").val(),
                         "VoucherType": $("#VoucherType").val(),
                         "AccountingPeriod": $("#AccountingPeriod").val(),
@@ -276,10 +276,11 @@ var $page = function () {
             //var x = $(".nav-i")[0].id.split("_")[1];
             if ($("#SubjectName0").val() != null && $("#SubjectName0").val() != "") {
                 var subjectName = $("#SubjectName0").val().split(".");
-                var companyName = subjectName[6].split(/[\s\n]/)[1];
-                if (subjectName[6].split(/[\s\n]/).length < 2) {
-                    companyName = subjectName[6].substring(1, subjectName[6].length);
-                }
+                var companyName = $("#LoginCompanyName").val()
+                //var companyName = subjectName[6].split(/[\s\n]/)[1];
+                //if (subjectName[6].split(/[\s\n]/).length < 2) {
+                //    companyName = subjectName[6].substring(1, subjectName[6].length);
+                //}
                 $("#lblCompany").text(companyName);
             } else {
                 jqxNotification("借贷科目不完整！", null, "error");

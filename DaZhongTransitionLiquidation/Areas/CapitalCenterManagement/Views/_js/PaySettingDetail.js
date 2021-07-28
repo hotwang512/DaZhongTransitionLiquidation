@@ -93,7 +93,7 @@ var $page = function () {
                 $.ajax({
                     url: "/CapitalCenterManagement/PaySettingDetail/SavePaySettingDetail?isEdit=" + isEdit,
                     data: {
-                        TransferCompany: $("#TransferCompany").val(),
+                        TransferCompany: $("#TransferCompany  option:selected").text(),
                         TransferType: $("#TransferType").val(),
                         Month: $("#Month").val(),
                         Channel: $("#txtChannelName").val(),
@@ -104,6 +104,7 @@ var $page = function () {
                         VGUID: vguid,
                         PayVGUID: payVGUID,
                         Remark: $("#Remark").val(),
+                        OrgVGUID: $("#TransferCompany").val()
                     },
                     type: "post",
                     dataType: "json",
@@ -257,6 +258,7 @@ var $page = function () {
                     { name: 'Money', type: 'number' },
                     { name: 'PayVGUID', type: 'string' },
                     { name: 'Remark', type: 'string' },
+                    { name: 'OrgVGUID', type: 'string' },
                 ],
                 datatype: "json",
                 id: "VGUID",
@@ -293,7 +295,8 @@ var $page = function () {
                     { text: '是否禁用', datafield: "IsUnable", align: 'center', cellsAlign: 'center', hidden: true },
                     { text: '渠道编码', datafield: 'Channel', hidden: true },
                     { text: '公司', datafield: 'CompanyCode', hidden: true },
-                    { text: 'VGUID', datafield: 'VGUID', hidden: true }
+                    { text: 'VGUID', datafield: 'VGUID', hidden: true },
+                    { text: 'OrgVGUID', datafield: 'OrgVGUID', hidden: true }
                 ]
             });
 
@@ -306,7 +309,7 @@ var $page = function () {
         if (rowData.Borrow != null) {
             borrow = rowData.Borrow.split(/[\s\n]/)[0];
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','"
-                + rowData.TransferCompany + "','"
+                + rowData.OrgVGUID + "','"
                 + rowData.TransferType + "','"
                 + rowData.Month + "','"
                 + rowData.CompanyCode + "','"
@@ -324,7 +327,7 @@ var $page = function () {
         if (rowData.Loan != null) {
             loan = rowData.Loan.split(/[\s\n]/)[0];
             container = "<a href='#' onclick=edit('" + rowData.VGUID + "','"
-                + rowData.TransferCompany + "','"
+                + rowData.OrgVGUID + "','"
                 + rowData.TransferType + "','"
                 + rowData.Month + "','"
                 + rowData.CompanyCode + "','"
@@ -418,7 +421,7 @@ function add(type) {
     //initBorrowTable(companyCode, accountMode);
 }
 
-function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, Loan, Remark, Channel) {
+function edit(guid, OrgVGUID, TransferType, Month, CompanyCode, Borrow, Loan, Remark, Channel) {
     $("#TransferCompany").val("");
     $("#TransferType").val("");
     $("#Channel").val("");
@@ -427,7 +430,7 @@ function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, L
     isEdit = true;
     vguid = guid;
     $("#myModalLabel_title").text("编辑借/贷方信息");
-    $("#TransferCompany").val(TransferCompany);
+    $("#TransferCompany").val(OrgVGUID);
     $("#TransferType").val(TransferType);
     $("#Channel").val(Channel);
     $("#Month").val(Month);
@@ -441,10 +444,12 @@ function edit(guid, TransferCompany, TransferType, Month, CompanyCode, Borrow, L
     if (Borrow != null && Borrow != "") {
         //$("#BorrowTr").show();
         //$("#LoanTr").hide();
+        $("#hidborrow").val(Borrow);
         sevenStr = Borrow.split(".");
     } else {
         //$("#BorrowTr").hide();
         //$("#LoanTr").show();
+        $("#hidloan").val(Loan);
         sevenStr = Loan.split(".");
     }
     code = $("#CompanyCode").val();

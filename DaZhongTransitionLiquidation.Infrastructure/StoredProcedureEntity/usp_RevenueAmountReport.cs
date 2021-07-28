@@ -31,5 +31,6 @@ namespace DaZhongTransitionLiquidation.Infrastructure.StoredProcedureEntity
         public decimal? DriverBearFeesTotal { get; set; }
 
         public decimal? CompanyBearsFeesTotal { get; set; }
+        public Guid OrgVGUID { get; set; }
     }
 }

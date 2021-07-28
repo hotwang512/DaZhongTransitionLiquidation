@@ -576,7 +576,7 @@ from AssetsGeneralLedgerDetail_Swap where ACCOUNTING_DATE > @VoucherData", new {
                 var months = month.TryToInt() < 10 ? "0" + month : month;
                 var date = (year + "-" + months).TryToDate();
                 var myData = db.Queryable<Business_VoucherModel>().Where(x => x.VGUID == vguid).ToList().FirstOrDefault();
-                var cashDataLsit = db.Queryable<Business_CashBorrowLoan>().Where(x => x.PayVGUID == vguid).OrderBy(i => i.Sort, OrderByType.Asc).OrderBy(i => i.VCRTTIME, OrderByType.Asc).ToList();
+                var cashDataLsit = db.Queryable<Business_CashBorrowLoan>().Where(x => x.PayVGUID == vguid).OrderBy(i => i.VCRTTIME, OrderByType.Asc).OrderBy(i => i.Sort, OrderByType.Asc).ToList();
                 var isAnyModelList = db.Queryable<Business_VoucherList>().Where(x => x.VoucherType == "转账类" && x.AccountModeName == UserInfo.AccountModeName && x.CompanyCode == UserInfo.CompanyCode
                                    && x.ReceivingUnit == myData.ModelName + "（模板）" && x.AccountingPeriod == date).ToList();
                 if (isAnyModelList.Count >= 1)

@@ -78,6 +78,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                         db.Updateable<Business_PaySettingDetail>().UpdateColumns(it => new Business_PaySettingDetail()
                         {
                             TransferCompany = bankChannel.TransferCompany,
+                            OrgVGUID = bankChannel.OrgVGUID,
                             TransferType = bankChannel.TransferType,
                             Channel = bankChannel.Channel,
                             ChannelName = bankChannel.ChannelName,

@@ -58,7 +58,7 @@ var $page = function () {
                 url: "/VoucherManageManagement/VoucherModelDetail/SaveVoucherModelDetail",
                 data: {
                     AccountModeCode: $("#AccountModeCode").val(),
-                    CompanyCode: $("#CompanyCode").val(),
+                    CompanyCode: $("#LoginCompanyCode").val(),
                     ModelName: $("#ModelName").val(),
                     Remark: $("#Remark").val(),
                     VGUID: $("#VGUID").val(),

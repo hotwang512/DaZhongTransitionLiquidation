@@ -31,24 +31,25 @@ namespace DaZhongTransitionLiquidation.Areas.VoucherManageManagement.Controllers
                 //主信息
                 orderList = db.Queryable<Business_VoucherModel>().Single(x => x.VGUID == vguid);
 
-                //var vguidList = db.SqlQueryable<List<Guid>>(@"select VGUID from Business_VoucherModel").ToList();
-                //List<Business_CashBorrowLoan> cblList = new List<Business_CashBorrowLoan>();
-                //foreach (var item in vguidList[0])
+
+                //var vguidList = db.SqlQueryable<Business_VoucherModel>(@"select VGUID from Business_VoucherModel").ToList();
+                //foreach (var item in vguidList)
                 //{
-                //    var vm = db.Queryable<Business_CashBorrowLoan>().Where(x => x.PayVGUID == item).OrderBy(x=>x.VCRTTIME,OrderByType.Asc).ToList();
+                //    List<Business_CashBorrowLoan> cblList = new List<Business_CashBorrowLoan>();
+                //    var vm = db.Queryable<Business_CashBorrowLoan>().Where(x => x.PayVGUID == item.VGUID).OrderBy(x => x.VCRTTIME, OrderByType.Asc).ToList();
                 //    int j = 0;
                 //    for (int i = 0; i < vm.Count; i++)
                 //    {
-                //        Business_CashBorrowLoan cbl = new Business_CashBorrowLoan();
                 //        vm[i].Sort = j;
                 //        j += 10;
-                //        cblList.Add(cbl);
+                //        cblList.Add(vm[i]);
+                //    }
+                //    if (cblList.Count > 0)
+                //    {
+                //        db.Updateable(cblList).ExecuteCommand();
                 //    }
                 //}
-                //if(cblList.Count > 0)
-                //{
-
-                //}
+                
             });
             return Json(orderList, JsonRequestBehavior.AllowGet); ;
         }

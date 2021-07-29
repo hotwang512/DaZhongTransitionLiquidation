@@ -250,6 +250,7 @@ namespace DaZhongTransitionLiquidation.Controllers
                         List<Business_VoucherDetail> voucherDetails = new List<Business_VoucherDetail>();
                         var accountInfo = _db.Queryable<V_Business_PaySetting>().Where(x => x.IsUnable == "启用" || x.IsUnable == null || x.IsShow == "1" || x.IsShow == null).ToList();
                         var accountDetail = _db.Queryable<Business_PaySettingDetail>().ToList();
+                        var bankFlowData = _db.Queryable<Business_BankFlowTemplate>().Where(x=>x.TransactionDate >= day.AddDays(-30)).ToList();
                         var month = DateTime.Now.ToString("yyyy-MM");
                         var bankFlowList1 = _db.Ado.SqlQuery<usp_RevenueAmountReport>(@"exec usp_RevenueAmountReport @Month,@Channel", new { Month = month, Channel = "" }).ToList();
                         var sevenData = _db.Queryable<Business_SevenSection>().Where(x => x.SectionVGUID == "H63BD715-C27D-4C47-AB66-550309794D43").ToList();
@@ -381,8 +382,8 @@ namespace DaZhongTransitionLiquidation.Controllers
                                     }
                                     else
                                     {
-                                        //借配置明细,1==1有借贷配置变更需要刷新
-                                        if (it.BorrowMoney == null || it.BorrowMoney == 0 || 1==1)
+                                        //借配置明细
+                                        if (it.BorrowMoney == null || it.BorrowMoney == 0)
                                         {
                                             var subject = it.CompanySection + "." + it.SubjectSection + "." + it.AccountSection + "." + it.CostCenterSection + "." + it.SpareOneSection + "." + it.SpareTwoSection + "." + it.IntercourseSection;
                                             var payVGUID = accountInfo.Where(x => x.BankAccount == receivableAccount).FirstOrDefault().VGUID.TryToString();
@@ -413,7 +414,15 @@ namespace DaZhongTransitionLiquidation.Controllers
                                             }
                                             else
                                             {
-                                                it.BorrowMoney = 0;
+                                                bankFlowData = bankFlowData.Where(x => x.TradingBank == item.TradingBank && x.ReceivingUnit == item.ReceivingUnit && x.TransactionDate == item.TransactionDate).ToList();
+                                                if(bankFlowData.Count == 1)
+                                                {
+                                                    it.BorrowMoney = bankFlowData[0].TurnOut;
+                                                }
+                                                else
+                                                {
+                                                    it.BorrowMoney = 0;
+                                                }
                                                 _db.Updateable(it).ExecuteCommand();
                                             }
                                         }

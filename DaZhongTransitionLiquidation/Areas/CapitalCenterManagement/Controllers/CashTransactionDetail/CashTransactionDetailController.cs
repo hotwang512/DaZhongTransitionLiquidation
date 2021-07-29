@@ -119,7 +119,7 @@ namespace DaZhongTransitionLiquidation.Areas.CapitalCenterManagement.Controllers
                 para.pagenum = para.pagenum + 1;
                 if (sort == 1)
                 {
-                    jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID).OrderBy(i => i.VCRTTIME, OrderByType.Asc)
+                    jsonResult.Rows = db.Queryable<Business_CashBorrowLoan>().Where(i => i.PayVGUID == PayVGUID)
                         .OrderBy(i => i.Sort, OrderByType.Asc).ToPageList(para.pagenum, para.pagesize, ref pageCount);
                 }
                 else

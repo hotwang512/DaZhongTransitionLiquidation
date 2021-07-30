@@ -20,6 +20,7 @@ var loginAccountModeCode = $("#LoginAccountModeCode").val();
 var voucherHtmls = "";
 var subjectName0 = "";
 var subjectName1 = "";
+var type = $.request.queryString().Type;
 var $page = function () {
 
     this.init = function () {
@@ -33,7 +34,6 @@ var $page = function () {
         var day = (myDate.getDate()) < 10 ? "0" + (myDate.getDate()) : (myDate.getDate());
         var date = myDate.getFullYear().toString() + month.toString() + day;
         var voucherType = $("#VoucherType").val();
-        var type = $.request.queryString().Type;
         if (type == 0 || type == "0") {
             voucherType = "现金类";
         } else if (type == "1") {
@@ -591,7 +591,11 @@ var $page = function () {
                     $("#hideButton").show();
                     $("#btnUp").show();
                     $("#AttachmentHide").show();
-                    $("#GetSetting").show();
+                    if (type == 2) {
+                        $("#GetSetting").hide();
+                    } else {
+                        $("#GetSetting").show();
+                    }
                     $("#AddNewBankData_GoBackBtn").hide();
                 } else {
                     $("#btnSave").hide();
@@ -615,7 +619,7 @@ var $page = function () {
                     setTimeout(function () {
                         //$(".subjectbtn").removeAttr('disabled');
                         $(".subjectbtn").show();
-                    }, 400); 
+                    }, 400);
                 }
                 var voucherDate = parseInt(msg.VoucherDate.replace(/[^0-9]/ig, ""));//转时间戳
                 var accountingPeriod = parseInt(msg.AccountingPeriod.replace(/[^0-9]/ig, ""));//转时间戳
@@ -739,7 +743,7 @@ var $page = function () {
                     switch (msg[i].Role) {
                         case "财务经理": $("#FinanceDirector").val(msg[i].LoginName); break;
                         case "财务主管": $("#Bookkeeping").val(msg[i].LoginName); break;
-                        //case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
+                            //case "审核岗": $("#Auditor").val(msg[i].LoginName); break;
                         case "出纳": $("#Cashier").val(msg[i].LoginName); break;
                         default: break;
                     }
